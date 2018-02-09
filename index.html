@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="google-site-verification" content="zLyTJjR3SdsG8d0wR5jdHzmm5170gpm_KFfGcy4RfDs" />
+  <title>GhettoStudio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
+</head>
+<body>
+  <header>
+  </header>
+  <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" />
+  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" />
+  <div id="cover"></div>
+  <main>
+    <div class="content">
+    <input type="radio" id="main" class="hiddenCheck" name="view" checked />
+    <section>
+      <label class="bigButton action" for="create"></label><label class="bigButton action" for="edit"></label>
+    </section>
+    <input type="radio" id="create" class="hiddenCheck" name="view" />
+    <section>
+      <div id="videoView">
+        <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" />
+        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-target="desktop">
+          <video id="desktop" autoplay></video>
+          <span class="placeholder"></span>
+        </label>
+        <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" />
+        <div class="midSplit">
+          <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" />
+          <label for="mergestreams" class="mediadevice action" data-title="Merge streams"></label>
+          <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-target="audio">
+            <audio id="audio" autoplay muted></audio>
+            <span class="placeholder"></span>
+            <span class="shadow"></span>
+            <canvas></canvas>
+          </label>
+        </div>
+        <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" />
+        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-target="video">
+          <video id="video" autoplay muted></video>
+          <span class="placeholder"></span>
+          <span class="shadow"></span>
+        </label>
+        <ul id="streams">
+          <div class="list">
+          </div>
+          <label type="button" id="addDevice" for="toggleAddDeviceModal"></label>
+        </ul>
+      </div>
+    </section>
+    <input type="radio" id="edit" class="hiddenCheck" name="view" />
+    <section>
+    </section>
+    </div>
+  </main>
+  <svg viewBox="0 0 100 100" width="0" height="0">
+    <clipPath id="webcamStand">
+      <path d="M 0 48
+               l 0 -24
+               l 16 -16
+               c 0 18
+                 64 18
+                 64 0
+               l 16 16
+               l 0 24
+               h -96
+               " />
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="mic">
+        <rect x="12" y="0" width="52" height="64" />
+        <rect x="0" y="0" width="12" height="16" />
+        <rect x="0" y="22" width="12" height="6" />
+        <rect x="0" y="34" width="12" height="30" />
+      </clipPath>
+    </defs>
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="micStand">
+        <path d="M 0 0
+                 C 0 29
+                   48 29
+                   48 0
+                 h -6
+                 C 43 22
+                   5 22
+                   5 0" />
+        <rect width="6" height="10" x="21" y="19" />
+        <rect height="5" width="38" x="6" y="24" />
+      </clipPath>
+    </defs>
+  </svg>
+  <svg>
+    <defs xmlns="http://www.w3.org/2000/svg">
+    <filter id="dropshadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/> 
+      <feOffset dx="0" dy="0" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  </svg>
+  <div id="addDeviceModal" class="modal">
+    <h4>Pair a device to your session</h4>
+    <div class="modalBody">
+      Pair your iOS or Android device to this session by scanning the QR code below
+    </div>
+  </div>
+  <div id="extensionModal" class="modal">
+    <h4>Desktop capture requires extension</h4>
+    <div class="modalBody">
+      You need to install a chrome extension to enable desktop capture.
+      <p>
+        <button id="installExtension" type="button">Install it</button>
+      </p>
+    </div>
+  </div>
+  <script src="js/utils.js"></script>
+  <script src="js/eventemitter.js"></script>
+  <script src="js/devicemanager.js"></script>
+  <script src="js/compositor.js"></script>
+  <script src="js/audioanalyser.js"></script>
+  <script src="js/rafloop.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/peerconnection.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

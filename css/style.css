@@ -1,0 +1,550 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+  font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+  font-weight: 300;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+header {
+  height: 4rem;
+  display: block;
+  width: 100%;
+  background: #333;
+  box-shadow: 0 4px 4px -4px rgba(0,0,0,0.4);
+}
+
+.no-transitions * {
+  transition-delay: 0s !important;
+  transition-duration: 0s !important;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 4rem);
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+section {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding-top: 4rem;
+  transform: translateX(100%);
+  transition: transform ease-in-out;
+  transition-duration: 0.5s;
+}
+
+main section:first-of-type {
+  transform: translateX(-100%);
+}
+
+input:checked + section {
+  transform: translateX(0);
+}
+
+.hiddenCheck {
+  display: none;
+}
+
+.bigButton {
+  display: inline-block;
+  vertical-align: top;
+  width: 20%;
+  margin: 0 20% 0 0;
+  position: relative;
+  background: #f4f4f4;
+  border-radius: 0.25rem;
+}
+
+.bigButton:first-child {
+  margin-left: 20%;
+}
+
+.bigButton::before {
+  margin-top: 100%;
+  display: block;
+  content: '';
+}
+
+.bigButton::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #666;
+  width: 100%;
+}
+
+.bigButton[for=create]::after {
+  content: 'Create a video';
+}
+
+.bigButton[for=edit]::after {
+  content: 'Edit a video';  
+}
+
+.action {
+  cursor: pointer;
+}
+
+#videoView {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.mediadevice {
+  background: #f4f4f4;
+  width: 30%;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.mediadevice::before {
+  display: block;
+  margin-top: 75%;
+  content: '';
+}
+
+.mediadevice video,
+.mediadevice audio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  background: transparent;
+}
+
+.mediadevice.desktopDevice video {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mediadevice.desktopDevice.active {
+  background: black;
+}
+
+.midSplit {
+  display: flex;
+  width: 30%;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.midSplit .mediadevice {
+  width: 100%;
+}
+
+.midSplit .mediadevice::before {
+  margin-top: calc(100%/3);
+}
+
+.mediadevice::after {
+  content: attr(data-title);
+  position: absolute;
+  color: #666;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 3rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  transition: opacity 0.5s;
+}
+
+.mediadevice[for=mergestreams]::after {
+  bottom: calc(50% - 1.5rem);
+}
+
+.extensionRequired label[for=desktopstream]::after {
+  content: 'Click to install desktop extension';
+}
+
+.mediadevice.active::after {
+  opacity: 0;
+}
+
+.placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15rem;
+  height: 10rem;
+  transform: translate(-50%, calc(-50% - 1rem));
+  z-index: 1;
+}
+
+.shadow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+.desktopDevice.active .placeholder {
+  display: none;
+}
+
+.desktopDevice .placeholder::before {
+  content: '';
+  width: 100%;
+  height: calc(100% - 3rem);
+  border: 0px solid white;
+  border-bottom-width: 2rem;
+  border-top-width: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2),
+              inset 0 2px 2px -2px rgba(0,0,0,0.2),
+              inset 0 -2px 2px -2px rgba(0,0,0,0.2);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.desktopDevice .placeholder::after {
+  content: '';
+  width: 3rem;
+  height: 0;
+  position: absolute;
+  bottom: -3rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-bottom: 2rem solid white;
+  border-left: 1rem solid transparent;
+  border-right: 1rem solid transparent;
+  filter: drop-shadow(0 2px 1px rgba(0,0,0,0.1));
+}
+
+.videoDevice .placeholder, .videoDevice .shadow {
+  width: 8rem;
+  height: 8rem;
+  transform: translate(-50%, -50%);
+}
+
+.videoDevice .placeholder::before {
+  content: '';
+  width: 4rem;
+  height: 4rem;
+  border: 1rem solid white;
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 0 0 1px 1px rgba(0,0,0,0.2),
+              inset 0 0 1px 1px rgba(0,0,0,0.2);
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.videoDevice .placeholder::after, .videoDevice .shadow::after {
+  content: '';
+  width: 6rem;
+  height: 6rem;
+  position: absolute;
+  bottom: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 50%;
+  -webkit-clip-path: url(#webcamStand);
+  clip-path: url(#webcamStand);
+}
+
+.videoDevice .shadow::after {
+  bottom: calc(-3rem - 1px);
+  transform: translateX(-50%) scaleY(1.1) scaleX(1.025);
+  background: rgba(0,0,0,0.1);
+}
+
+.mediadevice canvas {
+  position: absolute;
+  width: 70%;
+  height: 1rem;
+  background: white;
+  top: calc(50% - 0.5rem);
+  left: 15%;
+  opacity: 0;
+  transition: 0.25s;
+  border-radius: 0.5rem;
+}
+
+.active.mediadevice canvas {
+  opacity: 1;
+  transition: 0.5s 1s;
+}
+
+.audioDevice .placeholder, .audioDevice .shadow {
+  transform: translate(-50%, -50%);
+  width: 4rem;
+  height: 4rem;
+  top: calc(50% - 0.5rem);
+  transition: transform 0.75s ease-in-out, left 0.75s ease-in-out, top 0.75s ease-in-out;
+}
+
+.audioDevice .shadow {
+  top: calc(50% - 0.5rem + 1px);
+  position: absolute;
+  
+}
+
+.active.audioDevice .placeholder, .active.audioDevice .shadow {
+  left: 0;
+  top: calc(50% - 0.75rem);
+  transform: scale(0.5) translate(0, -50%);
+}
+
+.active .audioDevice .shadow {
+  top: calc(50% - 0.75rem + 1px);
+}
+
+.audioDevice .placeholder::before, .audioDevice .shadow::before {
+  width: 2rem;
+  height: 4rem;
+  content: '';
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: white;
+  border-radius: 1rem;
+  -webkit-clip-path: url(#mic);
+  clip-path: url(#mic);
+}
+
+.audioDevice .shadow::before {
+  transform: translate(-50%, 0) scaleX(1.05);
+}
+
+.audioDevice .placeholder::after, .audioDevice .shadow::after {
+  width: 3rem;
+  height: 1.8125rem;
+  background: white;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  content: '';
+  position: absolute;
+  -webkit-clip-path: url(#micStand);
+  clip-path: url(#micStand);
+}
+
+.audioDevice .shadow::before, .audioDevice .shadow::after {
+  background: rgba(0,0,0,0.2);
+}
+
+#streams {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  overflow: auto;
+  list-style: none;
+  height: 8rem;
+  box-shadow: 0 -1px 1px rgba(0,0,0,0.2);
+  padding: 0;
+  margin: 0;
+}
+
+#streams::before {
+  display: inline-block;
+  vertical-align: top;
+  width: 8rem;
+  content: 'Devices';
+  line-height: 8rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #666;
+  background: #f4f4f4;
+}
+
+#streams .list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: inline-block;
+}
+
+#streams li, #addDevice {
+  cursor: pointer;
+  width: 8rem;
+  height: 6rem;
+  display: inline-block;
+  margin: 0.875rem 0 0.875rem 1rem;
+  vertical-align: top;
+  background: #f4f4f4;
+  position: relative;
+  border: none;
+  overflow: hidden;
+  font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+}
+
+#streams li video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+#streams li.desktopDevice.active {
+  background: black;
+}
+
+#streams li.desktopDevice video {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#streams li .placeholder, #streams li .shadow {
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.4);
+  position: absolute;
+}
+
+#streams li .shadow {
+  top: calc(45% + 1px);
+}
+
+#streams li.audioDevice .placeholder, #streams li.audioDevice .shadow {
+  transform: translate(-50%, calc(-50% + 6px)) scale(0.6);
+}
+
+#streams li.desktopDevice .placeholder {
+  transform: translate(-50%, -50%) scale(0.25);
+  box-shadow: -2px 0 2px -2px black,
+              2px 0 2px -2px black;
+}
+
+li[data-title]::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0 0.25rem;
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.25rem;
+  width: calc(100% - 0.5rem);
+  text-align: center;
+}
+
+#addDevice {
+  background: white;
+  width: 6rem;
+  height: 6rem;
+  position: absolute;
+  border: 1px solid #f4f4f4;
+}
+
+#addDevice::after {
+  content: 'Add device';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  line-height: 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 300;
+  text-align: center;
+}
+
+#addDevice::before {
+  position: absolute;
+  content: '';
+  width: 3rem;
+  height: 3rem;
+  top: 1rem;
+  left: 1.5rem;
+  background: #f4f4f4;
+  clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0 66%);
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  z-index: -1000;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  background: rgba(0,0,0,0.5);
+  transition: visibility 0s 0.25s, opacity 0.25s;
+}
+
+.toggleCover:checked ~ #cover {
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 0s, opacity 0.25s;
+}
+
+.modal {
+  position: fixed;
+  top: 5rem;
+  left: calc(50% - 320px);
+  width: 640px;
+  height: 480px;
+  background: white;
+  z-index: 2;
+  transform: translateY(calc(-5rem - 500px));
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transition: transform 0.25s ease-in;
+}
+
+.addDevice:checked ~ #addDeviceModal,
+#toggleExtensionModal:checked ~ #extensionModal {
+  transform: translateY(0);
+  transition: transform 0.25s ease-out;
+}
+
+.modal h4 {
+  margin: 0;
+  padding: 0 1rem;
+  font-weight: 300;
+  font-size: 1.5rem;
+  line-height: 5rem;
+}
+
+.modalClose {
+}
+
+.modalBody {
+  padding: 1rem;
+}
