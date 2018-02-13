@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width">
+  <title>GhettoStudio Pair</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
+</head>
+<body id="code">
+  <input type="radio" id="enterCode" class="hiddenCheck" name="view" checked />
+  <input type="radio" id="chooseDevice" class="hiddenCheck" name="view" />
+  <input type="radio" id="stream" class="hiddenCheck" name="view" />
+   <header>
+    <label for="enterCode">
+      1
+    </label><label for="chooseDevice">
+      2
+    </label><label for="stream">
+      3
+    </label>
+  </header>
+  <main>
+    <div class="content">
+      <section id="codeView">
+        Please enter pair code in the box below:
+        <input type="text" name="code" />
+      </section>
+      <section id="choiceView">
+        <ul id="deviceList">
+        </ul>
+      </section>
+      <section id="streamView">
+        <div class="mediadevice audioDevice">
+          <div class="placeholder"></div>
+          <div class="shadow"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="mic">
+        <rect x="12" y="0" width="52" height="64" />
+        <rect x="0" y="0" width="12" height="16" />
+        <rect x="0" y="22" width="12" height="6" />
+        <rect x="0" y="34" width="12" height="30" />
+      </clipPath>
+    </defs>
+  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="micStand">
+        <path d="M 0 0
+                 C 0 29
+                   48 29
+                   48 0
+                 h -6
+                 C 43 22
+                   5 22
+                   5 0" />
+        <rect width="6" height="10" x="21" y="19" />
+        <rect height="5" width="38" x="6" y="24" />
+      </clipPath>
+    </defs>
+  </svg>
+
+  <script>
+    navigator.mediaDevices.enumerateDevices()
+      .then(devices => {
+        devices.filter(device => device.label != 'Default')
+          .sort((a, b) => a.kind - b.kind)
+          .forEach(device => {
+            let li = document.createElement('li');
+            li.textContent = device.label;
+            document.querySelector('#deviceList').appendChild(li);
+          });
+      });
+  </script>
+</body>
+</html>
+
