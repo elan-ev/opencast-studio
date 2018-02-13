@@ -3,7 +3,6 @@ const compositor = new Compositor();
 const rafLoop = new RAFLoop();
 const audAnalyser = new AudioAnalyser();
 const peers = {};
-const socket = io();
 
 function App() {
   let deviceEls = document.querySelectorAll('.mediadevice[data-target]');
@@ -35,12 +34,13 @@ function App() {
       if (typeof bool == 'boolean') {
         _needsExtension = bool;
         if (bool) {
-          console.log('setting body class');
           document.body.classList.add('extensionRequired');
         }
       }
     }
   });
+
+  this.socketId = null;
 
   this.attachEvents();
 }
@@ -104,6 +104,13 @@ App.prototype = {
             (!audioContainer.classList.contains('active') || stream.getVideoTracks().length === 0)) {
           audioContainer.classList.add('active');
           audAnalyser.analyse(stream);
+
+          let audioDeviceId = this.mediaToggles.audio.value;
+          let audioListItem = document.querySelector(`#streams li.audioDevice[data-id="${audioDeviceId}"]`);
+
+          if (audioListItem) {
+            audioListItem.classList.add('active');
+          }
         }
 
         if (stream.getVideoTracks().length > 0) {
@@ -143,10 +150,48 @@ App.prototype = {
       item.appendChild(shadow);
 
       this.deviceList.appendChild(item);
+      item.addEventListener('click', this.toggleDevice.bind(this), false);
     }
   },
   toggleAddDevice: function(e) {
-    document.body.classList.toggle('addDevice');
+    socket.emit('initiatePair');
+  },
+  displayPairCode: function(code) {
+    let _linkEl = document.querySelector('#codehref');
+    let url = '/pair/?code=' + code;
+    _linkEl.href = url;
+    let link = _linkEl.href;
+    _linkEl.textContent = link;
+    new QRCode(document.getElementById('qrcode'), {
+      text: link,
+      width: 240,
+      height: 240,
+      correctLevel: QRCode.CorrectLevel.L
+    });
+
+    document.getElementById('host').textContent = link.split('/').slice(0, 4).join('/');
+
+    let codeEl = document.getElementById('paircode');
+    codeEl.textContent = '';
+    code.split('').forEach(char => {
+      let charSpan = document.createElement('span');
+      charSpan.textContent = char;
+      document.getElementById('paircode').appendChild(charSpan);
+    });
+  },
+  toggleDevice: function(e) {
+    let item = e.target;
+    while (item && item.tagName.toLowerCase() != 'li') {
+      item = item.parentNode;
+    }
+
+    let id = item.getAttribute('data-id');
+    let inputToggle = document.querySelector('input[value="' + id + '"]');
+
+    if (inputToggle && !inputToggle.checked) {
+      inputToggle.checked = true;
+      inputToggle.dispatchEvent(new Event('change'));
+    }
   },
   mergeStreams: function(e) {
     if (e.target.checked) {

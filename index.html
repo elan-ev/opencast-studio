@@ -116,6 +116,11 @@
     <h4>Pair a device to your session</h4>
     <div class="modalBody">
       Pair your iOS or Android device to this session by scanning the QR code below
+      <div id="qrcode">
+      </div>
+      Alternatively, head over to <span id="host"></span> and use the code:
+      <p id="paircode"></p>
+      <a id="codehref"></a>
     </div>
   </div>
   <div id="extensionModal" class="modal">
@@ -134,7 +139,9 @@
   <script src="js/audioanalyser.js"></script>
   <script src="js/rafloop.js"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="js/servercomms.js"></script>
   <script src="js/peerconnection.js"></script>
+  <script src="js/qrcode.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

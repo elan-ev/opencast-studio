@@ -23,6 +23,39 @@ header {
   box-shadow: 0 4px 4px -4px rgba(0,0,0,0.4);
 }
 
+#code header {
+  background: transparent;
+}
+
+#code header label {
+  display: inline-block;
+  width: calc(100%/3);
+  height: 4rem;
+  line-height: 4rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+#code header::before {
+  content: '';
+  width: calc(100%/3);
+  height: 4rem;
+  background: #09f;
+  transition: transform 0.3s;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+#chooseDevice:checked ~ header::before {
+  transform: translateX(100%);
+}
+
+#stream:checked ~ header::before {
+  transform: translateX(200%);
+}
+
 .no-transitions * {
   transition-delay: 0s !important;
   transition-duration: 0s !important;
@@ -443,6 +476,18 @@ input:checked + section {
               2px 0 2px -2px black;
 }
 
+li[data-title].active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0.25rem solid #09f;
+  pointer-events: none;
+  z-index: 3;
+  width: calc(100% - 0.5rem);
+  height: calc(100% - 0.5rem);
+}
+
 li[data-title]::after {
   content: attr(data-title);
   position: absolute;
@@ -528,7 +573,12 @@ svg {
   transition: transform 0.25s ease-in;
 }
 
-.addDevice:checked ~ #addDeviceModal,
+#addDeviceModal {
+  height: auto;
+  transform: translateY(calc(-5rem - 540px));
+}
+
+#toggleAddDeviceModal:checked ~ #addDeviceModal,
 #toggleExtensionModal:checked ~ #extensionModal {
   transform: translateY(0);
   transition: transform 0.25s ease-out;
@@ -547,4 +597,40 @@ svg {
 
 .modalBody {
   padding: 1rem;
+}
+
+#qrcode {
+  height: 240px;
+  margin: 2rem auto;
+}
+
+#qrcode canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+#host {
+  padding: 0 0.25rem;
+  color: #09f;
+}
+
+#paircode {
+  height: 2rem;
+  line-height: 2rem;
+  text-align: center;
+}
+
+#paircode span {
+  display: inline-block;
+  height: 2rem;
+  line-height: 2rem;
+  width: 2rem;
+  text-align: center;
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+  background: #f3f3f3;
+}
+
+#codehref {
+  display: none;
 }
