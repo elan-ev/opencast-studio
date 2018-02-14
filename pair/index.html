@@ -95,7 +95,8 @@
           });
       });
 
-    document.getElementById('codeInput').addEventListener('keyup', validateCode, false);
+    let codeInput = document.getElementById('codeInput');
+    codeInput.addEventListener('keyup', validateCode, false);
 
     function validateCode(e) {
       if (this.value.length === 5) {
@@ -154,6 +155,23 @@
 
       peers[data.target].handleRequest(data);
     });
+
+    let getParams = location.href.split('?')
+                      .filter((params, i) => i === 1)
+                      .reduce((collect, param) => collect = collect || param, null)
+                      .split('&')
+                      .filter(key => key.indexOf('=') > -1 && key.indexOf('=') !== key.length - 1)
+                      .map(key => key.split('='))
+                      .reduce((result, param) => {
+                        result[param[0]] = param[1];
+                        return result;
+                      }, {});
+
+    if (getParams.code) {
+      codeInput.value = getParams.code;
+      codeInput.dispatchEvent(new Event('keyup'));
+    }
+
   </script>
 </body>
 </html>

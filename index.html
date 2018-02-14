@@ -23,6 +23,8 @@
     </section>
     <input type="radio" id="create" class="hiddenCheck" name="view" />
     <section>
+      <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" />
+      <label for="mergestreams" class="mediadevice action" data-title="Merge streams"></label>
       <div id="videoView">
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" />
         <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-target="desktop">
@@ -30,16 +32,12 @@
           <span class="placeholder"></span>
         </label>
         <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" />
-        <div class="midSplit">
-          <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" />
-          <label for="mergestreams" class="mediadevice action" data-title="Merge streams"></label>
-          <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-target="audio">
-            <audio id="audio" autoplay muted></audio>
-            <span class="placeholder"></span>
-            <span class="shadow"></span>
-            <canvas></canvas>
-          </label>
-        </div>
+        <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-target="audio">
+          <audio id="audio" autoplay muted></audio>
+          <span class="placeholder"></span>
+          <span class="shadow"></span>
+          <canvas></canvas>
+        </label>
         <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" />
         <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-target="video">
           <video id="video" autoplay muted></video>

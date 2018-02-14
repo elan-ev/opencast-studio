@@ -166,10 +166,14 @@ App.prototype = {
                       });
 
       this.deviceList.appendChild(peerItem);
+      peerItem.addEventListener('click', this.togglePeerStream.bind(this), false);
     }
   },
   toggleAddDevice: function(e) {
     socket.emit('initiatePair');
+  },
+  togglePeerStream: function(e) {
+    console.log(e.target.getAttribute('data-id'));
   },
   displayPairCode: function(code) {
     let _linkEl = document.querySelector('#codehref');
