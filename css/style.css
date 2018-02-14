@@ -56,6 +56,16 @@ header {
   transform: translateX(200%);
 }
 
+#chooseDevice[disabled] ~ header label[for=chooseDevice] {
+  color: #777;
+  background: #ddd;
+}
+
+#stream[disabled] ~ header label[for=stream] {
+  color: #777;
+  background: #ddd;
+}
+
 .no-transitions * {
   transition-delay: 0s !important;
   transition-duration: 0s !important;
@@ -692,13 +702,12 @@ svg {
   transform: translateX(calc(-200%/3));
 }
 
-#code ul {
-  list-style: none;
+#deviceList {
   margin: 2rem 0 0;
   padding: 0;
 }
 
-#code ul li {
+#deviceList button {
   margin: 0.5rem auto;
   width: 100%;
   border: 1px solid #ccc;
@@ -710,22 +719,28 @@ svg {
   padding: 0 1rem 0 2rem;
   text-align: left;
   position: relative;
+  font-weight: 300;
+  background: white;
 }
 
-#code ul li .placeholder,
-#code ul li .shadow {
+#deviceList .placeholder,
+#deviceList .shadow {
   transform: scale(0.3) translate(-50%, -50%);
   left: -0.375rem;
   top: 0;
 }
 
-#code ul li .placeholder::before,
-#code ul li .placeholder::after,
-#code ul li .shadow::before,
-#code ul li .shadow::after {
+#deviceList .placeholder::before,
+#deviceList .placeholder::after,
+#deviceList .shadow::before,
+#deviceList .shadow::after {
   background: #ccc !important;
 }
 
-#code ul li.videoDevice::before {
+#deviceList .videoDevice::before {
   left: -1rem;
+}
+
+button {
+  font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
 }

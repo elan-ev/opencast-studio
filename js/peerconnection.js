@@ -24,7 +24,7 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
     this.id = peerDetails;
   }
   else {
-    this.id = app.peers[0];
+    this.id = (app.peers || [])[0] || peerDetails.target;
     this.room = app.room;
   }
   this.isCaller = isInitiator || (typeof stream == 'boolean' ? stream : false);
@@ -48,6 +48,7 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   });
 
   this.pc.oniceconnectionstatechange = e => {
+    console.log('state changing', this.pc.iceConnectionState);
     if (['connected', 'completed'].indexOf(this.pc.iceConnectionState) > -1 && !this.noVideoElement) {
       //hacky...
       if (this.stream && !this.streamElement) {
@@ -63,6 +64,7 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   };
 
   if (this.isCaller && stream instanceof MediaStream) {
+    console.log('caller + stream');
     this.pc.addStream(stream);
     this.dataChannel = this.pc.createDataChannel('channel');
     this.dataChannel.onopen = e => {
@@ -89,6 +91,7 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
       }
     };
   }
+  else console.log('not caller nor streamer');
 
   var mediaElement = null;
 
@@ -156,6 +159,8 @@ PeerConnection.prototype = {
                           var self = this;
                           this.pc.createOffer(offer => {
                             self.pc.setLocalDescription(offer);
+                            console.log('sending offer to peer');
+                            console.log(offer);
                             socket.emit('peerConnection', {target: self.id, details: offer});
                           }, self.offerFailed, streamConstraints);
                         },
@@ -174,6 +179,7 @@ PeerConnection.prototype = {
                         },
          handleRequest: function(data) {
                           let details = data.details;
+                          console.log('request type', details.type);
                           switch (details.type) {
                             case 'offer':
                               this.handleOffer(details);
@@ -189,16 +195,19 @@ PeerConnection.prototype = {
                        },
           handleOffer: function(details) {
                          var self = this;
+                         console.log('got an offer');
                          if (!this.pc.remoteDescription.sdp) {
+                           console.log('setting remote description');
                            this.pc.setRemoteDescription(new RTCSessionDescription(details), function() {
                                self.candidateQueue.forEach(candidate => {
                                  self.pc.addIceCandidate(candidate);
                                });
-                             });
+                             }, err => console.log('err setting remote desc', err));
                          }
                          this.sendAnswer();
                        },
          handleAnswer: function(details) {
+                         console.log('setting remote description to handle answer');
                          this.pc.setRemoteDescription(new RTCSessionDescription(details));
                        },
          addCandidate: function(details) {
