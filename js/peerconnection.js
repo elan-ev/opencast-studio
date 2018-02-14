@@ -48,7 +48,6 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   });
 
   this.pc.oniceconnectionstatechange = e => {
-    console.log('state changing', this.pc.iceConnectionState);
     if (['connected', 'completed'].indexOf(this.pc.iceConnectionState) > -1 && !this.noVideoElement) {
       //hacky...
       if (this.stream && !this.streamElement) {
@@ -56,7 +55,6 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
       }
     }
     if (this.pc.iceConnectionState === 'connected') {
-      console.log('connected');
       this.oncomplete.forEach(func => {
         func();
       });
@@ -64,11 +62,10 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   };
 
   if (this.isCaller && stream instanceof MediaStream) {
-    console.log('caller + stream');
     this.pc.addStream(stream);
     this.dataChannel = this.pc.createDataChannel('channel');
     this.dataChannel.onopen = e => {
-      console.log('opened data channel');
+      console.log('data channel opened');
       this.dataChannel.send("hello");
     };
     this.dataChannel.onerror = e => {
@@ -82,16 +79,12 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   }
   else if (!this.isCaller) {
     this.pc.ondatachannel = function(e) {
-      console.log('setting up datachannel');
       this.dataChannel = e.channel;
       if (app && app.attachChannelEvents) {
-        console.log('attaching');
-        console.log(this);
         app.attachChannelEvents(this.dataChannel);
       }
     };
   }
-  else console.log('not caller nor streamer');
 
   var mediaElement = null;
 
@@ -159,8 +152,6 @@ PeerConnection.prototype = {
                           var self = this;
                           this.pc.createOffer(offer => {
                             self.pc.setLocalDescription(offer);
-                            console.log('sending offer to peer');
-                            console.log(offer);
                             socket.emit('peerConnection', {target: self.id, details: offer});
                           }, self.offerFailed, streamConstraints);
                         },
@@ -179,7 +170,6 @@ PeerConnection.prototype = {
                         },
          handleRequest: function(data) {
                           let details = data.details;
-                          console.log('request type', details.type);
                           switch (details.type) {
                             case 'offer':
                               this.handleOffer(details);
@@ -195,9 +185,7 @@ PeerConnection.prototype = {
                        },
           handleOffer: function(details) {
                          var self = this;
-                         console.log('got an offer');
                          if (!this.pc.remoteDescription.sdp) {
-                           console.log('setting remote description');
                            this.pc.setRemoteDescription(new RTCSessionDescription(details), function() {
                                self.candidateQueue.forEach(candidate => {
                                  self.pc.addIceCandidate(candidate);
@@ -207,7 +195,6 @@ PeerConnection.prototype = {
                          this.sendAnswer();
                        },
          handleAnswer: function(details) {
-                         console.log('setting remote description to handle answer');
                          this.pc.setRemoteDescription(new RTCSessionDescription(details));
                        },
          addCandidate: function(details) {

@@ -10,7 +10,15 @@ socket.on('peerConnection', data => {
   if (!peers[data.target]) {
     peers[data.target] = new PeerConnection(data);
     peers[data.target].oncomplete = function() {
-      console.log('done');
+      let peerItem = document.querySelector('#streams li[data-id="' + data.target + '"]');
+
+      if (peers[data.target].stream.getVideoTracks().length > 0) {
+        let peerVid = document.createElement('video');
+        peerVid.autoplay = true;
+        peerVid.muted = true;
+        peerItem.appendChild(peerVid);
+        peerVid.srcObject = peers[data.target].stream;
+      }
     };
   }
 

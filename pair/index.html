@@ -130,7 +130,11 @@
       navigator.mediaDevices.getUserMedia(constraints)
         .then(mediaStream => {
           stream = mediaStream;
-          document.querySelector('video').srcObject = mediaStream;
+          let vidEl = document.querySelector('video');
+          if (vidEl) {
+            vidEl.muted = true;
+            vidEl.srcObject = mediaStream;
+          }
           document.getElementById("stream").disabled = false;
           document.getElementById("stream").checked = true;
           info.peers.forEach(peer => peers[peer] = new PeerConnection(peer, mediaStream, true));

@@ -516,6 +516,11 @@ li[data-title]::after {
   text-align: center;
 }
 
+#streams .peerDevice {
+  animation: addingPeer 1.5s;
+  animation-fill-mode: forwards;
+}
+
 #addDevice {
   background: white;
   width: 6rem;
@@ -618,7 +623,8 @@ svg {
   margin: 2rem auto;
 }
 
-#qrcode canvas {
+#qrcode canvas,
+#qrcode img {
   display: block;
   margin: 0 auto;
 }
@@ -743,4 +749,20 @@ svg {
 
 button {
   font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+}
+
+@keyframes addingPeer {
+  0% {
+    margin: 0;
+    width: 0;
+    opacity: 0;
+  }
+  50% {
+    margin: 0.875rem 0 0.875rem 1rem;
+    width: 8rem;
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

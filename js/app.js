@@ -41,6 +41,7 @@ function App() {
   });
 
   this.socketId = null;
+  this.listingPeer = [];
 
   this.attachEvents();
 }
@@ -153,11 +154,29 @@ App.prototype = {
       item.addEventListener('click', this.toggleDevice.bind(this), false);
     }
   },
+  listPeer: function(id) {
+    if (this.listingPeer.indexOf(id) === -1) {
+      this.listingPeer.push(id);
+      let peerItem = utils.createElement('li', {
+                       class: 'peerDevice connecting',
+                        text: 'Some peer',
+                        data: {
+                             id: id
+                        }
+                      });
+
+      this.deviceList.appendChild(peerItem);
+    }
+  },
   toggleAddDevice: function(e) {
     socket.emit('initiatePair');
   },
   displayPairCode: function(code) {
     let _linkEl = document.querySelector('#codehref');
+    if (document.querySelector('#addDeviceModal canvas')) {
+      return;
+    }
+
     let url = '/pair/?code=' + code;
     _linkEl.href = url;
     let link = _linkEl.href;
@@ -223,7 +242,15 @@ App.prototype = {
       );
     }
   },
+  attachChannelEvents: function(ch) {
+    ch.onopen = function(e) {
+      //add UI notification for data channel opened?
+    };
 
+    ch.onmessage = function(e) {
+      console.log('datachannel message', e);
+    };
+  }
 };
 
 const app = new App();
@@ -261,3 +288,10 @@ if (window.chrome && chrome.app) {
     }
   });
 }
+
+socket.on('peerConnection', data => {
+  document.getElementById('toggleAddDeviceModal').checked = false;
+  if (!document.querySelector('button[data-stream="' + data.target + '"]')) {
+    app.listPeer(data.target);
+  }
+});
