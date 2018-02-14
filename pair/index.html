@@ -20,13 +20,14 @@
       3
     </label>
   </header>
-  <main>
+  <main style="overflow-x: hidden;">
     <div class="content">
       <section id="codeView">
-        Please enter pair code in the box below:
+        Please enter pair code below
         <input type="text" name="code" />
       </section>
       <section id="choiceView">
+        Choose devices to share
         <ul id="deviceList">
         </ul>
       </section>
@@ -72,7 +73,14 @@
           .sort((a, b) => a.kind - b.kind)
           .forEach(device => {
             let li = document.createElement('li');
+            let place = document.createElement('span');
+            let shadow = document.createElement('span');
+            place.classList.add('placeholder');
+            shadow.classList.add('shadow');
             li.textContent = device.label;
+            li.appendChild(place);
+            li.appendChild(shadow);
+            li.classList.add(device.kind.replace(/input/g, '') + 'Device');
             document.querySelector('#deviceList').appendChild(li);
           });
       });
