@@ -37,7 +37,7 @@ body:not(#code) header span:nth-child(1) {
 body:not(#code) header span:nth-child(2) {
   font-family: "Comfortaa", cursive;
   text-transform: uppercase;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 
@@ -48,8 +48,8 @@ body:not(#code) header span:nth-child(2) {
 #code header label {
   display: inline-block;
   width: calc(100%/3);
-  height: 4rem;
-  line-height: 4rem;
+  height: 3rem;
+  line-height: 3rem;
   text-align: center;
   position: relative;
   z-index: 1;
@@ -58,7 +58,7 @@ body:not(#code) header span:nth-child(2) {
 #code header::before {
   content: '';
   width: calc(100%/3);
-  height: 4rem;
+  height: 3rem;
   background: #09f;
   transition: transform 0.3s;
   top: 0;
@@ -705,7 +705,7 @@ svg {
   padding: 0 0.5rem;
   display: inline-block;
   vertical-align: top;
-  font-size: 1.125rem;
+  font-size: 0.9rem;
   font-weight: 300;
 }
 

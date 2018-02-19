@@ -158,7 +158,7 @@
 
     let getParams = location.href.split('?')
                       .filter((params, i) => i === 1)
-                      .reduce((collect, param) => collect = collect || param, null)
+                      .reduce((collect, param) => collect = collect || param, '')
                       .split('&')
                       .filter(key => key.indexOf('=') > -1 && key.indexOf('=') !== key.length - 1)
                       .map(key => key.split('='))
