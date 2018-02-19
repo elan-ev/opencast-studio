@@ -16,8 +16,8 @@ body {
 }
 
 header {
-  height: 4rem;
-  line-height: 4rem;
+  height: 3rem;
+  line-height: 3rem;
   display: block;
   width: 100%;
   background: #333;
@@ -877,7 +877,6 @@ label[for=mergestreams]::before {
   position: absolute;
   top: 0;
   right: 2rem;
-  font-size: 1.25rem;
 }
 
 .viewControls select {
@@ -902,8 +901,8 @@ label[for=mergestreams]::before {
 }
 
 #recordingControls button {
-  width: 4rem;
-  height: 4rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 0.25rem;
   border: none;
   position: relative;
