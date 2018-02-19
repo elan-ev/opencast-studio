@@ -30,14 +30,14 @@ body:not(#code) header span {
 
 body:not(#code) header span:nth-child(1) {
   font-family: "Lobster", cursive;
-  font-size: 2em;
+  font-size: 1.6rem;
   margin-left: 2rem;
 }
 
 body:not(#code) header span:nth-child(2) {
   font-family: "Comfortaa", cursive;
   text-transform: uppercase;
-  font-size: 1.6em;
+  font-size: 1.1rem;
 }
 
 
@@ -877,10 +877,11 @@ label[for=mergestreams]::before {
   position: absolute;
   top: 0;
   right: 2rem;
+  font-size: 0.8rem;
 }
 
 .viewControls select {
-  font-size: 1.25rem;
+  font-size: 0.8rem;
   background: white;
   border: 1px solid #eee;
   height: 2rem;
@@ -914,12 +915,12 @@ label[for=mergestreams]::before {
 
 #startRecord::before {
   position: absolute;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   background: #8d2351;
   border-radius: 50%;
-  top: 1rem;
-  left: 1rem;
+  top: 0.5rem;
+  left: 0.5rem;
   content: '';
 }
 
@@ -942,8 +943,8 @@ label[for=mergestreams]::before {
   border: 0.5rem solid #888;
   border-top: none;
   border-bottom: none;
-  top: 1.25rem;
-  left: 1.25rem;
+  top: 0.5rem;
+  left: 0.5rem;
   content: '';
 }
 
@@ -955,8 +956,8 @@ label[for=mergestreams]::before {
   position: absolute;
   width: 1.5rem;
   height: 1.5rem;
-  top: 1.25rem;
-  left: 1.25rem;
+  top: 0.5rem;
+  left: 0.5rem;
   content: '';
   background: #888;
 }
