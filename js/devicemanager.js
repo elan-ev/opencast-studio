@@ -43,6 +43,11 @@ class DeviceManager extends EventEmitter {
         });
 
         this.emit('enumerated', this.devices);
+
+        for (let dev in this.devices) {
+          this.devices[dev].on('record.prepare', label => this.emit('record.prepare', {label: label, id: dev}));
+          this.devices[dev].on('record.complete', obj => this.emit('record.complete', {media: obj.media, url: obj.url, id: dev}));
+        }
       });
   }
 
@@ -66,6 +71,30 @@ class DeviceManager extends EventEmitter {
     window.addEventListener('message', e => {
     });
   }
+
+  record() {
+    for (var dev in this.devices) {
+      if (this.devices[dev].stream) {
+        this.devices[dev].record();
+      }
+    }
+  }
+
+  pauseRecording() {
+    for (var dev in this.devices) {
+      if (this.devices[dev].stream) {
+        this.devices[dev].pauseRecording();
+      }
+    }
+  }
+
+  stopRecording() {
+    for (var dev in this.devices) {
+      if (this.devices[dev].stream) {
+        this.devices[dev].stopRecording();
+      }
+    }
+  }
 }
 
 class Device extends EventEmitter {
@@ -74,6 +103,7 @@ class Device extends EventEmitter {
     super();
 
     let _stream = null;
+    this.recorder = null;
 
     Object.defineProperty(this, 'stream', {
       get: function() {
@@ -183,5 +213,109 @@ class Device extends EventEmitter {
          url: location.origin
       }, '*');
     });
+  }
+
+  record() {
+    if (!this.recorder) {
+      if (!this.stream) {
+        throw new Error("Can't record as stream is not active");
+      }
+
+      this.recorder = new Recorder(this.stream);
+      this.recorder.on('record.complete', media => this.emit('record.complete', media));
+      this.recorder.start(1000);
+    }
+    else {
+      this.recorder.resume();
+    }
+  }
+
+  stopRecording() {
+    if (this.recorder) {
+      this.recorder.stop();
+      this.emit('record.prepare', this.info.label);
+    }
+  }
+
+  pauseRecording() {
+    this.recorder.pause();
+  }
+}
+
+class Recorder extends EventEmitter {
+  constructor(stream) {
+    super();
+
+    let _codecs = [
+                    'video/webm;codecs="vp9,opus"',
+                    'video/webm;codecs="vp9.0,opus"',
+                    'video/webm;codecs="avc1"',
+                    'video/x-matroska;codecs="avc1"',
+                    'video/webm;codecs="vp8,opus"'
+                  ].filter(codec => MediaRecorder.isTypeSupported(codec));
+
+    let _recData = [];
+    this.recorder = new MediaRecorder(stream, {mimeType: _codecs[0]});
+
+    this.recorder.ondataavailable = function(e) {
+      if (e.data.size > 0) {
+        _recData.push(e.data);
+      }
+    };
+
+    this.recorder.onerror = e => {
+      this.emit('record.error', e);
+    };
+
+    this.recorder.onstart = e => {
+      this.emit('record.start', true);
+    };
+
+    this.result = null;
+
+    this.recorder.onstop = e => {
+      let mimeType = (this.deviceType == 'audio' ? 'audio' : 'video') + '/webm';
+      this.result = new Blob(_recData, {type: mimeType});
+      let url = URL.createObjectURL(this.result);
+      this.emit('record.complete', {url: url, media: this.result});
+    };
+
+    Object.defineProperty(this, 'recData', {
+      get: function() {
+        return _recData;
+      }
+    });
+
+    this.isRecording = false;
+    this.isPaused = false;
+  }
+
+  start(delay) {
+    delay = delay || 0;
+    if (!this.isRecording) {
+      this.recorder.start(delay);
+      this.isRecording = true;
+    }
+    else if (this.isPaused) {
+      this.resume();
+    }
+  }
+
+  pause() {
+    if (!this.isPaused) {
+      this.recorder.pause();
+    }
+    else {
+      this.resume();
+    }
+    this.isPaused = !this.isPaused;
+  }
+
+  resume() {
+    this.recorder.resume();
+  }
+
+  stop() {
+    this.recorder.stop();
   }
 }

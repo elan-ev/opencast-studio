@@ -4,16 +4,18 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width">
   <meta name="google-site-verification" content="zLyTJjR3SdsG8d0wR5jdHzmm5170gpm_KFfGcy4RfDs" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https: ws: wss:; style-src 'self'; media-src 'self' blob:; img-src 'self' data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https: ws: wss:; style-src 'self' https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com">
   <title>GhettoStudio</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
 </head>
 <body>
   <header>
+    <span>Ghetto</span><span>Studio</span>
   </header>
   <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" />
+  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" />
   <div id="cover"></div>
   <main>
     <div class="content">
@@ -23,9 +25,17 @@
     </section>
     <input type="radio" id="create" class="hiddenCheck" name="view" />
     <section>
+      <input name="userView" type="radio" value="simple" class="hiddenCheck" checked id="simpleUserView"/>
+      <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" />
       <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" />
       <label for="mergestreams" class="mediadevice action" data-title="Merge streams"></label>
       <div id="videoView">
+        <div class="viewControls">
+          View: <select name="createView">
+            <option value="simple">Simple</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" />
         <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-target="desktop">
           <video id="desktop" autoplay></video>
@@ -44,12 +54,18 @@
           <span class="placeholder"></span>
           <span class="shadow"></span>
         </label>
-        <ul id="streams">
-          <div class="list">
-          </div>
-          <label type="button" id="addDevice" for="toggleAddDeviceModal"></label>
-        </ul>
       </div>
+      <div id="recordingControls">
+        <button id="pauseRecord" title="Pause recording"></button>
+        <button id="startRecord" title="Start/resume recording"></button>
+        <button id="stopRecord" title="Stop recording"></button>
+        <span id="recordingTime"></span>
+      </div>
+      <ul id="streams">
+        <div class="list">
+        </div>
+        <label type="button" id="addDevice" for="toggleAddDeviceModal"></label>
+      </ul>
     </section>
     <input type="radio" id="edit" class="hiddenCheck" name="view" />
     <section>
@@ -130,6 +146,23 @@
       </p>
     </div>
   </div>
+  <div id="saveCreation" class="modal">
+    <h4>Production details</h4>
+    <div class="modalBody">
+      <ul>
+        <span class="quarterWidth">Title</span><span class="threeQuarterWidth"><input name="title" /></span>
+        <span class="quarterWidth">Presenter</span><span class="threeQuarterWidth"><input name="presenter" /></span>
+        <span class="quarterWidth">Location</span><span class="threeQuarterWidth"><input name="location" /></span>
+      </ul>
+      <h4>Media</h4>
+      <div id="recordingList"></div>
+    </div>
+    <div class="modalFooter">
+      <button class="btn btn-action" id="editRecordings">Edit media</button>
+      <button class="btn btn-success" id="saveRecordings">Save media</button>
+      <label for="toggleSaveCreationModal" class="btn btn-cancel">Discard</label>
+    </div>
+  </div>
   <script src="js/utils.js"></script>
   <script src="js/eventemitter.js"></script>
   <script src="js/devicemanager.js"></script>
@@ -141,5 +174,6 @@
   <script src="js/peerconnection.js"></script>
   <script src="js/qrcode.min.js"></script>
   <script src="js/app.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa:300|Lobster+Two:400" rel="stylesheet">
 </body>
 </html>

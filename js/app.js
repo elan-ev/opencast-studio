@@ -24,6 +24,66 @@ function App() {
   this.deviceList = document.querySelector('#streams .list');
   this.audioCanvas = document.querySelector('#audio ~ canvas');
 
+  this.userView = document.querySelector('select[name=createView]');
+  this.simpleUserView = document.getElementById('simpleUserView');
+  this.advancedUserView = document.getElementById('advancedUserView');
+
+  this.recordButton = document.getElementById('startRecord');
+  this.pauseButton = document.getElementById('pauseRecord');
+  this.stopButton = document.getElementById('stopRecord');
+
+  this.timeEl = document.getElementById('recordingTime');
+  this.recTime = [];
+  this.logNextTick = true;
+  this.recTimeToken = null;
+
+  let _isRecording = false;
+  let _isPaused = false;
+
+  Object.defineProperty(this, 'isRecording', {
+    get: function() {
+      return _isRecording;
+    },
+    set: function(bool) {
+      if (typeof bool == 'boolean') {
+        _isRecording = bool;
+
+        if (bool) {
+          document.body.classList.add('recording');
+        }
+        else {
+          document.body.classList.remove('recording');
+        }
+
+        if (!this.recTimeToken) {
+          this.recTimeToken = rafLoop.subscribe({
+               fn: this.logRecordingTime,
+            scope: this
+          });
+        }
+      }
+    }
+  });
+
+  Object.defineProperty(this, 'isPaused', {
+    get: function() {
+      return _isPaused;
+    },
+    set: function(bool) {
+      if (typeof bool == 'boolean') {
+        _isPaused = bool;
+        this.logNextTick = true;
+
+        if (bool) {
+          document.body.classList.add('paused');
+        }
+        else {
+          document.body.classList.remove('paused');
+        }
+      }
+    }
+  });
+
   let _needsExtension = false;
 
   Object.defineProperty(this, 'needsExtension', {
@@ -39,6 +99,17 @@ function App() {
       }
     }
   });
+
+  this.title = '';
+  this.presenter = '';
+  this.location = '';
+
+  this.titleEl = document.querySelector('#saveCreation input[name=title]');
+  this.presenterEl = document.querySelector('#saveCreation input[name=presenter]');
+  this.locationEl = document.querySelector('#saveCreation input[name=location]');
+
+  this.saveRecordings = document.getElementById('saveRecordings');
+  this.discardRecordings = document.querySelector('label[for=toggleSaveCreationModal]');
 
   this.socketId = null;
   this.listingPeer = [];
@@ -79,6 +150,21 @@ App.prototype = {
     document.getElementById('installExtension').addEventListener('click', this.chromeInstall.bind(this), false);
     document.getElementById('mergestreams').addEventListener('change', this.mergeStreams.bind(this), false);
     document.body.addEventListener('keyup', this.handleKeys.bind(this), false);
+    this.userView.addEventListener('change', this.switchCreateView.bind(this), false);
+
+    this.recordButton.addEventListener('click', this.startRecord.bind(this), false);
+    this.pauseButton.addEventListener('click', this.pauseRecord.bind(this), false);
+    this.stopButton.addEventListener('click', this.stopRecord.bind(this), false);
+
+    this.titleEl.addEventListener('keyup', this.setTitle.bind(this), false);
+    this.presenterEl.addEventListener('keyup', this.setPresenter.bind(this), false);
+    this.locationEl.addEventListener('keyup', this.setLocation.bind(this), false);
+
+    this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
+  },
+  switchCreateView: function(e) {
+    let newView = `${e.target.value}UserView`;
+    this[newView].checked = true;
   },
   toggleStream: function(e) {
     if (!e.target.checked) {
@@ -254,6 +340,100 @@ App.prototype = {
     ch.onmessage = function(e) {
       console.log('datachannel message', e);
     };
+  },
+  startRecord: function(e) {
+    if (this.isRecording) {
+      this.isPaused = false;
+      deviceMgr.record();
+      return;
+    }
+
+    let numStreams = Object.keys(deviceMgr.devices)
+                       .map(key => deviceMgr.devices[key].stream)
+                       .filter(stream => stream).length;
+    if (numStreams === 0) {
+      return;
+    }
+
+    this.isRecording = true;
+
+    deviceMgr.record();
+  },
+  pauseRecord: function(e) {
+    deviceMgr.pauseRecording();
+    this.isPaused = !this.isPaused;
+  },
+  stopRecord: function(e) {
+    if (!this.isRecording) {
+      return;
+    }
+
+    this.isRecording = false;
+    this.isPaused = false;
+    deviceMgr.stopRecording();
+    document.getElementById('toggleSaveCreationModal').checked = true;
+    rafLoop.unsubscribe(this.recTimeToken);
+  },
+  logRecordingTime: function(timestamp) {
+    if (this.logNextTick) {
+      this.recTime.push(timestamp);
+      this.logNextTick = false;
+    }
+
+    if (this.isPaused) {
+      return;
+    }
+
+    let timeslices = this.recTime.reduce((collect, current, i) => collect += current * (i % 2 ? -1 : 1), 0);
+    let duration = timestamp - timeslices;
+    let timeArr = [duration / 3600000 >> 0, (duration / 60000 >> 0) % 60, ((duration / 1000.0) % 60).toFixed(3)]
+                    .map((unit, i) => (unit < 10 ? '0' : '') + unit);
+    this.timeEl.textContent = timeArr.join(':');
+  },
+  listRecording: function(details) {
+    let anchor = document.createElement('a');
+    anchor.target = '_blank';
+    anchor.textContent = details.label;
+    anchor.setAttribute('data-id', details.id);
+    document.getElementById('recordingList').appendChild(anchor);
+  },
+  setMediaLink: function(details) {
+    let anchor = document.querySelector(`a[data-id="${details.id}"]`);
+    if (anchor) {
+      anchor.href = details.url;
+      if (details.media.type.indexOf('video') > -1) {
+        anchor.setAttribute('data-type', 'video');
+        anchor.download = 'Video - ' + this.title + '.webm';
+        let vid = document.createElement('video');
+        vid.src = details.url;
+        vid.muted = true;
+        vid.addEventListener('mouseover', e => vid.play(), false);
+        vid.addEventListener('mouseout', e => vid.pause(), false);
+        vid.addEventListener('ended', e => vid.currentTime = 0, false);
+
+        anchor.appendChild(vid);
+      }
+      else {
+        anchor.download = 'Audio - ' + this.title + '.webm';
+        anchor.setAttribute('data-type', 'audio');
+      }
+    }
+  },
+  setTitle: function(e) {
+    this.title = e.target.value || 'Recording';
+    [...document.querySelectorAll('#recordingList a')].forEach(anchor => {
+      anchor.download = anchor.getAttribute('data-type') + ' - ' + this.title + '.webm';
+    });
+  },
+  setPresenter: function(e) {
+    this.presenter = e.target.value;
+  },
+  setLocation: function(e) {
+    this.location = e.target.value;
+  },
+  saveMedia: function(e) {
+    [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());
+    document.getElementById('toggleSaveCreationModal').checked = false;
   }
 };
 
@@ -263,6 +443,14 @@ deviceMgr.once('enumerated', {
     fn: devices => {
       app.listDevices(devices);
     }
+});
+
+deviceMgr.on('record.prepare', label => {
+  app.listRecording(label);
+});
+
+deviceMgr.on('record.complete', details => {
+  app.setMediaLink(details);
 });
 
 compositor.on('subscribe.raf', function() {
