@@ -9,5 +9,3 @@ Demo at https://studio.letmedev.com
 
 ### Introduction
 Record your webcam, microphone, desktop (chrome: requires extension) or any mediastream sourced via WebRTC.
-
-Finally!
