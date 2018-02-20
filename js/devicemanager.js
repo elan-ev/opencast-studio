@@ -222,7 +222,10 @@ class Device extends EventEmitter {
       }
 
       this.recorder = new Recorder(this.stream);
-      this.recorder.on('record.complete', media => this.emit('record.complete', media));
+      this.recorder.on('record.complete', media => {
+        this.emit('record.complete', media);
+        this.recorder = null;
+      });
       this.recorder.start(1000);
     }
     else {
