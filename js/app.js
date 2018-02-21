@@ -358,6 +358,8 @@ App.prototype = {
     this.isRecording = true;
 
     deviceMgr.record();
+
+    [...document.querySelectorAll('#recordingList a')].forEach(anchor => anchor.parentNode.removeChild(anchor));
   },
   pauseRecord: function(e) {
     deviceMgr.pauseRecording();
@@ -373,6 +375,8 @@ App.prototype = {
     deviceMgr.stopRecording();
     document.getElementById('toggleSaveCreationModal').checked = true;
     rafLoop.unsubscribe(this.recTimeToken);
+    this.recTimeToken = null;
+    this.recTime = [];
   },
   logRecordingTime: function(timestamp) {
     if (this.logNextTick) {
@@ -395,6 +399,7 @@ App.prototype = {
     anchor.target = '_blank';
     anchor.textContent = details.label;
     anchor.setAttribute('data-id', details.id);
+    anchor.setAttribute('data-flavor', details.flavor);
     document.getElementById('recordingList').appendChild(anchor);
   },
   setMediaLink: function(details) {
@@ -403,7 +408,7 @@ App.prototype = {
       anchor.href = details.url;
       if (details.media.type.indexOf('video') > -1) {
         anchor.setAttribute('data-type', 'video');
-        anchor.download = 'Video - ' + this.title + '.webm';
+        anchor.download = anchor.getAttribute('data-flavor') + ' video - ' + this.title + '.webm';
         let vid = document.createElement('video');
         vid.src = details.url;
         vid.muted = true;
@@ -414,7 +419,7 @@ App.prototype = {
         anchor.appendChild(vid);
       }
       else {
-        anchor.download = 'Audio - ' + this.title + '.webm';
+        anchor.download = anchor.getAttribute('data-flavor') + ' audio - ' + this.title + '.webm';
         anchor.setAttribute('data-type', 'audio');
       }
     }
@@ -422,7 +427,7 @@ App.prototype = {
   setTitle: function(e) {
     this.title = e.target.value || 'Recording';
     [...document.querySelectorAll('#recordingList a')].forEach(anchor => {
-      anchor.download = anchor.getAttribute('data-type') + ' - ' + this.title + '.webm';
+      anchor.download = anchor.getAttribute('data-flavor') + ' ' + anchor.getAttribute('data-type') + ' - ' + this.title + '.webm';
     });
   },
   setPresenter: function(e) {
@@ -445,8 +450,8 @@ deviceMgr.once('enumerated', {
     }
 });
 
-deviceMgr.on('record.prepare', label => {
-  app.listRecording(label);
+deviceMgr.on('record.prepare', details => {
+  app.listRecording(details);
 });
 
 deviceMgr.on('record.complete', details => {

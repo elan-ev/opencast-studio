@@ -13,42 +13,43 @@
   <header>
     <span>Ghetto</span><span>Studio</span>
   </header>
-  <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" />
-  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" />
-  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" />
+  <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
+  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
+  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" autocomplete="off" />
   <div id="cover"></div>
   <main>
     <div class="content">
-    <input type="radio" id="main" class="hiddenCheck" name="view" checked />
+    <input type="radio" id="main" class="hiddenCheck" name="view" checked autocomplete="off" />
     <section>
       <label class="bigButton action" for="create"></label><label class="bigButton action" for="edit"></label>
     </section>
-    <input type="radio" id="create" class="hiddenCheck" name="view" />
+    <input type="radio" id="create" class="hiddenCheck" name="view" autocomplete="off" />
     <section>
-      <input name="userView" type="radio" value="simple" class="hiddenCheck" checked id="simpleUserView"/>
-      <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" />
-      <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" />
+      <label class="backBtn" for="main" title="Back to main navigation"></label>
+      <input name="userView" type="radio" value="simple" class="hiddenCheck" checked id="simpleUserView"/autocomplete="off" >
+      <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" autocomplete="off" />
+      <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" autocomplete="off" />
       <label for="mergestreams" class="mediadevice action" data-title="Merge streams"></label>
       <div id="videoView">
         <div class="viewControls">
-          View: <select name="createView">
+          View: <select name="createView" autocomplete="off">
             <option value="simple">Simple</option>
             <option value="advanced">Advanced</option>
           </select>
         </div>
-        <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" />
+        <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
         <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-target="desktop">
           <video id="desktop" autoplay></video>
           <span class="placeholder"></span>
         </label>
-        <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" />
+        <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" autocomplete="off" />
         <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-target="audio">
           <audio id="audio" autoplay muted></audio>
           <span class="placeholder"></span>
           <span class="shadow"></span>
           <canvas></canvas>
         </label>
-        <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" />
+        <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" autocomplete="off" />
         <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-target="video">
           <video id="video" autoplay muted></video>
           <span class="placeholder"></span>
@@ -67,8 +68,10 @@
         <label type="button" id="addDevice" for="toggleAddDeviceModal"></label>
       </ul>
     </section>
-    <input type="radio" id="edit" class="hiddenCheck" name="view" />
+    <input type="radio" id="edit" class="hiddenCheck" name="view" autocomplete="off" />
     <section>
+      <label class="backBtn" for="main" title="Back to main navigation"></label>
+      <p class="centreText">Under construction.<br>Please check back later.</p>
     </section>
     </div>
   </main>
@@ -150,9 +153,9 @@
     <h4>Production details</h4>
     <div class="modalBody">
       <ul>
-        <span class="quarterWidth">Title</span><span class="threeQuarterWidth"><input name="title" /></span>
-        <span class="quarterWidth">Presenter</span><span class="threeQuarterWidth"><input name="presenter" /></span>
-        <span class="quarterWidth">Location</span><span class="threeQuarterWidth"><input name="location" /></span>
+        <span class="quarterWidth">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
+        <span class="quarterWidth">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
+        <span class="quarterWidth">Location</span><span class="threeQuarterWidth"><input name="location" autocomplete="off" /></span>
       </ul>
       <h4>Media</h4>
       <div id="recordingList"></div>

@@ -29,6 +29,22 @@ class DeviceManager extends EventEmitter {
       }
     });
 
+    let _isRecording = false;
+
+    Object.defineProperty(this, 'isRecording', {
+      get: function() {
+        return _isRecording;
+      },
+      set: function(bool) {
+        if (typeof bool == 'boolean') {
+          _isRecording = bool;
+        }
+        else {
+          throw new Error('Please provide of a boolean value for assignment instead of this ' + (typeof bool));
+        }
+      }
+    });
+
     navigator.mediaDevices.enumerateDevices()
       .then(devices => {
         ['audio', 'video'].forEach(deviceType => {
@@ -37,6 +53,13 @@ class DeviceManager extends EventEmitter {
                                  result[info.deviceId] = new Device(info);
                                  result[info.deviceId].on('stream', stream => {
                                    this.emit('stream', {id: info.deviceId, stream: stream});
+                                   if (this.isRecording) {
+                                     result[info.deviceId].record();
+                                   }
+
+                                   if (stream.getAudioTracks().length > 0) {
+                                     this.desktop.attachAudioTrack(stream);
+                                   }
                                  });
                                  return result;
                                }, {});
@@ -45,8 +68,20 @@ class DeviceManager extends EventEmitter {
         this.emit('enumerated', this.devices);
 
         for (let dev in this.devices) {
-          this.devices[dev].on('record.prepare', label => this.emit('record.prepare', {label: label, id: dev}));
-          this.devices[dev].on('record.complete', obj => this.emit('record.complete', {media: obj.media, url: obj.url, id: dev}));
+          this.devices[dev].on('record.prepare', label =>
+            this.emit('record.prepare', {
+               label: label,
+                  id: dev,
+              flavor: dev === 'desktop' ? 'Presentation' : 'Presenter'
+            })
+          );
+          this.devices[dev].on('record.complete', obj =>
+            this.emit('record.complete', {
+               media: obj.media,
+                 url: obj.url,
+                  id: dev,
+            })
+          );
         }
       });
   }
@@ -78,6 +113,7 @@ class DeviceManager extends EventEmitter {
         this.devices[dev].record();
       }
     }
+    this.isRecording = true;
   }
 
   pauseRecording() {
@@ -94,6 +130,7 @@ class DeviceManager extends EventEmitter {
         this.devices[dev].stopRecording();
       }
     }
+    this.isRecording = false;
   }
 }
 
@@ -104,6 +141,7 @@ class Device extends EventEmitter {
 
     let _stream = null;
     this.recorder = null;
+    this.cachedAudioTracks = [];
 
     Object.defineProperty(this, 'stream', {
       get: function() {
@@ -186,6 +224,11 @@ class Device extends EventEmitter {
       opts = opts || {};
       navigator.mediaDevices.getUserMedia(this.constraints)
         .then(stream => {
+          if (!this.isChrome && this.deviceType === 'desktop') {
+            this.cachedAudioTracks.forEach(track =>
+              stream = new MediaStream([track, ...stream.getVideoTracks(), ...stream.getAudioTracks()])
+            );
+          }
           this.stream = stream;
           resolve(stream);
         })
@@ -201,6 +244,7 @@ class Device extends EventEmitter {
           navigator.mediaDevices.getUserMedia(this.constraints)
             .then(stream => {
               this.stream = stream;
+              this.cachedAudioTracks.forEach(track => this.stream.addTrack(track));
               resolve(stream);
             })
             .catch(err => reject(err));
@@ -213,6 +257,28 @@ class Device extends EventEmitter {
          url: location.origin
       }, '*');
     });
+  }
+
+  attachAudioTrack(streamOrTrack) {
+    if (!(streamOrTrack instanceof MediaStream) &&
+        !(streamOrTrack instanceof MediaStreamTrack)) {
+      return;
+    }
+
+    try {
+      let audioTrack = streamOrTrack instanceof MediaStreamTrack ?
+                         streamOrTrack :
+                         streamOrTrack.getAudioTracks()[0];
+
+      if (!this.stream) {
+        this.cachedAudioTracks.push(audioTrack);
+      }
+      else {
+        this.stream.addTrack(audioTrack);
+      }
+    } catch(e) {
+      //MediaStream has no audio tracks
+    }
   }
 
   record() {
@@ -281,6 +347,7 @@ class Recorder extends EventEmitter {
       this.result = new Blob(_recData, {type: mimeType});
       let url = URL.createObjectURL(this.result);
       this.emit('record.complete', {url: url, media: this.result});
+      this.recorder = null;
     };
 
     Object.defineProperty(this, 'recData', {
@@ -320,5 +387,6 @@ class Recorder extends EventEmitter {
 
   stop() {
     this.recorder.stop();
+    this.isRecording = false;
   }
 }
