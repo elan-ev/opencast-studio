@@ -274,7 +274,12 @@ class Device extends EventEmitter {
         this.cachedAudioTracks.push(audioTrack);
       }
       else {
-        this.stream.addTrack(audioTrack);
+        if (this.isChrome) {
+          this.stream.addTrack(audioTrack);
+        }
+        else {
+          this.stream = new MediaStream([audioTrack, ...this.stream.getVideoTracks(), ...this.stream.getAudioTracks()])
+        }
       }
     } catch(e) {
       //MediaStream has no audio tracks
