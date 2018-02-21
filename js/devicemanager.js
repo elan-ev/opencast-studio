@@ -82,6 +82,7 @@ class DeviceManager extends EventEmitter {
                   id: dev,
             })
           );
+          this.devices[dev].on('stream.mute', () => this.emit('stream.mute', dev));
         }
       });
   }
@@ -280,6 +281,7 @@ class Device extends EventEmitter {
         else {
           this.stream = new MediaStream([audioTrack, ...this.stream.getVideoTracks(), ...this.stream.getAudioTracks()])
         }
+        this.emit('stream.mute');
       }
     } catch(e) {
       //MediaStream has no audio tracks

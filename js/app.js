@@ -206,6 +206,17 @@ App.prototype = {
       })
       .catch(err => console.log(err));
   },
+  muteStream: function(id) {
+    let vid = document.querySelector(`video[data-id="${id}"]`);
+    let aud = document.querySelector(`aud[data-id="${id}"]`);
+
+    if (vid) {
+      vid.muted = true;
+    }
+    if (aud) {
+      aud.muted = true;
+    }
+  },
   listDevices: function(devices) {
     for (let key in devices) {
       let item = utils.createElement('li', {
@@ -456,6 +467,10 @@ deviceMgr.on('record.prepare', details => {
 
 deviceMgr.on('record.complete', details => {
   app.setMediaLink(details);
+});
+
+deviceMgr.on('stream.mute', id => {
+  app.muteStream(id);
 });
 
 compositor.on('subscribe.raf', function() {
