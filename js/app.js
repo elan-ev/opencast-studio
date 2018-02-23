@@ -161,6 +161,8 @@ App.prototype = {
     this.locationEl.addEventListener('keyup', this.setLocation.bind(this), false);
 
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
+
+    document.getElementById('minimiseStreams').addEventListener('change', this.minimiseStreamView.bind(this), false);
   },
   switchCreateView: function(e) {
     let newView = `${e.target.value}UserView`;
@@ -177,34 +179,36 @@ App.prototype = {
 
     deviceMgr.connect(e.target.value)
       .then(stream => {
-        this.mediaElements[e.target.name].srcObject = stream;
-        this.mediaElements[e.target.name].parentNode
-          .classList.add('active');
-        [...document.querySelectorAll(`video[data-id="${e.target.value}"]`)]
-          .forEach(vid => {
-            vid.srcObject = stream;
-            vid.parentNode.classList.add('active')
-          });
-
-        let audioContainer = this.mediaElements.audio.parentNode;
-        if (stream.getAudioTracks().length > 0 && 
-            (!audioContainer.classList.contains('active') || stream.getVideoTracks().length === 0)) {
-          audioContainer.classList.add('active');
-          audAnalyser.analyse(stream);
-
-          let audioDeviceId = this.mediaToggles.audio.value;
-          let audioListItem = document.querySelector(`#streams li.audioDevice[data-id="${audioDeviceId}"]`);
-
-          if (audioListItem) {
-            audioListItem.classList.add('active');
-          }
-        }
-
+        this.displayStream(stream, e.target.name, e.target.value);
         if (stream.getVideoTracks().length > 0) {
           compositor.addStream(stream);
         }
       })
       .catch(err => console.log(err));
+  },
+  displayStream: function(stream, name, value) {
+    this.mediaElements[name].srcObject = stream;
+    this.mediaElements[name].parentNode
+      .classList.add('active');
+    [...document.querySelectorAll(`video[data-id="${value}"]`)]
+      .forEach(vid => {
+        vid.srcObject = stream;
+        vid.parentNode.classList.add('active')
+      });
+
+    let audioContainer = this.mediaElements.audio.parentNode;
+    if (stream.getAudioTracks().length > 0 &&
+      (!audioContainer.classList.contains('active') || stream.getVideoTracks().length === 0)) {
+      audioContainer.classList.add('active');
+      audAnalyser.analyse(stream);
+
+      let audioDeviceId = this.mediaToggles.audio.value;
+      let audioListItem = document.querySelector(`#streams li.audioDevice[data-id="${audioDeviceId}"]`);
+
+      if (audioListItem) {
+        audioListItem.classList.add('active');
+      }
+    }
   },
   muteStream: function(id) {
     let vid = document.querySelector(`video[data-id="${id}"]`);
@@ -243,9 +247,14 @@ App.prototype = {
                      class: 'shadow'
                    });
 
+      let backdrop = utils.createElement('span', {
+                     class: 'backdrop'
+                   });
+
       item.appendChild(mediaEl);
       item.appendChild(placeholder);
       item.appendChild(shadow);
+      item.appendChild(backdrop);
 
       this.deviceList.appendChild(item);
       item.addEventListener('click', this.toggleDevice.bind(this), false);
@@ -319,6 +328,17 @@ App.prototype = {
     }
     else {
       compositor.stop();
+    }
+  },
+  minimiseStreamView: function(e) {
+    let title = e.target.checked ? 'Maximise' : 'Minimise';
+    document.querySelector('label[for=minimiseStreams]').setAttribute('title', title);
+
+    if (e.target.checked) {
+      this.addDeviceToggle.setAttribute('title', 'Add device');
+    }
+    else {
+      this.addDeviceToggle.removeAttribute('title');
     }
   },
   handleKeys: function(e) {
@@ -473,6 +493,10 @@ deviceMgr.on('stream.mute', id => {
   app.muteStream(id);
 });
 
+compositor.on('stream.mute', id => {
+  app.muteStream('compositor');
+});
+
 compositor.on('subscribe.raf', function() {
   let args = Array.prototype.slice.call(arguments, 0, 2);
   rafLoop.subscribe({
@@ -486,7 +510,7 @@ compositor.on('unsubscribe.raf', function() {
 });
 
 compositor.on('compositestream', stream => {
-  console.log('got composite stream', stream);
+  app.displayStream(stream, 'composite', 'composite');
 });
 
 if (window.chrome && chrome.app) {

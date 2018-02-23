@@ -319,19 +319,25 @@ class Device extends EventEmitter {
 }
 
 class Recorder extends EventEmitter {
-  constructor(stream) {
+  constructor(stream, chosenCodec) {
     super();
 
-    let _codecs = [
+    let _vidCodecs = [
                     'video/webm;codecs="vp9,opus"',
                     'video/webm;codecs="vp9.0,opus"',
                     'video/webm;codecs="avc1"',
                     'video/x-matroska;codecs="avc1"',
                     'video/webm;codecs="vp8,opus"'
                   ].filter(codec => MediaRecorder.isTypeSupported(codec));
+    let _audioCodecs = [
+                         'audio/ogg;codecs=opus',
+                         'audio/webm;codecs=opus'
+                       ]
 
     let _recData = [];
-    this.recorder = new MediaRecorder(stream, {mimeType: _codecs[0]});
+
+    chosenCodec = chosenCodec || stream.getVideoTracks().length ? _vidCodecs[0] : _audioCodecs[0];
+    this.recorder = new MediaRecorder(stream, {mimeType: chosenCodec});
 
     this.recorder.ondataavailable = function(e) {
       if (e.data.size > 0) {

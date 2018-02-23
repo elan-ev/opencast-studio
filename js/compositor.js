@@ -42,6 +42,12 @@ class Compositor extends EventEmitter {
         return {width: this.width, height: this.height};
       }
     });
+
+    let _browser = window.hasOwnProperty('InstallTrigger') ? 'firefox' : (
+                     window.hasOwnProperty('chrome') && chrome.app ? 'chrome' : 'other'
+                   );
+
+    this.isChrome = _browser === 'chrome';
   }
 
   addStream(stream, opts) {
@@ -60,7 +66,7 @@ class Compositor extends EventEmitter {
     video.muted = true;
 
     video.onloadedmetadata = function() {
-      let height = this.height / 3;
+      let height = this.height;
       let width = video.videoWidth / video.videoHeight * height;
       let offsetX = 0;
       let offsetY = 0;
@@ -102,6 +108,13 @@ class Compositor extends EventEmitter {
   }
 
   addAudioTrack(track) {
+    if (this.isChrome) {
+      this.stream.addTrack(audioTrack);
+    }
+    else {
+      this.stream = new MediaStream([track, ...this.stream.getVideoTracks(), ...this.stream.getAudioTracks()])
+    }
     this.stream.addTrack(track instanceof MediaStream ? track.getAudioTracks()[0] : track);
+    this.emit('stream.mute');
   }
 }
