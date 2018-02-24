@@ -144,6 +144,12 @@ App.prototype = {
         delFns[1](token);
       }
     });
+    audAnalyser.ondelegation('pause.raf', token => {
+      rafLoop.pauseExecution(token);
+    });
+    audAnalyser.ondelegation('resume.raf', token => {
+      rafLoop.resumeExecution(token);
+    });
 
     this.addDeviceToggle.addEventListener('click', this.toggleAddDevice, false);
 
@@ -181,7 +187,7 @@ App.prototype = {
       .then(stream => {
         this.displayStream(stream, e.target.name, e.target.value);
         if (stream.getVideoTracks().length > 0) {
-          compositor.addStream(stream);
+          compositor.addStream(stream, e.target.name);
         }
       })
       .catch(err => console.log(err));
@@ -325,9 +331,11 @@ App.prototype = {
   mergeStreams: function(e) {
     if (e.target.checked) {
       compositor.start();
+      audAnalyser.switchDraw('drawMerged');
     }
     else {
       compositor.stop();
+      audAnalyser.switchDraw('draw');
     }
   },
   minimiseStreamView: function(e) {
@@ -389,11 +397,13 @@ App.prototype = {
     this.isRecording = true;
 
     deviceMgr.record();
+    compositor.record();
 
     [...document.querySelectorAll('#recordingList a')].forEach(anchor => anchor.parentNode.removeChild(anchor));
   },
   pauseRecord: function(e) {
     deviceMgr.pauseRecording();
+    compositor.pauseRecording();
     this.isPaused = !this.isPaused;
   },
   stopRecord: function(e) {
@@ -404,6 +414,7 @@ App.prototype = {
     this.isRecording = false;
     this.isPaused = false;
     deviceMgr.stopRecording();
+    compositor.stopRecording();
     document.getElementById('toggleSaveCreationModal').checked = true;
     rafLoop.unsubscribe(this.recTimeToken);
     this.recTimeToken = null;
@@ -481,20 +492,19 @@ deviceMgr.once('enumerated', {
     }
 });
 
-deviceMgr.on('record.prepare', details => {
-  app.listRecording(details);
+[deviceMgr, compositor].forEach(recorder => {
+  recorder.on('record.prepare', details => {
+    app.listRecording(details);
+  });
+  recorder.on('record.complete', details => {
+    app.setMediaLink(details);
+  });
 });
 
-deviceMgr.on('record.complete', details => {
-  app.setMediaLink(details);
-});
-
-deviceMgr.on('stream.mute', id => {
-  app.muteStream(id);
-});
-
-compositor.on('stream.mute', id => {
-  app.muteStream('compositor');
+[deviceMgr, compositor].forEach(stream => {
+  stream.on('stream.mute', id => {
+    app.muteStream(id);
+  });
 });
 
 compositor.on('subscribe.raf', function() {

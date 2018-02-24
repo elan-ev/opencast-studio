@@ -43,15 +43,17 @@ AudioAnalyser.prototype = {
 
     if (this.canvas !== canvas) {
       this.canvas = canvas;
-      this.canvas.width = this.WIDTH = this.canvas.clientWidth;
-      this.canvas.height = this.HEIGHT = this.canvas.clientHeight;
-
-      this.canvasCtx = this.canvas.getContext('2d');
-      this.canvasCtx.lineWidth = this.canvas.height - 2;
-      this.canvasCtx.lineCap = 'round';
-      this.canvasCtx.fillStyle = 'white';
-      this.canvasCtx.strokeStyle  = '#09f';
+      this.setCanvasDimensions(canvas);
     }
+  },
+  setCanvasDimensions: function(canvas) {
+    this.canvas.width = this.WIDTH = this.canvas.clientWidth;
+    this.canvas.height = this.HEIGHT = this.canvas.clientHeight;
+    this.canvasCtx = this.canvas.getContext('2d');
+    this.canvasCtx.lineWidth = this.canvas.height - 2;
+    this.canvasCtx.lineCap = 'round';
+    this.canvasCtx.fillStyle = 'white';
+    this.canvasCtx.strokeStyle = '#09f';
   },
   analyse: function(track) {
     this.audioSource = this.audioCtx.createMediaStreamSource(track);
@@ -76,7 +78,7 @@ AudioAnalyser.prototype = {
                       }, 0.0));
       this.notifyDependencies('magnitude', magnitude);
       if (!this.noCanvas) {
-        this.draw(magnitude);
+        this.drawFn(magnitude);
       }
     } catch(e) {
       console.log(e);
@@ -93,6 +95,39 @@ AudioAnalyser.prototype = {
 
     this.canvasCtx.lineTo(magnitude/16*this.WIDTH, this.HEIGHT/2);
     this.canvasCtx.stroke();
+  },
+  drawMerged: function(magnitude) {
+/*    this.canvasCtx.fillStyle = 'white';
+    this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+    this.canvasCtx.beginPath();
+    this.canvasCtx.fillStyle = '#09f';
+    this.canvasCtx.arc(this.WIDTH/2, this.HEIGHT/2, magnitude/16 * this.WIDTH, 0, 2 * Math.PI);
+    this.canvasCtx.fill();
+    this.canvasCtx.stroke();*/
+    this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+    this.canvasCtx.beginPath();
+    let calcMag = magnitude/16 * this.WIDTH;
+    this.canvasCtx.lineWidth = calcMag;
+    this.canvasCtx.moveTo(this.HEIGHT/2, this.HEIGHT/2);
+    this.canvasCtx.lineTo(this.HEIGHT/2, this.HEIGHT/2);
+    this.canvasCtx.stroke();
+  },
+  drawFn: function(magnitude) {
+    return this.draw(magnitude);
+  },
+  switchDraw: function(fnString) {
+    if (typeof fnString == 'string' && this.__proto__[fnString]) {
+      this.clearCanvas();
+      this.delegate('pause.raf', this.rafTokens.performCalc);
+      setTimeout(() => {
+        this.setCanvasDimensions(this.canvas);
+        this.__proto__.drawFn = this.__proto__[fnString];
+        this.delegate('resume.raf', this.rafTokens.performCalc);
+      }, 1500);
+    }
+  },
+  clearCanvas: function() {
+    this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
   },
   on: function(ev, fn) {
     if (!this.subscriptions.hasOwnProperty(ev)) {

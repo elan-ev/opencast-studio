@@ -7,9 +7,11 @@ RAFLoop.prototype = {
   constructor: RAFLoop,
   loop: function(timestamp) {
     for (let key in this.subscriptions) {
-      let fn = this.subscriptions[key].fn;
-      let scope = this.subscriptions[key].scope;
-      fn.call(scope, timestamp);
+      if (this.subscriptions[key].active) {
+        let fn = this.subscriptions[key].fn;
+        let scope = this.subscriptions[key].scope;
+        fn.call(scope, timestamp);
+      }
     }
     requestAnimationFrame(ts => this.loop(ts));
   },
@@ -22,7 +24,8 @@ RAFLoop.prototype = {
 
       this.subscriptions[subToken] = {
         fn: sub.fn,
-        scope: sub.scope
+        scope: sub.scope,
+        active: true
       }
 
       if (cb && typeof cb == 'function') {
@@ -44,5 +47,24 @@ RAFLoop.prototype = {
     }
 
     return result;
-  }
+  },
+  pauseExecution: function(subToken) {
+    let result = false;
+    if (this.subscriptions.hasOwnProperty(subToken)) {
+      this.subscriptions[subToken].active = false;
+      result = true;
+    }
+
+    return result;
+  },
+  resumeExecution: function(subToken) {
+    let result = false;
+    if (this.subscriptions.hasOwnProperty(subToken)) {
+      this.subscriptions[subToken].active = true;
+      result = true;
+    }
+
+    return result;
+  },
+
 }

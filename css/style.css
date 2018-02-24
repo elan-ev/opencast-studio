@@ -177,8 +177,20 @@ input:checked + section {
 #videoView {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 0 2rem;
+  position: relative;
+  pointer-events: none;
+  min-height: 50%;
+  transition: min-height 1s;
+}
+
+#minimiseStreams:checked ~ #advancedUserView:checked ~ #mergestreams:checked ~ #videoView {
+  min-height: calc(100% - 10rem);
+}
+
+#videoView * {
+  pointer-events: auto;
 }
 
 .mediadevice {
@@ -189,14 +201,14 @@ input:checked + section {
 }
 
 .mediadevice:not(.audioDevice) {
-  transition: width 0.5s;
+  transition: width 0.5s, opacity 0.25s;
 }
 
 .mediadevice.audioDevice {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 30% !important;
+  width: calc((100% - 4rem)*0.3) !important;
 }
 
 .mediadevice::before {
@@ -371,6 +383,7 @@ input:checked + section {
   opacity: 0;
   transition: 0.25s;
   border-radius: 0.5rem;
+  z-index: 1;
 }
 
 .active.mediadevice canvas {
@@ -384,12 +397,13 @@ input:checked + section {
   height: 4rem;
   top: calc(50% - 0.5rem);
   transition: transform 0.75s ease-in-out, left 0.75s ease-in-out, top 0.75s ease-in-out;
+  z-index: 3;
 }
 
 .audioDevice .shadow {
   top: calc(50% - 0.5rem + 1px);
   position: absolute;
-  
+  z-index: 2;
 }
 
 .active.audioDevice .placeholder, .active.audioDevice .shadow {
@@ -414,6 +428,7 @@ input:checked + section {
   border-radius: 1rem;
   -webkit-clip-path: url(#mic);
   clip-path: url(#mic);
+  transition: background 1s;
 }
 
 .audioDevice .shadow::before {
@@ -432,11 +447,18 @@ input:checked + section {
   position: absolute;
   -webkit-clip-path: url(#micStand);
   clip-path: url(#micStand);
+  transition: background 0.5s 1s;
 }
 
 .audioDevice .shadow::before, .audioDevice .shadow::after {
   background: rgba(0,0,0,0.2);
 }
+
+#mergestreams:checked ~ #videoView .audioDevice .placeholder::before,
+#mergestreams:checked ~ #videoView .audioDevice .placeholder::after {
+  background: #eee;
+}
+
 
 #streams {
   position: absolute;
@@ -467,7 +489,6 @@ input:checked + section {
 #simpleUserView:checked ~ label[for=mergestreams].mediadevice {
   opacity: 0;
   visibility: hidden;
-  position: absolute;
   transition: opacity 0.5s, visibility 0s 0.5s;
 }
 
@@ -476,7 +497,15 @@ input:checked + section {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.3s 0.5s, visibility 0s 0.5s, position 0s,
-              width 1s, height 1s, top 1s, left 1s, transform 1s, border-radius 0.5s 0.75s;
+              width 1s, height 1s, top 1s, bottom 1s, left 1s, transform 1s, border-radius 0.5s 0.75s;
+}
+
+#minimiseStreams:checked ~ #advancedUserView:checked ~ #mergestreams:checked ~ label[for=mergestreams].mediadevice {
+  width: calc((100vh - 17rem)*16/9);
+}
+
+#advancedUserView:checked ~ #videoView .mediadevice.audioDevice {
+  bottom: 0;
 }
 
 #streams::before {
@@ -987,11 +1016,12 @@ button {
   }
 }
 
-label[for=mergestreams] {
+label.mediadevice[for=mergestreams] {
   position: absolute;
   top: 4rem;
   left: 50%;
   transform: translateX(-50%);
+  width: calc((100% - 4rem)*0.3);
 }
 
 label[for=audiostream]::before,
@@ -1005,7 +1035,7 @@ label[for=mergestreams]::before {
   line-height: 4rem;
   text-align: right;
   position: absolute;
-  top: 0;
+  top: -4rem;
   right: 2rem;
   font-size: 0.8rem;
 }
@@ -1265,8 +1295,23 @@ input:focus {
   width: 3rem !important;
   min-height: 3rem;
   border-radius: 50%;
-  left: calc(200%/3 - 4rem);
+  bottom: 0.5rem;
+  left: calc(50% + 38.166%/2 - 2rem);
+  overflow: hidden;
 }
+
+
+#mergestreams:checked ~ #videoView .mediadevice.audioDevice canvas {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#minimiseStreams:checked ~ #mergestreams:checked ~ #videoView .mediadevice.audioDevice {
+  left: calc(50% + (100vh - 17rem)*8/9 - 2rem);
+}
+
 
 #mergestreams:checked ~ #videoView .audioDevice .placeholder,
 #mergestreams:checked ~ #videoView .audioDevice .shadow {
@@ -1280,9 +1325,28 @@ input:focus {
 }
 
 #mergestreams:checked ~ label[for=mergestreams] {
- /* width: 50%; */
+ width: 38.166%;
 }
 
 #mergestreams:checked ~ label[for=mergestreams]::before {
-  margin-top: 75%;
+  margin-top: 56.25%;
+}
+
+#mergestreams:checked ~ label[for=mergestreams]::after {
+  content: "Don't worry, \A all streams will be recorded";
+  white-space: pre;
+  line-height: 1.75rem;
+  transition: opacity 0.5s 10s;
+  background: rgba(255,255,255,0.9);
+  padding: 2rem 0;
+  z-index: 3;
+  color: black;
+  bottom: 50%;
+  transform: translateY(50%);
+  -webkit-subpixel-rendering: anti-aliased;
+}
+
+#advancedUserView:checked ~ #mergestreams:checked ~ #videoView .videoDevice,
+#advancedUserView:checked ~ #mergestreams:checked ~ #videoView .desktopDevice {
+  opacity: 0;
 }

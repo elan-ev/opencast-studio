@@ -13,6 +13,8 @@ class Compositor extends EventEmitter {
                     'video/x-matroska;codecs="avc1"',
                     'video/webm;codecs="vp8,opus"'
                   ].filter(codec => MediaRecorder.isTypeSupported(codec));
+    this.recorder = null;
+    this.recData = [];
 
     this.width = (opts ? (opts.width || 1280) : 1280);
     this.height = (opts ? (opts.height || 720) : 720);
@@ -65,24 +67,56 @@ class Compositor extends EventEmitter {
     video.autoplay = true;
     video.muted = true;
 
-    video.onloadedmetadata = function() {
-      let height = this.height;
-      let width = video.videoWidth / video.videoHeight * height;
-      let offsetX = 0;
-      let offsetY = 0;
+    video.onloadedmetadata = () => {
+      let position = this.getPosition(video, opts);
 
       this.streams.push({
         stream: stream,
         video: video,
         active: true,
-        offsetX: offsetX,
-        offsetY: offsetY,
-        width: width,
-        height: height
+        offsetX: position.offsetX,
+        offsetY: position.offsetY,
+        width: position.width,
+        height: position.height
       });
-      this.streamOrder.push(stream.id);
-    }.bind(this);
+      if (typeof opts == 'string' && opts == 'desktop') {
+        this.streamOrder.unshift(stream.id);
+      }
+      else {
+        this.streamOrder.push(stream.id);
+      }
+    };
     video.srcObject = stream;
+
+    if (this.stream && stream.getAudioTracks().length) {
+      this.addAudioTrack(stream.getAudioTracks()[0]);
+    }
+  }
+
+  getPosition(video, opts) {
+    if (typeof opts == 'string') {
+      switch (opts) {
+        case 'desktop':
+          return {
+              width: Math.min(video.videoWidth, this.width),
+             height: Math.min(video.videoHeight, this.height),
+            offsetX: 0,
+            offsetY: (this.height - Math.min(video.videoHeight, this.height)) / 2
+          };
+
+        default:
+          let aspectRatio = video.videoWidth / video.videoHeight;
+          let isLandscape = aspectRatio > 1;
+          let width = (isLandscape) ? this.width / 3 : this.height / 3 * aspectRatio; 
+          let height = (isLandscape) ? (this.width / 3) / aspectRatio : this.height / 3;
+          return {
+              width: width,
+             height: height,
+            offsetX: this.width - width,
+            offsetY: this.height - height
+          };
+      }
+    }
   }
 
   draw() {
@@ -100,6 +134,11 @@ class Compositor extends EventEmitter {
     });
 
     this.stream = this.canvas.captureStream(30);
+    this.streams.forEach(streamObj => {
+      if (streamObj.stream.getAudioTracks().length) {
+        this.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
+      }
+    });
     this.emit('compositestream', this.stream);
   }
 
@@ -109,12 +148,45 @@ class Compositor extends EventEmitter {
 
   addAudioTrack(track) {
     if (this.isChrome) {
-      this.stream.addTrack(audioTrack);
+      this.stream.addTrack(track);
     }
     else {
       this.stream = new MediaStream([track, ...this.stream.getVideoTracks(), ...this.stream.getAudioTracks()])
     }
-    this.stream.addTrack(track instanceof MediaStream ? track.getAudioTracks()[0] : track);
     this.emit('stream.mute');
+  }
+
+  record() {
+    if (!this.recorder) {
+      if (!this.stream) {
+        throw new Error("Can't record as stream is not active");
+      }
+
+      this.recorder = new Recorder(this.stream);
+      this.recorder.on('record.complete', media => {
+        media.id = 'compositor';
+        this.emit('record.complete', media);
+        this.recorder = null;
+      });
+      this.recorder.start(1000);
+    }
+    else {
+      this.recorder.resume();
+    }
+  }
+
+  stopRecording() {
+    if (this.recorder) {
+      this.recorder.stop();
+      this.emit('record.prepare', {
+         label: 'compositor',
+            id: 'compositor',
+        flavor: 'Composite'
+      });
+    }
+  }
+
+  pauseRecording() {
+    this.recorder.pause();
   }
 }
