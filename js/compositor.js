@@ -30,9 +30,11 @@ class Compositor extends EventEmitter {
         return _stream;
       },
       set: function(stream) {
-        if (stream instanceof MediaStream) {
+        if (stream === null || stream instanceof MediaStream) {
           _stream = stream;
-          this.emit('stream', stream);
+          if (stream) {
+            this.emit('stream', {stream: stream, id: 'composite'});
+          }
         }
       }
     });
@@ -52,13 +54,20 @@ class Compositor extends EventEmitter {
     this.isChrome = _browser === 'chrome';
   }
 
-  addStream(stream, opts) {
-    let streamIndex = this.streams.map(curStream => curStream.stream.id).indexOf(stream.id);
+  addStream(streamObj) {
+    let streamIndex = this.streams.map(curStream => curStream.id).indexOf(streamObj.id);
     if (streamIndex > -1) {
       this.streams[streamIndex].active = true;
+      console.log('here');
+      if (this.streams[streamIndex].stream.id != streamObj.stream.id) {
+        console.log('inside');
+        console.log(this.streams[streamIndex]);
+        this.streams[streamIndex].stream = streamObj.stream;
+        this.streams[streamIndex].video.srcObject = streamObj.stream;
+      }
+      else console.log('same id');
       return;
     }
-
     if (this.streams.length > 4) {
       throw new Error('max streams attached');
     }
@@ -68,10 +77,11 @@ class Compositor extends EventEmitter {
     video.muted = true;
 
     video.onloadedmetadata = () => {
-      let position = this.getPosition(video, opts);
+      let position = this.getPosition(video, streamObj.id);
 
       this.streams.push({
-        stream: stream,
+        id: streamObj.id,
+        stream: streamObj.stream,
         video: video,
         active: true,
         offsetX: position.offsetX,
@@ -79,44 +89,73 @@ class Compositor extends EventEmitter {
         width: position.width,
         height: position.height
       });
-      if (typeof opts == 'string' && opts == 'desktop') {
-        this.streamOrder.unshift(stream.id);
+      if (streamObj.id == 'desktop') {
+        this.streamOrder.unshift(streamObj.id);
       }
       else {
-        this.streamOrder.push(stream.id);
+        this.streamOrder.push(streamObj.id);
       }
     };
-    video.srcObject = stream;
+    video.srcObject = streamObj.stream;
 
-    if (this.stream && stream.getAudioTracks().length) {
-      this.addAudioTrack(stream.getAudioTracks()[0]);
+    if (this.stream && streamObj.stream.getAudioTracks().length) {
+      console.log(streamObj.stream.getAudioTracks()[0], this.stream);
+      this.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
     }
   }
 
-  getPosition(video, opts) {
-    if (typeof opts == 'string') {
-      switch (opts) {
-        case 'desktop':
-          return {
-              width: Math.min(video.videoWidth, this.width),
-             height: Math.min(video.videoHeight, this.height),
-            offsetX: 0,
-            offsetY: (this.height - Math.min(video.videoHeight, this.height)) / 2
-          };
+  removeStream(id) {
+    return new Promise((resolve, reject) => {
+      let streamIndex = this.streams.map(curStream => curStream.id).indexOf(id);
 
-        default:
-          let aspectRatio = video.videoWidth / video.videoHeight;
-          let isLandscape = aspectRatio > 1;
-          let width = (isLandscape) ? this.width / 3 : this.height / 3 * aspectRatio; 
-          let height = (isLandscape) ? (this.width / 3) / aspectRatio : this.height / 3;
-          return {
-              width: width,
-             height: height,
-            offsetX: this.width - width,
-            offsetY: this.height - height
-          };
+      if (streamIndex === -1) {
+        reject("no such stream");
+        return;
       }
+
+      resolve(this.streams.splice(streamIndex, 1));
+    });
+  }
+
+  getPosition(video, id) {
+    switch (id) {
+      case 'desktop':
+        return {
+            width: Math.min(video.videoWidth, this.width),
+           height: Math.min(video.videoHeight, this.height),
+          offsetX: 0,
+          offsetY: (this.height - Math.min(video.videoHeight, this.height)) / 2
+        };
+
+      default:
+        let aspectRatio = video.videoWidth / video.videoHeight;
+        let isLandscape = aspectRatio > 1;
+        let width = (isLandscape) ? this.width / 4 : this.height / 4 * aspectRatio; 
+        let height = (isLandscape) ? (this.width / 4) / aspectRatio : this.height / 4;
+        let offsets = this.getDefaultOffsets(width, height);
+        return {
+            width: width,
+           height: height,
+          offsetX: offsets.x,
+          offsetY: offsets.y
+        };
     }
+  }
+
+  getDefaultOffsets(width, height) {
+    let x = this.width - width;
+    let y = this.height - height;
+
+    this.streams.forEach(stream => {
+      if (stream.id !== 'desktop') {
+        if (x >= stream.offsetX && x < (stream.offsetX + stream.width) &&
+            y >= stream.offsetY && y < (stream.offsetY + stream.height)) {
+          x = Math.max(0, stream.offsetX - width);
+        }
+      }
+    });
+
+    return {x: x, y: y};
   }
 
   draw() {
@@ -139,11 +178,12 @@ class Compositor extends EventEmitter {
         this.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
       }
     });
-    this.emit('compositestream', this.stream);
   }
 
   stop() {
-    this.emit('unsubscribe.raf', token, () => this.rafToken = null);
+    this.emit('unsubscribe.raf', this.refToken, () => this.rafToken = null);
+    this.stream = null;
+    this.emit('stream.remove', 'composite');
   }
 
   addAudioTrack(track) {

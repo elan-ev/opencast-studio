@@ -198,10 +198,12 @@ input:checked + section {
   width: 30%;
   position: relative;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  overflow: hidden;
+  visibility: visible;
 }
 
 .mediadevice:not(.audioDevice) {
-  transition: width 0.5s, opacity 0.25s;
+  transition: width 0.5s, opacity 0.25s, visibility 0s;
 }
 
 .mediadevice.audioDevice {
@@ -237,6 +239,90 @@ input:checked + section {
   background: black;
 }
 
+.mediadevice .streamControls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3rem;
+  background: rgba(48,48,48,0.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0s 0.3s;
+  z-index: 3;
+  text-align: right;
+}
+
+.streamControls label {
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0.5rem;
+  position: relative;
+  background: transparent;
+  transition: background 0.3s;
+  color: white;
+  font-size: 0.8rem;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.streamControls label:hover {
+  color: black;
+}
+
+.streamControls label ul {
+  position: absolute;
+  right: -0.5rem;
+  top: calc(100% + 0.5rem);
+  background: rgba(48,48,48,0.9);
+  overflow: hidden;
+  max-height: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  transition: max-height 0.5s;
+}
+
+.streamControls input:nth-of-type(1):checked ~ label:nth-of-type(1) ul {
+  max-height: 6rem;
+}
+
+.streamControls label ul li {
+  line-height: 1rem;
+  display: block;
+  overflow: hidden;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.streamControls label ul li:hover {
+  background: rgba(255,255,255, 0.7);
+}
+
+.streamControls label ul li button {
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 300;
+  display: block;
+  margin: 0;
+}
+
+.streamControls label:hover {
+  background: white;
+}
+
+#advancedUserView:checked ~ .mediadevice.active:hover .streamControls,
+#advancedUserView:checked ~ #videoView .mediadevice.active:hover .streamControls {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s, visibility 0s;
+}
+
 .midSplit {
   display: flex;
   width: 30%;
@@ -265,6 +351,7 @@ input:checked + section {
   font-size: 1.5rem;
   font-weight: 300;
   transition: opacity 0.5s;
+  opacity: 1;
 }
 
 .mediadevice[for=mergestreams]::after {
@@ -454,6 +541,10 @@ input:checked + section {
   background: rgba(0,0,0,0.2);
 }
 
+#mergestreams:checked ~ #videoView .audioDevice {
+  background: transparent;
+}
+
 #mergestreams:checked ~ #videoView .audioDevice .placeholder::before,
 #mergestreams:checked ~ #videoView .audioDevice .placeholder::after {
   background: #eee;
@@ -462,7 +553,7 @@ input:checked + section {
 
 #streams {
   position: absolute;
-  bottom: 3px;
+  bottom: 0;
   width: 100%;
   list-style: none;
   height: 8rem;
@@ -625,7 +716,7 @@ label[for=minimiseStreams]::before {
 
 #minimiseStreams:checked ~ #streams li:hover video {
   top: auto;
-  bottom: calc(100% + 1.5rem);
+  bottom: calc(100% + 1rem);
   display: block;
 }
 
@@ -662,7 +753,7 @@ label[for=minimiseStreams]::before {
 
 #streams li .backdrop {
   position: absolute;
-  bottom: calc(100% + 1rem);
+  bottom: calc(100% + 0.5rem);
   width: 9rem;
   height: 7rem;
   left: -0.5rem;
@@ -670,6 +761,32 @@ label[for=minimiseStreams]::before {
   border-radius: 0.125rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   display: none;
+}
+
+.backdrop::before {
+  width: 0;
+  height: 0;
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(-0.5rem + 1px);
+  transform: translate(-50%, 0);
+  border-top: 0.375rem solid rgba(0,0,0,0.2);
+  border-left: 0.25rem solid transparent;
+  border-right: 0.25rem solid transparent;
+}
+
+.backdrop::after {
+  width: 0;
+  height: 0;
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(-0.5rem + 2px);
+  transform: translate(-50%, 0);
+  border-top: white solid 0.375rem;
+  border-left: 0.25rem solid transparent;
+  border-right: 0.25rem solid transparent;
 }
 
 #minimiseStreams:checked ~ #streams li.active:hover .backdrop {
@@ -1202,6 +1319,10 @@ input {
   font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
 }
 
+button {
+  outline: none;
+}
+
 input:focus {
   border-color: #09f;
   box-shadow: 0 0 3px #8cf;
@@ -1306,6 +1427,7 @@ input:focus {
   left: 0;
   width: 100%;
   height: 100%;
+  background: rgba(0,0,0,0.2);
 }
 
 #minimiseStreams:checked ~ #mergestreams:checked ~ #videoView .mediadevice.audioDevice {
@@ -1325,7 +1447,8 @@ input:focus {
 }
 
 #mergestreams:checked ~ label[for=mergestreams] {
- width: 38.166%;
+  width: 38.166%;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
 }
 
 #mergestreams:checked ~ label[for=mergestreams]::before {
@@ -1343,10 +1466,34 @@ input:focus {
   color: black;
   bottom: 50%;
   transform: translateY(50%);
-  -webkit-subpixel-rendering: anti-aliased;
 }
 
 #advancedUserView:checked ~ #mergestreams:checked ~ #videoView .videoDevice,
 #advancedUserView:checked ~ #mergestreams:checked ~ #videoView .desktopDevice {
   opacity: 0;
+  visibility: hidden;
+  transition: width 0.5s, opacity 0.25s, visibility 0s 0.25s;
+}
+
+.close::before, .close::after {
+  width: 1rem;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  content: '';
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+  transition: background 0.3s !important;
+  margin: 0 !important;
+}
+
+.close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
+.close:hover::before, .close:hover::after {
+  background: #333;
 }

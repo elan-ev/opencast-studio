@@ -46,13 +46,13 @@ AudioAnalyser.prototype = {
       this.setCanvasDimensions(canvas);
     }
   },
-  setCanvasDimensions: function(canvas) {
+  setCanvasDimensions: function(canvas, isMerged) {
     this.canvas.width = this.WIDTH = this.canvas.clientWidth;
     this.canvas.height = this.HEIGHT = this.canvas.clientHeight;
     this.canvasCtx = this.canvas.getContext('2d');
     this.canvasCtx.lineWidth = this.canvas.height - 2;
     this.canvasCtx.lineCap = 'round';
-    this.canvasCtx.fillStyle = 'white';
+    this.canvasCtx.fillStyle = isMerged ? 'rgba(255,255,255,0.3)' : 'white';
     this.canvasCtx.strokeStyle = '#09f';
   },
   analyse: function(track) {
@@ -97,14 +97,7 @@ AudioAnalyser.prototype = {
     this.canvasCtx.stroke();
   },
   drawMerged: function(magnitude) {
-/*    this.canvasCtx.fillStyle = 'white';
-    this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
-    this.canvasCtx.beginPath();
-    this.canvasCtx.fillStyle = '#09f';
-    this.canvasCtx.arc(this.WIDTH/2, this.HEIGHT/2, magnitude/16 * this.WIDTH, 0, 2 * Math.PI);
-    this.canvasCtx.fill();
-    this.canvasCtx.stroke();*/
-    this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+    this.canvasCtx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
     this.canvasCtx.beginPath();
     let calcMag = magnitude/16 * this.WIDTH;
     this.canvasCtx.lineWidth = calcMag;
@@ -117,10 +110,10 @@ AudioAnalyser.prototype = {
   },
   switchDraw: function(fnString) {
     if (typeof fnString == 'string' && this.__proto__[fnString]) {
-      this.clearCanvas();
       this.delegate('pause.raf', this.rafTokens.performCalc);
+      this.clearCanvas();
       setTimeout(() => {
-        this.setCanvasDimensions(this.canvas);
+        this.setCanvasDimensions(this.canvas, fnString === 'drawMerged');
         this.__proto__.drawFn = this.__proto__[fnString];
         this.delegate('resume.raf', this.rafTokens.performCalc);
       }, 1500);

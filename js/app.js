@@ -169,6 +169,10 @@ App.prototype = {
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
 
     document.getElementById('minimiseStreams').addEventListener('change', this.minimiseStreamView.bind(this), false);
+
+    [...document.querySelectorAll('.streamControls label:nth-of-type(1) button')].forEach(btn => {
+      btn.addEventListener('click', this.chooseResolution.bind(this), false);
+    });
   },
   switchCreateView: function(e) {
     let newView = `${e.target.value}UserView`;
@@ -183,23 +187,19 @@ App.prototype = {
       document.getElementById('toggleExtensionModal').checked = true;
     }
 
-    deviceMgr.connect(e.target.value)
-      .then(stream => {
-        this.displayStream(stream, e.target.name, e.target.value);
-        if (stream.getVideoTracks().length > 0) {
-          compositor.addStream(stream, e.target.name);
-        }
-      })
-      .catch(err => console.log(err));
+    deviceMgr.connect(e.target.value);
   },
-  displayStream: function(stream, name, value) {
-    this.mediaElements[name].srcObject = stream;
-    this.mediaElements[name].parentNode
-      .classList.add('active');
-    [...document.querySelectorAll(`video[data-id="${value}"]`)]
+  displayStream: function(stream, value) {
+    let mediaContainer = null;
+
+    [...document.querySelectorAll(`video[data-id="${value}"],audio[data-id="${value}"]`)]
       .forEach(vid => {
         vid.srcObject = stream;
-        vid.parentNode.classList.add('active')
+        vid.muted = true;
+        vid.parentNode.classList.add('active');
+        if (vid.parentNode.querySelector('.streamControls')) {
+          mediaContainer = vid.parentNode;
+        }
       });
 
     let audioContainer = this.mediaElements.audio.parentNode;
@@ -214,6 +214,77 @@ App.prototype = {
       if (audioListItem) {
         audioListItem.classList.add('active');
       }
+    }
+
+    if (stream.getVideoTracks().length > 0 && mediaContainer && mediaContainer.parentNode.id === 'videoView') {
+      let resolution = stream.getVideoTracks()[0].getSettings().height + 'p';
+      let videoControls = mediaContainer.querySelector('.streamControls');
+      videoControls.querySelector('label:first-of-type span').textContent = resolution;
+
+      let resolutionOptions = [...videoControls.querySelectorAll('label:first-of-type button')]
+      let doListRes = true;
+      resolutionOptions.some(button => {
+        if (button.value === resolution) {
+          doListRes = false;
+          return;
+        }
+      });
+
+      if (doListRes) {
+        resolutionOptions.some((button, i) => {
+          if (parseInt(resolution) < parseInt(button.value) ||
+              i === resolutionOptions.length - 1) {
+            let resButton = document.createElement('button');
+            button.type = 'button';
+            button.textContent = button.value = resolution;
+
+            if (parseInt(resolution) < parseInt(button.value)) {
+              button.parentNode.insertBefore(resButton, button);
+            }
+            else {
+              button.parentNode.appendChild(resButton);
+            }
+
+            resButton.addEventListener('click', this.chooseResolution.bind(this), false);
+            return;
+          }
+        });
+      }
+    }
+  },
+  chooseResolution: function(e) {
+    let res = e.target.value;
+    let parent = e.target.parentNode;
+    while (parent && !parent.classList.contains('mediadevice')) {
+      parent = parent.parentNode;
+    }
+
+    let id = parent.getAttribute('for');
+    let streamId = document.getElementById(id).value;
+    parent.querySelector('.streamControls input:nth-of-type(1)').checked = false;
+    let change = this.changeResolution(streamId, res);
+    change.then(streamObj => this.displayStream(streamObj.stream, streamId === 'desktop' ? 'desktop' : 'video', streamId));
+  },
+  changeResolution: function(id, res) {
+    if (peers.hasOwnProperty(id)) {
+      return peers[id].changeResolution(res);
+    }
+
+    switch(id) {
+      case 'composite':
+        return compositor.changeResolution(res);
+        break;
+
+      default:
+        compositor.removeStream(id);
+        return deviceMgr.changeResolution(id, res);
+    }
+  },
+  removeStream: function(name) {
+    let mediaEl = document.getElementById(name);
+    if (name) {
+      mediaEl.srcObject = null;
+      mediaEl.parentNode.classList.remove('active');
     }
   },
   muteStream: function(id) {
@@ -264,6 +335,10 @@ App.prototype = {
 
       this.deviceList.appendChild(item);
       item.addEventListener('click', this.toggleDevice.bind(this), false);
+
+      if (!this.mediaElements[devices[key].deviceType].getAttribute('data-id')) {
+        this.mediaElements[devices[key].deviceType].setAttribute('data-id', deviceType === 'desktop' ? 'desktop' : key);
+      }
     }
   },
   listPeer: function(id) {
@@ -505,6 +580,23 @@ deviceMgr.once('enumerated', {
   stream.on('stream.mute', id => {
     app.muteStream(id);
   });
+  stream.on('stream', streamObj => {
+    app.displayStream(streamObj.stream, streamObj.id);
+    if (app.isRecording) {
+      stream.record(streamObj.id);
+    }
+
+    if (streamObj.id === 'composite') {
+      return;
+    }
+
+    if (streamObj.stream.getVideoTracks().length > 0) {
+      compositor.addStream(streamObj);
+    }
+    else if (streamObj.stream.getVideoTracks().length > 0) {
+      compositor.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
+    }
+  });
 });
 
 compositor.on('subscribe.raf', function() {
@@ -515,12 +607,12 @@ compositor.on('subscribe.raf', function() {
   }, args[1]);
 });
 
-compositor.on('unsubscribe.raf', function() {
-  console.log(arguments);
+compositor.on('unsubscribe.raf', token => {
+  rafLoop.unsubscribe(token);
 });
 
-compositor.on('compositestream', stream => {
-  app.displayStream(stream, 'composite', 'composite');
+compositor.on('stream.remove', () => {
+  app.removeStream('composite');
 });
 
 if (window.chrome && chrome.app) {
@@ -530,7 +622,6 @@ if (window.chrome && chrome.app) {
   window.addEventListener('message', e => {
     if (e.data.type && e.data.type == 'SS_PING' && document.getElementById('appInstalled')) {
       clearTimeout(delay);
-      deviceMgr.listenForChromeDesktop();
     }
   });
 }

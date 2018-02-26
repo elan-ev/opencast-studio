@@ -12,6 +12,13 @@ class DeviceManager extends EventEmitter {
       label: 'Desktop'
     });
 
+    this.desktop.on('stream', stream => {
+      this.emit('stream', {id: 'desktop', stream: stream});
+      if (this.isRecording) {
+        this.desktop.record();
+      }
+    });
+
     Object.defineProperty(this, 'devices', {
       get: function() {
         let devices = {desktop: this.desktop};
@@ -103,11 +110,6 @@ class DeviceManager extends EventEmitter {
     return new Promise((resolve, reject) => reject("no such device"));
   }
 
-  listenForChromeDesktop() {
-    window.addEventListener('message', e => {
-    });
-  }
-
   record() {
     for (var dev in this.devices) {
       if (this.devices[dev].stream) {
@@ -132,6 +134,19 @@ class DeviceManager extends EventEmitter {
       }
     }
     this.isRecording = false;
+  }
+
+  changeResolution(id, res) {
+    return new Promise((resolve, reject) => {
+      if (this.devices.hasOwnProperty(id)) {
+        this.devices[id].changeResolution(res)
+          .then(stream => resolve({id: id, stream: stream}))
+          .catch(err => reject(err));
+      }
+      else {
+        reject("no such device");
+      }
+    });
   }
 }
 
@@ -191,6 +206,12 @@ class Device extends EventEmitter {
 
     this.isChrome = _browser === 'chrome';
 
+    Object.defineProperty(this, 'browser', {
+      get: function() {
+        return _browser;
+      }
+    });
+
     Object.defineProperty(this, 'constraints', {
       get: function() {
         switch(this.deviceType) {
@@ -218,11 +239,20 @@ class Device extends EventEmitter {
 
   connect(opts) {
     if (this.deviceType === 'desktop' && this.isChrome) {
-      return this.connectChromeDesktop();
+      return this.connectChromeDesktop(opts);
     }
 
     return new Promise((resolve, reject) => {
       opts = opts || {};
+      for (var key in opts) {
+        if (this.deviceType === 'desktop') {
+          this.constraints.video[key] = opts[key];
+        }
+        else {
+          this.constraints[this.deviceType][key] = opts[key];
+        }
+      }
+
       navigator.mediaDevices.getUserMedia(this.constraints)
         .then(stream => {
           if (!this.isChrome && this.deviceType === 'desktop') {
@@ -231,17 +261,22 @@ class Device extends EventEmitter {
             );
           }
           this.stream = stream;
+
           resolve(stream);
         })
-        .catch(err => reject(err));
+        .catch(err => {console.log(err);reject(err)});
     });
   }
 
-  connectChromeDesktop() {
+  connectChromeDesktop(opts) {
     return new Promise((resolve, reject) => {
       this.once('streamId', {
         fn: function(id) {
           this.constraints.video.mandatory.chromeMediaSourceId = id;
+          opts = opts || {};
+          for (var key in opts) {
+            this.constraints.video.mandatory['max' + key.charAt(0).toUpperCase() + key.substring(1)] = opts[key];
+          }
           navigator.mediaDevices.getUserMedia(this.constraints)
             .then(stream => {
               this.stream = stream;
@@ -286,6 +321,16 @@ class Device extends EventEmitter {
     } catch(e) {
       //MediaStream has no audio tracks
     }
+  }
+
+  changeResolution(res) {
+    if (typeof res === 'string') {
+      res = {width: parseInt(res) * 4 / 3, height: parseInt(res)};
+    }
+
+    this.stream.getVideoTracks().forEach(track => track.stop());
+    this.stream = null;
+    return this.connect(res);
   }
 
   record() {

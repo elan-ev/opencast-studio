@@ -31,7 +31,10 @@
       <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" autocomplete="off" />
       <input type="checkbox" name="merge" class="hiddenCheck" id="mergestreams" autocomplete="off" />
       <label for="mergestreams" class="mediadevice action" data-title="Merge streams" data-id="composite" data-target="composite">
-        <video id="composite" autoplay muted></video>
+        <video id="composite" autoplay muted data-id="composite"></video>
+        <div class="streamControls">
+          <label class="close pull-left" title="Remove composite stream" for="mergestreams"></label>
+        </div>
       </label>
       <div id="videoView">
         <div class="viewControls">
@@ -44,6 +47,18 @@
         <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-target="desktop">
           <video id="desktop" autoplay muted></video>
           <span class="placeholder"></span>
+          <div class="streamControls">
+            <input type="checkbox" id="desktopResolution" class="hiddenCheck" />
+            <label for="desktopResolution">
+              <span></span>
+              <ul>
+                <li><button type="button" value="360p">360p</button></li>
+                <li><button type="button" value="480p">480p</button></li>
+                <li><button type="button" value="720p">720p</button></li>
+                <li><button type="button" value="1080p">1080p</button></li>
+              </ul>
+            </label>
+          </div>
         </label>
         <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" autocomplete="off" />
         <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-target="audio">
@@ -57,6 +72,18 @@
           <video id="video" autoplay muted></video>
           <span class="placeholder"></span>
           <span class="shadow"></span>
+          <div class="streamControls">
+            <input type="checkbox" id="videoResolution" class="hiddenCheck" />
+            <label for="videoResolution">
+              <span></span>
+              <ul>
+                <li><button type="button" value="360p">360p</button></li>
+                <li><button type="button" value="480p">480p</button></li>
+                <li><button type="button" value="720p">720p</button></li>
+                <li><button type="button" value="1080p">1080p</button></li>
+              </ul>
+            </label>
+          </div>
         </label>
       </div>
       <div id="recordingControls">
