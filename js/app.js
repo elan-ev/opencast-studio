@@ -173,6 +173,8 @@ App.prototype = {
     [...document.querySelectorAll('.streamControls label:nth-of-type(1) button')].forEach(btn => {
       btn.addEventListener('click', this.chooseResolution.bind(this), false);
     });
+
+    document.getElementById('unmerge').addEventListener('click', this.unmergeStreams.bind(this), false);
   },
   switchCreateView: function(e) {
     let newView = `${e.target.value}UserView`;
@@ -412,6 +414,11 @@ App.prototype = {
       compositor.stop();
       audAnalyser.switchDraw('draw');
     }
+  },
+  unmergeStreams: function(e) {
+    let mergeRadio = document.getElementById('mergestreams');
+    mergeRadio.checked = false;
+    mergeRadio.dispatchEvent(new Event('change'));
   },
   minimiseStreamView: function(e) {
     let title = e.target.checked ? 'Maximise' : 'Minimise';

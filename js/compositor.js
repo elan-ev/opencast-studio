@@ -3,7 +3,7 @@ class Compositor extends EventEmitter {
   constructor(opts) {
     super();
 
-    this.streams = [];
+    this.streams = {};
     this.streamOrder = [];
 
     this.codecs = [
@@ -55,20 +55,15 @@ class Compositor extends EventEmitter {
   }
 
   addStream(streamObj) {
-    let streamIndex = this.streams.map(curStream => curStream.id).indexOf(streamObj.id);
-    if (streamIndex > -1) {
-      this.streams[streamIndex].active = true;
-      console.log('here');
-      if (this.streams[streamIndex].stream.id != streamObj.stream.id) {
-        console.log('inside');
-        console.log(this.streams[streamIndex]);
-        this.streams[streamIndex].stream = streamObj.stream;
-        this.streams[streamIndex].video.srcObject = streamObj.stream;
+    if (this.streams.hasOwnProperty(streamObj.id)) {
+      this.streams[streamObj.id].active = true;
+      if (this.streams[steamObj.id].stream.id != streamObj.stream.id) {
+        this.streams[streamObj.id].stream = streamObj.stream;
+        this.streams[streamObj.id].video.srcObject = streamObj.stream;
       }
-      else console.log('same id');
       return;
     }
-    if (this.streams.length > 4) {
+    if (Object.keys(this.streams).length > 4) {
       throw new Error('max streams attached');
     }
 
@@ -79,7 +74,7 @@ class Compositor extends EventEmitter {
     video.onloadedmetadata = () => {
       let position = this.getPosition(video, streamObj.id);
 
-      this.streams.push({
+      this.streams[streamObj.id] = {
         id: streamObj.id,
         stream: streamObj.stream,
         video: video,
@@ -88,7 +83,7 @@ class Compositor extends EventEmitter {
         offsetY: position.offsetY,
         width: position.width,
         height: position.height
-      });
+      };
       if (streamObj.id == 'desktop') {
         this.streamOrder.unshift(streamObj.id);
       }
@@ -99,21 +94,18 @@ class Compositor extends EventEmitter {
     video.srcObject = streamObj.stream;
 
     if (this.stream && streamObj.stream.getAudioTracks().length) {
-      console.log(streamObj.stream.getAudioTracks()[0], this.stream);
       this.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
     }
   }
 
   removeStream(id) {
     return new Promise((resolve, reject) => {
-      let streamIndex = this.streams.map(curStream => curStream.id).indexOf(id);
-
-      if (streamIndex === -1) {
+      if (!this.streams.hasOwnProperty(id)) {
         reject("no such stream");
         return;
       }
 
-      resolve(this.streams.splice(streamIndex, 1));
+      delete this.streams[id];
     });
   }
 
@@ -146,22 +138,23 @@ class Compositor extends EventEmitter {
     let x = this.width - width;
     let y = this.height - height;
 
-    this.streams.forEach(stream => {
-      if (stream.id !== 'desktop') {
+    for (let key in this.streams) {
+      if (key !== 'desktop') {
+        let stream = this.streams[key];
         if (x >= stream.offsetX && x < (stream.offsetX + stream.width) &&
             y >= stream.offsetY && y < (stream.offsetY + stream.height)) {
           x = Math.max(0, stream.offsetX - width);
         }
       }
-    });
+    }
 
     return {x: x, y: y};
   }
 
   draw() {
-    this.streams
-      .sort((a, b) => this.streamOrder.indexOf(a.stream.id) - this.streamOrder.indexOf(b.stream.id))
-      .filter(stream => stream.active)
+    this.streamOrder
+      .filter(id => this.streams[id].active)
+      .map(id => this.streams[id])
       .forEach(stream => {
         this.ctx.drawImage(stream.video, stream.offsetX, stream.offsetY, stream.width, stream.height);
       });
@@ -173,11 +166,12 @@ class Compositor extends EventEmitter {
     });
 
     this.stream = this.canvas.captureStream(30);
-    this.streams.forEach(streamObj => {
+    for (let key in this.streams) {
+      let streamObj = this.streams[key];
       if (streamObj.stream.getAudioTracks().length) {
         this.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
       }
-    });
+    }
   }
 
   stop() {
