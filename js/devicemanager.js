@@ -183,7 +183,7 @@ class Device extends EventEmitter {
     this.deviceType = device.deviceType || (device.kind === 'audioinput' ? 'audio' : 'video');
 
     let _audConstraints = {audio: {exact: device.deviceId}};
-    let _vidConstraints = {audio: true, video: {exact: device.deviceId}};
+    let _vidConstraints = {audio: true, video: {exact: device.deviceId, facingMode: "user"}};
     let _desktop = {
       firefox: {
         video: {mediaSource: 'screen', frameRate: {ideal: 10, max: 15}}
@@ -264,7 +264,7 @@ class Device extends EventEmitter {
 
           resolve(stream);
         })
-        .catch(err => {console.log(err);reject(err)});
+        .catch(err => reject(err));
     });
   }
 
@@ -374,6 +374,7 @@ class Recorder extends EventEmitter {
                     'video/x-matroska;codecs="avc1"',
                     'video/webm;codecs="vp8,opus"'
                   ].filter(codec => MediaRecorder.isTypeSupported(codec));
+
     let _audioCodecs = [
                          'audio/ogg;codecs=opus',
                          'audio/webm;codecs=opus'
@@ -383,7 +384,6 @@ class Recorder extends EventEmitter {
 
     chosenCodec = chosenCodec || stream.getVideoTracks().length ? _vidCodecs[0] : _audioCodecs[0];
     this.recorder = new MediaRecorder(stream, {mimeType: chosenCodec});
-
     this.recorder.ondataavailable = function(e) {
       if (e.data.size > 0) {
         _recData.push(e.data);
@@ -421,7 +421,9 @@ class Recorder extends EventEmitter {
   start(delay) {
     delay = delay || 0;
     if (!this.isRecording) {
-      this.recorder.start(delay);
+      setTimeout(() => {
+        this.recorder.start();
+      }, delay);
       this.isRecording = true;
     }
     else if (this.isPaused) {
@@ -440,7 +442,9 @@ class Recorder extends EventEmitter {
   }
 
   resume() {
-    this.recorder.resume();
+    if (this.recorder.state === 'paused') {
+      this.recorder.resume();
+    }
   }
 
   stop() {

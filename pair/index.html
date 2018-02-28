@@ -89,6 +89,9 @@
             button.type = 'button';
             button.value = device.deviceId;
             button.setAttribute('data-type', device.kind);
+            if (device.kind === 'videoinput' && device.label.toLowerCase().indexOf('back') > -1) {
+              device.setAttribute('data-opts', '{facingMode:"environment"}');
+            }
             document.querySelector('#deviceList').appendChild(button);
 
             button.addEventListener('click', startStream, false);
@@ -117,7 +120,8 @@
 
     function startStream(e) {
       let id = this.value;
-      let type = this.getAttribute('data-type');
+      let type = this.getAttribute('data-type').replace(/input/g, '');
+      let opts = JSON.parse(this.getAttribute('data-opts') || "{}");
 
       let constraints = type.indexOf('audio') > -1 ?
         {
@@ -127,6 +131,10 @@
           audio: true,
           video: {exact: id}
         };
+
+      for (let key in opts) {
+        constraints[type][key] = opts[key];
+      }
 
       navigator.mediaDevices.getUserMedia(constraints)
         .then(mediaStream => {

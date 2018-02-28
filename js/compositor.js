@@ -191,11 +191,11 @@ class Compositor extends EventEmitter {
   }
 
   record() {
-    if (!this.recorder) {
-      if (!this.stream) {
-        throw new Error("Can't record as stream is not active");
-      }
+    if (!this.stream) {
+      return;
+    }
 
+    if (!this.recorder) {
       this.recorder = new Recorder(this.stream);
       this.recorder.on('record.complete', media => {
         media.id = 'compositor';
@@ -204,7 +204,7 @@ class Compositor extends EventEmitter {
       });
       this.recorder.start(1000);
     }
-    else {
+    else if (this.recorder.state === 'paused') {
       this.recorder.resume();
     }
   }
@@ -221,6 +221,8 @@ class Compositor extends EventEmitter {
   }
 
   pauseRecording() {
-    this.recorder.pause();
+    if (this.recorder) {
+      this.recorder.pause();
+    }
   }
 }

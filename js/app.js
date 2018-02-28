@@ -261,6 +261,11 @@ App.prototype = {
       parent = parent.parentNode;
     }
 
+    if (this.isRecording) {
+      console.log(parent.querySelector('video').videoHeight);
+      return;
+    }
+
     let id = parent.getAttribute('for');
     let streamId = document.getElementById(id).value;
     parent.querySelector('.streamControls input:nth-of-type(1)').checked = false;
@@ -329,6 +334,17 @@ App.prototype = {
       let backdrop = utils.createElement('span', {
                      class: 'backdrop'
                    });
+
+      let optionsList = utils.createElement('span', {
+                          class: 'options'
+                        });
+
+      let addCompositeBtn = utils.createElement('button', {
+                              text: 'Add to composite'
+                              data: {
+                                action: 'composite'
+                              }
+                            });
 
       item.appendChild(mediaEl);
       item.appendChild(placeholder);
@@ -466,6 +482,7 @@ App.prototype = {
     if (this.isRecording) {
       this.isPaused = false;
       deviceMgr.record();
+      compositor.record();
       return;
     }
 

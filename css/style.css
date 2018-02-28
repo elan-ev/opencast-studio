@@ -269,6 +269,14 @@ input:checked + section {
   transition: color 0.3s;
 }
 
+.recording .streamControls label:nth-of-type(1) {
+  pointer-events: none !important;
+  background: rgba(254,0,1,0.4);
+}
+.recording .streamControls label:nth-of-type(1) * {
+  pointer-events: none !important;
+}
+
 .streamControls label:hover {
   color: black;
 }
@@ -1460,10 +1468,10 @@ input:focus {
   white-space: pre;
   line-height: 1.75rem;
   transition: opacity 0.5s 10s;
-  background: rgba(255,255,255,0.9);
+  background: rgba(0,0,0,0.8);
   padding: 2rem 0;
   z-index: 3;
-  color: black;
+  color: white;
   bottom: 50%;
   transform: translateY(50%);
 }
