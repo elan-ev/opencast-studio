@@ -90,7 +90,7 @@
             button.value = device.deviceId;
             button.setAttribute('data-type', device.kind);
             if (device.kind === 'videoinput' && device.label.toLowerCase().indexOf('back') > -1) {
-              button.setAttribute('data-opts', '{facingMode:"environment"}');
+              button.setAttribute('data-opts', '{"facingMode":"environment"}');
             }
             document.querySelector('#deviceList').appendChild(button);
 
