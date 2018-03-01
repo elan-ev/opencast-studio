@@ -340,7 +340,7 @@ App.prototype = {
                         });
 
       let addCompositeBtn = utils.createElement('button', {
-                              text: 'Add to composite'
+                              text: 'Add to composite',
                               data: {
                                 action: 'composite'
                               }
