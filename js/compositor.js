@@ -175,7 +175,7 @@ class Compositor extends EventEmitter {
   }
 
   stop() {
-    this.emit('unsubscribe.raf', this.refToken, () => this.rafToken = null);
+    this.emit('unsubscribe.raf', this.rafToken, () => this.rafToken = null);
     this.stream = null;
     this.emit('stream.remove', 'composite');
   }
