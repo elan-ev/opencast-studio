@@ -904,7 +904,7 @@ svg {
   opacity: 0;
 }
 
-#cover {
+#cover, #introCover {
   position: absolute;
   top: 0;
   left: 0;
@@ -915,6 +915,74 @@ svg {
   visibility: hidden;
   background: rgba(0,0,0,0.5);
   transition: visibility 0s 0.25s, opacity 0.25s;
+}
+
+.loading #introCover {
+  z-index: 4;
+  opacity: 1;
+  background: white;
+  visibility: visible;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+  text-align: center;
+  width: 12rem;
+  height: 12rem;
+  transition: opacity 0.5s 0.5s, visibility 0s 1s;
+}
+
+.loader svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 1;
+  animation: spin 6s infinite linear;
+}
+
+.loader svg circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.loader circle:nth-of-type(2) {
+  animation: circleCover1 3s infinite linear;
+  transform-origin: 50% 50%;
+}
+
+.loader circle:nth-of-type(3) {
+  transform-origin: 50% 50%;
+  transform: rotateX(180deg) rotateZ(-16deg);
+}
+
+.loader .loaderText {
+  text-align: center;
+  white-space: nowrap;
+  position: absolute;
+  max-width: 80%;
+  max-height: 80%;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: #666;
+}
+
+.loading .loader {
+  opacity: 1;
+  visibility: visible;
 }
 
 .toggleCover:checked ~ #cover {
@@ -1504,4 +1572,31 @@ input:focus {
 
 .close:hover::before, .close:hover::after {
   background: #333;
+}
+
+@keyframes circleCover1 {
+  0% {
+    stroke-dashoffset: 0;
+    transform: rotateX(180deg) rotateZ(90deg);
+  }
+  50% {
+    stroke-dashoffset: 515;
+    transform: rotateX(180deg) rotateZ(90deg);
+  }
+  50.01% {
+    transform: rotateX(0deg) rotateZ(-90deg);
+  }
+  100% {
+    stroke-dashoffset: 0;
+    transform: rotateX(0deg) rotateZ(-90deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

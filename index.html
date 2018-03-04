@@ -9,13 +9,22 @@
   <link rel="stylesheet" href="css/style.css?version=%ver">
   <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
 </head>
-<body>
+<body class="loading">
   <header>
     <span>Ghetto</span><span>Studio</span>
   </header>
   <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" autocomplete="off" />
+  <div id="introCover">
+    <div class="loader">
+      <svg width="192" height="192">
+        <circle r="82" cx="96" cy="96" fill="none" stroke="#00bdc4" stroke-width="8" stroke-dashoffset="0" stroke-dasharray="515" />
+        <circle r="82" cx="96" cy="96" fill="none" stroke="white" stroke-width="14" stroke-dashoffset="20" stroke-dasharray="515"/>
+      <svg>
+      <span class="loaderText">Loading...</span>
+    </div>
+  </div>
   <div id="cover"></div>
   <main>
     <div class="content">

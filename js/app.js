@@ -115,6 +115,9 @@ function App() {
   this.listingPeer = [];
 
   this.attachEvents();
+  setTimeout(() => {
+    document.body.classList.remove('loading');
+  }, 500);
 }
 
 App.prototype = {
