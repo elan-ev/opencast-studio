@@ -15,13 +15,10 @@ class Compositor extends EventEmitter {
                   ].filter(codec => MediaRecorder.isTypeSupported(codec));
     this.recorder = null;
     this.recData = [];
-
-    this.width = (opts ? (opts.width || 1280) : 1280);
-    this.height = (opts ? (opts.height || 720) : 720);
     this.canvas = document.createElement('canvas');
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.ctx = this.canvas.getContext('2d');
+    this.width = 1280;
+    this.height = 720;
+    this.setDimensions(opts);
 
     let _stream = null;
 
@@ -52,6 +49,30 @@ class Compositor extends EventEmitter {
                    );
 
     this.isChrome = _browser === 'chrome';
+  }
+
+  setDimensions(opts) {
+    let activeState = false;
+    let oldWidth = this.width;
+    let oldHeight = this.height;
+    if (this.stream) {
+      activeState = true;
+      this.stop();
+    }
+    this.width = (opts ? (opts.width || 1280) : 1280);
+    this.height = (opts ? (opts.height || 720) : 720);
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+    this.ctx = this.canvas.getContext('2d');
+    if (activeState) {
+      for (let id in this.streams) {
+        this.streams[id].offsetX = Math.floor(this.streams[id].offsetX / oldWidth * this.width);
+        this.streams[id].offsetY = Math.floor(this.streams[id].offsetY / oldHeight * this.height);
+        this.streams[id].width = Math.floor(this.streams[id].width / oldWidth * this.width);
+        this.streams[id].height = Math.floor(this.streams[id].height / oldHeight * this.height);
+      }
+      this.start();
+    }
   }
 
   addStream(streamObj) {
@@ -224,5 +245,14 @@ class Compositor extends EventEmitter {
     if (this.recorder) {
       this.recorder.pause();
     }
+  }
+
+  changeResolution(res) {
+    let height = parseInt(res);
+    let width = Math.ceil(height / 9 * 16);
+    return new Promise((resolve, reject) => {
+      this.setDimensions({width: width, height: height});
+      resolve({stream: this.stream});
+    });
   }
 }
