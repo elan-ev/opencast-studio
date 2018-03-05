@@ -42,6 +42,15 @@
       <label for="mergestreams" class="mediadevice action" data-title="Merge streams" data-id="composite" data-target="composite">
         <video id="composite" autoplay muted data-id="composite"></video>
         <div class="streamControls">
+          <input type="checkbox" id="compositeResolution" class="hiddenCheck" />
+          <label for="compositeResolution">
+            <span>720p</span>
+            <ul>
+              <li><button type="button" value="480p">480p</button></li>
+              <li><button type="button" value="720p">720p</button></li>
+              <li><button type="button" value="1080p">1080p</button></li>
+            </ul>
+          </label>
           <label class="close pull-left" title="Remove composite stream" id="unmerge"></label>
         </div>
       </label>

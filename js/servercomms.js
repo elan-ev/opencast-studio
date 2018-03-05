@@ -19,6 +19,7 @@ socket.on('peerConnection', data => {
         peerItem.appendChild(peerVid);
         peerVid.srcObject = peers[data.target].stream;
         peerItem.classList.add('streaming');
+        peerItem.classList.remove('connecting');
       }
     };
   }

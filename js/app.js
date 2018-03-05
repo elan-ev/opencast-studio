@@ -367,7 +367,6 @@ App.prototype = {
       this.listingPeer.push(id);
       let peerItem = utils.createElement('li', {
                        class: 'peerDevice connecting',
-                        text: 'Some peer',
                         data: {
                              id: id
                         }
@@ -375,6 +374,9 @@ App.prototype = {
 
       this.deviceList.appendChild(peerItem);
       peerItem.addEventListener('click', this.togglePeerStream.bind(this), false);
+      setTimeout(() => {
+        this.addLoader(peerItem, 'Connecting', {fill: '#eee', fontSize: '1.75rem'});
+      }, 500);
     }
   },
   toggleAddDevice: function(e) {
@@ -583,6 +585,23 @@ App.prototype = {
   saveMedia: function(e) {
     [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());
     document.getElementById('toggleSaveCreationModal').checked = false;
+  },
+  addLoader: function(container, text, opts) {
+    let currentLoader = document.querySelector('#introCover .loader');
+    let loader = currentLoader.cloneNode(true);
+    loader.querySelector('.loaderText').textContent = text || "";
+    let containerWidth = Math.min(container.clientWidth, container.clientHeight);
+    let loaderWidth = Math.min(containerWidth * 0.8, currentLoader.clientWidth);
+    loader.style.transform = `translate(-50%, -50%) scale(${loaderWidth/currentLoader.clientWidth})`;
+    container.appendChild(loader);
+    if (opts) {
+      if (opts.fill) {
+        loader.querySelector('circle:nth-of-type(2)').setAttribute('stroke', opts.fill);
+      }
+      if (opts.fontSize) {
+        loader.querySelector('.loaderText').style.fontSize = opts.fontSize;
+      }
+    }
   }
 };
 

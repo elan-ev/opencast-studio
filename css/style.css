@@ -93,6 +93,7 @@ main {
   position: relative;
   width: 100%;
   height: calc(100% - 3rem);
+  overflow: hidden;
 }
 
 #code main {
@@ -980,7 +981,8 @@ svg {
   color: #666;
 }
 
-.loading .loader {
+.loading .loader,
+.connecting .loader {
   opacity: 1;
   visibility: visible;
 }
@@ -1535,10 +1537,11 @@ input:focus {
   content: "Don't worry, \A all streams will be recorded";
   white-space: pre;
   line-height: 1.75rem;
-  transition: opacity 0.5s 10s;
+  transition: opacity 0.5s 10s, visibility 0s 10s;
   background: rgba(0,0,0,0.8);
   padding: 2rem 0;
   z-index: 3;
+  pointer-events: none;
   color: white;
   bottom: 50%;
   transform: translateY(50%);
