@@ -182,7 +182,7 @@ input:checked + section {
   padding: 0 2rem;
   position: relative;
   pointer-events: none;
-  min-height: 50%;
+  min-height: calc(22.5vw - 4rem);
   transition: min-height 1s;
 }
 
@@ -1410,6 +1410,7 @@ input:focus {
   display: flex;
   max-height: 6.5rem;
   overflow-y: auto;
+  flex-wrap: wrap;
 }
 
 #recordingList a {
@@ -1534,7 +1535,7 @@ input:focus {
 }
 
 #mergestreams:checked ~ label[for=mergestreams]::after {
-  content: "Don't worry, \A all streams will be recorded";
+  content: "Don't worry, \A all active streams will be recorded";
   white-space: pre;
   line-height: 1.75rem;
   transition: opacity 0.5s 10s, visibility 0s 10s;
