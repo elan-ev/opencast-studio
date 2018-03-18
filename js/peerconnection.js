@@ -1,8 +1,8 @@
-var pc_config = {"iceServers":[
+let pc_config = {"iceServers":[
                   {urls: 'stun:stun.sipgate.net:3478'},
                 ]};
 
-var streamConstraints = {
+let streamConstraints = {
   optional: [],
   mandatory: {
     OfferToReceiveAudio: true,
@@ -12,14 +12,17 @@ var streamConstraints = {
 
 if (window.hasOwnProperty('InstallTrigger')) {
   //Firefox has window.InstallTrigger (for now)
-  optional: [],
   streamConstraints = {
     offerToReceiveVideo: true,
     offerToReceiveAudio: true
-  };
+  }
 }
 
-var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
+const myCapabilities = {
+  MediaRecorder: !!window.MediaRecorder
+}
+
+let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   if (typeof peerDetails == 'string') {
     this.id = peerDetails;
   }
@@ -29,6 +32,14 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   }
   this.isCaller = isInitiator || (typeof stream == 'boolean' ? stream : false);
   this.candidateQueue = [];
+
+  this.capabilities = {
+    MediaRecorder: !!window.MediaRecorder
+  }
+
+  this.recorder = null;
+  this.fileChunk = 16384;
+
   this.pc = new RTCPeerConnection(pc_config);
 
   this.pc.onicecandidate = evt => {
@@ -45,6 +56,12 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
 
   this.pc.addEventListener('addstream', event => {
     this.stream = event.stream;
+    this.recorder = new Recorder(this.stream);
+    this.recorder.on('record.complete', media => {
+      media.id = this.id;
+      this.emit('record.complete', media);
+      this.recorder = null;
+    });
   });
 
   this.pc.oniceconnectionstatechange = e => {
@@ -55,33 +72,25 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
       }
     }
     if (this.pc.iceConnectionState === 'connected') {
-      this.oncomplete.forEach(func => {
-        func();
-      });
+      this.emit('complete');
     }
   };
 
   if (this.isCaller && stream instanceof MediaStream) {
     this.pc.addStream(stream);
     this.dataChannel = this.pc.createDataChannel('channel');
-    this.dataChannel.onopen = e => {
-      console.log('data channel opened');
-      this.dataChannel.send("hello");
-    };
-    this.dataChannel.onerror = e => {
-      console.log('data channel error', e);
-    };
-    this.dataChannel.onmessage = e => {
-      console.log('msg', e);
-    };
+    setChannelEvents.call(this);
 
     this.sendOffer();
   }
   else if (!this.isCaller) {
-    this.pc.ondatachannel = function(e) {
+    this.pc.ondatachannel = e => {
       this.dataChannel = e.channel;
       if (app && app.attachChannelEvents) {
         app.attachChannelEvents(this.dataChannel);
+      }
+      else {
+        setChannelEvents.call(this);
       }
     };
   }
@@ -102,18 +111,11 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
     }
   );
 
-  var completeFuncs = [];
+  let _completeFns = {};
 
-  Object.defineProperty(this, 'oncomplete', {
+  Object.defineProperty(this, 'completeFns', {
       get: function() {
-             return completeFuncs;
-           },
-      set: function(func) {
-             if (typeof func != 'function') {
-               return;
-             }
-
-             completeFuncs.push(func);
+             return _completeFns;
            }
   });
 
@@ -148,6 +150,39 @@ var PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
 
 PeerConnection.prototype = {
            constructor: PeerConnection,
+  on: function(ev, fnObj) {
+    if (!this.completeFns[ev]) {
+      this.completeFns[ev] = {};
+    }
+
+    let token = null;
+    do {
+      token = (Math.random() + 1).toString(36).substring(2,10);
+    } while (Object.keys(this.completeFns).indexOf(token) > -1);
+
+    fnObj = typeof fnObj === 'function' ? {fn: fnObj, scope: null} : fnObj;
+    this.completeFns[ev][token] = {
+      scope: fnObj.scope,
+         fn: fnObj.fn
+    }
+
+    return token;
+  },
+  emit: function(ev, val) {
+    let args = Array.prototype.slice.call(arguments);
+    ev = args[0];
+    val = args.slice(1);
+
+    if (this.completeFns[ev]) {
+      for (let key in this.completeFns[ev]) {
+        let scope = this.completeFns[ev][key].scope;
+        let fn = this.completeFns[ev][key].fn;
+        (function() {
+          fn.apply(scope, val);
+        }.bind(scope))();
+      }
+    }
+  },
              sendOffer: function() {
                           var self = this;
                           this.pc.createOffer(offer => {
@@ -205,5 +240,140 @@ PeerConnection.prototype = {
                          else {
                            this.candidateQueue.push(candidate);
                          }
-                       }
+                       },
+  record: function() {
+    this.dataChannel.send('record');
+    this.recorder.start();
+  },
+  pauseRecording: function() {
+    this.dataChannel.send('pauseRecording');
+    this.recorder.pause();
+  },
+  stopRecording: function() {
+    if (this.recorder) {
+      this.dataChannel.send('stopRecording');
+      this.recorder.stop();
+      this.emit('record.prepare', {id: this.id, label: 'Remote peer', flavor: 'remote'});
+    }
+  },
+  transferFile: function() {
+    //TODO: tokenize each recorder
+    let file = recorder.result;
+    let sliceFile = offset => {
+      let reader = new FileReader();
+      reader.onload = (() => {
+        return e => {
+          this.dataChannel.send(e.target.result);
+          if (file.size > offset + e.target.result.byteLength) {
+            setTimeout(sliceFile, 0, offset + this.fileChunk);
+          }
+          else {
+            this.dataChannel.send('filetransfer.complete');
+          }
+        }
+      })(file);
+      let slice = file.slice(offset, offset + this.fileChunk);
+      reader.readAsArrayBuffer(slice);
+    }
+    sliceFile(0);
+  },
+  handleIncomingTransfer: function(data) {
+    this.mediaBuffer.push(data);
+    if (this.progress) {
+      this.mediaDetails.current += data.byteLength;
+      let currentProgress = 515 - (this.mediaDetails.current / this.mediaDetails.size) * 515 >> 0;
+      this.progress.setAttributeNS(null, 'stroke-dashoffset', currentProgress);
+    }
+  },
+  saveBuffer: function() {
+    this.mediaBlob = new Blob(this.mediaBuffer, {type: 'video/webm'});
+    let url = URL.createObjectURL(this.mediaBlob);
+    this.emit('record.raw', {url: url, media: this.mediaBlob, id: this.id});
+  }
 };
+
+function setChannelEvents() {
+  let channel = this.dataChannel;
+  if (!channel) {
+    console.log('no datachannel supplied');
+    return;
+  }
+
+  channel.onopen = e => {
+    channel.send("ping");
+    console.log('datachannel opened');
+    if (this.isCaller) {
+      channel.send(JSON.stringify(
+        {event: 'capabilities', payload: myCapabilities}
+      ));
+    }
+  };
+
+  channel.onerror = e => {
+    console.log('data channel error', e);
+  };
+
+  channel.onmessage = e => {
+    let event = e.data;
+    let json = {};
+    try {
+      json = JSON.parse(e.data);
+      event = json.event;
+    } catch(e) {
+    }
+
+    switch(event) {
+      case 'ping':
+        channel.send('pong');
+        break;
+
+      case 'record':
+        if (stream) {
+          recorder = new Recorder(stream);
+          recorder.start();
+        }
+        break;
+
+      case 'pauseRecording':
+        recorder.pause();
+        break;
+
+      case 'stopRecording':
+        recorder.stop();
+        break;
+
+      case 'request.filetransfer':
+        let response = {
+            event: 'request.filetransfer.accepted',
+          payload: {
+               size: recorder.result.size,
+            current: 0
+          }
+        }
+        channel.send(JSON.stringify(response));
+        this.transferFile();
+        break;
+
+      case 'request.filetransfer.accepted':
+        this.mediaBuffer = [];
+        this.incomingMedia = true;
+        this.mediaDetails = json.payload;
+        break;
+
+      case 'filetransfer.complete':
+        this.incomingMedia = false;
+        this.saveBuffer();
+        break;
+
+      case 'capabilities':
+        this.capabilities = json.payload;
+        break;
+
+      default:
+        //incoming file
+        if (this.incomingMedia) {
+          this.handleIncomingTransfer(e.data);
+        }
+    }
+  }
+}

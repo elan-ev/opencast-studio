@@ -474,7 +474,7 @@ App.prototype = {
       );
     }
   },
-  attachChannelEvents: function(ch) {
+/*  attachChannelEvents: function(ch) {
     ch.onopen = function(e) {
       //add UI notification for data channel opened?
     };
@@ -482,12 +482,18 @@ App.prototype = {
     ch.onmessage = function(e) {
       console.log('datachannel message', e);
     };
-  },
+  },*/
   startRecord: function(e) {
     if (this.isRecording) {
       this.isPaused = false;
       deviceMgr.record();
       compositor.record();
+      for (let peer in peers) {
+        try {
+          peers[peer].record();
+        } catch (e) {
+        }
+      }
       return;
     }
 
@@ -502,12 +508,21 @@ App.prototype = {
 
     deviceMgr.record();
     compositor.record();
+    for (let peer in peers) {
+      try {
+        peers[peer].record();
+      } catch(e) {
+      }
+    }
 
     [...document.querySelectorAll('#recordingList a')].forEach(anchor => anchor.parentNode.removeChild(anchor));
   },
   pauseRecord: function(e) {
     deviceMgr.pauseRecording();
     compositor.pauseRecording();
+    for (let peer in peers) {
+      peers[peer].pauseRecording();
+    }
     this.isPaused = !this.isPaused;
   },
   stopRecord: function(e) {
@@ -519,6 +534,9 @@ App.prototype = {
     this.isPaused = false;
     deviceMgr.stopRecording();
     compositor.stopRecording();
+    for (let peer in peers) {
+      peers[peer].stopRecording();
+    }
     document.getElementById('toggleSaveCreationModal').checked = true;
     rafLoop.unsubscribe(this.recTimeToken);
     this.recTimeToken = null;
@@ -547,6 +565,20 @@ App.prototype = {
     anchor.setAttribute('data-id', details.id);
     anchor.setAttribute('data-flavor', details.flavor);
     document.getElementById('recordingList').appendChild(anchor);
+    if (details.flavor === 'remote' && peers[details.id].capabilities.MediaRecorder) {
+      let requestRaw = document.createElement('button');
+      requestRaw.value = details.id;
+      requestRaw.className = 'requestRaw';
+      requestRaw.addEventListener('click', this.requestRawFootage.bind(this), true);
+      requestRaw.textContent = 'Request raw footage';
+      let currentLoader = document.querySelector('#introCover .loader');
+      let loader = currentLoader.cloneNode(true);
+      loader.querySelector('circle').setAttributeNS(null, 'stroke-width', '12');
+      loader.querySelector('.loaderText').textContent = 'Incoming Transfer';
+
+      anchor.appendChild(requestRaw);
+      anchor.appendChild(loader);
+    }
   },
   setMediaLink: function(details) {
     let anchor = document.querySelector(`a[data-id="${details.id}"]`);
@@ -555,6 +587,11 @@ App.prototype = {
       if (details.media.type.indexOf('video') > -1) {
         anchor.setAttribute('data-type', 'video');
         anchor.download = anchor.getAttribute('data-flavor') + ' video - ' + this.title + '.webm';
+
+        if (anchor.querySelector('video')) {
+          anchor.removeChild(anchor.querySelector('video'));
+        }
+
         let vid = document.createElement('video');
         vid.src = details.url;
         vid.muted = true;
@@ -569,6 +606,18 @@ App.prototype = {
         anchor.setAttribute('data-type', 'audio');
       }
     }
+  },
+  requestRawFootage: function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    let peerId = e.target.value;
+    if (!peers.hasOwnProperty(peerId)) {
+      return;
+    }
+
+    peers[peerId].progress = e.target.parentNode.querySelector('.loader circle');
+    peers[peerId].dataChannel.send('request.filetransfer');
+    e.target.parentNode.classList.add('transfer');
   },
   setTitle: function(e) {
     this.title = e.target.value || 'Recording';

@@ -68,6 +68,8 @@
   </svg>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/eventemitter.js"></script>
+  <script src="../js/recorder.js"></script>
   <script src="../js/peerconnection.js"></script>
   <script>
     let socket = io();
@@ -179,6 +181,8 @@
       codeInput.value = getParams.code;
       codeInput.dispatchEvent(new Event('keyup'));
     }
+
+    let recorder = null;
 
   </script>
 </body>
