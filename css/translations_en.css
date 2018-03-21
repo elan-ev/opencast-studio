@@ -1,0 +1,4 @@
+[lang=en] #addDevice::before {
+  transform: scale(1);
+}
+

@@ -1,0 +1,41 @@
+[lang=af] .bigButton[for=create]::after {
+  content: "Skep 'n video";
+}
+
+[lang=af] .bigButton[for=edit]::after {
+  content: "Video redigering";  
+}
+
+[lang=af] .extensionRequired label[for=desktopstream]::after {
+  content: 'Kliek om die desktop uitbreiding te installeer';
+}
+
+[lang=af] #streams::before {
+  content: 'Toestelle';
+}
+
+[lang=af] #addDevice::after {
+  content: 'Voeg toestel by';
+}
+
+[lang=af] .recording #recordingTime::before {
+  content: 'Opname';
+}
+
+[lang=af] .paused.recording #recordingTime::before {
+  content: 'Geonderbreek';
+}
+
+[lang=af] #mergestreams:checked ~ label[for=mergestreams]::after {
+  content: "Moenie u bekommer nie, \A alle aktiewe strome sal aangeteken word";
+}
+
+#addDevice::before {
+  transform: scale(0.8) translateY(-0.5rem);
+}
+
+#addDevice::after {
+  line-height: 1rem;
+  max-width: 90%;
+  left: 5%;
+}

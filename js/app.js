@@ -1,3 +1,4 @@
+const ts = new TranslationService();
 const deviceMgr = new DeviceManager();
 const compositor = new Compositor();
 const rafLoop = new RAFLoop();
@@ -570,7 +571,7 @@ App.prototype = {
       requestRaw.value = details.id;
       requestRaw.className = 'requestRaw';
       requestRaw.addEventListener('click', this.requestRawFootage.bind(this), true);
-      requestRaw.textContent = 'Request raw footage';
+      requestRaw.textContent = ts.translate('RAW_FOOTAGE');
       let currentLoader = document.querySelector('#introCover .loader');
       let loader = currentLoader.cloneNode(true);
       loader.querySelector('circle').setAttributeNS(null, 'stroke-width', '12');
@@ -635,6 +636,11 @@ App.prototype = {
     [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());
     document.getElementById('toggleSaveCreationModal').checked = false;
   },
+  changeLanguage: function(e) {
+    let btn = e.target.parentNode.querySelector('button');
+    let lang = btn.value;
+    ts.setLanguage(lang);
+  },
   addLoader: function(container, text, opts) {
     let currentLoader = document.querySelector('#introCover .loader');
     let loader = currentLoader.cloneNode(true);
@@ -655,6 +661,62 @@ App.prototype = {
 };
 
 const app = new App();
+
+ts.on('translations.languages', languages => {
+  let langList = document.querySelector('#language ul');
+  langList.innerHTML = '';
+  languages.forEach(lang => {
+    let item = document.createElement('li');
+    let btn = utils.createElement('button', {
+                type: 'button',
+                value: lang.short,
+                text: lang.language
+              });
+    let img = utils.createElement('img', {
+                prop: {
+                  alt: lang.language,
+                  src: lang.img
+                },
+                data: {
+                  attribution: "Icon made by Freepik from www.flaticon.com"
+                }
+              });
+
+    item.appendChild(btn);
+    item.appendChild(img);
+    item.addEventListener('click', app.changeLanguage.bind(app), true);
+    langList.appendChild(item);
+  });
+});
+ts.on('translations.set', langObj => {
+  document.documentElement.lang = langObj.language;
+  if (!document.head.querySelector(`link[data-lang=${langObj.language}`)) {
+    let link = document.createElement('link');
+    link.rel = "stylesheet";
+    link.href = `/css/translations_${langObj.language}.css`;
+    document.head.appendChild(link);
+  }
+
+  let langDisplay = document.getElementById('chosenLanguage');
+  langDisplay.querySelector('span').textContent = langObj.short.toUpperCase();
+  langDisplay.querySelector('img').src = langObj.img;
+
+  [...document.querySelectorAll('[data-translate]')].forEach(el => {
+    let translate = el.getAttribute('data-translate');
+    if (langObj.translation && langObj.translation[translate]) {
+      el.textContent = langObj.translation[translate];
+    }
+  });
+
+  [...document.querySelectorAll('[data-translatetitle]')].forEach(el => {
+    let translate = el.getAttribute('data-translatetitle');
+    if (langObj.translation[translate]) {
+      el.setAttribute('data-title', langObj.translation[translate]);
+    }
+  });
+});
+ts.on('translations.loaded', languages => {
+});
 
 deviceMgr.once('enumerated', {
     fn: devices => {

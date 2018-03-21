@@ -12,6 +12,15 @@
 <body class="loading">
   <header>
     <span>Ghetto</span><span>Studio</span>
+    <div id="language">
+      <input type="checkbox" class="hiddenCheck" id="chooseLanguage" />
+      <label id="chosenLanguage" for="chooseLanguage">
+        <span>EN</span>
+        <img alt="English" src="res/flags/uk.png" />
+      </label>
+      <ul>
+      </ul>
+    </div>
   </header>
   <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
@@ -22,7 +31,7 @@
         <circle r="82" cx="96" cy="96" fill="none" stroke="#00bdc4" stroke-width="8" stroke-dashoffset="0" stroke-dasharray="515" />
         <circle r="82" cx="96" cy="96" fill="none" stroke="white" stroke-width="14" stroke-dashoffset="20" stroke-dasharray="515"/>
       <svg>
-      <span class="loaderText">Loading...</span>
+      <span class="loaderText" data-translate="LOADING">Loading...</span>
     </div>
   </div>
   <div id="cover"></div>
@@ -39,7 +48,7 @@
       <input name="userView" type="radio" value="simple" class="hiddenCheck" checked id="simpleUserView"/autocomplete="off" >
       <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" autocomplete="off" />
       <input type="radio" name="merge" class="hiddenCheck" id="mergestreams" value="composite" autocomplete="off" />
-      <label for="mergestreams" class="mediadevice action" data-title="Merge streams" data-id="composite" data-target="composite">
+      <label for="mergestreams" class="mediadevice action" data-title="Merge streams" data-translatetitle="MERGE_STREAMS" data-id="composite" data-target="composite">
         <video id="composite" autoplay muted data-id="composite"></video>
         <div class="streamControls">
           <input type="checkbox" id="compositeResolution" class="hiddenCheck" />
@@ -56,13 +65,13 @@
       </label>
       <div id="videoView">
         <div class="viewControls">
-          View: <select name="createView" autocomplete="off">
-            <option value="simple">Simple</option>
-            <option value="advanced">Advanced</option>
+          <span data-translate="VIEW">View</span>: <select name="createView" autocomplete="off">
+            <option value="simple" data-translate="SIMPLE">Simple</option>
+            <option value="advanced" data-translate="ADVANCED">Advanced</option>
           </select>
         </div>
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
-        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-target="desktop">
+        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-translatetitle="SHARE_DESKTOP" data-target="desktop">
           <video id="desktop" autoplay muted></video>
           <span class="placeholder"></span>
           <div class="streamControls">
@@ -79,14 +88,14 @@
           </div>
         </label>
         <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" autocomplete="off" />
-        <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-target="audio">
+        <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-translatetitle="SHARE_MICROPHONE" data-target="audio">
           <audio id="audio" autoplay muted></audio>
           <span class="placeholder"></span>
           <span class="shadow"></span>
           <canvas></canvas>
         </label>
         <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" autocomplete="off" />
-        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-target="video">
+        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-translatetitle="SHARE_WEBCAM" data-target="video">
           <video id="video" autoplay muted></video>
           <span class="placeholder"></span>
           <span class="shadow"></span>
@@ -124,19 +133,6 @@
     </section>
     </div>
   </main>
-  <svg viewBox="0 0 100 100" width="0" height="0">
-    <clipPath id="webcamStand">
-      <path d="M 0 48
-               l 0 -24
-               l 16 -16
-               c 0 18
-                 64 18
-                 64 0
-               l 16 16
-               l 0 24
-               h -96
-               " />
-  </svg>
   <svg xmlns="http://www.w3.org/2000/svg">
     <defs>
       <clipPath id="mic">
@@ -145,10 +141,6 @@
         <rect x="0" y="22" width="12" height="6" />
         <rect x="0" y="34" width="12" height="30" />
       </clipPath>
-    </defs>
-  </svg>
-  <svg xmlns="http://www.w3.org/2000/svg">
-    <defs>
       <clipPath id="micStand">
         <path d="M 0 0
                  C 0 29
@@ -161,62 +153,71 @@
         <rect width="6" height="10" x="21" y="19" />
         <rect height="5" width="38" x="6" y="24" />
       </clipPath>
+      <clipPath id="webcamStand">
+        <path d="M 0 48
+                 l 0 -24
+                 l 16 -16
+                 c 0 18
+                   64 18
+                   64 0
+                 l 16 16
+                 l 0 24
+                 h -96
+                 " />
+      </clipPath>
+      <filter id="dropshadow">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/> 
+        <feOffset dx="0" dy="0" result="offsetblur"/>
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.2"/>
+        </feComponentTransfer>
+        <feMerge> 
+          <feMergeNode/>
+          <feMergeNode in="SourceGraphic"/> 
+        </feMerge>
+      </filter>
     </defs>
   </svg>
-  <svg>
-    <defs xmlns="http://www.w3.org/2000/svg">
-    <filter id="dropshadow">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/> 
-      <feOffset dx="0" dy="0" result="offsetblur"/>
-      <feComponentTransfer>
-        <feFuncA type="linear" slope="0.2"/>
-      </feComponentTransfer>
-      <feMerge> 
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/> 
-      </feMerge>
-    </filter>
-  </defs>
-  </svg>
   <div id="addDeviceModal" class="modal">
-    <h4>Pair a device to your session</h4>
+    <h4 data-translate="PAIR_HEADING">Pair a device to your session</h4>
     <div class="modalBody">
-      Pair your iOS or Android device to this session by scanning the QR code below
+      <span data-translate="PAIR_TEXT">Pair your iOS or Android device to this session by scanning the QR code below</span>
       <div id="qrcode">
       </div>
-      Alternatively, head over to <span id="host"></span> and use the code:
+      <span data-translate="PAIR_ALT_TEXT_1">Alternatively, head over to </span><span id="host"></span><span data-translate="PAIR_ALT_TEXT_2"> and use the code</span>:
       <p id="paircode"></p>
       <a id="codehref"></a>
     </div>
   </div>
   <div id="extensionModal" class="modal">
-    <h4>Desktop capture requires extension</h4>
+    <h4 data-translate="HEADING_EXTENSION">Desktop capture requires extension</h4>
     <div class="modalBody">
-      You need to install a chrome extension to enable desktop capture.
+      <span data-translate="REQUIRE_EXTENSION">You need to install a chrome extension to enable desktop capture.</span>
       <p>
-        <button id="installExtension" type="button">Install it</button>
+        <button id="installExtension" type="button" data-translate="INSTALL_EXTENSION">Install it</button>
       </p>
     </div>
   </div>
   <div id="saveCreation" class="modal">
-    <h4>Production details</h4>
+    <h4 data-translate="PRODUCTION_HEADING">Production details</h4>
     <div class="modalBody">
       <ul>
-        <span class="quarterWidth">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
-        <span class="quarterWidth">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
-        <span class="quarterWidth">Location</span><span class="threeQuarterWidth"><input name="location" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="PRODUCTION_TITLE">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="PRODUCTION_PRESENTER">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="PRODUCTION_LOCATION">Location</span><span class="threeQuarterWidth"><input name="location" autocomplete="off" /></span>
       </ul>
-      <h4>Media</h4>
+      <h4 data-translate="PRODUCTION_MEDIA">Media</h4>
       <div id="recordingList"></div>
     </div>
     <div class="modalFooter">
-      <button class="btn btn-action" id="editRecordings">Edit media</button>
-      <button class="btn btn-success" id="saveRecordings">Save media</button>
-      <label for="toggleSaveCreationModal" class="btn btn-cancel">Discard</label>
+      <button class="btn btn-action" id="editRecordings" data-translate="PRODUCTION_EDIT">Edit media</button>
+      <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
+      <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
     </div>
   </div>
   <script src="js/utils.js?version=%ver%"></script>
   <script src="js/eventemitter.js?version=%ver%"></script>
+  <script src="js/translate.js?version=%ver%"></script>
   <script src="js/recorder.js?version=%ver%"></script>
   <script src="js/devicemanager.js?version=%ver%"></script>
   <script src="js/compositor.js?version=%ver%"></script>

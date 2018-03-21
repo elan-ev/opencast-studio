@@ -1,0 +1,41 @@
+[lang=xh] .bigButton[for=create]::after {
+  content: "Yenza ividiyo";
+}
+
+[lang=xh] .bigButton[for=edit]::after {
+  content: "Hlela ividiyo";  
+}
+
+[lang=xh] .extensionRequired label[for=desktopstream]::after {
+  content: 'Cofa ukufaka isandiso se idesktophu';
+}
+
+[lang=xh] #streams::before {
+  content: 'Izixhobo';
+}
+
+[lang=xh] #addDevice::after {
+  content: 'Yongeza isixhobo';
+}
+
+[lang=xh] .recording #recordingTime::before {
+  content: 'Ukurekhoda';
+}
+
+[lang=xh] .paused.recording #recordingTime::before {
+  content: 'Ikhefu';
+}
+
+[lang=xh] #mergestreams:checked ~ label[for=mergestreams]::after {
+  content: "Ungakhathazeki, \A yonke imilambo esebenzayo iya kubhalwa";
+}
+
+#addDevice::before {
+  transform: scale(0.8) translateY(-0.5rem);
+}
+
+#addDevice::after {
+  line-height: 1rem;
+  max-width: 90%;
+  left: 5%;
+}

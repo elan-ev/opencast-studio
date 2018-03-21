@@ -1,5 +1,36 @@
 const utils = {
-  xhr: function() {
+  xhr: function(url, opts) {
+    return new Promise((resolve, reject) => {
+      if (!url) {
+        reject("no url");
+        return;
+      }
+
+      const req = new XMLHttpRequest();
+      const reqType = (opts ? opts.type || 'GET' : 'GET').toUpperCase();
+      req.open(reqType, url, true);
+      if (opts && opts.hasOwnProperty('attributes')) {
+        for (let key in opts.attributes) {
+          req.setAttribute(key, opts.attributes[key]);
+        }
+      }
+
+      if (opts && opts.hasOwnProperty('properties')) {
+        for (let key in opts.properties) {
+          req[key] = opts.properties[key];
+        }
+      }
+
+      req.onload = e => {
+        resolve(req.response);
+      }
+
+      req.onerror = e => {
+        reject(e);
+      }
+
+      req.send(opts && opts.data ? opts.data : null);
+    });
   },
   createElement: function(type, params) {
     if (typeof type != 'string') {
@@ -28,6 +59,9 @@ const utils = {
     }
     if (params.name) {
       el.name = params.name;
+    }
+    if (params.value) {
+      el.value = params.value;
     }
     if (params.for) {
       el.setAttribute('for', params.for);

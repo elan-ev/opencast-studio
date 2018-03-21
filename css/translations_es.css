@@ -1,0 +1,41 @@
+[lang=es] .bigButton[for=create]::after {
+  content: "Crea un video";
+}
+
+[lang=es] .bigButton[for=edit]::after {
+  content: "Editar un video";  
+}
+
+[lang=es] .extensionRequired label[for=desktopstream]::after {
+  content: 'Haga clic para instalar la extensión de escritorio';
+}
+
+[lang=es] #streams::before {
+  content: 'Dispositivos';
+}
+
+[lang=es] #addDevice::after {
+  content: 'Añadir dispositivo';
+}
+
+[lang=es] .recording #recordingTime::before {
+  content: 'Grabación';
+}
+
+[lang=es] .paused.recording #recordingTime::before {
+  content: 'Pausado';
+}
+
+[lang=es] #mergestreams:checked ~ label[for=mergestreams]::after {
+  content: "No te preocupes, \A todas las transmisiones activas se grabarán";
+}
+
+#addDevice::before {
+  transform: scale(0.8) translateY(-0.5rem);
+}
+
+#addDevice::after {
+  line-height: 1rem;
+  max-width: 90%;
+  left: 5%;
+}
