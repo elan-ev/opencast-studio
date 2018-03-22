@@ -1,17 +1,26 @@
 [lang=xh] .bigButton[for=create]::after {
-  content: "Yenza ividiyo";
+  content: "Yenza i-video";
 }
 
 [lang=xh] .bigButton[for=edit]::after {
-  content: "Hlela ividiyo";  
+  content: "Hlela i-video";  
 }
 
 [lang=xh] .extensionRequired label[for=desktopstream]::after {
-  content: 'Cofa ukufaka isandiso se idesktophu';
+  content: 'Cofa ukufaka isandiso se i-desktop yakho';
 }
 
 [lang=xh] #streams::before {
-  content: 'Izixhobo';
+  content: 'Izixhobo \A ezikhoyo';
+  line-height: 2rem;
+  padding: 2rem 0;
+  transition: padding 0.5s, line-height 0.5s;
+  height: 8rem;
+}
+
+[lang=xh] #minimiseStreams:checked ~ #streams::before {
+  line-height: 3rem;
+  padding: 0;
 }
 
 [lang=xh] #addDevice::after {

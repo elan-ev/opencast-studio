@@ -23,7 +23,8 @@
     "PRODUCTION_EDIT": "Edit media",
     "PRODUCTION_SAVE": "Save media",
     "PRODUCTION_DISCARD": "Discard media",
-    "RAW_FOOTAGE": "Request Raw footage"
+    "RAW_FOOTAGE": "Request Raw footage",
+    "ADD_DEVICE": "Add device"
   },
   "af": {
     "SIMPLE": "Eenvoudig",
@@ -49,7 +50,14 @@
     "PRODUCTION_EDIT": "Redigeer media",
     "PRODUCTION_SAVE": "Stoor media",
     "PRODUCTION_DISCARD": "Verwyder media",
-    "RAW_FOOTAGE": "Versoek rou materiaal"
+    "RAW_FOOTAGE": "Versoek rou materiaal",
+    "MINIMISE": "Verminder houer",
+    "BACK_TO_MAIN": "Gaan terug na hoof skerm toe",
+    "STOP_COMPOSITE": "Verwyder saamgestelde ströme",
+    "PAUSE_RECORDING": "Onderbreek opname",
+    "START_RECORDING": "Begin/Vorder met opname",
+    "STOP_RECORDING": "Voltooi opname",
+    "ADD_DEVICE": "Voeg toestel by"
   },
   "xh": {
     "SIMPLE": "Kulula",
@@ -59,22 +67,22 @@
     "SHARE_DESKTOP": "Sebenzisa ideskithophu",
     "SHARE_MICROPHONE": "Sebenzisa mic",
     "VIEW": "Khangela",
-    "MERGE_STREAMS": "Ukudibanisa majelo",
+    "MERGE_STREAMS": "Dibanisa amajelo",
     "REQUIRE_EXTENSION": "",
     "INSTALL_EXTENSION": "Yongeza ukwandiswa",
-    "HEADING_EXTENSION": "Kufuna ukwandiswa",
+    "HEADING_EXTENSION": "Ufuna ukwandiswa i-desktop?",
     "PAIR_HEADING": "Qhagamshela i sixhobo kule seshoni",
-    "PAIR_TEXT": "Xhuma iOS yakho okanye ifowuni ye-Android kule seshoni ngokuskena ikhowudi ye-QR ngezantsi",
-    "PAIR_ALT_TEXT_1": "Ngenye indlela, iya kwindawo eya kuyo",
+    "PAIR_TEXT": "Sebenzisa i-camera ye-phone yakho, uyijongise kulo mfanekiso ngezantsi",
+    "PAIR_ALT_TEXT_1": "Enye indlela, iya kule address",
     "PAIR_ALT_TEXT_2": "kwaye usebenzise ikhowudi",
     "PRODUCTION_HEADING": "Iinkcukacha zemveliso",
     "PRODUCTION_TITLE": "Isihloko",
     "PRODUCTION_PRESENTER": "Umenzi",
-    "PRODUCTION_LOCATION": "Indawo",
+    "PRODUCTION_LOCATION": "Ischicilelwe phi?",
     "PRODUCTION_MEDIA": "Majelo",
     "PRODUCTION_EDIT": "Hlaziya ijelo",
-    "PRODUCTION_SAVE": "Ndoloza majelo",
-    "PRODUCTION_DISCARD": "Ukulahla majelo",
+    "PRODUCTION_SAVE": "Gcina majelo",
+    "PRODUCTION_DISCARD": "Lahla amajelo",
     "RAW_FOOTAGE": "Vidiyo ye nyaniso"
   }
 }

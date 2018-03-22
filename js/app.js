@@ -447,7 +447,7 @@ App.prototype = {
     document.querySelector('label[for=minimiseStreams]').setAttribute('title', title);
 
     if (e.target.checked) {
-      this.addDeviceToggle.setAttribute('title', 'Add device');
+      this.addDeviceToggle.setAttribute('title', ts.translate('ADD_DEVICE'));
     }
     else {
       this.addDeviceToggle.removeAttribute('title');
@@ -708,12 +708,23 @@ ts.on('translations.set', langObj => {
     }
   });
 
-  [...document.querySelectorAll('[data-translatetitle]')].forEach(el => {
-    let translate = el.getAttribute('data-translatetitle');
+  [...document.querySelectorAll('[data-pseudotext]')].forEach(el => {
+    let translate = el.getAttribute('data-pseudotext');
     if (langObj.translation[translate]) {
       el.setAttribute('data-title', langObj.translation[translate]);
     }
   });
+
+  [...document.querySelectorAll('[data-translatetitle]')].forEach(el => {
+    let translate = el.getAttribute('data-translatetitle');
+    if (langObj.translation[translate]) {
+      el.title = langObj.translation[translate];
+    }
+  });
+
+  if (document.getElementById('addDevice').title) {
+    document.getElementById('addDevice').title = ts.translate("ADD_DEVICE");
+  }
 });
 ts.on('translations.loaded', languages => {
 });

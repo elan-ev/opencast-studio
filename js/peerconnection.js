@@ -1,5 +1,12 @@
 let pc_config = {"iceServers":[
-                  {urls: 'stun:stun.sipgate.net:3478'},
+                  {url: 'stun:stun.sipgate.net:3478'},
+                  {url: 'stun:iphone-stun.strato-iphone.de:3478'},
+                  {url: 'stun:numb.viagenie.ca:3478'},
+                  {url: 'stun:stun.aa.net.uk:3478'},
+                  {url: 'stun:stun.kiwilink.co.nz:3478'},
+                  {url: 'stun:stun.uls.co.za:3478'},
+                  {url: 'stun:stun.mitake.com.tw:3478'},
+                  {url: 'stun:stun.sip.us:3478'}
                 ]};
 
 let streamConstraints = {

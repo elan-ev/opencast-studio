@@ -264,6 +264,7 @@ input:checked + section {
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   overflow: hidden;
   visibility: visible;
+  max-height: calc(100vh - 14rem);
 }
 
 .mediadevice:not(.audioDevice) {
@@ -683,6 +684,20 @@ input:checked + section {
   color: #666;
   background: #eee;
   transition: line-height 0.5s, height 0.5s;
+  z-index: 2;
+  position: relative;
+}
+
+#streams::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  background: #eee;
+  width: 8rem;
+  height: 8rem;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 #minimiseStreams:checked ~ #streams::before {

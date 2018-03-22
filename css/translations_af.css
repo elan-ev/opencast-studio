@@ -23,7 +23,7 @@
 }
 
 [lang=af] .paused.recording #recordingTime::before {
-  content: 'Geonderbreek';
+  content: 'Opname geonderbreek';
 }
 
 [lang=af] #mergestreams:checked ~ label[for=mergestreams]::after {
