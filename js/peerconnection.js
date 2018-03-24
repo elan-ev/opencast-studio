@@ -47,41 +47,31 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   this.recorder = null;
   this.fileChunk = 16384;
 
-  this.pc = new RTCPeerConnection(pc_config);
+  let _completeFns = {};
 
-  this.pc.onicecandidate = evt => {
-    if (evt.candidate) {
-      details = {
-                 type: 'candidate',
-        sdpMLineIndex: evt.candidate.sdpMLineIndex,
-               sdpMid: evt.candidate.sdpMid,
-            candidate: evt.candidate.candidate
-      };
-      socket.emit('peerConnection', {target: this.id, details: details});
-    }
-  };
-
-  this.pc.addEventListener('addstream', event => {
-    this.stream = event.stream;
-    this.recorder = new Recorder(this.stream);
-    this.recorder.on('record.complete', media => {
-      media.id = this.id;
-      this.emit('record.complete', media);
-      this.recorder = null;
-    });
+  Object.defineProperty(this, 'completeFns', {
+      get: function() {
+             return _completeFns;
+           }
   });
 
-  this.pc.oniceconnectionstatechange = e => {
-    if (['connected', 'completed'].indexOf(this.pc.iceConnectionState) > -1 && !this.noVideoElement) {
-      //hacky...
-      if (this.stream && !this.streamElement) {
-        this.streamElement = this.stream;
-      }
-    }
-    if (this.pc.iceConnectionState === 'connected') {
-      this.emit('complete');
-    }
-  };
+  var _closeFuncs = [];
+
+  Object.defineProperty(this, 'onclose', {
+      get: function() {
+             return _closeFuncs;
+           },
+      set: function(func) {
+             if (typeof func != 'function') {
+               return;
+             }
+
+             _closeFuncs.push(func);
+           }
+  });
+
+  this.pc = new RTCPeerConnection(pc_config);
+  this.captureEvents();
 
   if (this.isCaller && stream instanceof MediaStream) {
     this.pc.addStream(stream);
@@ -118,28 +108,6 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
     }
   );
 
-  let _completeFns = {};
-
-  Object.defineProperty(this, 'completeFns', {
-      get: function() {
-             return _completeFns;
-           }
-  });
-
-  var _closeFuncs = [];
-
-  Object.defineProperty(this, 'onclose', {
-      get: function() {
-             return _closeFuncs;
-           },
-      set: function(func) {
-             if (typeof func != 'function') {
-               return;
-             }
-
-             _closeFuncs.push(func);
-           }
-  });
 
   var _username = '';
   this.awaitUsername = [];
@@ -192,23 +160,26 @@ PeerConnection.prototype = {
   },
              sendOffer: function() {
                           var self = this;
-                          this.pc.createOffer(offer => {
-                            self.pc.setLocalDescription(offer);
-                            socket.emit('peerConnection', {target: self.id, details: offer});
-                          }, self.offerFailed, streamConstraints);
-                        },
-           offerFailed: function(e) {
-                          console.log('failed offer', e);
+                          this.pc.createOffer()
+                            .then(offer => {
+                              self.pc.setLocalDescription(offer);
+                              socket.emit('peerConnection', {target: self.id, details: offer});
+                            })
+                            .catch(err => this.offerFailed(err));
                         },
             sendAnswer: function() {
-                          var self = this;
-                          this.pc.createAnswer(offer => {
-                             self.pc.setLocalDescription(offer);
-                             socket.emit('peerConnection', {target: self.id, details: offer});
-                          }, self.answerFailed, streamConstraints);
+                          this.pc.createAnswer()
+                           .then(offer => {
+                             this.pc.setLocalDescription(offer);
+                             socket.emit('peerConnection', {target: this.id, details: offer});
+                           })
+                           .catch(err => this.answerFailed(err));
                         },
           answerFailed: function(e) {
                           console.log('failed answer', e);
+                        },
+           offerFailed: function(e) {
+                          console.log('failed offer', e);
                         },
          handleRequest: function(data) {
                           let details = data.details;
@@ -228,11 +199,9 @@ PeerConnection.prototype = {
           handleOffer: function(details) {
                          var self = this;
                          if (!this.pc.remoteDescription.sdp) {
-                           this.pc.setRemoteDescription(new RTCSessionDescription(details), function() {
-                               self.candidateQueue.forEach(candidate => {
-                                 self.pc.addIceCandidate(candidate);
-                               });
-                             }, err => console.log('err setting remote desc', err));
+                           this.pc.setRemoteDescription(details)
+                             .then(() => this.emit('remoteDescription.set'))
+                             .catch(err => this.emit('remoteDescription.failed', err));
                          }
                          this.sendAnswer();
                        },
@@ -241,13 +210,55 @@ PeerConnection.prototype = {
                        },
          addCandidate: function(details) {
                          let candidate = new RTCIceCandidate({sdpMLineIndex:details.sdpMLineIndex, sdpMid:details.sdpMid, candidate:details.candidate});
-                         if (this.pc.hasOwnProperty('remoteDescription')) {
+                         if (this.pc.remoteDescription) {
                            this.pc.addIceCandidate(candidate);
                          }
                          else {
                            this.candidateQueue.push(candidate);
                          }
                        },
+  captureEvents: function() {
+    this.pc.onicecandidate = evt => {
+      if (evt.candidate) {
+        details = {
+                   type: 'candidate',
+          sdpMLineIndex: evt.candidate.sdpMLineIndex,
+                 sdpMid: evt.candidate.sdpMid,
+              candidate: evt.candidate.candidate
+        };
+        socket.emit('peerConnection', {target: this.id, details: details});
+      }
+    };
+
+    this.pc.addEventListener('addstream', event => {
+      this.stream = event.stream;
+      this.recorder = new Recorder(this.stream);
+      this.recorder.on('record.complete', media => {
+        media.id = this.id;
+        this.emit('record.complete', media);
+        this.recorder = null;
+      });
+    });
+
+    this.pc.oniceconnectionstatechange = e => {
+      if (['connected', 'completed'].indexOf(this.pc.iceConnectionState) > -1 && !this.noVideoElement) {
+        //hacky...
+        if (this.stream && !this.streamElement) {
+          this.streamElement = this.stream;
+        }
+      }
+      if (this.pc.iceConnectionState === 'connected') {
+        this.emit('complete');
+      }
+    };
+    this.on('remoteDescription.set', () => {
+      this.candidateQueue.forEach(candidate => {
+        this.pc.addIceCandidate(candidate);
+      });
+      this.candidateQueue = [];
+    });
+    this.on('remoteDescription.failed', e => console.log("rdp failed", e));
+  },
   record: function() {
     this.dataChannel.send('record');
     this.recorder.start();
@@ -308,7 +319,6 @@ function setChannelEvents() {
 
   channel.onopen = e => {
     channel.send("ping");
-    console.log('datachannel opened');
     if (this.isCaller) {
       channel.send(JSON.stringify(
         {event: 'capabilities', payload: myCapabilities}
@@ -332,6 +342,10 @@ function setChannelEvents() {
     switch(event) {
       case 'ping':
         channel.send('pong');
+        break;
+
+      case 'pong':
+        utils.log("Communications channel opened");
         break;
 
       case 'record':

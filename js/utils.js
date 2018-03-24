@@ -1,5 +1,5 @@
 const utils = {
-  xhr: function(url, opts) {
+  xhr: (url, opts) => {
     return new Promise((resolve, reject) => {
       if (!url) {
         reject("no url");
@@ -32,7 +32,7 @@ const utils = {
       req.send(opts && opts.data ? opts.data : null);
     });
   },
-  createElement: function(type, params) {
+  createElement: (type, params) => {
     if (typeof type != 'string') {
       return null;
     }
@@ -87,5 +87,18 @@ const utils = {
       }
     }
     return el;
+  },
+  getParameters: () => {
+    return ((window.location.href
+             .split('?'))[1] || "")
+             .split('&')
+             .map(paramStr => paramStr.split('='))
+             .filter(param => param.length === 2)
+             .reduce((params, param) => {params[param[0]] = param[1];return params;}, {});
+  },
+  log: (logItem) => {
+    if (utils.getParameters().debug && utils.getParameters().debug === 'true') {
+      console.log(logItem);
+    }
   }
 }
