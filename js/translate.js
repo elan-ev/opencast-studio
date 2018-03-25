@@ -1,8 +1,15 @@
 class TranslationService extends EventEmitter {
   constructor() {
     super();
-    let _lang;
 
+    let _chosen = {};
+    Object.defineProperty(this, 'chosen', {
+      get: function() {
+        return _chosen;
+      }
+    });
+
+    let _lang;
     Object.defineProperty(this, 'language', {
       get: function() {
         return _lang;
@@ -13,7 +20,7 @@ class TranslationService extends EventEmitter {
           if (_languages) {
             _chosen = _languages
                           .filter(current => _lang.indexOf(current.short) > -1)
-                          .reduce((chosen, check) => chosen = chosen || check, null);
+                          .reduce((chosen, check) => chosen = check, {});
             localStorage.setItem('language', newLang);
             let emitObj = JSON.parse(JSON.stringify(_chosen));
             emitObj.language = _lang;
@@ -24,16 +31,7 @@ class TranslationService extends EventEmitter {
       }
     });
 
-    let _chosen = {};
-
-    Object.defineProperty(this, 'chosen', {
-      get: function() {
-        return _chosen;
-      }
-    });
-
-    let _languages = null;
-
+    let _languages = JSON.parse(localStorage.getItem('languagePacks') || "[]");
     Object.defineProperty(this, 'languages', {
       get: function() {
         return _languages;
@@ -45,10 +43,11 @@ class TranslationService extends EventEmitter {
           if (_lang) {
             _chosen = langs
                         .filter(current => _lang.indexOf(current.short) > -1)
-                        .reduce((chosen, check) => chosen = chosen || check, null);
+                        .reduce((chosen, check) => chosen = check, {});
             let emitObj = JSON.parse(JSON.stringify(_chosen));
             emitObj.language = _lang;
             emitObj.translation = this[_lang] || this.en;
+            localStorage.setItem('languagePacks', JSON.stringify(langs));
             this.emit('translations.set', emitObj);
           }
         }
@@ -99,11 +98,9 @@ class TranslationService extends EventEmitter {
   }
 
   setLanguages() {
-    if (!this.languages) {
-      this.getLanguages()
-        .then(languages => this.languages = languages)
-        .catch(err => console.log(err));
-    }
+    this.getLanguages()
+      .then(languages => this.languages = languages)
+      .catch(err => console.log(err));
   }
 
   setLanguage(lang) {

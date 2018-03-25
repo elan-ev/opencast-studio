@@ -657,6 +657,46 @@ App.prototype = {
         loader.querySelector('.loaderText').style.fontSize = opts.fontSize;
       }
     }
+  },
+  setLanguage: function(langObj) {
+    document.documentElement.lang = langObj.language;
+    document.body.classList.add('translating');
+    if (!document.head.querySelector(`link[data-lang=${langObj.language}`)) {
+      let link = document.createElement('link');
+      link.rel = "stylesheet";
+      link.href = `/css/translations_${langObj.language}.css`;
+      document.head.appendChild(link);
+    }
+
+    let langDisplay = document.getElementById('chosenLanguage');
+    langDisplay.querySelector('span').textContent = langObj.short.toUpperCase();
+    langDisplay.querySelector('img').src = langObj.img;
+
+    [...document.querySelectorAll('[data-translate]')].forEach(el => {
+      let translate = el.getAttribute('data-translate');
+      if (langObj.translation && langObj.translation[translate]) {
+        el.textContent = langObj.translation[translate];
+      }
+    });
+
+    [...document.querySelectorAll('[data-pseudotext]')].forEach(el => {
+      let translate = el.getAttribute('data-pseudotext');
+      if (langObj.translation && langObj.translation[translate]) {
+        el.setAttribute('data-title', langObj.translation[translate]);
+      }
+    });
+
+    [...document.querySelectorAll('[data-translatetitle]')].forEach(el => {
+      let translate = el.getAttribute('data-translatetitle');
+      if (langObj.translation && langObj.translation[translate]) {
+        el.title = langObj.translation[translate];
+      }
+    });
+
+    if (document.getElementById('addDevice').title) {
+      document.getElementById('addDevice').title = ts.translate("ADD_DEVICE");
+    }
+    document.body.classList.remove('translating');
   }
 };
 
@@ -688,46 +728,8 @@ ts.on('translations.languages', languages => {
     langList.appendChild(item);
   });
 });
-ts.on('translations.set', langObj => {
-  document.documentElement.lang = langObj.language;
-  if (!document.head.querySelector(`link[data-lang=${langObj.language}`)) {
-    let link = document.createElement('link');
-    link.rel = "stylesheet";
-    link.href = `/css/translations_${langObj.language}.css`;
-    document.head.appendChild(link);
-  }
 
-  let langDisplay = document.getElementById('chosenLanguage');
-  langDisplay.querySelector('span').textContent = langObj.short.toUpperCase();
-  langDisplay.querySelector('img').src = langObj.img;
-
-  [...document.querySelectorAll('[data-translate]')].forEach(el => {
-    let translate = el.getAttribute('data-translate');
-    if (langObj.translation && langObj.translation[translate]) {
-      el.textContent = langObj.translation[translate];
-    }
-  });
-
-  [...document.querySelectorAll('[data-pseudotext]')].forEach(el => {
-    let translate = el.getAttribute('data-pseudotext');
-    if (langObj.translation[translate]) {
-      el.setAttribute('data-title', langObj.translation[translate]);
-    }
-  });
-
-  [...document.querySelectorAll('[data-translatetitle]')].forEach(el => {
-    let translate = el.getAttribute('data-translatetitle');
-    if (langObj.translation[translate]) {
-      el.title = langObj.translation[translate];
-    }
-  });
-
-  if (document.getElementById('addDevice').title) {
-    document.getElementById('addDevice').title = ts.translate("ADD_DEVICE");
-  }
-});
-ts.on('translations.loaded', languages => {
-});
+ts.on('translations.set', langObj => app.setLanguage(langObj));
 
 deviceMgr.once('enumerated', {
     fn: devices => {

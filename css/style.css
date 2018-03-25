@@ -15,6 +15,12 @@ body {
   overflow-x: hidden;
 }
 
+body.translating [data-translate],
+body.translating [data-translatetitle],
+body.translating [data-pseudotext] {
+  color: transparent;
+}
+
 header {
   height: 3rem;
   line-height: 3rem;
