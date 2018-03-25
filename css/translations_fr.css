@@ -7,7 +7,7 @@
 }
 
 [lang=fr] .extensionRequired label[for=desktopstream]::after {
-  content: "Cliquez pour installer l'extension de bureau";
+  content: "Cliquez pour installer l'extension d'écran";
 }
 
 [lang=fr] #streams::before {

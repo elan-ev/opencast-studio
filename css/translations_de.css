@@ -7,7 +7,7 @@
 }
 
 [lang=de] .extensionRequired label[for=desktopstream]::after {
-  content: 'Klicken Sie hier, um die Desktop-Erweiterung zu installieren';
+  content: 'Klicken um die Desktop-Erweiterung zu installieren';
 }
 
 [lang=de] #streams::before {
