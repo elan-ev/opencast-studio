@@ -198,7 +198,7 @@ PeerConnection.prototype = {
                        },
           handleOffer: function(details) {
                          var self = this;
-                         if (!this.pc.remoteDescription.sdp) {
+                         if (!this.pc.remoteDescription || !this.pc.remoteDescription.sdp) {
                            this.pc.setRemoteDescription(details)
                              .then(() => this.emit('remoteDescription.set'))
                              .catch(err => this.emit('remoteDescription.failed', err));
