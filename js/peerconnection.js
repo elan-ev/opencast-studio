@@ -75,8 +75,10 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
 
   if (this.isCaller && stream instanceof MediaStream) {
     this.pc.addStream(stream);
-    this.dataChannel = this.pc.createDataChannel('channel');
-    setChannelEvents.call(this);
+    if (this.pc.createDataChannel) {
+      this.dataChannel = this.pc.createDataChannel('channel');
+      setChannelEvents.call(this);
+    }
 
     this.sendOffer();
   }
