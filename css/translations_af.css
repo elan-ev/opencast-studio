@@ -7,7 +7,7 @@
 }
 
 [lang=af] .extensionRequired label[for=desktopstream]::after {
-  content: 'Kliek om die desktop uitbreiding te installeer';
+  content: 'Kliek om die skerm uitbreiding te installeer';
 }
 
 [lang=af] #streams::before {

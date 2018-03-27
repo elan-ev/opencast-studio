@@ -697,6 +697,10 @@ App.prototype = {
       document.getElementById('addDevice').title = ts.translate("ADD_DEVICE");
     }
     document.body.classList.remove('translating');
+  },
+  cacheApp: function() {
+    navigator.serviceWorker.register('/sw.js')
+      .catch(err => console.log('failed to register sw', err));
   }
 };
 
@@ -802,3 +806,10 @@ socket.on('peerConnection', data => {
     app.listPeer(data.target);
   }
 });
+
+if ('serviceWorker' in navigator && 'caches' in window) {
+  app.cacheApp();
+/*  caches.open('app').then(cache =>
+    cache.keys().then(keys => keys.length === app.cacheApp())
+  );*/
+}
