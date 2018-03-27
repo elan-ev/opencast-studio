@@ -6,13 +6,16 @@ class Compositor extends EventEmitter {
     this.streams = {};
     this.streamOrder = [];
 
-    this.codecs = [
-                    'video/webm;codecs="vp9,opus"',
-                    'video/webm;codecs="vp9.0,opus"',
-                    'video/webm;codecs="avc1"',
-                    'video/x-matroska;codecs="avc1"',
-                    'video/webm;codecs="vp8,opus"'
-                  ].filter(codec => MediaRecorder.isTypeSupported(codec));
+    this.codecs = ('MediaRecorder' in window) ?
+                    [
+                     'video/webm;codecs="vp9,opus"',
+                     'video/webm;codecs="vp9.0,opus"',
+                     'video/webm;codecs="avc1"',
+                     'video/x-matroska;codecs="avc1"',
+                     'video/webm;codecs="vp8,opus"'
+                   ].filter(codec => MediaRecorder.isTypeSupported(codec)) :
+                   [];
+
     this.recorder = null;
     this.recData = [];
     this.canvas = document.createElement('canvas');
