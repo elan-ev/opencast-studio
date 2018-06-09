@@ -206,6 +206,9 @@ App.prototype = {
         if (vid.parentNode.querySelector('.streamControls')) {
           mediaContainer = vid.parentNode;
         }
+        if (vid.parentNode.classList.contains('front')) {
+          vid.parentNode.parentNode.parentNode.classList.add('active');
+        }
       });
 
     let audioContainer = this.mediaElements.audio.parentNode;
@@ -322,12 +325,6 @@ App.prototype = {
       let deviceType = devices[key].deviceType;
       deviceType = deviceType === 'desktop' ? 'video' : deviceType;
 
-      let mediaEl = utils.createElement(deviceType, {
-                      data: {
-                        id: key
-                      }
-                    });
-
       let placeholder = utils.createElement('span', {
                           class: 'placeholder'
                         });
@@ -335,9 +332,41 @@ App.prototype = {
                      class: 'shadow'
                    });
 
-      let backdrop = utils.createElement('span', {
-                     class: 'backdrop'
-                   });
+      let mediaEl = utils.createElement(deviceType, {
+                      data: {
+                        id: key
+                      }
+                    });
+
+      let mediaElContainer = utils.createElement('span', {
+                               class: 'mediaContainer'
+                             });
+
+      let mediaFront = utils.createElement('span', {
+                         class: 'front'
+                       });
+
+      let mediaBack = utils.createElement('ul', {
+                         class: 'back'
+                       });
+
+      let removeItem = utils.createElement('li');
+      let mediaRemoveBtn = utils.createElement('button', {
+                             text: 'Deactivate'
+                           });
+      removeItem.appendChild(mediaRemoveBtn);
+
+      let compositeItem = utils.createElement('li');
+      let mediaCompositeBtn = utils.createElement('button', {
+                             text: 'Add to composite'
+                           });
+      compositeItem.appendChild(mediaCompositeBtn);
+
+      let cancelItem = utils.createElement('li', { text: 'Cancel' });
+
+      mediaBack.appendChild(removeItem);
+      mediaBack.appendChild(compositeItem);
+      mediaBack.appendChild(cancelItem);
 
       let optionsList = utils.createElement('span', {
                           class: 'options'
@@ -350,10 +379,12 @@ App.prototype = {
                               }
                             });
 
-      item.appendChild(mediaEl);
+      mediaFront.appendChild(mediaEl);
+      mediaElContainer.appendChild(mediaFront);
+      mediaElContainer.appendChild(mediaBack);
+      item.appendChild(mediaElContainer);
       item.appendChild(placeholder);
       item.appendChild(shadow);
-      item.appendChild(backdrop);
 
       this.deviceList.appendChild(item);
       item.addEventListener('click', this.toggleDevice.bind(this), false);
@@ -403,7 +434,10 @@ App.prototype = {
       correctLevel: QRCode.CorrectLevel.L
     });
 
-    document.getElementById('host').textContent = link.split('/').slice(0, 4).join('/');
+    let pairLink = document.getElementById('host');
+    pairLink.textContent = link.split('/').slice(0, 4).join('/');
+    pairLink.href = url;
+    pairLink.target = '_blank';
 
     let codeEl = document.getElementById('paircode');
     codeEl.textContent = '';
@@ -419,6 +453,14 @@ App.prototype = {
       item = item.parentNode;
     }
 
+    if (item.classList.contains('active')) {
+      item.classList.toggle('toggled');
+      let mediaContainer = item.querySelector('.mediaContainer');
+      if (mediaContainer) {
+        mediaContainer.classList.toggle('toggled');
+      }
+      return;
+    }
     let id = item.getAttribute('data-id');
     let inputToggle = document.querySelector('input[value="' + id + '"]');
 
@@ -697,6 +739,30 @@ App.prototype = {
       document.getElementById('addDevice').title = ts.translate("ADD_DEVICE");
     }
     document.body.classList.remove('translating');
+  },
+  addPeerStreamToComposite: function(e) {
+    let parent = e.target;
+    while (parent && !parent.getAttribute('data-id')) {
+      parent = parent.parentNode;
+    }
+
+    if (!parent) {
+      return console.log('no such item');
+    }
+
+    let peerId = parent.getAttribute('data-id');
+    if (!peers[peerId]) {
+      return console.log('no such peer');
+    }
+    if (!peers[peerId].stream) {
+      return console.log('requested peer has no stream');
+    }
+
+    compositor.addStream({id: peerId, stream: peers[peerId].stream});
+  },
+  removePeer: function(peer) {
+    [...document.querySelectorAll(`[data-id="${peer}"]`)]
+      .forEach(el => el.parentNode.removeChild(el));
   },
   cacheApp: function() {
     navigator.serviceWorker.register('/sw.js')

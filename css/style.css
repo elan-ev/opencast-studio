@@ -53,7 +53,7 @@ body:not(#code) header > span:nth-child(2) {
 
 #code header label {
   display: inline-block;
-  width: calc(100%/3);
+  width: 25%;
   height: 3rem;
   line-height: 3rem;
   text-align: center;
@@ -63,7 +63,7 @@ body:not(#code) header > span:nth-child(2) {
 
 #code header::before {
   content: '';
-  width: calc(100%/3);
+  width: 25%;
   height: 3rem;
   background: #09f;
   transition: transform 0.3s;
@@ -80,12 +80,21 @@ body:not(#code) header > span:nth-child(2) {
   transform: translateX(200%);
 }
 
+#whiteboard:checked ~ header::before {
+  transform: translateX(300%);
+}
+
 #chooseDevice[disabled] ~ header label[for=chooseDevice] {
   color: #777;
   background: #ddd;
 }
 
 #stream[disabled] ~ header label[for=stream] {
+  color: #777;
+  background: #ddd;
+}
+
+#whiteboard[disabled] ~ header label[for=whiteboard] {
   color: #777;
   background: #ddd;
 }
@@ -129,7 +138,7 @@ body:not(#code) header > span:nth-child(2) {
   right: -0.5rem;
   padding-right: 0.5rem;
   visibility: hidden;
-  z-index: 2;
+  z-index: 3;
   box-shadow: inset 0 3px 3px -3px rgba(0,0,0,0.2),
               0 3px 6px -2px rgba(0,0,0,0.4);
   background: white;
@@ -173,6 +182,12 @@ main {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+#code .content {
+  overflow-y: visible;
 }
 
 section {
@@ -340,6 +355,12 @@ input:checked + section {
   transition: color 0.3s;
 }
 
+.streamControls label[for^=inputSource] {
+  float: left;
+  width: auto;
+  padding: 0 0.5rem;
+}
+
 .recording .streamControls label:nth-of-type(1) {
   pointer-events: none !important;
   background: rgba(254,0,1,0.4);
@@ -365,7 +386,17 @@ input:checked + section {
   transition: max-height 0.5s;
 }
 
+.streamControls label.pull-left ul {
+  right: auto;
+  left: 0;
+  min-width: 100%;
+}
+
 .streamControls input:nth-of-type(1):checked ~ label:nth-of-type(1) ul {
+  max-height: 6rem;
+}
+
+.streamControls input:nth-of-type(2):checked ~ label:nth-of-type(2) ul {
   max-height: 6rem;
 }
 
@@ -642,6 +673,7 @@ input:checked + section {
   opacity: 0;
   visibility: hidden;
   transition: visibility 0s 0.5s, opacity 0.5s, height 0.5s;
+  perspective: 800px;
 }
 
 #advancedUserView:checked ~ #streams {
@@ -775,7 +807,31 @@ label[for=minimiseStreams]::before {
   border: none;
   overflow: hidden;
   font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
-  transition: height 0.5s, margin 0.5s;
+  transition: height 0.5s, margin 0.5s, transform 0.5s;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  perspective: 800px;
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active.toggled {
+  transform: rotateY(180deg);
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active .front,
+#minimiseStreams:not(:checked) ~ #streams li.active.toggled .back {
+  visibility: visible;
+  transition: visibility 0s 0.2s;
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active .back,
+#minimiseStreams:not(:checked) ~ #streams li.active.toggled .front {
+  visibility: hidden;
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active .mediaContainer {
+  width: calc(100% - 0.5rem);
+  height: calc(100% - 0.5rem);
+  margin: 0.25rem;
 }
 
 #streams li::after {
@@ -787,6 +843,10 @@ label[for=minimiseStreams]::before {
   height: 2rem;
   margin: 0.5rem 0 0.5rem 1rem;
   overflow: visible;
+}
+
+#minimiseStreams:checked ~ #streams li .back li {
+  margin: 0;
 }
 
 #minimiseStreams:checked ~ #streams li::after {
@@ -803,14 +863,16 @@ label[for=minimiseStreams]::before {
   transition: opacity 0.5s;
 }
 
-#minimiseStreams:checked ~ #streams li video {
-  display: none;
-}
-
-#minimiseStreams:checked ~ #streams li:hover video {
+#minimiseStreams:checked ~ #streams li:hover .mediaContainer {
   top: auto;
   bottom: calc(100% + 1rem);
-  display: block;
+  opacity: 1;
+  visibility: visible; 
+  transition: opacity 0s, visibility 0s, transform 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer.toggled {
+  transform: rotateY(180deg);
 }
 
 #streams li.desktopDevice.active {
@@ -827,11 +889,6 @@ label[for=minimiseStreams]::before {
   transform: translate(-50%, -50%);
 }
 
-#minimiseStreams:checked ~ #streams li.desktopDevice.active video {
-  bottom: calc(100% + 4.25rem);
-  transform: translate(-50%, 50%);
-}
-
 #streams li .placeholder, #streams li .shadow {
   top: 45%;
   left: 50%;
@@ -843,8 +900,8 @@ label[for=minimiseStreams]::before {
 #streams li .shadow {
   top: calc(45% + 1px);
 }
-
-#streams li .backdrop {
+/*
+#streams li .mediaContainer {
   position: absolute;
   bottom: calc(100% + 0.5rem);
   width: 9rem;
@@ -854,36 +911,111 @@ label[for=minimiseStreams]::before {
   border-radius: 0.125rem;
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   display: none;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
 }
+*/
 
-.backdrop::before {
-  width: 0;
-  height: 0;
-  content: '';
+#streams li .mediaContainer {
   position: absolute;
-  left: 50%;
-  bottom: calc(-0.5rem + 1px);
-  transform: translate(-50%, 0);
-  border-top: 0.375rem solid rgba(0,0,0,0.2);
-  border-left: 0.25rem solid transparent;
-  border-right: 0.25rem solid transparent;
+  top: 0;
+  left: 0;
+  width: 8rem;
+  height: 6rem;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  transform: rotateY(0deg);
+  transform-style: preserve-3d;
 }
 
-.backdrop::after {
-  width: 0;
-  height: 0;
-  content: '';
+#streams li:not(.active) .mediaContainer * {
+  visibility: hidden;
+}
+
+#streams li.active .mediaContainer {
+  z-index: 2;
+}
+
+
+
+.videoDevice .mediaContainer.active,
+.desktopDevice .mediaContainer.active {
+  background: black;
+}
+
+.mediaContainer .front {
   position: absolute;
-  left: 50%;
-  bottom: calc(-0.5rem + 2px);
-  transform: translate(-50%, 0);
-  border-top: white solid 0.375rem;
-  border-left: 0.25rem solid transparent;
-  border-right: 0.25rem solid transparent;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
-#minimiseStreams:checked ~ #streams li.active:hover .backdrop {
+.mediaContainer .back {
+  background: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotateY(-180deg);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+#streams .back li {
+  margin: 0;
+  background: white;
   display: block;
+  height: 1.8125rem;
+  line-height: 1.8125rem;
+  width: 8rem;
+  font-size: 0.9rem;
+}
+
+#minimiseStreams:not(:checked) ~ #streams .back li {
+  width: 100%;
+  padding-left: 0.125rem;
+}
+
+#streams .back li:hover {
+  background: #8cf;
+}
+
+#streams .back li button {
+  padding: 0;
+  border: none;
+  background: none;
+  font-weight: 300;
+  font-size: 0.9rem;
+  display: block;
+  margin: 0;
+  line-height: 2rem;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer::before {
+  width: calc(100% + 1rem);
+  height: calc(100% + 1rem);
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  top: -0.5rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  background: white;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer::after {
+  width: 100%;
+  height: 1rem;
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1rem;
 }
 
 #streams li.audioDevice .placeholder, #streams li.audioDevice .shadow {
@@ -928,6 +1060,15 @@ li[data-title]::after {
   animation-fill-mode: forwards;
 }
 
+.peerDevice canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: white;
+}
+
 #addDevice {
   background: white;
   width: 6rem;
@@ -959,6 +1100,11 @@ li[data-title]::after {
 #minimiseStreams:checked ~ #streams #addDevice::after {
   opacity: 0;
   transition: opacity 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer {
+  opacity: 0;
+  visibility: hidden;
 }
 
 #addDevice::before {
@@ -996,7 +1142,7 @@ svg {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 3;
   opacity: 0;
   visibility: hidden;
   background: rgba(0,0,0,0.5);
@@ -1084,7 +1230,7 @@ svg {
   width: 640px;
   height: 480px;
   background: white;
-  z-index: 2;
+  z-index: 3;
   transform: translateY(calc(-5rem - 500px));
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
   transition: transform 0.25s ease-in;
@@ -1179,6 +1325,7 @@ svg {
 #host {
   padding: 0 0.25rem;
   color: #09f;
+  text-decoration: none;
 }
 
 #paircode {
@@ -1205,6 +1352,7 @@ svg {
 #code .content {
   width: 300%;
   transition: transform 0.5s;
+  background: white;
 }
 
 #code section {
@@ -1214,7 +1362,7 @@ svg {
   text-align: center;
 }
 
-#code section input {
+#code section input:not(.hiddenCheck) {
   display: block;
   width: 50%;
   margin: 1rem auto;
@@ -1243,6 +1391,11 @@ svg {
   transform: translate(200%) !important;
 }
 
+#whiteboardView {
+  transform: translate(300%) !important;
+  padding: 0 !important;
+}
+
 #enterCode:checked ~ main .content {
   transform: translate(0);
 }
@@ -1255,39 +1408,63 @@ svg {
   transform: translateX(calc(-200%/3));
 }
 
+#whiteboard:checked ~ main .content {
+  transform: translateX(-100%);
+}
+
 #deviceList {
   margin: 2rem 0 0;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 #deviceList button {
-  margin: 0.5rem auto;
-  width: 100%;
-  border: 1px solid #ccc;
-  height: 2.5rem;
-  line-height: 2.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 0 1rem 0 2rem;
-  text-align: left;
+  width: 8rem;
+  max-width: 40%;
+  box-shadow: 0 0 1px rgba(0,0,0,0.2);
   position: relative;
-  font-weight: 300;
   background: white;
+  border: none;
+  margin: 1rem;
+}
+
+#deviceList button::before {
+  display: block;
+  margin-top: 100%;
+  content: '';
+}
+
+.deviceName {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 1rem;
+  padding: 0.25rem 0;
+  line-height: 1rem;
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 #deviceList .placeholder,
 #deviceList .shadow {
-  transform: scale(0.3) translate(-50%, -50%);
-  left: -0.375rem;
-  top: 0;
+  transform: scale(0.6) translate(-80%, -100%);
+  left: 50%;
+  top: 50%;
 }
 
-#deviceList .placeholder::before,
+#deviceList .audioDevice .placeholder::before,
 #deviceList .placeholder::after,
 #deviceList .shadow::before,
 #deviceList .shadow::after {
   background: #ccc !important;
+}
+
+#deviceList .videoDevice .placeholder::before {
+  border-color: #ccc;
+  box-shadow: none;
 }
 
 #deviceList .videoDevice::before {
@@ -1764,4 +1941,76 @@ input:focus {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.pairExtraOptions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3rem;
+  line-height: 3rem;
+  box-shadow: 0 -1px 2px rgba(0,0,0,0.3);
+  width: 100%;
+  text-align: left;
+  padding: 0 1rem;
+}
+
+.canvasContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.canvasContainer canvas {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.canvasContainer .tutorial {
+  position: absolute;
+  max-width: 90%;
+  padding: 0 1rem 1rem;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.6);
+  color: white;
+  transition: visibility 0s 0.5s, opacity 0.5s;
+}
+
+.neverRemind .tutorial {
+  visibility: hidden;
+  opacity: 0;
+}
+
+#whiteboard:checked ~ main .canvasContainer .tutorial {
+  transition: visibility 0s 15.5s, opacity 0.5s 15s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.tutorial ul {
+  list-style: disc;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tutorial span {
+  display: block;
+  text-align: right;
+}
+
+.tutorial span label, .tutorial span input {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.8rem;
+}
+
+.tutorial span input:focus {
+  box-shadow: none;
 }

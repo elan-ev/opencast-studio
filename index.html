@@ -85,6 +85,10 @@
                 <li><button type="button" value="1080p">1080p</button></li>
               </ul>
             </label>
+            <input type="checkbox" id="inputSource1" class="hiddenCheck" />
+            <label for="inputSource1" class="pull-left">
+              <span>Desktop</span>
+            </label>
           </div>
         </label>
         <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" autocomplete="off" />
@@ -108,6 +112,13 @@
                 <li><button type="button" value="480p">480p</button></li>
                 <li><button type="button" value="720p">720p</button></li>
                 <li><button type="button" value="1080p">1080p</button></li>
+              </ul>
+            </label>
+            <input type="checkbox" id="inputSource2" class="hiddenCheck" />
+            <label for="inputSource2" class="pull-left">
+              <span>Webcam</span>
+              <ul>
+                <li><button>Thing</button></li>
               </ul>
             </label>
           </div>
@@ -184,7 +195,7 @@
       <span data-translate="PAIR_TEXT">Pair your iOS or Android device to this session by scanning the QR code below</span>
       <div id="qrcode">
       </div>
-      <span data-translate="PAIR_ALT_TEXT_1">Alternatively, head over to </span><span id="host"></span><span data-translate="PAIR_ALT_TEXT_2"> and use the code</span>:
+      <span data-translate="PAIR_ALT_TEXT_1">Alternatively, head over to </span><a id="host"></a><span data-translate="PAIR_ALT_TEXT_2"> and use the code</span>:
       <p id="paircode"></p>
       <a id="codehref"></a>
     </div>

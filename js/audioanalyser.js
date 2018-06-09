@@ -93,7 +93,9 @@ AudioAnalyser.prototype = {
     this.canvasCtx.beginPath();
     this.canvasCtx.moveTo(this.HEIGHT/2, this.HEIGHT/2);
 
-    this.canvasCtx.lineTo(magnitude/16*this.WIDTH, this.HEIGHT/2);
+
+    let lineWidth = Math.max(magnitude/16*this.WIDTH, this.HEIGHT/2);
+    this.canvasCtx.lineTo(lineWidth, this.HEIGHT/2);
     this.canvasCtx.stroke();
   },
   drawMerged: function(magnitude) {

@@ -11,6 +11,7 @@
   <input type="radio" id="enterCode" class="hiddenCheck" name="view" checked />
   <input type="radio" id="chooseDevice" class="hiddenCheck" name="view" disabled />
   <input type="radio" id="stream" class="hiddenCheck" name="view" disabled />
+  <input type="radio" id="whiteboard" class="hiddenCheck" name="view" disabled />
    <header>
     <label for="enterCode">
       1
@@ -18,13 +19,19 @@
       2
     </label><label for="stream">
       3
+    </label><label for="whiteboard">
+      4
     </label>
   </header>
   <main style="overflow-x: hidden;">
     <div class="content">
       <section id="codeView">
+        <input type="checkbox" class="hiddenCheck" id="offlineConnect" />
         Please enter pair code below
         <input type="text" name="code" maxlength="5" id="codeInput" />
+        <div class="pairExtraOptions">
+          <label for"offlineConnect">Offline connection?</label>
+        </div>
       </section>
       <section id="choiceView">
         Choose devices to share
@@ -38,6 +45,18 @@
           <video autoplay></video>
         </div>
       </section>
+    </div>
+    <div class="canvasContainer">
+      <div class="tutorial">
+        <h4>Whiteboard mode</h4>
+        <p>Your device should support stylus input to make use of this mode.</p>
+        <ul>
+           <li>Write/draw using a stylus as input</li>
+           <li>Erase strokes using your finger</li>
+        </ul>
+        <span><label for="neverRemind">Don't remind me again</label><input type="checkbox" id="neverRemind" /></span>
+      </div>
+      <canvas></canvas>
     </div>
   </main>
   <svg xmlns="http://www.w3.org/2000/svg">
@@ -64,6 +83,18 @@
         <rect width="6" height="10" x="21" y="19" />
         <rect height="5" width="38" x="6" y="24" />
       </clipPath>
+      <clipPath id="webcamStand">
+        <path d="M 0 48
+                 l 0 -24
+                 l 16 -16
+                 c 0 18
+                   64 18
+                   64 0
+                 l 16 16
+                 l 0 24
+                 h -96
+                 " />
+      </clipPath>
     </defs>
   </svg>
 
@@ -72,6 +103,7 @@
   <script src="../js/eventemitter.js"></script>
   <script src="../js/recorder.js"></script>
   <script src="../js/peerconnection.js"></script>
+  <script src="../js/canvas.js"></script>
   <script>
     let socket = io();
 
@@ -81,13 +113,16 @@
           .sort((a, b) => a.kind - b.kind)
           .forEach(device => {
             let button = document.createElement('button');
+            let buttonText =document.createElement('span');
             let place = document.createElement('span');
             let shadow = document.createElement('span');
             place.classList.add('placeholder');
             shadow.classList.add('shadow');
-            button.textContent = device.label;
+            buttonText.textContent = device.label;
+            buttonText.classList.add('deviceName');
             button.appendChild(place);
             button.appendChild(shadow);
+            button.appendChild(buttonText);
             button.classList.add(device.kind.replace(/input/g, '') + 'Device');
             button.type = 'button';
             button.value = device.deviceId;
@@ -99,6 +134,12 @@
 
             button.addEventListener('click', startStream, false);
           });
+        let canvasButton = document.createElement('button');
+        let canvasText = document.createElement('span');
+        canvasText.textContent = 'Whiteboard';
+        canvasButton.appendChild(canvasText);
+        document.getElementById('deviceList').appendChild(canvasButton);
+        canvasButton.addEventListener('click', startCanvas, false);
       });
 
     let codeInput = document.getElementById('codeInput');
@@ -154,6 +195,36 @@
         .catch(err => console.log(err));
     }
 
+    let canvas;
+    function startCanvas(e) {
+      document.getElementById("whiteboard").disabled = false;
+      document.getElementById("whiteboard").checked = true;
+      canvas = new Canvas(document.getElementsByTagName('canvas')[0]);
+      info.peers.forEach(peer => peers[peer] = new PeerConnection(peer, null, true));
+      canvas.on('strokePoints', pts => {
+        let msg = JSON.stringify({
+          event: 'canvas.draw',
+          payload: pts
+        });
+        Object.keys(peers).forEach(peer => {
+          if (peers[peer].dataChannel) {
+            peers[peer].dataChannel.send(msg);
+          }
+        });
+      });
+      canvas.on('erasePoints', pts => {
+        let msg = JSON.stringify({
+          event: 'canvas.erase',
+          payload: pts
+        });
+        Object.keys(peers).forEach(peer => {
+          if (peers[peer].dataChannel) {
+            peers[peer].dataChannel.send(msg);
+          }
+        });
+      });
+    }
+
     socket.on('failPair', data => console.log('failed to pair', data));
 
     socket.on('peerConnection', data => {
@@ -185,6 +256,18 @@
 
     let recorder = null;
 
+    let reminder = document.getElementById('neverRemind');
+    let doRemind = localStorage.getItem('neverRemind') === 'true';
+    if (doRemind) {
+      reminder.checked = true;
+      document.body.classList.add('neverRemind');
+    }
+
+    reminder.addEventListener('change', e => {
+      let state = e.target.checked;
+      localStorage.setItem('neverRemind', state.toString());
+      console.log(localStorage.getItem('neverRemind'));
+    }, false);
   </script>
 </body>
 </html>

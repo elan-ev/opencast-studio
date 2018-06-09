@@ -39,6 +39,10 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   }
   this.isCaller = isInitiator || (typeof stream == 'boolean' ? stream : false);
   this.candidateQueue = [];
+  this.canvas = null;
+  this.bgCanvas = null;
+  this.canvasPages = [];
+  this.bgCanvasPages = [];
 
   this.capabilities = {
     MediaRecorder: !!window.MediaRecorder
@@ -73,8 +77,25 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   this.pc = new RTCPeerConnection(pc_config);
   this.captureEvents();
 
-  if (this.isCaller && stream instanceof MediaStream) {
-    this.pc.addStream(stream);
+  if (this.isCaller) {
+    if (stream instanceof MediaStream) {
+      this.pc.addStream(stream);
+    }
+    else if (canvas) {
+      this.on('channel.opened', () => {
+        let msg = {
+          event: 'canvas.dimensions',
+          payload: {
+            width: canvas.canvas.width,
+            height: canvas.canvas.height,
+            lineWidth: canvas.ctx.lineWidth,
+            eraseWidth: canvas.eraseWidth,
+            colour: canvas.ctx.fillStyle
+          }
+        };
+        this.dataChannel.send(JSON.stringify(msg));
+      });
+    }
     if (this.pc.createDataChannel) {
       this.dataChannel = this.pc.createDataChannel('channel');
       setChannelEvents.call(this);
@@ -249,9 +270,7 @@ PeerConnection.prototype = {
           this.streamElement = this.stream;
         }
       }
-      if (this.pc.iceConnectionState === 'connected') {
-        this.emit('complete');
-      }
+      this.emit(`connection.${this.pc.iceConnectionState}`);
     };
     this.on('remoteDescription.set', () => {
       this.candidateQueue.forEach(candidate => {
@@ -309,6 +328,96 @@ PeerConnection.prototype = {
     this.mediaBlob = new Blob(this.mediaBuffer, {type: 'video/webm'});
     let url = URL.createObjectURL(this.mediaBlob);
     this.emit('record.raw', {url: url, media: this.mediaBlob, id: this.id});
+  },
+  setCanvasDimensions: function(dims) {
+    if (!this.canvas) {
+      //displayScale not used in this block (it SHOULD be used)
+      this.canvas = document.createElement('canvas');
+      this.canvas.width = dims.width;
+      this.canvas.height = dims.height;
+      this.ctx = this.canvas.getContext('2d');
+      this.lineWidth = this.ctx.lineWidth = dims.lineWidth;
+      this.eraseWidth = dims.eraseWidth;
+      this.ctx.fillStyle = this.ctx.strokeStyle = dims.colour;
+      this.ctx.lineCap = 'round';
+    }
+    if (this.displayCanvas) {
+      let aspectRatio = dims.width / dims.height;
+      if (aspectRatio > 1) {
+        let parentWidth = this.displayCanvas.parentNode.clientWidth;
+        let parentHeight = this.displayCanvas.parentNode.clientHeight;
+        this.displayCanvas.style.width = '100%';
+        this.displayCanvas.style.height = (parentWidth / aspectRatio >> 0) + 'px';
+        this.displayCanvas.width = parentWidth;
+        this.displayCanvas.height = parentWidth / aspectRatio >> 0;
+        this.displayScale = parentWidth / dims.width;
+        this.displayCanvas.style.top = (parentHeight - parentWidth/aspectRatio)/2 + 'px';
+      }
+      else {
+        let parentHeight = this.displayCanvas.parentNode.clientHeight;
+        let parentWidth = this.displayCanvas.parentNode.clientWidth;
+        this.displayCanvas.style.height = '100%';
+        this.displayCanvas.style.width = (parentHeight * aspectRatio >> 0) + 'px';
+        this.displayCanvas.width = parentHeight * aspectRatio >> 0;
+        this.displayCanvas.height = parentHeight;
+        this.displayScale = parentHeight / dims.height;
+        this.displayCanvas.style.left = (parentWidth - parentHeight*aspectRatio)/2 + 'px';
+      }
+      this.displayCtx = this.displayCanvas.getContext('2d');
+      this.displayCtx.lineWidth = dims.lineWidth * this.displayScale;
+      this.eraseWidth = dims.eraseWidth * this.displayScale;
+      this.displayCtx.strokeStyle = this.displayCtx.fillStyle = dims.colour;
+      this.displayCtx.lineCap = 'round';
+    }
+  },
+  drawCanvas: function(pts) {
+    pts = pts.map(pt => {
+      return {
+        x: pt.x * this.displayScale,
+        y: pt.y * this.displayScale
+      }
+    });
+
+    let p0 = pts[0];
+    let p1 = pts[1];
+
+    this.displayCtx.globalCompositeOperation = 'source-over';
+
+    this.displayCtx.beginPath();
+    this.displayCtx.moveTo(pts[0].x, pts[0].y);
+
+    let mid = {};
+    for (let i = 1, n = pts.length - 1; i < n; i++) {
+      mid = {
+              x: (p0.x + p1.x)/2,
+              y: (p0.y + p1.y)/2
+            };
+      this.displayCtx.quadraticCurveTo(p0.x, p0.y, mid.x, mid.y);
+      p0 = pts[i];
+      p1 = pts[i+1];
+    }
+    this.displayCtx.lineTo(mid.x, mid.y);
+    this.displayCtx.stroke();
+  },
+  canvasErase: function(pts) {
+    if (!pts.length) return;
+
+    pts = pts.map(pt => {
+      return {
+        x: pt.x * this.displayScale,
+        y: pt.y * this.displayScale
+      }
+    });
+
+    this.displayCtx.globalCompositeOperation = 'destination-out';
+    this.displayCtx.lineWidth = this.eraseWidth;
+    this.displayCtx.beginPath();
+    this.displayCtx.moveTo(pts[0].x, pts[0].y);
+
+    for (let i = 1, n = pts.length; i < n; i++) {
+      this.displayCtx.lineTo(pts[i].x, pts[i].y);
+      this.displayCtx.stroke();
+    }
   }
 };
 
@@ -348,6 +457,7 @@ function setChannelEvents() {
 
       case 'pong':
         utils.log("Communications channel opened");
+        this.emit('channel.opened');
         break;
 
       case 'record':
@@ -390,6 +500,18 @@ function setChannelEvents() {
 
       case 'capabilities':
         this.capabilities = json.payload;
+        break;
+
+      case 'canvas.dimensions':
+        this.setCanvasDimensions(json.payload);
+        break;
+
+      case 'canvas.draw':
+        this.drawCanvas(json.payload);
+        break;
+
+      case 'canvas.erase':
+        this.canvasErase(json.payload);
         break;
 
       default:
