@@ -329,7 +329,7 @@ PeerConnection.prototype = {
     let url = URL.createObjectURL(this.mediaBlob);
     this.emit('record.raw', {url: url, media: this.mediaBlob, id: this.id});
   },
-  setCanvasDimensions: function(dims) {
+  setCanvasDimensions: function(dims, numAttempts) {
     if (!this.canvas) {
       //displayScale not used in this block (it SHOULD be used)
       this.canvas = document.createElement('canvas');
@@ -345,6 +345,12 @@ PeerConnection.prototype = {
       let aspectRatio = dims.width / dims.height;
       if (aspectRatio > 1) {
         let parentWidth = this.displayCanvas.parentNode.clientWidth;
+        if (!parentWidth && (!numAttempts || numAttempts < 3) {
+          numAttempts = numAttempts || 0;
+          return setTimeout(() => {
+            this.setCanvasDimensions(dims, ++numAttempts);
+          }, 1000);
+        }
         let parentHeight = this.displayCanvas.parentNode.clientHeight;
         this.displayCanvas.style.width = '100%';
         this.displayCanvas.style.height = (parentWidth / aspectRatio >> 0) + 'px';
@@ -355,6 +361,12 @@ PeerConnection.prototype = {
       }
       else {
         let parentHeight = this.displayCanvas.parentNode.clientHeight;
+        if (!parentHeight && (!numAttempts || numAttempts < 3) {
+          numAttempts = numAttempts || 0;
+          return setTimeout(() => {
+            this.setCanvasDimensions(dims, ++numAttempts);
+          }, 1000);
+        }
         let parentWidth = this.displayCanvas.parentNode.clientWidth;
         this.displayCanvas.style.height = '100%';
         this.displayCanvas.style.width = (parentHeight * aspectRatio >> 0) + 'px';
