@@ -262,6 +262,40 @@ App.prototype = {
       }
     }
   },
+  switchStream: function(e) {
+    let id = e.target.value;
+    let parent = e.target.parentNode;
+    while (parent && !parent.querySelector('video')) {
+      parent = parent.parentNode;
+    }
+
+    if (!parent) {
+      return console.log('no vid elements');
+    }
+    let vid = parent.querySelector('video');
+    if (vid.getAttribute('data-id') === id) {
+      return;
+    }
+
+    let stream = this.getStreamSource(id, !!e.target.getAttribute('data-peer'));
+    if (!stream) {
+      return console.log('no such stream source for switching');
+    }
+
+    vid.srcObject = stream;
+    vid.setAttribute('data-id', id);
+  },
+  getStreamSource: function(id, isPeer) {
+    if (isPeer) {
+      if (peers[id] && peers[id].stream) {
+        return peers[id].stream;
+      }
+    }
+    else if (deviceMgr.video[id]) {
+      return deviceMgr.video[id].stream;
+    }
+    return;
+  },
   chooseResolution: function(e) {
     let res = e.target.value;
     let parent = e.target.parentNode;
@@ -412,8 +446,44 @@ App.prototype = {
       }, 500);
     }
   },
+  listAsSource: function(details) {
+    let inputSources = document.querySelectorAll('.inputSource ul');
+
+    Object.keys(details)
+      .filter(key => details[key].deviceType == 'video')
+      .forEach(key => {
+        if (!inputSources[0].querySelector(`li[data-id="${key}"]`)) {
+          let item = utils.createElement('li', {
+                       data: {
+                         id: key
+                       }
+                     });
+          let deviceBtn = utils.createElement('button', {
+                            text: details[key].info.label,
+                            value: key
+                          });
+
+          if (details[key].source == 'peer') {
+            let streamType = details[key].info.type;
+            deviceBtn.setAttribute('data-peer', streamType);
+          }
+
+          item.appendChild(deviceBtn);
+          
+          inputSources.forEach(input => {
+            let cloned = item.cloneNode(true);
+            input.appendChild(cloned);
+            cloned.addEventListener('click', this.switchStream.bind(this), false);
+          });
+        }
+      })
+
+    inputSources.forEach(input => {
+      input.style.maxHeight = (([...input.querySelectorAll('li')].length + 1) * 2) + 'rem';
+    });
+  },
   toggleAddDevice: function(e) {
-    socket.emit('initiatePair');
+    comms.emit('initiatePair');
   },
   togglePeerStream: function(e) {
     console.log(e.target.getAttribute('data-id'));
@@ -805,6 +875,7 @@ ts.on('translations.set', langObj => app.setLanguage(langObj));
 deviceMgr.once('enumerated', {
     fn: devices => {
       app.listDevices(devices);
+      app.listAsSource(devices);
     }
 });
 
@@ -867,7 +938,7 @@ if (window.chrome && chrome.app) {
   });
 }
 
-socket.on('peerConnection', data => {
+comms.socket.on('peerConnection', data => {
   document.getElementById('toggleAddDeviceModal').checked = false;
   if (!document.querySelector('button[data-stream="' + data.target + '"]')) {
     app.listPeer(data.target);

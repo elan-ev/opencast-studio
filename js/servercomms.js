@@ -2,18 +2,99 @@
  * Websockets *
  * ***********/
 
-const socket = io();
+function Communications() {
+  this.socket = null;
+  this.bt = null;
+  this.nfc = null;
 
-if (socket) {
-  socket.on('welcome', id => app.socketId = id);
-  socket.on('pairCode', code => app.displayPairCode(code));
-  socket.on('peerConnection', data => {
-    if (!peers[data.target]) {
-      peers[data.target] = new PeerConnection(data);
-      peers[data.target].on('connection.connected', function() {
+  if (io) {
+    this.socket = io();
+
+    this.socket.on('welcome', id => app.socketId = id);
+    this.socket.on('pairCode', code => app.displayPairCode(code));
+    this.socket.on('peerConnection', data => managePeerConnection(data));
+  }
+  if (navigator.bluetooth) {
+    this.bt = navigator.bluetooth;
+  }
+  if (navigator.nfc) {
+    this.nfc = navigator.nfc;
+  }
+
+  this.transportOrder = ['SOCKET', 'BT', 'NFC'];
+  this.transportOrder.some(newTransport => {
+    if (this[newTransport.toLowerCase()]) {
+      return this.switchTransport(newTransport);
+    }
+  });
+}
+
+Communications.prototype = {
+  constructor: Communications,
+  emitSOCKET: function() {
+    if (!this.socket) {
+      throw new Error('socket not initialized (io not found)');
+    }
+
+    let args = Array.prototype.slice.call(arguments);
+    this.socket.emit.apply(this.socket, args);
+  },
+  emitBT: function() {
+    if (!this.bt) {
+      throw new Error('bluetooth not found');
+    }
+  },
+  emitNFC: function() {
+    if (!this.nfc) {
+      throw new Error('NFC not found');
+    }
+  },
+  switchTransport: function(transport) {
+    if (['SOCKET', 'BT', 'NFC'].indexOf(transport) > -1) {
+      this.emit = this.__proto__[`emit${transport}`];
+      return true;
+    }
+  },
+  emit: function() {
+  }
+}
+
+const comms = new Communications();
+
+function managePeerConnection(data) {
+  if (!peers[data.target]) {
+    peers[data.target] = new PeerConnection(data);
+    peers[data.target].on('connection.connected', () => connectionSuccess(data));
+    peers[data.target].on('record.prepare', details => {
+      app.listRecording(details);
+    });
+    peers[data.target].on('record.complete', details => {
+      app.setMediaLink(details);
+    });
+    peers[data.target].on('record.raw', details => {
+      app.setMediaLink(details);
+      let peerListing = document.querySelector(`#recordingList a[data-id="${details.id}"]`);
+      if (peerListing) {
+        peerListing.classList.remove('transfer');
+      }
+      else {
+        console.log('no such peer listing');
+      }
+    });
+    peers[data.target].on('connection.disconnected', () => {
+      app.removePeer(data.target);
+    });
+  }
+
+  peers[data.target].handleRequest(data);
+}
+
+function connectionSuccess(data) {
         let peerItem = document.querySelector('#streams li[data-id="' + data.target + '"]');
+        let isVisual = false;
 
         if (peers[data.target].stream && peers[data.target].stream.getVideoTracks().length > 0) {
+          isVisual = true;
           let peerVid = document.createElement('video');
           let container = utils.createElement('span', {
                             class: 'mediaContainer'
@@ -65,6 +146,7 @@ if (socket) {
         }
         else if (!peers[data.target].stream) {
           //probably only the whiteboard
+          isVisual = true;
           let peerCanvas = document.createElement('canvas');
           let container = utils.createElement('span', {
                             class: 'mediaContainer'
@@ -88,28 +170,18 @@ if (socket) {
           peerItem.setAttribute('data-title', 'Whiteboard');
           peers[data.target].displayCanvas = peerCanvas;
         }
-      });
-      peers[data.target].on('record.prepare', details => {
-        app.listRecording(details);
-      });
-      peers[data.target].on('record.complete', details => {
-        app.setMediaLink(details);
-      });
-      peers[data.target].on('record.raw', details => {
-        app.setMediaLink(details);
-        let peerListing = document.querySelector(`#recordingList a[data-id="${details.id}"]`);
-        if (peerListing) {
-          peerListing.classList.remove('transfer');
-        }
-        else {
-          console.log('no such peer listing');
-        }
-      });
-      peers[data.target].on('connection.disconnected', () => {
-        app.removePeer(data.target);
-      });
-    }
 
-    peers[data.target].handleRequest(data);
-  });
+        if (isVisual) {
+          let sourceItem = {}
+          sourceItem[data.target] = {
+            deviceType: 'video',
+            source: 'peer',
+            info: {
+              label: `Remote peer ${Object.keys(peers).length}: ${peers[data.target].stream ? 'stream' : 'whiteboard'}`,
+              type: peers[data.target].stream ? 'video' : 'whiteboard'
+            }
+          }
+          app.listAsSource(sourceItem);
+        }
+
 }

@@ -361,6 +361,33 @@ input:checked + section {
   padding: 0 0.5rem;
 }
 
+.streamControls label[for^=inputSource] ul:not(:empty)::before {
+  content: 'Switch to:';
+  display: block;
+  text-align: left;
+  color: white;
+  font-weight: 300;
+  padding: 0 0.25rem;
+  line-height: 2rem;
+}
+
+.streamControls label[for^=inputSource] ul li {
+  height: 2rem;
+  line-height: 2rem;
+  text-align: left;
+  padding: 0 0.5rem;
+}
+
+input[id^=inputSource]:not(:checked) ~ label[for^=inputSource] ul {
+  max-height: 0 !important;
+}
+
+.streamControls label[for^=inputSource] ul li button {
+  display: block;
+  height: 100%;
+  line-height: 2rem;
+}
+
 .recording .streamControls label:nth-of-type(1) {
   pointer-events: none !important;
   background: rgba(254,0,1,0.4);

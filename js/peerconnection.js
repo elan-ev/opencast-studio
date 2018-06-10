@@ -123,7 +123,7 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
            },
       set: function(stream) {
              mediaElement = document.createElement(stream.getVideoTracks().length > 0 ? 'video' : 'audio');
-             mediaElement.src = URL.createObjectURL(stream);
+             mediaElement.srcObject = stream;
              mediaElement.autoplay = true;
              mediaElement.muted = true;
              mediaElement.setAttribute('data-peer', this.id);
@@ -186,7 +186,8 @@ PeerConnection.prototype = {
                           this.pc.createOffer()
                             .then(offer => {
                               self.pc.setLocalDescription(offer);
-                              socket.emit('peerConnection', {target: self.id, details: offer});
+                              //TODO: remove type check when comms implemented on pairing device
+                              (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {target: self.id, details: offer});
                             })
                             .catch(err => this.offerFailed(err));
                         },
@@ -194,7 +195,7 @@ PeerConnection.prototype = {
                           this.pc.createAnswer()
                            .then(offer => {
                              this.pc.setLocalDescription(offer);
-                             socket.emit('peerConnection', {target: this.id, details: offer});
+                             (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {target: this.id, details: offer});
                            })
                            .catch(err => this.answerFailed(err));
                         },
@@ -249,7 +250,7 @@ PeerConnection.prototype = {
                  sdpMid: evt.candidate.sdpMid,
               candidate: evt.candidate.candidate
         };
-        socket.emit('peerConnection', {target: this.id, details: details});
+        (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {target: this.id, details: details});
       }
     };
 
