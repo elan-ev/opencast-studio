@@ -221,7 +221,7 @@ input:checked + section {
   width: 20%;
   margin: 0 20% 0 0;
   position: relative;
-  background: #eee;
+  background: #ddd;
   border-radius: 0.25rem;
 }
 
@@ -279,7 +279,7 @@ input:checked + section {
 }
 
 .mediadevice {
-  background: #eee;
+  background: #ddd;
   width: 30%;
   position: relative;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -657,7 +657,7 @@ input:checked + section {
 
 #mergestreams:checked ~ #videoView .audioDevice .placeholder::before,
 #mergestreams:checked ~ #videoView .audioDevice .placeholder::after {
-  background: #eee;
+  background: #ddd;
 }
 
 
@@ -720,7 +720,7 @@ input:checked + section {
   font-size: 1.5rem;
   font-weight: 300;
   color: #666;
-  background: #eee;
+  background: #ddd;
   transition: line-height 0.5s, height 0.5s;
   z-index: 2;
   position: relative;
@@ -730,7 +730,7 @@ input:checked + section {
   content: '';
   position: absolute;
   z-index: 0;
-  background: #eee;
+  background: #ddd;
   width: 8rem;
   height: 8rem;
   position: absolute;
@@ -759,7 +759,7 @@ label[for=minimiseStreams] {
   width: 3rem;
   border-bottom-left-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   border-top: none;
 }
 
@@ -802,7 +802,7 @@ label[for=minimiseStreams]::before {
   display: inline-block;
   margin: 0.875rem 0 0.875rem 1rem;
   vertical-align: top;
-  background: #eee;
+  background: #ddd;
   position: relative;
   border: none;
   overflow: hidden;
@@ -880,7 +880,7 @@ label[for=minimiseStreams]::before {
 }
 
 #minimiseStreams:checked ~ #streams li.desktopDevice.active {
-  background: #eee;
+  background: #ddd;
 }
 
 #streams li.desktopDevice video {
@@ -1074,7 +1074,7 @@ li[data-title]::after {
   width: 6rem;
   height: 6rem;
   position: absolute;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   transition: width 0.5s, height 0.5s, margin 0.5s;
 }
 
@@ -1114,7 +1114,7 @@ li[data-title]::after {
   height: 3rem;
   top: 1rem;
   left: 1.5rem;
-  background: #eee;
+  background: #ddd;
   clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0 66%);
   transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, background 0.5s, transform 0.25s;
 }
@@ -1518,7 +1518,7 @@ label[for=mergestreams]::before {
 .viewControls select {
   font-size: 0.8rem;
   background: white;
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   height: 2rem;
   padding: 0 0.5rem;
   border-radius: 0.25rem;
@@ -1543,7 +1543,7 @@ label[for=mergestreams]::before {
   border: none;
   position: relative;
   margin: 0 0.5rem;
-  background: linear-gradient(to bottom, #eee 0%, #f0f0f0 100%);
+  background: linear-gradient(to bottom, #ddd 0%, #f0f0f0 100%);
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   outline: none;
 }
@@ -1610,11 +1610,13 @@ label, button {
   position: absolute;
   top: 0;
   right: 2rem;
+  font-family: monospace;
 }
 
 #recordingTime::before {
   font-weight: 300;
   margin-right: 0.5rem;
+  font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
 }
 
 .recording #recordingTime::before {
@@ -1698,7 +1700,7 @@ input:focus {
   width: 8rem;
   height: 6rem;
   position: relative;
-  background: #eee;
+  background: #ddd;
   text-align: center;
   padding: 0.5rem;
   margin: 0 0.5rem 0.5rem 0;
