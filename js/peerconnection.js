@@ -345,7 +345,7 @@ PeerConnection.prototype = {
       let aspectRatio = dims.width / dims.height;
       if (aspectRatio > 1) {
         let parentWidth = this.displayCanvas.parentNode.clientWidth;
-        if (!parentWidth && (!numAttempts || numAttempts < 3) {
+        if (!parentWidth && (!numAttempts || numAttempts < 3)) {
           numAttempts = numAttempts || 0;
           return setTimeout(() => {
             this.setCanvasDimensions(dims, ++numAttempts);
@@ -361,7 +361,7 @@ PeerConnection.prototype = {
       }
       else {
         let parentHeight = this.displayCanvas.parentNode.clientHeight;
-        if (!parentHeight && (!numAttempts || numAttempts < 3) {
+        if (!parentHeight && (!numAttempts || numAttempts < 3)) {
           numAttempts = numAttempts || 0;
           return setTimeout(() => {
             this.setCanvasDimensions(dims, ++numAttempts);
