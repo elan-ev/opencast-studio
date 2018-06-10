@@ -193,7 +193,8 @@ App.prototype = {
       document.getElementById('toggleExtensionModal').checked = true;
     }
 
-    deviceMgr.connect(e.target.value);
+    deviceMgr.connect(e.target.value)
+      .catch(err => console.log(err));
   },
   displayStream: function(stream, value) {
     let mediaContainer = null;
