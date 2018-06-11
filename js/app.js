@@ -284,7 +284,7 @@ App.prototype = {
 
     vid.srcObject = stream;
     vid.setAttribute('data-id', id);
-    parent.querySelector('label[for^=inputSource]').textContent = e.target.getAttribute('data-label');
+    parent.querySelector('label[for^=inputSource] > span').textContent = e.target.getAttribute('data-label');
   },
   getStreamSource: function(id, isPeer) {
     if (isPeer) {
