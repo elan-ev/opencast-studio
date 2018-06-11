@@ -359,6 +359,14 @@ input:checked + section {
   float: left;
   width: auto;
   padding: 0 0.5rem;
+  max-width: 40%;
+}
+
+.streamControls label[for^=inputSource] > span {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .streamControls label[for^=inputSource] ul:not(:empty)::before {

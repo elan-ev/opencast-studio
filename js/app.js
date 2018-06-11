@@ -284,6 +284,7 @@ App.prototype = {
 
     vid.srcObject = stream;
     vid.setAttribute('data-id', id);
+    parent.querySelector('label[for^=inputSource]').textContent = e.target.getAttribute('data-label');
   },
   getStreamSource: function(id, isPeer) {
     if (isPeer) {
@@ -460,7 +461,10 @@ App.prototype = {
                      });
           let deviceBtn = utils.createElement('button', {
                             text: details[key].info.label,
-                            value: key
+                            value: key,
+                            data: {
+                              label: details[key].info.label
+                            }
                           });
 
           if (details[key].source == 'peer') {
@@ -469,7 +473,7 @@ App.prototype = {
           }
 
           item.appendChild(deviceBtn);
-          
+
           inputSources.forEach(input => {
             let cloned = item.cloneNode(true);
             input.appendChild(cloned);
@@ -832,8 +836,10 @@ App.prototype = {
     compositor.addStream({id: peerId, stream: peers[peerId].stream});
   },
   removePeer: function(peer) {
-    [...document.querySelectorAll(`[data-id="${peer}"]`)]
+    [...document.querySelectorAll(`.streamControls [data-id="${peer}"], #streams [data-id="${peer}"]`)]
       .forEach(el => el.parentNode.removeChild(el));
+    [...document.querySelectorAll(`video[data-id="${peer}"], audio[data-id="${peer}"]`)]
+      .forEach(mediaEl => mediaEl.srcObject = null);
   },
   cacheApp: function() {
     navigator.serviceWorker.register('/sw.js')
