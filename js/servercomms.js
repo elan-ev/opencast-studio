@@ -14,14 +14,8 @@ function Communications() {
     this.socket.on('pairCode', code => app.displayPairCode(code));
     this.socket.on('peerConnection', data => managePeerConnection(data));
   }
-  if (navigator.bluetooth) {
-    this.bt = navigator.bluetooth;
-  }
-  if (navigator.nfc) {
-    this.nfc = navigator.nfc;
-  }
 
-  this.transportOrder = ['SOCKET', 'BT', 'NFC'];
+  this.transportOrder = ['SOCKET'];
   this.transportOrder.some(newTransport => {
     if (this[newTransport.toLowerCase()]) {
       return this.switchTransport(newTransport);
@@ -39,18 +33,8 @@ Communications.prototype = {
     let args = Array.prototype.slice.call(arguments);
     this.socket.emit.apply(this.socket, args);
   },
-  emitBT: function() {
-    if (!this.bt) {
-      throw new Error('bluetooth not found');
-    }
-  },
-  emitNFC: function() {
-    if (!this.nfc) {
-      throw new Error('NFC not found');
-    }
-  },
   switchTransport: function(transport) {
-    if (['SOCKET', 'BT', 'NFC'].indexOf(transport) > -1) {
+    if (['SOCKET'].indexOf(transport) > -1) {
       this.emit = this.__proto__[`emit${transport}`];
       return true;
     }
