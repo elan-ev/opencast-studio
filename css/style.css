@@ -1286,13 +1286,18 @@ svg {
   margin-bottom: 0;
 }
 
-#extensionModal button {
+#extensionModal a,
+#extensionModal a:visited {
   background: #4397ff;
   color: white;
   text-shadow: 0 1px rgba(0,0,0,0.1);
   border: none;
   height: 2rem;
+  line-height: 2rem;
   box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+  text-decoration: none;
+  display: inline-block;
+  padding: 0 0.5rem;
 }
 
 #toggleAddDeviceModal:checked ~ #addDeviceModal,
