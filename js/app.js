@@ -934,14 +934,16 @@ compositor.on('stream.remove', () => {
 });
 
 if (window.chrome && chrome.app) {
-  let delay = setTimeout(() => {
-    app.needsExtension = true;
-  }, 1000);
-  window.addEventListener('message', e => {
-    if (e.data.type && e.data.type == 'SS_PING' && document.getElementById('appInstalled')) {
-      clearTimeout(delay);
-    }
-  });
+  if (!navigator.mediaDevices || !('getDisplayMedia' in navigator.mediaDevices)) {
+    let delay = setTimeout(() => {
+      app.needsExtension = true;
+    }, 1000);
+    window.addEventListener('message', e => {
+      if (e.data.type && e.data.type == 'SS_PING' && document.getElementById('appInstalled')) {
+        clearTimeout(delay);
+      }
+    });
+  }
 }
 
 comms.socket.on('peerConnection', data => {

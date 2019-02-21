@@ -238,7 +238,10 @@ class Device extends EventEmitter {
   }
 
   connect(opts) {
-    if (this.deviceType === 'desktop' && this.isChrome) {
+    if (this.deviceType === 'desktop' && 'getDisplayMedia' in navigator.mediaDevices) {
+      return this.connectDisplayMedia();
+    }
+    else if (this.deviceType === 'desktop' && this.isChrome) {
       return this.connectChromeDesktop(opts);
     }
 
@@ -265,6 +268,18 @@ class Device extends EventEmitter {
           resolve(stream);
         })
         .catch(err => reject(err));
+    });
+  }
+
+  connectDisplayMedia() {
+    return new Promise((resolve, reject) => {
+      return navigator.mediaDevices.getDisplayMedia()
+               .then(stream => {
+                 this.stream = stream;
+                 this.cachedAudioTracks.forEach(track => this.stream.addTrack(track));
+                 resolve(stream);
+               })
+               .catch(err => reject(err));
     });
   }
 
