@@ -117,6 +117,10 @@ class Compositor extends EventEmitter {
     };
     video.srcObject = streamObj.stream;
 
+    if (typeof video.play === 'function') {
+      video.play();
+    }
+
     if (this.stream && streamObj.stream.getAudioTracks().length) {
       this.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
     }
