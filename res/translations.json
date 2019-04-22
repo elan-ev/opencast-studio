@@ -21,6 +21,7 @@
     "PRODUCTION_LOCATION": "Location",
     "PRODUCTION_MEDIA": "Media",
     "PRODUCTION_EDIT": "Edit media",
+    "PRODUCTION_UPLOAD_OC": "Upload media to Opencast",
     "PRODUCTION_SAVE": "Save media",
     "PRODUCTION_DISCARD": "Discard media",
     "RAW_FOOTAGE": "Request Raw footage",

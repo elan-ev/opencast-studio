@@ -3,6 +3,7 @@ const deviceMgr = new DeviceManager();
 const compositor = new Compositor();
 const rafLoop = new RAFLoop();
 const audAnalyser = new AudioAnalyser();
+const ocUploader = new OpencastUploader();
 const peers = {};
 
 function App() {
@@ -109,6 +110,7 @@ function App() {
   this.presenterEl = document.querySelector('#saveCreation input[name=presenter]');
   this.locationEl = document.querySelector('#saveCreation input[name=location]');
 
+  this.uploadOcRecordings = document.getElementById('uploadOcRecordings');
   this.saveRecordings = document.getElementById('saveRecordings');
   this.discardRecordings = document.querySelector('label[for=toggleSaveCreationModal]');
 
@@ -170,6 +172,7 @@ App.prototype = {
     this.presenterEl.addEventListener('keyup', this.setPresenter.bind(this), false);
     this.locationEl.addEventListener('keyup', this.setLocation.bind(this), false);
 
+    this.uploadOcRecordings.addEventListener('click', this.uploadMediaOc.bind(this), false);
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
 
     document.getElementById('minimiseStreams').addEventListener('change', this.minimiseStreamView.bind(this), false);
@@ -748,6 +751,10 @@ App.prototype = {
   },
   setLocation: function(e) {
     this.location = e.target.value;
+  },
+  uploadMediaOc: function(e) {
+    ocUploader.uploadFromAnchor([...document.querySelectorAll('#saveCreation a')]);
+    document.getElementById('toggleSaveCreationModal').checked = false;
   },
   saveMedia: function(e) {
     [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());

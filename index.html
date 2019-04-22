@@ -4,7 +4,7 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width">
   <meta name="google-site-verification" content="zLyTJjR3SdsG8d0wR5jdHzmm5170gpm_KFfGcy4RfDs" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' wss:; connect-src 'self' https: ws: wss: studio.letmedev.com:443 wss://studio.letmedev.com; style-src 'self' https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' wss:; connect-src 'self' blob: https: ws: wss: studio.letmedev.com:443 wss://studio.letmedev.com; style-src 'self' https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com">
   <title>GhettoStudio</title>
   <link rel="stylesheet" href="css/style.css?version=%ver%">
   <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
@@ -222,6 +222,7 @@
     </div>
     <div class="modalFooter">
       <button class="btn btn-action" id="editRecordings" data-translate="PRODUCTION_EDIT">Edit media</button>
+      <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
       <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
       <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
     </div>
@@ -238,6 +239,7 @@
   <script src="js/servercomms.js?version=%ver%"></script>
   <script src="js/peerconnection.js?version=%ver%"></script>
   <script src="js/qrcode.min.js?version=%ver%"></script>
+  <script src="js/opencastuploader.js?version=%ver%"></script>
   <script src="js/app.js?version=%ver%"></script>
   <link href="https://fonts.googleapis.com/css?family=Comfortaa:300|Lobster+Two:400" rel="stylesheet">
 </body>

@@ -1816,6 +1816,10 @@ input:focus {
   background: #1DE9B6;
 }
 
+.btn-upload-oc {
+  background: rgb(33, 245, 227);
+}
+
 .btn-action {
   background: #64B5F6;
 }
