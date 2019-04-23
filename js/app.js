@@ -753,8 +753,13 @@ App.prototype = {
     this.location = e.target.value;
   },
   uploadMediaOc: function(e) {
-    ocUploader.uploadFromAnchor([...document.querySelectorAll('#saveCreation a')]);
-    document.getElementById('toggleSaveCreationModal').checked = false;
+    ocUploader.uploadFromAnchor(
+      [...document.querySelectorAll('#saveCreation a')],
+      () => {
+        document.getElementById('toggleSaveCreationModal').checked = false;
+      }, () => {
+        alert("Upload failed! Are you logged in?");
+      });
   },
   saveMedia: function(e) {
     [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());

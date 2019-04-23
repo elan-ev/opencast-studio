@@ -22,7 +22,12 @@ const utils = {
       }
 
       req.onload = e => {
-        resolve(req.response);
+        if (req.status == 200) {
+          resolve(req.response);
+        }
+        else {
+          reject(e);
+        }
       }
 
       req.onerror = e => {
