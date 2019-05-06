@@ -958,12 +958,14 @@ if (window.chrome && chrome.app) {
   }
 }
 
-comms.socket.on('peerConnection', data => {
-  document.getElementById('toggleAddDeviceModal').checked = false;
-  if (!document.querySelector('button[data-stream="' + data.target + '"]')) {
-    app.listPeer(data.target);
-  }
-});
+if (comms.socket !== null) {
+  comms.socket.on('peerConnection', data => {
+    document.getElementById('toggleAddDeviceModal').checked = false;
+    if (!document.querySelector('button[data-stream="' + data.target + '"]')) {
+      app.listPeer(data.target);
+    }
+  });
+}
 
 if ('serviceWorker' in navigator && 'caches' in window) {
   app.cacheApp();

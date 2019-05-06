@@ -7,7 +7,7 @@ function Communications() {
   this.bt = null;
   this.nfc = null;
 
-  if (io) {
+  if (typeof io !== 'undefined' && io) {
     this.socket = io();
 
     this.socket.on('welcome', id => app.socketId = id);
