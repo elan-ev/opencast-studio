@@ -25,6 +25,7 @@
   <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" autocomplete="off" />
+  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleOcUploadSettingsModal" autocomplete="off" />
   <div id="introCover">
     <div class="loader">
       <svg width="192" height="192">
@@ -69,6 +70,7 @@
             <option value="simple" data-translate="SIMPLE">Simple</option>
             <option value="advanced" data-translate="ADVANCED">Advanced</option>
           </select>
+          <label class="ocUploadSettingsOpenBtn" id="ocUploadSettingsOpenButton">&nbsp;&#x2699;&nbsp;</label>
         </div>
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
         <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
@@ -225,6 +227,20 @@
       <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
       <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
       <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
+    </div>
+  </div>
+  <div id="ocUploadSettings" class="modal">
+    <h4 data-translate="OC_UPLOAD_SETTINGS_HEADING">Configure Opencast</h4>
+    <div class="modalBody">
+      <ul>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_SERVER_URL">Opencast Server URL</span><span class="threeQuarterWidth"><input name="ocUploadSettingsServerURL" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_WORKFLOW_ID">Workflow Id</span><span class="threeQuarterWidth"><input name="ocUploadSettingsWorkflowId" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_NAME">Opencast Username</span><span class="threeQuarterWidth"><input name="ocUploadSettingsLoginName" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_PASSWORD">Opencast Password</span><span class="threeQuarterWidth"><input type="password" name="ocUploadSettingsLoginPassword" autocomplete="off" /></span>
+      </ul>
+    </div>
+    <div class="modalFooter">
+      <button class="btn btn-success" id="saveOcUploadSettings" data-translate="OC_UPLOAD_SETTINGS_OK">Ok</button>
     </div>
   </div>
   <script src="js/utils.js?version=%ver%"></script>

@@ -21,6 +21,12 @@ const utils = {
         }
       }
 
+      if (opts && opts.hasOwnProperty('requestHeaders')) {
+        for (let key in opts.requestHeaders) {
+          req.setRequestHeader(key, opts.requestHeaders[key]);
+        }
+      }
+
       req.onload = e => {
         if (req.status == 200) {
           resolve(req.response);

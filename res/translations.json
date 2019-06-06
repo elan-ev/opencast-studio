@@ -30,7 +30,12 @@
     "PAUSE_RECORDING": "Pause recording",
     "START_RECORDING": "Start/resume recording",
     "STOP_RECORDING": "Stop recording",
-    "ADD_DEVICE": "Add device"
+    "ADD_DEVICE": "Add device",
+    "OC_UPLOAD_SETTINGS_HEADING": "Configure Opencast",
+    "OC_UPLOAD_SETTINGS_OK": "Ok",
+    "OC_UPLOAD_SETTINGS_SERVER_URL": "Opencast Server URL",
+    "OC_UPLOAD_SETTINGS_LOGIN_NAME": "Opencast Username",
+    "OC_UPLOAD_SETTINGS_LOGIN_PASSWORD": "Opencast Password"
   },
   "af": {
     "SIMPLE": "Eenvoudig",

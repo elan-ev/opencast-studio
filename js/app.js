@@ -3,7 +3,7 @@ const deviceMgr = new DeviceManager();
 const compositor = new Compositor();
 const rafLoop = new RAFLoop();
 const audAnalyser = new AudioAnalyser();
-const ocUploader = new OpencastUploader();
+const ocUploaderSettings = new OpencastUploaderSettingsDialog();
 const peers = {};
 
 function App() {
@@ -753,13 +753,39 @@ App.prototype = {
     this.location = e.target.value;
   },
   uploadMediaOc: function(e) {
-    ocUploader.uploadFromAnchor(
-      [...document.querySelectorAll('#saveCreation a')],
-      () => {
-        document.getElementById('toggleSaveCreationModal').checked = false;
-      }, () => {
-        alert("Upload failed! Are you logged in?");
-      });
+    let title = this.title;
+    let presenter = this.presenter;
+
+    if (title !== "" && presenter !== "") {
+      new OpencastUploader(ocUploaderSettings)
+        .loginAndUploadFromAnchor(
+          [...document.querySelectorAll('#saveCreation a')],
+          () => {
+            alert("Upload complete!");
+            document.getElementById('toggleSaveCreationModal').checked = false;
+          },
+          () => {
+            alert("Login failed, Please check your Password!");
+            ocUploaderSettings.show();
+          },
+          err => {
+            alert("Server unreachable: Check your Internet Connetion and the Server Url, " + 
+              "also check whether your Opencast Instance supports this site.");
+            console.log("Server unreachable: ", err);
+            ocUploaderSettings.show();
+          },
+          err => {
+            alert("The Internet Connection failed or you are missing necessary permissions.");
+            console.log("Inet fail or Missing Permission: ", err);
+            ocUploaderSettings.show();
+          },
+          title,
+          presenter
+        );
+    }
+    else {
+      alert("Please set Title and Presenter");
+    }
   },
   saveMedia: function(e) {
     [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());
