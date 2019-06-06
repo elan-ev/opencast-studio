@@ -120,6 +120,7 @@ function App() {
   this.attachEvents();
   setTimeout(() => {
     document.body.classList.remove('loading');
+    document.getElementById("create").checked = true;
   }, 500);
 }
 
