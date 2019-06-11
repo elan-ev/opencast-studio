@@ -108,7 +108,6 @@ function App() {
 
   this.titleEl = document.querySelector('#saveCreation input[name=title]');
   this.presenterEl = document.querySelector('#saveCreation input[name=presenter]');
-  this.locationEl = document.querySelector('#saveCreation input[name=location]');
 
   this.uploadOcRecordings = document.getElementById('uploadOcRecordings');
   this.saveRecordings = document.getElementById('saveRecordings');
@@ -118,9 +117,9 @@ function App() {
   this.listingPeer = [];
 
   this.attachEvents();
+  document.getElementById("create").checked = true;
   setTimeout(() => {
     document.body.classList.remove('loading');
-    document.getElementById("create").checked = true;
   }, 500);
 }
 
@@ -171,7 +170,6 @@ App.prototype = {
 
     this.titleEl.addEventListener('keyup', this.setTitle.bind(this), false);
     this.presenterEl.addEventListener('keyup', this.setPresenter.bind(this), false);
-    this.locationEl.addEventListener('keyup', this.setLocation.bind(this), false);
 
     this.uploadOcRecordings.addEventListener('click', this.uploadMediaOc.bind(this), false);
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);

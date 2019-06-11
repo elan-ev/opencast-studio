@@ -176,8 +176,15 @@ function OpencastUploaderSettingsDialog() {
   this.workflowIdEl.value = localStorage.getItem("ocUploadSettingsWorkflowId");
   this.loginNameEl.value = localStorage.getItem("ocUploadSettingsLoginName");
   this.loginPasswordEl.value = localStorage.getItem("ocUploadSettingsLoginPassword");
-  if (this.workflowIdEl.value === "") {
+  if (this.workflowIdEl.value === "" &&
+      this.serverURLEl.value === "" &&
+      this.loginNameEl.value === "" &&
+      this.loginPasswordEl.value === "") {
+    // load defaults
     this.workflowIdEl.value = "fast";
+    this.serverURLEl.value = "https://develop.opencast.org/";
+    this.loginNameEl.value = "admin";
+    this.loginPasswordEl.value = "opencast";
   }
 
   // bind save button

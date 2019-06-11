@@ -73,7 +73,7 @@
           <label class="ocUploadSettingsOpenBtn" id="ocUploadSettingsOpenButton">&nbsp;&#x2699;&nbsp;</label>
         </div>
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
-        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
+        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop (no audio)" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
           <video id="desktop" autoplay muted></video>
           <span class="placeholder"></span>
           <div class="streamControls">
@@ -103,7 +103,7 @@
           <canvas></canvas>
         </label>
         <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" autocomplete="off" />
-        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-pseudotext="SHARE_WEBCAM" data-target="video">
+        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam (with microphone audio)" data-pseudotext="SHARE_WEBCAM" data-target="video">
           <video id="video" autoplay muted></video>
           <span class="placeholder"></span>
           <span class="shadow"></span>
@@ -217,7 +217,6 @@
       <ul>
         <span class="quarterWidth" data-translate="PRODUCTION_TITLE">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
         <span class="quarterWidth" data-translate="PRODUCTION_PRESENTER">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
-        <span class="quarterWidth" data-translate="PRODUCTION_LOCATION">Location</span><span class="threeQuarterWidth"><input name="location" autocomplete="off" /></span>
       </ul>
       <h4 data-translate="PRODUCTION_MEDIA">Media</h4>
       <div id="recordingList"></div>

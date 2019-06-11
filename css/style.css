@@ -1853,6 +1853,7 @@ input:focus {
 }
 
 .backBtn {
+  visibility: hidden;
   position: absolute;
   top: 0.75rem;
   left: 2rem;
