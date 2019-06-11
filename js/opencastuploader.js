@@ -185,6 +185,7 @@ function OpencastUploaderSettingsDialog() {
     this.serverURLEl.value = "https://develop.opencast.org/";
     this.loginNameEl.value = "admin";
     this.loginPasswordEl.value = "opencast";
+    this.show();
   }
 
   // bind save button
