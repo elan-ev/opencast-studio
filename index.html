@@ -4,7 +4,7 @@
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width">
   <meta name="google-site-verification" content="zLyTJjR3SdsG8d0wR5jdHzmm5170gpm_KFfGcy4RfDs" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' wss:; connect-src 'self' https: ws: wss: studio.letmedev.com:443 wss://studio.letmedev.com; style-src 'self' https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' wss:; connect-src 'self' blob: https: ws: wss: studio.letmedev.com:443 wss://studio.letmedev.com; style-src 'self' https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com">
   <title>GhettoStudio</title>
   <link rel="stylesheet" href="css/style.css?version=%ver%">
   <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
@@ -25,6 +25,7 @@
   <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
   <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" autocomplete="off" />
+  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleOcUploadSettingsModal" autocomplete="off" />
   <div id="introCover">
     <div class="loader">
       <svg width="192" height="192">
@@ -69,9 +70,11 @@
             <option value="simple" data-translate="SIMPLE">Simple</option>
             <option value="advanced" data-translate="ADVANCED">Advanced</option>
           </select>
+          <label title="Report Issue" id="ocUploadIssueButton">&nbsp;&#x26A0;&nbsp;</label>
+          <label title="Open Opencast Upload Settings" id="ocUploadSettingsOpenButton">&nbsp;&#x2699;&nbsp;</label>
         </div>
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
-        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
+        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop (no audio)" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
           <video id="desktop" autoplay muted></video>
           <span class="placeholder"></span>
           <div class="streamControls">
@@ -101,7 +104,7 @@
           <canvas></canvas>
         </label>
         <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" autocomplete="off" />
-        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam" data-pseudotext="SHARE_WEBCAM" data-target="video">
+        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam (with microphone audio)" data-pseudotext="SHARE_WEBCAM" data-target="video">
           <video id="video" autoplay muted></video>
           <span class="placeholder"></span>
           <span class="shadow"></span>
@@ -215,15 +218,28 @@
       <ul>
         <span class="quarterWidth" data-translate="PRODUCTION_TITLE">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
         <span class="quarterWidth" data-translate="PRODUCTION_PRESENTER">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
-        <span class="quarterWidth" data-translate="PRODUCTION_LOCATION">Location</span><span class="threeQuarterWidth"><input name="location" autocomplete="off" /></span>
       </ul>
       <h4 data-translate="PRODUCTION_MEDIA">Media</h4>
       <div id="recordingList"></div>
     </div>
     <div class="modalFooter">
-      <button class="btn btn-action" id="editRecordings" data-translate="PRODUCTION_EDIT">Edit media</button>
+      <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
       <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
       <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
+    </div>
+  </div>
+  <div id="ocUploadSettings" class="modal">
+    <h4 data-translate="OC_UPLOAD_SETTINGS_HEADING">Configure Opencast Upload</h4>
+    <div class="modalBody">
+      <ul>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_SERVER_URL">Opencast Server URL</span><span class="threeQuarterWidth"><input name="ocUploadSettingsServerURL" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_WORKFLOW_ID">Workflow Id</span><span class="threeQuarterWidth"><input name="ocUploadSettingsWorkflowId" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_NAME">Opencast Username</span><span class="threeQuarterWidth"><input name="ocUploadSettingsLoginName" autocomplete="off" /></span>
+        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_PASSWORD">Opencast Password</span><span class="threeQuarterWidth"><input type="password" name="ocUploadSettingsLoginPassword" autocomplete="off" /></span>
+      </ul>
+    </div>
+    <div class="modalFooter">
+      <button class="btn btn-success" id="saveOcUploadSettings" data-translate="OC_UPLOAD_SETTINGS_OK">Ok</button>
     </div>
   </div>
   <script src="js/utils.js?version=%ver%"></script>
@@ -238,6 +254,7 @@
   <script src="js/servercomms.js?version=%ver%"></script>
   <script src="js/peerconnection.js?version=%ver%"></script>
   <script src="js/qrcode.min.js?version=%ver%"></script>
+  <script src="js/opencastuploader.js?version=%ver%"></script>
   <script src="js/app.js?version=%ver%"></script>
   <link href="https://fonts.googleapis.com/css?family=Comfortaa:300|Lobster+Two:400" rel="stylesheet">
 </body>

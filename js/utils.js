@@ -21,8 +21,19 @@ const utils = {
         }
       }
 
+      if (opts && opts.hasOwnProperty('requestHeaders')) {
+        for (let key in opts.requestHeaders) {
+          req.setRequestHeader(key, opts.requestHeaders[key]);
+        }
+      }
+
       req.onload = e => {
-        resolve(req.response);
+        if (req.status == 200) {
+          resolve(req.response);
+        }
+        else {
+          reject(e);
+        }
       }
 
       req.onerror = e => {

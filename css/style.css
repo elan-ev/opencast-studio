@@ -1302,6 +1302,7 @@ svg {
 
 #toggleAddDeviceModal:checked ~ #addDeviceModal,
 #toggleSaveCreationModal:checked ~ #saveCreation,
+#toggleOcUploadSettingsModal:checked ~ #ocUploadSettings,
 #toggleExtensionModal:checked ~ #extensionModal {
   transform: translateY(0);
   transition: transform 0.25s ease-out;
@@ -1816,6 +1817,10 @@ input:focus {
   background: #1DE9B6;
 }
 
+.btn-upload-oc {
+  background: rgb(33, 245, 227);
+}
+
 .btn-action {
   background: #64B5F6;
 }
@@ -1834,7 +1839,33 @@ input:focus {
   color: #666;
 }
 
+#ocUploadSettingsOpenButton {
+  position: relative;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  font-size: 1.3rem;
+  color: #4bb07b;
+  background-color: #24425d;
+}
+
+#ocUploadIssueButton {
+  position: relative;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  font-size: 1.3rem;
+  color: #fb6723;
+}
+
 .backBtn {
+  visibility: hidden;
   position: absolute;
   top: 0.75rem;
   left: 2rem;

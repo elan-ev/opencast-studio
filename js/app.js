@@ -3,6 +3,7 @@ const deviceMgr = new DeviceManager();
 const compositor = new Compositor();
 const rafLoop = new RAFLoop();
 const audAnalyser = new AudioAnalyser();
+const ocUploaderSettings = new OpencastUploaderSettingsDialog();
 const peers = {};
 
 function App() {
@@ -107,8 +108,8 @@ function App() {
 
   this.titleEl = document.querySelector('#saveCreation input[name=title]');
   this.presenterEl = document.querySelector('#saveCreation input[name=presenter]');
-  this.locationEl = document.querySelector('#saveCreation input[name=location]');
 
+  this.uploadOcRecordings = document.getElementById('uploadOcRecordings');
   this.saveRecordings = document.getElementById('saveRecordings');
   this.discardRecordings = document.querySelector('label[for=toggleSaveCreationModal]');
 
@@ -116,6 +117,7 @@ function App() {
   this.listingPeer = [];
 
   this.attachEvents();
+  document.getElementById("create").checked = true;
   setTimeout(() => {
     document.body.classList.remove('loading');
   }, 500);
@@ -168,8 +170,8 @@ App.prototype = {
 
     this.titleEl.addEventListener('keyup', this.setTitle.bind(this), false);
     this.presenterEl.addEventListener('keyup', this.setPresenter.bind(this), false);
-    this.locationEl.addEventListener('keyup', this.setLocation.bind(this), false);
 
+    this.uploadOcRecordings.addEventListener('click', this.uploadMediaOc.bind(this), false);
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
 
     document.getElementById('minimiseStreams').addEventListener('change', this.minimiseStreamView.bind(this), false);
@@ -749,6 +751,41 @@ App.prototype = {
   setLocation: function(e) {
     this.location = e.target.value;
   },
+  uploadMediaOc: function(e) {
+    let title = this.title;
+    let presenter = this.presenter;
+
+    if (title !== "" && presenter !== "") {
+      new OpencastUploader(ocUploaderSettings)
+        .loginAndUploadFromAnchor(
+          [...document.querySelectorAll('#saveCreation a')],
+          () => {
+            alert("Upload complete!");
+            document.getElementById('toggleSaveCreationModal').checked = false;
+          },
+          () => {
+            alert("Login failed, Please check your Password!");
+            ocUploaderSettings.show();
+          },
+          err => {
+            alert("Server unreachable: Check your Internet Connetion and the Server Url, " + 
+              "also check whether your Opencast Instance supports this site.");
+            console.log("Server unreachable: ", err);
+            ocUploaderSettings.show();
+          },
+          err => {
+            alert("The Internet Connection failed or you are missing necessary permissions.");
+            console.log("Inet fail or Missing Permission: ", err);
+            ocUploaderSettings.show();
+          },
+          title,
+          presenter
+        );
+    }
+    else {
+      alert("Please set Title and Presenter");
+    }
+  },
   saveMedia: function(e) {
     [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());
     document.getElementById('toggleSaveCreationModal').checked = false;
@@ -946,12 +983,14 @@ if (window.chrome && chrome.app) {
   }
 }
 
-comms.socket.on('peerConnection', data => {
-  document.getElementById('toggleAddDeviceModal').checked = false;
-  if (!document.querySelector('button[data-stream="' + data.target + '"]')) {
-    app.listPeer(data.target);
-  }
-});
+if (comms.socket !== null) {
+  comms.socket.on('peerConnection', data => {
+    document.getElementById('toggleAddDeviceModal').checked = false;
+    if (!document.querySelector('button[data-stream="' + data.target + '"]')) {
+      app.listPeer(data.target);
+    }
+  });
+}
 
 if ('serviceWorker' in navigator && 'caches' in window) {
   app.cacheApp();
