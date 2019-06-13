@@ -70,7 +70,8 @@
             <option value="simple" data-translate="SIMPLE">Simple</option>
             <option value="advanced" data-translate="ADVANCED">Advanced</option>
           </select>
-          <label class="ocUploadSettingsOpenBtn" id="ocUploadSettingsOpenButton">&nbsp;&#x2699;&nbsp;</label>
+          <label title="Report Issue" id="ocUploadIssueButton">&nbsp;&#x26A0;&nbsp;</label>
+          <label title="Open Opencast Upload Settings" id="ocUploadSettingsOpenButton">&nbsp;&#x2699;&nbsp;</label>
         </div>
         <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
         <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop (no audio)" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
@@ -222,14 +223,13 @@
       <div id="recordingList"></div>
     </div>
     <div class="modalFooter">
-      <button class="btn btn-action" id="editRecordings" data-translate="PRODUCTION_EDIT">Edit media</button>
       <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
       <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
       <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
     </div>
   </div>
   <div id="ocUploadSettings" class="modal">
-    <h4 data-translate="OC_UPLOAD_SETTINGS_HEADING">Configure Opencast</h4>
+    <h4 data-translate="OC_UPLOAD_SETTINGS_HEADING">Configure Opencast Upload</h4>
     <div class="modalBody">
       <ul>
         <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_SERVER_URL">Opencast Server URL</span><span class="threeQuarterWidth"><input name="ocUploadSettingsServerURL" autocomplete="off" /></span>
