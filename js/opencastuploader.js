@@ -70,7 +70,19 @@ OpencastUploader.prototype = {
       for (let i in anchors) {
         let anchor = anchors[i];
         let blob = await this.retrieve_blob(anchor.href);
-        mp = await this.addTrack(mp, blob, anchor.download, "presenter/source", "");
+
+        let anchor_flavor = anchor.getAttribute("data-flavor");
+        let track_flavor = "presentation/source";
+
+        if (anchor_flavor === "Presentation") {
+          track_flavor = "presentation/source";
+        } else if (anchor_flavor === "Presenter") {
+          track_flavor = "presenter/source";
+        } else if (anchor_flavor === "Composite") {
+          track_flavor = "composite/preview";
+        }
+
+        mp = await this.addTrack(mp, blob, anchor.download, track_flavor, "");
       }
 
       mp = await this.ingest(mp, this.workflow_id);
