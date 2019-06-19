@@ -787,7 +787,7 @@ App.prototype = {
     }
   },
   saveMedia: function(e) {
-    [...document.querySelectorAll('#saveCreation a')].forEach(anchor => anchor.click());
+    [...document.querySelectorAll('#saveCreation a')].forEach((anchor, i) => setTimeout(() => anchor.click(), i*100));
     document.getElementById('toggleSaveCreationModal').checked = false;
   },
   changeLanguage: function(e) {
