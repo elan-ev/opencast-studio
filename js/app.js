@@ -26,7 +26,7 @@ function App() {
   this.deviceList = document.querySelector('#streams .list');
   this.audioCanvas = document.querySelector('#audio ~ canvas');
 
-  this.userView = document.querySelector('select[name=createView]');
+  // this.userView = document.querySelector('select[name=createView]');
   this.simpleUserView = document.getElementById('simpleUserView');
   this.advancedUserView = document.getElementById('advancedUserView');
 
@@ -162,7 +162,7 @@ App.prototype = {
     document.getElementById('installExtension').addEventListener('click', this.chromeInstall.bind(this), false);
     document.getElementById('mergestreams').addEventListener('change', this.mergeStreams.bind(this), false);
     document.body.addEventListener('keyup', this.handleKeys.bind(this), false);
-    this.userView.addEventListener('change', this.switchCreateView.bind(this), false);
+    // this.userView.addEventListener('change', this.switchCreateView.bind(this), false);
 
     this.recordButton.addEventListener('click', this.startRecord.bind(this), false);
     this.pauseButton.addEventListener('click', this.pauseRecord.bind(this), false);

@@ -1539,7 +1539,7 @@ label[for=mergestreams]::before {
   transition: margin-top 1s;
 }
 
-.viewControls {
+.topRightControls {
   height: 4rem;
   line-height: 4rem;
   text-align: right;
@@ -1547,21 +1547,6 @@ label[for=mergestreams]::before {
   top: -4rem;
   right: 2rem;
   font-size: 0.8rem;
-}
-
-.viewControls select {
-  font-size: 0.8rem;
-  background: white;
-  border: 1px solid #ddd;
-  height: 2rem;
-  padding: 0 0.5rem;
-  border-radius: 0.25rem;
-  font-weight: 300;
-  font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
-}
-
-.viewControls select::before {
-  content: 'View:';
 }
 
 #recordingControls {
