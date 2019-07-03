@@ -1,9 +1,9 @@
-Ghetto Studio (with Opencast Integration)
-=========================================
+Opencast Studio
+===============
 
 Web based audio/video studio using random devices lying around your house, with direct upload to Opencast.
 
-Demo at https://studio.opencast.org
+Demo at <https://studio.opencast.org>
 
 ### Contents
 
