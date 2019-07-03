@@ -168,8 +168,8 @@ App.prototype = {
     this.pauseButton.addEventListener('click', this.pauseRecord.bind(this), false);
     this.stopButton.addEventListener('click', this.stopRecord.bind(this), false);
 
-    this.titleEl.addEventListener('keyup', this.setTitle.bind(this), false);
-    this.presenterEl.addEventListener('keyup', this.setPresenter.bind(this), false);
+    this.titleEl.addEventListener('keyup', this.updateTitleKeyUpEvent.bind(this), false);
+    this.presenterEl.addEventListener('keyup', this.updatePresenterKeyUpEvent.bind(this), false);
 
     this.uploadOcRecordings.addEventListener('click', this.uploadMediaOc.bind(this), false);
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
@@ -657,7 +657,15 @@ App.prototype = {
     for (let peer in peers) {
       peers[peer].stopRecording();
     }
+
+    // clear fields
+    this.titleEl.value = "";
+    this.presenterEl.value = "";
+    // update internal data like a keyup event would
+    this.setTitle("");
+    this.setPresenter("");
     document.getElementById('toggleSaveCreationModal').checked = true;
+
     rafLoop.unsubscribe(this.recTimeToken);
     this.recTimeToken = null;
     this.recTime = [];
@@ -739,14 +747,20 @@ App.prototype = {
     peers[peerId].dataChannel.send('request.filetransfer');
     e.target.parentNode.classList.add('transfer');
   },
-  setTitle: function(e) {
-    this.title = e.target.value || 'Recording';
+  updateTitleKeyUpEvent(e) {
+    this.setTitle(e.target.value);
+  },
+  setTitle: function(newTitle) {
+    this.title = newTitle || 'Recording';
     [...document.querySelectorAll('#recordingList a')].forEach(anchor => {
       anchor.download = anchor.getAttribute('data-flavor') + ' ' + anchor.getAttribute('data-type') + ' - ' + this.title + '.webm';
     });
   },
-  setPresenter: function(e) {
-    this.presenter = e.target.value;
+  updatePresenterKeyUpEvent(e) {
+    this.setPresenter(e.target.value);
+  },
+  setPresenter: function(newPresenter) {
+    this.presenter = newPresenter;
   },
   setLocation: function(e) {
     this.location = e.target.value;
