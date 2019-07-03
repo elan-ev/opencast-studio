@@ -30,7 +30,11 @@ header {
   box-shadow: 0 4px 4px -4px rgba(0,0,0,0.4);
 }
 
-body:not(#code) header img {
+body:not(#code) header span {
+  color: white;
+}
+
+body:not(#code) header #logo-main {
   height: 50px;
   padding-top: -5px;
 }
