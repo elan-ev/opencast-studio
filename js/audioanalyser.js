@@ -7,8 +7,8 @@ var AudioAnalyser = function AudioAnalyserImpl(isNoCanvas) {
   this.height = 0;
   this.noCanvas = isNoCanvas;
 
-  this.audioCtx = new AudioContext();
-  this.analyser = this.audioCtx.createAnalyser();
+  this.audioCtx = null;
+  this.analyser = null;
   this.bufferLength = 0;
   this.dataArray = null;
 
@@ -56,6 +56,8 @@ AudioAnalyser.prototype = {
     this.canvasCtx.strokeStyle = '#09f';
   },
   analyse: function(track) {
+    this.audioCtx = new (AudioContext || webkitAudioContext)();
+    this.analyser = this.audioCtx.createAnalyser();
     this.audioSource = this.audioCtx.createMediaStreamSource(track);
     this.audioSource.connect(this.analyser);
     this.bufferLength = this.analyser.frequencyBinCount;
