@@ -18,6 +18,9 @@ class DeviceManager extends EventEmitter {
         this.desktop.record();
       }
     });
+    this.desktop.on('record.stop.stream.remove', stream => {
+      this.emit('record.stop.stream.remove', {id: 'desktop', stream: stream});
+    })
 
     Object.defineProperty(this, 'devices', {
       get: function() {
@@ -68,6 +71,9 @@ class DeviceManager extends EventEmitter {
                                      this.desktop.attachAudioTrack(stream);
                                    }
                                  });
+                                 result[info.deviceId].on('record.stop.stream.remove', stream => {
+                                   this.emit('record.stop.stream.remove', {id: info.deviceId, stream:stream});
+                                 })
                                  return result;
                                }, {});
         });
@@ -167,6 +173,8 @@ class Device extends EventEmitter {
         if (stream instanceof MediaStream) {
           _stream = stream;
           this.emit('stream', _stream);
+        } else if (stream === null) {
+          _stream = stream;
         }
       }
     });
@@ -371,6 +379,12 @@ class Device extends EventEmitter {
       this.recorder.stop();
       this.emit('record.prepare', this.info.label);
     }
+
+    // disconnect the stream
+    this.stream.getVideoTracks().forEach(track => track.stop()); // removes the recording symbol
+    let old_stream = this.stream;
+    this.stream = null; // needed so recording started without stream is not possible
+    this.emit('record.stop.stream.remove', old_stream);
   }
 
   pauseRecording() {

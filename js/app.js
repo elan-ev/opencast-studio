@@ -966,6 +966,20 @@ deviceMgr.once('enumerated', {
       compositor.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
     }
   });
+  stream.on('record.stop.stream.remove', old_streamObj => {
+    [...document.querySelectorAll(
+      `video[data-id="${old_streamObj.id}"],audio[data-id="${old_streamObj.id}"]`
+    )].forEach(elem => {
+      elem.parentNode.classList.remove('active');
+      elem.load(); // refresh vid, so the removed stream gets detected
+
+      // make it clickable
+      let forId = elem.parentNode.getAttribute("for");
+      if (forId) {
+        document.getElementById(forId).checked = false;
+      }
+    })
+  })
 });
 
 compositor.on('subscribe.raf', function() {

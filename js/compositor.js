@@ -81,7 +81,7 @@ class Compositor extends EventEmitter {
   addStream(streamObj) {
     if (this.streams.hasOwnProperty(streamObj.id)) {
       this.streams[streamObj.id].active = true;
-      if (this.streams[steamObj.id].stream.id != streamObj.stream.id) {
+      if (this.streams[streamObj.id].stream.id != streamObj.stream.id) {
         this.streams[streamObj.id].stream = streamObj.stream;
         this.streams[streamObj.id].video.srcObject = streamObj.stream;
       }
