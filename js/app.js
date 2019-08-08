@@ -196,7 +196,10 @@ App.prototype = {
     }
 
     deviceMgr.connect(e.target.value)
-      .catch(err => console.log(err));
+      .catch(err => {
+        e.target.checked = false;
+        console.log(err);
+      });
   },
   displayStream: function(stream, value) {
     let mediaContainer = null;
@@ -950,6 +953,13 @@ deviceMgr.once('enumerated', {
     app.muteStream(id);
   });
   stream.on('stream', streamObj => {
+    streamObj.stream.getTracks().forEach((track) => {
+      track.onended = function() {
+        app.stopRecord();
+        deviceMgr.stopRecording();
+      }
+    });
+
     app.displayStream(streamObj.stream, streamObj.id);
     if (app.isRecording) {
       stream.record(streamObj.id);
