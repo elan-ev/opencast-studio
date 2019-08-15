@@ -174,6 +174,10 @@ function OpencastUploaderSettingsDialog() {
   this.openSettingsButton = document.getElementById("ocUploadSettingsOpenButton");
   this.openSettingsButton.addEventListener("click", this.show.bind(this), false);
 
+  // Open oc server button
+  this.openOcServerButton = document.getElementById("ocOpenServerButton");
+  this.openOcServerButton.addEventListener("click", this.openOcServer.bind(this), false);
+
   // Issue Button
   this.issueButton = document.getElementById("ocUploadIssueButton");
   this.issueButton.addEventListener("click", this.openIssuesPage.bind(this), false);
@@ -215,6 +219,12 @@ OpencastUploaderSettingsDialog.prototype = {
   },
   openIssuesPage: function() {
     window.open("https://github.com/elan-ev/opencast-studio/issues");
+  },
+  openOcServer: function() {
+    let serverUrl = this.getServerUrl();
+    if (serverUrl != "" && serverUrl !== "/") {
+      window.open(this.getServerUrl());
+    }
   },
   saveAndCloseOcUploadSettings: function(e) {
     // save data to localStorage

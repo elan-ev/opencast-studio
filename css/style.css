@@ -1817,7 +1817,7 @@ input:focus {
   color: #666;
 }
 
-#ocUploadSettingsOpenButton {
+.ocTopRightButton {
   position: relative;
   top: 0.2rem;
   left: 0.2rem;
@@ -1826,19 +1826,21 @@ input:focus {
   border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   font-size: 1.3rem;
+}
+
+.ocColoredButton {
   color: #4bb07b;
   background-color: #24425d;
 }
 
+.ocButtonSmallLogo {
+  height: 1.35rem;
+  padding-top: 0.3rem;
+  padding-right: 0.2rem;
+  padding-left: 0.2rem;
+}
+
 #ocUploadIssueButton {
-  position: relative;
-  top: 0.2rem;
-  left: 0.2rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  font-size: 1.3rem;
   color: #fb6723;
 }
 
