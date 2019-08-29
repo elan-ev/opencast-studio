@@ -1844,6 +1844,13 @@ input:focus {
   color: #fb6723;
 }
 
+.ocAboutLinks {
+  text-align: right;
+  position: relative;
+  bottom: 0rem;
+  right: 3rem;
+}
+
 .backBtn {
   visibility: hidden;
   position: absolute;
