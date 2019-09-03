@@ -380,8 +380,9 @@ class Device extends EventEmitter {
       this.emit('record.prepare', this.info.label);
     }
 
-    // disconnect the stream
+    // disconnect the streams
     this.stream.getVideoTracks().forEach(track => track.stop()); // removes the recording symbol
+    this.stream.getAudioTracks().forEach(track => track.stop());
     let old_stream = this.stream;
     this.stream = null; // needed so recording started without stream is not possible
     this.emit('record.stop.stream.remove', old_stream);
