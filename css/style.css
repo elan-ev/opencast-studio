@@ -1546,7 +1546,11 @@ label[for=mergestreams]::before {
   position: absolute;
   top: -4rem;
   right: 2rem;
-  font-size: 0.8rem;
+  font-size: 1.6rem;
+}
+
+#ocUploadIssueButton {
+  padding-left: 10px;
 }
 
 #recordingControls {
@@ -1838,10 +1842,6 @@ input:focus {
   padding-top: 0.3rem;
   padding-right: 0.2rem;
   padding-left: 0.2rem;
-}
-
-#ocUploadIssueButton {
-  color: #fb6723;
 }
 
 .ocAboutLinks {
