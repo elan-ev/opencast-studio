@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/style.css?version=%ver%">
   <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
 </head>
-<body class="loading translating">
+<body id=main class="loading translating">
   <header>
     <img src=res/opencast-studio.svg id="logo-main" alt="Opencast Studio" />
     <div id="language">
@@ -129,10 +129,10 @@
         <button id="startRecord" title="Start/resume recording" data-translatetitle="START_RECORDING"></button>
         <button id="stopRecord" title="Stop recording" data-translatetitle="STOP_RECORDING"></button>
         <span id="recordingTime"></span>
-        <div class="ocAboutLinks">
-          <a target="_blank" rel="noopener noreferrer" href="about.html">About</a>
-          <a target="_blank" rel="noopener noreferrer" href="impressum.html">Impressum</a>
-        </div>
+		  <footer>
+          <a href=about.html>About</a>
+          <a href=impressum.html>Impressum</a>
+        </footer>
       </div>
       <ul id="streams">
         <div class="list">

@@ -8,7 +8,6 @@ html, body {
   height: 100%;
   min-height: 100%;
   font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
-  font-weight: 300;
 }
 
 body {
@@ -1686,7 +1685,7 @@ label, button {
   clear: both;
 }
 
-ul {
+#main ul {
   margin: 0;
   padding: 0;
   line-height: 2.5rem;
@@ -2073,4 +2072,24 @@ input:focus {
 
 .tutorial span input:focus {
   box-shadow: none;
+}
+
+article {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: sans;
+  padding: 25px 0;
+}
+
+article a {
+  text-decoration: none;
+}
+
+footer {
+  padding-top: 25px;
+  text-align: center;
+}
+
+footer a {
+  padding: 0 10px;
 }
