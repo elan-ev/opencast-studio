@@ -903,6 +903,7 @@ App.prototype = {
 
 const app = new App();
 
+/*
 ts.on('translations.languages', languages => {
   let langList = document.querySelector('#language ul');
   langList.innerHTML = '';
@@ -931,6 +932,7 @@ ts.on('translations.languages', languages => {
 });
 
 ts.on('translations.set', langObj => app.setLanguage(langObj));
+*/
 
 deviceMgr.once('enumerated', {
     fn: devices => {
