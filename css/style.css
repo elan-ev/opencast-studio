@@ -2093,3 +2093,15 @@ footer {
 footer a {
   padding: 0 10px;
 }
+
+span.beta {
+  position: relative;
+  top: 4px;
+  font-size: 6pt;
+  vertical-align: top;
+  display: inline;
+  border: 1px solid #888;
+  border-radius: 5px;
+  padding: 2px;
+  color: #888;
+}
