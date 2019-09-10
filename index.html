@@ -224,9 +224,26 @@
       <div id="recordingList"></div>
     </div>
     <div class="modalFooter">
-      <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
-      <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
-      <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
+      <button class=btn id="uploadOcRecordings">
+        <i class="fas fa-upload"></i>
+        <span data-translate="PRODUCTION_UPLOAD_OC">
+          Upload to Opencast
+        </span>
+      </button>
+      <button class=btn id="saveRecordings">
+        <i class="fas fa-download"></i>
+        <span data-translate="PRODUCTION_SAVE">
+          Save media
+        </span>
+      </button>
+      <button class=btn>
+      <label for="toggleSaveCreationModal">
+        <i class="fas fa-trash"></i>
+        <span data-translate="PRODUCTION_DISCARD">
+          Discard
+        </span>
+      </label>
+      </button>
     </div>
   </div>
   <div id="ocUploadSettings" class="modal">
@@ -240,7 +257,7 @@
       </ul>
     </div>
     <div class="modalFooter">
-      <button class="btn btn-success" id="saveOcUploadSettings" data-translate="OC_UPLOAD_SETTINGS_OK">Ok</button>
+      <button class=btn id="saveOcUploadSettings" data-translate="OC_UPLOAD_SETTINGS_OK">Ok</button>
     </div>
   </div>
   <script src="js/utils.js?version=%ver%"></script>
