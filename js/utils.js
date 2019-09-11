@@ -2,7 +2,7 @@ const utils = {
   xhr: (url, opts) => {
     return new Promise((resolve, reject) => {
       if (!url) {
-        reject("no url");
+        reject('no url');
         return;
       }
 
@@ -30,15 +30,14 @@ const utils = {
       req.onload = e => {
         if (req.status == 200) {
           resolve(req.response);
-        }
-        else {
+        } else {
           reject(e);
         }
-      }
+      };
 
       req.onerror = e => {
         reject(e);
-      }
+      };
 
       req.send(opts && opts.data ? opts.data : null);
     });
@@ -100,16 +99,20 @@ const utils = {
     return el;
   },
   getParameters: () => {
-    return ((window.location.href
-             .split('?'))[1] || "")
-             .split('&')
-             .map(paramStr => paramStr.split('='))
-             .filter(param => param.length === 2)
-             .reduce((params, param) => {params[param[0]] = param[1];return params;}, {});
+    return (window.location.href.split('?')[1] || '')
+      .split('&')
+      .map(paramStr => paramStr.split('='))
+      .filter(param => param.length === 2)
+      .reduce((params, param) => {
+        params[param[0]] = param[1];
+        return params;
+      }, {});
   },
-  log: (logItem) => {
+  log: logItem => {
     if (utils.getParameters().debug && utils.getParameters().debug === 'true') {
       console.log(logItem);
     }
   }
-}
+};
+
+export default utils;

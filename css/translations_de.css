@@ -1,41 +1,41 @@
 [lang=de] .bigButton[for=create]::after {
-  content: "Video erstellen";
+    content: "Video erstellen";
 }
 
 [lang=de] .bigButton[for=edit]::after {
-  content: "Video bearbeiten";  
+    content: "Video bearbeiten";  
 }
 
 [lang=de] .extensionRequired label[for=desktopstream]::after {
-  content: 'Klicken um die Desktop-Erweiterung zu installieren';
+    content: 'Klicken um die Desktop-Erweiterung zu installieren';
 }
 
 [lang=de] #streams::before {
-  content: 'Geräte';
+    content: 'Geräte';
 }
 
 [lang=de] #addDevice::after {
-  content: 'Gerät hinzufügen';
+    content: 'Gerät hinzufügen';
 }
 
 [lang=de] .recording #recordingTime::before {
-  content: 'Aufzeichnung';
+    content: 'Aufzeichnung';
 }
 
 [lang=de] .paused.recording #recordingTime::before {
-  content: 'Pausiert';
+    content: 'Pausiert';
 }
 
 [lang=de] #mergestreams:checked ~ label[for=mergestreams]::after {
-  content: "Keine Sorge, \A alle aktiven ströme werden aufgezeichnet";
+    content: "Keine Sorge, \A alle aktiven ströme werden aufgezeichnet";
 }
 
 #addDevice::before {
-  transform: scale(0.8) translateY(-0.5rem);
+    transform: scale(0.8) translateY(-0.5rem);
 }
 
 #addDevice::after {
-  line-height: 1rem;
-  max-width: 90%;
-  left: 5%;
+    line-height: 1rem;
+    max-width: 90%;
+    left: 5%;
 }

@@ -1,3 +1,12 @@
+import TranslationService from './translate';
+import { DeviceManager } from './devicemanager';
+import Compositor from './compositor';
+import RAFLoop from './rafloop';
+import AudioAnalyser from './audioanalyser';
+import { OpencastUploader, OpencastUploaderSettingsDialog } from './opencastuploader';
+import utils from './utils';
+import comms from './servercomms';
+
 const ts = new TranslationService();
 const deviceMgr = new DeviceManager();
 const compositor = new Compositor();
@@ -8,17 +17,15 @@ const peers = {};
 
 function App() {
   let deviceEls = document.querySelectorAll('.mediadevice[data-target]');
-  this.mediaElements = [...deviceEls]
-                         .reduce((result, current) => {
-                           result[current.getAttribute('data-target')] = current.querySelector(':first-child');
-                           return result;
-                         }, {});
+  this.mediaElements = [...deviceEls].reduce((result, current) => {
+    result[current.getAttribute('data-target')] = current.querySelector(':first-child');
+    return result;
+  }, {});
 
-  this.mediaToggles = [...document.querySelectorAll('.streamToggle')]
-                        .reduce((result, current) => {
-                           result[current.name] = current;
-                           return result;
-                        }, {});
+  this.mediaToggles = [...document.querySelectorAll('.streamToggle')].reduce((result, current) => {
+    result[current.name] = current;
+    return result;
+  }, {});
 
   this.addDeviceToggle = document.getElementById('addDevice');
   this.cover = document.getElementById('cover');
@@ -52,14 +59,13 @@ function App() {
 
         if (bool) {
           document.body.classList.add('recording');
-        }
-        else {
+        } else {
           document.body.classList.remove('recording');
         }
 
         if (!this.recTimeToken) {
           this.recTimeToken = rafLoop.subscribe({
-               fn: this.logRecordingTime,
+            fn: this.logRecordingTime,
             scope: this
           });
         }
@@ -78,8 +84,7 @@ function App() {
 
         if (bool) {
           document.body.classList.add('paused');
-        }
-        else {
+        } else {
           document.body.classList.remove('paused');
         }
       }
@@ -117,7 +122,7 @@ function App() {
   this.listingPeer = [];
 
   this.attachEvents();
-  document.getElementById("create").checked = true;
+  document.getElementById('create').checked = true;
   setTimeout(() => {
     document.body.classList.remove('loading');
   }, 500);
@@ -128,10 +133,11 @@ App.prototype = {
   attachEvents: function() {
     deviceMgr.on('enumerated', () => {
       for (let deviceType in deviceMgr) {
-        let deviceId = (deviceMgr[deviceType].info || {}).deviceId || 
-                         Object.keys(deviceMgr[deviceType])
-                           .filter(device => device !== 'default')
-                           .reduce((id, current) => id = id || current, null);
+        let deviceId =
+          (deviceMgr[deviceType].info || {}).deviceId ||
+          Object.keys(deviceMgr[deviceType])
+            .filter(device => device !== 'default')
+            .reduce((id, current) => (id = id || current), null);
 
         this.mediaToggles[deviceType].value = deviceId;
       }
@@ -145,7 +151,7 @@ App.prototype = {
     audAnalyser.attachCanvas(this.audioCanvas);
     audAnalyser.ondelegation('subscribe.raf', function() {
       let delFns = Array.prototype.slice.call(arguments);
-      let token = rafLoop.subscribe({fn: delFns[0], scope: audAnalyser});
+      let token = rafLoop.subscribe({ fn: delFns[0], scope: audAnalyser });
       if (delFns[1]) {
         delFns[1](token);
       }
@@ -159,8 +165,12 @@ App.prototype = {
 
     this.addDeviceToggle.addEventListener('click', this.toggleAddDevice, false);
 
-    document.getElementById('installExtension').addEventListener('click', this.chromeInstall.bind(this), false);
-    document.getElementById('mergestreams').addEventListener('change', this.mergeStreams.bind(this), false);
+    document
+      .getElementById('installExtension')
+      .addEventListener('click', this.chromeInstall.bind(this), false);
+    document
+      .getElementById('mergestreams')
+      .addEventListener('change', this.mergeStreams.bind(this), false);
     document.body.addEventListener('keyup', this.handleKeys.bind(this), false);
     // this.userView.addEventListener('change', this.switchCreateView.bind(this), false);
 
@@ -174,13 +184,17 @@ App.prototype = {
     this.uploadOcRecordings.addEventListener('click', this.uploadMediaOc.bind(this), false);
     this.saveRecordings.addEventListener('click', this.saveMedia.bind(this), false);
 
-    document.getElementById('minimiseStreams').addEventListener('change', this.minimiseStreamView.bind(this), false);
+    document
+      .getElementById('minimiseStreams')
+      .addEventListener('change', this.minimiseStreamView.bind(this), false);
 
     [...document.querySelectorAll('.streamControls label:nth-of-type(1) button')].forEach(btn => {
       btn.addEventListener('click', this.chooseResolution.bind(this), false);
     });
 
-    document.getElementById('unmerge').addEventListener('click', this.unmergeStreams.bind(this), false);
+    document
+      .getElementById('unmerge')
+      .addEventListener('click', this.unmergeStreams.bind(this), false);
   },
   switchCreateView: function(e) {
     let newView = `${e.target.value}UserView`;
@@ -195,17 +209,16 @@ App.prototype = {
       document.getElementById('toggleExtensionModal').checked = true;
     }
 
-    deviceMgr.connect(e.target.value)
-      .catch(err => {
-        e.target.checked = false;
-        console.log(err);
-      });
+    deviceMgr.connect(e.target.value).catch(err => {
+      e.target.checked = false;
+      console.log(err);
+    });
   },
   displayStream: function(stream, value) {
     let mediaContainer = null;
 
-    [...document.querySelectorAll(`video[data-id="${value}"],audio[data-id="${value}"]`)]
-      .forEach(vid => {
+    [...document.querySelectorAll(`video[data-id="${value}"],audio[data-id="${value}"]`)].forEach(
+      vid => {
         vid.srcObject = stream;
         vid.muted = true;
         vid.parentNode.classList.add('active');
@@ -215,28 +228,37 @@ App.prototype = {
         if (vid.parentNode.classList.contains('front')) {
           vid.parentNode.parentNode.parentNode.classList.add('active');
         }
-      });
+      }
+    );
 
     let audioContainer = this.mediaElements.audio.parentNode;
-    if (stream.getAudioTracks().length > 0 &&
-      (!audioContainer.classList.contains('active') || stream.getVideoTracks().length === 0)) {
+    if (
+      stream.getAudioTracks().length > 0 &&
+      (!audioContainer.classList.contains('active') || stream.getVideoTracks().length === 0)
+    ) {
       audioContainer.classList.add('active');
       audAnalyser.analyse(stream);
 
       let audioDeviceId = this.mediaToggles.audio.value;
-      let audioListItem = document.querySelector(`#streams li.audioDevice[data-id="${audioDeviceId}"]`);
+      let audioListItem = document.querySelector(
+        `#streams li.audioDevice[data-id="${audioDeviceId}"]`
+      );
 
       if (audioListItem) {
         audioListItem.classList.add('active');
       }
     }
 
-    if (stream.getVideoTracks().length > 0 && mediaContainer && mediaContainer.parentNode.id === 'videoView') {
+    if (
+      stream.getVideoTracks().length > 0 &&
+      mediaContainer &&
+      mediaContainer.parentNode.id === 'videoView'
+    ) {
       let resolution = stream.getVideoTracks()[0].getSettings().height + 'p';
       let videoControls = mediaContainer.querySelector('.streamControls');
       videoControls.querySelector('label:first-of-type span').textContent = resolution;
 
-      let resolutionOptions = [...videoControls.querySelectorAll('label:first-of-type button')]
+      let resolutionOptions = [...videoControls.querySelectorAll('label:first-of-type button')];
       let doListRes = true;
       resolutionOptions.some(button => {
         if (button.value === resolution) {
@@ -247,16 +269,14 @@ App.prototype = {
 
       if (doListRes) {
         resolutionOptions.some((button, i) => {
-          if (parseInt(resolution) < parseInt(button.value) ||
-              i === resolutionOptions.length - 1) {
+          if (parseInt(resolution) < parseInt(button.value) || i === resolutionOptions.length - 1) {
             let resButton = document.createElement('button');
             button.type = 'button';
             button.textContent = button.value = resolution;
 
             if (parseInt(resolution) < parseInt(button.value)) {
               button.parentNode.insertBefore(resButton, button);
-            }
-            else {
+            } else {
               button.parentNode.appendChild(resButton);
             }
 
@@ -289,15 +309,16 @@ App.prototype = {
 
     vid.srcObject = stream;
     vid.setAttribute('data-id', id);
-    parent.querySelector('label[for^=inputSource] > span').textContent = e.target.getAttribute('data-label');
+    parent.querySelector('label[for^=inputSource] > span').textContent = e.target.getAttribute(
+      'data-label'
+    );
   },
   getStreamSource: function(id, isPeer) {
     if (isPeer) {
       if (peers[id] && peers[id].stream) {
         return peers[id].stream;
       }
-    }
-    else if (deviceMgr.video[id]) {
+    } else if (deviceMgr.video[id]) {
       return deviceMgr.video[id].stream;
     }
     return;
@@ -318,14 +339,16 @@ App.prototype = {
     let streamId = document.getElementById(id).value;
     parent.querySelector('.streamControls input:nth-of-type(1)').checked = false;
     let change = this.changeResolution(streamId, res);
-    change.then(streamObj => this.displayStream(streamObj.stream, streamId === 'desktop' ? 'desktop' : 'video', streamId));
+    change.then(streamObj =>
+      this.displayStream(streamObj.stream, streamId === 'desktop' ? 'desktop' : 'video', streamId)
+    );
   },
   changeResolution: function(id, res) {
     if (peers.hasOwnProperty(id)) {
       return peers[id].changeResolution(res);
     }
 
-    switch(id) {
+    switch (id) {
       case 'composite':
         return compositor.changeResolution(res);
         break;
@@ -356,51 +379,51 @@ App.prototype = {
   listDevices: function(devices) {
     for (let key in devices) {
       let item = utils.createElement('li', {
-                   class: `${devices[key].deviceType} ${devices[key].deviceType}Device`,
-                   data: {
-                        id: key,
-                     title: (devices[key].info.label.split(' '))[0]
-                   }
-                 });
+        class: `${devices[key].deviceType} ${devices[key].deviceType}Device`,
+        data: {
+          id: key,
+          title: devices[key].info.label.split(' ')[0]
+        }
+      });
 
       let deviceType = devices[key].deviceType;
       deviceType = deviceType === 'desktop' ? 'video' : deviceType;
 
       let placeholder = utils.createElement('span', {
-                          class: 'placeholder'
-                        });
+        class: 'placeholder'
+      });
       let shadow = utils.createElement('span', {
-                     class: 'shadow'
-                   });
+        class: 'shadow'
+      });
 
       let mediaEl = utils.createElement(deviceType, {
-                      data: {
-                        id: key
-                      }
-                    });
+        data: {
+          id: key
+        }
+      });
 
       let mediaElContainer = utils.createElement('span', {
-                               class: 'mediaContainer'
-                             });
+        class: 'mediaContainer'
+      });
 
       let mediaFront = utils.createElement('span', {
-                         class: 'front'
-                       });
+        class: 'front'
+      });
 
       let mediaBack = utils.createElement('ul', {
-                         class: 'back'
-                       });
+        class: 'back'
+      });
 
       let removeItem = utils.createElement('li');
       let mediaRemoveBtn = utils.createElement('button', {
-                             text: 'Deactivate'
-                           });
+        text: 'Deactivate'
+      });
       removeItem.appendChild(mediaRemoveBtn);
 
       let compositeItem = utils.createElement('li');
       let mediaCompositeBtn = utils.createElement('button', {
-                             text: 'Add to composite'
-                           });
+        text: 'Add to composite'
+      });
       compositeItem.appendChild(mediaCompositeBtn);
 
       let cancelItem = utils.createElement('li', { text: 'Cancel' });
@@ -410,15 +433,15 @@ App.prototype = {
       mediaBack.appendChild(cancelItem);
 
       let optionsList = utils.createElement('span', {
-                          class: 'options'
-                        });
+        class: 'options'
+      });
 
       let addCompositeBtn = utils.createElement('button', {
-                              text: 'Add to composite',
-                              data: {
-                                action: 'composite'
-                              }
-                            });
+        text: 'Add to composite',
+        data: {
+          action: 'composite'
+        }
+      });
 
       mediaFront.appendChild(mediaEl);
       mediaElContainer.appendChild(mediaFront);
@@ -431,7 +454,10 @@ App.prototype = {
       item.addEventListener('click', this.toggleDevice.bind(this), false);
 
       if (!this.mediaElements[devices[key].deviceType].getAttribute('data-id')) {
-        this.mediaElements[devices[key].deviceType].setAttribute('data-id', deviceType === 'desktop' ? 'desktop' : key);
+        this.mediaElements[devices[key].deviceType].setAttribute(
+          'data-id',
+          deviceType === 'desktop' ? 'desktop' : key
+        );
       }
     }
   },
@@ -439,16 +465,16 @@ App.prototype = {
     if (this.listingPeer.indexOf(id) === -1) {
       this.listingPeer.push(id);
       let peerItem = utils.createElement('li', {
-                       class: 'peerDevice connecting',
-                        data: {
-                             id: id
-                        }
-                      });
+        class: 'peerDevice connecting',
+        data: {
+          id: id
+        }
+      });
 
       this.deviceList.appendChild(peerItem);
       peerItem.addEventListener('click', this.togglePeerStream.bind(this), false);
       setTimeout(() => {
-        this.addLoader(peerItem, 'Connecting', {fill: '#eee', fontSize: '1.75rem'});
+        this.addLoader(peerItem, 'Connecting', { fill: '#eee', fontSize: '1.75rem' });
       }, 500);
     }
   },
@@ -460,17 +486,17 @@ App.prototype = {
       .forEach(key => {
         if (!inputSources[0].querySelector(`li[data-id="${key}"]`)) {
           let item = utils.createElement('li', {
-                       data: {
-                         id: key
-                       }
-                     });
+            data: {
+              id: key
+            }
+          });
           let deviceBtn = utils.createElement('button', {
-                            text: details[key].info.label,
-                            value: key,
-                            data: {
-                              label: details[key].info.label
-                            }
-                          });
+            text: details[key].info.label,
+            value: key,
+            data: {
+              label: details[key].info.label
+            }
+          });
 
           if (details[key].source == 'peer') {
             let streamType = details[key].info.type;
@@ -485,10 +511,10 @@ App.prototype = {
             cloned.addEventListener('click', this.switchStream.bind(this), false);
           });
         }
-      })
+      });
 
     inputSources.forEach(input => {
-      input.style.maxHeight = (([...input.querySelectorAll('li')].length + 1) * 2) + 'rem';
+      input.style.maxHeight = ([...input.querySelectorAll('li')].length + 1) * 2 + 'rem';
     });
   },
   toggleAddDevice: function(e) {
@@ -515,7 +541,10 @@ App.prototype = {
     });
 
     let pairLink = document.getElementById('host');
-    pairLink.textContent = link.split('/').slice(0, 4).join('/');
+    pairLink.textContent = link
+      .split('/')
+      .slice(0, 4)
+      .join('/');
     pairLink.href = url;
     pairLink.target = '_blank';
 
@@ -553,8 +582,7 @@ App.prototype = {
     if (e.target.checked) {
       compositor.start();
       audAnalyser.switchDraw('drawMerged');
-    }
-    else {
+    } else {
       compositor.stop();
       audAnalyser.switchDraw('draw');
     }
@@ -570,8 +598,7 @@ App.prototype = {
 
     if (e.target.checked) {
       this.addDeviceToggle.setAttribute('title', ts.translate('ADD_DEVICE'));
-    }
-    else {
+    } else {
       this.addDeviceToggle.removeAttribute('title');
     }
   },
@@ -580,8 +607,9 @@ App.prototype = {
 
     switch (keyCode) {
       case 27:
-        [...document.querySelectorAll('.toggleCover:checked')]
-          .forEach(input => input.checked = false);
+        [...document.querySelectorAll('.toggleCover:checked')].forEach(
+          input => (input.checked = false)
+        );
     }
   },
   chromeInstall: function() {
@@ -597,7 +625,7 @@ App.prototype = {
       );
     }
   },
-/*  attachChannelEvents: function(ch) {
+  /*  attachChannelEvents: function(ch) {
     ch.onopen = function(e) {
       //add UI notification for data channel opened?
     };
@@ -614,15 +642,14 @@ App.prototype = {
       for (let peer in peers) {
         try {
           peers[peer].record();
-        } catch (e) {
-        }
+        } catch (e) {}
       }
       return;
     }
 
     let numStreams = Object.keys(deviceMgr.devices)
-                       .map(key => deviceMgr.devices[key].stream)
-                       .filter(stream => stream).length;
+      .map(key => deviceMgr.devices[key].stream)
+      .filter(stream => stream).length;
     if (numStreams === 0) {
       return;
     }
@@ -634,11 +661,12 @@ App.prototype = {
     for (let peer in peers) {
       try {
         peers[peer].record();
-      } catch(e) {
-      }
+      } catch (e) {}
     }
 
-    [...document.querySelectorAll('#recordingList a')].forEach(anchor => anchor.parentNode.removeChild(anchor));
+    [...document.querySelectorAll('#recordingList a')].forEach(anchor =>
+      anchor.parentNode.removeChild(anchor)
+    );
   },
   pauseRecord: function(e) {
     deviceMgr.pauseRecording();
@@ -662,11 +690,11 @@ App.prototype = {
     }
 
     // clear fields
-    this.titleEl.value = "";
-    this.presenterEl.value = "";
+    this.titleEl.value = '';
+    this.presenterEl.value = '';
     // update internal data like a keyup event would
-    this.setTitle("");
-    this.setPresenter("");
+    this.setTitle('');
+    this.setPresenter('');
     document.getElementById('toggleSaveCreationModal').checked = true;
 
     rafLoop.unsubscribe(this.recTimeToken);
@@ -683,10 +711,16 @@ App.prototype = {
       return;
     }
 
-    let timeslices = this.recTime.reduce((collect, current, i) => collect += current * (i % 2 ? -1 : 1), 0);
+    let timeslices = this.recTime.reduce(
+      (collect, current, i) => (collect += current * (i % 2 ? -1 : 1)),
+      0
+    );
     let duration = timestamp - timeslices;
-    let timeArr = [duration / 3600000 >> 0, (duration / 60000 >> 0) % 60, ((duration / 1000.0) % 60).toFixed(3)]
-                    .map((unit, i) => (unit < 10 ? '0' : '') + unit);
+    let timeArr = [
+      (duration / 3600000) >> 0,
+      ((duration / 60000) >> 0) % 60,
+      ((duration / 1000.0) % 60).toFixed(3)
+    ].map((unit, i) => (unit < 10 ? '0' : '') + unit);
     this.timeEl.textContent = timeArr.join(':');
   },
   listRecording: function(details) {
@@ -728,11 +762,10 @@ App.prototype = {
         vid.muted = true;
         vid.addEventListener('mouseover', e => vid.play(), false);
         vid.addEventListener('mouseout', e => vid.pause(), false);
-        vid.addEventListener('ended', e => vid.currentTime = 0, false);
+        vid.addEventListener('ended', e => (vid.currentTime = 0), false);
 
         anchor.appendChild(vid);
-      }
-      else {
+      } else {
         anchor.download = anchor.getAttribute('data-flavor') + ' audio - ' + this.title + '.webm';
         anchor.setAttribute('data-type', 'audio');
       }
@@ -756,7 +789,13 @@ App.prototype = {
   setTitle: function(newTitle) {
     this.title = newTitle || 'Recording';
     [...document.querySelectorAll('#recordingList a')].forEach(anchor => {
-      anchor.download = anchor.getAttribute('data-flavor') + ' ' + anchor.getAttribute('data-type') + ' - ' + this.title + '.webm';
+      anchor.download =
+        anchor.getAttribute('data-flavor') +
+        ' ' +
+        anchor.getAttribute('data-type') +
+        ' - ' +
+        this.title +
+        '.webm';
     });
   },
   updatePresenterKeyUpEvent(e) {
@@ -772,39 +811,41 @@ App.prototype = {
     let title = this.title;
     let presenter = this.presenter;
 
-    if (title !== "" && presenter !== "") {
-      new OpencastUploader(ocUploaderSettings)
-        .loginAndUploadFromAnchor(
-          [...document.querySelectorAll('#saveCreation a')],
-          () => {
-            alert("Upload complete!");
-            document.getElementById('toggleSaveCreationModal').checked = false;
-          },
-          () => {
-            alert("Login failed, Please check your Password!");
-            ocUploaderSettings.show();
-          },
-          err => {
-            alert("Server unreachable: Check your Internet Connetion and the Server Url, " + 
-              "also check whether your Opencast Instance supports this site.");
-            console.log("Server unreachable: ", err);
-            ocUploaderSettings.show();
-          },
-          err => {
-            alert("The Internet Connection failed or you are missing necessary permissions.");
-            console.log("Inet fail or Missing Permission: ", err);
-            ocUploaderSettings.show();
-          },
-          title,
-          presenter
-        );
-    }
-    else {
-      alert("Please set Title and Presenter");
+    if (title !== '' && presenter !== '') {
+      new OpencastUploader(ocUploaderSettings).loginAndUploadFromAnchor(
+        [...document.querySelectorAll('#saveCreation a')],
+        () => {
+          alert('Upload complete!');
+          document.getElementById('toggleSaveCreationModal').checked = false;
+        },
+        () => {
+          alert('Login failed, Please check your Password!');
+          ocUploaderSettings.show();
+        },
+        err => {
+          alert(
+            'Server unreachable: Check your Internet Connetion and the Server Url, ' +
+              'also check whether your Opencast Instance supports this site.'
+          );
+          console.log('Server unreachable: ', err);
+          ocUploaderSettings.show();
+        },
+        err => {
+          alert('The Internet Connection failed or you are missing necessary permissions.');
+          console.log('Inet fail or Missing Permission: ', err);
+          ocUploaderSettings.show();
+        },
+        title,
+        presenter
+      );
+    } else {
+      alert('Please set Title and Presenter');
     }
   },
   saveMedia: function(e) {
-    [...document.querySelectorAll('#saveCreation a')].forEach((anchor, i) => setTimeout(() => anchor.click(), i*100));
+    [...document.querySelectorAll('#saveCreation a')].forEach((anchor, i) =>
+      setTimeout(() => anchor.click(), i * 100)
+    );
     document.getElementById('toggleSaveCreationModal').checked = false;
   },
   changeLanguage: function(e) {
@@ -815,10 +856,11 @@ App.prototype = {
   addLoader: function(container, text, opts) {
     let currentLoader = document.querySelector('#introCover .loader');
     let loader = currentLoader.cloneNode(true);
-    loader.querySelector('.loaderText').textContent = text || "";
+    loader.querySelector('.loaderText').textContent = text || '';
     let containerWidth = Math.min(container.clientWidth, container.clientHeight);
     let loaderWidth = Math.min(containerWidth * 0.8, currentLoader.clientWidth);
-    loader.style.transform = `translate(-50%, -50%) scale(${loaderWidth/currentLoader.clientWidth})`;
+    loader.style.transform = `translate(-50%, -50%) scale(${loaderWidth /
+      currentLoader.clientWidth})`;
     container.appendChild(loader);
     if (opts) {
       if (opts.fill) {
@@ -834,7 +876,7 @@ App.prototype = {
     document.body.classList.add('translating');
     if (!document.head.querySelector(`link[data-lang=${langObj.language}`)) {
       let link = document.createElement('link');
-      link.rel = "stylesheet";
+      link.rel = 'stylesheet';
       link.href = `/css/translations_${langObj.language}.css`;
       document.head.appendChild(link);
     }
@@ -865,7 +907,7 @@ App.prototype = {
     });
 
     if (document.getElementById('addDevice').title) {
-      document.getElementById('addDevice').title = ts.translate("ADD_DEVICE");
+      document.getElementById('addDevice').title = ts.translate('ADD_DEVICE');
     }
     document.body.classList.remove('translating');
   },
@@ -887,16 +929,21 @@ App.prototype = {
       return console.log('requested peer has no stream');
     }
 
-    compositor.addStream({id: peerId, stream: peers[peerId].stream});
+    compositor.addStream({ id: peerId, stream: peers[peerId].stream });
   },
   removePeer: function(peer) {
-    [...document.querySelectorAll(`.streamControls [data-id="${peer}"], #streams [data-id="${peer}"]`)]
-      .forEach(el => el.parentNode.removeChild(el));
-    [...document.querySelectorAll(`video[data-id="${peer}"], audio[data-id="${peer}"]`)]
-      .forEach(mediaEl => mediaEl.srcObject = null);
+    [
+      ...document.querySelectorAll(
+        `.streamControls [data-id="${peer}"], #streams [data-id="${peer}"]`
+      )
+    ].forEach(el => el.parentNode.removeChild(el));
+    [...document.querySelectorAll(`video[data-id="${peer}"], audio[data-id="${peer}"]`)].forEach(
+      mediaEl => (mediaEl.srcObject = null)
+    );
   },
   cacheApp: function() {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker
+      .register('/sw.js')
       .catch(err => console.log('failed to register sw', err));
   }
 };
@@ -909,19 +956,19 @@ ts.on('translations.languages', languages => {
   languages.forEach(lang => {
     let item = document.createElement('li');
     let btn = utils.createElement('button', {
-                type: 'button',
-                value: lang.short,
-                text: lang.language
-              });
+      type: 'button',
+      value: lang.short,
+      text: lang.language
+    });
     let img = utils.createElement('img', {
-                prop: {
-                  alt: lang.language,
-                  src: lang.img
-                },
-                data: {
-                  attribution: "Icon made by Freepik from www.flaticon.com"
-                }
-              });
+      prop: {
+        alt: lang.language,
+        src: lang.img
+      },
+      data: {
+        attribution: 'Icon made by Freepik from www.flaticon.com'
+      }
+    });
 
     item.appendChild(btn);
     item.appendChild(img);
@@ -933,10 +980,10 @@ ts.on('translations.languages', languages => {
 ts.on('translations.set', langObj => app.setLanguage(langObj));
 
 deviceMgr.once('enumerated', {
-    fn: devices => {
-      app.listDevices(devices);
-      app.listAsSource(devices);
-    }
+  fn: devices => {
+    app.listDevices(devices);
+    app.listAsSource(devices);
+  }
 });
 
 [deviceMgr, compositor].forEach(recorder => {
@@ -953,11 +1000,11 @@ deviceMgr.once('enumerated', {
     app.muteStream(id);
   });
   stream.on('stream', streamObj => {
-    streamObj.stream.getTracks().forEach((track) => {
+    streamObj.stream.getTracks().forEach(track => {
       track.onended = function() {
         app.stopRecord();
         deviceMgr.stopRecording();
-      }
+      };
     });
 
     app.displayStream(streamObj.stream, streamObj.id);
@@ -971,33 +1018,37 @@ deviceMgr.once('enumerated', {
 
     if (streamObj.stream.getVideoTracks().length > 0) {
       compositor.addStream(streamObj);
-    }
-    else if (streamObj.stream.getVideoTracks().length > 0) {
+    } else if (streamObj.stream.getVideoTracks().length > 0) {
       compositor.addAudioTrack(streamObj.stream.getAudioTracks()[0]);
     }
   });
   stream.on('record.stop.stream.remove', old_streamObj => {
-    [...document.querySelectorAll(
-      `video[data-id="${old_streamObj.id}"],audio[data-id="${old_streamObj.id}"]`
-    )].forEach(elem => {
+    [
+      ...document.querySelectorAll(
+        `video[data-id="${old_streamObj.id}"],audio[data-id="${old_streamObj.id}"]`
+      )
+    ].forEach(elem => {
       elem.parentNode.classList.remove('active');
       elem.load(); // refresh vid, so the removed stream gets detected
 
       // make it clickable
-      let forId = elem.parentNode.getAttribute("for");
+      let forId = elem.parentNode.getAttribute('for');
       if (forId) {
         document.getElementById(forId).checked = false;
       }
-    })
-  })
+    });
+  });
 });
 
 compositor.on('subscribe.raf', function() {
   let args = Array.prototype.slice.call(arguments, 0, 2);
-  rafLoop.subscribe({
-    fn: args[0],
-    scope: compositor
-  }, args[1]);
+  rafLoop.subscribe(
+    {
+      fn: args[0],
+      scope: compositor
+    },
+    args[1]
+  );
 });
 
 compositor.on('unsubscribe.raf', token => {
@@ -1008,7 +1059,7 @@ compositor.on('stream.remove', () => {
   app.removeStream('composite');
 });
 
-if (window.chrome && chrome.app) {
+if (window.chrome && window.chrome.app) {
   if (!navigator.mediaDevices || !('getDisplayMedia' in navigator.mediaDevices)) {
     let delay = setTimeout(() => {
       app.needsExtension = true;
@@ -1032,7 +1083,7 @@ if (comms.socket !== null) {
 
 if ('serviceWorker' in navigator && 'caches' in window) {
   app.cacheApp();
-/*  caches.open('app').then(cache =>
+  /*  caches.open('app').then(cache =>
     cache.keys().then(keys => keys.length === app.cacheApp())
   );*/
 }

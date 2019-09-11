@@ -1,263 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf8">
-  <meta name="viewport" content="width=device-width">
-  <meta name="google-site-verification" content="zLyTJjR3SdsG8d0wR5jdHzmm5170gpm_KFfGcy4RfDs" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' wss:; connect-src 'self' blob: https: ws: wss: studio.letmedev.com:443 wss://studio.letmedev.com; style-src 'self' https://kit-free.fontawesome.com https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com https://kit-free.fontawesome.com; script-src 'self' https://kit.fontawesome.com">
-  <title>Opencast Studio (beta)</title>
-  <link rel="stylesheet" href="css/style.css?version=%ver%">
-  <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
-</head>
-<body id=main class="loading translating">
-  <header>
-    <img src=res/opencast-studio.svg id="logo-main" alt="Opencast Studio" />
-    <span class=beta>beta</span>
-    <div id="language">
-      <input type="checkbox" class="hiddenCheck" id="chooseLanguage" />
-      <label id="chosenLanguage" for="chooseLanguage">
-        <span>EN</span>
-        <img alt="English" src="res/flags/uk.png" />
-      </label>
-      <ul>
-      </ul>
-    </div>
-  </header>
-  <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
-  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
-  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" autocomplete="off" />
-  <input type="checkbox" class="toggleCover hiddenCheck" id="toggleOcUploadSettingsModal" autocomplete="off" />
-  <div id="introCover">
-    <div class="loader">
-      <svg width="192" height="192">
-        <circle r="82" cx="96" cy="96" fill="none" stroke="#00bdc4" stroke-width="8" stroke-dashoffset="0" stroke-dasharray="515"></circle>
-        <circle r="82" cx="96" cy="96" fill="none" stroke="white" stroke-width="14" stroke-dashoffset="20" stroke-dasharray="515"></circle>
-      </svg>
-      <span class="loaderText" data-translate="LOADING">Loading...</span>
-    </div>
-  </div>
-  <div id="cover"></div>
-  <main>
-    <div class="content">
-    <input type="radio" id="main" class="hiddenCheck" name="view" checked autocomplete="off" />
-    <section>
-      <label class="bigButton action" for="create"></label><label class="bigButton action" for="edit"></label>
-    </section>
-    <input type="radio" id="create" class="hiddenCheck" name="view" autocomplete="off" />
-    <section>
-      <label class="backBtn" for="main" title="Back to main navigation" data-translatetitle="BACK_TO_MAIN"></label>
-      <input type="checkbox" id="minimiseStreams" class="hiddenCheck" />
-      <input name="userView" type="radio" value="simple" class="hiddenCheck" checked id="simpleUserView" autocomplete="off" />
-      <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" autocomplete="off" />
-      <input type="radio" name="merge" class="hiddenCheck" id="mergestreams" value="composite" autocomplete="off" />
-      <label for="mergestreams" class="mediadevice action" data-title="Merge streams" data-pseudotext="MERGE_STREAMS" data-id="composite" data-target="composite">
-        <video id="composite" autoplay muted data-id="composite"></video>
-        <div class="streamControls">
-          <input type="checkbox" id="compositeResolution" class="hiddenCheck" />
-          <label for="compositeResolution">
-            <span>720p</span>
-            <ul>
-              <li><button type="button" value="480p">480p</button></li>
-              <li><button type="button" value="720p">720p</button></li>
-              <li><button type="button" value="1080p">1080p</button></li>
-            </ul>
-          </label>
-          <label class="close pull-left" title="Remove composite stream" id="unmerge" data-translatetitle="STOP_COMPOSITE"></label>
+    <head>
+        <meta charset="utf8">
+        <meta name="viewport" content="width=device-width">
+        <meta name="google-site-verification" content="zLyTJjR3SdsG8d0wR5jdHzmm5170gpm_KFfGcy4RfDs" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' wss:; connect-src 'self' blob: https: ws: wss: studio.letmedev.com:443 wss://studio.letmedev.com; style-src 'self' https://kit-free.fontawesome.com https://fonts.googleapis.com ; media-src 'self' blob:; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com https://kit-free.fontawesome.com; script-src 'self' https://kit.fontawesome.com">
+        <title>Opencast Studio (beta)</title>
+        <link rel="stylesheet" href="css/style.css?version=%ver%">
+        <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm">
+    </head>
+    <body id=main class="loading translating">
+        <header>
+            <img src=res/opencast-studio.svg id="logo-main" alt="Opencast Studio" />
+            <span class=beta>beta</span>
+            <div id="language">
+                <input type="checkbox" class="hiddenCheck" id="chooseLanguage" />
+                <label id="chosenLanguage" for="chooseLanguage">
+                    <span>EN</span>
+                    <img alt="English" src="res/flags/uk.png" />
+                </label>
+                <ul>
+                </ul>
+            </div>
+        </header>
+        <input type="checkbox" class="toggleCover addDevice hiddenCheck" id="toggleExtensionModal" autocomplete="off" />
+        <input type="checkbox" class="toggleCover hiddenCheck" id="toggleAddDeviceModal" autocomplete="off" />
+        <input type="checkbox" class="toggleCover hiddenCheck" id="toggleSaveCreationModal" autocomplete="off" />
+        <input type="checkbox" class="toggleCover hiddenCheck" id="toggleOcUploadSettingsModal" autocomplete="off" />
+        <div id="introCover">
+            <div class="loader">
+                <svg width="192" height="192">
+                    <circle r="82" cx="96" cy="96" fill="none" stroke="#00bdc4" stroke-width="8" stroke-dashoffset="0" stroke-dasharray="515"></circle>
+                    <circle r="82" cx="96" cy="96" fill="none" stroke="white" stroke-width="14" stroke-dashoffset="20" stroke-dasharray="515"></circle>
+                </svg>
+                <span class="loaderText" data-translate="LOADING">Loading...</span>
+            </div>
         </div>
-      </label>
-      <div id="videoView">
-        <div class="topRightControls">
-          <label title="Go to Opencast" id="ocOpenServerButton"><i class="fas fa-play-circle"></i></label>
-          <label title="Open Upload Settings" id="ocUploadSettingsOpenButton"><i class="fas fa-cog"></i></label>
-          <label title="Report Issue" id="ocUploadIssueButton"><i class="fas fa-exclamation-circle"></i></label>
+        <div id="cover"></div>
+        <main>
+            <div class="content">
+                <input type="radio" id="main" class="hiddenCheck" name="view" checked autocomplete="off" />
+                <section>
+                    <label class="bigButton action" for="create"></label><label class="bigButton action" for="edit"></label>
+                </section>
+                <input type="radio" id="create" class="hiddenCheck" name="view" autocomplete="off" />
+                <section>
+                    <label class="backBtn" for="main" title="Back to main navigation" data-translatetitle="BACK_TO_MAIN"></label>
+                    <input type="checkbox" id="minimiseStreams" class="hiddenCheck" />
+                    <input name="userView" type="radio" value="simple" class="hiddenCheck" checked id="simpleUserView" autocomplete="off" />
+                    <input name="userView" type="radio" value="advanced" class="hiddenCheck" id="advancedUserView" autocomplete="off" />
+                    <input type="radio" name="merge" class="hiddenCheck" id="mergestreams" value="composite" autocomplete="off" />
+                    <label for="mergestreams" class="mediadevice action" data-title="Merge streams" data-pseudotext="MERGE_STREAMS" data-id="composite" data-target="composite">
+                        <video id="composite" autoplay muted data-id="composite"></video>
+                        <div class="streamControls">
+                            <input type="checkbox" id="compositeResolution" class="hiddenCheck" />
+                            <label for="compositeResolution">
+                                <span>720p</span>
+                                <ul>
+                                    <li><button type="button" value="480p">480p</button></li>
+                                    <li><button type="button" value="720p">720p</button></li>
+                                    <li><button type="button" value="1080p">1080p</button></li>
+                                </ul>
+                            </label>
+                            <label class="close pull-left" title="Remove composite stream" id="unmerge" data-translatetitle="STOP_COMPOSITE"></label>
+                        </div>
+                    </label>
+                    <div id="videoView">
+                        <div class="topRightControls">
+                            <label title="Go to Opencast" id="ocOpenServerButton"><i class="fas fa-play-circle"></i></label>
+                            <label title="Open Upload Settings" id="ocUploadSettingsOpenButton"><i class="fas fa-cog"></i></label>
+                            <label title="Report Issue" id="ocUploadIssueButton"><i class="fas fa-exclamation-circle"></i></label>
+                        </div>
+                        <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
+                        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop (no audio)" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
+                            <video id="desktop" autoplay muted></video>
+                            <span class="placeholder"></span>
+                            <div class="streamControls">
+                                <input type="checkbox" id="desktopResolution" class="hiddenCheck" />
+                                <label for="desktopResolution">
+                                    <span></span>
+                                    <ul>
+                                        <li><button type="button" value="360p">360p</button></li>
+                                        <li><button type="button" value="480p">480p</button></li>
+                                        <li><button type="button" value="720p">720p</button></li>
+                                        <li><button type="button" value="1080p">1080p</button></li>
+                                    </ul>
+                                </label>
+                                <input type="checkbox" id="inputSource1" class="hiddenCheck" />
+                                <label for="inputSource1" class="pull-left inputSource">
+                                    <span>Desktop</span>
+                                    <ul>
+                                    </ul>
+                                </label>
+                            </div>
+                        </label>
+                        <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" autocomplete="off" />
+                        <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-pseudotext="SHARE_MICROPHONE" data-target="audio">
+                            <audio id="audio" autoplay muted></audio>
+                            <span class="placeholder"></span>
+                            <span class="shadow"></span>
+                            <canvas></canvas>
+                        </label>
+                        <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" autocomplete="off" />
+                        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam (with microphone audio)" data-pseudotext="SHARE_WEBCAM" data-target="video">
+                            <video id="video" autoplay muted></video>
+                            <span class="placeholder"></span>
+                            <span class="shadow"></span>
+                            <div class="streamControls">
+                                <input type="checkbox" id="videoResolution" class="hiddenCheck" />
+                                <label for="videoResolution">
+                                    <span></span>
+                                    <ul>
+                                        <li><button type="button" value="360p">360p</button></li>
+                                        <li><button type="button" value="480p">480p</button></li>
+                                        <li><button type="button" value="720p">720p</button></li>
+                                        <li><button type="button" value="1080p">1080p</button></li>
+                                    </ul>
+                                </label>
+                                <input type="checkbox" id="inputSource2" class="hiddenCheck" />
+                                <label for="inputSource2" class="pull-left inputSource">
+                                    <span>Webcam</span>
+                                    <ul></ul>
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+                    <div id="recordingControls">
+                        <button id="pauseRecord" title="Pause recording" data-translatetitle="PAUSE_RECORDING"></button>
+                        <button id="startRecord" title="Start/resume recording" data-translatetitle="START_RECORDING"></button>
+                        <button id="stopRecord" title="Stop recording" data-translatetitle="STOP_RECORDING"></button>
+                        <span id="recordingTime"></span>
+                        <footer>
+                            <a href=about.html>About</a>
+                            <a href=impressum.html>Impressum</a>
+                        </footer>
+                    </div>
+                    <ul id="streams">
+                        <div class="list">
+                        </div>
+                        <label type="button" id="addDevice" for="toggleAddDeviceModal"></label>
+                        <label for="minimiseStreams" title="Minimise" data-translatetitle="MINIMISE"></label>
+                    </ul>
+                </section>
+                <input type="radio" id="edit" class="hiddenCheck" name="view" autocomplete="off" />
+                <section>
+                    <label class="backBtn" for="main" title="Back to main navigation" data-translatetitle="BACK_TO_MAIN"></label>
+                    <p class="centreText">Under construction.<br>Please check back later.</p>
+                </section>
+            </div>
+        </main>
+        <svg xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <clipPath id="mic">
+                    <rect x="12" y="0" width="52" height="64" />
+                    <rect x="0" y="0" width="12" height="16" />
+                    <rect x="0" y="22" width="12" height="6" />
+                    <rect x="0" y="34" width="12" height="30" />
+                </clipPath>
+                <clipPath id="micStand">
+                    <path d="M 0 0
+                             C 0 29
+                             48 29
+                             48 0
+                             h -6
+                             C 43 22
+                             5 22
+                             5 0" />
+                    <rect width="6" height="10" x="21" y="19" />
+                    <rect height="5" width="38" x="6" y="24" />
+                </clipPath>
+                <clipPath id="webcamStand">
+                    <path d="M 0 48
+                             l 0 -24
+                             l 16 -16
+                             c 0 18
+                             64 18
+                             64 0
+                             l 16 16
+                             l 0 24
+                             h -96
+                             " />
+                </clipPath>
+                <filter id="dropshadow">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+                    <feOffset dx="0" dy="0" result="offsetblur"/>
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.2"/>
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+        <div id="addDeviceModal" class="modal">
+            <h4 data-translate="PAIR_HEADING">Pair a device to your session</h4>
+            <div class="modalBody">
+                <span data-translate="PAIR_TEXT">Pair your iOS or Android device to this session by scanning the QR code below</span>
+                <div id="qrcode">
+                </div>
+                <span data-translate="PAIR_ALT_TEXT_1">Alternatively, head over to </span><a id="host"></a><span data-translate="PAIR_ALT_TEXT_2"> and use the code</span>:
+                <p id="paircode"></p>
+                <a id="codehref"></a>
+            </div>
         </div>
-        <input type="radio" name="desktop" class="hiddenCheck streamToggle" id="desktopstream" autocomplete="off" />
-        <label for="desktopstream" class="mediadevice action desktopDevice" data-title="Share desktop (no audio)" data-pseudotext="SHARE_DESKTOP" data-target="desktop">
-          <video id="desktop" autoplay muted></video>
-          <span class="placeholder"></span>
-          <div class="streamControls">
-            <input type="checkbox" id="desktopResolution" class="hiddenCheck" />
-            <label for="desktopResolution">
-              <span></span>
-              <ul>
-                <li><button type="button" value="360p">360p</button></li>
-                <li><button type="button" value="480p">480p</button></li>
-                <li><button type="button" value="720p">720p</button></li>
-                <li><button type="button" value="1080p">1080p</button></li>
-              </ul>
-            </label>
-            <input type="checkbox" id="inputSource1" class="hiddenCheck" />
-            <label for="inputSource1" class="pull-left inputSource">
-              <span>Desktop</span>
-              <ul>
-              </ul>
-            </label>
-          </div>
-        </label>
-        <input type="radio" name="audio" class="hiddenCheck streamToggle" id="audiostream" autocomplete="off" />
-        <label for="audiostream" class="mediadevice action audioDevice" data-title="Share microphone" data-pseudotext="SHARE_MICROPHONE" data-target="audio">
-          <audio id="audio" autoplay muted></audio>
-          <span class="placeholder"></span>
-          <span class="shadow"></span>
-          <canvas></canvas>
-        </label>
-        <input type="radio" name="video" class="hiddenCheck streamToggle" id="webcamstream" autocomplete="off" />
-        <label for="webcamstream" class="mediadevice action videoDevice" data-title="Share webcam (with microphone audio)" data-pseudotext="SHARE_WEBCAM" data-target="video">
-          <video id="video" autoplay muted></video>
-          <span class="placeholder"></span>
-          <span class="shadow"></span>
-          <div class="streamControls">
-            <input type="checkbox" id="videoResolution" class="hiddenCheck" />
-            <label for="videoResolution">
-              <span></span>
-              <ul>
-                <li><button type="button" value="360p">360p</button></li>
-                <li><button type="button" value="480p">480p</button></li>
-                <li><button type="button" value="720p">720p</button></li>
-                <li><button type="button" value="1080p">1080p</button></li>
-              </ul>
-            </label>
-            <input type="checkbox" id="inputSource2" class="hiddenCheck" />
-            <label for="inputSource2" class="pull-left inputSource">
-              <span>Webcam</span>
-              <ul></ul>
-            </label>
-          </div>
-        </label>
-      </div>
-      <div id="recordingControls">
-        <button id="pauseRecord" title="Pause recording" data-translatetitle="PAUSE_RECORDING"></button>
-        <button id="startRecord" title="Start/resume recording" data-translatetitle="START_RECORDING"></button>
-        <button id="stopRecord" title="Stop recording" data-translatetitle="STOP_RECORDING"></button>
-        <span id="recordingTime"></span>
-		  <footer>
-          <a href=about.html>About</a>
-          <a href=impressum.html>Impressum</a>
-        </footer>
-      </div>
-      <ul id="streams">
-        <div class="list">
+        <div id="extensionModal" class="modal">
+            <h4 data-translate="HEADING_EXTENSION">Desktop capture requires extension</h4>
+            <div class="modalBody">
+                <span data-translate="REQUIRE_EXTENSION">You need to install a chrome extension to enable desktop capture.</span>
+                <p>
+                    <a href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm" target="_blank" id="installExtension" type="button" data-translate="INSTALL_EXTENSION">Install it via Chrome webstore</a>
+                </p>
+            </div>
         </div>
-        <label type="button" id="addDevice" for="toggleAddDeviceModal"></label>
-        <label for="minimiseStreams" title="Minimise" data-translatetitle="MINIMISE"></label>
-      </ul>
-    </section>
-    <input type="radio" id="edit" class="hiddenCheck" name="view" autocomplete="off" />
-    <section>
-      <label class="backBtn" for="main" title="Back to main navigation" data-translatetitle="BACK_TO_MAIN"></label>
-      <p class="centreText">Under construction.<br>Please check back later.</p>
-    </section>
-    </div>
-  </main>
-  <svg xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <clipPath id="mic">
-        <rect x="12" y="0" width="52" height="64" />
-        <rect x="0" y="0" width="12" height="16" />
-        <rect x="0" y="22" width="12" height="6" />
-        <rect x="0" y="34" width="12" height="30" />
-      </clipPath>
-      <clipPath id="micStand">
-        <path d="M 0 0
-                 C 0 29
-                   48 29
-                   48 0
-                 h -6
-                 C 43 22
-                   5 22
-                   5 0" />
-        <rect width="6" height="10" x="21" y="19" />
-        <rect height="5" width="38" x="6" y="24" />
-      </clipPath>
-      <clipPath id="webcamStand">
-        <path d="M 0 48
-                 l 0 -24
-                 l 16 -16
-                 c 0 18
-                   64 18
-                   64 0
-                 l 16 16
-                 l 0 24
-                 h -96
-                 " />
-      </clipPath>
-      <filter id="dropshadow">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="2"/> 
-        <feOffset dx="0" dy="0" result="offsetblur"/>
-        <feComponentTransfer>
-          <feFuncA type="linear" slope="0.2"/>
-        </feComponentTransfer>
-        <feMerge> 
-          <feMergeNode/>
-          <feMergeNode in="SourceGraphic"/> 
-        </feMerge>
-      </filter>
-    </defs>
-  </svg>
-  <div id="addDeviceModal" class="modal">
-    <h4 data-translate="PAIR_HEADING">Pair a device to your session</h4>
-    <div class="modalBody">
-      <span data-translate="PAIR_TEXT">Pair your iOS or Android device to this session by scanning the QR code below</span>
-      <div id="qrcode">
-      </div>
-      <span data-translate="PAIR_ALT_TEXT_1">Alternatively, head over to </span><a id="host"></a><span data-translate="PAIR_ALT_TEXT_2"> and use the code</span>:
-      <p id="paircode"></p>
-      <a id="codehref"></a>
-    </div>
-  </div>
-  <div id="extensionModal" class="modal">
-    <h4 data-translate="HEADING_EXTENSION">Desktop capture requires extension</h4>
-    <div class="modalBody">
-      <span data-translate="REQUIRE_EXTENSION">You need to install a chrome extension to enable desktop capture.</span>
-      <p>
-        <a href="https://chrome.google.com/webstore/detail/oghkihildgnkedhlolgjomnbfmjpmddm" target="_blank" id="installExtension" type="button" data-translate="INSTALL_EXTENSION">Install it via Chrome webstore</a>
-      </p>
-    </div>
-  </div>
-  <div id="saveCreation" class="modal">
-    <h4 data-translate="PRODUCTION_HEADING">Production details</h4>
-    <div class="modalBody">
-      <ul>
-        <span class="quarterWidth" data-translate="PRODUCTION_TITLE">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
-        <span class="quarterWidth" data-translate="PRODUCTION_PRESENTER">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
-      </ul>
-      <h4 data-translate="PRODUCTION_MEDIA">Media</h4>
-      <div id="recordingList"></div>
-    </div>
-    <div class="modalFooter">
-      <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
-      <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
-      <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
-    </div>
-  </div>
-  <div id="ocUploadSettings" class="modal">
-    <h4 data-translate="OC_UPLOAD_SETTINGS_HEADING">Configure Opencast Upload</h4>
-    <div class="modalBody">
-      <ul>
-        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_SERVER_URL">Opencast Server URL</span><span class="threeQuarterWidth"><input name="ocUploadSettingsServerURL" autocomplete="off" /></span>
-        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_WORKFLOW_ID">Workflow Id</span><span class="threeQuarterWidth"><input name="ocUploadSettingsWorkflowId" autocomplete="off" /></span>
-        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_NAME">Opencast Username</span><span class="threeQuarterWidth"><input name="ocUploadSettingsLoginName" autocomplete="off" /></span>
-        <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_PASSWORD">Opencast Password</span><span class="threeQuarterWidth"><input type="password" name="ocUploadSettingsLoginPassword" autocomplete="off" /></span>
-      </ul>
-    </div>
-    <div class="modalFooter">
-      <button class="btn btn-success" id="saveOcUploadSettings" data-translate="OC_UPLOAD_SETTINGS_OK">Ok</button>
-    </div>
-  </div>
-  <script src="js/utils.js?version=%ver%"></script>
-  <script src="js/eventemitter.js?version=%ver%"></script>
-  <script src="js/translate.js?version=%ver%"></script>
-  <script src="js/recorder.js?version=%ver%"></script>
-  <script src="js/devicemanager.js?version=%ver%"></script>
-  <script src="js/compositor.js?version=%ver%"></script>
-  <script src="js/audioanalyser.js?version=%ver%"></script>
-  <script src="js/rafloop.js?version=%ver%"></script>
-  <script src="js/servercomms.js?version=%ver%"></script>
-  <script src="js/peerconnection.js?version=%ver%"></script>
-  <script src="js/qrcode.min.js?version=%ver%"></script>
-  <script src="js/opencastuploader.js?version=%ver%"></script>
-  <script src="js/app.js?version=%ver%"></script>
-  <script src="https://kit.fontawesome.com/04db973ba6.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Comfortaa:300|Lobster+Two:400" rel="stylesheet">
-</body>
+        <div id="saveCreation" class="modal">
+            <h4 data-translate="PRODUCTION_HEADING">Production details</h4>
+            <div class="modalBody">
+                <ul>
+                    <span class="quarterWidth" data-translate="PRODUCTION_TITLE">Title</span><span class="threeQuarterWidth"><input name="title" autocomplete="off" /></span>
+                    <span class="quarterWidth" data-translate="PRODUCTION_PRESENTER">Presenter</span><span class="threeQuarterWidth"><input name="presenter" autocomplete="off" /></span>
+                </ul>
+                <h4 data-translate="PRODUCTION_MEDIA">Media</h4>
+                <div id="recordingList"></div>
+            </div>
+            <div class="modalFooter">
+                <button class="btn btn-upload-oc" id="uploadOcRecordings" data-translate="PRODUCTION_UPLOAD_OC">Upload media to Opencast</button>
+                <button class="btn btn-success" id="saveRecordings" data-translate="PRODUCTION_SAVE">Save media</button>
+                <label for="toggleSaveCreationModal" class="btn btn-cancel" data-translate="PRODUCTION_DISCARD">Discard</label>
+            </div>
+        </div>
+        <div id="ocUploadSettings" class="modal">
+            <h4 data-translate="OC_UPLOAD_SETTINGS_HEADING">Configure Opencast Upload</h4>
+            <div class="modalBody">
+                <ul>
+                    <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_SERVER_URL">Opencast Server URL</span><span class="threeQuarterWidth"><input name="ocUploadSettingsServerURL" autocomplete="off" /></span>
+                    <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_WORKFLOW_ID">Workflow Id</span><span class="threeQuarterWidth"><input name="ocUploadSettingsWorkflowId" autocomplete="off" /></span>
+                    <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_NAME">Opencast Username</span><span class="threeQuarterWidth"><input name="ocUploadSettingsLoginName" autocomplete="off" /></span>
+                    <span class="quarterWidth" data-translate="OC_UPLOAD_SETTINGS_LOGIN_PASSWORD">Opencast Password</span><span class="threeQuarterWidth"><input type="password" name="ocUploadSettingsLoginPassword" autocomplete="off" /></span>
+                </ul>
+            </div>
+            <div class="modalFooter">
+                <button class="btn btn-success" id="saveOcUploadSettings" data-translate="OC_UPLOAD_SETTINGS_OK">Ok</button>
+            </div>
+        </div>
+        <script src="js/qrcode.min.js"></script>
+        <script src="dist/app.js"></script>
+        <script src="https://kit.fontawesome.com/04db973ba6.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Comfortaa:300|Lobster+Two:400" rel="stylesheet">
+    </body>
 </html>

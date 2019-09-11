@@ -18,20 +18,20 @@ var AudioAnalyser = function AudioAnalyserImpl(isNoCanvas) {
   Object.defineProperty(this, 'subscriptions', {
     get: function() {
       return _subscriptions;
-    },
+    }
   });
 
   var _delegations = {};
   Object.defineProperty(this, 'delegations', {
     get: function() {
-      return _delegations
+      return _delegations;
     }
   });
 
   this.rafTokens = {
     performCalc: null
   };
-}
+};
 
 AudioAnalyser.prototype = {
   constructor: AudioAnalyser,
@@ -75,14 +75,16 @@ AudioAnalyser.prototype = {
   performCalc: function(hiPerfTimeStamp) {
     try {
       this.analyser.getByteTimeDomainData(this.dataArray);
-      let magnitude = Math.sqrt(this.dataArray.reduce((collect, current) => {
-                        return collect + Math.pow((current - 128)/128.0, 2);
-                      }, 0.0));
+      let magnitude = Math.sqrt(
+        this.dataArray.reduce((collect, current) => {
+          return collect + Math.pow((current - 128) / 128.0, 2);
+        }, 0.0)
+      );
       this.notifyDependencies('magnitude', magnitude);
       if (!this.noCanvas) {
         this.drawFn(magnitude);
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
   },
@@ -93,20 +95,19 @@ AudioAnalyser.prototype = {
   draw: function(magnitude) {
     this.canvasCtx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
     this.canvasCtx.beginPath();
-    this.canvasCtx.moveTo(this.HEIGHT/2, this.HEIGHT/2);
+    this.canvasCtx.moveTo(this.HEIGHT / 2, this.HEIGHT / 2);
 
-
-    let lineWidth = Math.max(magnitude/16*this.WIDTH, this.HEIGHT/2);
-    this.canvasCtx.lineTo(lineWidth, this.HEIGHT/2);
+    let lineWidth = Math.max((magnitude / 16) * this.WIDTH, this.HEIGHT / 2);
+    this.canvasCtx.lineTo(lineWidth, this.HEIGHT / 2);
     this.canvasCtx.stroke();
   },
   drawMerged: function(magnitude) {
     this.canvasCtx.clearRect(0, 0, this.WIDTH, this.HEIGHT);
     this.canvasCtx.beginPath();
-    let calcMag = magnitude/16 * this.WIDTH;
+    let calcMag = (magnitude / 16) * this.WIDTH;
     this.canvasCtx.lineWidth = calcMag;
-    this.canvasCtx.moveTo(this.HEIGHT/2, this.HEIGHT/2);
-    this.canvasCtx.lineTo(this.HEIGHT/2, this.HEIGHT/2);
+    this.canvasCtx.moveTo(this.HEIGHT / 2, this.HEIGHT / 2);
+    this.canvasCtx.lineTo(this.HEIGHT / 2, this.HEIGHT / 2);
     this.canvasCtx.stroke();
   },
   drawFn: function(magnitude) {
@@ -162,4 +163,6 @@ AudioAnalyser.prototype = {
 
     this.delegations[type].push(fn);
   }
-}
+};
+
+export default AudioAnalyser;
