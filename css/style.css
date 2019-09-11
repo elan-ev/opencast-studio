@@ -1329,19 +1329,9 @@ svg {
     width: 100%;
 }
 
-.modalFooter .btn {
-    border: none;
-    margin-left: 0.5rem;
-    border-radius: 0.125rem;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
-    height: 2rem;
-    line-height: 2rem;
-    padding: 0 0.5rem;
-    display: inline-block;
-    vertical-align: top;
-    font-size: 0.9rem;
-    font-weight: 300;
+.btn {
+    min-width: 100px;
+    padding: 5px;
 }
 
 #qrcode {
@@ -1794,22 +1784,6 @@ input:focus {
     display: none;
 }
 
-.btn-success {
-    background: #1DE9B6;
-}
-
-.btn-upload-oc {
-    background: rgb(33, 245, 227);
-}
-
-.btn-action {
-    background: #64B5F6;
-}
-
-.btn-cancel {
-    background: #F4FF81;
-}
-
 .centreText {
     font-size: 2rem;
     position: absolute;
@@ -2092,16 +2066,4 @@ footer {
 
 footer a {
     padding: 0 10px;
-}
-
-span.beta {
-  position: relative;
-  top: 4px;
-  font-size: 6pt;
-  vertical-align: top;
-  display: inline;
-  border: 1px solid #888;
-  border-radius: 5px;
-  padding: 2px;
-  color: #888;
 }
