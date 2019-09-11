@@ -1,50 +1,50 @@
 [lang=xh] .bigButton[for=create]::after {
-  content: "Yenza i-video";
+    content: "Yenza i-video";
 }
 
 [lang=xh] .bigButton[for=edit]::after {
-  content: "Hlela i-video";  
+    content: "Hlela i-video";
 }
 
 [lang=xh] .extensionRequired label[for=desktopstream]::after {
-  content: 'Cofa ukufaka isandiso se i-desktop yakho';
+    content: 'Cofa ukufaka isandiso se i-desktop yakho';
 }
 
 [lang=xh] #streams::before {
-  content: 'Izixhobo \A ezikhoyo';
-  line-height: 2rem;
-  padding: 2rem 0;
-  transition: padding 0.5s, line-height 0.5s;
-  height: 8rem;
+    content: 'Izixhobo \A ezikhoyo';
+    line-height: 2rem;
+    padding: 2rem 0;
+    transition: padding 0.5s, line-height 0.5s;
+    height: 8rem;
 }
 
 [lang=xh] #minimiseStreams:checked ~ #streams::before {
-  line-height: 3rem;
-  padding: 0;
+    line-height: 3rem;
+    padding: 0;
 }
 
 [lang=xh] #addDevice::after {
-  content: 'Yongeza isixhobo';
+    content: 'Yongeza isixhobo';
 }
 
 [lang=xh] .recording #recordingTime::before {
-  content: 'Ukurekhoda';
+    content: 'Ukurekhoda';
 }
 
 [lang=xh] .paused.recording #recordingTime::before {
-  content: 'Ikhefu';
+    content: 'Ikhefu';
 }
 
 [lang=xh] #mergestreams:checked ~ label[for=mergestreams]::after {
-  content: "Ungakhathazeki, \A yonke imilambo esebenzayo iya kubhalwa";
+    content: "Ungakhathazeki, \A yonke imilambo esebenzayo iya kubhalwa";
 }
 
 #addDevice::before {
-  transform: scale(0.8) translateY(-0.5rem);
+    transform: scale(0.8) translateY(-0.5rem);
 }
 
 #addDevice::after {
-  line-height: 1rem;
-  max-width: 90%;
-  left: 5%;
+    line-height: 1rem;
+    max-width: 90%;
+    left: 5%;
 }

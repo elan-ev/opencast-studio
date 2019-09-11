@@ -1,13 +1,15 @@
-let pc_config = {"iceServers":[
-                  {url: 'stun:stun.sipgate.net:3478'},
-                  {url: 'stun:iphone-stun.strato-iphone.de:3478'},
-                  {url: 'stun:numb.viagenie.ca:3478'},
-                  {url: 'stun:stun.aa.net.uk:3478'},
-                  {url: 'stun:stun.kiwilink.co.nz:3478'},
-                  {url: 'stun:stun.uls.co.za:3478'},
-                  {url: 'stun:stun.mitake.com.tw:3478'},
-                  {url: 'stun:stun.sip.us:3478'}
-                ]};
+let pc_config = {
+  iceServers: [
+    { url: 'stun:stun.sipgate.net:3478' },
+    { url: 'stun:iphone-stun.strato-iphone.de:3478' },
+    { url: 'stun:numb.viagenie.ca:3478' },
+    { url: 'stun:stun.aa.net.uk:3478' },
+    { url: 'stun:stun.kiwilink.co.nz:3478' },
+    { url: 'stun:stun.uls.co.za:3478' },
+    { url: 'stun:stun.mitake.com.tw:3478' },
+    { url: 'stun:stun.sip.us:3478' }
+  ]
+};
 
 let streamConstraints = {
   optional: [],
@@ -15,25 +17,24 @@ let streamConstraints = {
     OfferToReceiveAudio: true,
     OfferToReceiveVideo: true
   }
-}
+};
 
 if (window.hasOwnProperty('InstallTrigger')) {
   //Firefox has window.InstallTrigger (for now)
   streamConstraints = {
     offerToReceiveVideo: true,
     offerToReceiveAudio: true
-  }
+  };
 }
 
 const myCapabilities = {
   MediaRecorder: !!window.MediaRecorder
-}
+};
 
 let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   if (typeof peerDetails == 'string') {
     this.id = peerDetails;
-  }
-  else {
+  } else {
     this.id = (app.peers || [])[0] || peerDetails.target;
     this.room = app.room;
   }
@@ -46,7 +47,7 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
 
   this.capabilities = {
     MediaRecorder: !!window.MediaRecorder
-  }
+  };
 
   this.recorder = null;
   this.fileChunk = 16384;
@@ -54,24 +55,24 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   let _completeFns = {};
 
   Object.defineProperty(this, 'completeFns', {
-      get: function() {
-             return _completeFns;
-           }
+    get: function() {
+      return _completeFns;
+    }
   });
 
   var _closeFuncs = [];
 
   Object.defineProperty(this, 'onclose', {
-      get: function() {
-             return _closeFuncs;
-           },
-      set: function(func) {
-             if (typeof func != 'function') {
-               return;
-             }
+    get: function() {
+      return _closeFuncs;
+    },
+    set: function(func) {
+      if (typeof func != 'function') {
+        return;
+      }
 
-             _closeFuncs.push(func);
-           }
+      _closeFuncs.push(func);
+    }
   });
 
   this.pc = new RTCPeerConnection(pc_config);
@@ -80,8 +81,7 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   if (this.isCaller) {
     if (stream instanceof MediaStream) {
       this.pc.addStream(stream);
-    }
-    else if (canvas) {
+    } else if (canvas) {
       this.on('channel.opened', () => {
         let msg = {
           event: 'canvas.dimensions',
@@ -102,14 +102,12 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
     }
 
     this.sendOffer();
-  }
-  else if (!this.isCaller) {
+  } else if (!this.isCaller) {
     this.pc.ondatachannel = e => {
       this.dataChannel = e.channel;
       if (app && app.attachChannelEvents) {
         app.attachChannelEvents(this.dataChannel);
-      }
-      else {
+      } else {
         setChannelEvents.call(this);
       }
     };
@@ -118,36 +116,34 @@ let PeerConnection = function(peerDetails, stream, isInitiator, channelEvents) {
   var mediaElement = null;
 
   Object.defineProperty(this, 'streamElement', {
-      get: function() {
-             return mediaElement;
-           },
-      set: function(stream) {
-             mediaElement = document.createElement(stream.getVideoTracks().length > 0 ? 'video' : 'audio');
-             mediaElement.srcObject = stream;
-             mediaElement.autoplay = true;
-             mediaElement.muted = true;
-             mediaElement.setAttribute('data-peer', this.id);
-           }
+    get: function() {
+      return mediaElement;
+    },
+    set: function(stream) {
+      mediaElement = document.createElement(stream.getVideoTracks().length > 0 ? 'video' : 'audio');
+      mediaElement.srcObject = stream;
+      mediaElement.autoplay = true;
+      mediaElement.muted = true;
+      mediaElement.setAttribute('data-peer', this.id);
     }
-  );
-
+  });
 
   var _username = '';
   this.awaitUsername = [];
 
   Object.defineProperty(this, 'username', {
-      get: function() {
-             return _username;
-           },
-      set: function(username) {
-             _username = username;
-             this.awaitUsername.forEach(el => el.innerHTML = _username);
-           }
+    get: function() {
+      return _username;
+    },
+    set: function(username) {
+      _username = username;
+      this.awaitUsername.forEach(el => (el.innerHTML = _username));
+    }
   });
 };
 
 PeerConnection.prototype = {
-           constructor: PeerConnection,
+  constructor: PeerConnection,
   on: function(ev, fnObj) {
     if (!this.completeFns[ev]) {
       this.completeFns[ev] = {};
@@ -155,14 +151,14 @@ PeerConnection.prototype = {
 
     let token = null;
     do {
-      token = (Math.random() + 1).toString(36).substring(2,10);
+      token = (Math.random() + 1).toString(36).substring(2, 10);
     } while (Object.keys(this.completeFns).indexOf(token) > -1);
 
-    fnObj = typeof fnObj === 'function' ? {fn: fnObj, scope: null} : fnObj;
+    fnObj = typeof fnObj === 'function' ? { fn: fnObj, scope: null } : fnObj;
     this.completeFns[ev][token] = {
       scope: fnObj.scope,
-         fn: fnObj.fn
-    }
+      fn: fnObj.fn
+    };
 
     return token;
   },
@@ -177,80 +173,95 @@ PeerConnection.prototype = {
         let fn = this.completeFns[ev][key].fn;
         (function() {
           fn.apply(scope, val);
-        }.bind(scope))();
+        }.bind(scope)());
       }
     }
   },
-             sendOffer: function() {
-                          var self = this;
-                          this.pc.createOffer()
-                            .then(offer => {
-                              self.pc.setLocalDescription(offer);
-                              //TODO: remove type check when comms implemented on pairing device
-                              (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {target: self.id, details: offer});
-                            })
-                            .catch(err => this.offerFailed(err));
-                        },
-            sendAnswer: function() {
-                          this.pc.createAnswer()
-                           .then(offer => {
-                             this.pc.setLocalDescription(offer);
-                             (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {target: this.id, details: offer});
-                           })
-                           .catch(err => this.answerFailed(err));
-                        },
-          answerFailed: function(e) {
-                          console.log('failed answer', e);
-                        },
-           offerFailed: function(e) {
-                          console.log('failed offer', e);
-                        },
-         handleRequest: function(data) {
-                          let details = data.details;
-                          switch (details.type) {
-                            case 'offer':
-                              this.handleOffer(details);
-                              break;
+  sendOffer: function() {
+    var self = this;
+    this.pc
+      .createOffer()
+      .then(offer => {
+        self.pc.setLocalDescription(offer);
+        //TODO: remove type check when comms implemented on pairing device
+        (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {
+          target: self.id,
+          details: offer
+        });
+      })
+      .catch(err => this.offerFailed(err));
+  },
+  sendAnswer: function() {
+    this.pc
+      .createAnswer()
+      .then(offer => {
+        this.pc.setLocalDescription(offer);
+        (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {
+          target: this.id,
+          details: offer
+        });
+      })
+      .catch(err => this.answerFailed(err));
+  },
+  answerFailed: function(e) {
+    console.log('failed answer', e);
+  },
+  offerFailed: function(e) {
+    console.log('failed offer', e);
+  },
+  handleRequest: function(data) {
+    let details = data.details;
+    switch (details.type) {
+      case 'offer':
+        this.handleOffer(details);
+        break;
 
-                            case 'answer':
-                              this.handleAnswer(details);
-                              break;
+      case 'answer':
+        this.handleAnswer(details);
+        break;
 
-                            case 'candidate':
-                              this.addCandidate(details);
-                          }
-                       },
-          handleOffer: function(details) {
-                         var self = this;
-                         if (!this.pc.remoteDescription || !this.pc.remoteDescription.sdp) {
-                           this.pc.setRemoteDescription(details)
-                             .then(() => this.emit('remoteDescription.set'))
-                             .catch(err => this.emit('remoteDescription.failed', err));
-                         }
-                         this.sendAnswer();
-                       },
-         handleAnswer: function(details) {
-                         this.pc.setRemoteDescription(new RTCSessionDescription(details));
-                       },
-         addCandidate: function(details) {
-                         let candidate = new RTCIceCandidate({sdpMLineIndex:details.sdpMLineIndex, sdpMid:details.sdpMid, candidate:details.candidate});
-                         if (this.pc.remoteDescription) {
-                           this.pc.addIceCandidate(candidate);
-                         }
-                         else {
-                           this.candidateQueue.push(candidate);
-                         }
-                       },
+      case 'candidate':
+        this.addCandidate(details);
+    }
+  },
+  handleOffer: function(details) {
+    var self = this;
+    if (!this.pc.remoteDescription || !this.pc.remoteDescription.sdp) {
+      this.pc
+        .setRemoteDescription(details)
+        .then(() => this.emit('remoteDescription.set'))
+        .catch(err => this.emit('remoteDescription.failed', err));
+    }
+    this.sendAnswer();
+  },
+  handleAnswer: function(details) {
+    this.pc.setRemoteDescription(new RTCSessionDescription(details));
+  },
+  addCandidate: function(details) {
+    let candidate = new RTCIceCandidate({
+      sdpMLineIndex: details.sdpMLineIndex,
+      sdpMid: details.sdpMid,
+      candidate: details.candidate
+    });
+    if (this.pc.remoteDescription) {
+      this.pc.addIceCandidate(candidate);
+    } else {
+      this.candidateQueue.push(candidate);
+    }
+  },
   captureEvents: function() {
     this.pc.onicecandidate = evt => {
       if (evt.candidate) {
         details = {
-                   type: 'candidate',
+          type: 'candidate',
           sdpMLineIndex: evt.candidate.sdpMLineIndex,
-                 sdpMid: evt.candidate.sdpMid,
-              candidate: evt.candidate.candidate
+          sdpMid: evt.candidate.sdpMid,
+          candidate: evt.candidate.candidate
         };
-        (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {target: this.id, details: details});
+        (typeof comms != 'undefined' ? comms : socket).emit('peerConnection', {
+          target: this.id,
+          details: details
+        });
       }
     };
 
@@ -265,7 +276,10 @@ PeerConnection.prototype = {
     });
 
     this.pc.oniceconnectionstatechange = e => {
-      if (['connected', 'completed'].indexOf(this.pc.iceConnectionState) > -1 && !this.noVideoElement) {
+      if (
+        ['connected', 'completed'].indexOf(this.pc.iceConnectionState) > -1 &&
+        !this.noVideoElement
+      ) {
         //hacky...
         if (this.stream && !this.streamElement) {
           this.streamElement = this.stream;
@@ -279,7 +293,7 @@ PeerConnection.prototype = {
       });
       this.candidateQueue = [];
     });
-    this.on('remoteDescription.failed', e => console.log("rdp failed", e));
+    this.on('remoteDescription.failed', e => console.log('rdp failed', e));
   },
   record: function() {
     this.dataChannel.send('record');
@@ -293,7 +307,7 @@ PeerConnection.prototype = {
     if (this.recorder) {
       this.dataChannel.send('stopRecording');
       this.recorder.stop();
-      this.emit('record.prepare', {id: this.id, label: 'Remote peer', flavor: 'remote'});
+      this.emit('record.prepare', { id: this.id, label: 'Remote peer', flavor: 'remote' });
     }
   },
   transferFile: function() {
@@ -306,29 +320,28 @@ PeerConnection.prototype = {
           this.dataChannel.send(e.target.result);
           if (file.size > offset + e.target.result.byteLength) {
             setTimeout(sliceFile, 0, offset + this.fileChunk);
-          }
-          else {
+          } else {
             this.dataChannel.send('filetransfer.complete');
           }
-        }
+        };
       })(file);
       let slice = file.slice(offset, offset + this.fileChunk);
       reader.readAsArrayBuffer(slice);
-    }
+    };
     sliceFile(0);
   },
   handleIncomingTransfer: function(data) {
     this.mediaBuffer.push(data);
     if (this.progress) {
       this.mediaDetails.current += data.byteLength;
-      let currentProgress = 515 - (this.mediaDetails.current / this.mediaDetails.size) * 515 >> 0;
+      let currentProgress = (515 - (this.mediaDetails.current / this.mediaDetails.size) * 515) >> 0;
       this.progress.setAttributeNS(null, 'stroke-dashoffset', currentProgress);
     }
   },
   saveBuffer: function() {
-    this.mediaBlob = new Blob(this.mediaBuffer, {type: 'video/webm'});
+    this.mediaBlob = new Blob(this.mediaBuffer, { type: 'video/webm' });
     let url = URL.createObjectURL(this.mediaBlob);
-    this.emit('record.raw', {url: url, media: this.mediaBlob, id: this.id});
+    this.emit('record.raw', { url: url, media: this.mediaBlob, id: this.id });
   },
   setCanvasDimensions: function(dims, numAttempts) {
     if (!this.canvas) {
@@ -354,13 +367,12 @@ PeerConnection.prototype = {
         }
         let parentHeight = this.displayCanvas.parentNode.clientHeight;
         this.displayCanvas.style.width = '100%';
-        this.displayCanvas.style.height = (parentWidth / aspectRatio >> 0) + 'px';
+        this.displayCanvas.style.height = ((parentWidth / aspectRatio) >> 0) + 'px';
         this.displayCanvas.width = parentWidth;
-        this.displayCanvas.height = parentWidth / aspectRatio >> 0;
+        this.displayCanvas.height = (parentWidth / aspectRatio) >> 0;
         this.displayScale = parentWidth / dims.width;
-        this.displayCanvas.style.top = (parentHeight - parentWidth/aspectRatio)/2 + 'px';
-      }
-      else {
+        this.displayCanvas.style.top = (parentHeight - parentWidth / aspectRatio) / 2 + 'px';
+      } else {
         let parentHeight = this.displayCanvas.parentNode.clientHeight;
         if (!parentHeight && (!numAttempts || numAttempts < 3)) {
           numAttempts = numAttempts || 0;
@@ -370,11 +382,11 @@ PeerConnection.prototype = {
         }
         let parentWidth = this.displayCanvas.parentNode.clientWidth;
         this.displayCanvas.style.height = '100%';
-        this.displayCanvas.style.width = (parentHeight * aspectRatio >> 0) + 'px';
-        this.displayCanvas.width = parentHeight * aspectRatio >> 0;
+        this.displayCanvas.style.width = ((parentHeight * aspectRatio) >> 0) + 'px';
+        this.displayCanvas.width = (parentHeight * aspectRatio) >> 0;
         this.displayCanvas.height = parentHeight;
         this.displayScale = parentHeight / dims.height;
-        this.displayCanvas.style.left = (parentWidth - parentHeight*aspectRatio)/2 + 'px';
+        this.displayCanvas.style.left = (parentWidth - parentHeight * aspectRatio) / 2 + 'px';
       }
       this.displayCtx = this.displayCanvas.getContext('2d');
       this.displayCtx.lineWidth = dims.lineWidth * this.displayScale;
@@ -388,7 +400,7 @@ PeerConnection.prototype = {
       return {
         x: pt.x * this.displayScale,
         y: pt.y * this.displayScale
-      }
+      };
     });
 
     let p0 = pts[0];
@@ -402,12 +414,12 @@ PeerConnection.prototype = {
     let mid = {};
     for (let i = 1, n = pts.length - 1; i < n; i++) {
       mid = {
-              x: (p0.x + p1.x)/2,
-              y: (p0.y + p1.y)/2
-            };
+        x: (p0.x + p1.x) / 2,
+        y: (p0.y + p1.y) / 2
+      };
       this.displayCtx.quadraticCurveTo(p0.x, p0.y, mid.x, mid.y);
       p0 = pts[i];
-      p1 = pts[i+1];
+      p1 = pts[i + 1];
     }
     this.displayCtx.lineTo(mid.x, mid.y);
     this.displayCtx.stroke();
@@ -419,7 +431,7 @@ PeerConnection.prototype = {
       return {
         x: pt.x * this.displayScale,
         y: pt.y * this.displayScale
-      }
+      };
     });
 
     this.displayCtx.globalCompositeOperation = 'destination-out';
@@ -442,11 +454,9 @@ function setChannelEvents() {
   }
 
   channel.onopen = e => {
-    channel.send("ping");
+    channel.send('ping');
     if (this.isCaller) {
-      channel.send(JSON.stringify(
-        {event: 'capabilities', payload: myCapabilities}
-      ));
+      channel.send(JSON.stringify({ event: 'capabilities', payload: myCapabilities }));
     }
   };
 
@@ -460,16 +470,15 @@ function setChannelEvents() {
     try {
       json = JSON.parse(e.data);
       event = json.event;
-    } catch(e) {
-    }
+    } catch (e) {}
 
-    switch(event) {
+    switch (event) {
       case 'ping':
         channel.send('pong');
         break;
 
       case 'pong':
-        utils.log("Communications channel opened");
+        utils.log('Communications channel opened');
         this.emit('channel.opened');
         break;
 
@@ -490,12 +499,12 @@ function setChannelEvents() {
 
       case 'request.filetransfer':
         let response = {
-            event: 'request.filetransfer.accepted',
+          event: 'request.filetransfer.accepted',
           payload: {
-               size: recorder.result.size,
+            size: recorder.result.size,
             current: 0
           }
-        }
+        };
         channel.send(JSON.stringify(response));
         this.transferFile();
         break;
@@ -533,5 +542,5 @@ function setChannelEvents() {
           this.handleIncomingTransfer(e.data);
         }
     }
-  }
+  };
 }

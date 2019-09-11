@@ -7,7 +7,7 @@ class EventEmitter {
       get: function() {
         return _completeFns;
       }
-    })
+    });
 
     Object.defineProperty(this, 'onceFns', {
       get: function() {
@@ -23,14 +23,14 @@ class EventEmitter {
 
     let token = null;
     do {
-      token = (Math.random() + 1).toString(36).substring(2,10);
+      token = (Math.random() + 1).toString(36).substring(2, 10);
     } while (Object.keys(this.completeFns).indexOf(token) > -1);
 
-    fnObj = typeof fnObj === 'function' ? {fn: fnObj, scope: null} : fnObj;
+    fnObj = typeof fnObj === 'function' ? { fn: fnObj, scope: null } : fnObj;
     this.completeFns[ev][token] = {
       scope: fnObj.scope,
-         fn: fnObj.fn
-    }
+      fn: fnObj.fn
+    };
 
     return token;
   }
@@ -42,14 +42,14 @@ class EventEmitter {
 
     let token = null;
     do {
-      token = (Math.random() + 1).toString(36).substring(2,10);
+      token = (Math.random() + 1).toString(36).substring(2, 10);
     } while (Object.keys(this.completeFns).indexOf(token) > -1);
 
-    fnObj = typeof fnObj === 'function' ? {fn: fnObj, scope: null} : fnObj;
+    fnObj = typeof fnObj === 'function' ? { fn: fnObj, scope: null } : fnObj;
     this.onceFns[ev][token] = {
       scope: fnObj.scope,
-         fn: fnObj.fn
-    }
+      fn: fnObj.fn
+    };
   }
 
   off(ev, token) {
@@ -76,7 +76,7 @@ class EventEmitter {
           let fn = this[fnType][ev][key].fn;
           (function() {
             fn.apply(scope, val);
-          }.bind(scope))();
+          }.bind(scope)());
         }
       }
     });

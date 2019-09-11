@@ -1,5 +1,5 @@
 var SpeechToText = function(audioAnalyser) {
-  var Recog = (window.webkitSpeechRecognition || window.SpeechRecognition);
+  var Recog = window.webkitSpeechRecognition || window.SpeechRecognition;
   this.isCapable = !!Recog;
   this.audioAnalyser = audioAnalyser;
   this.transcript = [];
@@ -71,13 +71,15 @@ var SpeechToText = function(audioAnalyser) {
       if (!isMicActive) {
         this.micActive = true;
       }
-    }
-    else if (magnitude < 2 && this.micActive && !micTimeout) {
-      micTimeout = setTimeout(function() {
-        this.micActive = false;
-        clearTimeout(micTimeout);
-        micTimeout = null;
-      }.bind(this), 1000);
+    } else if (magnitude < 2 && this.micActive && !micTimeout) {
+      micTimeout = setTimeout(
+        function() {
+          this.micActive = false;
+          clearTimeout(micTimeout);
+          micTimeout = null;
+        }.bind(this),
+        1000
+      );
     }
   });
 
@@ -85,11 +87,11 @@ var SpeechToText = function(audioAnalyser) {
   Object.defineProperty(this, 'subscriptions', {
     get: function() {
       return _subscriptions;
-    },
+    }
   });
 
   this.notifyDependencies('capability', this.isCapable);
-}
+};
 
 SpeechToText.prototype = {
   constructor: SpeechToText,
@@ -137,8 +139,7 @@ SpeechToText.prototype = {
   },
   off: function(ev, token) {
     var result = false;
-    if (this.subscriptions.hasOwnProperty(ev) &&
-         this.subscriptions[ev].hasOwnProperty(token)) {
+    if (this.subscriptions.hasOwnProperty(ev) && this.subscriptions[ev].hasOwnProperty(token)) {
       delete this.subscriptions[ev][token];
       result = true;
     }
@@ -151,4 +152,4 @@ SpeechToText.prototype = {
       }
     }
   }
-}
+};

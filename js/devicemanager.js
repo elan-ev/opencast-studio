@@ -1,5 +1,4 @@
 class DeviceManager extends EventEmitter {
-
   constructor() {
     super();
     this.video = {};
@@ -13,18 +12,18 @@ class DeviceManager extends EventEmitter {
     });
 
     this.desktop.on('stream', stream => {
-      this.emit('stream', {id: 'desktop', stream: stream});
+      this.emit('stream', { id: 'desktop', stream: stream });
       if (this.isRecording) {
         this.desktop.record();
       }
     });
     this.desktop.on('record.stop.stream.remove', stream => {
-      this.emit('record.stop.stream.remove', {id: 'desktop', stream: stream});
-    })
+      this.emit('record.stop.stream.remove', { id: 'desktop', stream: stream });
+    });
 
     Object.defineProperty(this, 'devices', {
       get: function() {
-        let devices = {desktop: this.desktop};
+        let devices = { desktop: this.desktop };
         for (let key in this.video) {
           if (key !== 'default') {
             devices[key] = this.video[key];
@@ -48,56 +47,60 @@ class DeviceManager extends EventEmitter {
       set: function(bool) {
         if (typeof bool == 'boolean') {
           _isRecording = bool;
-        }
-        else {
-          throw new Error('Please provide of a boolean value for assignment instead of this ' + (typeof bool));
+        } else {
+          throw new Error(
+            'Please provide of a boolean value for assignment instead of this ' + typeof bool
+          );
         }
       }
     });
 
-    navigator.mediaDevices.enumerateDevices()
-      .then(devices => {
-        ['audio', 'video'].forEach(deviceType => {
-          this[deviceType] = devices.filter(device => device.kind === `${deviceType}input`)
-                               .reduce((result, info) => {
-                                 result[info.deviceId] = new Device(info);
-                                 result[info.deviceId].on('stream', stream => {
-                                   this.emit('stream', {id: info.deviceId, stream: stream});
-                                   if (this.isRecording) {
-                                     result[info.deviceId].record();
-                                   }
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+      ['audio', 'video'].forEach(deviceType => {
+        this[deviceType] = devices
+          .filter(device => device.kind === `${deviceType}input`)
+          .reduce((result, info) => {
+            result[info.deviceId] = new Device(info);
+            result[info.deviceId].on('stream', stream => {
+              this.emit('stream', { id: info.deviceId, stream: stream });
+              if (this.isRecording) {
+                result[info.deviceId].record();
+              }
 
-                                   if (stream.getAudioTracks().length > 0) {
-                                     this.desktop.attachAudioTrack(stream);
-                                   }
-                                 });
-                                 result[info.deviceId].on('record.stop.stream.remove', stream => {
-                                   this.emit('record.stop.stream.remove', {id: info.deviceId, stream:stream});
-                                 })
-                                 return result;
-                               }, {});
-        });
-
-        this.emit('enumerated', this.devices);
-
-        for (let dev in this.devices) {
-          this.devices[dev].on('record.prepare', label =>
-            this.emit('record.prepare', {
-               label: label,
-                  id: dev,
-              flavor: dev === 'desktop' ? 'Presentation' : 'Presenter'
-            })
-          );
-          this.devices[dev].on('record.complete', obj =>
-            this.emit('record.complete', {
-               media: obj.media,
-                 url: obj.url,
-                  id: dev,
-            })
-          );
-          this.devices[dev].on('stream.mute', () => this.emit('stream.mute', dev));
-        }
+              if (stream.getAudioTracks().length > 0) {
+                this.desktop.attachAudioTrack(stream);
+              }
+            });
+            result[info.deviceId].on('record.stop.stream.remove', stream => {
+              this.emit('record.stop.stream.remove', {
+                id: info.deviceId,
+                stream: stream
+              });
+            });
+            return result;
+          }, {});
       });
+
+      this.emit('enumerated', this.devices);
+
+      for (let dev in this.devices) {
+        this.devices[dev].on('record.prepare', label =>
+          this.emit('record.prepare', {
+            label: label,
+            id: dev,
+            flavor: dev === 'desktop' ? 'Presentation' : 'Presenter'
+          })
+        );
+        this.devices[dev].on('record.complete', obj =>
+          this.emit('record.complete', {
+            media: obj.media,
+            url: obj.url,
+            id: dev
+          })
+        );
+        this.devices[dev].on('stream.mute', () => this.emit('stream.mute', dev));
+      }
+    });
   }
 
   connect(id, opts) {
@@ -113,7 +116,7 @@ class DeviceManager extends EventEmitter {
       return this.audio[id].connect(opts);
     }
 
-    return new Promise((resolve, reject) => reject("no such device"));
+    return new Promise((resolve, reject) => reject('no such device'));
   }
 
   record() {
@@ -145,19 +148,18 @@ class DeviceManager extends EventEmitter {
   changeResolution(id, res) {
     return new Promise((resolve, reject) => {
       if (this.devices.hasOwnProperty(id)) {
-        this.devices[id].changeResolution(res)
-          .then(stream => resolve({id: id, stream: stream}))
+        this.devices[id]
+          .changeResolution(res)
+          .then(stream => resolve({ id: id, stream: stream }))
           .catch(err => reject(err));
-      }
-      else {
-        reject("no such device");
+      } else {
+        reject('no such device');
       }
     });
   }
 }
 
 class Device extends EventEmitter {
-
   constructor(device) {
     super();
 
@@ -185,32 +187,38 @@ class Device extends EventEmitter {
         return _info;
       },
       configurable: false,
-      enumerable: false,
+      enumerable: false
     });
 
     this.deviceType = device.deviceType || (device.kind === 'audioinput' ? 'audio' : 'video');
 
-    let _audConstraints = {audio: {exact: device.deviceId}};
-    let _vidConstraints = {audio: true, video: {exact: device.deviceId, facingMode: "user"}};
+    let _audConstraints = { audio: { exact: device.deviceId } };
+    let _vidConstraints = {
+      audio: true,
+      video: { exact: device.deviceId, facingMode: 'user' }
+    };
     let _desktop = {
       firefox: {
-        video: {mediaSource: 'screen', frameRate: {ideal: 10, max: 15}}
+        video: { mediaSource: 'screen', frameRate: { ideal: 10, max: 15 } }
       },
       chrome: {
         audio: false,
-        video: { mandatory: {
-                   chromeMediaSource: 'desktop',
-                   chromeMediaSourceId: null,
-                   maxWidth: window.screen.width,
-                   maxHeight: window.screen.height
-                 }
-               }
+        video: {
+          mandatory: {
+            chromeMediaSource: 'desktop',
+            chromeMediaSourceId: null,
+            maxWidth: window.screen.width,
+            maxHeight: window.screen.height
+          }
+        }
       },
       other: null
-    }
-    let _browser = window.hasOwnProperty('InstallTrigger') ? 'firefox' : (
-                     window.hasOwnProperty('chrome') && chrome.app ? 'chrome' : 'other'
-                   );
+    };
+    let _browser = window.hasOwnProperty('InstallTrigger')
+      ? 'firefox'
+      : window.hasOwnProperty('chrome') && chrome.app
+      ? 'chrome'
+      : 'other';
 
     this.isChrome = _browser === 'chrome';
 
@@ -222,7 +230,7 @@ class Device extends EventEmitter {
 
     Object.defineProperty(this, 'constraints', {
       get: function() {
-        switch(this.deviceType) {
+        switch (this.deviceType) {
           case 'audio':
             return _audConstraints;
 
@@ -248,8 +256,7 @@ class Device extends EventEmitter {
   connect(opts) {
     if (this.deviceType === 'desktop' && 'getDisplayMedia' in navigator.mediaDevices) {
       return this.connectDisplayMedia();
-    }
-    else if (this.deviceType === 'desktop' && this.isChrome) {
+    } else if (this.deviceType === 'desktop' && this.isChrome) {
       return this.connectChromeDesktop(opts);
     }
 
@@ -258,17 +265,22 @@ class Device extends EventEmitter {
       for (var key in opts) {
         if (this.deviceType === 'desktop') {
           this.constraints.video[key] = opts[key];
-        }
-        else {
+        } else {
           this.constraints[this.deviceType][key] = opts[key];
         }
       }
 
-      navigator.mediaDevices.getUserMedia(this.constraints)
+      navigator.mediaDevices
+        .getUserMedia(this.constraints)
         .then(stream => {
           if (!this.isChrome && this.deviceType === 'desktop') {
-            this.cachedAudioTracks.forEach(track =>
-              stream = new MediaStream([track, ...stream.getVideoTracks(), ...stream.getAudioTracks()])
+            this.cachedAudioTracks.forEach(
+              track =>
+                (stream = new MediaStream([
+                  track,
+                  ...stream.getVideoTracks(),
+                  ...stream.getAudioTracks()
+                ]))
             );
           }
           this.stream = stream;
@@ -281,13 +293,14 @@ class Device extends EventEmitter {
 
   connectDisplayMedia() {
     return new Promise((resolve, reject) => {
-      return navigator.mediaDevices.getDisplayMedia()
-               .then(stream => {
-                 this.stream = stream;
-                 this.cachedAudioTracks.forEach(track => this.stream.addTrack(track));
-                 resolve(stream);
-               })
-               .catch(err => reject(err));
+      return navigator.mediaDevices
+        .getDisplayMedia()
+        .then(stream => {
+          this.stream = stream;
+          this.cachedAudioTracks.forEach(track => this.stream.addTrack(track));
+          resolve(stream);
+        })
+        .catch(err => reject(err));
     });
   }
 
@@ -298,9 +311,12 @@ class Device extends EventEmitter {
           this.constraints.video.mandatory.chromeMediaSourceId = id;
           opts = opts || {};
           for (var key in opts) {
-            this.constraints.video.mandatory['max' + key.charAt(0).toUpperCase() + key.substring(1)] = opts[key];
+            this.constraints.video.mandatory[
+              'max' + key.charAt(0).toUpperCase() + key.substring(1)
+            ] = opts[key];
           }
-          navigator.mediaDevices.getUserMedia(this.constraints)
+          navigator.mediaDevices
+            .getUserMedia(this.constraints)
             .then(stream => {
               this.stream = stream;
               this.cachedAudioTracks.forEach(track => this.stream.addTrack(track));
@@ -310,45 +326,50 @@ class Device extends EventEmitter {
         },
         scope: this
       });
-      window.postMessage({
-        type: 'SS_UI_REQUEST',
-        text: 'start',
-         url: location.origin
-      }, '*');
+      window.postMessage(
+        {
+          type: 'SS_UI_REQUEST',
+          text: 'start',
+          url: location.origin
+        },
+        '*'
+      );
     });
   }
 
   attachAudioTrack(streamOrTrack) {
-    if (!(streamOrTrack instanceof MediaStream) &&
-        !(streamOrTrack instanceof MediaStreamTrack)) {
+    if (!(streamOrTrack instanceof MediaStream) && !(streamOrTrack instanceof MediaStreamTrack)) {
       return;
     }
 
     try {
-      let audioTrack = streamOrTrack instanceof MediaStreamTrack ?
-                         streamOrTrack :
-                         streamOrTrack.getAudioTracks()[0];
+      let audioTrack =
+        streamOrTrack instanceof MediaStreamTrack
+          ? streamOrTrack
+          : streamOrTrack.getAudioTracks()[0];
 
       if (!this.stream) {
         this.cachedAudioTracks.push(audioTrack);
-      }
-      else {
+      } else {
         if (this.isChrome) {
           this.stream.addTrack(audioTrack);
-        }
-        else {
-          this.stream = new MediaStream([audioTrack, ...this.stream.getVideoTracks(), ...this.stream.getAudioTracks()])
+        } else {
+          this.stream = new MediaStream([
+            audioTrack,
+            ...this.stream.getVideoTracks(),
+            ...this.stream.getAudioTracks()
+          ]);
         }
         this.emit('stream.mute');
       }
-    } catch(e) {
+    } catch (e) {
       //MediaStream has no audio tracks
     }
   }
 
   changeResolution(res) {
     if (typeof res === 'string') {
-      res = {width: parseInt(res) * 4 / 3, height: parseInt(res)};
+      res = { width: (parseInt(res) * 4) / 3, height: parseInt(res) };
     }
 
     this.stream.getVideoTracks().forEach(track => track.stop());
@@ -368,8 +389,7 @@ class Device extends EventEmitter {
         this.recorder = null;
       });
       this.recorder.start(1000);
-    }
-    else {
+    } else {
       this.recorder.resume();
     }
   }

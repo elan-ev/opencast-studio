@@ -1,0 +1,22 @@
+{
+    "name": "opencast-studio",
+    "private": "true",
+    "version": "1.0.0",
+    "description": "Web-based recording studio for Opencast",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/elan-ev/opencast-studio.git"
+    },
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/elan-ev/opencast-studio/issues"
+    },
+    "homepage": "https://github.com/elan-ev/opencast-studio#readme",
+    "devDependencies": {
+        "eslint": "^6.3.0",
+    }
+}

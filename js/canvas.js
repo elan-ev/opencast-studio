@@ -1,5 +1,4 @@
 class Canvas extends EventEmitter {
-
   constructor(canvas) {
     super();
     this.canvas = canvas;
@@ -34,7 +33,7 @@ class Canvas extends EventEmitter {
 
   setPointer(e) {
     e.preventDefault();
-    switch(e.pointerType) {
+    switch (e.pointerType) {
       case 'pen':
         this.ctx.lineWidth = this.lineWidth;
         this.ctx.globalCompositeOperation = 'source-over';
@@ -42,8 +41,8 @@ class Canvas extends EventEmitter {
         this.canvas.addEventListener('touchmove', this.boundStroke, false);
         let xCoord = e.layerX >> 0;
         let yCoord = e.layerY >> 0;
-        this.strokePts = [{x: xCoord, y: yCoord}];
-        this.streamPts = [{x: xCoord, y: yCoord}];
+        this.strokePts = [{ x: xCoord, y: yCoord }];
+        this.streamPts = [{ x: xCoord, y: yCoord }];
         this.ctx.beginPath();
         this.ctx.moveTo(xCoord, yCoord);
         this.ctx.lineTo(xCoord, yCoord);
@@ -54,16 +53,16 @@ class Canvas extends EventEmitter {
           this.ctx.lineWidth = this.eraseWidth;
           this.ctx.globalCompositeOperation = 'destination-out';
           this.canvas.addEventListener('touchmove', this.boundErase, false);
-          this.erasePts = [{x: e.layerX >> 0, y: e.layerY >> 0}];
+          this.erasePts = [{ x: e.layerX >> 0, y: e.layerY >> 0 }];
           this.ctx.beginPath();
           this.ctx.moveTo(e.layerX >> 0, e.layerY >> 0);
           break;
         }
-    };
+    }
   }
 
   removePointer(e) {
-    switch(e.pointerType) {
+    switch (e.pointerType) {
       case 'pen':
         this.isPen = false;
         this.canvas.removeEventListener('touchmove', this.boundStroke, false);
@@ -90,8 +89,8 @@ class Canvas extends EventEmitter {
   moveStroke(e) {
     let xCoord = e.targetTouches[0].clientX >> 0;
     let yCoord = (e.targetTouches[0].clientY >> 0) - this.offset.top;
-    this.strokePts.push({x: xCoord, y: yCoord});
-    this.streamPts.push({x: xCoord, y: yCoord});
+    this.strokePts.push({ x: xCoord, y: yCoord });
+    this.streamPts.push({ x: xCoord, y: yCoord });
     let p0 = this.strokePts[0];
     let p1 = this.strokePts[1];
     this.ctx.beginPath();
@@ -105,12 +104,12 @@ class Canvas extends EventEmitter {
     let mid = {};
     for (let i = 1, n = this.strokePts.length - 1; i < n; i++) {
       mid = {
-              x: (p0.x + p1.x)/2,
-              y: (p0.y + p1.y)/2
-            };
+        x: (p0.x + p1.x) / 2,
+        y: (p0.y + p1.y) / 2
+      };
       this.ctx.quadraticCurveTo(p0.x, p0.y, mid.x, mid.y);
       p0 = this.strokePts[i];
-      p1 = this.strokePts[i+1];
+      p1 = this.strokePts[i + 1];
     }
     this.ctx.lineTo(mid.x, mid.y);
     this.ctx.stroke();
@@ -127,6 +126,6 @@ class Canvas extends EventEmitter {
     this.ctx.stroke();
     this.ctx.beginPath();
     this.ctx.moveTo(xCoord, yCoord);
-    this.erasePts.push({x: xCoord, y: yCoord});
+    this.erasePts.push({ x: xCoord, y: yCoord });
   }
 }
