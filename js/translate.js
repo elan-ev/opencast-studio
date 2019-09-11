@@ -1,3 +1,6 @@
+import EventEmitter from './eventemitter';
+import utils from './utils';
+
 class TranslationService extends EventEmitter {
   constructor() {
     super();
@@ -19,8 +22,8 @@ class TranslationService extends EventEmitter {
           _lang = newLang;
           if (_languages) {
             _chosen = _languages
-                          .filter(current => _lang.indexOf(current.short) > -1)
-                          .reduce((chosen, check) => chosen = check, {});
+              .filter(current => _lang.indexOf(current.short) > -1)
+              .reduce((chosen, check) => (chosen = check), {});
             localStorage.setItem('language', newLang);
             let emitObj = JSON.parse(JSON.stringify(_chosen));
             emitObj.language = _lang;
@@ -31,7 +34,7 @@ class TranslationService extends EventEmitter {
       }
     });
 
-    let _languages = JSON.parse(localStorage.getItem('languagePacks') || "[]");
+    let _languages = JSON.parse(localStorage.getItem('languagePacks') || '[]');
     Object.defineProperty(this, 'languages', {
       get: function() {
         return _languages;
@@ -42,8 +45,8 @@ class TranslationService extends EventEmitter {
           this.emit('translations.languages', langs);
           if (_lang) {
             _chosen = langs
-                        .filter(current => _lang.indexOf(current.short) > -1)
-                        .reduce((chosen, check) => chosen = check, {});
+              .filter(current => _lang.indexOf(current.short) > -1)
+              .reduce((chosen, check) => (chosen = check), {});
             let emitObj = JSON.parse(JSON.stringify(_chosen));
             emitObj.language = _lang;
             emitObj.translation = this[_lang] || this.en;
@@ -54,10 +57,9 @@ class TranslationService extends EventEmitter {
       }
     });
 
-    this.getTranslations()
-      .then(() => {
-        this.emit('translations.received');
-      });
+    this.getTranslations().then(() => {
+      this.emit('translations.received');
+    });
 
     this.setLanguages();
 
@@ -66,9 +68,10 @@ class TranslationService extends EventEmitter {
 
   getTranslations() {
     return new Promise((resolve, reject) => {
-      utils.xhr("/res/translations.json", {
+      utils
+        .xhr('/res/translations.json', {
           properties: {
-           responseType: 'json'
+            responseType: 'json'
           }
         })
         .then(translations => {
@@ -79,7 +82,7 @@ class TranslationService extends EventEmitter {
             }
           }
 
-          resolve(); 
+          resolve();
         })
         .catch(err => reject(err));
     });
@@ -87,11 +90,12 @@ class TranslationService extends EventEmitter {
 
   getLanguages() {
     return new Promise((resolve, reject) => {
-      utils.xhr("/res/languages.json", {
-           properties: {
-             responseType: 'json'
-           }
-         })
+      utils
+        .xhr('/res/languages.json', {
+          properties: {
+            responseType: 'json'
+          }
+        })
         .then(languages => resolve(languages))
         .catch(err => reject(err));
     });
@@ -99,7 +103,7 @@ class TranslationService extends EventEmitter {
 
   setLanguages() {
     this.getLanguages()
-      .then(languages => this.languages = languages)
+      .then(languages => (this.languages = languages))
       .catch(err => console.log(err));
   }
 
@@ -108,12 +112,8 @@ class TranslationService extends EventEmitter {
   }
 
   translate(phrase) {
-    return this[this.language][phrase] || this.en[phrase] || "";
+    return this[this.language][phrase] || this.en[phrase] || '';
   }
 }
 
-TranslationService.prototype = {
-  constructor: TranslationService,
-  getTranslations: function() {
-  }
-}
+export default TranslationService;

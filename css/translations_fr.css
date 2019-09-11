@@ -1,41 +1,41 @@
 [lang=fr] .bigButton[for=create]::after {
-  content: "Créer une vidéo";
+    content: "Créer une vidéo";
 }
 
 [lang=fr] .bigButton[for=edit]::after {
-  content: "Modifier une vidéo";  
+    content: "Modifier une vidéo";
 }
 
 [lang=fr] .extensionRequired label[for=desktopstream]::after {
-  content: "Cliquez pour installer l'extension d'écran";
+    content: "Cliquez pour installer l'extension d'écran";
 }
 
 [lang=fr] #streams::before {
-  content: 'Dispositifs';
+    content: 'Dispositifs';
 }
 
 [lang=fr] #addDevice::after {
-  content: 'Ajouter un dispositif';
+    content: 'Ajouter un dispositif';
 }
 
 [lang=fr] .recording #recordingTime::before {
-  content: 'Enregistrement';
+    content: 'Enregistrement';
 }
 
 [lang=fr] .paused.recording #recordingTime::before {
-  content: 'En pause';
+    content: 'En pause';
 }
 
 [lang=fr] #mergestreams:checked ~ label[for=mergestreams]::after {
-  content: "Ne vous inquiétez pas, \A tous les flux actifs seront enregistrés";
+    content: "Ne vous inquiétez pas, \A tous les flux actifs seront enregistrés";
 }
 
 #addDevice::before {
-  transform: scale(0.8) translateY(-0.5rem);
+    transform: scale(0.8) translateY(-0.5rem);
 }
 
 #addDevice::after {
-  line-height: 1rem;
-  max-width: 90%;
-  left: 5%;
+    line-height: 1rem;
+    max-width: 90%;
+    left: 5%;
 }
