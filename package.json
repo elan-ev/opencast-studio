@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "Web-based recording studio for Opencast",
     "scripts": {
-        "build": "webpack --mode development",
+        "build": "webpack --mode production",
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "webpack --mode development --watch"
     },
