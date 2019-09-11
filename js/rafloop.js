@@ -1,7 +1,7 @@
 const RAFLoop = function RAFLoop() {
   this.subscriptions = {};
   this.loop();
-}
+};
 
 RAFLoop.prototype = {
   constructor: RAFLoop,
@@ -26,7 +26,7 @@ RAFLoop.prototype = {
         fn: sub.fn,
         scope: sub.scope,
         active: true
-      }
+      };
 
       if (cb && typeof cb == 'function') {
         cb.call(sub.scope, subToken);
@@ -65,6 +65,7 @@ RAFLoop.prototype = {
     }
 
     return result;
-  },
+  }
+};
 
-}
+export default RAFLoop;
