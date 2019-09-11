@@ -544,3 +544,5 @@ function setChannelEvents() {
     }
   };
 }
+
+export default PeerConnection;

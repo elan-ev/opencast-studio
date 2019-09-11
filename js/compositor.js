@@ -1,3 +1,6 @@
+import EventEmitter from './eventemitter';
+import Recorder from './recorder';
+
 class Compositor extends EventEmitter {
   constructor(opts) {
     super();
@@ -276,3 +279,5 @@ class Compositor extends EventEmitter {
     });
   }
 }
+
+export default Compositor;

@@ -153,3 +153,5 @@ SpeechToText.prototype = {
     }
   }
 };
+
+export default SpeechToText;

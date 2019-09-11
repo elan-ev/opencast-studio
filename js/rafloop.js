@@ -67,3 +67,5 @@ RAFLoop.prototype = {
     return result;
   }
 };
+
+export default RAFLoop;

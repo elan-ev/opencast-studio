@@ -1,3 +1,12 @@
+import TranslationService from './translate';
+import { DeviceManager } from './devicemanager';
+import Compositor from './compositor';
+import RAFLoop from './rafloop';
+import AudioAnalyser from './audioanalyser';
+import { OpencastUploader, OpencastUploaderSettingsDialog } from './opencastuploader';
+import utils from './utils';
+import comms from './servercomms';
+
 const ts = new TranslationService();
 const deviceMgr = new DeviceManager();
 const compositor = new Compositor();
@@ -1050,7 +1059,7 @@ compositor.on('stream.remove', () => {
   app.removeStream('composite');
 });
 
-if (window.chrome && chrome.app) {
+if (window.chrome && window.chrome.app) {
   if (!navigator.mediaDevices || !('getDisplayMedia' in navigator.mediaDevices)) {
     let delay = setTimeout(() => {
       app.needsExtension = true;

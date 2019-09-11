@@ -291,3 +291,5 @@ OpencastUploaderSettingsDialog.prototype = {
     return loginPassword;
   }
 };
+
+export { OpencastUploader, OpencastUploaderSettingsDialog };

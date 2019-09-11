@@ -4,7 +4,9 @@
     "version": "1.0.0",
     "description": "Web-based recording studio for Opencast",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "build": "webpack --mode development",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "watch": "webpack --mode development --watch"
     },
     "repository": {
         "type": "git",
@@ -18,5 +20,7 @@
     "homepage": "https://github.com/elan-ev/opencast-studio#readme",
     "devDependencies": {
         "eslint": "^6.3.0",
+        "webpack": "^4.39.3",
+        "webpack-cli": "^3.3.8"
     }
 }

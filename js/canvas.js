@@ -1,3 +1,5 @@
+import EventEmitter from './eventemitter';
+
 class Canvas extends EventEmitter {
   constructor(canvas) {
     super();
@@ -129,3 +131,5 @@ class Canvas extends EventEmitter {
     this.erasePts.push({ x: xCoord, y: yCoord });
   }
 }
+
+export default Canvas;

@@ -1,3 +1,6 @@
+import EventEmitter from './eventemitter';
+import utils from './utils';
+
 class TranslationService extends EventEmitter {
   constructor() {
     super();
@@ -113,7 +116,4 @@ class TranslationService extends EventEmitter {
   }
 }
 
-TranslationService.prototype = {
-  constructor: TranslationService,
-  getTranslations: function() {}
-};
+export default TranslationService;

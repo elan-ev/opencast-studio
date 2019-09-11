@@ -1,3 +1,5 @@
+import EventEmitter from './eventemitter';
+
 class Recorder extends EventEmitter {
   constructor(stream, chosenCodec) {
     super();
@@ -82,3 +84,5 @@ class Recorder extends EventEmitter {
     this.isRecording = false;
   }
 }
+
+export default Recorder;

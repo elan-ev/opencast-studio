@@ -43,6 +43,7 @@ Communications.prototype = {
 };
 
 const comms = new Communications();
+export default comms;
 
 function managePeerConnection(data) {
   if (!peers[data.target]) {

@@ -164,3 +164,5 @@ AudioAnalyser.prototype = {
     this.delegations[type].push(fn);
   }
 };
+
+export default AudioAnalyser;

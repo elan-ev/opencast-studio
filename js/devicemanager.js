@@ -1,3 +1,6 @@
+import EventEmitter from './eventemitter';
+import Recorder from './recorder';
+
 class DeviceManager extends EventEmitter {
   constructor() {
     super();
@@ -412,3 +415,5 @@ class Device extends EventEmitter {
     this.recorder.pause();
   }
 }
+
+export { DeviceManager, Device };
