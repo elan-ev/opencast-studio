@@ -34,6 +34,42 @@
             </p>
 
 
+            <h2>How it works</h2>
+
+            Opencast Studio uses the recording capabilities build into browsers
+            to record audio and video streams. The whole recording happens in
+            the user's browser. No audio or video data is sent to Opencast
+            servers.  Finally, the recording is transferred directly from the
+            users browser to the target Opencast.
+
+
+            <h2>Allow Studio to interact with your Opencast</h2>
+
+            For Studio to work with your Opencast, your need to allow this on
+            your Opencast by serving a special HTTP header. The mechanism used
+            is called
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">
+                Cross-Origin Resource Sharing
+            </a>.
+
+            <p>
+            Here is a list of the required headers Nginx's configuration format:
+
+            <p>
+            <code>
+                # Basic open CORS for studio.opencast.org<br />
+                add_header Access-Control-Allow-Origin https://studio.opencast.org;<br />
+                add_header Access-Control-Allow-Methods 'GET, POST';<br />
+                add_header Access-Control-Allow-Credentials true;<br />
+                add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization';
+            </code>
+
+            <p>
+            For a complete configuration file, take a look at the <a
+                href="https://github.com/opencast/opencast-project-infrastructure/blob/9f09638e922d623cd4d3c91dd90aca39c421530d/ansible-allinone-demo-vm/roles/nginx/templates/nginx.conf#L158-L162">
+                test server configuration</a>.
+
+
             <h2>Credits</h2>
 
             Thanks to the following people and institutions for contributing to this
