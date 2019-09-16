@@ -6,7 +6,8 @@
     "scripts": {
         "build": "webpack --mode production",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "watch": "webpack --mode development --watch"
+        "watch": "webpack --mode development --watch",
+        "eslint": "eslint sw.js js"
     },
     "repository": {
         "type": "git",
