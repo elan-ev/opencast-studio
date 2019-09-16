@@ -1,6 +1,9 @@
 Opencast Studio
 ===============
 
+[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
+](https://travis-ci.com/elan-ev/opencast-studio)
+
 Web based audio/video studio using random devices lying around your house, with direct upload to Opencast.
 
 Demo at <https://studio.opencast.org>
