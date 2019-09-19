@@ -1,3 +1,5 @@
+import utils from './utils.js';
+
 function OpencastUploader(ocUploaderSettings) {
   this.server_url = ocUploaderSettings.getServerUrl();
   this.workflow_id = ocUploaderSettings.getWorkflowId();

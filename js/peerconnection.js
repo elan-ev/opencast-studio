@@ -1,3 +1,5 @@
+import utils from './utils.js';
+
 let pc_config = {
   iceServers: [
     { url: 'stun:stun.sipgate.net:3478' },
