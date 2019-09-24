@@ -26,8 +26,6 @@ class MediaDevices extends React.Component {
     this.requestUserMedia = this.requestUserMedia.bind(this);
   }
 
-  componentDidMount() {}
-
   componentDidUpdate(prevProps) {
     if (this.props.desktopStream !== prevProps.desktopStream) {
       this.desktopRef.srcObject = this.props.desktopStream;

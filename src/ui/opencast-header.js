@@ -1,7 +1,8 @@
+//; -*- mode: rjsx;-*-
 import React from "react";
 import styled from "styled-components/macro";
 import logo from "./opencast-studio.svg";
-import LanguageChooser from "./language-chooser";
+import LanguagesChooser from "./languages-chooser";
 
 const Header = styled.header`
   height: 3rem;
@@ -38,7 +39,7 @@ function OpencastHeader(props) {
     <Header>
       <Logo src={logo} alt="Opencast Studio" />
       <BetaBubble>beta</BetaBubble>
-      <LanguageChooser
+      <LanguagesChooser
         languages={props.languages}
         chosenLanguage={props.chosenLanguage}
         onSelectLanguage={props.onSelectLanguage}

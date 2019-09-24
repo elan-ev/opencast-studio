@@ -2,6 +2,8 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
+import FormField from './form-field';
+
 class OpencastUploaderSettingsDialog extends React.Component {
   constructor(props) {
     super(props);
@@ -33,67 +35,53 @@ class OpencastUploaderSettingsDialog extends React.Component {
         </header>
 
         <main>
-          <div className="field">
-            <label className="label">Opencast Server URL</label>
-            <div className="control">
-              <input
-                name="serverUrl"
-                value={this.state.serverUrl}
-                onChange={this.handleInputChange}
-                className="input"
-                type="text"
-                autoComplete="off"
-              />
-            </div>
-          </div>
+          <FormField label="Opencast Server URL">
+            <input
+              name="serverUrl"
+              value={this.state.serverUrl}
+              onChange={this.handleInputChange}
+              className="input"
+              type="text"
+              autoComplete="off"
+            />
+          </FormField>
 
-          <div className="field">
-            <label className="label">Workflow ID</label>
-            <div className="control">
-              <input
-                name="workflowId"
-                value={this.state.workflowId}
-                onChange={this.handleInputChange}
-                className="input"
-                type="text"
-                autoComplete="off"
-              />
-            </div>
-          </div>
+          <FormField label="Workflow ID">
+            <input
+              name="workflowId"
+              value={this.state.workflowId}
+              onChange={this.handleInputChange}
+              className="input"
+              type="text"
+              autoComplete="off"
+            />
+          </FormField>
 
-          <div className="field">
-            <label className="label">Opencast Username</label>
-            <div className="control">
-              <input
-                name="loginName"
-                value={this.state.loginName}
-                onChange={this.handleInputChange}
-                className="input"
-                type="text"
-                autoComplete="off"
-              />
-            </div>
-          </div>
+          <FormField label="Opencast Username">
+            <input
+              name="loginName"
+              value={this.state.loginName}
+              onChange={this.handleInputChange}
+              className="input"
+              type="text"
+              autoComplete="off"
+            />
+          </FormField>
 
-          <div className="field">
-            <label className="label">Opencast Passwort</label>
-            <div className="control">
-              <input
-                name="loginPassword"
-                value={this.state.loginPassword}
-                onChange={this.handleInputChange}
-                className="input"
-                type="password"
-                autoComplete="off"
-              />
-            </div>
-          </div>
+          <FormField label="Opencast Password">
+            <input
+              name="loginPassword"
+              value={this.state.loginPassword}
+              onChange={this.handleInputChange}
+              className="input"
+              type="password"
+              autoComplete="off"
+            />
+          </FormField>
         </main>
 
         <footer>
-          <button className="btn" onClick={this.handleSubmit}>
-            OK
-          </button>
+          <button onClick={this.handleSubmit}>OK</button>
         </footer>
       </div>
     );

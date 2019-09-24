@@ -1,120 +1,19 @@
+//; -*- mode: rjsx;-*-
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components/macro';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle, faStopCircle, faPauseCircle } from '@fortawesome/free-solid-svg-icons';
+import downloadBlob from '../download-blob';
+import OpencastUploader from '../opencast-uploader';
+import Recorder from '../recorder';
 
 import Clock from './clock';
-import Recorder from '../recorder';
+import PauseButton from './recording-buttons/pause';
+import RecordButton from './recording-buttons/record';
+import RecordingState from './recording-state';
 import SaveCreationDialog from './save-creation';
-import OpencastUploader from '../opencast-uploader';
+import StopButton from './recording-buttons/stop';
 
-const Button = styled.button`
-  border-radius: 0.25rem;
-  border: none;
-  position: relative;
-  margin: 0 0.5rem;
-  background: linear-gradient(to bottom, #ddd 0%, #f0f0f0 100%);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  font-size: 2.5rem;
-  line-height: 2.5rem;
-  padding: 0.25rem;
-  svg {
-    margin: 0;
-    padding: 0;
-    outline: none;
-  }
-`;
-
-const PauseButton = styled(function(props) {
-  return (
-    <Button className={props.className} onClick={props.onClick}>
-      <span className="fa-layers fa-fw">
-        <FontAwesomeIcon icon={faPauseCircle} />
-      </span>
-    </Button>
-  );
-})`
-  border-color: ${props => (props.recording ? 'black' : '#888')};
-  box-shadow: ${props => (props.paused ? 'inset 0 2px 3px rgba(0, 0, 0, 0.2)' : 'none')};
-`;
-
-const RecordButton = styled(function(props) {
-  return (
-    <Button className={props.className} onClick={props.onClick}>
-      <span className="fa-layers fa-fw">
-        <FontAwesomeIcon icon={faCircle} />
-        <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
-      </span>
-    </Button>
-  );
-})`
-  color: #bd181c;
-  svg + svg {
-    color: #e22319;
-  }
-
-  box-shadow: ${props => (props.recording ? 'inset 0 2px 3px rgba(0, 0, 0, 0.2)' : 'none')};
-`;
-
-const StopButton = styled(function(props) {
-  return (
-    <Button className={props.className} onClick={props.onClick}>
-      <FontAwesomeIcon icon={faStopCircle} />
-    </Button>
-  );
-})``;
-
-const RecorderState = styled(props => {
-  return (
-    <div className={props.className}>
-      {props.recording ? (props.paused ? 'Paused' : 'Recording') : ' Waiting '}
-    </div>
-  );
-})`
-  font-style: ${props => (props.recording && !props.paused ? 'italic' : 'normal')};
-  color: ${props => (props.recording ? (props.paused ? 'teal' : '#fe0001') : 'grey')};
-`;
-
-function click(node) {
-  try {
-    node.dispatchEvent(new MouseEvent('click'));
-  } catch (e) {
-    var evt = document.createEvent('MouseEvents');
-    evt.initMouseEvent(
-      'click',
-      true,
-      true,
-      window,
-      0,
-      0,
-      0,
-      80,
-      20,
-      false,
-      false,
-      false,
-      false,
-      0,
-      null
-    );
-    node.dispatchEvent(evt);
-  }
-}
-
-function downloadBlob(blob, name) {
-  var a = document.createElement('a');
-  a.download = name;
-  a.rel = 'noopener'; // tabnabbing
-  a.href = URL.createObjectURL(blob);
-  setTimeout(function() {
-    URL.revokeObjectURL(a.href);
-  }, 4e4); // 40s
-  setTimeout(function() {
-    click(a);
-  }, 0);
-}
 
 class RecordingControls extends React.Component {
   constructor(props) {
@@ -323,7 +222,7 @@ class RecordingControls extends React.Component {
         </div>
 
         <div>
-          <RecorderState paused={this.state.isPaused} recording={this.state.isRecording} />
+          <RecordingState paused={this.state.isPaused} recording={this.state.isRecording} />
           <Clock paused={this.state.isPaused} recording={this.state.isRecording} />
         </div>
 

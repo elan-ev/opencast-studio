@@ -4,53 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components/macro';
 import { faDownload, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 
-function Field(props) {
-  return (
-    <div className="field">
-      <label className="label">{props.label}</label>
-      <div className="control">{props.children}</div>
-    </div>
-  );
-}
+import FormField from './form-field';
+import RecordingPreview from './recording-preview';
 
-const Recording = ({ className, deviceType, title, type, url }) => {
-  const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
-  const downloadName = `${flavor} ${type} - ${title || 'Recording'}.webm`;
-
-  if (!url) {
-    return (
-      <a className={className} download={downloadName}>
-        {deviceType}
-      </a>
-    );
-  }
-
-  return (
-    <a className={className} target="_blank" download={downloadName} href={url}>
-      {deviceType}
-      <video src={url}></video>
-    </a>
-  );
-};
-
-const StyledRecording = styled(Recording)`
-  width: 8rem;
-  height: 6rem;
-  position: relative;
-  background: #ddd;
-  text-align: center;
-  padding: 0.5rem;
-  margin: 0 0.5rem 0.5rem 0;
-
-  video {
-    position: absolute;
-    max-width: 100%;
-    max-height: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-`;
 
 class SaveCreationDialog extends React.Component {
   constructor(props) {
@@ -82,23 +38,23 @@ class SaveCreationDialog extends React.Component {
         </header>
 
         <main>
-          <Field label="Title">
+          <FormField label="Title">
             <input
               name="title"
               autoComplete="off"
               value={this.props.recordingData.title}
               onChange={this.handleInputChange}
             />
-          </Field>
+          </FormField>
 
-          <Field label="Presenter">
+          <FormField label="Presenter">
             <input
               name="presenter"
               autoComplete="off"
               value={this.props.recordingData.presenter}
               onChange={this.handleInputChange}
             />
-          </Field>
+          </FormField>
         </main>
 
         <header>
@@ -108,7 +64,7 @@ class SaveCreationDialog extends React.Component {
         <main>
           <div id="recordingList">
             {this.props.desktopRecording && (
-              <StyledRecording
+              <RecordingPreview
                 deviceType="desktop"
                 title={this.props.recordingData.title}
                 type="video"
@@ -116,7 +72,7 @@ class SaveCreationDialog extends React.Component {
               />
             )}
             {this.props.videoRecording && (
-              <StyledRecording
+              <RecordingPreview
                 deviceType="video"
                 title={this.props.recordingData.title}
                 type="video"
@@ -167,29 +123,6 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
 
   header h1 {
     font-weight: 300;
-  }
-
-  .field:not(:last-child) {
-    margin-bottom: 0.75rem;
-  }
-
-  .control {
-    box-sizing: border-box;
-    clear: both;
-    font-size: 1rem;
-    position: relative;
-    text-align: left;
-  }
-
-  .label {
-    color: #363636;
-    display: block;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .label:not(:last-child) {
-    margin-bottom: 0.5em;
   }
 
   button {
