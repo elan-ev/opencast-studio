@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import languages from './languages';
-import GlobalStyle from './global-style';
-import MediaDevices from './media-devices';
-import OpencastHeader from './opencast-header';
-import RecordingControls from './recording-controls';
-import Toolbar from './toolbar';
-import Footer from './footer';
+import GlobalStyle from './style/global-style';
+import MediaDevices from './ui/media-devices';
+import OpencastHeader from './ui/opencast-header';
+import RecordingControls from './ui/recording-controls';
+import Toolbar from './ui/toolbar';
+import Footer from './ui/footer';
 
 const defaultUploadSettings = {
   serverUrl: 'https://develop.opencast.org/',

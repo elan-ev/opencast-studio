@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faStopCircle, faPauseCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Clock from './clock';
-import Recorder from './recorder';
+import Recorder from '../recorder';
 import SaveCreationDialog from './save-creation';
-import OpencastUploader from './opencast-uploader';
+import OpencastUploader from '../opencast-uploader';
 
 const Button = styled.button`
   border-radius: 0.25rem;
