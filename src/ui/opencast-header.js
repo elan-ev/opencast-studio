@@ -1,7 +1,6 @@
 //; -*- mode: rjsx;-*-
 import React from "react";
 import styled from "styled-components/macro";
-import logo from "./opencast-studio.svg";
 import LanguagesChooser from "./languages-chooser";
 
 const Header = styled.header`
@@ -37,7 +36,7 @@ const BetaBubble = styled.span`
 function OpencastHeader(props) {
   return (
     <Header>
-      <Logo src={logo} alt="Opencast Studio" />
+      <Logo src={process.env.PUBLIC_URL + '/opencast-studio.svg'} alt="Opencast Studio" />
       <BetaBubble>beta</BetaBubble>
       <LanguagesChooser
         languages={props.languages}
