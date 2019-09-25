@@ -9,6 +9,8 @@
     "babel-plugin-styled-components": "^1.10.6",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-intl": "^3.3.0",
+    "react-modal": "^3.10.1",
     "react-scripts": "3.1.2",
     "styled-components": "^4.4.0"
   },
@@ -32,8 +34,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "react-modal": "^3.10.1"
   }
 }
