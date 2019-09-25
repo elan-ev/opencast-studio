@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 
 import languages from './languages';
 import GlobalStyle from './style/global-style';
+import useLocalStorage from './use-local-storage';
 
 import Footer from './ui/footer';
 import OpencastHeader from './ui/opencast-header';
@@ -30,7 +31,10 @@ const defaultUploadSettings = {
 
 function App() {
   const [chosenLanguage, setChosenLanguage] = useState('en');
-  const [uploadSettings, setUploadSettings] = useState(defaultUploadSettings);
+  const [uploadSettings, setUploadSettings] = useLocalStorage(
+    'uploadSettings',
+    defaultUploadSettings
+  );
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleOpenUploadSettings = e => {
