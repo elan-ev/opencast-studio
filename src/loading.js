@@ -12,9 +12,9 @@ const Loading = props => {
           cy="96"
           fill="none"
           stroke="#00bdc4"
-          stroke-width="8"
-          stroke-dashoffset="0"
-          stroke-dasharray="515"
+          strokeWidth="8"
+          strokeDashoffset="0"
+          strokeDasharray="515"
         ></circle>
         <circle
           r="82"
@@ -22,9 +22,9 @@ const Loading = props => {
           cy="96"
           fill="none"
           stroke="white"
-          stroke-width="14"
-          stroke-dashoffset="20"
-          stroke-dasharray="515"
+          strokeWidth="14"
+          strokeDashoffset="20"
+          strokeDasharray="515"
         ></circle>
       </svg>
       <span>Loading...</span>
