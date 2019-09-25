@@ -7,7 +7,6 @@ import downloadBlob from '../download-blob';
 import OpencastUploader from '../opencast-uploader';
 import Recorder from '../recorder';
 
-import Clock from './clock';
 import PauseButton from './recording-buttons/pause';
 import RecordButton from './recording-buttons/record';
 import RecordingState from './recording-state';
@@ -216,10 +215,7 @@ class RecordingControls extends React.Component {
           />
         </div>
 
-        <div>
-          <RecordingState paused={this.state.isPaused} recording={this.state.isRecording} />
-          <Clock paused={this.state.isPaused} recording={this.state.isRecording} />
-        </div>
+        <RecordingState paused={this.state.isPaused} recording={this.state.isRecording} />
 
         <Modal
           isOpen={this.state.showModal}
