@@ -14,7 +14,6 @@ import RecordingState from './recording-state';
 import SaveCreationDialog from './save-creation';
 import StopButton from './recording-buttons/stop';
 
-
 class RecordingControls extends React.Component {
   constructor(props) {
     super(props);
@@ -140,13 +139,13 @@ class RecordingControls extends React.Component {
         // onsuccess
         () => {
           alert('Upload complete!');
-            this.handleDialogClose()
+          this.handleDialogClose();
         },
 
         // onloginfailed
         () => {
           alert('Login failed, Please check your Password!');
-          // TODO(mel) ocUploaderSettings.show();
+          this.props.handleOpenUploadSettings();
         },
 
         // onserverunreachable
@@ -156,14 +155,14 @@ class RecordingControls extends React.Component {
               'also check whether your Opencast Instance supports this site.'
           );
           console.log('Server unreachable: ', err);
-          // TODO(mel) ocUploaderSettings.show();
+          this.props.handleOpenUploadSettings();
         },
 
         // oninetorpermfailed
         err => {
           alert('The Internet Connection failed or you are missing necessary permissions.');
           console.log('Inet fail or Missing Permission: ', err);
-          // TODO(mel) ocUploaderSettings.show();
+          this.props.handleOpenUploadSettings();
         },
 
         title,

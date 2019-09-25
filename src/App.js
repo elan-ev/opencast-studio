@@ -86,6 +86,7 @@ function App() {
         uploadSettings={uploadSettings}
         recordingData={recordingData}
         setRecordingData={setRecordingData}
+        handleOpenUploadSettings={handleOpenUploadSettings}
       />
       <Footer />
 
