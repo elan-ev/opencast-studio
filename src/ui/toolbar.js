@@ -1,64 +1,22 @@
 //; -*- mode: rjsx;-*-
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Modal from "react-modal";
+import React from 'react';
+import styled from 'styled-components/macro';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCog,
   faExclamationCircle,
   faPlayCircle,
   faQuestionCircle
-} from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components/macro";
-import UploadSettings from "./upload-settings";
+} from '@fortawesome/free-solid-svg-icons';
 
 const Icon = styled(FontAwesomeIcon)`
   color: black;
 `;
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
-  }
-};
-
-function Toolbar({ className, uploadSettings, setUploadSettings }) {
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const handleOpenUploadSettings = e => {
-    setModalOpen(true);
-  };
-
-  const handleCloseUploadSettings = e => {
-    setModalOpen(false);
-  };
-
-  const handleUpdateUploadSettings = settings => {
-    setUploadSettings(settings);
-
-    handleCloseUploadSettings();
-  };
-
+function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
   return (
     <div className={className}>
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={handleCloseUploadSettings}
-        contentLabel="Opencast Upload Settings"
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
-        style={customStyles}
-      >
-        <UploadSettings
-          uploadSettings={uploadSettings}
-          updateUploadSettings={handleUpdateUploadSettings}
-        />
-      </Modal>
-
       <a href={uploadSettings.serverUrl} title="Go to Opencast">
         <Icon icon={faPlayCircle} />
       </a>

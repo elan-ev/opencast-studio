@@ -34,7 +34,6 @@ class RecordingControls extends React.Component {
       'handleStartResume',
       'handleStop',
       'handleDialogClose',
-      'handleSaveCreationCancel',
       'handleSaveCreationSave',
       'handleSaveCreationUpload'
     ].forEach(method => (this[method] = this[method].bind(this)));
@@ -116,10 +115,6 @@ class RecordingControls extends React.Component {
 
   handleDialogClose() {
     this.setState({ showModal: false });
-  }
-
-  handleSaveCreationCancel() {
-    this.handleDialogClose();
     this.resetRecordings();
   }
 
@@ -145,7 +140,7 @@ class RecordingControls extends React.Component {
         // onsuccess
         () => {
           alert('Upload complete!');
-          document.getElementById('toggleSaveCreationModal').checked = false;
+            this.handleDialogClose()
         },
 
         // onloginfailed
@@ -238,7 +233,7 @@ class RecordingControls extends React.Component {
             videoRecording={this.state.videoRecording}
             recordingData={this.props.recordingData}
             setRecordingData={this.props.setRecordingData}
-            handleCancel={this.handleSaveCreationCancel}
+            handleCancel={this.handleDialogClose}
             handleSave={this.handleSaveCreationSave}
             handleUpload={this.handleSaveCreationUpload}
           />
