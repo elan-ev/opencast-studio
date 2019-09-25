@@ -1,8 +1,9 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components/macro';
+import { useTranslation } from 'react-i18next';
 
 function startDisplayCapture(displayMediaOptions) {
   return navigator.mediaDevices.getDisplayMedia(displayMediaOptions).catch(err => {
@@ -18,111 +19,34 @@ function startUserCapture(userMediaOptions) {
   });
 }
 
-class MediaDevices extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.requestDisplayMedia = this.requestDisplayMedia.bind(this);
-    this.requestUserMedia = this.requestUserMedia.bind(this);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.desktopStream !== prevProps.desktopStream) {
-      this.desktopRef.srcObject = this.props.desktopStream;
-    }
-
-    if (this.props.videoStream !== prevProps.videoStream) {
-      this.videoRef.srcObject = this.props.videoStream;
-    }
-  }
-
-  requestDisplayMedia() {
-    startDisplayCapture({ video: true, audio: false }).then(desktopStream => {
-      this.desktopRef.srcObject = desktopStream;
-      this.props.setDesktopStream(desktopStream);
-    });
-  }
-
-  requestUserMedia() {
-    startUserCapture({ video: true, audio: true }).then(videoStream => {
-      console.log(videoStream);
-      this.videoRef.srcObject = videoStream;
-      this.props.setVideoStream(videoStream);
-    });
-  }
-
-  render() {
-    return (
-      <div className={this.props.className}>
-        <div
-          onClick={this.requestDisplayMedia}
-          data-title="Share desktop (no audio)"
-          className="mediadevice action desktopDevice"
-        >
-          <video
-            ref={desktopRef => {
-              this.desktopRef = desktopRef;
-            }}
-            autoPlay
-            muted
-          ></video>
-          <span className="placeholder">
-            <FontAwesomeIcon icon={faDesktop} />
-          </span>
-        </div>
-
-        <div
-          onClick={this.requestUserMedia}
-          className="mediadevice action videoDevice"
-          data-title="Share webcam (with microphone audio)"
-        >
-          <video
-            ref={videoRef => {
-              this.videoRef = videoRef;
-            }}
-            autoPlay
-            muted
-          ></video>
-          <span className="placeholder">
-            <FontAwesomeIcon icon={faVideo} className="fad" />
-          </span>
-        </div>
-      </div>
-    );
-  }
+function UnstyledMediaDevice({ className, onClick, title, deviceType, icon, stream }) {
+  const videoRef = useRef();
+  useEffect(() => {
+    videoRef.current.srcObject = stream;
+  });
+  return (
+    <div onClick={onClick} data-title={title} className={`mediadevice action ${className}`}>
+      <video ref={videoRef} autoPlay muted></video>
+      <span className="placeholder">
+        <FontAwesomeIcon icon={icon} />
+      </span>
+    </div>
+  );
 }
 
-const StyledMediaDevices = styled(MediaDevices)`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0 2rem;
+const MediaDevice = styled(UnstyledMediaDevice)`
+  background: #ddd;
   position: relative;
-  // pointer-events: none;
-  min-height: calc(22.5vw - 4rem);
-  transition: min-height 1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  visibility: visible;
+  max-height: calc(100vh - 14rem);
+  z-index: 0;
+  width: 45%;
+  transition: width 0.5s 0.5s;
+  cursor: pointer;
 
-  video {
-    outline: none;
-  }
-
-  .mediadevice {
-    background: #ddd;
-    position: relative;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    visibility: visible;
-    max-height: calc(100vh - 14rem);
-    z-index: 0;
-    width: 45%;
-    transition: width 0.5s 0.5s;
-  }
-
-  .action {
-    cursor: pointer;
-  }
-
-  .mediadevice:after {
+  :after {
     bottom: 0;
     color: #666;
     content: attr(data-title);
@@ -137,24 +61,20 @@ const StyledMediaDevices = styled(MediaDevices)`
     width: 100%;
   }
 
-  .mediadevice:before {
+  :before {
     display: block;
     margin-top: 75%;
     content: '';
   }
 
-  .mediadevice video,
-  .mediadevice audio {
+  video {
+    outline: none;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 2;
     background: transparent;
-  }
-
-  .desktopDevice.active {
-    background: black;
   }
 
   .placeholder {
@@ -165,17 +85,58 @@ const StyledMediaDevices = styled(MediaDevices)`
     height: 10rem;
     transform: translate(-50%, calc(-50% - 1rem));
     z-index: 1;
-
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 5rem;
     color: white;
   }
+`;
 
-  .active .placeholder {
-    display: none;
+function MediaDevices(props) {
+  const { t, i18n } = useTranslation();
+
+  function requestDisplayMedia() {
+    startDisplayCapture({ video: true, audio: false }).then(desktopStream => {
+      props.setDesktopStream(desktopStream);
+    });
   }
+
+  function requestUserMedia() {
+    startUserCapture({ video: true, audio: true }).then(videoStream => {
+      props.setVideoStream(videoStream);
+    });
+  }
+
+  return (
+    <div className={props.className}>
+      <MediaDevice
+        onClick={requestDisplayMedia}
+        title={t('share-desktop')}
+        deviceType="desktop"
+        icon={faDesktop}
+        stream={props.desktopStream}
+      />
+
+      <MediaDevice
+        onClick={requestUserMedia}
+        title={t('share-webcam')}
+        deviceType="video"
+        icon={faVideo}
+        stream={props.videoStream}
+      />
+    </div>
+  );
+}
+
+const StyledMediaDevices = styled(MediaDevices)`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 2rem;
+  position: relative;
+  min-height: calc(22.5vw - 4rem);
+  transition: min-height 1s;
 `;
 
 export default StyledMediaDevices;
