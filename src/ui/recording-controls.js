@@ -181,16 +181,6 @@ class RecordingControls extends React.Component {
     this.props.setVideoStream(null);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.desktopStream !== prevProps.desktopStream) {
-      // desktopStream changed
-    }
-
-    if (this.props.videoStream !== prevProps.videoStream) {
-      // videoStream changed
-    }
-  }
-
   render() {
     return (
       <div className={this.props.className}>

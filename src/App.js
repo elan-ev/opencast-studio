@@ -31,8 +31,8 @@ const defaultUploadSettings = {
 };
 
 const defaultRecordingData = {
-  title: 'lorem',
-  presenter: 'iüsum'
+  title: '',
+  presenter: ''
 };
 
 function App() {
