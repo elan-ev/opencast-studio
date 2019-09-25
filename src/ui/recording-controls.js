@@ -14,6 +14,11 @@ import RecordingState from './recording-state';
 import SaveCreationDialog from './save-creation';
 import StopButton from './recording-buttons/stop';
 
+const getDownloadName = (deviceType, type, title) => {
+  const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
+  return `${flavor} ${type} - ${title || 'Recording'}.webm`;
+};
+
 class RecordingControls extends React.Component {
   constructor(props) {
     super(props);
@@ -120,10 +125,16 @@ class RecordingControls extends React.Component {
   handleSaveCreationSave() {
     this.handleDialogClose();
     if (this.state.desktopRecording) {
-      downloadBlob(this.state.desktopRecording.media, 'desktop.webm');
+      downloadBlob(
+        this.state.desktopRecording.media,
+        getDownloadName('desktop', 'video', this.props.recordingData.title)
+      );
     }
     if (this.state.videoRecording) {
-      downloadBlob(this.state.videoRecording.media, 'video.webm');
+      downloadBlob(
+        this.state.videoRecording.media,
+        getDownloadName('video', 'video', this.props.recordingData.title)
+      );
     }
     this.resetRecordings();
   }

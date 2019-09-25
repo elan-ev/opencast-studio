@@ -147,7 +147,7 @@ class OpencastUploader {
 
         const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
         const downloadName = `${flavor} ${type} - ${title || 'Recording'}.webm`;
-        console.log('track', mp, media, downloadName, trackFlavor);
+
         mp = await this.addTrack(mp, media, downloadName, trackFlavor, '');
       }
 
