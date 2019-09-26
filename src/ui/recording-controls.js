@@ -2,6 +2,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components/macro';
+import { withTranslation } from 'react-i18next';
 
 import downloadBlob from '../download-blob';
 import OpencastUploader from '../opencast-uploader';
@@ -32,14 +33,12 @@ class RecordingControls extends React.Component {
     this.desktopRecorder = null;
     this.videoRecorder = null;
 
-    [
-      'handlePause',
-      'handleStartResume',
-      'handleStop',
-      'handleDialogClose',
-      'handleSaveCreationSave',
-      'handleSaveCreationUpload'
-    ].forEach(method => (this[method] = this[method].bind(this)));
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handlePause = this.handlePause.bind(this);
+    this.handleSaveCreationSave = this.handleSaveCreationSave.bind(this);
+    this.handleSaveCreationUpload = this.handleSaveCreationUpload.bind(this);
+    this.handleStartResume = this.handleStartResume.bind(this);
+    this.handleStop = this.handleStop.bind(this);
   }
 
   hasStreams() {
@@ -139,6 +138,7 @@ class RecordingControls extends React.Component {
   }
 
   handleSaveCreationUpload() {
+    const { t } = this.props;
     const { title, presenter } = this.props.recordingData;
 
     if (title !== '' && presenter !== '') {
@@ -148,30 +148,27 @@ class RecordingControls extends React.Component {
 
         // onsuccess
         () => {
-          alert('Upload complete!');
+          alert(t('message-upload-complete'));
           this.handleDialogClose();
         },
 
         // onloginfailed
         () => {
-          alert('Login failed, Please check your Password!');
+          alert(t('message-login-failed'));
           this.props.handleOpenUploadSettings();
         },
 
         // onserverunreachable
         err => {
-          alert(
-            'Server unreachable: Check your Internet Connetion and the Server Url, ' +
-              'also check whether your Opencast Instance supports this site.'
-          );
-          console.log('Server unreachable: ', err);
+          alert(t('message-server-unreachable'));
+          console.error('Server unreachable: ', err);
           this.props.handleOpenUploadSettings();
         },
 
         // oninetorpermfailed
         err => {
-          alert('The Internet Connection failed or you are missing necessary permissions.');
-          console.log('Inet fail or Missing Permission: ', err);
+          alert(t('message-conn-failed'));
+          console.error('Inet fail or Missing Permission: ', err);
           this.props.handleOpenUploadSettings();
         },
 
@@ -179,7 +176,7 @@ class RecordingControls extends React.Component {
         presenter
       );
     } else {
-      alert('Please set Title and Presenter');
+      alert(t('save-creation-form-invalid'));
     }
   }
 
@@ -192,23 +189,25 @@ class RecordingControls extends React.Component {
   }
 
   render() {
+    const { t } = this.props;
+
     return (
       <div className={this.props.className}>
         <div className="grouped-buttons">
           <PauseButton
-            title="Pause recording"
+            title={t('pause-button-title')}
             paused={this.state.isPaused}
             recording={this.state.isRecording}
             onClick={this.handlePause}
           />
           <RecordButton
-            title="Start/resume recording"
+            title={t('record-button-title')}
             paused={this.state.isPaused}
             recording={this.state.isRecording}
             onClick={this.handleStartResume}
           />
           <StopButton
-            title="Stop recording"
+            title={t('stop-button-title')}
             paused={this.state.isPaused}
             recording={this.state.isRecording}
             onClick={this.handleStop}
@@ -220,7 +219,7 @@ class RecordingControls extends React.Component {
         <Modal
           isOpen={this.state.showModal}
           onRequestClose={this.handleDialogClose}
-          contentLabel="Production Details"
+          contentLabel={t('save-creation-modal-title')}
           shouldCloseOnOverlayClick={true}
           shouldCloseOnEsc={true}
         >
@@ -245,4 +244,4 @@ const StyledRecordingControls = styled(RecordingControls)`
   position: relative;
 `;
 
-export default StyledRecordingControls;
+export default withTranslation()(StyledRecordingControls);

@@ -1,6 +1,7 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
 import styled from 'styled-components/macro';
+import { useTranslation } from 'react-i18next';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,14 +16,16 @@ const Icon = styled(FontAwesomeIcon)`
 `;
 
 function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
+  const { t } = useTranslation();
+
   return (
     <div className={className}>
-      <a href={uploadSettings.serverUrl} title="Go to Opencast">
+      <a href={uploadSettings.serverUrl} title={t('toolbar-button-opencast')}>
         <Icon icon={faPlayCircle} />
       </a>
 
       <label
-        title="Open Upload Settings"
+        title={t('toolbar-button-upload-settings')}
         id="ocUploadSettingsOpenButton"
         onClick={handleOpenUploadSettings}
       >
@@ -31,13 +34,13 @@ function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
 
       <a
         href="https://github.com/elan-ev/opencast-studio/issues"
-        title="Report Issue"
+        title={t('toolbar-button-issues')}
         id="ocUploadIssueButton"
       >
         <Icon icon={faExclamationCircle} />
       </a>
 
-      <a href="/about.html" title="About Opencast Studio">
+      <a href="/about.html" title={t('toolbar-button-about')}>
         <Icon icon={faQuestionCircle} />
       </a>
     </div>

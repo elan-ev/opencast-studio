@@ -1,6 +1,7 @@
 //; -*- mode: rjsx;-*-
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import { useTranslation } from 'react-i18next';
 
 import languages from './languages';
 import GlobalStyle from './style/global-style';
@@ -32,12 +33,19 @@ const defaultUploadSettings = {
 const UPLOAD_SETTINGS_KEY = 'uploadSettings';
 
 function App() {
+  const { t, i18n } = useTranslation();
+
   const [chosenLanguage, setChosenLanguage] = useState('en');
   const [isModalOpen, setModalOpen] = useState(!window.localStorage.getItem(UPLOAD_SETTINGS_KEY));
   const [uploadSettings, setUploadSettings] = useLocalStorage(
     UPLOAD_SETTINGS_KEY,
     defaultUploadSettings
   );
+
+  const selectLanguage = language => {
+    setChosenLanguage(language);
+    i18n.changeLanguage(language);
+  };
 
   const handleOpenUploadSettings = e => {
     setModalOpen(true);
@@ -59,7 +67,7 @@ function App() {
       <OpencastHeader
         languages={languages}
         chosenLanguage={chosenLanguage}
-        onSelectLanguage={setChosenLanguage}
+        onSelectLanguage={selectLanguage}
       />
 
       <Studio uploadSettings={uploadSettings} handleOpenUploadSettings={handleOpenUploadSettings} />
@@ -69,7 +77,7 @@ function App() {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={handleCloseUploadSettings}
-        contentLabel="Opencast Upload Settings"
+        contentLabel={t('upload-settings-modal-title')}
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
         style={modalCustomStyles}

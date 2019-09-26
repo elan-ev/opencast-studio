@@ -7,7 +7,7 @@ import Button from './button'
 
 const PauseButton = styled(function(props) {
   return (
-    <Button className={props.className} onClick={props.onClick}>
+      <Button className={props.className} onClick={props.onClick} title={props.title}>
       <span className="fa-layers fa-fw">
         <FontAwesomeIcon icon={faPauseCircle} />
       </span>

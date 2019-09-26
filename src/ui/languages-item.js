@@ -5,7 +5,7 @@ import Flag from './languages-flag';
 
 function Language({ className, language, onSelectLanguage }) {
   return (
-    <li className={className} onClick={() => onSelectLanguage(language.short)}>
+      <li className={className} onClick={onSelectLanguage.bind(null, language.short)}>
       <button type="button" value={language.short}>
         {language.long}
       </button>

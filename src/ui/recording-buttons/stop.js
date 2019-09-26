@@ -7,7 +7,7 @@ import Button from './button'
 
 const StopButton = styled(function(props) {
   return (
-    <Button className={props.className} onClick={props.onClick}>
+    <Button className={props.className} onClick={props.onClick} title={props.title}>
       <FontAwesomeIcon icon={faStopCircle} />
     </Button>
   );

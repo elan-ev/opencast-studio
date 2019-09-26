@@ -94,7 +94,7 @@ const MediaDevice = styled(UnstyledMediaDevice)`
 `;
 
 function MediaDevices(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   function requestDisplayMedia() {
     startDisplayCapture({ video: true, audio: false }).then(desktopStream => {

@@ -3,104 +3,91 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components/macro';
 import { faDownload, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
+function SaveCreationDialog(props) {
+  const { t } = useTranslation();
 
-class SaveCreationDialog extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  componentDidMount() {
-    console.log('SaveCreationDialog mounted', this.props);
-  }
-
-  componentDidUpdate(...oldStuff) {
-    console.log('SaveCreationDialog updated', this.props, oldStuff);
-  }
-
-  handleInputChange(event) {
+  function handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    this.props.setRecordingData({ ...this.props.recordingData, [name]: value });
+    props.setRecordingData({ ...props.recordingData, [name]: value });
   }
 
-  render() {
-    return (
-      <div className={this.props.className}>
-        <header>
-          <h1>Production details</h1>
-        </header>
+  return (
+    <div className={props.className}>
+      <header>
+        <h1>Production details</h1>
+      </header>
 
-        <main>
-          <FormField label="Title">
-            <input
-              name="title"
-              autoComplete="off"
-              value={this.props.recordingData.title}
-              onChange={this.handleInputChange}
+      <main>
+        <FormField label={t('save-creation-label-title')}>
+          <input
+            name="title"
+            autoComplete="off"
+            value={props.recordingData.title}
+            onChange={handleInputChange}
+          />
+        </FormField>
+
+        <FormField label={t('save-creation-label-presenter')}>
+          <input
+            name="presenter"
+            autoComplete="off"
+            value={props.recordingData.presenter}
+            onChange={handleInputChange}
+          />
+        </FormField>
+      </main>
+
+      <header>
+        <h1>{t('save-creation-label-media')}</h1>
+      </header>
+
+      <main>
+        <div id="recordingList">
+          {props.desktopRecording && (
+            <RecordingPreview
+              deviceType="desktop"
+              title={props.recordingData.title}
+              type="video"
+              url={props.desktopRecording.url}
             />
-          </FormField>
-
-          <FormField label="Presenter">
-            <input
-              name="presenter"
-              autoComplete="off"
-              value={this.props.recordingData.presenter}
-              onChange={this.handleInputChange}
+          )}
+          {props.videoRecording && (
+            <RecordingPreview
+              deviceType="video"
+              title={props.recordingData.title}
+              type="video"
+              url={props.videoRecording.url}
             />
-          </FormField>
-        </main>
+          )}
+        </div>
+      </main>
 
-        <header>
-          <h1>Media</h1>
-        </header>
+      <footer>
+        <button onClick={props.handleUpload}>
+          <FontAwesomeIcon icon={faUpload} />
+          <span>{t('save-creation-button-upload')}</span>
+        </button>
 
-        <main>
-          <div id="recordingList">
-            {this.props.desktopRecording && (
-              <RecordingPreview
-                deviceType="desktop"
-                title={this.props.recordingData.title}
-                type="video"
-                url={this.props.desktopRecording.url}
-              />
-            )}
-            {this.props.videoRecording && (
-              <RecordingPreview
-                deviceType="video"
-                title={this.props.recordingData.title}
-                type="video"
-                url={this.props.videoRecording.url}
-              />
-            )}
-          </div>
-        </main>
+        <button onClick={props.handleSave}>
+          <FontAwesomeIcon icon={faDownload} />
+          <span>{t('save-creation-button-save')}</span>
+        </button>
 
-        <footer>
-          <button onClick={this.props.handleUpload}>
-            <FontAwesomeIcon icon={faUpload} />
-            <span>Upload to Opencast</span>
-          </button>
-
-          <button onClick={this.props.handleSave}>
-            <FontAwesomeIcon icon={faDownload} />
-            <span>Save media</span>
-          </button>
-
-          <button onClick={this.props.handleCancel}>
-            <FontAwesomeIcon icon={faTrash} />
-            <span>Discard</span>
-          </button>
-        </footer>
-      </div>
-    );
-  }
+        <button onClick={props.handleCancel}>
+          <FontAwesomeIcon icon={faTrash} />
+          <span>{t('save-creation-button-discard')}</span>
+        </button>
+      </footer>
+    </div>
+  );
 }
 
 const StyledSaveCreationDialog = styled(SaveCreationDialog)`

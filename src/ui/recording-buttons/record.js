@@ -7,7 +7,7 @@ import Button from './button'
 
 const RecordButton = styled(function(props) {
   return (
-    <Button className={props.className} onClick={props.onClick}>
+    <Button className={props.className} onClick={props.onClick} title={props.title}>
       <span className="fa-layers fa-fw">
         <FontAwesomeIcon icon={faCircle} />
         <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
