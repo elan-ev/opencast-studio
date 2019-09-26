@@ -29,13 +29,15 @@ const defaultUploadSettings = {
   loginPassword: 'opencast'
 };
 
+const UPLOAD_SETTINGS_KEY = 'uploadSettings';
+
 function App() {
   const [chosenLanguage, setChosenLanguage] = useState('en');
+  const [isModalOpen, setModalOpen] = useState(!window.localStorage.getItem(UPLOAD_SETTINGS_KEY));
   const [uploadSettings, setUploadSettings] = useLocalStorage(
-    'uploadSettings',
+    UPLOAD_SETTINGS_KEY,
     defaultUploadSettings
   );
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const handleOpenUploadSettings = e => {
     setModalOpen(true);
