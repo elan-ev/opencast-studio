@@ -1,0 +1,2101 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100%;
+    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+body.translating [data-translate],
+body.translating [data-translatetitle],
+body.translating [data-pseudotext] {
+    color: transparent;
+}
+
+header {
+    height: 3rem;
+    line-height: 3rem;
+    display: block;
+    width: 100%;
+    background: #333;
+    box-shadow: 0 4px 4px -4px rgba(0,0,0,0.4);
+}
+
+body:not(#code) header span {
+    color: white;
+}
+
+body:not(#code) header #logo-main {
+    height: 50px;
+    padding-top: -5px;
+}
+
+
+#code header {
+    background: transparent;
+}
+
+#code header label {
+    display: inline-block;
+    width: 25%;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+#code header::before {
+    content: '';
+    width: 25%;
+    height: 3rem;
+    background: #09f;
+    transition: transform 0.3s;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+#chooseDevice:checked ~ header::before {
+    transform: translateX(100%);
+}
+
+#stream:checked ~ header::before {
+    transform: translateX(200%);
+}
+
+#whiteboard:checked ~ header::before {
+    transform: translateX(300%);
+}
+
+#chooseDevice[disabled] ~ header label[for=chooseDevice] {
+    color: #777;
+    background: #ddd;
+}
+
+#stream[disabled] ~ header label[for=stream] {
+    color: #777;
+    background: #ddd;
+}
+
+#whiteboard[disabled] ~ header label[for=whiteboard] {
+    color: #777;
+    background: #ddd;
+}
+
+.no-transitions * {
+    transition-delay: 0s !important;
+    transition-duration: 0s !important;
+}
+
+#language {
+    float: right;
+    line-height: 3rem;
+    height: 3rem;
+    margin: 0 1rem;
+    position: relative;
+}
+
+#chosenLanguage {
+    line-height: 3rem;
+    height: 3rem;
+    display: inline-block;
+}
+
+#language img {
+    width: 2rem;
+    height: 2rem;
+    margin: 0.5rem 0 0.5rem 0.5rem;
+    vertical-align: top;
+    display: inline-block;
+}
+
+#language span {
+    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+    line-height: 3rem;
+    vertical-align: top;
+}
+
+#language ul {
+    position: absolute;
+    top: 100%;
+    right: -0.5rem;
+    padding-right: 0.5rem;
+    visibility: hidden;
+    z-index: 3;
+    box-shadow: inset 0 3px 3px -3px rgba(0,0,0,0.2),
+                0 3px 6px -2px rgba(0,0,0,0.4);
+    background: white;
+}
+
+#chooseLanguage:checked ~ ul {
+    visibility: visible;
+}
+
+#language ul li {
+    line-height: 2rem;
+    text-align: right;
+    white-space: nowrap;
+    padding-left: 1rem;
+    cursor: pointer;
+}
+
+#language ul li img {
+    margin: 0.25rem 0 0.25rem 0.5rem;
+}
+
+#language ul button {
+    background: none;
+    border:none;
+    line-height: 2.5rem;
+    vertical-align: top;
+}
+
+main {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 3rem);
+    overflow: hidden;
+}
+
+#code main {
+    overflow-x: hidden;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+#code .content {
+    overflow-y: visible;
+}
+
+section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: translateX(100%);
+    transition: transform ease-in-out;
+    transition-duration: 0.5s;
+    padding-top: 4rem;
+    overflow: hidden;
+}
+
+main section:first-of-type {
+    transform: translateX(-100%);
+}
+
+input:checked + section {
+    transform: translateX(0);
+}
+
+.hiddenCheck {
+    display: none;
+}
+
+.bigButton {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    margin: 0 20% 0 0;
+    position: relative;
+    background: #ddd;
+    border-radius: 0.25rem;
+}
+
+.bigButton:first-child {
+    margin-left: 20%;
+}
+
+.bigButton::before {
+    margin-top: 100%;
+    display: block;
+    content: '';
+}
+
+.bigButton::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #666;
+    width: 100%;
+}
+
+.bigButton[for=create]::after {
+    content: 'Create a video';
+}
+
+.bigButton[for=edit]::after {
+    content: 'Edit a video';
+}
+
+.action {
+    cursor: pointer;
+}
+
+#videoView {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 2rem;
+    position: relative;
+    pointer-events: none;
+    min-height: calc(22.5vw - 4rem);
+    transition: min-height 1s;
+}
+
+#minimiseStreams:checked ~ #advancedUserView:checked ~ #mergestreams:checked ~ #videoView {
+    min-height: calc(100% - 10rem);
+}
+
+#videoView * {
+    pointer-events: auto;
+}
+
+.mediadevice {
+    background: #ddd;
+    width: 30%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    overflow: hidden;
+    visibility: visible;
+    max-height: calc(100vh - 14rem);
+}
+
+.mediadevice:not(.audioDevice) {
+    transition: width 0.5s, opacity 0.25s, visibility 0s;
+}
+
+.mediadevice.audioDevice {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc((100% - 4rem)*0.3) !important;
+}
+
+.mediadevice::before {
+    display: block;
+    margin-top: 75%;
+    content: '';
+}
+
+.mediadevice video,
+.mediadevice audio {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    background: transparent;
+}
+
+.mediadevice.desktopDevice video {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mediadevice.desktopDevice.active {
+    background: black;
+}
+
+.mediadevice .streamControls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3rem;
+    background: rgba(48,48,48,0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0s 0.3s;
+    z-index: 3;
+    text-align: right;
+}
+
+.streamControls label {
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    display: inline-block;
+    vertical-align: top;
+    margin: 0.5rem;
+    position: relative;
+    background: transparent;
+    transition: background 0.3s;
+    color: white;
+    font-size: 0.8rem;
+    text-align: center;
+    transition: color 0.3s;
+}
+
+.streamControls label[for^=inputSource] {
+    float: left;
+    width: auto;
+    padding: 0 0.5rem;
+    max-width: 40%;
+}
+
+.streamControls label[for^=inputSource] > span {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.streamControls label[for^=inputSource] ul:not(:empty)::before {
+    content: 'Switch to:';
+    display: block;
+    text-align: left;
+    color: white;
+    font-weight: 300;
+    padding: 0 0.25rem;
+    line-height: 2rem;
+}
+
+.streamControls label[for^=inputSource] ul li {
+    height: 2rem;
+    line-height: 2rem;
+    text-align: left;
+    padding: 0 0.5rem;
+}
+
+input[id^=inputSource]:not(:checked) ~ label[for^=inputSource] ul {
+    max-height: 0 !important;
+}
+
+.streamControls label[for^=inputSource] ul li button {
+    display: block;
+    height: 100%;
+    line-height: 2rem;
+}
+
+.recording .streamControls label:nth-of-type(1) {
+    pointer-events: none !important;
+    background: rgba(254,0,1,0.4);
+}
+.recording .streamControls label:nth-of-type(1) * {
+    pointer-events: none !important;
+}
+
+.streamControls label:hover {
+    color: black;
+}
+
+.streamControls label ul {
+    position: absolute;
+    right: -0.5rem;
+    top: calc(100% + 0.5rem);
+    background: rgba(48,48,48,0.9);
+    overflow: hidden;
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    transition: max-height 0.5s;
+}
+
+.streamControls label.pull-left ul {
+    right: auto;
+    left: 0;
+    min-width: 100%;
+}
+
+.streamControls input:nth-of-type(1):checked ~ label:nth-of-type(1) ul {
+    max-height: 6rem;
+}
+
+.streamControls input:nth-of-type(2):checked ~ label:nth-of-type(2) ul {
+    max-height: 6rem;
+}
+
+.streamControls label ul li {
+    line-height: 1rem;
+    display: block;
+    overflow: hidden;
+    padding: 0 0.5rem;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.streamControls label ul li:hover {
+    background: rgba(255,255,255, 0.7);
+}
+
+.streamControls label ul li button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: 300;
+    display: block;
+    margin: 0;
+}
+
+.streamControls label:hover {
+    background: white;
+}
+
+#advancedUserView:checked ~ .mediadevice.active:hover .streamControls,
+#advancedUserView:checked ~ #videoView .mediadevice.active:hover .streamControls {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s, visibility 0s;
+}
+
+.midSplit {
+    display: flex;
+    width: 30%;
+    position: relative;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.midSplit .mediadevice {
+    width: 100%;
+}
+
+.midSplit .mediadevice::before {
+    margin-top: calc(100%/3);
+}
+
+.mediadevice::after {
+    content: attr(data-title);
+    position: absolute;
+    color: #666;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+    transition: opacity 0.5s;
+    opacity: 1;
+}
+
+.mediadevice[for=mergestreams]::after {
+    bottom: calc(50% - 1.5rem);
+}
+
+.extensionRequired label[for=desktopstream]::after {
+    content: 'Click to install desktop extension';
+}
+
+.mediadevice.active::after {
+    opacity: 0;
+}
+
+.placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 15rem;
+    height: 10rem;
+    transform: translate(-50%, calc(-50% - 1rem));
+    z-index: 1;
+}
+
+.shadow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+
+.desktopDevice.active .placeholder {
+    display: none;
+}
+
+.desktopDevice .placeholder::before {
+    content: '';
+    width: 100%;
+    height: calc(100% - 3rem);
+    border: 0px solid white;
+    border-bottom-width: 2rem;
+    border-top-width: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2),
+                inset 0 2px 2px -2px rgba(0,0,0,0.2),
+                inset 0 -2px 2px -2px rgba(0,0,0,0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.desktopDevice .placeholder::after {
+    content: '';
+    width: 3rem;
+    height: 0;
+    position: absolute;
+    bottom: -3rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-bottom: 2rem solid white;
+    border-left: 1rem solid transparent;
+    border-right: 1rem solid transparent;
+    filter: drop-shadow(0 2px 1px rgba(0,0,0,0.1));
+}
+
+.videoDevice .placeholder, .videoDevice .shadow {
+    width: 8rem;
+    height: 8rem;
+    transform: translate(-50%, -50%);
+}
+
+.videoDevice .placeholder::before {
+    content: '';
+    width: 4rem;
+    height: 4rem;
+    border: 1rem solid white;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 0 1px 1px rgba(0,0,0,0.2),
+                inset 0 0 1px 1px rgba(0,0,0,0.2);
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.videoDevice .placeholder::after, .videoDevice .shadow::after {
+    content: '';
+    width: 6rem;
+    height: 6rem;
+    position: absolute;
+    bottom: -3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 50%;
+    -webkit-clip-path: url(#webcamStand);
+    clip-path: url(#webcamStand);
+}
+
+.videoDevice .shadow::after {
+    bottom: calc(-3rem - 1px);
+    transform: translateX(-50%) scaleY(1.1) scaleX(1.025);
+    background: rgba(0,0,0,0.1);
+}
+
+.mediadevice canvas {
+    position: absolute;
+    width: 70%;
+    height: 1rem;
+    background: white;
+    top: calc(50% - 0.5rem);
+    left: 15%;
+    opacity: 0;
+    transition: 0.25s;
+    border-radius: 0.5rem;
+    z-index: 1;
+}
+
+.active.mediadevice canvas {
+    opacity: 1;
+    transition: 0.5s 1s;
+}
+
+.audioDevice .placeholder, .audioDevice .shadow {
+    transform: translate(-50%, -50%);
+    width: 4rem;
+    height: 4rem;
+    top: calc(50% - 0.5rem);
+    transition: transform 0.75s ease-in-out, left 0.75s ease-in-out, top 0.75s ease-in-out;
+    z-index: 3;
+}
+
+.audioDevice .shadow {
+    top: calc(50% - 0.5rem + 1px);
+    position: absolute;
+    z-index: 2;
+}
+
+.active.audioDevice .placeholder, .active.audioDevice .shadow {
+    left: 0;
+    top: calc(50% - 0.75rem);
+    transform: scale(0.5) translate(0, -50%);
+}
+
+.active .audioDevice .shadow {
+    top: calc(50% - 0.75rem + 1px);
+}
+
+.audioDevice .placeholder::before, .audioDevice .shadow::before {
+    width: 2rem;
+    height: 4rem;
+    content: '';
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background: white;
+    border-radius: 1rem;
+    -webkit-clip-path: url(#mic);
+    clip-path: url(#mic);
+    transition: background 1s;
+}
+
+.audioDevice .shadow::before {
+    transform: translate(-50%, 0) scaleX(1.05);
+}
+
+.audioDevice .placeholder::after, .audioDevice .shadow::after {
+    width: 3rem;
+    height: 1.8125rem;
+    background: white;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    content: '';
+    position: absolute;
+    -webkit-clip-path: url(#micStand);
+    clip-path: url(#micStand);
+    transition: background 0.5s 1s;
+}
+
+.audioDevice .shadow::before, .audioDevice .shadow::after {
+    background: rgba(0,0,0,0.2);
+}
+
+#mergestreams:checked ~ #videoView .audioDevice {
+    background: transparent;
+}
+
+#mergestreams:checked ~ #videoView .audioDevice .placeholder::before,
+#mergestreams:checked ~ #videoView .audioDevice .placeholder::after {
+    background: #ddd;
+}
+
+
+#streams {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    list-style: none;
+    height: 8rem;
+    box-shadow: 0 -1px 1px rgba(0,0,0,0.2);
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0s 0.5s, opacity 0.5s, height 0.5s;
+    perspective: 800px;
+}
+
+#advancedUserView:checked ~ #streams {
+    opacity: 1;
+    visibility: visible;
+    transition: visibility 0s, opacity 0.5s, height 0.5s;
+}
+
+#simpleUserView:checked ~ #videoView .mediadevice {
+    width: 45%;
+    transition: width 0.5s 0.5s;
+}
+
+#simpleUserView:checked ~ #videoView .mediadevice.audioDevice,
+#simpleUserView:checked ~ label[for=mergestreams].mediadevice {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0s 0.5s;
+}
+
+#advancedUserView:checked ~ #videoView .mediadevice.audioDevice,
+#advancedUserView:checked ~ label[for=mergestreams].mediadevice {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s 0.5s, visibility 0s 0.5s, position 0s,
+                width 1s, height 1s, top 1s, bottom 1s, left 1s, transform 1s, border-radius 0.5s 0.75s;
+}
+
+#minimiseStreams:checked ~ #advancedUserView:checked ~ #mergestreams:checked ~ label[for=mergestreams].mediadevice {
+    width: calc((100vh - 17rem)*16/9);
+}
+
+#advancedUserView:checked ~ #videoView .mediadevice.audioDevice {
+    bottom: 0;
+}
+
+#streams::before {
+    display: inline-block;
+    vertical-align: top;
+    width: 8rem;
+    content: 'Devices';
+    line-height: 8rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #666;
+    background: #ddd;
+    transition: line-height 0.5s, height 0.5s;
+    z-index: 2;
+    position: relative;
+}
+
+#streams::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    background: #ddd;
+    width: 8rem;
+    height: 8rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#minimiseStreams:checked ~ #streams::before {
+    line-height: 3rem;
+    height: 3rem;
+}
+
+
+#streams .list {
+    overflow-y: auto;
+    display: inline-block;
+    max-width: calc(100% - 17rem);
+    height: 100%;
+}
+
+label[for=minimiseStreams] {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    height: 2rem;
+    width: 3rem;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+label[for=minimiseStreams]::before {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    left: 50%;
+    top: 50%;
+    border-top: 0.75rem solid #888;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    transform: translate(-50%, -50%);
+    transition: transform 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams {
+    height: 3rem;
+}
+
+#minimiseStreams:checked ~ #streams label[for=minimiseStreams]::before {
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+#minimiseStreams:checked ~ #streams .list {
+    overflow-y: visible;
+}
+
+#minimiseStreams:checked ~ #streams li .placeholder,
+#minimiseStreams:checked ~ #streams li .shadow {
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+#streams li, #addDevice {
+    cursor: pointer;
+    width: 8rem;
+    height: 6rem;
+    display: inline-block;
+    margin: 0.875rem 0 0.875rem 1rem;
+    vertical-align: top;
+    background: #ddd;
+    position: relative;
+    border: none;
+    overflow: hidden;
+    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+    transition: height 0.5s, margin 0.5s, transform 0.5s;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    perspective: 800px;
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active.toggled {
+    transform: rotateY(180deg);
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active .front,
+#minimiseStreams:not(:checked) ~ #streams li.active.toggled .back {
+    visibility: visible;
+    transition: visibility 0s 0.2s;
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active .back,
+#minimiseStreams:not(:checked) ~ #streams li.active.toggled .front {
+    visibility: hidden;
+}
+
+#minimiseStreams:not(:checked) ~ #streams li.active .mediaContainer {
+    width: calc(100% - 0.5rem);
+    height: calc(100% - 0.5rem);
+    margin: 0.25rem;
+}
+
+#streams li::after {
+    line-height: 1.25rem;
+    transition: line-height 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams li {
+    height: 2rem;
+    margin: 0.5rem 0 0.5rem 1rem;
+    overflow: visible;
+}
+
+#minimiseStreams:checked ~ #streams li .back li {
+    margin: 0;
+}
+
+#minimiseStreams:checked ~ #streams li::after {
+    line-height: 2rem;
+}
+
+#streams li video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams li:hover .mediaContainer {
+    top: auto;
+    bottom: calc(100% + 1rem);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0s, visibility 0s, transform 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer.toggled {
+    transform: rotateY(180deg);
+}
+
+#streams li.desktopDevice.active {
+    background: black;
+}
+
+#minimiseStreams:checked ~ #streams li.desktopDevice.active {
+    background: #ddd;
+}
+
+#streams li.desktopDevice video {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#streams li .placeholder, #streams li .shadow {
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.4);
+    position: absolute;
+    transition: opacity 0.25s 0.5s;
+}
+
+#streams li .shadow {
+    top: calc(45% + 1px);
+}
+/*
+#streams li .mediaContainer {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  width: 9rem;
+  height: 7rem;
+  left: -0.5rem;
+  background: white;
+  border-radius: 0.125rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  display: none;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+}
+*/
+
+#streams li .mediaContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8rem;
+    height: 6rem;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transform: rotateY(0deg);
+    transform-style: preserve-3d;
+}
+
+#streams li:not(.active) .mediaContainer * {
+    visibility: hidden;
+}
+
+#streams li.active .mediaContainer {
+    z-index: 2;
+}
+
+
+
+.videoDevice .mediaContainer.active,
+.desktopDevice .mediaContainer.active {
+    background: black;
+}
+
+.mediaContainer .front {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotateY(0deg);
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.mediaContainer .back {
+    background: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotateY(-180deg);
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+#streams .back li {
+    margin: 0;
+    background: white;
+    display: block;
+    height: 1.8125rem;
+    line-height: 1.8125rem;
+    width: 8rem;
+    font-size: 0.9rem;
+}
+
+#minimiseStreams:not(:checked) ~ #streams .back li {
+    width: 100%;
+    padding-left: 0.125rem;
+}
+
+#streams .back li:hover {
+    background: #8cf;
+}
+
+#streams .back li button {
+    padding: 0;
+    border: none;
+    background: none;
+    font-weight: 300;
+    font-size: 0.9rem;
+    display: block;
+    margin: 0;
+    line-height: 2rem;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer::before {
+    width: calc(100% + 1rem);
+    height: calc(100% + 1rem);
+    content: '';
+    position: absolute;
+    left: -0.5rem;
+    top: -0.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    background: white;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer::after {
+    width: 100%;
+    height: 1rem;
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1rem;
+}
+
+#streams li.audioDevice .placeholder, #streams li.audioDevice .shadow {
+    transform: translate(-50%, calc(-50% + 6px)) scale(0.6);
+    transition: opacity 0.25s 0.5s;
+}
+
+#streams li.desktopDevice .placeholder {
+    transform: translate(-50%, -50%) scale(0.25);
+    box-shadow: -2px 0 2px -2px black,
+                2px 0 2px -2px black;
+}
+
+li[data-title].active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0.25rem solid #09f;
+    pointer-events: none;
+    z-index: 3;
+    width: calc(100% - 0.5rem);
+    height: calc(100% - 0.5rem);
+}
+
+li[data-title]::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0 0.25rem;
+    overflow: hidden;
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.25rem;
+    width: calc(100% - 0.5rem);
+    text-align: center;
+}
+
+#streams .peerDevice {
+    animation: addingPeer 1.5s;
+    animation-fill-mode: forwards;
+}
+
+.peerDevice canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+}
+
+#addDevice {
+    background: white;
+    width: 6rem;
+    height: 6rem;
+    position: absolute;
+    border: 1px solid #ddd;
+    transition: width 0.5s, height 0.5s, margin 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams #addDevice {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0.25rem 0 0 1rem;
+}
+
+#addDevice::after {
+    content: 'Add device';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 300;
+    text-align: center;
+    transition: opacity 0.25s 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams #addDevice::after {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+#minimiseStreams:checked ~ #streams .mediaContainer {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#addDevice::before {
+    position: absolute;
+    content: '';
+    width: 3rem;
+    height: 3rem;
+    top: 1rem;
+    left: 1.5rem;
+    background: #ddd;
+    clip-path: polygon(0% 33%, 33% 33%, 33% 0%, 66% 0%, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0 66%);
+    transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, background 0.5s, transform 0.25s;
+}
+
+#minimiseStreams:checked ~ #streams #addDevice::before {
+    width: calc(2rem - 2px);
+    height: calc(2rem - 2px);
+    top: 0.25rem;
+    left: 0.25rem;
+    background: #ccc;
+    transform: scale(1);
+}
+
+svg {
+    position: absolute;
+    top: 0;
+    z-index: -1000;
+    pointer-events: none;
+    opacity: 0;
+}
+
+#cover, #introCover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(0,0,0,0.5);
+    transition: visibility 0s 0.25s, opacity 0.25s;
+}
+
+.loading #introCover {
+    z-index: 4;
+    opacity: 1;
+    background: white;
+    visibility: visible;
+}
+
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    visibility: hidden;
+    text-align: center;
+    width: 12rem;
+    height: 12rem;
+    transition: opacity 0.5s 0.5s, visibility 0s 1s;
+}
+
+.loader svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    opacity: 1;
+    animation: spin 6s infinite linear;
+}
+
+.loader svg circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.loader circle:nth-of-type(2) {
+    animation: circleCover1 3s infinite linear;
+    transform-origin: 50% 50%;
+}
+
+.loader circle:nth-of-type(3) {
+    transform-origin: 50% 50%;
+    transform: rotateX(180deg) rotateZ(-16deg);
+}
+
+.loader .loaderText {
+    text-align: center;
+    position: absolute;
+    max-width: 80%;
+    max-height: 80%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: #666;
+}
+
+.loading .loader,
+.connecting .loader {
+    opacity: 1;
+    visibility: visible;
+}
+
+.toggleCover:checked ~ #cover {
+    opacity: 1;
+    visibility: visible;
+    transition: visibility 0s, opacity 0.25s;
+}
+
+.modal {
+    position: fixed;
+    top: 5rem;
+    left: calc(50% - 320px);
+    width: 640px;
+    height: 480px;
+    background: white;
+    z-index: 3;
+    transform: translateY(calc(-5rem - 500px));
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transition: transform 0.25s ease-in;
+}
+
+#addDeviceModal {
+    height: auto;
+    transform: translateY(calc(-5rem - 540px));
+}
+
+#extensionModal {
+    height: auto;
+    transform: translateY(calc(-5rem - 20px - 100%));
+}
+
+#extensionModal p {
+    text-align: right;
+    margin-bottom: 0;
+}
+
+#extensionModal a,
+#extensionModal a:visited {
+    background: #4397ff;
+    color: white;
+    text-shadow: 0 1px rgba(0,0,0,0.1);
+    border: none;
+    height: 2rem;
+    line-height: 2rem;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+    text-decoration: none;
+    display: inline-block;
+    padding: 0 0.5rem;
+}
+
+#toggleAddDeviceModal:checked ~ #addDeviceModal,
+#toggleSaveCreationModal:checked ~ #saveCreation,
+#toggleOcUploadSettingsModal:checked ~ #ocUploadSettings,
+#toggleExtensionModal:checked ~ #extensionModal {
+    transform: translateY(0);
+    transition: transform 0.25s ease-out;
+}
+
+.modal h4 {
+    margin: 0;
+    padding: 0 1rem;
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 4rem;
+}
+
+.modalBody h4 {
+    padding: 0;
+}
+
+.modalClose {
+}
+
+.modalBody {
+    padding: 1rem;
+}
+
+.modalFooter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4rem;
+    padding: 1rem;
+    text-align: right;
+    width: 100%;
+}
+
+.btn {
+    min-width: 100px;
+    padding: 5px;
+}
+
+#qrcode {
+    height: 240px;
+    margin: 2rem auto;
+}
+
+#qrcode canvas,
+#qrcode img {
+    display: block;
+    margin: 0 auto;
+}
+
+#host {
+    padding: 0 0.25rem;
+    color: #09f;
+    text-decoration: none;
+}
+
+#paircode {
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+}
+
+#paircode span {
+    display: inline-block;
+    height: 2rem;
+    line-height: 2rem;
+    width: 2rem;
+    text-align: center;
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
+    background: #f3f3f3;
+}
+
+#codehref {
+    display: none;
+}
+
+#code .content {
+    width: 300%;
+    transition: transform 0.5s;
+    background: white;
+}
+
+#code section {
+    width: 100vw;
+    padding: 2rem 1rem;
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+#code section input:not(.hiddenCheck) {
+    display: block;
+    width: 50%;
+    margin: 1rem auto;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    height: 2rem;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 1.25rem;
+}
+
+#code section input:focus {
+    border-color: #09f;
+    box-shadow: 0 3px 2px -2px #8cf;
+}
+#codeView {
+    transform: translate(0) !important;
+}
+
+#choiceView {
+    transform: translate(100%) !important;
+}
+
+#streamView {
+    transform: translate(200%) !important;
+}
+
+#whiteboardView {
+    transform: translate(300%) !important;
+    padding: 0 !important;
+}
+
+#enterCode:checked ~ main .content {
+    transform: translate(0);
+}
+
+#chooseDevice:checked ~ main .content {
+    transform: translateX(calc(-100%/3));
+}
+
+#stream:checked ~ main .content {
+    transform: translateX(calc(-200%/3));
+}
+
+#whiteboard:checked ~ main .content {
+    transform: translateX(-100%);
+}
+
+#deviceList {
+    margin: 2rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#deviceList button {
+    width: 8rem;
+    max-width: 40%;
+    box-shadow: 0 0 1px rgba(0,0,0,0.2);
+    position: relative;
+    background: white;
+    border: none;
+    margin: 1rem;
+}
+
+#deviceList button::before {
+    display: block;
+    margin-top: 100%;
+    content: '';
+}
+
+.deviceName {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 1rem;
+    padding: 0.25rem 0;
+    line-height: 1rem;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+#deviceList .placeholder,
+#deviceList .shadow {
+    transform: scale(0.6) translate(-80%, -100%);
+    left: 50%;
+    top: 50%;
+}
+
+#deviceList .audioDevice .placeholder::before,
+#deviceList .placeholder::after,
+#deviceList .shadow::before,
+#deviceList .shadow::after {
+    background: #ccc !important;
+}
+
+#deviceList .videoDevice .placeholder::before {
+    border-color: #ccc;
+    box-shadow: none;
+}
+
+#deviceList .videoDevice::before {
+    left: -1rem;
+}
+
+button {
+    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+}
+
+@keyframes addingPeer {
+    0% {
+        margin: 0;
+        width: 0;
+        opacity: 0;
+    }
+    50% {
+        margin: 0.875rem 0 0.875rem 1rem;
+        width: 8rem;
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+label.mediadevice[for=mergestreams] {
+    position: absolute;
+    top: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc((100% - 4rem)*0.3);
+}
+
+label[for=audiostream]::before,
+label[for=mergestreams]::before {
+    margin-top: calc(37.5% - 1rem);
+    transition: margin-top 1s;
+}
+
+.topRightControls {
+    height: 4rem;
+    line-height: 4rem;
+    text-align: right;
+    position: absolute;
+    top: -4rem;
+    right: 2rem;
+    font-size: 1.6rem;
+}
+
+.topRightControls a {
+	color: #000;
+}
+
+#ocUploadIssueButton {
+    padding-left: 10px;
+}
+
+#recordingControls {
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+#recordingControls button {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.25rem;
+    border: none;
+    position: relative;
+    margin: 0 0.5rem;
+    background: linear-gradient(to bottom, #ddd 0%, #f0f0f0 100%);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    outline: none;
+}
+
+#startRecord::before {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: #8d2351;
+    border-radius: 50%;
+    top: 0.75rem;
+    left: 0.75rem;
+    content: '';
+}
+
+.recording #startRecord::before {
+    background: #fe0001;
+}
+
+.recording #startRecord {
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.paused #pauseRecord {
+    box-shadow: inset 0 2px 3px rgba(0,0,0,0.2);
+}
+
+#pauseRecord::before {
+    position: absolute;
+    width: 0.5rem;
+    height: 1.5rem;
+    border: 0.5rem solid #888;
+    border-top: none;
+    border-bottom: none;
+    top: 0.75rem;
+    left: 0.75rem;
+    content: '';
+}
+
+.recording #pauseRecord::before {
+    border-color: black;
+}
+
+#stopRecord::before {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 0.75rem;
+    left: 0.75rem;
+    content: '';
+    background: #888;
+}
+
+.recording #stopRecord::before {
+    background: black;
+}
+
+label, button {
+    cursor: pointer;
+}
+
+#recordingTime {
+    line-height: 4rem;
+    position: absolute;
+    top: 0;
+    right: 2rem;
+    font-family: monospace;
+}
+
+#recordingTime::before {
+    font-weight: 300;
+    margin-right: 0.5rem;
+    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+}
+
+.recording #recordingTime::before {
+    content: 'Recording';
+    font-style: italic;
+    color: #fe0001;
+}
+
+.paused.recording #recordingTime::before {
+    content: 'Paused';
+    font-style: normal;
+    color: teal;
+}
+
+
+.thirdWidth {
+    width: calc(100%/3);
+    display: inline-block;
+}
+
+.twoThirdWidth {
+    width: calc(200%/3);
+    display: inline-block;
+}
+
+.quarterWidth {
+    width: 25%;
+    display: inline-block;
+}
+
+.threeQuarterWidth {
+    width: 75%;
+    display: inline-block;
+}
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+#main ul {
+    margin: 0;
+    padding: 0;
+    line-height: 2.5rem;
+    list-style: none;
+}
+
+input {
+    border: 1px solid #ccc;
+    height: 2rem;
+    border-radius: 0.125rem;
+    padding: 0 0.5rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+}
+
+button {
+    outline: none;
+}
+
+input:focus {
+    border-color: #09f;
+    box-shadow: 0 0 3px #8cf;
+}
+
+#recordingList {
+    display: flex;
+    max-height: 6.5rem;
+    overflow-y: auto;
+    flex-wrap: wrap;
+}
+
+#recordingList a {
+    width: 8rem;
+    height: 6rem;
+    position: relative;
+    background: #ddd;
+    text-align: center;
+    padding: 0.5rem;
+    margin: 0 0.5rem 0.5rem 0;
+}
+
+#recordingList a video {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#recordingList a .requestRaw {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 0.7rem;
+    color: white;
+    background: rgba(0,0,0,0.8);
+    width: 100%;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    z-index: 2;
+    transition: opacity 0.25s;
+    border: none;
+    opacity: 0;
+    font-weight: 300;
+    padding: 0;
+}
+
+#recordingList a:hover .requestRaw {
+    opacity: 1;
+}
+
+#recordingList .transfer .requestRaw {
+    opacity: 0 !important;
+}
+
+#recordingList a .loader {
+    z-index: 3;
+    transform: translate(-50%, -50%) scale(0.4);
+}
+
+#recordingList a .loader svg {
+    animation: none;
+}
+
+#recordingList a .loaderText {
+    color: white;
+    font-style: normal;
+    font-size: 1.75rem;
+    white-space: normal;
+}
+
+#recordingList .transfer .loader {
+    opacity: 1;
+    visibility: visible;
+}
+
+#recordingList a .loader svg circle:nth-of-type(1) {
+    transform-origin: 50% 50%;
+    transform:  rotateX(180deg) rotateZ(90deg) ;
+}
+
+#recordingList a .loader svg circle:nth-of-type(2) {
+    display: none;
+}
+
+.centreText {
+    font-size: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 4rem));
+    text-align: center;
+    color: #666;
+}
+
+.ocTopRightButton {
+    position: relative;
+    top: 0.2rem;
+    left: 0.2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    font-size: 1.3rem;
+}
+
+.ocColoredButton {
+    color: #4bb07b;
+    background-color: #24425d;
+}
+
+.ocButtonSmallLogo {
+    height: 1.35rem;
+    padding-top: 0.3rem;
+    padding-right: 0.2rem;
+    padding-left: 0.2rem;
+}
+
+.ocAboutLinks {
+    text-align: right;
+    position: relative;
+    bottom: 0rem;
+    right: 3rem;
+}
+
+.backBtn {
+    visibility: hidden;
+    position: absolute;
+    top: 0.75rem;
+    left: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.backBtn::before {
+    width: 1.5rem;
+    height: 4px;
+    border-radius: 2px;
+    top: calc(1.25rem - 2px);
+    left: 0.5rem;
+    background: #888;
+    position: absolute;
+    content: '';
+}
+
+.backBtn::after {
+    position: absolute;
+    content: '';
+    width: 0.75rem;
+    height: 0.75rem;
+    border-bottom: 4px solid #888;
+    border-left: 4px solid #888;
+    transform: rotate(45deg);
+    top: 0.75rem;
+    left: 0.625rem;
+}
+
+#mergestreams:checked ~ #videoView .mediadevice.audioDevice::after {
+    opacity: 0;
+}
+
+#mergestreams:checked ~ #videoView .mediadevice.audioDevice {
+    width: 3rem !important;
+    min-height: 3rem;
+    border-radius: 50%;
+    bottom: 0.5rem;
+    left: calc(50% + 38.166%/2 - 2rem);
+    overflow: hidden;
+}
+
+
+#mergestreams:checked ~ #videoView .mediadevice.audioDevice canvas {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+}
+
+#minimiseStreams:checked ~ #mergestreams:checked ~ #videoView .mediadevice.audioDevice {
+    left: calc(50% + (100vh - 17rem)*8/9 - 2rem);
+}
+
+
+#mergestreams:checked ~ #videoView .audioDevice .placeholder,
+#mergestreams:checked ~ #videoView .audioDevice .shadow {
+    left: 0;
+    top: calc(50% - 0.75rem);
+    transform: scale(0.4) translate(-33%, -62.5%);
+}
+
+#mergestreams:checked ~ #videoView .audioDevice .shadow {
+    top: calc(50% - 0.75rem + 1px);
+}
+
+#mergestreams:checked ~ label[for=mergestreams] {
+    width: 38.166%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+}
+
+#mergestreams:checked ~ label[for=mergestreams]::before {
+    margin-top: 56.25%;
+}
+
+#mergestreams:checked ~ label[for=mergestreams]::after {
+    content: "Don't worry, \A all active streams will be recorded";
+    white-space: pre;
+    line-height: 1.75rem;
+    transition: opacity 0.5s 10s, visibility 0s 10s;
+    background: rgba(0,0,0,0.8);
+    padding: 2rem 0;
+    z-index: 3;
+    pointer-events: none;
+    color: white;
+    bottom: 50%;
+    transform: translateY(50%);
+}
+
+#advancedUserView:checked ~ #mergestreams:checked ~ #videoView .videoDevice,
+#advancedUserView:checked ~ #mergestreams:checked ~ #videoView .desktopDevice {
+    opacity: 0;
+    visibility: hidden;
+    transition: width 0.5s, opacity 0.25s, visibility 0s 0.25s;
+}
+
+.close::before, .close::after {
+    width: 1rem;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    content: '';
+    transform: translate(-50%, -50%) rotate(45deg);
+    pointer-events: none;
+    transition: background 0.3s !important;
+    margin: 0 !important;
+}
+
+.close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+
+.close:hover::before, .close:hover::after {
+    background: #333;
+}
+
+@keyframes circleCover1 {
+    0% {
+        stroke-dashoffset: 0;
+        transform: rotateX(180deg) rotateZ(90deg);
+    }
+    50% {
+        stroke-dashoffset: 515;
+        transform: rotateX(180deg) rotateZ(90deg);
+    }
+    50.01% {
+        transform: rotateX(0deg) rotateZ(-90deg);
+    }
+    100% {
+        stroke-dashoffset: 0;
+        transform: rotateX(0deg) rotateZ(-90deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.pairExtraOptions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3rem;
+    line-height: 3rem;
+    box-shadow: 0 -1px 2px rgba(0,0,0,0.3);
+    width: 100%;
+    text-align: left;
+    padding: 0 1rem;
+}
+
+.canvasContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.canvasContainer canvas {
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+.canvasContainer .tutorial {
+    position: absolute;
+    max-width: 90%;
+    padding: 0 1rem 1rem;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.6);
+    color: white;
+    transition: visibility 0s 0.5s, opacity 0.5s;
+}
+
+.neverRemind .tutorial {
+    visibility: hidden;
+    opacity: 0;
+}
+
+#whiteboard:checked ~ main .canvasContainer .tutorial {
+    transition: visibility 0s 15.5s, opacity 0.5s 15s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.tutorial ul {
+    list-style: disc;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tutorial span {
+    display: block;
+    text-align: right;
+}
+
+.tutorial span label, .tutorial span input {
+    display: inline-block;
+    vertical-align: top;
+    line-height: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.8rem;
+}
+
+.tutorial span input:focus {
+    box-shadow: none;
+}
+
+article {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: sans;
+    padding: 25px 0;
+}
+
+article a {
+    text-decoration: none;
+}
+
+footer {
+    padding-top: 25px;
+    text-align: center;
+}
+
+footer a {
+    padding: 0 10px;
+}
+
+span.beta {
+    position: relative;
+    top: 4px;
+    font-size: 6pt;
+    vertical-align: top;
+    display: inline;
+    border: 1px solid #888;
+    border-radius: 5px;
+    padding: 2px;
+    color: #888;
+}
+
+code {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-left: 3px solid #f36d33;
+    color: #666;
+    page-break-inside: avoid;
+    font-family: monospace;
+    line-height: 1.6;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1em 1.5em;
+    display: block;
+    word-wrap: break-word;
+}
