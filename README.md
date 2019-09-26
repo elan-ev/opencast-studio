@@ -1,68 +1,47 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Opencast Studio
+===============
 
-## Available Scripts
+[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
+](https://travis-ci.com/elan-ev/opencast-studio)
 
-In the project directory, you can run:
+A web-based recording studio for [Opencast](https://opencast.org).
 
-### `npm start`
+Opencast Studio uses the recording capabilities build into browsers to record
+audio and video streams. The recording happens in the user's browser. Finally,
+the recording is transferred directly from the users browser to the target
+Opencast.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Demo at [studio.opencast.org](https://studio.opencast.org).
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
+Introduction
+------------
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Record your webcam, microphone, desktop or any mediastream sourced via WebRTC.
 
-### `npm run build`
+1. Configure your Opencast server (gear symbol).
+2. Enable the devices you want to record.
+3. Click the recording button to start the recording.
+4. Click the stop button to finish the recording.
+5. Upload the recording.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Allow Studio to interact with your Opencast
+-------------------------------------------
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+For Studio to work with your Opencast, your need to allow this on your Opencast
+by serving a special HTTP header. The mechanism used is called Cross-Origin
+Resource Sharing .
 
-### `npm run eject`
+Here is a list of the required headers Nginx's configuration format:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+# Basic open CORS for studio.opencast.org
+add_header Access-Control-Allow-Origin https://studio.opencast.org;
+add_header Access-Control-Allow-Methods 'GET, POST';
+add_header Access-Control-Allow-Credentials true;
+add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization';
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+For a complete configuration file, take a look at [the test server configuration
+](https://github.com/opencast/opencast-project-infrastructure/blob/9f09638e922d623cd4d3c91dd90aca39c421530d/ansible-allinone-demo-vm/roles/nginx/templates/nginx.conf#L158-L162).
