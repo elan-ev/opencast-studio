@@ -9,6 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "babel-plugin-styled-components": "^1.10.6",
+    "gh-pages": "^2.1.1",
     "i18next": "^17.0.16",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -21,8 +22,10 @@
     "type": "git",
     "url": "git+https://github.com/elan-ev/opencast-studio.git"
   },
-  "homepage": "https://github.com/elan-ev/opencast-studio#readme",
+  "homepage": "https://studio.opencast.org",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
