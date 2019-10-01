@@ -25,5 +25,7 @@
   "toolbar-button-issues": "Problem berichten",
   "toolbar-button-opencast": "Zu Opencast",
   "toolbar-button-upload-settings": "Einstellungen für das Hochladen öffnen",
-  "upload-settings-modal-title": "Einstellungen für das Hochladen"
+  "upload-settings-modal-title": "Einstellungen für das Hochladen",
+  "upload-settings-button-validate": "Überprüfen",
+  "upload-settings-validation-error": "Ungültige Einstellungen. Bitte überprüfen und noch einmal probieren!"
 }

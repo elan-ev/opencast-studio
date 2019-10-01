@@ -51,6 +51,15 @@ class OpencastUploader {
     this.login_password = settings.loginPassword;
   }
 
+  async checkConnection() {
+    try {
+      await this.login();
+      return !!(await this.validateState());
+    } catch (error) {
+      return false;
+    }
+  }
+
   async loginAndUploadFromAnchor(
     recordings,
     onsuccess,

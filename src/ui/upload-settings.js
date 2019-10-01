@@ -1,91 +1,98 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
+import { useTranslation } from 'react-i18next';
 
 import FormField from './form-field';
+import Notification from './notification';
+import OpencastUploader from '../opencast-uploader';
 
-class OpencastUploaderSettingsDialog extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { ...props.uploadSettings };
+function OpencastUploaderSettingsDialog(props) {
+  const { t } = useTranslation();
+  const [settings, updateSettings] = useState({ ...props.uploadSettings });
+  const [error, setError] = useState();
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleInputChange(event) {
+  function handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    this.setState({
-      [name]: value
-    });
+    updateSettings({ ...settings, [name]: value });
   }
 
-  handleSubmit(event) {
-    this.props.updateUploadSettings(this.state);
+  async function handleSubmit(event) {
+    try {
+      const ocUploader = new OpencastUploader({ ...settings });
+      if (await ocUploader.checkConnection()) {
+        props.updateUploadSettings(settings);
+      } else {
+        setError(t('upload-settings-validation-error'));
+      }
+    } catch (error) {
+      setError(t('message-server-unreachable'));
+      console.error(error);
+    }
   }
 
-  render() {
-    return (
-      <div className={this.props.className}>
-        <header>
-          <h1>Configure Opencast Upload</h1>
-        </header>
+  return (
+    <div className={props.className}>
+      <header>
+        <h1>Configure Opencast Upload</h1>
+      </header>
 
-        <main>
-          <FormField label="Opencast Server URL">
-            <input
-              name="serverUrl"
-              value={this.state.serverUrl}
-              onChange={this.handleInputChange}
-              className="input"
-              type="text"
-              autoComplete="off"
-            />
-          </FormField>
+      <main>
+        {error && <Notification isDanger>{error}</Notification>}
 
-          <FormField label="Workflow ID">
-            <input
-              name="workflowId"
-              value={this.state.workflowId}
-              onChange={this.handleInputChange}
-              className="input"
-              type="text"
-              autoComplete="off"
-            />
-          </FormField>
+        <FormField label="Opencast Server URL">
+          <input
+            name="serverUrl"
+            value={settings.serverUrl}
+            onChange={handleInputChange}
+            className="input"
+            type="text"
+            autoComplete="off"
+          />
+        </FormField>
 
-          <FormField label="Opencast Username">
-            <input
-              name="loginName"
-              value={this.state.loginName}
-              onChange={this.handleInputChange}
-              className="input"
-              type="text"
-              autoComplete="off"
-            />
-          </FormField>
+        <FormField label="Workflow ID">
+          <input
+            name="workflowId"
+            value={settings.workflowId}
+            onChange={handleInputChange}
+            className="input"
+            type="text"
+            autoComplete="off"
+          />
+        </FormField>
 
-          <FormField label="Opencast Password">
-            <input
-              name="loginPassword"
-              value={this.state.loginPassword}
-              onChange={this.handleInputChange}
-              className="input"
-              type="password"
-              autoComplete="off"
-            />
-          </FormField>
-        </main>
+        <FormField label="Opencast Username">
+          <input
+            name="loginName"
+            value={settings.loginName}
+            onChange={handleInputChange}
+            className="input"
+            type="text"
+            autoComplete="off"
+          />
+        </FormField>
 
-        <footer>
-          <button onClick={this.handleSubmit}>OK</button>
-        </footer>
-      </div>
-    );
-  }
+        <FormField label="Opencast Password">
+          <input
+            name="loginPassword"
+            value={settings.loginPassword}
+            onChange={handleInputChange}
+            className="input"
+            type="password"
+            autoComplete="off"
+          />
+        </FormField>
+      </main>
+
+      <footer>
+        <button onClick={handleSubmit}>{t('upload-settings-button-validate')}</button>
+      </footer>
+    </div>
+  );
 }
 
 const UploaderSettingsDialog = styled(OpencastUploaderSettingsDialog)`
