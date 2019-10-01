@@ -7,7 +7,7 @@ import Button from './button'
 
 const RecordButton = styled(function(props) {
   return (
-    <Button className={props.className} onClick={props.onClick} title={props.title}>
+      <Button className={props.className} onClick={props.onClick} title={props.title} large={!!props.large}>
       <span className="fa-layers fa-fw">
         <FontAwesomeIcon icon={faCircle} />
         <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
@@ -19,8 +19,6 @@ const RecordButton = styled(function(props) {
   svg + svg {
     color: #e22319;
   }
-
-  box-shadow: ${props => (props.recording ? 'inset 0 2px 3px rgba(0, 0, 0, 0.2)' : 'none')};
 `;
 
 export default RecordButton;

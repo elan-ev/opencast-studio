@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
-import React from "react";
-import styled from "styled-components/macro";
+import React from 'react';
+import styled from 'styled-components/macro';
 
 class Clock extends React.Component {
   constructor(props) {
@@ -30,13 +30,19 @@ class Clock extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.recording && !prevProps.recording) {
+    // recording state did not change
+    if (this.props.recordingState === prevProps.recordingState) {
+      return;
+    }
+
+    if (this.props.recordingState !== 'recording') {
+      this.stopTimer();
+      return;
+    }
+
+    if (prevProps.recordingState === 'inactive') {
       this.startTimer();
-    } else if (!this.props.recording && prevProps.recording) {
-      this.stopTimer();
-    } else if (this.props.paused && !prevProps.paused) {
-      this.stopTimer();
-    } else if (!this.props.paused && prevProps.paused) {
+    } else if (prevProps.recordingState === 'paused') {
       this.resumeTimer();
     }
   }
@@ -53,21 +59,20 @@ class Clock extends React.Component {
 
   render() {
     const duration = this.state.time;
-    const timeArr = [
+    let timeArr = [
       (duration / 3600000) >> 0,
       ((duration / 60000) >> 0) % 60,
-      ((duration / 1000.0) % 60).toFixed(1)
+      ((duration / 1000) >> 0) % 60
     ];
-    const content = timeArr
-      .map((unit, i) => (unit < 10 ? "0" : "") + unit)
-      .join(":");
+    if (timeArr[0] === 0) {
+      timeArr = timeArr.slice(1);
+    }
+    const content = timeArr.map(unit => (unit < 10 ? '0' : '') + unit).join(':');
 
     return <span className={this.props.className}>{content}</span>;
   }
 }
 
-const StyledClock = styled(Clock)`
-  font-family: monospace;
-`;
+const StyledClock = styled(Clock)``;
 
 export default StyledClock;

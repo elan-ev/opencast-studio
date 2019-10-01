@@ -10,6 +10,7 @@ import Recorder from '../recorder';
 
 import PauseButton from './recording-buttons/pause';
 import RecordButton from './recording-buttons/record';
+import ResumeButton from './recording-buttons/resume';
 import RecordingState from './recording-state';
 import SaveCreationDialog from './save-creation';
 import StopButton from './recording-buttons/stop';
@@ -25,6 +26,7 @@ class RecordingControls extends React.Component {
     this.state = {
       isPaused: false,
       isRecording: false,
+      recordingState: 'paused',
       showModal: false,
       desktopRecording: null,
       videoRecording: null
@@ -35,9 +37,10 @@ class RecordingControls extends React.Component {
 
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handlePause = this.handlePause.bind(this);
+    this.handleResume = this.handleResume.bind(this);
     this.handleSaveCreationSave = this.handleSaveCreationSave.bind(this);
     this.handleSaveCreationUpload = this.handleSaveCreationUpload.bind(this);
-    this.handleStartResume = this.handleStartResume.bind(this);
+    this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
   }
 
@@ -63,7 +66,9 @@ class RecordingControls extends React.Component {
           this[recorder] = null;
         });
 
-        this[recorder].start(1000);
+        // TODO: reinstate the delay with a countdown
+        //this[recorder].start(1000);
+        this[recorder].start();
       } else {
         this[recorder].resume();
       }
@@ -93,26 +98,25 @@ class RecordingControls extends React.Component {
   }
 
   handlePause() {
-    if (this.state.isRecording) {
-      this.setState(state => ({ isPaused: !state.isPaused }));
-
-      this.pause();
-    }
+    this.setState({ recordingState: 'paused' });
+    this.pause();
   }
 
-  handleStartResume() {
+  handleResume() {
+    this.handleStart();
+  }
+
+  handleStart() {
     if (!this.hasStreams()) {
       return;
     }
-    this.setState({ isPaused: false, isRecording: true });
+    this.setState({ recordingState: 'recording' });
     this.record();
   }
 
   handleStop() {
-    if (this.state.isRecording) {
-      this.setState({ isPaused: false, isRecording: false });
-      this.stop();
-    }
+    this.setState({ recordingState: 'inactive' });
+    this.stop();
   }
 
   handleDialogClose() {
@@ -193,28 +197,46 @@ class RecordingControls extends React.Component {
 
     return (
       <div className={this.props.className}>
-        <div className="grouped-buttons">
-          <PauseButton
-            title={t('pause-button-title')}
-            paused={this.state.isPaused}
-            recording={this.state.isRecording}
-            onClick={this.handlePause}
-          />
-          <RecordButton
-            title={t('record-button-title')}
-            paused={this.state.isPaused}
-            recording={this.state.isRecording}
-            onClick={this.handleStartResume}
-          />
-          <StopButton
-            title={t('stop-button-title')}
-            paused={this.state.isPaused}
-            recording={this.state.isRecording}
-            onClick={this.handleStop}
-          />
-        </div>
+        <RecordingState recordingState={this.state.recordingState} />
+        <div className="buttons">
+          <div className="left">
+            {this.state.recordingState === 'recording' && (
+              <PauseButton
+                title={t('pause-button-title')}
+                recordingState={this.state.recordingState}
+                onClick={this.handlePause}
+              />
+            )}
 
-        <RecordingState paused={this.state.isPaused} recording={this.state.isRecording} />
+            {this.state.recordingState === 'paused' && (
+              <ResumeButton
+                title={t('resume-button-title')}
+                recordingState={this.state.recordingState}
+                onClick={this.handleResume}
+              />
+            )}
+          </div>
+
+          <div className="center">
+            {this.state.recordingState === 'inactive' ? (
+              <RecordButton
+                large
+                title={t('record-button-title')}
+                recordingState={this.state.recordingState}
+                onClick={this.handleStart}
+              />
+            ) : (
+              <StopButton
+                large
+                title={t('stop-button-title')}
+                recordingState={this.state.recordingState}
+                onClick={this.handleStop}
+              />
+            )}
+          </div>
+
+          <div className="right"></div>
+        </div>
 
         <Modal
           isOpen={this.state.showModal}
@@ -242,6 +264,15 @@ const StyledRecordingControls = styled(RecordingControls)`
   text-align: center;
   margin: 2rem 0;
   position: relative;
+
+  .buttons {
+    display: flex;
+  }
+
+  .left,
+  .right {
+    flex: 1;
+  }
 `;
 
 export default withTranslation()(StyledRecordingControls);

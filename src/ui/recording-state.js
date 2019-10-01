@@ -9,19 +9,21 @@ const RecordingState = styled(props => {
   const { t } = useTranslation();
   return (
     <div className={props.className}>
-      <span>{props.recording ? (props.paused ? t('Paused') : t('Recording')) : t('Waiting')}</span>
-      <Clock paused={props.paused} recording={props.recording} />
+      <p>
+        {props.recordingState === 'recording'
+          ? t('Recording')
+          : props.recordingState === 'paused'
+          ? t('Paused')
+          : t('Waiting')}
+      </p>
+      <Clock recordingState={props.recordingState} />
     </div>
   );
 })`
-  visibility: ${props => (props.paused || props.recording ? 'visible' : 'hidden')};
-
-  font-style: ${props => (props.recording && !props.paused ? 'italic' : 'normal')};
-  color: ${props => (props.recording ? (props.paused ? 'teal' : '#fe0001') : 'grey')};
-
-  ${Clock} {
-    margin-left: 0.5em;
+  p {
+    color: ${props => (props.recordingState === 'paused' ? '#aaa' : 'transparent')};
   }
+  visibility: ${props => (props.recordingState === 'inactive' ? 'hidden' : 'visible')};
 `;
 
 export default RecordingState;
