@@ -26,7 +26,7 @@ class RecordingControls extends React.Component {
     this.state = {
       isPaused: false,
       isRecording: false,
-      recordingState: 'paused',
+      recordingState: 'inactive',
       showModal: false,
       desktopRecording: null,
       videoRecording: null
