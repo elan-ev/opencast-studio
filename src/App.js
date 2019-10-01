@@ -13,17 +13,6 @@ import OpencastHeader from './ui/opencast-header';
 import Studio from './ui/studio';
 import UploadSettings from './ui/upload-settings';
 
-const modalCustomStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
-
 const defaultUploadSettings = {
   serverUrl: 'https://develop.opencast.org/',
   workflowId: 'fast',
@@ -81,7 +70,6 @@ function App(props) {
         contentLabel={t('upload-settings-modal-title')}
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
-        style={modalCustomStyles}
       >
         <UploadSettings
           uploadSettings={uploadSettings}
