@@ -1,5 +1,6 @@
 //; -*- mode: rjsx;-*-
 import React, { useState } from 'react';
+import styled from 'styled-components/macro';
 
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
@@ -16,7 +17,7 @@ function Studio(props) {
   const [recordingData, setRecordingData] = useState(defaultRecordingData);
 
   return (
-    <>
+      <main className={props.className}>
       <Toolbar
         uploadSettings={props.uploadSettings}
         handleOpenUploadSettings={props.handleOpenUploadSettings}
@@ -37,8 +38,10 @@ function Studio(props) {
         setRecordingData={setRecordingData}
         handleOpenUploadSettings={props.handleOpenUploadSettings}
       />
-    </>
+    </main>
   );
 }
 
-export default Studio;
+const StyledStudio = styled(Studio)``
+
+export default StyledStudio;

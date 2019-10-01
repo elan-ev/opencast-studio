@@ -14,12 +14,8 @@ function Footer(props) {
 }
 
 const StyledFooter = styled(Footer)`
-  padding-top: 25px;
+  padding: 1rem;
   text-align: center;
-
-  a {
-    padding: 0 10px;
-  }
 `;
 
 export default StyledFooter;

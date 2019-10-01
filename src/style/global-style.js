@@ -41,6 +41,10 @@ input:focus {
     border-color: #09f;
     box-shadow: 0 0 3px #8cf;
 }
+
+#root {
+  height: 100%;
+}
 `;
 
 export default GlobalStyle;

@@ -1,5 +1,6 @@
 //; -*- mode: rjsx;-*-
 import React, { useState } from 'react';
+import styled from 'styled-components/macro';
 import Modal from 'react-modal';
 import { useTranslation } from 'react-i18next';
 
@@ -32,7 +33,7 @@ const defaultUploadSettings = {
 
 const UPLOAD_SETTINGS_KEY = 'uploadSettings';
 
-function App() {
+function App(props) {
   const { t, i18n } = useTranslation();
 
   const [chosenLanguage, setChosenLanguage] = useState('en');
@@ -61,7 +62,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={props.className}>
       <GlobalStyle />
 
       <OpencastHeader
@@ -91,4 +92,18 @@ function App() {
   );
 }
 
-export default App;
+const StyledApp = styled(App)`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  ${Studio} {
+    flex: 1 0 auto;
+  }
+
+  ${Footer} {
+    flex-shrink: 0;
+  }
+`;
+
+export default StyledApp;
