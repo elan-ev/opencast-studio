@@ -97,7 +97,7 @@ function MediaDevices(props) {
   const { t } = useTranslation();
 
   function requestDisplayMedia() {
-    startDisplayCapture({ video: true, audio: false }).then(desktopStream => {
+    startDisplayCapture({ video: true, audio: true }).then(desktopStream => {
       props.setDesktopStream(desktopStream);
     });
   }
