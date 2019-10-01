@@ -12,6 +12,7 @@
     "gh-pages": "^2.1.1",
     "i18next": "^17.0.16",
     "react": "^16.9.0",
+    "react-beforeunload": "^2.1.0",
     "react-dom": "^16.9.0",
     "react-i18next": "^10.13.0",
     "react-modal": "^3.10.1",

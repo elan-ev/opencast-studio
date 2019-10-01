@@ -3,6 +3,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components/macro';
 import { withTranslation } from 'react-i18next';
+import { Beforeunload } from 'react-beforeunload';
 
 import downloadBlob from '../download-blob';
 import OpencastUploader from '../opencast-uploader';
@@ -42,6 +43,10 @@ class RecordingControls extends React.Component {
     this.handleSaveCreationUpload = this.handleSaveCreationUpload.bind(this);
     this.handleStart = this.handleStart.bind(this);
     this.handleStop = this.handleStop.bind(this);
+  }
+
+  hasRecording() {
+    return this.state.desktopRecording || this.state.videoRecording;
   }
 
   hasStreams() {
@@ -197,7 +202,10 @@ class RecordingControls extends React.Component {
 
     return (
       <div className={this.props.className}>
+        {this.hasRecording() && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
+
         <RecordingState recordingState={this.state.recordingState} />
+
         <div className="buttons">
           <div className="left">
             {this.state.recordingState === 'recording' && (
