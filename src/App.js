@@ -1,7 +1,7 @@
 //; -*- mode: rjsx;-*-
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import Modal from 'react-modal';
+import Modal from 'react-responsive-modal';
 import { useTranslation } from 'react-i18next';
 
 import languages from './languages';
@@ -65,12 +65,21 @@ function App(props) {
       <Footer />
 
       <Modal
-        isOpen={isModalOpen}
-        onRequestClose={handleCloseUploadSettings}
-        contentLabel={t('upload-settings-modal-title')}
-        shouldCloseOnOverlayClick={true}
-        shouldCloseOnEsc={true}
+        open={isModalOpen}
+        onClose={handleCloseUploadSettings}
+        ariaLabelledBy="upload-settings-modal-label"
+        closeOnEsc={true}
+        closeOnOverlayClick={true}
       >
+        <div
+          id="upload-settings-modal-label"
+          css={`
+            display: none;
+          `}
+        >
+          {t('upload-settings-modal-title')}
+        </div>
+
         <UploadSettings
           uploadSettings={uploadSettings}
           updateUploadSettings={handleUpdateUploadSettings}

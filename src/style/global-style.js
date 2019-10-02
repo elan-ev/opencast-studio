@@ -45,12 +45,6 @@ input:focus {
 #root {
   height: 100%;
 }
-
-/* Remove scrolling on the body; see http://reactcommunity.org/react-modal/styles/classes.html */
-.ReactModal__Body--open {
-    overflow: hidden;
-}
-
 `;
 
 export default GlobalStyle;

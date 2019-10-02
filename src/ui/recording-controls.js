@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
-import Modal from 'react-modal';
+import Modal from 'react-responsive-modal';
 import styled from 'styled-components/macro';
 import { withTranslation } from 'react-i18next';
 import { Beforeunload } from 'react-beforeunload';
@@ -247,12 +247,21 @@ class RecordingControls extends React.Component {
         </div>
 
         <Modal
-          isOpen={this.state.showModal}
-          onRequestClose={this.handleDialogClose}
-          contentLabel={t('save-creation-modal-title')}
-          shouldCloseOnOverlayClick={true}
-          shouldCloseOnEsc={true}
+          open={this.state.showModal}
+          onClose={this.handleDialogClose}
+          ariaLabelledBy="save-creation-modal-label"
+          closeOnEsc={true}
+          closeOnOverlayClick={true}
         >
+          <div
+            id="save-creation-modal-label"
+            css={`
+              display: none;
+            `}
+          >
+            {t('save-creation-modal-title')}
+          </div>
+
           <SaveCreationDialog
             desktopRecording={this.state.desktopRecording}
             videoRecording={this.state.videoRecording}
@@ -269,8 +278,7 @@ class RecordingControls extends React.Component {
 }
 
 const StyledRecordingControls = styled(RecordingControls)`
-  text-align: center;
-  margin: 2rem 0;
+  margin: 0;
   position: relative;
 
   .buttons {
@@ -280,6 +288,14 @@ const StyledRecordingControls = styled(RecordingControls)`
   .left,
   .right {
     flex: 1;
+  }
+
+  .left {
+    text-align: right;
+  }
+
+  ${RecordingState} {
+    text-align: center;
   }
 `;
 
