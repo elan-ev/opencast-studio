@@ -25,8 +25,7 @@ class RecordingControls extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPaused: false,
-      isRecording: false,
+      countdown: false,
       recordingState: 'inactive',
       showModal: false,
       desktopRecording: null,
@@ -41,7 +40,7 @@ class RecordingControls extends React.Component {
     this.handleResume = this.handleResume.bind(this);
     this.handleSaveCreationSave = this.handleSaveCreationSave.bind(this);
     this.handleSaveCreationUpload = this.handleSaveCreationUpload.bind(this);
-    this.handleStart = this.handleStart.bind(this);
+    this.handleRecord = this.handleRecord.bind(this);
     this.handleStop = this.handleStop.bind(this);
   }
 
@@ -56,7 +55,7 @@ class RecordingControls extends React.Component {
   record() {
     const streams = ['desktop', 'video'];
 
-    streams.forEach(deviceType => {
+    streams.map(deviceType => {
       const recorder = `${deviceType}Recorder`;
       const stream = this.props[`${deviceType}Stream`];
 
@@ -64,23 +63,26 @@ class RecordingControls extends React.Component {
         return;
       }
 
-      if (!this[recorder]) {
-        this[recorder] = new Recorder(stream);
+      this[recorder] = new Recorder(stream);
 
-        this[recorder].on('record.complete', () => {
-          this[recorder] = null;
-        });
-
-        // TODO: reinstate the delay with a countdown
-        //this[recorder].start(1000);
-        this[recorder].start();
-      } else {
-        this[recorder].resume();
-      }
+      this[recorder].on('record.complete', () => {
+        this[recorder] = null;
+      });
 
       this[recorder].on('record.complete', ({ media, url }) => {
         this.setState({ [`${deviceType}Recording`]: { deviceType, media, url } });
       });
+
+      this[recorder].start();
+    });
+  }
+
+  resume() {
+    const streams = ['desktop', 'video'];
+
+    streams.forEach(deviceType => {
+      const recorder = `${deviceType}Recorder`;
+      this[recorder] && this[recorder].resume();
     });
   }
 
@@ -108,15 +110,19 @@ class RecordingControls extends React.Component {
   }
 
   handleResume() {
-    this.handleStart();
+    this.resume();
   }
 
-  handleStart() {
+  handleRecord() {
     if (!this.hasStreams()) {
       return;
     }
-    this.setState({ recordingState: 'recording' });
-    this.record();
+    this.setState({ countdown: true });
+    setTimeout(() => {
+      this.record();
+      this.setState({ recordingState: 'recording' });
+      this.setState({ countdown: false });
+    }, 1000);
   }
 
   handleStop() {
@@ -231,7 +237,9 @@ class RecordingControls extends React.Component {
                 large
                 title={t('record-button-title')}
                 recordingState={this.state.recordingState}
-                onClick={this.handleStart}
+                onClick={this.handleRecord}
+                disabled={!this.hasStreams()}
+                countdown={this.state.countdown}
               />
             ) : (
               <StopButton

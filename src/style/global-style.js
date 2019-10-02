@@ -20,7 +20,7 @@ body {
     overflow-x: hidden;
 }
 
-label, button {
+label, button:not(:disabled) {
     cursor: pointer;
 }
 
