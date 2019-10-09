@@ -4,6 +4,7 @@
   "message-login-failed": "Login fehlgeschlagen. Bitte Passwort überprüfen!",
   "message-server-unreachable": "Der Server ist nicht zu erreichen: Überprüfen Sie Ihre Internet-Verbindung und die Server-URL! Prüfen Sie auch die Konfiguration Ihrer Opencast-Installation.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
+  "notification-title": "Notice:",
   "pause-button-title": "Aufzeichnung pausieren",
   "record-button-title": "Aufzeichnung beginnen",
   "resume-button-title": "Aufzeichnung fortsetzen",
@@ -25,6 +26,7 @@
   "toolbar-button-issues": "Problem berichten",
   "toolbar-button-opencast": "Zu Opencast",
   "toolbar-button-upload-settings": "Einstellungen für das Hochladen öffnen",
+  "upload-notification": "Currently uploading",
   "upload-settings-modal-title": "Einstellungen für das Hochladen",
   "upload-settings-button-validate": "Überprüfen",
   "upload-settings-validation-error": "Ungültige Einstellungen. Bitte überprüfen und noch einmal probieren!"
