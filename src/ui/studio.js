@@ -17,7 +17,7 @@ function Studio(props) {
   const [recordingData, setRecordingData] = useState(defaultRecordingData);
 
   return (
-      <main className={props.className}>
+    <main className={props.className}>
       <Toolbar
         uploadSettings={props.uploadSettings}
         handleOpenUploadSettings={props.handleOpenUploadSettings}
@@ -42,6 +42,17 @@ function Studio(props) {
   );
 }
 
-const StyledStudio = styled(Studio)``
+const StyledStudio = styled(Studio)`
+  display: flex;
+  flex-direction: column;
+
+  ${Toolbar} {
+    flex: 0;
+  }
+
+  ${MediaDevices} {
+    flex: 1 0 5rem;
+  }
+`;
 
 export default StyledStudio;

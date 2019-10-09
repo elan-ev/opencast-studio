@@ -24,7 +24,7 @@ const RecordingPreview = ({ className, deviceType, title, type, url }) => {
 
 const StyledRecordingPreview = styled(RecordingPreview)`
   width: 8rem;
-  height: 6rem;
+  height: 4.5rem;
   position: relative;
   background: #ddd;
   text-align: center;

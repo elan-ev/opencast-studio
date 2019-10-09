@@ -63,13 +63,32 @@ function MediaDevices(props) {
 }
 
 const StyledMediaDevices = styled(MediaDevices)`
+  flex: 1;
   display: flex;
+  justify-content: center;
+  padding: 0 0.5rem;
+  flex-wrap: wrap;
+
+  ${MediaDevice} {
+    margin: 0 0.5rem;
+    flex: 1 0 384px;
+    max-height: 1080px;
+  }
+
+  @media (max-width: 768px) {
+    ${MediaDevice} {
+      margin-top: 0.5rem;
+    }
+  }
+
+  /*
   justify-content: space-between;
   align-items: flex-start;
   padding: 0 2rem;
   position: relative;
   min-height: calc(22.5vw - 4rem);
   transition: min-height 1s;
+*/
 `;
 
 export default StyledMediaDevices;

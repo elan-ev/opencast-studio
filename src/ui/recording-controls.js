@@ -291,6 +291,7 @@ const StyledRecordingControls = styled(RecordingControls)`
 
   .buttons {
     display: flex;
+    align-items: center;
   }
 
   .left,

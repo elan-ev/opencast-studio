@@ -1,50 +1,70 @@
 //; -*- mode: rjsx;-*-
-import React from "react";
-import styled from "styled-components/macro";
-import LanguagesChooser from "./languages-chooser";
-
-const Header = styled.header`
-  height: 3rem;
-  line-height: 3rem;
-  display: block;
-  width: 100%;
-  background: #333;
-  box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.4);
-
-  span {
-    color: white;
-  }
-`;
-
-const Logo = styled.img`
-  height: 50px;
-  padding-top: -5px;
-`;
+import React from 'react';
+import styled from 'styled-components/macro';
+import LanguagesChooser from './languages-chooser';
 
 const BetaBubble = styled.span`
   position: relative;
   top: 4px;
-  font-size: 6pt;
+  font-size: 8pt;
   vertical-align: top;
   display: inline;
   border: 1px solid #888;
   border-radius: 5px;
   padding: 2px;
   color: #888;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
+
+function Brand(props) {
+  return (
+    <span className={props.className}>
+      <picture>
+        <source
+          media="(min-width: 769px)"
+          srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
+        />
+        <img
+          src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
+          alt="Opencast Studio"
+          css={`
+            height: 50px;
+          `}
+        />
+      </picture>
+
+      <BetaBubble>beta</BetaBubble>
+    </span>
+  );
+}
 
 function OpencastHeader(props) {
   return (
-    <Header>
-      <Logo src={process.env.PUBLIC_URL + '/opencast-studio.svg'} alt="Opencast Studio" />
-      <BetaBubble>beta</BetaBubble>
+    <header className={props.className}>
+      <Brand />
+
       <LanguagesChooser
         languages={props.languages}
         chosenLanguage={props.chosenLanguage}
         onSelectLanguage={props.onSelectLanguage}
       />
-    </Header>
+    </header>
   );
 }
 
-export default OpencastHeader;
+const StyledHeader = styled(OpencastHeader)`
+  height: 3rem;
+  line-height: 3rem;
+  background: #333;
+  display: flex;
+  justify-content: space-between;
+
+  ${LanguagesChooser} {
+    color: white;
+  }
+`;
+
+export default StyledHeader;

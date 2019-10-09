@@ -1,6 +1,7 @@
 //; -*- mode: rjsx;-*-
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components/macro';
 
 function UnstyledMediaDevice({ className, onClick, title, deviceType, icon, stream }) {
@@ -9,7 +10,11 @@ function UnstyledMediaDevice({ className, onClick, title, deviceType, icon, stre
     videoRef.current.srcObject = stream;
   });
   return (
-    <div onClick={onClick} data-title={title} className={`mediadevice action ${className}`}>
+    <div
+      onClick={stream ? null : onClick}
+      data-title={title}
+      className={`mediadevice action ${className}`}
+    >
       <video ref={videoRef} autoPlay muted></video>
       <span className="placeholder">
         <FontAwesomeIcon icon={icon} />
@@ -21,19 +26,19 @@ function UnstyledMediaDevice({ className, onClick, title, deviceType, icon, stre
 const MediaDevice = styled(UnstyledMediaDevice)`
   background: #ddd;
   position: relative;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.35);
   overflow: hidden;
   visibility: visible;
   max-height: calc(100vh - 14rem);
   z-index: 0;
   width: 45%;
   transition: width 0.5s 0.5s;
-  cursor: pointer;
+  cursor: ${props => (props.stream ? 'initial' : 'pointer')};
 
   :after {
     bottom: 0;
     color: #666;
-    content: attr(data-title);
+    content: ${props => (props.stream ? '' : 'attr(data-title)')};
     font-size: 1.5rem;
     font-weight: 300;
     left: 0;
