@@ -1,7 +1,6 @@
 //; -*- mode: rjsx;-*-
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components/macro';
 
 function UnstyledMediaDevice({ className, onClick, title, deviceType, icon, stream }) {

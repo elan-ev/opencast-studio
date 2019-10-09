@@ -1,6 +1,5 @@
 //; -*- mode: rjsx;-*-
-import React, { useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';

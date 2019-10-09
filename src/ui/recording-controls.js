@@ -5,6 +5,9 @@ import styled from 'styled-components/macro';
 import { withTranslation } from 'react-i18next';
 import { Beforeunload } from 'react-beforeunload';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 import downloadBlob from '../download-blob';
 import OpencastUploader from '../opencast-uploader';
 import Recorder from '../recorder';
@@ -29,7 +32,12 @@ class RecordingControls extends React.Component {
       recordingState: 'inactive',
       showModal: false,
       desktopRecording: null,
-      videoRecording: null
+      videoRecording: null,
+
+      showUploading: false,
+
+      showAlert: false,
+      alertMessage: ''
     };
 
     this.desktopRecorder = null;
@@ -55,7 +63,7 @@ class RecordingControls extends React.Component {
   record() {
     const streams = ['desktop', 'video'];
 
-    streams.map(deviceType => {
+    streams.forEach(deviceType => {
       const recorder = `${deviceType}Recorder`;
       const stream = this.props[`${deviceType}Stream`];
 
@@ -102,6 +110,10 @@ class RecordingControls extends React.Component {
     });
 
     this.setState({ showModal: true });
+  }
+
+  alert(alertMessage) {
+    this.setState({ alertMessage, showAlert: true });
   }
 
   handlePause() {
@@ -157,32 +169,37 @@ class RecordingControls extends React.Component {
     const { title, presenter } = this.props.recordingData;
 
     if (title !== '' && presenter !== '') {
+      this.handleDialogClose();
+      this.showUploading();
       new OpencastUploader(this.props.uploadSettings).loginAndUploadFromAnchor(
         // recording,
         [this.state.desktopRecording, this.state.videoRecording],
 
         // onsuccess
         () => {
-          alert(t('message-upload-complete'));
-          this.handleDialogClose();
+          this.hideUploading();
+          this.alert(t('message-upload-complete'));
         },
 
         // onloginfailed
         () => {
-          alert(t('message-login-failed'));
+          this.hideUploading();
+          this.alert(t('message-login-failed'));
           this.props.handleOpenUploadSettings();
         },
 
         // onserverunreachable
         err => {
-          alert(t('message-server-unreachable'));
+          this.hideUploading();
+          this.alert(t('message-server-unreachable'));
           console.error('Server unreachable: ', err);
           this.props.handleOpenUploadSettings();
         },
 
         // oninetorpermfailed
         err => {
-          alert(t('message-conn-failed'));
+          this.hideUploading();
+          this.alert(t('message-conn-failed'));
           console.error('Inet fail or Missing Permission: ', err);
           this.props.handleOpenUploadSettings();
         },
@@ -191,7 +208,7 @@ class RecordingControls extends React.Component {
         presenter
       );
     } else {
-      alert(t('save-creation-form-invalid'));
+      this.alert(t('save-creation-form-invalid'));
     }
   }
 
@@ -201,6 +218,14 @@ class RecordingControls extends React.Component {
     this.setState({ desktopRecording: null, videoRecording: null });
     this.props.setDesktopStream(null);
     this.props.setVideoStream(null);
+  }
+
+  showUploading() {
+    this.setState({ showUploading: true });
+  }
+
+  hideUploading() {
+    this.setState({ showUploading: false });
   }
 
   render() {
@@ -279,6 +304,31 @@ class RecordingControls extends React.Component {
             handleSave={this.handleSaveCreationSave}
             handleUpload={this.handleSaveCreationUpload}
           />
+        </Modal>
+
+        <Modal
+          open={this.state.showAlert}
+          onClose={() => this.setState({ showAlert: false })}
+          styles={{ modal: { minWidth: '200px' } }}
+          center
+        >
+          <h2>{t('notification-title')}</h2>
+          <p>{this.state.alertMessage}</p>
+        </Modal>
+
+        <Modal
+          open={this.state.showUploading}
+          onClose={this.hideUploading.bind(this)}
+          closeOnEsc={false}
+          closeOnOverlayClick={false}
+          showCloseIcon={false}
+          focusTrapped={false}
+          center
+        >
+          <h2>{t('upload-notification')}</h2>
+          <center>
+            <FontAwesomeIcon icon={faSpinner} spin size="3x" />
+          </center>
         </Modal>
       </div>
     );
