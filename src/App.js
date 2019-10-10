@@ -68,8 +68,10 @@ function App(props) {
         open={isModalOpen}
         onClose={handleCloseUploadSettings}
         ariaLabelledBy="upload-settings-modal-label"
-        closeOnEsc={true}
-        closeOnOverlayClick={true}
+        center
+        closeOnEsc={false}
+        closeOnOverlayClick={false}
+        showCloseIcon={false}
       >
         <div
           id="upload-settings-modal-label"

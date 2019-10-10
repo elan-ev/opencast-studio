@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 
+import Button from './button';
 import FormField from './form-field';
 import Notification from './notification';
 import OpencastUploader from '../opencast-uploader';
@@ -89,7 +90,7 @@ function OpencastUploaderSettingsDialog(props) {
       </main>
 
       <footer>
-        <button onClick={handleSubmit}>{t('upload-settings-button-validate')}</button>
+        <Button primary onClick={handleSubmit}>{t('upload-settings-button-validate')}</Button>
       </footer>
     </div>
   );

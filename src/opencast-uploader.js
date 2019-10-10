@@ -42,6 +42,14 @@ function xhr(url, opts) {
   });
 }
 
+const parseJson = text => JSON.parse(text);
+
+const groupBy = (arr, key = 'identifier', value = 'title') =>
+  arr.reduce((memo, item) => {
+    memo[item[key]] = item[value];
+    return memo;
+  }, {});
+
 class OpencastUploader {
   constructor(settings) {
     this.server_url = settings.serverUrl;
@@ -192,6 +200,19 @@ class OpencastUploader {
 
     return this.cred_xhr(this.server_url + 'admin_ng/j_spring_security_check', 'POST', data, true);
   }
+
+  getSeries() {
+    return this.cred_xhr(this.server_url + 'api/series')
+      .then(parseJson)
+      .then(groupBy);
+  }
+
+  getWorkflows(tag = 'upload') {
+    return this.cred_xhr(this.server_url + `api/workflow-definitions?filter=tag:${tag}`)
+      .then(parseJson)
+      .then(groupBy);
+  }
+
   getMeInfo() {
     return this.cred_xhr(this.server_url + 'info/me.json');
   }
