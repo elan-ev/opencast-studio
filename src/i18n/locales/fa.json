@@ -1,7 +1,7 @@
 {
   "about-us": "درباره ما",
-  "message-conn-failed": "The Internet Connection failed or you are missing necessary permissions.",
-  "message-login-failed": "Login failed, Please check your Password!",
+  "message-conn-failed": "خطا در اتصال به اینترنت یا نداشتن اجازه لازم.",
+  "message-login-failed": "ورود ناموفق بود ، لطفا رمز عبور خود را بررسی کنید!",
   "message-server-unreachable": "Server unreachable: Check your Internet Connection and the Server Url, also check whether your Opencast Instance supports this site.",
   "message-upload-complete": "Upload complete!",
   "pause-button-title": "Pause recording",
