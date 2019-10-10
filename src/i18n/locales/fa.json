@@ -1,5 +1,5 @@
 {
-  "about-us": "about us",
+  "about-us": "درباره ما",
   "message-conn-failed": "The Internet Connection failed or you are missing necessary permissions.",
   "message-login-failed": "Login failed, Please check your Password!",
   "message-server-unreachable": "Server unreachable: Check your Internet Connection and the Server Url, also check whether your Opencast Instance supports this site.",
