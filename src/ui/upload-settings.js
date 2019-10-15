@@ -38,7 +38,7 @@ function OpencastUploaderSettingsDialog(props) {
   return (
     <div className={props.className}>
       <header>
-        <h1>Configure Opencast Upload</h1>
+        <h1>Configure Upload To Opencast</h1>
       </header>
 
       <main>
