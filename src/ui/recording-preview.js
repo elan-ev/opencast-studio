@@ -8,7 +8,7 @@ const RecordingPreview = ({ className, deviceType, title, type, url }) => {
 
   if (!url) {
     return (
-      <a className={className} download={downloadName}>
+      <a className={className} target="_blank" href={url} download={downloadName} rel="noopener noreferrer">
         {deviceType}
       </a>
     );
