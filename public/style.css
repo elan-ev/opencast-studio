@@ -2099,3 +2099,14 @@ code {
     display: block;
     word-wrap: break-word;
 }
+
+@media only screen and (max-width: 768px) {
+    article {
+      margin: 0 2em;
+    }
+  }
+@media only screen and (max-width: 425px) {
+    article {
+        margin: 0 1em;
+    }
+}
