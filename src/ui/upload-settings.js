@@ -38,13 +38,13 @@ function OpencastUploaderSettingsDialog(props) {
   return (
     <div className={props.className}>
       <header>
-        <h1>Configure Opencast Upload</h1>
+        <h1>Configure Upload To Opencast</h1>
       </header>
 
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 
-        <FormField label="Opencast Server URL">
+        <FormField label="Server URL">
           <input
             name="serverUrl"
             value={settings.serverUrl}
@@ -66,7 +66,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Opencast Username">
+        <FormField label="Username">
           <input
             name="loginName"
             value={settings.loginName}
@@ -77,7 +77,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Opencast Password">
+        <FormField label="Password">
           <input
             name="loginPassword"
             value={settings.loginPassword}
