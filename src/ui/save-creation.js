@@ -131,6 +131,22 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
     overflow-y: auto;
     flex-wrap: wrap;
   }
+  
+  span {
+    margin-left: 0.5em;
+  }
+
+  @media only screen and (max-width: 425px) {
+    button {
+        display: block;
+        border: 1px;
+        margin: 0 0 1em;
+        text-align: left;
+    }
+    button + button {
+      margin-left: 0;
+    }
+  }   
 `;
 
 export default StyledSaveCreationDialog;

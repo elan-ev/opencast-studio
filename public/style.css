@@ -2099,3 +2099,11 @@ code {
     display: block;
     word-wrap: break-word;
 }
+
+
+@media only screen and (max-width: 425px) {
+    .btn {
+        display: inline-block;
+        width: 500px;
+    }
+} 
