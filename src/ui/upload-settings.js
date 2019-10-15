@@ -44,7 +44,7 @@ function OpencastUploaderSettingsDialog(props) {
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 
-        <FormField label="Opencast Server URL">
+        <FormField label="Server URL">
           <input
             name="serverUrl"
             value={settings.serverUrl}
@@ -66,7 +66,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Opencast Username">
+        <FormField label="Username">
           <input
             name="loginName"
             value={settings.loginName}
@@ -77,7 +77,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Opencast Password">
+        <FormField label="Password">
           <input
             name="loginPassword"
             value={settings.loginPassword}
@@ -90,7 +90,9 @@ function OpencastUploaderSettingsDialog(props) {
       </main>
 
       <footer>
-        <Button primary onClick={handleSubmit}>{t('upload-settings-button-validate')}</Button>
+        <Button primary onClick={handleSubmit}>
+          {t('upload-settings-button-validate')}
+        </Button>
       </footer>
     </div>
   );
