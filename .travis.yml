@@ -8,3 +8,13 @@ jobs:
     - stage: tests
       script:
         - npm run build
+
+    # Deploy translation keys to Crowdin if we are on develop or one of the release branches
+    - stage: deployment
+      script:
+        - npm run build
+      deploy:
+        provider: script
+        script: bash .travis-deploy.sh
+        on:
+          branch: react
