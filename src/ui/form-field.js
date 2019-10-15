@@ -29,6 +29,7 @@ const StyledFormField = styled(FormField)`
     display: block;
     font-size: 1rem;
     font-weight: 700;
+    cursor:default;
   }
 
   .label:not(:last-child) {
