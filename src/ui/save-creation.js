@@ -110,6 +110,7 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
 
   header h1 {
     font-weight: 300;
+    cursor: default;
   }
 
   button {
