@@ -135,6 +135,7 @@ class OpencastUploader {
           '  <dcterms:creator>Creator not set</dcterms:creator>' +
           '  <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>' +
           '  <dcterms:title>Title Not Set</dcterms:title>' +
+          '  <dcterms:spatial>Opencast Studio</dcterms:spatial>' +
           '</dublincore>';
 
         let dc = new DOMParser().parseFromString(base_dc, 'text/xml');
