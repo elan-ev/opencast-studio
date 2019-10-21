@@ -10,7 +10,7 @@
     "@fortawesome/react-fontawesome": "^0.1.6",
     "babel-plugin-styled-components": "^1.10.6",
     "gh-pages": "^2.1.1",
-    "i18next": "^17.2.0",
+    "i18next": "^17.3.0",
     "react": "^16.10.2",
     "react-beforeunload": "^2.1.0",
     "react-dom": "^16.10.2",
