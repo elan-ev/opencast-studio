@@ -52,7 +52,9 @@ function App(props) {
     handleCloseUploadSettings();
   };
 
-  const stylisPlugins = []; // [stylisRTLPlugin]
+  const chosenLang = languages.find(({ short }) => short === chosenLanguage);
+  const isRtl = !!(chosenLang && chosenLang.rtl);
+  const stylisPlugins = isRtl ? [stylisRTLPlugin] : [];
 
   return (
     <StyleSheetManager stylisPlugins={stylisPlugins}>
