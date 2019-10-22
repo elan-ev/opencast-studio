@@ -114,7 +114,6 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
 
   header h1 {
     font-weight: 300;
-    cursor: default;
   }
 
   button {
@@ -138,7 +137,6 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
   }
 
   @media screen and (max-width: 450px) {
-
     footer {
       button {
         width: 100%;
@@ -149,7 +147,6 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
         }
       }
     }
-
   }
 `;
 

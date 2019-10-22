@@ -4,9 +4,11 @@ import styled from 'styled-components/macro';
 
 function FormField(props) {
   return (
-      <div className={props.className}>
-      <label className="label">{props.label}</label>
-      <div className="control">{props.children}</div>
+    <div className={props.className}>
+      <label className="label">
+        {props.label}
+        <div className="control">{props.children}</div>
+      </label>
     </div>
   );
 }
@@ -29,7 +31,6 @@ const StyledFormField = styled(FormField)`
     display: block;
     font-size: 1rem;
     font-weight: 700;
-    cursor:default;
   }
 
   .label:not(:last-child) {
