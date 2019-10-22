@@ -129,5 +129,9 @@ const UploaderSettingsDialog = styled(OpencastUploaderSettingsDialog)`
   .label:not(:last-child) {
     margin-bottom: 0.5em;
   }
+
+  input {
+    width: 100%;
+  }
 `;
 export default UploaderSettingsDialog;
