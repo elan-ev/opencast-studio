@@ -122,6 +122,7 @@ class RecordingControls extends React.Component {
   }
 
   handleResume() {
+    this.setState({ recordingState: 'recording' });
     this.resume();
   }
 
