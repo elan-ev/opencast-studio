@@ -38,13 +38,13 @@ function OpencastUploaderSettingsDialog(props) {
   return (
     <div className={props.className}>
       <header>
-        <h1>Configure Upload To Opencast</h1>
+        <h1>{t('upload-settings-modal-header')}</h1>
       </header>
 
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 
-        <FormField label="Server URL">
+        <FormField label={t('upload-settings-label-server-url')}>
           <input
             name="serverUrl"
             value={settings.serverUrl}
@@ -55,7 +55,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Workflow ID">
+        <FormField label={t('upload-settings-label-workflow-id')}>
           <input
             name="workflowId"
             value={settings.workflowId}
@@ -66,7 +66,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Username">
+        <FormField label={t('upload-settings-label-username')}>
           <input
             name="loginName"
             value={settings.loginName}
@@ -77,7 +77,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Password">
+        <FormField label={t('upload-settings-label-password')}>
           <input
             name="loginPassword"
             value={settings.loginPassword}
