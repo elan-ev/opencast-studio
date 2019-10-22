@@ -4,9 +4,11 @@ import styled from 'styled-components/macro';
 
 function FormField(props) {
   return (
-      <div className={props.className}>
-      <label className="label">{props.label}</label>
-      <div className="control">{props.children}</div>
+    <div className={props.className}>
+      <label className="label">
+        {props.label}
+        <div className="control">{props.children}</div>
+      </label>
     </div>
   );
 }

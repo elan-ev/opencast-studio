@@ -1,9 +1,10 @@
 {
-  "about-us": "about us",
+  "legal-notices": "Legal Notices",
   "message-conn-failed": "The Internet Connection failed or you are missing necessary permissions.",
   "message-login-failed": "Login failed, Please check your Password!",
   "message-server-unreachable": "Server unreachable: Check your Internet Connection and the Server Url, also check whether your Opencast Instance supports this site.",
   "message-upload-complete": "Upload complete!",
+  "notification-title": "Notice:",
   "pause-button-title": "Pause recording",
   "record-button-title": "Start recording",
   "resume-button-title": "Resume recording",
@@ -15,8 +16,8 @@
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Title",
   "save-creation-modal-title": "Production Details",
-  "share-desktop": "Share desktop (no audio)",
-  "share-webcam": "Share webcam (with microphone audio)",
+  "share-desktop": "Share desktop",
+  "share-webcam": "Share webcam",
   "state-paused": "Paused",
   "state-recording": "Recording",
   "state-waiting": "Waiting",
@@ -25,7 +26,13 @@
   "toolbar-button-issues": "Report Issue",
   "toolbar-button-opencast": "Go to Opencast",
   "toolbar-button-upload-settings": "Open Upload Settings",
+  "upload-notification": "Currently uploading",
   "upload-settings-modal-title": "Opencast Upload Settings",
   "upload-settings-button-validate": "Validate Settings",
-  "upload-settings-validation-error": "Invalid settings. Please verify and retry!"
+  "upload-settings-validation-error": "Invalid settings. Please verify and retry!",
+  "upload-settings-modal-header": "Configure Upload To Opencast",
+  "upload-settings-label-server-url": "Server URL",
+  "upload-settings-label-workflow-id": "Workflow ID",
+  "upload-settings-label-username": "Username",
+  "upload-settings-label-password": "Password"
 }

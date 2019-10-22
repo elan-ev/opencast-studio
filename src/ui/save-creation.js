@@ -104,6 +104,10 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
     flex: 1;
   }
 
+  input {
+    width: 100%;
+  }
+
   footer {
     margin-top: 1.5em;
   }
@@ -130,6 +134,19 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
     max-height: 6.5rem;
     overflow-y: auto;
     flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 450px) {
+    footer {
+      button {
+        width: 100%;
+
+        + button {
+          margin-left: 0;
+          margin-top: 1em;
+        }
+      }
+    }
   }
 `;
 

@@ -8,7 +8,7 @@ function Footer(props) {
 
   return (
     <footer className={props.className}>
-      <a href="/impressum.html">{t('about-us')}</a>
+      <a href="/impressum.html">{t('legal-notices')}</a>
     </footer>
   );
 }

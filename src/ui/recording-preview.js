@@ -8,7 +8,7 @@ const RecordingPreview = ({ className, deviceType, title, type, url }) => {
 
   if (!url) {
     return (
-      <a className={className} download={downloadName}>
+      <a className={className} target="_blank" href={url} download={downloadName} rel="noopener noreferrer">
         {deviceType}
       </a>
     );
@@ -24,7 +24,7 @@ const RecordingPreview = ({ className, deviceType, title, type, url }) => {
 
 const StyledRecordingPreview = styled(RecordingPreview)`
   width: 8rem;
-  height: 6rem;
+  height: 4.5rem;
   position: relative;
   background: #ddd;
   text-align: center;

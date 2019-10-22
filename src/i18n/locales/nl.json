@@ -29,5 +29,10 @@
   "upload-notification": "Currently uploading",
   "upload-settings-modal-title": "Opencast Upload Settings",
   "upload-settings-button-validate": "Validate Settings",
-  "upload-settings-validation-error": "Invalid settings. Please verify and retry!"
+  "upload-settings-validation-error": "Invalid settings. Please verify and retry!",
+  "upload-settings-modal-header": "Configure Upload To Opencast",
+  "upload-settings-label-server-url": "Server URL",
+  "upload-settings-label-workflow-id": "Workflow ID",
+  "upload-settings-label-username": "Username",
+  "upload-settings-label-password": "Password"
 }

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 
+import Button from './button';
 import FormField from './form-field';
 import Notification from './notification';
 import OpencastUploader from '../opencast-uploader';
@@ -37,13 +38,13 @@ function OpencastUploaderSettingsDialog(props) {
   return (
     <div className={props.className}>
       <header>
-        <h1>Configure Opencast Upload</h1>
+        <h1>{t('upload-settings-modal-header')}</h1>
       </header>
 
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 
-        <FormField label="Opencast Server URL">
+        <FormField label={t('upload-settings-label-server-url')}>
           <input
             name="serverUrl"
             value={settings.serverUrl}
@@ -54,7 +55,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Workflow ID">
+        <FormField label={t('upload-settings-label-workflow-id')}>
           <input
             name="workflowId"
             value={settings.workflowId}
@@ -65,7 +66,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Opencast Username">
+        <FormField label={t('upload-settings-label-username')}>
           <input
             name="loginName"
             value={settings.loginName}
@@ -76,7 +77,7 @@ function OpencastUploaderSettingsDialog(props) {
           />
         </FormField>
 
-        <FormField label="Opencast Password">
+        <FormField label={t('upload-settings-label-password')}>
           <input
             name="loginPassword"
             value={settings.loginPassword}
@@ -89,7 +90,9 @@ function OpencastUploaderSettingsDialog(props) {
       </main>
 
       <footer>
-        <button onClick={handleSubmit}>{t('upload-settings-button-validate')}</button>
+        <Button primary onClick={handleSubmit}>
+          {t('upload-settings-button-validate')}
+        </Button>
       </footer>
     </div>
   );

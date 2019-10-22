@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Opencast Studio",
+  "name": "Web-based recording studio for Opencast",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,15 +8,15 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "opencast-studio-icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "opencast-studio-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
-    }	    
+    }
   ],
   "start_url": ".",
   "display": "standalone",

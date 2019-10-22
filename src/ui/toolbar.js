@@ -48,11 +48,18 @@ function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
 }
 
 const StyledToolbar = styled(Toolbar)`
-  height: 4rem;
-  line-height: 4rem;
+  height: 3rem;
+  line-height: 3rem;
   text-align: right;
-  margin-right: 2rem;
-  font-size: 1.6rem;
+
+  padding-right: 2rem;
+  box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.4);
+  margin-bottom: 8px;
+
+  ${Icon} {
+    font-size: 1.6rem;
+    vertical-align: middle;
+  }
 
   > * {
     margin-left: 6px;

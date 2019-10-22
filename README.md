@@ -1,7 +1,7 @@
 Opencast Studio
 ===============
 
-[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
+[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=react)
 ](https://travis-ci.com/elan-ev/opencast-studio)
 
 A web-based recording studio for [Opencast](https://opencast.org).

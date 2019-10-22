@@ -1,16 +1,11 @@
-import flagRsa from "./flags/rsa.png";
-import flagEn from "./flags/uk.png";
-import flagDe from "./flags/de.png";
-import flagEs from "./flags/esp.png";
-import flagFr from "./flags/fra.png";
+import flagEn from "./flags/united-kingdom.png";
+import flagDe from "./flags/germany.png";
+import flagFa from "./flags/iran.png";
 
 const languages = [
-  { short: "af", long: "Afrikaans", flag: flagRsa },
-  { short: "xh", long: "isiXhosa", flag: flagRsa },
   { short: "en", long: "English", flag: flagEn },
   { short: "de", long: "Deutsch", flag: flagDe },
-  { short: "es", long: "Español", flag: flagEs },
-  { short: "fr", long: "Français", flag: flagFr }
+  { short: "fa", long: "Farsi", flag: flagFa },
 ];
 
 export default languages;
