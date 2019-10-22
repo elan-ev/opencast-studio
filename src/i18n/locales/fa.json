@@ -4,6 +4,7 @@
   "message-login-failed": "ورود ناموفق بود ، لطفا رمز عبور خود را بررسی کنید!",
   "message-server-unreachable": "سرور در دسترس نیست: اتصال به اینترنت و سرور اینترنتی خود را بررسی کنید! همچنین بررسی کنید که آیا Opencast Instance شما از این سایت پشتیبانی می کند یا خیر.",
   "message-upload-complete": "آپلود کامل شد!",
+  "notification-title": "Notice:",
   "pause-button-title": "مکث در ضبط کردن",
   "record-button-title": "شروع ضبط کردن",
   "resume-button-title": "ادامه ضبط کردن",
@@ -25,7 +26,13 @@
   "toolbar-button-issues": "گزارش مشکل",
   "toolbar-button-opencast": "برو به Opencast",
   "toolbar-button-upload-settings": "باز کردن تنظیمات آپلود",
+  "upload-notification": "Currently uploading",
   "upload-settings-modal-title": "تنظیمات آپلود Opencast",
   "upload-settings-button-validate": "معتبر سازی تنظیمات",
-  "upload-settings-validation-error": "تنظیمات نامعتبر است. لطفا تأیید کنید و دوباره امتحان کنید!"
+  "upload-settings-validation-error": "تنظیمات نامعتبر است. لطفا تأیید کنید و دوباره امتحان کنید!",
+  "upload-settings-modal-header": "Configure Upload To Opencast",
+  "upload-settings-label-server-url": "Server URL",
+  "upload-settings-label-workflow-id": "Workflow ID",
+  "upload-settings-label-username": "Username",
+  "upload-settings-label-password": "Password"
 }
