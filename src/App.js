@@ -1,11 +1,13 @@
 //; -*- mode: rjsx;-*-
 import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+import styled, { StyleSheetManager, ThemeProvider } from 'styled-components/macro';
 import Modal from 'react-responsive-modal';
 import { useTranslation } from 'react-i18next';
+import stylisRTLPlugin from 'stylis-rtl';
 
-import languages from './languages';
 import GlobalStyle from './style/global-style';
+import languages from './languages';
+import theme from './theme';
 import useLocalStorage from './use-local-storage';
 
 import Footer from './ui/footer';
@@ -50,44 +52,53 @@ function App(props) {
     handleCloseUploadSettings();
   };
 
+  const stylisPlugins = []; // [stylisRTLPlugin]
+
   return (
-    <div className={props.className}>
-      <GlobalStyle />
+    <StyleSheetManager stylisPlugins={stylisPlugins}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
 
-      <OpencastHeader
-        languages={languages}
-        chosenLanguage={chosenLanguage}
-        onSelectLanguage={selectLanguage}
-      />
+        <div className={props.className}>
+          <OpencastHeader
+            languages={languages}
+            chosenLanguage={chosenLanguage}
+            onSelectLanguage={selectLanguage}
+          />
 
-      <Studio uploadSettings={uploadSettings} handleOpenUploadSettings={handleOpenUploadSettings} />
+          <Studio
+            uploadSettings={uploadSettings}
+            handleOpenUploadSettings={handleOpenUploadSettings}
+          />
 
-      <Footer />
+          <Footer />
 
-      <Modal
-        open={isModalOpen}
-        onClose={handleCloseUploadSettings}
-        ariaLabelledBy="upload-settings-modal-label"
-        center
-        closeOnEsc={false}
-        closeOnOverlayClick={false}
-        showCloseIcon={false}
-      >
-        <div
-          id="upload-settings-modal-label"
-          css={`
-            display: none;
-          `}
-        >
-          {t('upload-settings-modal-title')}
+          <Modal
+            open={isModalOpen}
+            onClose={handleCloseUploadSettings}
+            ariaLabelledBy="upload-settings-modal-label"
+            center
+            closeOnEsc={false}
+            closeOnOverlayClick={false}
+            showCloseIcon={false}
+          >
+            <div
+              id="upload-settings-modal-label"
+              css={`
+                display: none;
+              `}
+            >
+              {t('upload-settings-modal-title')}
+            </div>
+
+            <UploadSettings
+              uploadSettings={uploadSettings}
+              updateUploadSettings={handleUpdateUploadSettings}
+            />
+          </Modal>
         </div>
-
-        <UploadSettings
-          uploadSettings={uploadSettings}
-          updateUploadSettings={handleUpdateUploadSettings}
-        />
-      </Modal>
-    </div>
+      </ThemeProvider>
+    </StyleSheetManager>
   );
 }
 
