@@ -12,11 +12,19 @@ function startDisplayCapture(displayMediaOptions) {
   });
 }
 
+function supportsDisplayCapture() {
+  return 'mediaDevices' in navigator && 'getDisplayMedia' in navigator.mediaDevices;
+}
+
 function startUserCapture(userMediaOptions) {
   return navigator.mediaDevices.getUserMedia(userMediaOptions).catch(err => {
     console.error('Error:' + err);
     return null;
   });
+}
+
+function supportsUserCapture() {
+  return 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 }
 
 function MediaDevices(props) {
@@ -42,21 +50,29 @@ function MediaDevices(props) {
 
   return (
     <div className={props.className}>
-      <MediaDevice
-        onClick={requestDisplayMedia}
-        title={t('share-desktop')}
-        deviceType="desktop"
-        icon={faDesktop}
-        stream={props.desktopStream}
-      />
+      {supportsDisplayCapture() && (
+        <MediaDevice
+          onClick={requestDisplayMedia}
+          title={t('share-desktop')}
+          deviceType="desktop"
+          icon={faDesktop}
+          stream={props.desktopStream}
+        />
+      )}
 
-      <MediaDevice
-        onClick={requestUserMedia}
-        title={t('share-webcam')}
-        deviceType="video"
-        icon={faVideo}
-        stream={props.videoStream}
-      />
+      {supportsUserCapture() && (
+        <MediaDevice
+          onClick={requestUserMedia}
+          title={t('share-webcam')}
+          deviceType="video"
+          icon={faVideo}
+          stream={props.videoStream}
+        />
+      )}
+
+      {!supportsDisplayCapture() && !supportsUserCapture() && (
+        <div>Your browser does not allow capturing your display or any other media input.</div>
+      )}
     </div>
   );
 }
