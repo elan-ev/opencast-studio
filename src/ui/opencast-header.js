@@ -2,17 +2,18 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import LanguagesChooser from './languages-chooser';
+import { Link } from '@reach/router';
 
 const BetaBubble = styled.span`
   position: relative;
   top: 4px;
-  font-size: 8pt;
+  font-size: 12pt;
   vertical-align: top;
   display: inline;
   border: 1px solid #888;
   border-radius: 5px;
   padding: 2px;
-  color: #888;
+  color: #aaa;
 
   @media (max-width: 768px) {
     display: none;
@@ -22,19 +23,21 @@ const BetaBubble = styled.span`
 function Brand(props) {
   return (
     <span className={props.className}>
-      <picture>
-        <source
-          media="(min-width: 769px)"
-          srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
-        />
-        <img
-          src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
-          alt="Opencast Studio"
-          css={`
-            height: 50px;
-          `}
-        />
-      </picture>
+      <Link to="/">
+        <picture>
+          <source
+            media="(min-width: 769px)"
+            srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
+          />
+          <img
+            src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
+            alt="Opencast Studio"
+            css={`
+              height: 50px;
+            `}
+          />
+        </picture>
+      </Link>
 
       <BetaBubble>beta</BetaBubble>
     </span>
@@ -64,6 +67,10 @@ const StyledHeader = styled(OpencastHeader)`
 
   ${LanguagesChooser} {
     color: white;
+  }
+
+  a {
+    outline: 0;
   }
 `;
 

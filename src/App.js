@@ -1,5 +1,6 @@
 //; -*- mode: rjsx;-*-
 import React, { useState } from 'react';
+import { Router } from '@reach/router';
 import styled, { ThemeProvider } from 'styled-components/macro';
 import Modal from 'react-responsive-modal';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,9 @@ import languages from './languages';
 import theme from './theme';
 import useLocalStorage from './use-local-storage';
 
+import About from './ui/about';
 import Footer from './ui/footer';
+import NotFound from './ui/not-found';
 import OpencastHeader from './ui/opencast-header';
 import Studio from './ui/studio';
 import UploadSettings from './ui/upload-settings';
@@ -62,12 +65,15 @@ function App(props) {
           onSelectLanguage={selectLanguage}
         />
 
-        <Studio
-          uploadSettings={uploadSettings}
-          handleOpenUploadSettings={handleOpenUploadSettings}
-        />
-
-        <Footer />
+        <Router>
+          <Studio
+            path="/"
+            uploadSettings={uploadSettings}
+            handleOpenUploadSettings={handleOpenUploadSettings}
+          />
+          <About path="/about" />
+          <NotFound default />
+        </Router>
 
         <Modal
           open={isModalOpen}
