@@ -18,7 +18,7 @@
     "react-i18next": "^10.13.1",
     "react-responsive-modal": "^4.0.1",
     "react-scripts": "3.2.0",
-    "styled-components": "^5.0.0-beta.11",
+    "styled-components": "^5.0.0-5.canary-sheet",
     "styled-system": "^5.1.2"
   },
   "repository": {
