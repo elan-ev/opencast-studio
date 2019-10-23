@@ -13,7 +13,7 @@
     "i18next": "^17.3.0",
     "react": "^16.10.2",
     "react-beforeunload": "^2.1.0",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.11.0",
     "react-i18next": "^10.13.1",
     "react-responsive-modal": "^4.0.1",
     "react-scripts": "3.2.0",
