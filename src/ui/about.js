@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import css from '@styled-system/css';
 
 import { Box, Container, Heading, Link, Text } from './base-components';
-
+import { navigate } from '@reach/router';
 const Code = props => (
   <Box
     bg="#f4f4f4"
@@ -112,11 +112,9 @@ function About(props) {
             </Text>
           </li>
         </ul>
-        <footer>
-          <Link display="block" textAlign="center" href="index.html">
-            ← Back to the Studio
-          </Link>
-        </footer>
+        <Box as="footer" textAlign="center">
+          <Link onClick={() => navigate('/')}>← Back to the Studio</Link>
+        </Box>
       </article>
     </Container>
   );

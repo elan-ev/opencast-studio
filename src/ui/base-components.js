@@ -36,7 +36,7 @@ export const Text = styled(Box).attrs(props => {
     }
   })}
 `;
-Text.defaultProps = { variant: 'body' };
+Text.defaultProps = { fontSize: 3, variant: 'body' };
 
 export const Heading = props => <Text as="h2" variant="heading" {...props} />;
 

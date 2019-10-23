@@ -12,6 +12,7 @@ import useLocalStorage from './use-local-storage';
 
 import About from './ui/about';
 import Footer from './ui/footer';
+import Impressum from './ui/impressum';
 import NotFound from './ui/not-found';
 import OpencastHeader from './ui/opencast-header';
 import Studio from './ui/studio';
@@ -72,6 +73,7 @@ function App(props) {
             handleOpenUploadSettings={handleOpenUploadSettings}
           />
           <About path="/about" />
+          <Impressum path="/impressum" />
           <NotFound default />
         </Router>
 
