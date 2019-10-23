@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 
+import Footer from './footer';
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
 import Toolbar from './toolbar';
@@ -17,28 +18,32 @@ function Studio(props) {
   const [recordingData, setRecordingData] = useState(defaultRecordingData);
 
   return (
-    <main className={props.className}>
-      <Toolbar
-        uploadSettings={props.uploadSettings}
-        handleOpenUploadSettings={props.handleOpenUploadSettings}
-      />
-      <MediaDevices
-        desktopStream={desktopStream}
-        setDesktopStream={setDesktopStream}
-        videoStream={videoStream}
-        setVideoStream={setVideoStream}
-      />
-      <RecordingControls
-        desktopStream={desktopStream}
-        setDesktopStream={setDesktopStream}
-        videoStream={videoStream}
-        setVideoStream={setVideoStream}
-        uploadSettings={props.uploadSettings}
-        recordingData={recordingData}
-        setRecordingData={setRecordingData}
-        handleOpenUploadSettings={props.handleOpenUploadSettings}
-      />
-    </main>
+    <>
+      <main className={props.className}>
+        <Toolbar
+          uploadSettings={props.uploadSettings}
+          handleOpenUploadSettings={props.handleOpenUploadSettings}
+        />
+        <MediaDevices
+          desktopStream={desktopStream}
+          setDesktopStream={setDesktopStream}
+          videoStream={videoStream}
+          setVideoStream={setVideoStream}
+        />
+        <RecordingControls
+          desktopStream={desktopStream}
+          setDesktopStream={setDesktopStream}
+          videoStream={videoStream}
+          setVideoStream={setVideoStream}
+          uploadSettings={props.uploadSettings}
+          recordingData={recordingData}
+          setRecordingData={setRecordingData}
+          handleOpenUploadSettings={props.handleOpenUploadSettings}
+        />
+      </main>
+
+      <Footer />
+    </>
   );
 }
 

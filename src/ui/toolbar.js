@@ -2,6 +2,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
+import { Link } from '@reach/router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -40,9 +41,9 @@ function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
         <Icon icon={faExclamationCircle} />
       </a>
 
-      <a href="/about.html" title={t('toolbar-button-about')}>
+      <Link to="/about" title={t('toolbar-button-about')}>
         <Icon icon={faQuestionCircle} />
-      </a>
+      </Link>
     </div>
   );
 }
