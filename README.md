@@ -45,3 +45,29 @@ add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorizatio
 
 For a complete configuration file, take a look at [the test server configuration
 ](https://github.com/opencast/opencast-project-infrastructure/blob/9f09638e922d623cd4d3c91dd90aca39c421530d/ansible-allinone-demo-vm/roles/nginx/templates/nginx.conf#L158-L162).
+
+
+Build Instructions
+------------------
+
+Opencast Studio is mainly just meant to be used as a service and you do not
+need to build and/or install it yourself. Just head over to
+[studio.opencast.org](https://studio.opencast.org).
+
+Nevertheless, if you want to build it yourself, here are a few instructions:
+
+```sh
+% git clone git@github.com:elan-ev/opencast-studio.git
+% cd opencast-studio
+% npm install
+% npm run build
+```
+
+This will generate static content you can serve via any web server in `build/`.
+That's it.
+
+If you prefer to run a local **development** server directly, you can use instead:
+
+```sh
+% npm run start
+```
