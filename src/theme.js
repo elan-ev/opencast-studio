@@ -24,11 +24,9 @@ export default {
   },
   textStyles: {
     body: {
-      fontSize: 3,
       fontFamily: 'body',
       fontWeight: 'body',
-      lineHeight: 'body',
-      py: 1
+      lineHeight: 'body'
     },
     heading: {
       fontSize: 4,
@@ -44,7 +42,9 @@ export default {
     },
     link: {
       variant: 'textStyles.body',
-      color: 'primary'
+      color: 'primary',
+      cursor: 'pointer',
+      textDecoration: 'underline'
     }
   }
 };

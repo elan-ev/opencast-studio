@@ -2,20 +2,19 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
+import { navigate } from "@reach/router";
+import { Box, Link } from './base-components';
 
 function Footer(props) {
   const { t } = useTranslation();
 
   return (
-    <footer className={props.className}>
-      <a href="/impressum.html">{t('legal-notices')}</a>
-    </footer>
+      <Box as="footer" p="1rem" textAlign="center" className={props.className}>
+        <Link fontSize={1} onClick={() => navigate('/impressum') }>{t('legal-notices')}</Link>
+    </Box>
   );
 }
 
-const StyledFooter = styled(Footer)`
-  padding: 1rem;
-  text-align: center;
-`;
+const StyledFooter = styled(Footer)``;
 
 export default StyledFooter;
