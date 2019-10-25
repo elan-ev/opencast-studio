@@ -1,6 +1,7 @@
 #!/bin/sh
 
 srcpath="$(pwd)"
+npm run build
 
 # Prepare Github SSH key
 echo "${GITHUB_DEPLOY_KEY}" | base64 -d > ~/.ssh/id_rsa
