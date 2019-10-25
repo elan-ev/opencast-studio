@@ -1,6 +1,7 @@
 #!/bin/sh
 
 srcpath="$(pwd)"
+npm ci
 npm run build
 
 # Prepare Github SSH key
