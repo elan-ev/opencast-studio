@@ -5,15 +5,26 @@ import { navigate } from '@reach/router';
 
 import { Box, Container, Heading, Link, Text } from './base-components';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+
 function Impressum(props) {
   return (
     <Container className={props.className}>
       <article>
         <header>
-          <Heading>Impressum</Heading>
+          <Heading>ELAN e.V.</Heading>
         </header>
 
-        <Text pb={3}>ELAN e.V. (E-Learning Academic Network)</Text>
+        <Text pb={3}>
+          The e-learning academic network (ELAN e.V.) is a German non-profit
+          organization supporting higher-education organizations in all matters
+          related to e-learning. Our services include practical tips about how
+          to use digital technologies in education, legal advice and development
+          of free, open-source software to support education.
+        </Text>
+
+        <Heading>Contact</Heading>
 
         <Text pb={3}>
           Dr. Norbert Kleinefeld, Geschäftsführer
@@ -24,11 +35,14 @@ function Impressum(props) {
         </Text>
 
         <Text pb={3}>
-          URL: <a href="https://elan-ev.de">https://elan-ev.de</a>
+          <FontAwesomeIcon icon={faGlobeEurope} />{" "}
+          <a href="https://elan-ev.de">elan-ev.de</a>
           <br />
-          E-Mail: <a href="mailto:kontakt@elan-ev.de">kontakt@elan-ev.de</a>
+          <FontAwesomeIcon icon={faEnvelope} />{" "}
+          <a href="mailto:kontakt@elan-ev.de">kontakt@elan-ev.de</a>
           <br />
-          Telefon: +49 441 998 666 10
+          <FontAwesomeIcon icon={faPhone} />{" "}
+          +49 441 998 666 10
         </Text>
 
         <Text pb={3}>
