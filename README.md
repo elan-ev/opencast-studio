@@ -3,6 +3,10 @@ Opencast Studio
 
 [![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=react)
 ](https://travis-ci.com/elan-ev/opencast-studio)
+[![GitHub issues](https://img.shields.io/github/issues-raw/elan-ev/opencast-studio?color=blue)
+](https://github.com/elan-ev/opencast-studio/issues)
+[![MIT license](https://img.shields.io/github/license/elan-ev/opencast-studio)
+](https://github.com/elan-ev/opencast-studio/blob/master/LICENSE)
 
 A web-based recording studio for [Opencast](https://opencast.org).
 
