@@ -11,7 +11,7 @@
     "@reach/router": "^1.2.1",
     "babel-plugin-styled-components": "^1.10.6",
     "gh-pages": "^2.1.1",
-    "i18next": "^18.0.0",
+    "i18next": "^18.0.1",
     "react": "^16.11.0",
     "react-beforeunload": "^2.1.0",
     "react-dom": "^16.11.0",
