@@ -42,14 +42,6 @@ function xhr(url, opts) {
   });
 }
 
-const parseJson = text => JSON.parse(text);
-
-const groupBy = (arr, key = 'identifier', value = 'title') =>
-  arr.reduce((memo, item) => {
-    memo[item[key]] = item[value];
-    return memo;
-  }, {});
-
 class OpencastAPI {
   constructor(settings) {
     this.server_url = settings.serverUrl.endsWith('/')
@@ -103,6 +95,7 @@ class OpencastAPI {
       creator
     );
   }
+
   async uploadFromRecordings(
     recordings,
     onsuccess,
@@ -201,46 +194,26 @@ class OpencastAPI {
       this.login_password +
       '&_spring_security_remember_me=on';
 
-    return this.cred_xhr(
-      `${this.server_url}/admin_ng/j_spring_security_check`,
-      'POST',
-      data,
-      true
-    );
-  }
-
-  getSeries() {
-    return this.cred_xhr(`${this.server_url}/api/series`)
-      .then(parseJson)
-      .then(groupBy);
-  }
-
-  getWorkflows(tag = 'upload') {
-    return this.cred_xhr(
-      `${this.server_url}/api/workflow-definitions?filter=tag:${tag}`
-    )
-      .then(parseJson)
-      .then(groupBy);
+    return this.cred_xhr(`${this.server_url}/admin_ng/j_spring_security_check`, 'POST', data, true);
   }
 
   getMeInfo() {
     return this.cred_xhr(`${this.server_url}/info/me.json`);
   }
+
   getMediaPackage() {
     return this.cred_xhr(`${this.server_url}/ingest/createMediaPackage`);
   }
+
   addDCCatalog(mp, dc, flavor) {
     let data = new FormData();
     data.append('mediaPackage', mp);
     data.append('dublinCore', dc);
     data.append('flavor', flavor);
 
-    return this.cred_xhr(
-      `${this.server_url}/ingest/addDCCatalog`,
-      'POST',
-      data
-    );
+    return this.cred_xhr(`${this.server_url}/ingest/addDCCatalog`, 'POST', data);
   }
+
   addTrack(mp, track, track_filename, flavor, tags) {
     let data = new FormData();
     data.append('mediaPackage', mp);
@@ -250,6 +223,7 @@ class OpencastAPI {
 
     return this.cred_xhr(`${this.server_url}/ingest/addTrack`, 'POST', data);
   }
+
   ingest(mp, workflowId) {
     let data = new FormData();
     data.append('mediaPackage', mp);
@@ -257,6 +231,7 @@ class OpencastAPI {
 
     return this.cred_xhr(`${this.server_url}/ingest/ingest`, 'POST', data);
   }
+
   cred_xhr(url, type, data, isUrlencoded) {
     let opts = {
       properties: {
@@ -274,13 +249,6 @@ class OpencastAPI {
     }
 
     return xhr(url, opts);
-  }
-  retrieve(blob_url) {
-    return xhr(blob_url, {
-      properties: {
-        responseType: 'blob'
-      }
-    });
   }
 }
 
