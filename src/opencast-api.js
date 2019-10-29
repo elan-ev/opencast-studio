@@ -50,7 +50,7 @@ const groupBy = (arr, key = 'identifier', value = 'title') =>
     return memo;
   }, {});
 
-class OpencastUploader {
+class OpencastAPI {
   constructor(settings) {
     this.server_url = settings.serverUrl.endsWith('/')
       ? settings.serverUrl.slice(0, -1)
@@ -284,4 +284,4 @@ class OpencastUploader {
   }
 }
 
-export default OpencastUploader;
+export default OpencastAPI;

@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import downloadBlob from '../download-blob';
-import OpencastUploader from '../opencast-uploader';
+import OpencastAPI from '../opencast-api';
 import Recorder from '../recorder';
 
 import PauseButton from './recording-buttons/pause';
@@ -172,7 +172,7 @@ class RecordingControls extends React.Component {
     if (title !== '' && presenter !== '') {
       this.handleDialogClose();
       this.showUploading();
-      new OpencastUploader(this.props.uploadSettings).loginAndUploadFromAnchor(
+      new OpencastAPI(this.props.uploadSettings).loginAndUploadFromAnchor(
         // recording,
         [this.state.desktopRecording, this.state.videoRecording],
 

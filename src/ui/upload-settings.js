@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import Button from './button';
 import FormField from './form-field';
 import Notification from './notification';
-import OpencastUploader from '../opencast-uploader';
+import OpencastAPI from '../opencast-api';
 
-function OpencastUploaderSettingsDialog(props) {
+function UploadSettings(props) {
   const { t } = useTranslation();
   const [settings, updateSettings] = useState({ ...props.uploadSettings });
   const [error, setError] = useState();
@@ -23,7 +23,7 @@ function OpencastUploaderSettingsDialog(props) {
 
   async function handleSubmit(event) {
     try {
-      const ocUploader = new OpencastUploader({ ...settings });
+      const ocUploader = new OpencastAPI({ ...settings });
       if (await ocUploader.checkConnection()) {
         props.updateUploadSettings(settings);
       } else {
@@ -98,7 +98,7 @@ function OpencastUploaderSettingsDialog(props) {
   );
 }
 
-const UploaderSettingsDialog = styled(OpencastUploaderSettingsDialog)`
+const UploadSettingsDialog = styled(UploadSettings)`
   footer {
     margin-top: 1.5em;
   }
@@ -134,4 +134,4 @@ const UploaderSettingsDialog = styled(OpencastUploaderSettingsDialog)`
     width: 100%;
   }
 `;
-export default UploaderSettingsDialog;
+export default UploadSettingsDialog;
