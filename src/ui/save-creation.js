@@ -5,6 +5,7 @@ import styled from 'styled-components/macro';
 import { faDownload, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from './base-components'
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
@@ -71,20 +72,20 @@ function SaveCreationDialog(props) {
       </main>
 
       <footer>
-        <button onClick={props.handleUpload}>
+        <Button onClick={props.handleUpload}>
           <FontAwesomeIcon icon={faUpload} />
           <span>{t('save-creation-button-upload')}</span>
-        </button>
+        </Button>
 
-        <button onClick={props.handleSave}>
+        <Button onClick={props.handleSave}>
           <FontAwesomeIcon icon={faDownload} />
           <span>{t('save-creation-button-save')}</span>
-        </button>
+        </Button>
 
-        <button onClick={props.handleCancel}>
+        <Button onClick={props.handleCancel}>
           <FontAwesomeIcon icon={faTrash} />
           <span>{t('save-creation-button-discard')}</span>
-        </button>
+        </Button>
       </footer>
     </div>
   );
@@ -118,7 +119,6 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
 
   button {
     min-width: 100px;
-    padding: 5px;
   }
 
   button + button {
@@ -136,7 +136,7 @@ const StyledSaveCreationDialog = styled(SaveCreationDialog)`
     flex-wrap: wrap;
   }
 
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 575.98px) {
     footer {
       button {
         width: 100%;
