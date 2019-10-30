@@ -172,7 +172,7 @@ class RecordingControls extends React.Component {
     if (title !== '' && presenter !== '') {
       this.handleDialogClose();
       this.showUploading();
-      new OpencastAPI(this.props.uploadSettings).loginAndUploadFromAnchor(
+      new OpencastAPI(this.props.uploadSettings).loginAndUpload(
         // recording,
         [this.state.desktopRecording, this.state.videoRecording],
 

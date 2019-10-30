@@ -7,8 +7,8 @@ class OpencastAPI {
       : settings.serverUrl;
     this.workflow_id = settings.workflowId;
 
-    this.login_name = settings.loginName;
-    this.login_password = settings.loginPassword;
+    this.username = settings.loginName;
+    this.password = settings.loginPassword;
   }
 
   async checkConnection() {
@@ -20,7 +20,7 @@ class OpencastAPI {
     }
   }
 
-  async loginAndUploadFromAnchor(
+  async loginAndUpload(
     recordings,
     onsuccess,
     onloginfailed,
@@ -139,13 +139,7 @@ class OpencastAPI {
   }
 
   login() {
-    const data =
-      'j_username=' +
-      this.login_name +
-      '&j_password=' +
-      this.login_password +
-      '&_spring_security_remember_me=on';
-
+    const data = `j_username=${this.username}&j_password=${this.password}&_spring_security_remember_me=on`;
     const url = `${this.server_url}/admin_ng/j_spring_security_check`;
     return axios({ url, method: 'post', data, withCredentials: true });
   }
