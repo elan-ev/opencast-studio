@@ -5,8 +5,7 @@ import styled from 'styled-components/macro';
 import { withTranslation } from 'react-i18next';
 import { Beforeunload } from 'react-beforeunload';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import toast from 'cogo-toast';
 
 import downloadBlob from '../download-blob';
 import OpencastAPI from '../opencast-api';
@@ -32,12 +31,7 @@ class RecordingControls extends React.Component {
       recordingState: 'inactive',
       showModal: false,
       desktopRecording: null,
-      videoRecording: null,
-
-      showUploading: false,
-
-      showAlert: false,
-      alertMessage: ''
+      videoRecording: null
     };
 
     this.desktopRecorder = null;
@@ -112,10 +106,6 @@ class RecordingControls extends React.Component {
     this.setState({ showModal: true });
   }
 
-  alert(alertMessage) {
-    this.setState({ alertMessage, showAlert: true });
-  }
-
   handlePause() {
     this.setState({ recordingState: 'paused' });
     this.pause();
@@ -171,36 +161,36 @@ class RecordingControls extends React.Component {
 
     if (title !== '' && presenter !== '') {
       this.handleDialogClose();
-      this.showUploading();
+      const { hide } = toast.loading(t('upload-notification'));
       new OpencastAPI(this.props.uploadSettings).loginAndUpload(
         // recording,
         [this.state.desktopRecording, this.state.videoRecording],
 
         // onsuccess
         () => {
-          this.hideUploading();
-          this.alert(t('message-upload-complete'));
+          hide();
+          toast.success(t('message-upload-complete'));
         },
 
         // onloginfailed
         () => {
-          this.hideUploading();
-          this.alert(t('message-login-failed'));
+          hide();
+          toast.error(t('message-login-failed'));
           this.props.handleOpenUploadSettings();
         },
 
         // onserverunreachable
         err => {
-          this.hideUploading();
-          this.alert(t('message-server-unreachable'));
+          hide();
+          toast.error(t('message-server-unreachable'));
           console.error('Server unreachable: ', err);
           this.props.handleOpenUploadSettings();
         },
 
         // oninetorpermfailed
         err => {
-          this.hideUploading();
-          this.alert(t('message-conn-failed'));
+          hide();
+          toast.error(t('message-conn-failed'));
           console.error('Inet fail or Missing Permission: ', err);
           this.props.handleOpenUploadSettings();
         },
@@ -209,7 +199,7 @@ class RecordingControls extends React.Component {
         presenter
       );
     } else {
-      this.alert(t('save-creation-form-invalid'));
+      toast.info(t('save-creation-form-invalid'));
     }
   }
 
@@ -219,14 +209,6 @@ class RecordingControls extends React.Component {
     this.setState({ desktopRecording: null, videoRecording: null });
     this.props.setDesktopStream(null);
     this.props.setVideoStream(null);
-  }
-
-  showUploading() {
-    this.setState({ showUploading: true });
-  }
-
-  hideUploading() {
-    this.setState({ showUploading: false });
   }
 
   render() {
@@ -305,31 +287,6 @@ class RecordingControls extends React.Component {
             handleSave={this.handleSaveCreationSave}
             handleUpload={this.handleSaveCreationUpload}
           />
-        </Modal>
-
-        <Modal
-          open={this.state.showAlert}
-          onClose={() => this.setState({ showAlert: false })}
-          styles={{ modal: { minWidth: '200px' } }}
-          center
-        >
-          <h2>{t('notification-title')}</h2>
-          <p>{this.state.alertMessage}</p>
-        </Modal>
-
-        <Modal
-          open={this.state.showUploading}
-          onClose={this.hideUploading.bind(this)}
-          closeOnEsc={false}
-          closeOnOverlayClick={false}
-          showCloseIcon={false}
-          focusTrapped={false}
-          center
-        >
-          <h2>{t('upload-notification')}</h2>
-          <center>
-            <FontAwesomeIcon icon={faSpinner} spin size="3x" />
-          </center>
         </Modal>
       </div>
     );

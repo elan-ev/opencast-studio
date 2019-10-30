@@ -30,6 +30,7 @@ const StyledRecordingPreview = styled(RecordingPreview)`
   text-align: center;
   padding: 0.5rem;
   margin: 0 0.5rem 0.5rem 0;
+  color: transparent;
 
   video {
     position: absolute;

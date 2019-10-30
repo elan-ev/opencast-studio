@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 
-import Button from './button';
+import { Button } from './base-components';
 import FormField from './form-field';
 import Notification from './notification';
 import OpencastAPI from '../opencast-api';
@@ -90,7 +90,7 @@ function UploadSettings(props) {
       </main>
 
       <footer>
-        <Button primary onClick={handleSubmit}>
+        <Button variant="primary" onClick={handleSubmit}>
           {t('upload-settings-button-validate')}
         </Button>
       </footer>
