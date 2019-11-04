@@ -161,7 +161,7 @@ class RecordingControls extends React.Component {
 
     if (title !== '' && presenter !== '') {
       this.handleDialogClose();
-      const { hide } = toast.loading(t('upload-notification'));
+      const { hide } = toast.loading(t('upload-notification'), { hideAfter: 0 });
       new OpencastAPI(this.props.uploadSettings).loginAndUpload(
         // recording,
         [this.state.desktopRecording, this.state.videoRecording],
