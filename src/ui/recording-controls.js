@@ -1,7 +1,9 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
+import { Component } from 'react';
 import Modal from 'react-responsive-modal';
-import styled from 'styled-components/macro';
 import { withTranslation } from 'react-i18next';
 import { Beforeunload } from 'react-beforeunload';
 
@@ -11,19 +13,16 @@ import downloadBlob from '../download-blob';
 import OpencastAPI from '../opencast-api';
 import Recorder from '../recorder';
 
-import PauseButton from './recording-buttons/pause';
-import RecordButton from './recording-buttons/record';
-import ResumeButton from './recording-buttons/resume';
+import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
 import RecordingState from './recording-state';
 import SaveCreationDialog from './save-creation';
-import StopButton from './recording-buttons/stop';
 
 const getDownloadName = (deviceType, type, title) => {
   const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
   return `${flavor} ${type} - ${title || 'Recording'}.webm`;
 };
 
-class RecordingControls extends React.Component {
+class RecordingControls extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -215,13 +214,13 @@ class RecordingControls extends React.Component {
     const { t } = this.props;
 
     return (
-      <div className={this.props.className}>
+      <div sx={{ m: 0, position: 'relative' }}>
         {this.hasRecording() && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
 
-        <RecordingState recordingState={this.state.recordingState} />
+        <div sx={{ textAlign: 'center' }}></div>
 
-        <div className="buttons">
-          <div className="left">
+        <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
+          <div sx={{ flex: 1, textAlign: 'right' }}>
             {this.state.recordingState === 'recording' && (
               <PauseButton
                 title={t('pause-button-title')}
@@ -242,7 +241,7 @@ class RecordingControls extends React.Component {
           <div className="center">
             {this.state.recordingState === 'inactive' ? (
               <RecordButton
-                large
+                large="true"
                 title={t('record-button-title')}
                 recordingState={this.state.recordingState}
                 onClick={this.handleRecord}
@@ -251,7 +250,7 @@ class RecordingControls extends React.Component {
               />
             ) : (
               <StopButton
-                large
+                large="true"
                 title={t('stop-button-title')}
                 recordingState={this.state.recordingState}
                 onClick={this.handleStop}
@@ -259,7 +258,9 @@ class RecordingControls extends React.Component {
             )}
           </div>
 
-          <div className="right"></div>
+          <div sx={{ flex: 1 }}>
+            <RecordingState recordingState={this.state.recordingState} />
+          </div>
         </div>
 
         <Modal
@@ -269,12 +270,7 @@ class RecordingControls extends React.Component {
           closeOnEsc={true}
           closeOnOverlayClick={true}
         >
-          <div
-            id="save-creation-modal-label"
-            css={`
-              display: none;
-            `}
-          >
+          <div id="save-creation-modal-label" sx={{ display: 'none' }}>
             {t('save-creation-modal-title')}
           </div>
 
@@ -293,27 +289,4 @@ class RecordingControls extends React.Component {
   }
 }
 
-const StyledRecordingControls = styled(RecordingControls)`
-  margin: 0;
-  position: relative;
-
-  .buttons {
-    display: flex;
-    align-items: center;
-  }
-
-  .left,
-  .right {
-    flex: 1;
-  }
-
-  .left {
-    text-align: right;
-  }
-
-  ${RecordingState} {
-    text-align: center;
-  }
-`;
-
-export default withTranslation()(StyledRecordingControls);
+export default withTranslation()(RecordingControls);

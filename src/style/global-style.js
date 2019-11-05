@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components/macro';
+import css from '@emotion/css/macro'
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = css`
 * {
     box-sizing: border-box;
 }

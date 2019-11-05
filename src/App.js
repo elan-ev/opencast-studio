@@ -1,17 +1,20 @@
 //; -*- mode: rjsx;-*-
-import React, { useState } from 'react';
-import { Router } from '@reach/router';
-import styled, { ThemeProvider } from 'styled-components/macro';
-import Modal from 'react-responsive-modal';
-import { useTranslation } from 'react-i18next';
+/** @jsx jsx */
+import { jsx, ThemeProvider } from 'theme-ui';
+import { Flex } from '@theme-ui/components';
 
-import GlobalStyle from './style/global-style';
+import { Global } from '@emotion/core';
+import { Router } from '@reach/router';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Modal from 'react-responsive-modal';
+
 import languages from './languages';
+import GlobalStyle from './style/global-style';
 import theme from './theme';
 import useLocalStorage from './use-local-storage';
 
 import About from './ui/about';
-import Footer from './ui/footer';
 import Impressum from './ui/impressum';
 import NotFound from './ui/not-found';
 import OpencastHeader from './ui/opencast-header';
@@ -31,7 +34,9 @@ function App(props) {
   const { t, i18n } = useTranslation();
 
   const [chosenLanguage, setChosenLanguage] = useState('en');
-  const [isModalOpen, setModalOpen] = useState(!window.localStorage.getItem(UPLOAD_SETTINGS_KEY));
+  const [isModalOpen, setModalOpen] = useState(
+    false && !window.localStorage.getItem(UPLOAD_SETTINGS_KEY)
+  );
   const [uploadSettings, setUploadSettings] = useLocalStorage(
     UPLOAD_SETTINGS_KEY,
     defaultUploadSettings
@@ -57,16 +62,21 @@ function App(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
+      <Global styles={GlobalStyle} />
 
-      <div className={props.className}>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          minHeight: '100%'
+        }}
+      >
         <OpencastHeader
           languages={languages}
           chosenLanguage={chosenLanguage}
           onSelectLanguage={selectLanguage}
         />
 
-        <Router>
+        <Router sx={{ flex: 1 }}>
           <Studio
             path="/"
             uploadSettings={uploadSettings}
@@ -76,47 +86,28 @@ function App(props) {
           <Impressum path="/impressum" />
           <NotFound default />
         </Router>
+      </Flex>
 
-        <Modal
-          open={isModalOpen}
-          onClose={handleCloseUploadSettings}
-          ariaLabelledBy="upload-settings-modal-label"
-          center
-          closeOnEsc={false}
-          closeOnOverlayClick={false}
-          showCloseIcon={false}
-        >
-          <div
-            id="upload-settings-modal-label"
-            css={`
-              display: none;
-            `}
-          >
-            {t('upload-settings-modal-title')}
-          </div>
+      <Modal
+        open={isModalOpen}
+        onClose={handleCloseUploadSettings}
+        ariaLabelledBy="upload-settings-modal-label"
+        center
+        closeOnEsc={false}
+        closeOnOverlayClick={false}
+        showCloseIcon={false}
+      >
+        <div id="upload-settings-modal-label" sx={{ display: 'none' }}>
+          {t('upload-settings-modal-title')}
+        </div>
 
-          <UploadSettings
-            uploadSettings={uploadSettings}
-            updateUploadSettings={handleUpdateUploadSettings}
-          />
-        </Modal>
-      </div>
+        <UploadSettings
+          uploadSettings={uploadSettings}
+          updateUploadSettings={handleUpdateUploadSettings}
+        />
+      </Modal>
     </ThemeProvider>
   );
 }
 
-const StyledApp = styled(App)`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  ${Studio} {
-    flex: 1 0 auto;
-  }
-
-  ${Footer} {
-    flex-shrink: 0;
-  }
-`;
-
-export default StyledApp;
+export default App;

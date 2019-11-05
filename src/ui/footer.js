@@ -1,20 +1,32 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
+import { Link } from '@reach/router';
 import { useTranslation } from 'react-i18next';
-import { navigate } from "@reach/router";
-import { Box, Link } from './base-components';
+import { Box } from '@theme-ui/components';
 
 function Footer(props) {
   const { t } = useTranslation();
 
   return (
-      <Box as="footer" p="1rem" textAlign="center" className={props.className}>
-        <Link fontSize={1} onClick={() => navigate('/impressum') }>{t('legal-notices')}</Link>
+    <Box
+      as="footer"
+      sx={{
+        p: 1,
+        textAlign: 'center'
+      }}
+    >
+      <Link
+        sx={{
+          fontSize: 1
+        }}
+        to="/impressum"
+      >
+        {t('legal-notices')}
+      </Link>
     </Box>
   );
 }
 
-const StyledFooter = styled(Footer)``;
-
-export default StyledFooter;
+export default Footer;

@@ -1,41 +1,39 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
 
 function FormField(props) {
   return (
-    <div className={props.className}>
-      <label className="label">
+    <div
+      sx={{
+        '&:not(:last-child)': {
+          marginBottom: 3
+        }
+      }}
+    >
+      <label
+        sx={{
+          color: '#363636',
+          display: 'block',
+          fontSize: 2,
+          fontWeight: 'bold'
+        }}
+      >
         {props.label}
-        <div className="control">{props.children}</div>
+        <div
+          sx={{
+            boxSizing: 'border-box',
+            clear: 'both',
+            fontSize: 2,
+            position: 'relative',
+            textAlign: 'left'
+          }}
+        >
+          {props.children}
+        </div>
       </label>
     </div>
   );
 }
 
-const StyledFormField = styled(FormField)`
-  :not(:last-child) {
-    margin-bottom: 0.75rem;
-  }
-
-  .control {
-    box-sizing: border-box;
-    clear: both;
-    font-size: 1rem;
-    position: relative;
-    text-align: left;
-  }
-
-  .label {
-    color: #363636;
-    display: block;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .label:not(:last-child) {
-    margin-bottom: 0.5em;
-  }
-`;
-
-export default StyledFormField;
+export default FormField;

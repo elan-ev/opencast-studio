@@ -1,28 +1,30 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
 import LanguagesChooser from './languages-chooser';
 import { Link } from '@reach/router';
 
-const BetaBubble = styled.span`
-  position: relative;
-  top: 4px;
-  font-size: 12pt;
-  vertical-align: top;
-  display: inline;
-  border: 1px solid #888;
-  border-radius: 5px;
-  padding: 2px;
-  color: #aaa;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
+const BetaBubble = props => (
+  <span
+    sx={{
+      position: 'relative',
+      top: '4px',
+      fontSize: '12pt',
+      verticalAlign: 'top',
+      display: ['none', 'inline'],
+      border: '1px solid #888',
+      borderRadius: '5px',
+      padding: '2px',
+      color: '#aaa'
+    }}
+    {...props}
+  />
+);
 
 function Brand(props) {
   return (
-    <span className={props.className}>
+    <span>
       <Link to="/">
         <picture>
           <source
@@ -32,9 +34,7 @@ function Brand(props) {
           <img
             src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
             alt="Opencast Studio"
-            css={`
-              height: 50px;
-            `}
+            sx={{ height: 50 }}
           />
         </picture>
       </Link>
@@ -46,7 +46,16 @@ function Brand(props) {
 
 function OpencastHeader(props) {
   return (
-    <header className={props.className}>
+    <header
+      sx={{
+        height: '3rem',
+        lineHeight: '3rem',
+        background: '#333',
+        color: 'background',
+        display: 'flex',
+        justifyContent: 'space-between'
+      }}
+    >
       <Brand />
 
       <LanguagesChooser
@@ -58,20 +67,4 @@ function OpencastHeader(props) {
   );
 }
 
-const StyledHeader = styled(OpencastHeader)`
-  height: 3rem;
-  line-height: 3rem;
-  background: #333;
-  display: flex;
-  justify-content: space-between;
-
-  ${LanguagesChooser} {
-    color: white;
-  }
-
-  a {
-    outline: 0;
-  }
-`;
-
-export default StyledHeader;
+export default OpencastHeader;

@@ -1,6 +1,5 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
-import styled from 'styled-components/macro';
 
 class Clock extends React.Component {
   constructor(props) {
@@ -69,10 +68,8 @@ class Clock extends React.Component {
     }
     const content = timeArr.map(unit => (unit < 10 ? '0' : '') + unit).join(':');
 
-    return <span className={this.props.className}>{content}</span>;
+    return <span>{content}</span>;
   }
 }
 
-const StyledClock = styled(Clock)``;
-
-export default StyledClock;
+export default Clock;

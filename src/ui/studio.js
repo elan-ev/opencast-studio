@@ -1,6 +1,9 @@
 //; -*- mode: rjsx;-*-
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
+import { useState } from 'react';
+import { Box, Flex } from '@theme-ui/components';
 
 import Footer from './footer';
 import MediaDevices from './media-devices';
@@ -18,46 +21,34 @@ function Studio(props) {
   const [recordingData, setRecordingData] = useState(defaultRecordingData);
 
   return (
-    <>
-      <main className={props.className}>
+    <Flex as="main" sx={{ flexDirection: 'column', height: '100%' }}>
+      <Box sx={{ flex: 0 }}>
         <Toolbar
           uploadSettings={props.uploadSettings}
           handleOpenUploadSettings={props.handleOpenUploadSettings}
         />
-        <MediaDevices
-          desktopStream={desktopStream}
-          setDesktopStream={setDesktopStream}
-          videoStream={videoStream}
-          setVideoStream={setVideoStream}
-        />
-        <RecordingControls
-          desktopStream={desktopStream}
-          setDesktopStream={setDesktopStream}
-          videoStream={videoStream}
-          setVideoStream={setVideoStream}
-          uploadSettings={props.uploadSettings}
-          recordingData={recordingData}
-          setRecordingData={setRecordingData}
-          handleOpenUploadSettings={props.handleOpenUploadSettings}
-        />
-      </main>
+      </Box>
 
+      <MediaDevices
+        desktopStream={desktopStream}
+        setDesktopStream={setDesktopStream}
+        videoStream={videoStream}
+        setVideoStream={setVideoStream}
+      />
+
+      <RecordingControls
+        desktopStream={desktopStream}
+        setDesktopStream={setDesktopStream}
+        videoStream={videoStream}
+        setVideoStream={setVideoStream}
+        uploadSettings={props.uploadSettings}
+        recordingData={recordingData}
+        setRecordingData={setRecordingData}
+        handleOpenUploadSettings={props.handleOpenUploadSettings}
+      />
       <Footer />
-    </>
+    </Flex>
   );
 }
 
-const StyledStudio = styled(Studio)`
-  display: flex;
-  flex-direction: column;
-
-  ${Toolbar} {
-    flex: 0;
-  }
-
-  ${MediaDevices} {
-    flex: 1 0 5rem;
-  }
-`;
-
-export default StyledStudio;
+export default Studio;

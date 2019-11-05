@@ -1,13 +1,16 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components/macro';
 import { faDownload, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from './base-components'
+import { Button } from '@theme-ui/components';
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
+
+const Input = props => <input sx={{ width: '100%' }} {...props} />;
 
 function SaveCreationDialog(props) {
   const { t } = useTranslation();
@@ -21,14 +24,21 @@ function SaveCreationDialog(props) {
   }
 
   return (
-    <div className={props.className}>
+    <div
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%'
+      }}
+    >
       <header>
-        <h1>Production details</h1>
+        <h1 sx={{ fontWeight: 'heading' }}>Production details</h1>
       </header>
 
-      <main>
+      <main sx={{ flex: 1 }}>
         <FormField label={t('save-creation-label-title')}>
-          <input
+          <Input
             name="title"
             autoComplete="off"
             value={props.recordingData.title}
@@ -37,7 +47,7 @@ function SaveCreationDialog(props) {
         </FormField>
 
         <FormField label={t('save-creation-label-presenter')}>
-          <input
+          <Input
             name="presenter"
             autoComplete="off"
             value={props.recordingData.presenter}
@@ -47,11 +57,18 @@ function SaveCreationDialog(props) {
       </main>
 
       <header>
-        <h1>{t('save-creation-label-media')}</h1>
+        <h1 sx={{ fontWeight: 'heading' }}>{t('save-creation-label-media')}</h1>
       </header>
 
-      <main>
-        <div id="recordingList">
+      <main sx={{ flex: 1 }}>
+        <div
+          sx={{
+            display: 'flex',
+            maxHeight: '6.5rem',
+            overflowY: 'auto',
+            flexWrap: 'wrap'
+          }}
+        >
           {props.desktopRecording && (
             <RecordingPreview
               deviceType="desktop"
@@ -71,7 +88,22 @@ function SaveCreationDialog(props) {
         </div>
       </main>
 
-      <footer>
+      <footer
+        sx={{
+          mt: 4,
+          button: {
+            minWidth: 100,
+            width: ['100%', 'auto'],
+            '& + button': {
+              ml: [0, 2],
+              mt: [2, 'auto']
+            },
+            '& svg': {
+              mr: 2
+            }
+          }
+        }}
+      >
         <Button onClick={props.handleUpload}>
           <FontAwesomeIcon icon={faUpload} />
           <span>{t('save-creation-button-upload')}</span>
@@ -91,63 +123,4 @@ function SaveCreationDialog(props) {
   );
 }
 
-const StyledSaveCreationDialog = styled(SaveCreationDialog)`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-
-  header,
-  footer {
-    flex: 0;
-  }
-  main {
-    flex: 1;
-  }
-
-  input {
-    width: 100%;
-  }
-
-  footer {
-    margin-top: 1.5em;
-  }
-
-  header h1 {
-    font-weight: 300;
-  }
-
-  button {
-    min-width: 100px;
-  }
-
-  button + button {
-    margin-left: 0.5em;
-  }
-
-  button svg {
-    margin-right: 0.25em;
-  }
-
-  #recordingList {
-    display: flex;
-    max-height: 6.5rem;
-    overflow-y: auto;
-    flex-wrap: wrap;
-  }
-
-  @media screen and (max-width: 575.98px) {
-    footer {
-      button {
-        width: 100%;
-
-        + button {
-          margin-left: 0;
-          margin-top: 1em;
-        }
-      }
-    }
-  }
-`;
-
-export default StyledSaveCreationDialog;
+export default SaveCreationDialog;

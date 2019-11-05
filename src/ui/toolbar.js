@@ -1,6 +1,7 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
 import { useTranslation } from 'react-i18next';
 import { Link } from '@reach/router';
 
@@ -12,15 +13,27 @@ import {
   faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-const Icon = styled(FontAwesomeIcon)`
-  color: black;
-`;
+const Icon = props => (
+  <FontAwesomeIcon sx={{ color: 'text', fontSize: 5, verticalAlign: 'middle' }} {...props} />
+);
 
-function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
+function Toolbar({ uploadSettings, handleOpenUploadSettings }) {
   const { t } = useTranslation();
 
   return (
-    <div className={className}>
+    <div
+      sx={{
+        height: '3rem',
+        lineHeight: '3rem',
+        textAlign: 'right',
+        paddingRight: 2,
+        boxShadow: '0 0px 4px 0px rgba(0, 0, 0, 0.4)',
+        marginBottom: 2,
+        '& > *': {
+          marginLeft: 2
+        }
+      }}
+    >
       <a href={uploadSettings.serverUrl} title={t('toolbar-button-opencast')}>
         <Icon icon={faPlayCircle} />
       </a>
@@ -36,7 +49,7 @@ function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
       <a
         href="https://github.com/elan-ev/opencast-studio/issues"
         title={t('toolbar-button-issues')}
-        id="ocUploadIssueButton"
+        sx={{ paddingLeft: 3 }}
       >
         <Icon icon={faExclamationCircle} />
       </a>
@@ -48,27 +61,4 @@ function Toolbar({ className, uploadSettings, handleOpenUploadSettings }) {
   );
 }
 
-const StyledToolbar = styled(Toolbar)`
-  height: 3rem;
-  line-height: 3rem;
-  text-align: right;
-
-  padding-right: 2rem;
-  box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.4);
-  margin-bottom: 8px;
-
-  ${Icon} {
-    font-size: 1.6rem;
-    vertical-align: middle;
-  }
-
-  > * {
-    margin-left: 6px;
-  }
-
-  #ocUploadIssueButton {
-    padding-left: 10px;
-  }
-`;
-
-export default StyledToolbar;
+export default Toolbar;

@@ -1,10 +1,9 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
-import styled from 'styled-components/macro';
 
 function NotFound(props) {
   return (
-    <div className={props.className}>
+    <div>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
       labore et dolore magna aliqua. Ut enimad minim veniam, quis nostrud exercitation ullamco
       laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
@@ -14,6 +13,4 @@ function NotFound(props) {
   );
 }
 
-const StyledNotFound = styled(NotFound)``;
-
-export default StyledNotFound;
+export default NotFound;

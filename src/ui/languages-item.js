@@ -1,40 +1,36 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
 import Flag from './languages-flag';
 
 function Language({ className, language, onSelectLanguage }) {
   return (
-      <li className={className} onClick={onSelectLanguage.bind(null, language.short)}>
-      <button type="button" value={language.short}>
+    <li
+      onClick={onSelectLanguage.bind(null, language.short)}
+      sx={{
+        lineheight: '2rem',
+        textAlign: 'right',
+        whiteSpace: 'nowrap',
+        paddingLeft: '1rem',
+        cursor: 'pointer'
+      }}
+    >
+      <button
+        type="button"
+        value={language.short}
+        sx={{ background: 'none', border: 'none', lineHeight: '2.5rem', verticalAlign: 'top' }}
+      >
         {language.long}
       </button>
       <Flag
         data-attribution="Icon made by Freepik from www.flaticon.com"
         alt={language.long}
         src={language.flag}
+        sx={{ margin: '0.25rem 0 0.25rem 0.5rem' }}
       />
     </li>
   );
 }
 
-const StyledLanguage = styled(Language)`
-  line-height: 2rem;
-  text-align: right;
-  white-space: nowrap;
-  padding-left: 1rem;
-  cursor: pointer;
-
-  button {
-    background: none;
-    border: none;
-    line-height: 2.5rem;
-    vertical-align: top;
-  }
-
-  img {
-    margin: 0.25rem 0 0.25rem 0.5rem;
-  }
-`;
-
-export default StyledLanguage;
+export default Language;

@@ -1,7 +1,8 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import MediaDevice from './media-device';
 
@@ -49,7 +50,18 @@ function MediaDevices(props) {
   }
 
   return (
-    <div className={props.className}>
+    <div
+      sx={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: ['column', 'row'],
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        '& > *': {
+          flex: '1 0 50%'
+        }
+      }}
+    >
       {supportsDisplayCapture() && (
         <MediaDevice
           onClick={requestDisplayMedia}
@@ -77,33 +89,4 @@ function MediaDevices(props) {
   );
 }
 
-const StyledMediaDevices = styled(MediaDevices)`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 0 0.5rem;
-  flex-wrap: wrap;
-
-  ${MediaDevice} {
-    margin: 0 0.5rem;
-    flex: 1 0 384px;
-    max-height: 1080px;
-  }
-
-  @media (max-width: 768px) {
-    ${MediaDevice} {
-      margin-top: 0.5rem;
-    }
-  }
-
-  /*
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0 2rem;
-  position: relative;
-  min-height: calc(22.5vw - 4rem);
-  transition: min-height 1s;
-*/
-`;
-
-export default StyledMediaDevices;
+export default MediaDevices;
