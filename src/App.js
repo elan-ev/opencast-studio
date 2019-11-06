@@ -34,9 +34,7 @@ function App(props) {
   const { t, i18n } = useTranslation();
 
   const [chosenLanguage, setChosenLanguage] = useState('en');
-  const [isModalOpen, setModalOpen] = useState(
-    false && !window.localStorage.getItem(UPLOAD_SETTINGS_KEY)
-  );
+  const [isModalOpen, setModalOpen] = useState(!window.localStorage.getItem(UPLOAD_SETTINGS_KEY));
   const [uploadSettings, setUploadSettings] = useLocalStorage(
     UPLOAD_SETTINGS_KEY,
     defaultUploadSettings
