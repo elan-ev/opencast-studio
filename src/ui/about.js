@@ -1,3 +1,4 @@
+//; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 import { Link } from '@reach/router';
@@ -118,7 +119,7 @@ function About(props) {
             </Styled.p>
           </li>
         </ul>
-        <Box as="footer" textAlign="center">
+        <Box as="footer" sx={{ py: 3, textAlign: 'center' }}>
           <Link to="/">← Back to the Studio</Link>
         </Box>
       </article>

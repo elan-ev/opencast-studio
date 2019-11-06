@@ -51,7 +51,7 @@ function Impressum(props) {
           USt.-ID-Nr.: DE 265901392
         </Styled.p>
 
-        <Box as="footer" sx={{ textAlign: 'center' }}>
+        <Box as="footer" sx={{ py: 3, textAlign: 'center' }}>
           <Link to="/">← Back to the Studio</Link>
         </Box>
       </article>
