@@ -6,6 +6,7 @@ import toast from 'cogo-toast';
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import MediaDevice from './media-device';
+import Notification from './notification';
 
 function startDisplayCapture(displayMediaOptions) {
   return navigator.mediaDevices.getDisplayMedia(displayMediaOptions).catch(err => {
@@ -88,7 +89,11 @@ function MediaDevices(props) {
       )}
 
       {!supportsDisplayCapture() && !supportsUserCapture() && (
-        <div>Your browser does not allow capturing your display or any other media input.</div>
+        <div sx={{ p: 3 }}>
+          <Notification isDanger>
+            Your browser does not allow capturing your display or any other media input.
+          </Notification>
+        </div>
       )}
     </div>
   );
