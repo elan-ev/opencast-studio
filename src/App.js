@@ -74,7 +74,9 @@ function App(props) {
           onSelectLanguage={selectLanguage}
         />
 
-        <Router sx={{ flex: 1 }}>
+        <Router
+          sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}
+        >
           <Studio
             path="/"
             uploadSettings={uploadSettings}
