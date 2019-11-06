@@ -4,16 +4,19 @@ import { jsx } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@theme-ui/components';
 import FormField from './form-field';
+import Notification from './notification';
 import RecordingPreview from './recording-preview';
 
 const Input = props => <input sx={{ width: '100%' }} {...props} />;
 
 function SaveCreationDialog(props) {
   const { t } = useTranslation();
+  const [error, setError] = useState();
 
   function handleInputChange(event) {
     const target = event.target;
@@ -21,6 +24,15 @@ function SaveCreationDialog(props) {
     const name = target.name;
 
     props.setRecordingData({ ...props.recordingData, [name]: value });
+  }
+
+  // TODO: validation is in props.handleUpload too; it is needed here to show the error in the dialog instead of as a toast
+  function handleUpload(event) {
+    if (props.recordingData.title === '' || props.recordingData.presenter === '') {
+      setError(t('save-creation-form-invalid'));
+    } else {
+      props.handleUpload();
+    }
   }
 
   return (
@@ -37,6 +49,8 @@ function SaveCreationDialog(props) {
       </header>
 
       <main sx={{ flex: 1 }}>
+        {error && <Notification isDanger>{error}</Notification>}
+
         <FormField label={t('save-creation-label-title')}>
           <Input
             name="title"
@@ -104,7 +118,7 @@ function SaveCreationDialog(props) {
           }
         }}
       >
-        <Button onClick={props.handleUpload}>
+        <Button onClick={handleUpload}>
           <FontAwesomeIcon icon={faUpload} />
           <span>{t('save-creation-button-upload')}</span>
         </Button>
