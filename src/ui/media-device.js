@@ -52,7 +52,7 @@ function MediaDevice({ onClick, title, deviceType, icon, stream }) {
               color: 'white'
             }}
           >
-            <FontAwesomeIcon icon={icon} sx={{ fontSize: '5rem' }} />
+          <FontAwesomeIcon icon={icon} sx={{ fontSize: [6, 7, 8] }} />
           </span>
           <p sx={{ color: '#666', fontSize: '1.5rem', fontWeight: '300' }}>{title}</p>
         </Fragment>
