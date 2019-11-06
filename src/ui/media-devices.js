@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
+import toast from 'cogo-toast';
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import MediaDevice from './media-device';
@@ -9,6 +10,7 @@ import MediaDevice from './media-device';
 function startDisplayCapture(displayMediaOptions) {
   return navigator.mediaDevices.getDisplayMedia(displayMediaOptions).catch(err => {
     console.error('Error:' + err);
+    toast.error('Your browser does not permit to capture the screen.');
     return null;
   });
 }
@@ -18,8 +20,11 @@ function supportsDisplayCapture() {
 }
 
 function startUserCapture(userMediaOptions) {
-  return navigator.mediaDevices.getUserMedia(userMediaOptions).catch(err => {
+  const userMediaPromise = navigator.mediaDevices.getUserMedia(userMediaOptions);
+
+  return userMediaPromise.catch(err => {
     console.error('Error:' + err);
+    toast.error('Your browser does not permit to capture your webcam.');
     return null;
   });
 }
