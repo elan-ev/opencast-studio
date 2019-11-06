@@ -214,7 +214,7 @@ class RecordingControls extends Component {
     const { t } = this.props;
 
     return (
-      <div sx={{ m: 0, position: 'relative' }}>
+        <div sx={{ m: 0, mt: 2 }}>
         {this.hasRecording() && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
 
         <div sx={{ textAlign: 'center' }}></div>
