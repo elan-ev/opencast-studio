@@ -76,7 +76,7 @@ const base = {
   colors: {
     text: '#000',
     background: '#fff',
-    primary: '#07c',
+    primary: '#47af7a',
     secondary: '#30c',
     muted: '#f6f6f6'
   },
