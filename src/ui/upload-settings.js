@@ -46,7 +46,7 @@ function UploadSettings(props) {
       </header>
 
       <main>
-        {error && <Notification isDanger>{error}</Notification>}
+        {error && <Notification isdanger="true">{error}</Notification>}
 
         <FormField label={t('upload-settings-label-server-url')}>
           <Input

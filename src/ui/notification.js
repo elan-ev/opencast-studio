@@ -6,8 +6,8 @@ const Notification = props => (
   <div
     sx={{
       ':not(:last-child)': { marginBottom: '1.5rem' },
-      backgroundColor: props.isDanger ? '#ff3860' : 'whitesmoke',
-      color: props.isDanger ? '#fff' : 'currentColor',
+      backgroundColor: props.isdanger ? '#ff3860' : 'whitesmoke',
+      color: props.isdanger ? '#fff' : 'currentColor',
       borderRadius: 2,
       padding: 3,
       position: 'relative'
