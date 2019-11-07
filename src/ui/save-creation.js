@@ -49,7 +49,7 @@ function SaveCreationDialog(props) {
       </header>
 
       <main sx={{ flex: 1 }}>
-        {error && <Notification isDanger>{error}</Notification>}
+        {error && <Notification isdanger="true">{error}</Notification>}
 
         <FormField label={t('save-creation-label-title')}>
           <Input
