@@ -17,4 +17,4 @@ jobs:
         provider: script
         script: bash .travis-deploy.sh
         on:
-          branch: react
+          branch: production
