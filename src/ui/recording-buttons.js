@@ -54,7 +54,10 @@ export const RecordButton = props => (
     }}
   >
     <span className="fa-layers fa-fw">
-      <FontAwesomeIcon icon={props.countdown ? faCircleNotch : faCircle} spin />
+      <FontAwesomeIcon
+        icon={props.countdown ? faCircleNotch : faCircle}
+        spin={props.countdown}
+      />
       <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
     </span>
   </Button>
