@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 srcpath="$(pwd)"
 npm ci
 npm run build
