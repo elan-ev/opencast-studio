@@ -1,10 +1,14 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
-import { act, cleanup, fireEvent, render, waitForElement } from '@testing-library/react';
-import axiosMock from 'axios';
-
+import { act, cleanup, render, waitForElement } from '@testing-library/react';
+import OpencastAPI, { mockCheckConnection } from '../opencast-api';
 import UploadSettings from './upload-settings';
 
+jest.mock('../opencast-api');
+
+beforeEach(() => {
+  OpencastAPI.mockClear();
+});
 afterEach(cleanup);
 
 it('renders empty form w/o upload settings', () => {
@@ -25,10 +29,7 @@ it('renders empty form w/o upload settings', () => {
   expect(getByLabelText('upload-settings-label-password')).toHaveValue('');
 });
 
-// TODO: (mel) refactor the opencast api JS for real testing
-it('renders error on wrong settings', () => {
-  // axiosMock.mockResolvedValue({ data: { greeting: 'hello there' } });
-
+it('renders error on wrong settings', async () => {
   const settings = {
     serverUrl: 'some',
     workflowId: 'very',
@@ -36,16 +37,18 @@ it('renders error on wrong settings', () => {
     loginPassword: 'settings'
   };
 
+  const mockUpdate = jest.fn();
   const { getByRole, getByText } = render(
-    <UploadSettings uploadSettings={settings} updateUploadSettings={() => {}} />
+    <UploadSettings uploadSettings={settings} updateUploadSettings={mockUpdate} />
   );
 
-  act(() => {
+  await act(async () => {
     getByRole('button').click();
   });
+  expect(mockCheckConnection).toHaveBeenCalledTimes(1);
+  expect(mockUpdate).toHaveBeenCalledTimes(0);
 
-  // expect(getByText('upload-settings-button-validate')).toBeInTheDocument();
-  // expect(getByText('upload-settings-validation-error')).toBeInTheDocument();
+  await waitForElement(() => getByText('upload-settings-validation-error'));
 });
 
 it('renders form w/ upload settings', () => {
