@@ -1,13 +1,17 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
+import toast from 'cogo-toast';
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components/macro';
 import { useTranslation } from 'react-i18next';
 import MediaDevice from './media-device';
+import Notification from './notification';
 
 function startDisplayCapture(displayMediaOptions) {
   return navigator.mediaDevices.getDisplayMedia(displayMediaOptions).catch(err => {
     console.error('Error:' + err);
+    toast.error('Your browser does not permit to capture the screen.');
     return null;
   });
 }
@@ -17,8 +21,11 @@ function supportsDisplayCapture() {
 }
 
 function startUserCapture(userMediaOptions) {
-  return navigator.mediaDevices.getUserMedia(userMediaOptions).catch(err => {
+  const userMediaPromise = navigator.mediaDevices.getUserMedia(userMediaOptions);
+
+  return userMediaPromise.catch(err => {
     console.error('Error:' + err);
+    toast.error('Your browser does not permit to capture your webcam.');
     return null;
   });
 }
@@ -49,7 +56,18 @@ function MediaDevices(props) {
   }
 
   return (
-    <div className={props.className}>
+    <div
+      sx={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: ['column', 'row'],
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        '& > *': {
+          flex: '1 0 50%'
+        }
+      }}
+    >
       {supportsDisplayCapture() && (
         <MediaDevice
           onClick={requestDisplayMedia}
@@ -71,39 +89,14 @@ function MediaDevices(props) {
       )}
 
       {!supportsDisplayCapture() && !supportsUserCapture() && (
-        <div>Your browser does not allow capturing your display or any other media input.</div>
+        <div sx={{ p: 3 }}>
+          <Notification isDanger>
+            Your browser does not allow capturing your display or any other media input.
+          </Notification>
+        </div>
       )}
     </div>
   );
 }
 
-const StyledMediaDevices = styled(MediaDevices)`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  padding: 0 0.5rem;
-  flex-wrap: wrap;
-
-  ${MediaDevice} {
-    margin: 0 0.5rem;
-    flex: 1 0 384px;
-    max-height: 1080px;
-  }
-
-  @media (max-width: 768px) {
-    ${MediaDevice} {
-      margin-top: 0.5rem;
-    }
-  }
-
-  /*
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0 2rem;
-  position: relative;
-  min-height: calc(22.5vw - 4rem);
-  transition: min-height 1s;
-*/
-`;
-
-export default StyledMediaDevices;
+export default MediaDevices;

@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components/macro';
+import css from '@emotion/css/macro'
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = css`
 * {
     box-sizing: border-box;
 }
@@ -38,7 +38,7 @@ input {
 }
 
 input:focus {
-    border-color: #09f;
+    border-color: #47af7a;
     box-shadow: 0 0 3px #8cf;
 }
 

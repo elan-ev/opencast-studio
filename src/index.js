@@ -1,3 +1,4 @@
+//; -*- mode: rjsx;-*-
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './i18n';

@@ -1,6 +1,8 @@
 //; -*- mode: rjsx;-*-
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
+import { useState } from 'react';
 import ChosenLanguage from './languages-chosen';
 import Languages from './languages-list';
 
@@ -23,19 +25,18 @@ function LanguageChooser({
   };
 
   return (
-    <div className={className}>
+    <div
+      sx={{
+        lineHeight: '3rem',
+        height: '3rem',
+        mx: 3,
+        position: 'relative'
+      }}
+    >
       <ChosenLanguage onClick={toggleVisible} language={chosenLang} />
       {isVisible ? <Languages languages={languages} onSelectLanguage={onSelectLanguage} /> : null}
     </div>
   );
 }
 
-const StyledLanguageChooser = styled(LanguageChooser)`
-  float: right;
-  line-height: 3rem;
-  height: 3rem;
-  margin: 0 1rem;
-  position: relative;
-`;
-
-export default StyledLanguageChooser;
+export default LanguageChooser;

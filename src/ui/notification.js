@@ -1,17 +1,19 @@
 //; -*- mode: rjsx;-*-
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
 
-const Notification = styled.div`
-  :not(:last-child) {
-    margin-bottom: 1.5rem;
-  }
-
-  background-color: ${props => (props.isDanger ? '#ff3860' : 'whitesmoke')};
-  color:  ${props => (props.isDanger ? '#fff' : 'currentColor')};
-  border-radius: 4px;
-  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
-  position: relative;
-}
-`;
+const Notification = props => (
+  <div
+    sx={{
+      ':not(:last-child)': { marginBottom: '1.5rem' },
+      backgroundColor: props.isDanger ? '#ff3860' : 'whitesmoke',
+      color: props.isDanger ? '#fff' : 'currentColor',
+      borderRadius: 2,
+      padding: 3,
+      position: 'relative'
+    }}
+    {...props}
+  />
+);
 
 export default Notification;

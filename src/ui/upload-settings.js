@@ -1,12 +1,16 @@
 //; -*- mode: rjsx;-*-
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from './base-components';
+import { Button } from '@theme-ui/components';
 import FormField from './form-field';
 import Notification from './notification';
 import OpencastAPI from '../opencast-api';
+
+const Input = props => <input sx={{ width: '100%' }} {...props} />;
 
 function UploadSettings(props) {
   const { t } = useTranslation();
@@ -36,60 +40,56 @@ function UploadSettings(props) {
   }
 
   return (
-    <div className={props.className}>
+    <div>
       <header>
-        <h1>{t('upload-settings-modal-header')}</h1>
+        <h1 sx={{ fontWeight: 'heading' }}>{t('upload-settings-modal-header')}</h1>
       </header>
 
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 
         <FormField label={t('upload-settings-label-server-url')}>
-          <input
+          <Input
             name="serverUrl"
             value={settings.serverUrl}
             onChange={handleInputChange}
-            className="input"
             type="text"
             autoComplete="off"
           />
         </FormField>
 
         <FormField label={t('upload-settings-label-workflow-id')}>
-          <input
+          <Input
             name="workflowId"
             value={settings.workflowId}
             onChange={handleInputChange}
-            className="input"
             type="text"
             autoComplete="off"
           />
         </FormField>
 
         <FormField label={t('upload-settings-label-username')}>
-          <input
+          <Input
             name="loginName"
             value={settings.loginName}
             onChange={handleInputChange}
-            className="input"
             type="text"
             autoComplete="off"
           />
         </FormField>
 
         <FormField label={t('upload-settings-label-password')}>
-          <input
+          <Input
             name="loginPassword"
             value={settings.loginPassword}
             onChange={handleInputChange}
-            className="input"
             type="password"
             autoComplete="off"
           />
         </FormField>
       </main>
 
-      <footer>
+      <footer sx={{mt: 4}}>
         <Button variant="primary" onClick={handleSubmit}>
           {t('upload-settings-button-validate')}
         </Button>
@@ -98,40 +98,4 @@ function UploadSettings(props) {
   );
 }
 
-const UploadSettingsDialog = styled(UploadSettings)`
-  footer {
-    margin-top: 1.5em;
-  }
-
-  header h1 {
-    font-weight: 300;
-  }
-
-  .field:not(:last-child) {
-    margin-bottom: 0.75rem;
-  }
-
-  .control {
-    box-sizing: border-box;
-    clear: both;
-    font-size: 1rem;
-    position: relative;
-    text-align: left;
-  }
-
-  .label {
-    color: #363636;
-    display: block;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .label:not(:last-child) {
-    margin-bottom: 0.5em;
-  }
-
-  input {
-    width: 100%;
-  }
-`;
-export default UploadSettingsDialog;
+export default UploadSettings;
