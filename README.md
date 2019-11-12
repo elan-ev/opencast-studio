@@ -75,3 +75,12 @@ If you prefer to run a local **development** server directly, you can use instea
 ```sh
 % npm run start
 ```
+
+Supported Browsers
+------------------
+
+The following browsers are officially supported:
+
+- On desktop: Firefox, Chrome, Edge
+- Android: Chrome and Firefox
+- iOS: Safari
