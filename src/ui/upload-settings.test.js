@@ -1,18 +1,14 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
-import { act, render, fireEvent, waitForElement } from '@testing-library/react';
-
-import { I18nextProvider } from 'react-i18next';
-import i18next from '../i18n/testing';
+import { act, cleanup, fireEvent, render, waitForElement } from '@testing-library/react';
+import axiosMock from 'axios';
 
 import UploadSettings from './upload-settings';
 
+afterEach(cleanup);
+
 it('renders empty form w/o upload settings', () => {
-  const { getByText, getByLabelText } = render(
-    <I18nextProvider i18n={i18next}>
-      <UploadSettings />
-    </I18nextProvider>
-  );
+  const { getByText, getByLabelText } = render(<UploadSettings />);
 
   expect(getByText('upload-settings-modal-header')).toBeInTheDocument();
 
@@ -30,7 +26,9 @@ it('renders empty form w/o upload settings', () => {
 });
 
 // TODO: (mel) refactor the opencast api JS for real testing
-xit('renders error on wrong settings', () => {
+it('renders error on wrong settings', () => {
+  // axiosMock.mockResolvedValue({ data: { greeting: 'hello there' } });
+
   const settings = {
     serverUrl: 'some',
     workflowId: 'very',
@@ -39,13 +37,12 @@ xit('renders error on wrong settings', () => {
   };
 
   const { getByRole, getByText } = render(
-    <I18nextProvider i18n={i18next}>
-      <UploadSettings uploadSettings={settings} updateUploadSettings={() => {}} />
-    </I18nextProvider>
+    <UploadSettings uploadSettings={settings} updateUploadSettings={() => {}} />
   );
 
-  expect(getByRole('button')).toBeInTheDocument();
-  // getByRole('button').click();
+  act(() => {
+    getByRole('button').click();
+  });
 
   // expect(getByText('upload-settings-button-validate')).toBeInTheDocument();
   // expect(getByText('upload-settings-validation-error')).toBeInTheDocument();
@@ -59,11 +56,7 @@ it('renders form w/ upload settings', () => {
     loginPassword: 'password'
   };
 
-  const { getByText, getByLabelText } = render(
-    <I18nextProvider i18n={i18next}>
-      <UploadSettings uploadSettings={settings} />
-    </I18nextProvider>
-  );
+  const { getByText, getByLabelText } = render(<UploadSettings uploadSettings={settings} />);
 
   expect(getByText('upload-settings-modal-header')).toBeInTheDocument();
 
