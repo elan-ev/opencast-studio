@@ -89,7 +89,7 @@ function UploadSettings(props) {
         </FormField>
       </main>
 
-      <footer sx={{mt: 4}}>
+      <footer sx={{ mt: 4 }}>
         <Button variant="primary" onClick={handleSubmit}>
           {t('upload-settings-button-validate')}
         </Button>
