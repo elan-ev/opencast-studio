@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-const Flag = props => (
+const Flag = ({ alt, ...rest }) => (
   <img
-    alt={props.alt || ''}
+    alt={alt || ''}
     sx={{
       width: '2rem',
       height: '2rem',
@@ -11,7 +11,7 @@ const Flag = props => (
       verticalAlign: 'top',
       display: 'inline-block'
     }}
-    {...props}
+    {...rest}
   />
 );
 
