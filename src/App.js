@@ -75,6 +75,7 @@ function App(props) {
         />
 
         <Router
+          basepath={process.env.PUBLIC_URL}
           sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}
         >
           <Studio

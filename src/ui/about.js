@@ -1,8 +1,8 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
-import { Link } from '@reach/router';
 import { Box } from '@theme-ui/components';
+import Link from '../link';
 
 const Container = props => <Box sx={{ maxWidth: 960, mx: 'auto', px: 3 }} {...props} />;
 
