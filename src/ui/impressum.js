@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 
-import { Link } from '@reach/router';
+import Link from '../link';
 import { Box } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';

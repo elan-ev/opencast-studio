@@ -2,9 +2,9 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { Link } from '@reach/router';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@theme-ui/components';
+import Link from '../link';
 
 function Footer(props) {
   const { t } = useTranslation();

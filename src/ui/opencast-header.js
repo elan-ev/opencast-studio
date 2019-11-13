@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import LanguagesChooser from './languages-chooser';
-import { Link } from '@reach/router';
+import Link from '../link';
 
 const BetaBubble = props => (
   <span
