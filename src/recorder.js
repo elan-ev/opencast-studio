@@ -4,17 +4,20 @@ class Recorder extends EventEmitter {
   constructor(stream, chosenCodec) {
     super();
 
-    let _vidCodecs = [
-      'video/webm;codecs="vp9,opus"',
-      'video/webm;codecs="vp9.0,opus"',
-      'video/webm;codecs="avc1"',
-      'video/x-matroska;codecs="avc1"',
-      'video/webm;codecs="vp8,opus"'
-    ].filter(codec => MediaRecorder.isTypeSupported(codec));
+    const _vidCodecs =
+      'isTypeSupported' in MediaRecorder
+        ? [
+            'video/webm;codecs="vp9,opus"',
+            'video/webm;codecs="vp9.0,opus"',
+            'video/webm;codecs="avc1"',
+            'video/x-matroska;codecs="avc1"',
+            'video/webm;codecs="vp8,opus"'
+          ].filter(codec => MediaRecorder.isTypeSupported(codec))
+        : ['video/webm;codecs="vp9,opus"'];
 
-    let _audioCodecs = ['audio/ogg;codecs=opus', 'audio/webm;codecs=opus'];
+    const _audioCodecs = ['audio/ogg;codecs=opus', 'audio/webm;codecs=opus'];
 
-    let _recData = [];
+    const _recData = [];
 
     chosenCodec = chosenCodec || stream.getVideoTracks().length ? _vidCodecs[0] : _audioCodecs[0];
     this.recorder = new MediaRecorder(stream, { mimeType: chosenCodec });
