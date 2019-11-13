@@ -90,7 +90,7 @@ function MediaDevices(props) {
 
       {!supportsDisplayCapture() && !supportsUserCapture() && (
         <div sx={{ p: 3 }}>
-          <Notification isdanger="true">
+          <Notification isDanger>
             Your browser does not allow capturing your display or any other media input.
           </Notification>
         </div>
