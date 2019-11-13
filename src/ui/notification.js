@@ -2,17 +2,17 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-const Notification = props => (
+const Notification = ({isDanger, ...rest}) => (
   <div
     sx={{
       ':not(:last-child)': { marginBottom: '1.5rem' },
-      backgroundColor: props.isdanger ? '#ff3860' : 'whitesmoke',
-      color: props.isdanger ? '#fff' : 'currentColor',
+      backgroundColor: isDanger ? '#ff3860' : 'whitesmoke',
+      color: isDanger ? '#fff' : 'currentColor',
       borderRadius: 2,
       padding: 3,
       position: 'relative'
     }}
-    {...props}
+    {...rest}
   />
 );
 
