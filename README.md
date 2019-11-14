@@ -5,6 +5,8 @@ Opencast Studio
 ](https://travis-ci.com/elan-ev/opencast-studio)
 [![GitHub issues](https://img.shields.io/github/issues-raw/elan-ev/opencast-studio?color=blue)
 ](https://github.com/elan-ev/opencast-studio/issues)
+[![Crowdin](https://badges.crowdin.net/e/d961aac56447c193679dfdb5b349e683/localized.svg)
+](https://elan-ev.crowdin.com/opencast-studio)
 [![MIT license](https://img.shields.io/github/license/elan-ev/opencast-studio)
 ](https://github.com/elan-ev/opencast-studio/blob/master/LICENSE)
 
