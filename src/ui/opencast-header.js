@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import LanguagesChooser from './languages-chooser';
-import Link from '../link';
+import { Link } from '../router';
 
 const BetaBubble = props => (
   <span

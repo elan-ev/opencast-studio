@@ -161,7 +161,7 @@ class RecordingControls extends Component {
     if (title !== '' && presenter !== '') {
       this.handleDialogClose();
       const { hide } = toast.loading(t('upload-notification'), { hideAfter: 0 });
-      new OpencastAPI(this.props.uploadSettings).loginAndUpload(
+      new OpencastAPI(this.props.settings).loginAndUpload(
         // recording,
         [this.state.desktopRecording, this.state.videoRecording],
 
@@ -175,7 +175,8 @@ class RecordingControls extends Component {
         () => {
           hide();
           toast.error(t('message-login-failed'));
-          this.props.handleOpenUploadSettings();
+          // TODO: (mel) We have to find a better way to ensure connection to OC
+          // this.props.handleOpenUploadSettings();
         },
 
         // onserverunreachable
@@ -183,7 +184,8 @@ class RecordingControls extends Component {
           hide();
           toast.error(t('message-server-unreachable'));
           console.error('Server unreachable: ', err);
-          this.props.handleOpenUploadSettings();
+          // TODO: (mel) We have to find a better way to ensure connection to OC
+          // this.props.handleOpenUploadSettings();
         },
 
         // oninetorpermfailed
@@ -191,7 +193,8 @@ class RecordingControls extends Component {
           hide();
           toast.error(t('message-conn-failed'));
           console.error('Inet fail or Missing Permission: ', err);
-          this.props.handleOpenUploadSettings();
+          // TODO: (mel) We have to find a better way to ensure connection to OC
+          // this.props.handleOpenUploadSettings();
         },
 
         title,

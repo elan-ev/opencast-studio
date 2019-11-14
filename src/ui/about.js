@@ -4,7 +4,7 @@ import { jsx, Styled } from 'theme-ui';
 import { Box } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-import Link from '../link';
+import { Link } from '../router';
 
 const Container = props => <Box sx={{ maxWidth: 960, mx: 'auto', px: 3 }} {...props} />;
 

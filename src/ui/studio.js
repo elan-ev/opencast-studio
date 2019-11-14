@@ -23,8 +23,7 @@ function Studio(props) {
     <Flex as="main" sx={{ flexDirection: 'column', height: '100%' }}>
       <Box sx={{ flex: 0 }}>
         <Toolbar
-          uploadSettings={props.uploadSettings}
-          handleOpenUploadSettings={props.handleOpenUploadSettings}
+          settings={props.settings}
         />
       </Box>
 
@@ -40,10 +39,9 @@ function Studio(props) {
         setDesktopStream={setDesktopStream}
         videoStream={videoStream}
         setVideoStream={setVideoStream}
-        uploadSettings={props.uploadSettings}
+        settings={props.settings}
         recordingData={recordingData}
         setRecordingData={setRecordingData}
-        handleOpenUploadSettings={props.handleOpenUploadSettings}
       />
     </Flex>
   );

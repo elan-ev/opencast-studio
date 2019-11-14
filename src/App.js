@@ -4,57 +4,35 @@ import { jsx, ThemeProvider } from 'theme-ui';
 import { Flex } from '@theme-ui/components';
 
 import { Global } from '@emotion/core';
-import { Router } from '@reach/router';
-import { useState } from 'react';
+import { Redirect, Router } from '@reach/router';
 import { useTranslation } from 'react-i18next';
-import Modal from 'react-responsive-modal';
 
 import languages from './languages';
 import GlobalStyle from './style/global-style';
 import theme from './theme';
 import useLocalStorage from './use-local-storage';
+import initial from './default-settings';
 
 import About from './ui/about';
 import NotFound from './ui/not-found';
 import OpencastHeader from './ui/opencast-header';
+import Settings from './ui/settings';
 import Studio from './ui/studio';
-import UploadSettings from './ui/upload-settings';
 
-const defaultUploadSettings = {
-  serverUrl: 'https://develop.opencast.org/',
-  workflowId: 'fast',
-  loginName: 'admin',
-  loginPassword: 'opencast'
-};
+const SETTINGS_KEY = 'ocStudioSettings';
 
-const UPLOAD_SETTINGS_KEY = 'uploadSettings';
+function App({ defaultSettings = initial }) {
+  const { i18n } = useTranslation();
 
-function App(props) {
-  const { t, i18n } = useTranslation();
-
-  const [chosenLanguage, setChosenLanguage] = useState('en');
-  const [isModalOpen, setModalOpen] = useState(!window.localStorage.getItem(UPLOAD_SETTINGS_KEY));
-  const [uploadSettings, setUploadSettings] = useLocalStorage(
-    UPLOAD_SETTINGS_KEY,
-    defaultUploadSettings
-  );
+  const [settings, updateSettings] = useLocalStorage(SETTINGS_KEY, defaultSettings);
 
   const selectLanguage = language => {
-    setChosenLanguage(language);
+    updateSettings(prevState => ({ ...prevState, language }));
     i18n.changeLanguage(language);
   };
 
-  const handleOpenUploadSettings = e => {
-    setModalOpen(true);
-  };
-
-  const handleCloseUploadSettings = e => {
-    setModalOpen(false);
-  };
-
-  const handleUpdateUploadSettings = settings => {
-    setUploadSettings(settings);
-    handleCloseUploadSettings();
+  const handleUpdate = data => {
+    updateSettings(prevState => ({ ...prevState, ...data, connected: true }));
   };
 
   return (
@@ -69,7 +47,7 @@ function App(props) {
       >
         <OpencastHeader
           languages={languages}
-          chosenLanguage={chosenLanguage}
+          chosenLanguage={settings.language}
           onSelectLanguage={selectLanguage}
         />
 
@@ -77,34 +55,19 @@ function App(props) {
           basepath={process.env.PUBLIC_URL}
           sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}
         >
-          <Studio
-            path="/"
-            uploadSettings={uploadSettings}
-            handleOpenUploadSettings={handleOpenUploadSettings}
-          />
+          {!settings.connected && (
+            <Redirect
+              from={`${process.env.PUBLIC_URL}/`}
+              to={`${process.env.PUBLIC_URL}/settings`}
+            />
+          )}
+
+          <Studio path="/" settings={settings} />
+          <Settings path="/settings" settings={settings} handleUpdate={handleUpdate} />
           <About path="/about" />
           <NotFound default />
         </Router>
       </Flex>
-
-      <Modal
-        open={isModalOpen}
-        onClose={handleCloseUploadSettings}
-        ariaLabelledBy="upload-settings-modal-label"
-        center
-        closeOnEsc={false}
-        closeOnOverlayClick={false}
-        showCloseIcon={false}
-      >
-        <div id="upload-settings-modal-label" sx={{ display: 'none' }}>
-          {t('upload-settings-modal-title')}
-        </div>
-
-        <UploadSettings
-          uploadSettings={uploadSettings}
-          updateUploadSettings={handleUpdateUploadSettings}
-        />
-      </Modal>
     </ThemeProvider>
   );
 }

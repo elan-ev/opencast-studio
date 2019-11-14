@@ -2,7 +2,7 @@
 import React from 'react';
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import OpencastAPI, { mockCheckConnection } from '../opencast-api';
-import UploadSettings from './upload-settings';
+import Settings from './settings';
 
 jest.mock('../opencast-api');
 
@@ -12,7 +12,10 @@ beforeEach(() => {
 afterEach(cleanup);
 
 it('renders empty form w/o upload settings', () => {
-  const { getByText, getByLabelText } = render(<UploadSettings />);
+  const mockUpdate = jest.fn();
+  const { getByText, getByLabelText } = render(
+    <Settings settings={{}} handleUpdate={mockUpdate} />
+  );
 
   expect(getByText('upload-settings-modal-header')).toBeInTheDocument();
 
@@ -39,7 +42,7 @@ it('renders error on wrong settings', async () => {
 
   const mockUpdate = jest.fn();
   const { getByRole, getByText } = render(
-    <UploadSettings uploadSettings={settings} updateUploadSettings={mockUpdate} />
+    <Settings settings={settings} handleUpdate={mockUpdate} />
   );
 
   await act(async () => {
@@ -59,7 +62,10 @@ it('renders form w/ upload settings', () => {
     loginPassword: 'password'
   };
 
-  const { getByText, getByLabelText } = render(<UploadSettings uploadSettings={settings} />);
+  const mockUpdate = jest.fn();
+  const { getByText, getByLabelText } = render(
+    <Settings settings={settings} handleUpdate={mockUpdate} />
+  );
 
   expect(getByText('upload-settings-modal-header')).toBeInTheDocument();
 
