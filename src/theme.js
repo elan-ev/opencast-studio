@@ -29,6 +29,19 @@ const base = {
     secondary: '#30c',
     muted: '#f6f6f6'
   },
+  buttons: {
+    primary: {
+      color: 'background',
+      bg: 'primary',
+      '&:hover': {
+        bg: 'text'
+      }
+    },
+    text: {
+      color: 'text',
+      bg: 'background'
+    }
+  },
   styles: {
     root: {
       fontFamily: 'body',

@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
-import Link from '../link';
+import { Link } from '../router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,7 +17,7 @@ const Icon = props => (
   <FontAwesomeIcon sx={{ color: 'text', fontSize: 5, verticalAlign: 'middle' }} {...props} />
 );
 
-function Toolbar({ uploadSettings, handleOpenUploadSettings }) {
+function Toolbar({ settings }) {
   const { t } = useTranslation();
 
   return (
@@ -34,17 +34,13 @@ function Toolbar({ uploadSettings, handleOpenUploadSettings }) {
         }
       }}
     >
-      <a href={uploadSettings.serverUrl} title={t('toolbar-button-opencast')}>
+      <a href={settings.serverUrl} title={t('toolbar-button-opencast')}>
         <Icon icon={faPlayCircle} />
       </a>
 
-      <label
-        title={t('toolbar-button-upload-settings')}
-        id="ocUploadSettingsOpenButton"
-        onClick={handleOpenUploadSettings}
-      >
+      <Link to="/settings" title={t('toolbar-upload-settings')}>
         <Icon icon={faCog} />
-      </label>
+      </Link>
 
       <a
         href="https://github.com/elan-ev/opencast-studio/issues"

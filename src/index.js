@@ -1,19 +1,21 @@
 //; -*- mode: rjsx;-*-
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import * as Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/browser';
 
 import './i18n';
 import * as serviceWorker from './serviceWorker';
 import Loading from './loading';
 
-Sentry.init({dsn: "https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4"});
+Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
 
 const App = lazy(() => import('./App'));
 
 ReactDOM.render(
   <Suspense fallback={<Loading />}>
-    <App />
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
   </Suspense>,
   document.getElementById('root')
 );
