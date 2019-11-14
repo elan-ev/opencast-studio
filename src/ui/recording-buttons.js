@@ -11,24 +11,24 @@ import {
   faStopCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-const Button = props => (
+const Button = ({ large, ...rest }) => (
   <button
     sx={{
       backgroundColor: 'transparent',
       border: 'none',
       position: 'relative',
       my: 0,
-      mx: props.large ? '1rem' : '0.5rem',
-      padding: props.large ? '0.5rem' : '0.25rem',
-      fontSize: props.large ? '5rem' : '2.5rem',
-      lineHeight: props.large ? '5rem' : '2.5rem',
+      mx: large ? '1rem' : '0.5rem',
+      padding: large ? '0.5rem' : '0.25rem',
+      fontSize: large ? '5rem' : '2.5rem',
+      lineHeight: large ? '5rem' : '2.5rem',
       svg: {
         margin: 0,
         padding: 0,
         outline: 'none'
       }
     }}
-    {...props}
+    {...rest}
   />
 );
 
@@ -54,10 +54,7 @@ export const RecordButton = props => (
     }}
   >
     <span className="fa-layers fa-fw">
-      <FontAwesomeIcon
-        icon={props.countdown ? faCircleNotch : faCircle}
-        spin={props.countdown}
-      />
+      <FontAwesomeIcon icon={props.countdown ? faCircleNotch : faCircle} spin={props.countdown} />
       <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
     </span>
   </Button>
