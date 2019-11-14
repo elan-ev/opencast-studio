@@ -20,7 +20,7 @@
     "react": "^16.11.0",
     "react-beforeunload": "^2.1.0",
     "react-dom": "^16.11.0",
-    "react-i18next": "^11.1.0",
+    "react-i18next": "^11.2.1",
     "react-responsive-modal": "^4.0.1",
     "react-scripts": "3.2.0",
     "theme-ui": "^0.2.46"
