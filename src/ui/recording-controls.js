@@ -241,7 +241,7 @@ class RecordingControls extends Component {
           <div className="center">
             {this.state.recordingState === 'inactive' ? (
               <RecordButton
-                large="true"
+                large
                 title={t('record-button-title')}
                 recordingState={this.state.recordingState}
                 onClick={this.handleRecord}
@@ -250,7 +250,7 @@ class RecordingControls extends Component {
               />
             ) : (
               <StopButton
-                large="true"
+                large
                 title={t('stop-button-title')}
                 recordingState={this.state.recordingState}
                 onClick={this.handleStop}
