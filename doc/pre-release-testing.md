@@ -22,11 +22,10 @@ Everything should be tested on all officially supported systems and browser:
 #### UI
 
 - **Logo and "Opencast Studio"** are visible?
-- Make sure **only supported options** are shown:
+- Make sure **only supported sources** are shown:
     - Mobile: only "Share webcam", not "Share desktop"
     - Desktop: should show both, "webcam" and "desktop"
 - Make sure there are **no scrollbars** anywhere.
-- Does page **"Legal notices"** exist and is easily reachable?
 - Does page **"About"** exist and is easily reachable?
 - Check **"Configure" dialog**:
     - Does it open?
@@ -48,6 +47,6 @@ Everything should be tested on all officially supported systems and browser:
 - Check buttons "Upload to Opencast", "Save Media" and "Discard"
     - Do they have useful colors (i.e. red for "discard")?
 - Click "Upload to Opencast"
-    - Make sure that the video arrived on the OpenCast side correctly
+    - Make sure that the video was correctly uploaded to Opencast
 - Repeat the recording
 - Click "Save Media" and make sure the video is correct
