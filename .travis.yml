@@ -19,3 +19,14 @@ jobs:
         script: bash .travis-deploy.sh
         on:
           branch: production
+
+    # Deploy translation keys to Crowdin if we are on develop or one of the release branches
+    - stage: deployment
+      install: skip
+      script: skip
+      deploy:
+        provider: script
+        script: bash .travis-deploy-test.sh
+        on:
+          all_branches: true
+          condition: $TRAVIS_BRANCH != ^production$
