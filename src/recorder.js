@@ -1,23 +1,28 @@
 import EventEmitter from './event-emitter';
 
+const findSupportedMimeType = list =>
+  'isTypeSupported' in MediaRecorder
+    ? list.find(mimeType => MediaRecorder.isTypeSupported(mimeType)) || ''
+    : '';
+
 class Recorder extends EventEmitter {
-  constructor(stream, chosenCodec) {
+  constructor(stream, mimeType) {
     super();
 
-    let _vidCodecs = [
-      'video/webm;codecs="vp9,opus"',
-      'video/webm;codecs="vp9.0,opus"',
-      'video/webm;codecs="avc1"',
-      'video/x-matroska;codecs="avc1"',
-      'video/webm;codecs="vp8,opus"'
-    ].filter(codec => MediaRecorder.isTypeSupported(codec));
+    if (!mimeType) {
+      mimeType = stream.getVideoTracks().length
+        ? findSupportedMimeType([
+            'video/webm;codecs="vp9,opus"',
+            'video/webm;codecs="vp9.0,opus"',
+            'video/webm;codecs="avc1"',
+            'video/x-matroska;codecs="avc1"',
+            'video/webm;codecs="vp8,opus"'
+          ])
+        : findSupportedMimeType(['audio/ogg;codecs=opus', 'audio/webm;codecs=opus']);
+    }
 
-    let _audioCodecs = ['audio/ogg;codecs=opus', 'audio/webm;codecs=opus'];
-
-    let _recData = [];
-
-    chosenCodec = chosenCodec || stream.getVideoTracks().length ? _vidCodecs[0] : _audioCodecs[0];
-    this.recorder = new MediaRecorder(stream, { mimeType: chosenCodec });
+    const _recData = [];
+    this.recorder = new MediaRecorder(stream, { mimeType });
     this.recorder.ondataavailable = function(e) {
       if (e.data.size > 0) {
         _recData.push(e.data);
