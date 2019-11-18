@@ -77,7 +77,7 @@ function MediaDevices(props) {
       {isUserCaptureSupported() && (
         <MediaDevice
           onClick={requestUserMedia}
-          title={t('share-webcam')}
+          title={t('share-camera')}
           deviceType="video"
           icon={faVideo}
           stream={props.videoStream}
