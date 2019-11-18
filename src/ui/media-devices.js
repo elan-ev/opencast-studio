@@ -6,6 +6,10 @@ import toast from 'cogo-toast';
 import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import MediaDevice from './media-device';
+import {
+  isDisplayCaptureSupported,
+  isUserCaptureSupported,
+} from "../util";
 import Notification from './notification';
 
 function startDisplayCapture(displayMediaOptions) {
@@ -16,10 +20,6 @@ function startDisplayCapture(displayMediaOptions) {
   });
 }
 
-function supportsDisplayCapture() {
-  return 'mediaDevices' in navigator && 'getDisplayMedia' in navigator.mediaDevices;
-}
-
 function startUserCapture(userMediaOptions) {
   const userMediaPromise = navigator.mediaDevices.getUserMedia(userMediaOptions);
 
@@ -28,10 +28,6 @@ function startUserCapture(userMediaOptions) {
     toast.error('Your browser does not permit to capture your webcam.');
     return null;
   });
-}
-
-function supportsUserCapture() {
-  return 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 }
 
 function MediaDevices(props) {
@@ -68,7 +64,7 @@ function MediaDevices(props) {
         }
       }}
     >
-      {supportsDisplayCapture() && (
+      {isDisplayCaptureSupported() && (
         <MediaDevice
           onClick={requestDisplayMedia}
           title={t('share-desktop')}
@@ -78,7 +74,7 @@ function MediaDevices(props) {
         />
       )}
 
-      {supportsUserCapture() && (
+      {isUserCaptureSupported() && (
         <MediaDevice
           onClick={requestUserMedia}
           title={t('share-webcam')}
@@ -88,7 +84,7 @@ function MediaDevices(props) {
         />
       )}
 
-      {!supportsDisplayCapture() && !supportsUserCapture() && (
+      {!isDisplayCaptureSupported() && !isUserCaptureSupported() && (
         <div sx={{ p: 3 }}>
           <Notification isDanger>
             Your browser does not allow capturing your display or any other media input.
