@@ -5,7 +5,6 @@ import { jsx } from 'theme-ui';
 import { useState } from 'react';
 import { Box, Flex } from '@theme-ui/components';
 
-import Footer from './footer';
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
 import Toolbar from './toolbar';
@@ -46,7 +45,6 @@ function Studio(props) {
         setRecordingData={setRecordingData}
         handleOpenUploadSettings={props.handleOpenUploadSettings}
       />
-      <Footer />
     </Flex>
   );
 }

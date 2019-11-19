@@ -2,6 +2,8 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 import { Box } from '@theme-ui/components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import Link from '../link';
 
 const Container = props => <Box sx={{ maxWidth: 960, mx: 'auto', px: 3 }} {...props} />;
@@ -26,6 +28,51 @@ const Code = props => (
     {...props}
   />
 );
+
+
+function Impressum(props) {
+  return (
+    <article>
+      <Styled.h2>ELAN e.V.</Styled.h2>
+
+      <Styled.p>
+        The e-learning academic network (ELAN e.V.) is a German non-profit organization supporting
+        higher-education organizations in all matters related to e-learning. Our services include
+        practical tips about how to use digital technologies in education, legal advice and
+        development of free, open-source software to support education.
+      </Styled.p>
+
+      <Styled.h3>Contact</Styled.h3>
+
+      <Styled.p>
+        Dr. Norbert Kleinefeld, Geschäftsführer
+        <br />
+        Karlstr. 23
+        <br />
+        D-26123 Oldenburg
+      </Styled.p>
+
+      <Styled.p>
+        <FontAwesomeIcon icon={faGlobeEurope} />{' '}
+        <Styled.a href="https://elan-ev.de">elan-ev.de</Styled.a>
+        <br />
+        <FontAwesomeIcon icon={faEnvelope} />{' '}
+        <Styled.a href="mailto:kontakt@elan-ev.de">kontakt@elan-ev.de</Styled.a>
+        <br />
+        <FontAwesomeIcon icon={faPhone} />{' '}
+        <Styled.a href="tel:+4944199866610">+49&thinsp;441 998&thinsp;666&thinsp;10</Styled.a>
+      </Styled.p>
+
+      <Styled.p>
+        Registergericht: Amtsgericht Oldenburg
+        <br />
+        Registernummer: VR 200644
+        <br />
+        USt.-ID-Nr.: DE 265901392
+      </Styled.p>
+    </article>
+  );
+}
 
 function About(props) {
   return (
@@ -103,7 +150,7 @@ function About(props) {
           <li>
             <Styled.p>
               <Styled.a href="https://github.com/cilt-uct">University of Cape Town (CILT)</Styled.a>
-              for letting Duncan start the project
+              {' '}for letting Duncan start the project
             </Styled.p>
           </li>
           <li>
@@ -119,6 +166,8 @@ function About(props) {
             </Styled.p>
           </li>
         </ul>
+        <br />
+        <Impressum></Impressum>
         <Box as="footer" sx={{ py: 3, textAlign: 'center' }}>
           <Link to="/">← Back to the Studio</Link>
         </Box>
