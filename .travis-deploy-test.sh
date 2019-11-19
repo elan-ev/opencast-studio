@@ -21,8 +21,9 @@ else
   srcbranch="pull-request-${TRAVIS_PULL_REQUEST}"
 fi
 srcpath="$(pwd)"
+builddate="$(date --utc '+%Y%m%d%H%M%S')"
 buildno="$(printf '%06d' "${TRAVIS_BUILD_NUMBER}")"
-deploydir="build-${TRAVIS_REPO_SLUG}-${buildno}-${srcbranch}"
+deploydir="build-${builddate}-${TRAVIS_REPO_SLUG}-${buildno}-${srcbranch}"
 deploydir="$(echo "${deploydir}" | sed 's/[^a-Z0-9]/-/g')"
 export PUBLIC_URL="/${deploydir}"
 npm ci
