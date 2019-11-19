@@ -1,7 +1,7 @@
 import EventEmitter from './event-emitter';
 
 const findSupportedMimeType = list =>
-  'isTypeSupported' in MediaRecorder
+  MediaRecorder && 'isTypeSupported' in MediaRecorder
     ? list.find(mimeType => MediaRecorder.isTypeSupported(mimeType)) || ''
     : '';
 
