@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
-import { Link } from '../router';
+import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {

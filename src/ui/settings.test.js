@@ -6,6 +6,14 @@ import Settings from './settings';
 
 jest.mock('../opencast-api');
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useHistory: () => ({
+    push: jest.fn()
+  }),
+  useLocation: jest.fn(() => ({}))
+}));
+
 beforeEach(() => {
   OpencastAPI.mockClear();
 });

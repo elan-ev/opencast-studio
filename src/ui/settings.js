@@ -4,20 +4,22 @@ import { jsx } from 'theme-ui';
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Box } from '@theme-ui/components';
 
 import Notification from './notification';
 import OpencastAPI from '../opencast-api';
-import { navigate } from '../router';
 import SettingsForm from './settings-form';
 
 function Settings(props) {
   const { t } = useTranslation();
   const [error, setError] = useState();
+  const history = useHistory();
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: '/' } };
 
   function returnToTheStudio() {
-    // TODO: (mel) possibly replace this with navigate(-1)
-    navigate('/');
+    history.replace(from);
   }
 
   async function handleSubmit(data) {

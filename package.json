@@ -10,7 +10,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
     "@mdx-js/react": "^1.5.1",
-    "@reach/router": "^1.2.1",
     "@sentry/browser": "^5.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -26,6 +25,7 @@
     "react-hook-form": "^3.27.0",
     "react-i18next": "^11.2.2",
     "react-responsive-modal": "^4.0.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "theme-ui": "^0.2.49"
   },
