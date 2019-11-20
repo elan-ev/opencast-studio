@@ -1,10 +1,10 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx, ThemeProvider } from 'theme-ui';
-import { Flex } from '@theme-ui/components';
+import { Box, Flex } from '@theme-ui/components';
 
 import { Global } from '@emotion/core';
-import { Redirect, Router } from '@reach/router';
+import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import languages from './languages';
@@ -38,38 +38,61 @@ function App({ defaultSettings = initial }) {
   return (
     <ThemeProvider theme={theme}>
       <Global styles={GlobalStyle} />
-
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          minHeight: '100%'
-        }}
-      >
-        <OpencastHeader
-          languages={languages}
-          chosenLanguage={settings.language}
-          onSelectLanguage={selectLanguage}
-        />
-
-        <Router
-          basepath={process.env.PUBLIC_URL}
-          sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}
+      <Router basename={process.env.PUBLIC_URL || '/'}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            minHeight: '100%'
+          }}
         >
-          {!settings.connected && (
-            <Redirect
-              from={`${process.env.PUBLIC_URL}/`}
-              to={`${process.env.PUBLIC_URL}/settings`}
-            />
-          )}
+          <OpencastHeader
+            languages={languages}
+            chosenLanguage={settings.language}
+            onSelectLanguage={selectLanguage}
+          />
 
-          <Studio path="/" settings={settings} />
-          <Settings path="/settings" settings={settings} handleUpdate={handleUpdate} />
-          <About path="/about" />
-          <NotFound default />
-        </Router>
-      </Flex>
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}>
+            <Switch>
+              <Route path="/settings">
+                <Settings settings={settings} handleUpdate={handleUpdate} />
+              </Route>
+
+              <Route path="/about">
+                <About />
+              </Route>
+
+              <ConnectedRoute path="/" settings={settings}>
+                <Studio settings={settings} />
+              </ConnectedRoute>
+
+              <Route path="*">
+                <NotFound />
+              </Route>
+            </Switch>
+          </Box>
+        </Flex>
+      </Router>
     </ThemeProvider>
   );
 }
 
+function ConnectedRoute({ children, settings, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        settings.connected ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/settings',
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+}
 export default App;

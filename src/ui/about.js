@@ -4,7 +4,7 @@ import { jsx, Styled } from 'theme-ui';
 import { Box } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { Link } from '../router';
+import { Link } from 'react-router-dom';
 
 const Container = props => <Box sx={{ maxWidth: 960, mx: 'auto', px: 3 }} {...props} />;
 
@@ -169,7 +169,9 @@ function About(props) {
         <br />
         <Impressum></Impressum>
         <Box as="footer" sx={{ py: 3, textAlign: 'center' }}>
-          <Link to="/">← Back to the Studio</Link>
+          <Link sx={{ variant: 'styles.a' }} to="/">
+            ← Back to the Studio
+          </Link>
         </Box>
       </article>
     </Container>
