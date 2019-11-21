@@ -38,7 +38,7 @@ function Toolbar({ settings }) {
         <Icon icon={faPlayCircle} />
       </a>
 
-      <Link to="/settings" title={t('toolbar-upload-settings')}>
+      <Link to="/settings" title={t('toolbar-button-upload-settings')}>
         <Icon icon={faCog} />
       </Link>
 
