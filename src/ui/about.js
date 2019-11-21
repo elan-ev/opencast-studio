@@ -168,6 +168,20 @@ function About(props) {
         </ul>
         <br />
         <Impressum></Impressum>
+
+        <Styled.h2>Version</Styled.h2>
+        <Styled.p>
+          Build date {process.env.REACT_APP_BUILD_DATE || '?'},
+          commit{' '}
+          <Styled.a
+            aria-label="Git commit on GitHub"
+            href={"https://github.com/elan-ev/opencast-studio/commit/"
+                  + process.env.REACT_APP_GIT_SHA }
+            >
+            {process.env.REACT_APP_GIT_SHA || '?'}
+          </Styled.a>.
+        </Styled.p>
+
         <Box as="footer" sx={{ py: 3, textAlign: 'center' }}>
           <Link sx={{ variant: 'styles.a' }} to="/">
             ← Back to the Studio
