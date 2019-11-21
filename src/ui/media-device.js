@@ -8,7 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function MediaDevice({ onClick, title, deviceType, icon, stream }) {
   const videoRef = useRef();
   useEffect(() => {
-    videoRef.current.srcObject = stream;
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+    }
   });
   return (
     <div
