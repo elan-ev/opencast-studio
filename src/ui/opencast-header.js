@@ -13,10 +13,12 @@ const BetaBubble = props => (
       fontSize: '12pt',
       verticalAlign: 'top',
       display: ['none', 'inline'],
-      border: '1px solid #888',
-      borderRadius: '5px',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'gray.2',
+      borderRadius: 5,
       padding: '2px',
-      color: '#aaa'
+      color: 'gray.2'
     }}
     {...props}
   />
@@ -50,7 +52,7 @@ function OpencastHeader(props) {
       sx={{
         height: '3rem',
         lineHeight: '3rem',
-        background: '#333',
+        backgroundColor: 'gray.0',
         color: 'background',
         display: 'flex',
         justifyContent: 'space-between'

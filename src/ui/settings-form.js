@@ -19,7 +19,7 @@ const Input = ({ errors, label, name, register, required, type = 'text', ...rest
     >
       <label
         sx={{
-          color: '#363636',
+          color: 'text',
           display: 'block',
           fontSize: 2,
           fontWeight: 'bold'
@@ -42,7 +42,7 @@ const Input = ({ errors, label, name, register, required, type = 'text', ...rest
             autoComplete="off"
             name={name}
             ref={register({ required })}
-            sx={{ width: '100%', '&[aria-invalid="true"]': { borderColor: '#f14668' } }}
+            sx={{ variant: 'styles.input' }}
             type={type}
             {...rest}
           />
@@ -50,7 +50,7 @@ const Input = ({ errors, label, name, register, required, type = 'text', ...rest
             <p
               id={`${name}Error`}
               sx={{
-                color: '#f14668',
+                color: 'error',
                 fontSize: 1,
                 fontWeight: 'body',
                 mt: 1

@@ -15,7 +15,7 @@ function MediaDevice({ onClick, title, icon, stream }) {
       onClick={stream ? null : onClick}
       data-title={title}
       sx={{
-        background: '#ddd',
+        backgroundColor: 'gray.3',
         boxShadow: '0 2px 2px rgba(0, 0, 0, 0.35)',
         overflow: 'hidden',
         zIndex: '0',
@@ -34,11 +34,11 @@ function MediaDevice({ onClick, title, icon, stream }) {
         sx={{
           outline: 'none',
           position: 'absolute',
-          top: '0',
-          left: '0',
+          top: 0,
+          left: 0,
           width: '100%',
           height: '100%',
-          zIndex: '2',
+          zIndex: 2,
           background: 'transparent'
         }}
       ></video>
@@ -55,7 +55,7 @@ function MediaDevice({ onClick, title, icon, stream }) {
           >
           <FontAwesomeIcon icon={icon} sx={{ fontSize: [6, 7, 8] }} />
           </span>
-          <p sx={{ color: '#666', fontSize: '1.5rem', fontWeight: '300' }}>{title}</p>
+          <p sx={{ color: 'gray.1', fontSize: 4, fontWeight: 'heading' }}>{title}</p>
         </Fragment>
       )}
     </div>

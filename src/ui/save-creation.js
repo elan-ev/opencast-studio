@@ -12,7 +12,7 @@ import FormField from './form-field';
 import Notification from './notification';
 import RecordingPreview from './recording-preview';
 
-const Input = props => <input sx={{ width: '100%' }} {...props} />;
+const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 function SaveCreationDialog(props) {
   const { t } = useTranslation();

@@ -11,10 +11,13 @@ const Container = props => <Box sx={{ maxWidth: 960, mx: 'auto', px: 3 }} {...pr
 const Code = props => (
   <Box
     sx={{
-      background: '#f4f4f4',
-      color: '#666',
-      border: '1px solid #ddd',
-      borderLeft: '3px solid #f36d33',
+      background: 'gray.2',
+      color: 'gray.1',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'gray.2',
+      borderLeftWidth: 3,
+      borderLeftColor: 'primary',
       fontFamily: 'monospace',
       lineHeight: 'body',
       my: 3,
@@ -28,7 +31,6 @@ const Code = props => (
     {...props}
   />
 );
-
 
 function Impressum() {
   return (

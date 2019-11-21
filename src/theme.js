@@ -27,7 +27,9 @@ const base = {
     background: '#fff',
     primary: '#47af7a',
     secondary: '#30c',
-    muted: '#f6f6f6'
+    muted: '#f6f6f6',
+    error: '#f14668',
+    gray: ['#363636', '#666666', '#aaaaaa', '#dddddd']
   },
   buttons: {
     primary: {
@@ -107,6 +109,26 @@ const base = {
     },
     img: {
       maxWidth: '100%'
+    },
+    input: {
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'gray.2',
+      height: '2rem',
+      borderRadius: 2,
+      px: 2,
+      py: 0,
+      outline: 'none',
+      transition: 'border-color 0.3s, box-shadow 0.3s',
+      width: '100%',
+      '&:focus': {
+        borderColor: 'primary',
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
+      },
+      '&[aria-invalid="true"]': {
+        borderColor: 'error',
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.error}`
+      }
     }
   }
 };
