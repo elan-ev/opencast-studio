@@ -10,7 +10,7 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
     width: '8rem',
     height: '4.5rem',
     position: 'relative',
-    background: '#ddd',
+    backgroundColor: 'gray.3',
     textAlign: 'center',
     padding: '0.5rem',
     margin: '0 0.5rem 0.5rem 0',

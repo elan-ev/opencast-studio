@@ -1,17 +1,13 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import PropTypes from 'prop-types';
+import { jsx } from 'theme-ui';
 
-import { jsx, ThemeProvider } from 'theme-ui';
 import { Box, Flex } from '@theme-ui/components';
-
-import { Global } from '@emotion/core';
-import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 
 import languages from './languages';
-import GlobalStyle from './style/global-style';
-import theme from './theme';
 import useLocalStorage from './use-local-storage';
 import initial from './default-settings';
 
@@ -38,8 +34,6 @@ function App({ defaultSettings = initial }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Global styles={GlobalStyle} />
       <Router basename={process.env.PUBLIC_URL || '/'}>
         <Flex
           sx={{
@@ -74,7 +68,6 @@ function App({ defaultSettings = initial }) {
           </Box>
         </Flex>
       </Router>
-    </ThemeProvider>
   );
 }
 

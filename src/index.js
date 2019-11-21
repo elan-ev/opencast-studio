@@ -1,7 +1,12 @@
 //; -*- mode: rjsx;-*-
 import React, { lazy, Suspense } from 'react';
+import { Global } from '@emotion/core';
 import ReactDOM from 'react-dom';
 import * as Sentry from '@sentry/browser';
+import { ThemeProvider } from 'theme-ui';
+
+import GlobalStyle from './style/global-style';
+import theme from './theme';
 
 import './i18n';
 import * as serviceWorker from './serviceWorker';
@@ -12,11 +17,14 @@ Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.
 const App = lazy(() => import('./App'));
 
 ReactDOM.render(
-  <Suspense fallback={<Loading />}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Suspense>,
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <Global styles={GlobalStyle} />
+      <Suspense fallback={<Loading />}>
+        <App />
+      </Suspense>
+    </ThemeProvider>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

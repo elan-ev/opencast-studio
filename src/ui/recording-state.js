@@ -10,7 +10,7 @@ const RecordingState = props => {
   return (
       <div sx={{ display: "flex", alignItems: 'center', visibility: props.recordingState === 'inactive' ? 'hidden' : 'visible' }}>
       <Clock recordingState={props.recordingState} />
-        <p sx={{ px: 2, color: props.recordingState === 'paused' ? '#aaa' : 'transparent' }}>
+        <p sx={{ px: 2, color: props.recordingState === 'paused' ? 'gray.1' : 'transparent' }}>
         {props.recordingState === 'recording'
           ? t('Recording')
           : props.recordingState === 'paused'

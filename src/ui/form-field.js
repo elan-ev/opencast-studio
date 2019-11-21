@@ -13,7 +13,7 @@ function FormField(props) {
     >
       <label
         sx={{
-          color: '#363636',
+          color: 'gray.0',
           display: 'block',
           fontSize: 2,
           fontWeight: 'bold'
