@@ -81,8 +81,23 @@ If you prefer to run a local **development** server directly, you can use instea
 Supported Browsers
 ------------------
 
-The following browsers are officially supported:
+The following table depicts the current state of browser support.
+Please note that Opencast Studio uses fairly new web technologies that are not yet (fully) supported by all browsers.
+That's usually the reason for why this app does not work on a particular browser/system.
+In the table, "(✔)" means partial support and/or major bugs are still present.
 
-- On desktop: Firefox, Chrome, Edge
-- Android: Chrome and Firefox
-- iOS: Safari
+| OS         | Browser    | Capture Camera | Capture Screen | Record | Notes |
+| ---------- | ---------- | -------------- | -------------- | ------ | ----- |
+| Win10 | Chrome 77  | ✔              | ✔              | ✔      |
+| Win10 | Firefox 68 | ✔              | ✔              | ✔      |
+| Win10 | Edge 44    | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | ✘ | See [#242](https://github.com/elan-ev/opencast-studio/issues/242)
+| Linux      | Chrome 77  | ✔              | ✔              | ✔      |
+| Linux      | Firefox 68 | ✔              | ✔              | ✔      |
+| MacOS      | Firefox 70 | ✔              | ✔              | ✔      |
+| MacOS      | Chrome 78  | ✔              | ✔              | ✔      | Video file does not allow seeking
+| MacOS      | Safari 13  | ✔              | ✘              | ✘      | Recording seems to fail due to unsupported MIME type
+| Android    | Firefox 68 | ✔              | ✘              | ✔      |
+| Android    | Chrome 78  | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | (✔) [#243](https://github.com/elan-ev/opencast-studio/issues/243) | Low frame rate, fairly unusable
+| iOS        | Safari     | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | (✔) [#84](https://github.com/elan-ev/opencast-studio/issues/84) | Video rotated by 180° in recording, requires enabling experimental feature in settings
+
+Browsers/systems not listed in this table are not currently tested by us, so they might or might not work.
