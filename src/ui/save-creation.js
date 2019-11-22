@@ -45,7 +45,7 @@ function SaveCreationDialog(props) {
       }}
     >
       <header>
-        <h1 sx={{ fontWeight: 'heading' }}>Production details</h1>
+        <h1 sx={{ fontWeight: 'heading' }}>{t('save-creation-modal-title')}</h1>
       </header>
 
       <main sx={{ flex: 1 }}>
