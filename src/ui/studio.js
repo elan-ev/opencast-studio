@@ -8,6 +8,7 @@ import { Box, Flex } from '@theme-ui/components';
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
 import Toolbar from './toolbar';
+import Warnings from './warnings';
 
 const defaultRecordingData = {
   title: '',
@@ -26,6 +27,8 @@ function Studio(props) {
           settings={props.settings}
         />
       </Box>
+
+      <Warnings />
 
       <MediaDevices
         desktopStream={desktopStream}

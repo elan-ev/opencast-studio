@@ -28,3 +28,10 @@ export const isDisplayCaptureSupported = () =>
 // phone cameras).
 export const isUserCaptureSupported = () =>
   'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
+
+// Checks if the browsers supports the `MediaRecorder` API required to actually
+// record the media streams.
+export const isRecordingSupported = () => typeof(MediaRecorder) !== 'undefined';
+
+// Checks if this runs in Safari.
+export const onSafari = () => /Safari/i.test(navigator.userAgent);
