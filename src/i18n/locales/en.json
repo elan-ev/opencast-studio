@@ -37,6 +37,7 @@
   "upload-settings-label-workflow-id": "Workflow ID",
   "upload-settings-label-username": "Username",
   "upload-settings-label-password": "Password",
+  "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "For Safari on iOS, you can enable the experimental feature 'MediaRecorder' in settings."
 }
