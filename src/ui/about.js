@@ -142,31 +142,23 @@ function About(props) {
         </Styled.p>
         <ul>
           <li>
-            <Styled.p>
-              <Styled.a href="https://github.com/slampunk">Duncan Smith</Styled.a> for starting this
-              project
-            </Styled.p>
+            <Styled.a href="https://github.com/slampunk">Duncan Smith</Styled.a> for starting this
+            project
           </li>
           <li>
-            <Styled.p>
-              <Styled.a href="https://github.com/cilt-uct">University of Cape Town (CILT)</Styled.a>
-              {' '}for letting Duncan start the project
-            </Styled.p>
+            <Styled.a href="https://github.com/cilt-uct">University of Cape Town (CILT)</Styled.a>
+            {' '}for letting Duncan start the project
           </li>
           <li>
-            <Styled.p>
-              <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a> for financial support and
-              testing
-            </Styled.p>
+            <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a> for financial support and
+            testing
           </li>
           <li>
-            <Styled.p>
-              <Styled.a href="https://github.com/elan-ev">ELAN e.V.</Styled.a> for the final
-              development
-            </Styled.p>
+            <Styled.a href="https://github.com/elan-ev">ELAN e.V.</Styled.a> for the final
+            development
           </li>
         </ul>
-        <br />
+
         <Impressum></Impressum>
         <Box as="footer" sx={{ py: 3, textAlign: 'center' }}>
           <Link sx={{ variant: 'styles.a' }} to="/">
