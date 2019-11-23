@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-function ChosenLanguage({ onClick, className, language }) {
+function ChosenLanguage({ onClick, language }) {
   return (
     <label onClick={onClick} sx={{ lineHeight: '3rem', height: '3rem', display: 'inlineBlock' }}>
       <span

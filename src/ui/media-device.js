@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { Fragment, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function MediaDevice({ onClick, title, deviceType, icon, stream }) {
+function MediaDevice({ onClick, title, icon, stream }) {
   const videoRef = useRef();
   useEffect(() => {
     videoRef.current.srcObject = stream;

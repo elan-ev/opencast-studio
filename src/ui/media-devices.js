@@ -68,7 +68,6 @@ function MediaDevices(props) {
         <MediaDevice
           onClick={requestDisplayMedia}
           title={t('share-desktop')}
-          deviceType="desktop"
           icon={faDesktop}
           stream={props.desktopStream}
         />
@@ -78,7 +77,6 @@ function MediaDevices(props) {
         <MediaDevice
           onClick={requestUserMedia}
           title={t('share-camera')}
-          deviceType="video"
           icon={faVideo}
           stream={props.videoStream}
         />

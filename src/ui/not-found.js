@@ -1,7 +1,7 @@
 //; -*- mode: rjsx;-*-
 import React from 'react';
 
-function NotFound(props) {
+function NotFound() {
   return (
     <div>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut

@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import Language from './languages-item.js';
 
-function Languages({ className, languages, onSelectLanguage }) {
+function Languages({ languages, onSelectLanguage }) {
   return (
     <ul
       sx={{

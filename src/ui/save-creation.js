@@ -27,7 +27,7 @@ function SaveCreationDialog(props) {
   }
 
   // TODO: validation is in props.handleUpload too; it is needed here to show the error in the dialog instead of as a toast
-  function handleUpload(event) {
+  function handleUpload() {
     if (props.recordingData.title === '' || props.recordingData.presenter === '') {
       setError(t('save-creation-form-invalid'));
     } else {
