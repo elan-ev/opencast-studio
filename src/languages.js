@@ -1,11 +1,9 @@
-import flagEn from './flags/united-kingdom.png';
-import flagDe from './flags/germany.png';
-import flagFa from './flags/iran.png';
-
 const languages = [
-  { short: 'en', long: 'English', flag: flagEn, rtl: false },
-  { short: 'de', long: 'Deutsch', flag: flagDe, rtl: false },
-  { short: 'fa', long: 'Farsi', flag: flagFa, rtl: true }
+  { short: 'en', long: 'English', rtl: false },
+  { short: 'de', long: 'Deutsch', rtl: false },
+  { short: 'el', long: 'Ελληνικά', rtl: false },
+  { short: 'es', long: 'Español', rtl: false },
+  { short: 'fa', long: 'Farsi', rtl: true }
 ];
 
 export default languages;

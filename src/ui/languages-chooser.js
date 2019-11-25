@@ -27,8 +27,7 @@ function LanguageChooser({
   return (
     <div
       sx={{
-        lineHeight: '3rem',
-        height: '3rem',
+        lineHeight: '2rem',
         mx: 3,
         position: 'relative'
       }}

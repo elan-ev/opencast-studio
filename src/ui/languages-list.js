@@ -17,7 +17,6 @@ function Languages({ className, languages, onSelectLanguage }) {
         background: 'white',
         margin: '0',
         padding: '0',
-        lineHeight: '2.5rem',
         listStyle: 'none'
       }}
     >

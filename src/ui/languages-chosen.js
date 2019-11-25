@@ -2,8 +2,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import Flag from './languages-flag';
-
 function ChosenLanguage({ onClick, className, language }) {
   return (
     <label onClick={onClick} sx={{ lineHeight: '3rem', height: '3rem', display: 'inlineBlock' }}>
@@ -16,7 +14,6 @@ function ChosenLanguage({ onClick, className, language }) {
       >
         {language.short}
       </span>
-      <Flag alt="language.long" src={language.flag} />
     </label>
   );
 }
