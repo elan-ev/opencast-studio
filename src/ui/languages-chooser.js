@@ -6,8 +6,7 @@ import { useState } from 'react';
 import ChosenLanguage from './languages-chosen';
 import Languages from './languages-list';
 
-function LanguageChooser({
-  className,
+function LanguagesChooser({
   languages,
   chosenLanguage,
   onSelectLanguage: selectLanguage
@@ -38,4 +37,4 @@ function LanguageChooser({
   );
 }
 
-export default LanguageChooser;
+export default LanguagesChooser;

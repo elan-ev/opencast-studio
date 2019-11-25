@@ -22,7 +22,7 @@ const BetaBubble = props => (
   />
 );
 
-function Brand(props) {
+function Brand() {
   return (
     <span>
       <Link to="/">

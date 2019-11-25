@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-const RecordingPreview = ({ className, deviceType, title, type, url }) => {
+const RecordingPreview = ({ deviceType, title, type, url }) => {
   const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
   const downloadName = `${flavor} ${type} - ${title || 'Recording'}.webm`;
 

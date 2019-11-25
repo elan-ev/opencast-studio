@@ -30,7 +30,7 @@ const Code = props => (
 );
 
 
-function Impressum(props) {
+function Impressum() {
   return (
     <article>
       <Styled.h2>ELAN e.V.</Styled.h2>
@@ -91,8 +91,8 @@ function About(props) {
             MIT License
           </Styled.a>{' '}
           developed by the <Styled.a href="https://elan-ev.de">ELAN e.V.</Styled.a> in cooperation
-          with the <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a>. Please report bugs or
-          submit new features on the project's{' '}
+          with the <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a>.
+          {" Please report bugs or submit new features on the project's "}
           <Styled.a href="https://github.com/elan-ev/opencast-studio">GitHub page</Styled.a>.
         </Styled.p>
         <Styled.p>
@@ -103,9 +103,10 @@ function About(props) {
         </Styled.p>
         <Styled.h2>How it works</Styled.h2>
         <Styled.p>
-          Opencast Studio uses the recording capabilities build into browsers to record audio and
-          video streams. The recording happens in the user's browser. Finally, the recording is
-          transferred directly from the users browser to the target Opencast.
+          {`Opencast Studio uses the recording capabilities build into browsers to record audio and video streams.
+            The recording happens in the user's browser.
+            No server is involved in the recording.
+            Finally, the recording is transferred directly from the users browser to the target Opencast.`}
         </Styled.p>
         <Styled.h2>Allow Studio to interact with your Opencast</Styled.h2>
         <Styled.p>
@@ -116,17 +117,19 @@ function About(props) {
           </Styled.a>
           .
         </Styled.p>
-        <Styled.p>Here is a list of the required headers Nginx's configuration format:</Styled.p>
+        <Styled.p>
+          {"Here is a list of the required headers in Nginx's configuration format:"}
+        </Styled.p>
         <Code>
           # Basic open CORS for studio.opencast.org
           <br />
           add_header Access-Control-Allow-Origin https://studio.opencast.org;
           <br />
-          add_header Access-Control-Allow-Methods 'GET, POST';
+          {"add_header Access-Control-Allow-Methods 'GET, POST';"}
           <br />
           add_header Access-Control-Allow-Credentials true;
           <br />
-          add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization';
+          {"add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization';"}
         </Code>
         <Styled.p>
           For a complete configuration file, take a look at the{' '}
@@ -159,7 +162,7 @@ function About(props) {
           </li>
         </ul>
 
-        <Impressum></Impressum>
+        <Impressum />
 
         <Styled.h2>Version</Styled.h2>
         <Styled.p>

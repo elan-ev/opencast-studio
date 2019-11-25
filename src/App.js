@@ -1,5 +1,7 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
+import PropTypes from 'prop-types';
+
 import { jsx, ThemeProvider } from 'theme-ui';
 import { Box, Flex } from '@theme-ui/components';
 
@@ -76,6 +78,10 @@ function App({ defaultSettings = initial }) {
   );
 }
 
+App.propTypes = {
+  defaultSettings: PropTypes.object
+}
+
 function ConnectedRoute({ children, settings, ...rest }) {
   return (
     <Route
@@ -95,4 +101,10 @@ function ConnectedRoute({ children, settings, ...rest }) {
     />
   );
 }
+
+ConnectedRoute.propTypes = {
+  children: PropTypes.object,
+  settings: PropTypes.object
+}
+
 export default App;

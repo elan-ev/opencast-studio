@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 import css from '@emotion/css/macro';
 
-const Loading = props => {
+const Loading = () => {
   return (
     <div
       css={css`

@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-function Language({ className, language, onSelectLanguage }) {
+function Language({ language, onSelectLanguage }) {
   return (
     <li
       onClick={onSelectLanguage.bind(null, language.short)}
