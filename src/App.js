@@ -4,10 +4,8 @@ import { jsx } from 'theme-ui';
 
 import { Box, Flex } from '@theme-ui/components';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 
-import languages from './languages';
 import useLocalStorage from './use-local-storage';
 import initial from './default-settings';
 
@@ -19,14 +17,7 @@ import Studio from './ui/studio';
 const SETTINGS_KEY = 'ocStudioSettings';
 
 function App({ defaultSettings = initial }) {
-  const { i18n } = useTranslation();
-
   const [settings, updateSettings] = useLocalStorage(SETTINGS_KEY, defaultSettings);
-
-  const selectLanguage = language => {
-    updateSettings(prevState => ({ ...prevState, language }));
-    i18n.changeLanguage(language);
-  };
 
   const handleUpdate = data => {
     updateSettings(prevState => ({ ...prevState, ...data, connected: true }));
@@ -48,9 +39,6 @@ function App({ defaultSettings = initial }) {
                 <Settings
                   settings={settings}
                   handleUpdate={handleUpdate}
-                  languages={languages}
-                  chosenLanguage={settings.language}
-                  onSelectLanguage={selectLanguage}
                 />
               </Route>
 

@@ -1,19 +1,26 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
+import { useTranslation } from 'react-i18next';
 
-const LanguagesSelect = ({ languages, chosenLanguage, onSelectLanguage }) => (
-  <select sx={{ width: '100%' }}>
-    {languages.map(language => (
-      <option
-        onClick={onSelectLanguage.bind(null, language.short)}
-        value={language.short}
-        selected={language.short === chosenLanguage}
-      >
-        {language.long}
-      </option>
-    ))}
-  </select>
-);
+import languages from '../languages';
+
+const LanguagesSelect = () => {
+  const { i18n } = useTranslation();
+
+  return (
+    <select sx={{ width: '100%' }} defaultValue={i18n.language} >
+      {languages.map(language => (
+        <option
+          onClick={i18n.changeLanguage.bind(i18n, language.short)}
+          value={language.short}
+          key={language.short}
+        >
+          {language.long}
+        </option>
+      ))}
+    </select>
+  );
+};
 
 export default LanguagesSelect;

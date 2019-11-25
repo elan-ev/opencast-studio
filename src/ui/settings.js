@@ -46,11 +46,7 @@ function Settings(props) {
       </header>
 
       <label sx={{ fontWeight: 'bold' }}>Language: </label>
-      <LanguagesSelect
-        languages={props.languages}
-        chosenLanguage={props.chosenLanguage}
-        onSelectLanguage={props.onSelectLanguage}
-      />
+      <LanguagesSelect />
 
       <h2 sx={{ fontWeight: 'heading' }}>{t('upload-settings-modal-header')}</h2>
       <main>

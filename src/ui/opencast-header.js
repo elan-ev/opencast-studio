@@ -45,7 +45,7 @@ function Brand() {
   );
 }
 
-function OpencastHeader(props) {
+function OpencastHeader() {
   return (
     <header
       sx={{
