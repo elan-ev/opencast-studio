@@ -3,7 +3,8 @@ const languages = [
   { short: 'de', long: 'Deutsch', rtl: false },
   { short: 'el', long: 'Ελληνικά', rtl: false },
   { short: 'es', long: 'Español', rtl: false },
-  { short: 'fa', long: 'Farsi', rtl: true }
+  { short: 'fa', long: 'Farsi', rtl: true },
+  { short: 'fr', long: 'Français', rtl: false }
 ];
 
 export default languages;
