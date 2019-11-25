@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import LanguagesChooser from './languages-chooser';
 import { Link } from 'react-router-dom';
 
 const BetaBubble = props => (
@@ -59,12 +58,6 @@ function OpencastHeader(props) {
       }}
     >
       <Brand />
-
-      <LanguagesChooser
-        languages={props.languages}
-        chosenLanguage={props.chosenLanguage}
-        onSelectLanguage={props.onSelectLanguage}
-      />
     </header>
   );
 }

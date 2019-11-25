@@ -40,16 +40,18 @@ function App({ defaultSettings = initial }) {
             minHeight: '100%'
           }}
         >
-          <OpencastHeader
-            languages={languages}
-            chosenLanguage={settings.language}
-            onSelectLanguage={selectLanguage}
-          />
+          <OpencastHeader />
 
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}>
             <Switch>
               <Route path="/settings" exact>
-                <Settings settings={settings} handleUpdate={handleUpdate} />
+                <Settings
+                  settings={settings}
+                  handleUpdate={handleUpdate}
+                  languages={languages}
+                  chosenLanguage={settings.language}
+                  onSelectLanguage={selectLanguage}
+                />
               </Route>
 
               <Route path="/about" exact>
