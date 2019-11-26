@@ -20,13 +20,12 @@ rm -rf "$reponame" || :
 git clone "git@github.com:${TRAVIS_REPO_SLUG}.git"
 cd "$reponame"
 
-# Save CNAME
-if [ -f CNAME ]; then
-  cname="$(cat CNAME)"
-fi
-
 # Prepare gh-pages branch
 if git checkout gh-pages; then
+  # Save CNAME
+  if [ -f CNAME ]; then
+    cname="$(cat CNAME)"
+  fi
   git ls-files | while read -r f; do git rm -rf "$f"; done
 else
   git checkout --orphan gh-pages
