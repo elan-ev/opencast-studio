@@ -1,7 +1,9 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import { Component } from 'react';
 
-class Clock extends React.Component {
+class Clock extends Component {
   constructor(props) {
     super(props);
     this.state = { time: 0, last: null };
