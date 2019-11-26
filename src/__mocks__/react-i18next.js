@@ -1,3 +1,5 @@
+/** @jsx jsx */
+const { jsx } = require('theme-ui');
 const React = require('react');
 const reactI18next = require('react-i18next');
 

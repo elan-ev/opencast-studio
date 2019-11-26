@@ -1,5 +1,6 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
 
 function NotFound() {
   return (

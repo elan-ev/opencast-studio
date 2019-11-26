@@ -1,5 +1,7 @@
 //; -*- mode: rjsx;-*-
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+
 import { act, cleanup, render, waitForElement } from '@testing-library/react';
 import OpencastAPI, { mockCheckConnection } from '../opencast-api';
 import Settings from './settings';
