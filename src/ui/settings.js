@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Box } from '@theme-ui/components';
+import { Container } from '@theme-ui/components';
 
 import LanguagesSelect from './languages-select';
 import Notification from './notification';
@@ -35,12 +35,12 @@ function Settings(props) {
       returnToTheStudio();
     } catch (error) {
       setError(t('message-server-unreachable'));
-      console.log(error);
+      console.error(error);
     }
   }
 
   return (
-    <Box sx={{ maxWidth: 960, mx: 'auto', px: 3, pb: 3 }}>
+    <Container>
       <header>
         <h1>{t('settings-header')}</h1>
       </header>
@@ -60,7 +60,7 @@ function Settings(props) {
           handleCancel={returnToTheStudio}
         />
       </main>
-    </Box>
+    </Container>
   );
 }
 

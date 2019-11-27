@@ -1,0 +1,101 @@
+//; -*- mode: rjsx;-*-
+/** @jsx jsx */
+import { jsx, Styled } from 'theme-ui';
+
+import { faUser, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Box, Button, Card, Flex, Heading, Text } from '@theme-ui/components';
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useDispatch, useRecordingState } from '../../../recording-context';
+
+import Notification from '../../notification';
+
+import { startUserCapture, stopUserCapture } from '../capturer';
+import { ShareButton } from '../elements';
+
+import PreviewVideo from './preview-video';
+
+export default function SourceUserMedia() {
+  const { t } = useTranslation();
+  const state = useRecordingState();
+  const dispatch = useDispatch();
+
+  const handleShare = useCallback(() => {
+    const userConstraints = {
+      video: { height: { ideal: 1080 }, facingMode: 'user' },
+      audio: false
+    };
+    startUserCapture(dispatch, userConstraints);
+  }, [dispatch]);
+
+  const handleUnshare = useCallback(
+    event => {
+      stopUserCapture(state.userStream, dispatch);
+    },
+    [state.userStream, dispatch]
+  );
+
+  return (
+    <Box>
+      <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+        <Styled.h2>{t('source-user-title')}</Styled.h2>
+        {state.userStream && (
+          <Box>
+            <UnshareButton handleClick={handleUnshare}>Stop sharing</UnshareButton>
+          </Box>
+        )}
+      </Flex>
+
+      {state.userAllowed === false && (
+        <Notification isDanger>
+          <Heading as="h3" mb={2}>
+            {t('source-user-not-allowed-title')}
+          </Heading>
+          <Text>{t('source-user-not-allowed-text')}</Text>
+        </Notification>
+      )}
+
+      {!state.userStream ? (
+        <Box>
+          <Text pb={4}>
+            {
+              'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enimad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+            }
+          </Text>
+          <ShareButton handleClick={handleShare} icon={faUser}>
+            {t('source-share-prompt')}
+          </ShareButton>
+        </Box>
+      ) : (
+        <PreviewStream stream={state.userStream} text={t('sources-select-user')}></PreviewStream>
+      )}
+    </Box>
+  );
+}
+
+function PreviewStream({ children, stream, text }) {
+  const track = stream?.getVideoTracks()?.[0];
+  const { width, height } = track?.getSettings();
+
+  return (
+    <Card>
+      <PreviewVideo stream={stream} />
+      <Text p={2} color="muted">
+        {text}
+        {track && `: ${width}×${height}`}
+      </Text>
+      {children && <Box p={2}>{children}</Box>}
+    </Card>
+  );
+}
+
+function UnshareButton({ children, handleClick }) {
+  return (
+    <Button onClick={handleClick} variant="text">
+      <FontAwesomeIcon icon={faTimes} />
+      {children}
+    </Button>
+  );
+}
