@@ -12,7 +12,6 @@ import useLocalStorage from './use-local-storage';
 import initial from './default-settings';
 
 import About from './ui/about';
-import NotFound from './ui/not-found';
 import OpencastHeader from './ui/opencast-header';
 import Settings from './ui/settings';
 import Studio from './ui/studio';
@@ -49,20 +48,20 @@ function App({ defaultSettings = initial }) {
 
           <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}>
             <Switch>
-              <Route path="/settings">
+              <Route path="/settings" exact>
                 <Settings settings={settings} handleUpdate={handleUpdate} />
               </Route>
 
-              <Route path="/about">
+              <Route path="/about" exact>
                 <About />
               </Route>
 
-              <ConnectedRoute path="/" settings={settings}>
+              <ConnectedRoute path="/" exact settings={settings}>
                 <Studio settings={settings} />
               </ConnectedRoute>
 
-              <Route path="*">
-                <NotFound />
+              <Route path="/*">
+                <Redirect to="/" />
               </Route>
             </Switch>
           </Box>
