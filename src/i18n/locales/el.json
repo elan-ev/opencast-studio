@@ -36,5 +36,8 @@
   "upload-settings-label-server-url": "Διεύθυνση διακομιστή",
   "upload-settings-label-workflow-id": "Αναγνωριστικό ροής εργασίας",
   "upload-settings-label-username": "Όνομα χρήστη",
-  "upload-settings-label-password": "Κωδικός"
+  "upload-settings-label-password": "Κωδικός",
+  "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
+  "warning-recorder-not-supported": "Your browser does not support recording media streams.",
+  "warning-recorder-safari-hint": "For Safari on iOS, you can enable the experimental feature 'MediaRecorder' in settings."
 }
