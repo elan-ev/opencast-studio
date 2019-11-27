@@ -8,11 +8,12 @@ import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-d
 
 import useLocalStorage from './use-local-storage';
 import initial from './default-settings';
+import { Provider } from './recording-context';
 
 import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
 import Settings from './ui/settings';
-import Studio from './ui/studio';
+import Studio from './ui/studio/page';
 
 const SETTINGS_KEY = 'ocStudioSettings';
 
@@ -24,6 +25,7 @@ function App({ defaultSettings = initial }) {
   };
 
   return (
+    <Provider>
       <Router basename={process.env.PUBLIC_URL || '/'}>
         <Flex
           sx={{
@@ -57,12 +59,13 @@ function App({ defaultSettings = initial }) {
           </Box>
         </Flex>
       </Router>
+    </Provider>
   );
 }
 
 App.propTypes = {
   defaultSettings: PropTypes.object
-}
+};
 
 function ConnectedRoute({ children, settings, ...rest }) {
   return (
@@ -87,6 +90,6 @@ function ConnectedRoute({ children, settings, ...rest }) {
 ConnectedRoute.propTypes = {
   children: PropTypes.object,
   settings: PropTypes.object
-}
+};
 
 export default App;

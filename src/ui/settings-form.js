@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import useForm from 'react-hook-form';
-import { Box, Button } from '@theme-ui/components';
+import { Container, Button } from '@theme-ui/components';
 
 const Input = ({ errors, label, name, register, required, type = 'text', ...rest }) => {
   const { t } = useTranslation();
@@ -81,7 +81,7 @@ function SettingsForm(props) {
   };
 
   return (
-    <Box sx={{ maxWidth: 960, mx: 'auto' }}>
+    <Container>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           errors={errors}
@@ -125,7 +125,7 @@ function SettingsForm(props) {
           )}
         </footer>
       </form>
-    </Box>
+    </Container>
   );
 }
 

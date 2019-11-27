@@ -5,8 +5,23 @@ const heading = {
   fontWeight: 'heading'
 };
 
+const baseButton = {
+  '& svg': {
+    mr: 2
+  },
+  '&:disabled': {
+    bg: 'background',
+    borderColor: 'gray.2',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    color: 'text',
+    cursor: 'not-allowed',
+    opacity: 0.5
+  }
+};
+
 const base = {
-  breakpoints: ["400px", "850px"],
+  breakpoints: ['576px', '768px', '992px', '1200px'],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body: 'Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, system-ui, sans-serif',
@@ -31,21 +46,43 @@ const base = {
     background: '#fff',
     primary: '#47af7a',
     secondary: '#30c',
-    muted: '#f6f6f6',
+    muted: '#888888',
     error: '#f14668',
-    gray: ['#363636', '#666666', '#aaaaaa', '#dddddd']
+    gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5']
   },
   buttons: {
     primary: {
-      color: 'background',
+      ...baseButton,
       bg: 'primary',
-      '&:hover': {
+      color: 'background',
+      '&:not(:disabled):hover': {
         bg: 'text'
       }
     },
+    danger: {
+      ...baseButton,
+      bg: 'error',
+      color: 'background',
+      '&:not(:disabled):hover': {
+        color: 'gray.4'
+      }
+    },
     text: {
+      ...baseButton,
+      bg: 'background',
       color: 'text',
-      bg: 'background'
+      '&:not(:disabled):hover': {
+        bg: 'gray.3'
+      }
+    }
+  },
+  cards: {
+    primary: {
+      bg: 'background',
+      boxShadow: '0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02)',
+      color: 'text',
+      maxWidth: '100%',
+      position: 'relative'
     }
   },
   styles: {
@@ -146,6 +183,12 @@ const base = {
         boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
       }
     }
+  },
+  container: {
+    mx: 'auto',
+    px: 3,
+    pb: 3,
+    maxWidth: ['none', 'none', 960, 1152, 1344]
   }
 };
 

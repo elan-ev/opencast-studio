@@ -103,7 +103,7 @@ class OpencastAPI {
         );
       });
 
-      for (const { deviceType, media } of recordings.filter(Boolean)) {
+      for (const { deviceType, media } of recordings) {
         let trackFlavor = 'presentation/source';
         if (deviceType === 'desktop') {
           trackFlavor = 'presentation/source';

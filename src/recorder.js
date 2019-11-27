@@ -1,4 +1,3 @@
-import EventEmitter from './event-emitter';
 import { isRecordingSupported } from './util';
 
 const findSupportedMimeType = list =>
@@ -6,12 +5,11 @@ const findSupportedMimeType = list =>
     ? list.find(mimeType => MediaRecorder.isTypeSupported(mimeType)) || ''
     : '';
 
-class Recorder extends EventEmitter {
-  constructor(stream, mimeType) {
-    super();
-
-    if (!mimeType) {
-      mimeType = stream.getVideoTracks().length
+export default class Recorder {
+  constructor(stream, options = {}) {
+    const mimeType =
+      options.mimeType ||
+      (stream.getVideoTracks().length
         ? findSupportedMimeType([
             'video/webm;codecs="vp9,opus"',
             'video/webm;codecs="vp9.0,opus"',
@@ -19,8 +17,7 @@ class Recorder extends EventEmitter {
             'video/x-matroska;codecs="avc1"',
             'video/webm;codecs="vp8,opus"'
           ])
-        : findSupportedMimeType(['audio/ogg;codecs=opus', 'audio/webm;codecs=opus']);
-    }
+        : findSupportedMimeType(['audio/ogg;codecs=opus', 'audio/webm;codecs=opus']));
 
     const _recData = [];
     this.recorder = new MediaRecorder(stream, { mimeType });
@@ -31,57 +28,38 @@ class Recorder extends EventEmitter {
     };
 
     this.recorder.onerror = error => {
-      this.emit('record.error', error);
+      options.onError && options.onError(error);
     };
-
-    this.recorder.onstart = () => {
-      this.emit('record.start', true);
-    };
-
-    this.result = null;
 
     this.recorder.onstop = () => {
-      let mimeType = (this.deviceType === 'audio' ? 'audio' : 'video') + '/webm';
-      this.result = new Blob(_recData, { type: mimeType });
-      let url = URL.createObjectURL(this.result);
-      this.emit('record.complete', { url: url, media: this.result });
+      const media = new Blob(_recData, { type: this.recorder.mimeType });
+      let url = URL.createObjectURL(media);
       this.recorder = null;
+      options.onStop && options.onStop({ url, media });
     };
-
-    Object.defineProperty(this, 'recData', {
-      get: function() {
-        return _recData;
-      }
-    });
 
     this.isRecording = false;
     this.isPaused = false;
   }
 
-  start(delay) {
-    delay = delay || 0;
+  start() {
     if (!this.isRecording) {
-      setTimeout(() => {
-        this.recorder.start();
-      }, delay);
+      this.recorder.start();
       this.isRecording = true;
-    } else if (this.isPaused) {
-      this.resume();
     }
   }
 
   pause() {
     if (!this.isPaused) {
       this.recorder.pause();
-    } else {
-      this.resume();
+      this.isPaused = true;
     }
-    this.isPaused = !this.isPaused;
   }
 
   resume() {
-    if (this.recorder.state === 'paused') {
+    if (this.isPaused) {
       this.recorder.resume();
+      this.isPaused = false;
     }
   }
 
@@ -90,5 +68,3 @@ class Recorder extends EventEmitter {
     this.isRecording = false;
   }
 }
-
-export default Recorder;

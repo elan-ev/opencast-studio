@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-
 function Toolbar({ settings }) {
   return (
     <div
@@ -17,8 +16,7 @@ function Toolbar({ settings }) {
           marginLeft: 2
         }
       }}
-    >
-    </div>
+    ></div>
   );
 }
 

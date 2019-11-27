@@ -4,11 +4,11 @@ import { jsx } from 'theme-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Notification from './notification';
+import Notification from '../../notification';
 import {
   onSafari,
   isRecordingSupported,
-} from "../util";
+} from "../../../util";
 
 // Conditionally shows a number of warnings to help the user identify problems.
 const Warnings = () => {
