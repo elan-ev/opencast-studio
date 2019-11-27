@@ -38,6 +38,9 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
           transform: 'translate(-50%, -50%)'
         }}
         src={url}
+
+        // Without this, some browsers show a black video element instead of the first frame.
+        onCanPlay={e => e.target.currentTime = 0}
       ></video>
     </a>
   );
