@@ -22,7 +22,6 @@
   "save-creation-label-presenter": "Vortragende*r",
   "save-creation-label-title": "Titel",
   "save-creation-modal-title": "Produktionsdetails",
-  "settings-first-run": "Bevor Sie Ihren Bildschirm und/oder Ihre Kamera aufnehmen können, müssen Sie sich mit einem Opencast-Server verbinden. Bitte geben Sie die folgenden Einstellungen an.",
   "share-desktop": "Bildschirm teilen",
   "share-camera": "Kamera teilen",
   "state-paused": "Pause",
@@ -37,5 +36,6 @@
   "upload-settings-label-server-url": "Server-URL",
   "upload-settings-label-workflow-id": "Workflow-ID",
   "upload-settings-label-username": "Benutzername",
-  "upload-settings-label-password": "Passwort"
+  "upload-settings-label-password": "Passwort",
+  "settings-back": "Zurück"
 }

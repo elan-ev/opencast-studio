@@ -12,7 +12,7 @@ import { Provider } from './recording-context';
 import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
 import Studio from './ui/studio/page';
-import Settings from './ui/settings/page';
+import SettingsPage from './ui/settings/page';
 
 
 function App({ settingsManager }) {
@@ -38,7 +38,7 @@ function App({ settingsManager }) {
           }}>
             <Switch>
               <Route path="/settings" exact>
-                <Settings settingsManager={settingsManager} />
+                <SettingsPage settingsManager={settingsManager} />
               </Route>
 
               <Route path="/about" exact>
@@ -46,11 +46,7 @@ function App({ settingsManager }) {
               </Route>
 
               <Route path="/" exact>
-                {
-                  settingsManager.showFirstRunSetup()
-                    ? <Redirect to={{ pathname: '/settings' }} />
-                    : <Studio settings={settings} />
-                }
+                <Studio settings={settings} />
               </Route>
 
               <Route path="/*">

@@ -3,14 +3,14 @@
 import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link } from 'react-router-dom';
 import { Box } from '@theme-ui/components';
 
 import LanguageSettings from './language';
 import OpencastSettings from './opencast';
 
 
-function SettingsPage(props) {
+const SettingsPage = ({ settingsManager }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation();
@@ -30,12 +30,17 @@ function SettingsPage(props) {
         <LanguageSettings />
 
         <OpencastSettings
-          settingsManager={props.settingsManager}
+          settingsManager={settingsManager}
           returnToTheStudio={returnToTheStudio}
         />
+
+        <hr />
+        <Link to="/">
+          ← {t('settings-back')}
+        </Link>
       </main>
     </Box>
   );
-}
+};
 
 export default SettingsPage;

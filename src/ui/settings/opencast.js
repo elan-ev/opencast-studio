@@ -17,7 +17,7 @@ import { Input, SettingsSection} from './elements';
 function OpencastSettings({ settingsManager, returnToTheStudio }) {
   const { t } = useTranslation();
   const [error, setError] = useState();
-  const { errors, handleSubmit, register, reset } = useForm({
+  const { errors, handleSubmit, register } = useForm({
     defaultValues: settingsManager.formValues().opencast
   });
 
@@ -38,13 +38,11 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
     }
   }
 
-  const onCancel = data => {
-    reset();
-    returnToTheStudio();
-  };
 
   const contextSettings = settingsManager.contextSettings.opencast || {};
 
+  // If all settings are already specified by the context, we do not show
+  // anything at all.
   if (
     contextSettings.serverUrl &&
     contextSettings.workflowId &&
@@ -56,9 +54,6 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
 
   return (
     <SettingsSection title={t('upload-settings-modal-header')}>
-      {settingsManager.showFirstRunSetup() &&
-        <Notification>{t('settings-first-run')}</Notification>}
-
       <Box sx={{ maxWidth: 960, mx: 'auto' }}>
         {error && <Notification isDanger>{error}</Notification>}
 
@@ -98,11 +93,6 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
 
           <footer sx={{ mt: 4 }}>
             <Button>{t('upload-settings-button-store')}</Button>
-            {!settingsManager.showFirstRunSetup() && (
-              <Button variant="text" onClick={onCancel}>
-                {t('cancel-button-title')}
-              </Button>
-            )}
           </footer>
         </form>
       </Box>

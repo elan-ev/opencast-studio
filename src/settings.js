@@ -12,7 +12,7 @@ export class SettingsManager {
 
   // The settings set by the user and stored in local storage. This is `null`
   // if there were no settings in local storage.
-  #userSettings = null;
+  #userSettings;
 
   // This function is called whenever the user saved their settings. The new
   // settings object is passed as parameter.
@@ -24,13 +24,13 @@ export class SettingsManager {
     let self = new SettingsManager();
 
     // Load the user settings from local storage
+    self.#userSettings = {};
     const stored = window.localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored !== null) {
       try {
         self.#userSettings = JSON.parse(stored);
       } catch {
         console.warn("Could not parse settings stored in local storage. Ignoring.");
-        self.#userSettings = {};
       }
     }
 
@@ -57,7 +57,7 @@ export class SettingsManager {
   // partial, i.e. only the new values can be specified. Values in `newSettings`
   // override values in the old user settings.
   saveSettings(newSettings) {
-    this.#userSettings = merge(this.#userSettings || {}, newSettings);
+    this.#userSettings = merge(this.#userSettings, newSettings);
     window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.#userSettings));
     if (this.onChange) {
       this.onChange(this.settings());
@@ -72,14 +72,7 @@ export class SettingsManager {
   // The values for the settings forms. These are simply the user settings with
   // missing settings filled by `defaultSettings`.
   formValues() {
-    return merge(defaultSettings, this.#userSettings || {});
-  }
-
-  // Returns whether or not the initial setup dialog should be shown. This is
-  // the case if there are no user settings in local storage, so we assume this
-  // is the the user's first visit.
-  showFirstRunSetup() {
-    return this.#userSettings === null;
+    return merge(defaultSettings, this.#userSettings);
   }
 }
 
