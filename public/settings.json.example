@@ -1,0 +1,8 @@
+{
+  "opencast": {
+    "serverUrl": "https://develop.opencast.org/",
+    "workflowId": "fast",
+    "loginName": "admin",
+    "loginPassword": "opencast"
+  }
+}
