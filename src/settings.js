@@ -10,6 +10,11 @@ export class SettingsManager {
   // server did not specify any settings, this is `{}`.
   contextSettings;
 
+  // These settings are given in the query part of the URL (e.g.
+  // `?opencast.loginName=peter`). If there are no settings in the URL, this
+  // object is empty.
+  urlSettings;
+
   // The settings set by the user and stored in local storage. This is `null`
   // if there were no settings in local storage.
   #userSettings;
@@ -50,6 +55,21 @@ export class SettingsManager {
       self.contextSettings = {};
     }
 
+    // Get settings from URL query.
+    self.urlSettings = {};
+    const urlParams = new URLSearchParams(window.location.search);
+    for (let [key, value] of urlParams) {
+      // Create empty objects for full path (if the key contains '.') and set
+      // the value at the end.
+      let obj = self.urlSettings;
+      const segments = key.split('.');
+      segments.slice(0, -1).forEach((segment) => {
+        obj[segment] = {};
+        obj = obj[segment];
+      });
+      obj[segments[segments.length - 1]] = value;
+    }
+
     return self;
   }
 
@@ -66,13 +86,29 @@ export class SettingsManager {
 
   // The merged settings that the whole application should use.
   settings() {
-    return merge(this.#userSettings, this.contextSettings);
+    return merge.all([this.#userSettings, this.contextSettings, this.urlSettings]);
   }
 
   // The values for the settings forms. These are simply the user settings with
   // missing settings filled by `defaultSettings`.
   formValues() {
     return merge(defaultSettings, this.#userSettings);
+  }
+
+  // Returns whether a specific setting is fixed by the context setting or an
+  // URL setting. The path is given as string.
+  // Example: `manager.isFixed('opencast.loginName')`
+  isFixed(path) {
+    let obj = merge(this.contextSettings, this.urlSettings);
+    const segments = path.split('.');
+    for (const segment of segments.slice(0, -1)) {
+      if (!(segment in obj)) {
+        return false;
+      }
+      obj = obj[segment];
+    }
+
+    return segments[segments.length - 1] in obj;
   }
 }
 

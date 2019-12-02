@@ -38,17 +38,14 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
     }
   }
 
-
-  const contextSettings = settingsManager.contextSettings.opencast || {};
+  const fixedServerUrl = settingsManager.isFixed('opencast.serverUrl');
+  const fixedWorkflowId = settingsManager.isFixed('opencast.workflowId');
+  const fixedLoginName = settingsManager.isFixed('opencast.loginName');
+  const fixedLoginPassword = settingsManager.isFixed('opencast.loginPassword');
 
   // If all settings are already specified by the context, we do not show
   // anything at all.
-  if (
-    contextSettings.serverUrl &&
-    contextSettings.workflowId &&
-    contextSettings.loginName &&
-    contextSettings.loginPassword
-  ) {
+  if (fixedServerUrl && fixedWorkflowId && fixedLoginName && fixedLoginPassword) {
     return null;
   }
 
@@ -58,7 +55,7 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
         {error && <Notification isDanger>{error}</Notification>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          { !contextSettings.serverUrl && <Input
+          { !fixedServerUrl && <Input
             errors={errors}
             label={t('upload-settings-label-server-url')}
             name="serverUrl"
@@ -66,7 +63,7 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
             required
           /> }
 
-          { !contextSettings.workflowId && <Input
+          { !fixedWorkflowId && <Input
             errors={errors}
             label={t('upload-settings-label-workflow-id')}
             name="workflowId"
@@ -74,7 +71,7 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
             required
           /> }
 
-          { !contextSettings.loginName && <Input
+          { !fixedLoginName && <Input
             errors={errors}
             label={t('upload-settings-label-username')}
             name="loginName"
@@ -82,7 +79,7 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
             required
           /> }
 
-          { !contextSettings.loginPassword && <Input
+          { !fixedLoginPassword && <Input
             errors={errors}
             label={t('upload-settings-label-password')}
             name="loginPassword"
