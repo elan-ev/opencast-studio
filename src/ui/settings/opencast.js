@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 import OpencastAPI from '../../opencast-api';
 import Notification from '../notification';
-import { Input } from './elements';
+import { Input, SettingsSection} from './elements';
 
 
 
@@ -45,54 +45,68 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
 
   const contextSettings = settingsManager.contextSettings.opencast || {};
 
+  if (
+    contextSettings.serverUrl &&
+    contextSettings.workflowId &&
+    contextSettings.loginName &&
+    contextSettings.loginPassword
+  ) {
+    return null;
+  }
+
   return (
-    <Box sx={{ maxWidth: 960, mx: 'auto' }}>
-      {error && <Notification isDanger>{error}</Notification>}
+    <SettingsSection title={t('upload-settings-modal-header')}>
+      {settingsManager.showFirstRunSetup() &&
+        <Notification>{t('settings-first-run')}</Notification>}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        { !contextSettings.serverUrl && <Input
-          errors={errors}
-          label={t('upload-settings-label-server-url')}
-          name="serverUrl"
-          register={register}
-          required
-        /> }
+      <Box sx={{ maxWidth: 960, mx: 'auto' }}>
+        {error && <Notification isDanger>{error}</Notification>}
 
-        { !contextSettings.workflowId && <Input
-          errors={errors}
-          label={t('upload-settings-label-workflow-id')}
-          name="workflowId"
-          register={register}
-          required
-        /> }
+        <form onSubmit={handleSubmit(onSubmit)}>
+          { !contextSettings.serverUrl && <Input
+            errors={errors}
+            label={t('upload-settings-label-server-url')}
+            name="serverUrl"
+            register={register}
+            required
+          /> }
 
-        { !contextSettings.loginName && <Input
-          errors={errors}
-          label={t('upload-settings-label-username')}
-          name="loginName"
-          register={register}
-          required
-        /> }
+          { !contextSettings.workflowId && <Input
+            errors={errors}
+            label={t('upload-settings-label-workflow-id')}
+            name="workflowId"
+            register={register}
+            required
+          /> }
 
-        { !contextSettings.loginPassword && <Input
-          errors={errors}
-          label={t('upload-settings-label-password')}
-          name="loginPassword"
-          register={register}
-          required
-          type="password"
-        /> }
+          { !contextSettings.loginName && <Input
+            errors={errors}
+            label={t('upload-settings-label-username')}
+            name="loginName"
+            register={register}
+            required
+          /> }
 
-        <footer sx={{ mt: 4 }}>
-          <Button>{t('upload-settings-button-store')}</Button>
-          {!settingsManager.showFirstRunSetup() && (
-            <Button variant="text" onClick={onCancel}>
-              {t('cancel-button-title')}
-            </Button>
-          )}
-        </footer>
-      </form>
-    </Box>
+          { !contextSettings.loginPassword && <Input
+            errors={errors}
+            label={t('upload-settings-label-password')}
+            name="loginPassword"
+            register={register}
+            required
+            type="password"
+          /> }
+
+          <footer sx={{ mt: 4 }}>
+            <Button>{t('upload-settings-button-store')}</Button>
+            {!settingsManager.showFirstRunSetup() && (
+              <Button variant="text" onClick={onCancel}>
+                {t('cancel-button-title')}
+              </Button>
+            )}
+          </footer>
+        </form>
+      </Box>
+    </SettingsSection>
   );
 }
 

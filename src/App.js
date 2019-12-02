@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { Box, Flex } from '@theme-ui/components';
+import { Flex } from '@theme-ui/components';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
@@ -30,7 +30,12 @@ function App({ settingsManager }) {
         >
           <OpencastHeader />
 
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}>
+          <main sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            '& > *': { flexGrow: 1 }
+          }}>
             <Switch>
               <Route path="/settings" exact>
                 <Settings settingsManager={settingsManager} />
@@ -52,7 +57,7 @@ function App({ settingsManager }) {
                 <Redirect to="/" />
               </Route>
             </Switch>
-          </Box>
+          </main>
         </Flex>
       </Router>
     </Provider>

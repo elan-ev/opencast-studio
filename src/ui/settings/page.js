@@ -4,12 +4,11 @@ import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-
-import Notification from '../notification';
+import { Box } from '@theme-ui/components';
 
 import LanguageSettings from './language';
 import OpencastSettings from './opencast';
-import { SettingsSection } from './elements';
+
 
 function SettingsPage(props) {
   const { t } = useTranslation();
@@ -22,25 +21,20 @@ function SettingsPage(props) {
   }
 
   return (
-    <main sx={{ maxWidth: 960, mx: 'auto', px: 3, pb: 3 }}>
+    <Box sx={{ width: 700, maxWidth: '100%', mx: 'auto', px: 3, pb: 3 }}>
       <header>
         <h1>{t('settings-header')}</h1>
       </header>
 
-      <SettingsSection title="Language">
+      <main>
         <LanguageSettings />
-      </SettingsSection>
-
-      <SettingsSection title={t('upload-settings-modal-header')}>
-        {props.settingsManager.showFirstRunSetup() &&
-          <Notification>{t('settings-first-run')}</Notification>}
 
         <OpencastSettings
           settingsManager={props.settingsManager}
           returnToTheStudio={returnToTheStudio}
         />
-      </SettingsSection>
-    </main>
+      </main>
+    </Box>
   );
 }
 
