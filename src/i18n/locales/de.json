@@ -33,7 +33,7 @@
   "upload-settings-modal-title": "Einstellungen für das Hochladen",
   "upload-settings-button-store": "Einstellungen speichern",
   "upload-settings-validation-error": "Ungültige Einstellungen. Bitte überprüfen und noch einmal probieren!",
-  "upload-settings-modal-header": "Konfiguration für den Opencast-Upload",
+  "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
   "upload-settings-label-workflow-id": "Workflow-ID",
   "upload-settings-label-username": "Benutzername",

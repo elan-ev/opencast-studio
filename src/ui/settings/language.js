@@ -1,11 +1,12 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
+
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 
-import languages from '../languages';
+import languages from '../../languages';
 
-const LanguagesSelect = () => {
+const LanguageSettings = () => {
   const { i18n } = useTranslation();
 
   return (
@@ -26,4 +27,4 @@ const LanguagesSelect = () => {
   );
 };
 
-export default LanguagesSelect;
+export default LanguageSettings;

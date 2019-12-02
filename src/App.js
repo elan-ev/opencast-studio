@@ -11,8 +11,8 @@ import { Provider } from './recording-context';
 
 import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
-import Settings from './ui/settings';
 import Studio from './ui/studio/page';
+import Settings from './ui/settings/page';
 
 
 function App({ settingsManager }) {
