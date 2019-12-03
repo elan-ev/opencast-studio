@@ -13,6 +13,7 @@ import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
 import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
+import Warnings from './ui/warnings';
 
 
 function App({ settingsManager }) {
@@ -34,8 +35,10 @@ function App({ settingsManager }) {
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            '& > *': { flexGrow: 1 }
+            '& > *:not(:first-of-type)': { flexGrow: 1 }
           }}>
+            <Warnings settings={settings} />
+
             <Switch>
               <Route path="/settings" exact>
                 <SettingsPage settingsManager={settingsManager} />

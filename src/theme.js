@@ -60,7 +60,10 @@ const base = {
       color: 'background',
       '&:not(:disabled):hover': {
         bg: darken('primary', 0.03)
-      }
+      },
+      '&:disabled': {
+        bg: 'gray.1'
+      },
     },
     danger: {
       ...baseButton,

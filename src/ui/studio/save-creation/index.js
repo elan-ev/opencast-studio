@@ -118,6 +118,8 @@ export default function SaveCreation(props) {
     props.previousStep();
   };
 
+  const uploadPossible = OpencastAPI.areSettingsComplete(props.settings.opencast);
+
   return (
     <Container>
       {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
@@ -206,7 +208,12 @@ export default function SaveCreation(props) {
       >
         <Button
           onClick={handleUpload}
-          disabled={recordings.length === 0 || state.uploading || state.uploaded}
+          disabled={
+            recordings.length === 0 ||
+              state.uploading ||
+              state.uploaded ||
+              !uploadPossible
+          }
         >
           <FontAwesomeIcon icon={faUpload} />
           <span>

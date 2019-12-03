@@ -11,6 +11,14 @@ class OpencastAPI {
     this.password = settings.loginPassword;
   }
 
+  static areSettingsComplete(settings) {
+    return !!settings &&
+      !!settings.serverUrl &&
+      !!settings.workflowId &&
+      !!settings.loginName &&
+      !!settings.loginPassword;
+  }
+
   async checkConnection() {
     try {
       await this.login();

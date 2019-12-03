@@ -14,7 +14,6 @@ import { PromptAndProceed } from '../elements';
 
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
-import Warnings from './warnings';
 
 export default function Recording(props) {
   const { t } = useTranslation();
@@ -53,7 +52,6 @@ export default function Recording(props) {
     <Flex as="main" sx={{ flexDirection: 'column', height: '100%', position: 'relative' }}>
       <Box sx={{ ...overlayStyle, top: 0, pl: 2 }}>
         <PromptAndProceed prev={<BackButton handlePrev={backToSetupVideo} />} />
-        <Warnings />
       </Box>
 
       <MediaDevices />
