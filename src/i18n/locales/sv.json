@@ -23,6 +23,7 @@
   "state-paused": "Paused",
   "state-recording": "Recording",
   "state-waiting": "Waiting",
+  "settings-header": "Settings",
   "stop-button-title": "Stop recording",
   "toolbar-button-about": "About Opencast Studio",
   "toolbar-button-issues": "Report Issue",
