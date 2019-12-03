@@ -76,5 +76,8 @@
     "styledComponents": {
       "pure": true
     }
+  },
+  "devDependencies": {
+    "jest-fetch-mock": "^2.1.2"
   }
 }

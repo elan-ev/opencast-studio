@@ -44,14 +44,17 @@ export class SettingsManager {
     const url = `${window.location.origin}${basepath}${CONTEXT_SETTINGS_FILE}`;
     try {
       const response = await window.fetch(url);
-      if (response.headers.get('Content-Type').startsWith('application/json')) {
+      const contentType = response.headers.get('Content-Type');
+      if (!contentType || contentType.startsWith('application/json')) {
         self.contextSettings = await response.json();
       } else {
         // No context settings were defined.
         self.contextSettings = {};
       }
     } catch (e) {
-      console.warn('Could not load `settings.json`!', e);
+      if (e) {
+        console.warn('Could not load `settings.json`!', e);
+      }
       self.contextSettings = {};
     }
 
