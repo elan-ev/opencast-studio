@@ -23,6 +23,7 @@
   "state-paused": "توقف شده",
   "state-recording": "ضبط کردن",
   "state-waiting": "در حال انتظار",
+  "settings-header": "Settings",
   "stop-button-title": "توقف در ضبط کردن",
   "toolbar-button-about": "درباره Opencast Studio",
   "toolbar-button-issues": "گزارش مشکل",
