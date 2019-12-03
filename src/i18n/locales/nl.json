@@ -23,6 +23,7 @@
   "state-paused": "Gepauzeerd",
   "state-recording": "Opnemen",
   "state-waiting": "Wachten",
+  "settings-header": "Settings",
   "stop-button-title": "Opname stoppen",
   "toolbar-button-about": "Over Opencast Studio",
   "toolbar-button-issues": "Probleem melden",
