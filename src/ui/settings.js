@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Box } from '@theme-ui/components';
 
+import LanguagesSelect from './languages-select';
 import Notification from './notification';
 import OpencastAPI from '../opencast-api';
 import SettingsForm from './settings-form';
@@ -41,9 +42,13 @@ function Settings(props) {
   return (
     <Box sx={{ maxWidth: 960, mx: 'auto', px: 3, pb: 3 }}>
       <header>
-        <h1 sx={{ fontWeight: 'heading' }}>{t('upload-settings-modal-header')}</h1>
+        <h1>{t('settings-header')}</h1>
       </header>
 
+      <label sx={{ fontWeight: 'bold' }}>Language</label>
+      <LanguagesSelect />
+
+      <h2 sx={{ fontWeight: 'heading' }}>{t('upload-settings-modal-header')}</h2>
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 

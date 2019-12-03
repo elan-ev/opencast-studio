@@ -115,6 +115,7 @@ const base = {
       borderStyle: 'solid',
       borderColor: 'gray.2',
       height: '2rem',
+      fontSize: '14pt',
       borderRadius: 2,
       px: 2,
       py: 0,
@@ -128,6 +129,17 @@ const base = {
       '&[aria-invalid="true"]': {
         borderColor: 'error',
         boxShadow: theme => `0 0 3px 0 ${theme.colors.error}`
+      }
+    },
+    select: {
+      height: '2rem',
+      fontSize: '14pt',
+      outline: 'none',
+      transition: 'border-color 0.3s, box-shadow 0.3s',
+      width: '100%',
+      '&:focus': {
+        borderColor: 'primary',
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
       }
     }
   }
