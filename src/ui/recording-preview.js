@@ -25,6 +25,15 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
     );
   }
 
+   // Without this, some browsers show a black video element instead of the first frame.
+  let hasBeenReset = false;
+  const onCanPlayHandler = e => {
+    if (!hasBeenReset) {
+      e.target.currentTime = 0;
+      hasBeenReset = true;
+    }
+  };
+
   return (
     <a sx={style} target="_blank" download={downloadName} href={url} rel="noopener noreferrer">
       {deviceType}
@@ -38,9 +47,7 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
           transform: 'translate(-50%, -50%)'
         }}
         src={url}
-
-        // Without this, some browsers show a black video element instead of the first frame.
-        onCanPlay={e => e.target.currentTime = 0}
+        onCanPlay={onCanPlayHandler}
       ></video>
     </a>
   );
