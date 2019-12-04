@@ -17,6 +17,7 @@ const Button = ({ large, ...rest }) => (
       backgroundColor: 'transparent',
       border: 'none',
       position: 'relative',
+      overflow: 'hidden',
       my: 0,
       mx: large ? '1rem' : '0.5rem',
       padding: large ? '0.5rem' : '0.25rem',
