@@ -9,10 +9,13 @@ const LanguagesSelect = () => {
   const { i18n } = useTranslation();
 
   return (
-    <select sx={{ variant: 'styles.select' }} defaultValue={i18n.language} >
+    <select
+      sx={{ variant: 'styles.select' }}
+      defaultValue={i18n.language}
+      onChange={e => i18n.changeLanguage(e.target.value)}
+    >
       {languages.map(language => (
         <option
-          onClick={i18n.changeLanguage.bind(i18n, language.short)}
           value={language.short}
           key={language.short}
         >
