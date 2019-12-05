@@ -30,9 +30,7 @@ afterEach(cleanup);
 it('renders empty form with no settings', async () => {
   const mockUpdate = jest.fn();
 
-  global.fetch = require('jest-fetch-mock');
-  fetch.mockRejectOnce();
-  const settingsManager = await SettingsManager.init();
+  const settingsManager = new SettingsManager();
 
   const { getByText, getByLabelText } = render(
     <Router>
@@ -56,14 +54,14 @@ it('renders empty form with no settings', async () => {
 it('renders empty form with partial OC settings', async () => {
   const mockUpdate = jest.fn();
 
-  global.fetch = require('jest-fetch-mock');
-  fetch.mockResponseOnce(JSON.stringify({
-    opencast: {
-      serverUrl: "https://localhost",
-      loginName: "peter",
+  const settingsManager = new SettingsManager({
+    contextSettings: {
+      opencast: {
+        serverUrl: "https://localhost",
+        loginName: "peter",
+      }
     }
-  }));
-  const settingsManager = await SettingsManager.init();
+  });
 
   const { getByText, getByLabelText, queryByLabelText } = render(
     <Router>
@@ -87,16 +85,16 @@ it('renders empty form with partial OC settings', async () => {
 it('renders empty form with full OC settings', async () => {
   const mockUpdate = jest.fn();
 
-  global.fetch = require('jest-fetch-mock');
-  fetch.mockResponseOnce(JSON.stringify({
-    opencast: {
-      serverUrl: "https://localhost",
-      workflowId: "any",
-      loginName: "peter",
-      loginPassword: "krokodil"
+  const settingsManager = new SettingsManager({
+    contextSettings: {
+      opencast: {
+            serverUrl: "https://localhost",
+            workflowId: "any",
+            loginName: "peter",
+            loginPassword: "krokodil"
+          }
     }
-  }));
-  const settingsManager = await SettingsManager.init();
+  });
 
   const { getByText, getByLabelText, queryByLabelText, queryByText } = render(
     <Router>

@@ -8,11 +8,8 @@ import theme from './theme';
 import { SettingsManager } from './settings';
 
 
-it('renders beta bubble', async () => {
-  global.fetch = require('jest-fetch-mock');
-  fetch.mockResponseOnce(JSON.stringify({}));
-
-  const settingsManager = await SettingsManager.init();
+it('renders beta bubble', () => {
+  const settingsManager = new SettingsManager();
   const { getByText } = render(
     <ThemeProvider theme={theme}>
       <App settingsManager={settingsManager} />

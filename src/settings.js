@@ -8,20 +8,36 @@ const CONTEXT_SETTINGS_FILE = 'settings.json';
 export class SettingsManager {
   // The settings set by the server. These cannot be edited by the user. If the
   // server did not specify any settings, this is `{}`.
-  contextSettings;
+  contextSettings = {};
 
   // These settings are given in the query part of the URL (e.g.
   // `?opencast.loginName=peter`). If there are no settings in the URL, this
-  // object is empty.
-  urlSettings;
+  // is `{}`.
+  urlSettings = {};
 
-  // The settings set by the user and stored in local storage. This is `null`
-  // if there were no settings in local storage.
-  #userSettings;
+  // The settings set by the user and stored in local storage. This is `{}` if
+  // there were no settings in local storage.
+  #userSettings = {};
 
   // This function is called whenever the user saved their settings. The new
   // settings object is passed as parameter.
   onChange = null;
+
+  // This constructor is mainly used for tests. Use `init()` to get an instance
+  // for the real application.
+  constructor(values) {
+    if (values) {
+      if (values.contextSettings) {
+        this.contextSettings = values.contextSettings;
+      }
+      if (values.urlSettings) {
+        this.urlSettings = values.urlSettings;
+      }
+      if (values.userSettings) {
+        this.#userSettings = values.userSettings;
+      }
+    }
+  }
 
   // Creates a new `Settings` instance by loading user settings from local
   // storage and attempting to load context settings from `/settings.json`.
@@ -29,7 +45,6 @@ export class SettingsManager {
     let self = new SettingsManager();
 
     // Load the user settings from local storage
-    self.#userSettings = {};
     const stored = window.localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored !== null) {
       try {
@@ -47,19 +62,14 @@ export class SettingsManager {
       const contentType = response.headers.get('Content-Type');
       if (!contentType || contentType.startsWith('application/json')) {
         self.contextSettings = await response.json();
-      } else {
-        // No context settings were defined.
-        self.contextSettings = {};
       }
     } catch (e) {
       if (e) {
         console.warn('Could not load `settings.json`!', e);
       }
-      self.contextSettings = {};
     }
 
     // Get settings from URL query.
-    self.urlSettings = {};
     const urlParams = new URLSearchParams(window.location.search);
     for (let [key, value] of urlParams) {
       // Create empty objects for full path (if the key contains '.') and set
