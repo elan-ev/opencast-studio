@@ -26,19 +26,17 @@ const SettingsPage = ({ settingsManager }) => {
         <h1>{t('settings-header')}</h1>
       </header>
 
-      <main>
-        <LanguageSettings />
+      <LanguageSettings />
 
-        <OpencastSettings
-          settingsManager={settingsManager}
-          returnToTheStudio={returnToTheStudio}
-        />
+      <OpencastSettings
+        settingsManager={settingsManager}
+        returnToTheStudio={returnToTheStudio}
+      />
 
-        <hr />
-        <Link to="/">
-          ← {t('settings-back')}
-        </Link>
-      </main>
+      <hr />
+      <Link to="/">
+        ← {t('settings-back')}
+      </Link>
     </Box>
   );
 };

@@ -168,7 +168,7 @@ export default function SaveCreation(props) {
         <h2 sx={{ fontWeight: 'heading' }}>{t('save-creation-label-media')}</h2>
       </header>
 
-      <main sx={{ flex: 1 }}>
+      <div sx={{ flex: 1 }}>
         <div
           sx={{
             display: 'flex',
@@ -191,7 +191,7 @@ export default function SaveCreation(props) {
             ))
           )}
         </div>
-      </main>
+      </div>
 
       <footer
         sx={{
