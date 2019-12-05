@@ -12,11 +12,11 @@ class OpencastAPI {
   }
 
   static areSettingsComplete(settings) {
-    return !!settings &&
-      !!settings.serverUrl &&
-      !!settings.workflowId &&
-      !!settings.loginName &&
-      !!settings.loginPassword;
+    return settings &&
+      settings.serverUrl &&
+      settings.workflowId &&
+      settings.loginName &&
+      settings.loginPassword;
   }
 
   async checkConnection() {

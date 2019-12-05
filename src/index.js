@@ -24,9 +24,8 @@ if (process.env.NODE_ENV === 'production') {
 
 // This async function does all the heavy initialization of the app.
 const init = async () => {
-  const module = await import('./App');
-  const settingsManager = await SettingsManager.init();
-  return [module.default, settingsManager];
+  const module = import('./App').then(module => module.default);
+  return Promise.all([module, SettingsManager.init()]);
 }
 
 // This component shows a loading screen until `init` is finished; then the main

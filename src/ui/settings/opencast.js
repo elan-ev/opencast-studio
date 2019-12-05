@@ -29,7 +29,6 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
         setError(t('upload-settings-validation-error'));
         return;
       }
-      console.log(data);
       settingsManager.saveSettings({ opencast: data });
       returnToTheStudio();
     } catch (error) {
