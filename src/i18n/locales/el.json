@@ -23,7 +23,7 @@
   "state-paused": "Παύση",
   "state-recording": "Εγγραφή",
   "state-waiting": "Αναμονή",
-  "settings-header": "Settings",
+  "settings-header": "",
   "stop-button-title": "Τερματισμός εγγραφής",
   "toolbar-button-about": "Σχετικά με το Opencast Studio",
   "toolbar-button-issues": "Αναφορά σφάλματος",
@@ -38,7 +38,7 @@
   "upload-settings-label-workflow-id": "Αναγνωριστικό ροής εργασίας",
   "upload-settings-label-username": "Όνομα χρήστη",
   "upload-settings-label-password": "Κωδικός",
-  "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
-  "warning-recorder-not-supported": "Your browser does not support recording media streams.",
-  "warning-recorder-safari-hint": "For Safari on iOS, you can enable the experimental feature 'MediaRecorder' in settings."
+  "warning-https": "",
+  "warning-recorder-not-supported": "",
+  "warning-recorder-safari-hint": ""
 }

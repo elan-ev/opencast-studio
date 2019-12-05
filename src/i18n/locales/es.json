@@ -23,7 +23,7 @@
   "state-paused": "Pausado",
   "state-recording": "Grabando",
   "state-waiting": "Esperando",
-  "settings-header": "Settings",
+  "settings-header": "",
   "stop-button-title": "Detener grabación",
   "toolbar-button-about": "Acerca de Opencast Studio",
   "toolbar-button-issues": "Reportar problema",
@@ -38,7 +38,7 @@
   "upload-settings-label-workflow-id": "Workflow ID",
   "upload-settings-label-username": "Usuario",
   "upload-settings-label-password": "Contraseña",
-  "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
-  "warning-recorder-not-supported": "Your browser does not support recording media streams.",
-  "warning-recorder-safari-hint": "For Safari on iOS, you can enable the experimental feature 'MediaRecorder' in settings."
+  "warning-https": "",
+  "warning-recorder-not-supported": "",
+  "warning-recorder-safari-hint": ""
 }
