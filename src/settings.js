@@ -1,4 +1,6 @@
+import axios from 'axios';
 import merge from 'deepmerge';
+
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
 const CONTEXT_SETTINGS_FILE = 'settings.json';
@@ -58,10 +60,10 @@ export class SettingsManager {
     const basepath = process.env.PUBLIC_URL || '/';
     const url = `${window.location.origin}${basepath}${CONTEXT_SETTINGS_FILE}`;
     try {
-      const response = await window.fetch(url);
-      const contentType = response.headers.get('Content-Type');
+      const response = await axios.get(url);
+      const contentType = response.headers['Content-Type'];
       if (!contentType || contentType.startsWith('application/json')) {
-        self.contextSettings = await response.json();
+        self.contextSettings = response.data;
       }
     } catch (e) {
       if (e) {
