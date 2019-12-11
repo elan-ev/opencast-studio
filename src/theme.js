@@ -22,6 +22,9 @@ const base = {
     body: 1.5,
     heading: 1.125
   },
+  heights: {
+    headerHeight: '3em',
+  },
   colors: {
     text: '#000',
     background: '#fff',

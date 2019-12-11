@@ -4,6 +4,8 @@ import { jsx } from 'theme-ui';
 
 import { Link } from 'react-router-dom';
 
+import Navigation from './navigation';
+
 const BetaBubble = props => (
   <span
     sx={{
@@ -49,15 +51,19 @@ function OpencastHeader() {
   return (
     <header
       sx={{
-        height: '3rem',
-        lineHeight: '3rem',
+        height: theme => theme.heights.headerHeight,
+        lineHeight: theme => theme.heights.headerHeight,
         backgroundColor: 'gray.0',
         color: 'background',
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        position: 'relative',
+        zIndex: 3,
       }}
     >
       <Brand />
+
+      <Navigation />
     </header>
   );
 }
