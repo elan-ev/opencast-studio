@@ -53,7 +53,6 @@ function OpencastHeader() {
       sx={{
         height: theme => theme.heights.headerHeight,
         lineHeight: theme => theme.heights.headerHeight,
-        backgroundColor: 'gray.0',
         color: 'background',
         display: 'flex',
         justifyContent: 'space-between',
@@ -61,6 +60,16 @@ function OpencastHeader() {
         zIndex: 3,
       }}
     >
+      {/* This div is used just for the background color. We can't set it for
+          the parent element, as the navigation overlay would otherwise occlude
+          this background color */}
+      <div sx={{
+        backgroundColor: 'gray.0',
+        position: 'absolute',
+        zIndex: -3,
+        height: '100%',
+        width: '100%',
+      }}></div>
       <Brand />
 
       <Navigation />
