@@ -4,6 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { NavLink } from 'react-router-dom';
 import { Fragment, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCaretDown,
@@ -86,6 +87,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
 const Navigation = props => {
   const [isOpened, updateIsOpened] = useState(false);
   const toggleMenu = () => updateIsOpened(!isOpened);
+  const { t } = useTranslation();
 
   return (
     <Fragment>
@@ -110,7 +112,7 @@ const Navigation = props => {
           },
         }}
       >
-        Menu
+        {t('nav-open-menu-button')}
         <span sx={{ width: '23px', display: 'inline-block' }}>
           <FontAwesomeIcon
             icon={isOpened ? faTimes : faCaretDown}
@@ -140,14 +142,18 @@ const Navigation = props => {
           }
         }}
       >
-        <NavElement target="/settings" icon={faWrench} onClick={toggleMenu}>Settings</NavElement>
-        <NavElement target="/about" icon={faInfoCircle} onClick={toggleMenu}>About</NavElement>
+        <NavElement target="/settings" icon={faWrench} onClick={toggleMenu}>
+          {t('nav-settings')}
+        </NavElement>
+        <NavElement target="/about" icon={faInfoCircle} onClick={toggleMenu}>
+          {t('nav-about')}
+        </NavElement>
         <NavElement
           target="https://github.com/elan-ev/opencast-studio/issues"
           icon={faGithub}
           onClick={toggleMenu}
         >
-          Report Issue
+          {t('nav-report-issue')}
           {' '}
           <FontAwesomeIcon icon={faExternalLinkAlt} size="xs" />
         </NavElement>
