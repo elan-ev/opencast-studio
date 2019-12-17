@@ -1,9 +1,9 @@
 {
-  "forms-validation-error-required": "",
-  "message-conn-failed": "",
-  "message-login-failed": "",
+  "forms-validation-error-required": "Bu alan gereklidir.",
+  "message-conn-failed": "İnternet bağlantısı başarısız oldu veya gerekli izinler eksik.",
+  "message-login-failed": "Giriş başarısız. Lütfen şifrenizi kontrol edin.",
   "message-server-unreachable": "",
-  "message-upload-complete": "",
+  "message-upload-complete": "Yükleme tamamlandı!",
   "notification-title": "",
   "cancel-button-title": "",
   "pause-button-title": "",
