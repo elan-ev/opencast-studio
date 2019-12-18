@@ -40,5 +40,5 @@
   "upload-settings-label-password": "Parola",
   "warning-https": "",
   "warning-recorder-not-supported": "Tarayıcınız medya akışlarını kaydetmeyi desteklemiyor.",
-  "warning-recorder-safari-hint": "iOS'taki Safari için, ayarlardan deneysel olan 'MediaRecorder' özelliğini etkinleştirebilirsiniz."
+  "warning-recorder-safari-hint": "iOS'taki Safari için, ayarlardan deneysel 'MediaRecorder' özelliğini etkinleştirebilirsiniz."
 }
