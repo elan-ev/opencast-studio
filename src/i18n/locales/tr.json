@@ -32,7 +32,7 @@
   "upload-notification": "Şu anda yükleniyor",
   "upload-settings-modal-title": "Opencast Yükleme Ayarları",
   "upload-settings-button-store": "Ayarları kaydet",
-  "upload-settings-validation-error": "",
+  "upload-settings-validation-error": "Ayarlar geçersiz. Lütfen doğrulayıp tekrar deneyin!",
   "upload-settings-modal-header": "Opencast'a Yüklemeyi Yapılandır",
   "upload-settings-label-server-url": "Sunucu URL",
   "upload-settings-label-workflow-id": "İş Akışı İD",
@@ -40,5 +40,5 @@
   "upload-settings-label-password": "Parola",
   "warning-https": "",
   "warning-recorder-not-supported": "Tarayıcınız medya akışlarını kaydetmeyi desteklemiyor.",
-  "warning-recorder-safari-hint": ""
+  "warning-recorder-safari-hint": "iOS'taki Safari için, ayarlardan deneysel olan 'MediaRecorder' özelliğini etkinleştirebilirsiniz."
 }
