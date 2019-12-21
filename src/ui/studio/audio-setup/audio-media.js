@@ -75,7 +75,7 @@ export default function SourceAudioMedia() {
 
 function PreviewStream({ children, stream, text }) {
   return (
-    <Card>
+      <Card sx={{maxWidth: [400, 600]}}>
       <PreviewAudio stream={stream} />
       <Text p={2} color="muted">
         {text}

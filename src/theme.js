@@ -1,3 +1,5 @@
+import { darken } from '@theme-ui/color';
+
 const heading = {
   color: 'text',
   fontFamily: 'heading',
@@ -39,7 +41,7 @@ const base = {
     heading: 1.125
   },
   heights: {
-    headerHeight: '3em',
+    headerHeight: '3em'
   },
   colors: {
     text: '#000',
@@ -48,7 +50,8 @@ const base = {
     secondary: '#30c',
     muted: '#888888',
     error: '#f14668',
-    gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5']
+    gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
+    videoOverlay: 'rgba(255, 255, 255, 0.2)'
   },
   buttons: {
     primary: {
@@ -56,7 +59,7 @@ const base = {
       bg: 'primary',
       color: 'background',
       '&:not(:disabled):hover': {
-        bg: 'text'
+        bg: darken('primary', 0.03)
       }
     },
     danger: {
@@ -64,7 +67,7 @@ const base = {
       bg: 'error',
       color: 'background',
       '&:not(:disabled):hover': {
-        color: 'gray.4'
+        bg: darken('error', 0.03)
       }
     },
     text: {

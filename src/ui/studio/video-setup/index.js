@@ -2,11 +2,18 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { faChalkboard, faChalkboardTeacher, faMicrophone, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChalkboard,
+  faChalkboardTeacher,
+  faMicrophone,
+  faUser
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Container } from '@theme-ui/components';
 import { Fragment, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import 'react-toggle/style.css';
 
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
