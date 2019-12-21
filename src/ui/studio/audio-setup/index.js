@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { faCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCaretLeft, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Container } from '@theme-ui/components';
 import { useCallback } from 'react';
@@ -48,6 +48,7 @@ export default function AudioSetup(props) {
             <Button onClick={enterStudio}>{t('enter-studio')}</Button>
           ) : (
             <Button variant="danger" onClick={enterStudio}>
+              <FontAwesomeIcon icon={faMicrophoneSlash}/>
               {t('sources-enter-studio-without-audio')}
             </Button>
           )

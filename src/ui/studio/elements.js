@@ -30,7 +30,7 @@ export function Fade({ children, duration = 300, ...rest }) {
       )}
     </Transition>
   );
-};
+}
 
 export function FadeInLeft({ children, duration = 200, ...rest }) {
   const transitionStyles = {
@@ -54,7 +54,7 @@ export function FadeInLeft({ children, duration = 200, ...rest }) {
       )}
     </Transition>
   );
-};
+}
 
 export function FadingNotification({ duration = 1000, text, ...rest }) {
   const [visible, setVisible] = useState(true);
@@ -87,15 +87,20 @@ export function PromptAndProceed({ children, prev, next }) {
     <Box>
       <Flex
         sx={{
-            height: 50,
-            mb: 3,
-            alignItems: 'center',
-            justifyContent: 'space-between'
+          height: 50,
+          alignItems: 'center',
+          justifyContent: 'space-between'
         }}
       >
-        <Box sx={{minWidth: '100px'}}>{prev}</Box>
-        <Heading as="h3">{children}</Heading>
-        <Box sx={{minWidth: '100px'}}>{next}</Box>
+        <Box sx={{ minWidth: '100px' }}>{prev}</Box>
+        {children ? (
+          <Heading as="h3" sx={{ display: ['none', 'none', 'block'] }}>
+            {children}
+          </Heading>
+        ) : (
+          <Box />
+        )}
+        <Box sx={{ minWidth: '100px' }}>{next}</Box>
       </Flex>
     </Box>
   );
@@ -222,7 +227,7 @@ export function Tab({ active = false, label, icon, onChange, value }) {
     >
       <Button variant="text" onClick={handleChange}>
         <FontAwesomeIcon icon={icon} />
-        <span sx={{ display: ['none', 'inline-block']}}>{label}</span>
+        <span sx={{ display: ['none', 'inline-block'] }}>{label}</span>
       </Button>
     </li>
   );

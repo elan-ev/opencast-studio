@@ -35,7 +35,7 @@
 
   "choose-sources": "Choose sources",
   "enter-studio": "Enter studio",
-  "sources-enter-studio-without-audio": "Proceed without audio",
+  "sources-enter-studio-without-audio": "Proceed w/o audio",
 
   "sources-video-selection-prompt": "Please share your display and/or camera",
   "sources-video-selection-done": "Display and/or camera is now shared. Select your audio source!",
@@ -49,7 +49,7 @@
   "sources-scenario-user": "Camera",
 
   "source-display-and-user-title": "Sharing Display and Camera",
-  "source-display-title": "Sharing Display and Camera",
+  "source-display-title": "Sharing Display",
   "source-user-title": "Sharing Camera",
   "source-audio-title": "Sharing Microphone",
   "source-share-prompt": "Start sharing",
