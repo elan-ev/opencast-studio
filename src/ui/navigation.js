@@ -11,7 +11,6 @@ import {
   faTimes,
   faWrench,
   faInfoCircle,
-  faExternalLinkAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
@@ -27,7 +26,8 @@ const NavElement = ({ target, children, icon, ...rest }) => {
     sx: {
       color: 'white',
       display: 'inline-block',
-      px: '10px',
+      pl: '10px',
+      pr: '14px',
       textDecoration: 'none',
       fontSize: '18px',
 
@@ -99,7 +99,7 @@ const Navigation = props => {
           borderRadius: '10px',
           color: 'white',
           my: '3px',
-          px: '8px',
+          px: '14px',
           mx: '5px',
           fontSize: '20px',
           backgroundColor: 'transparent',
@@ -154,8 +154,6 @@ const Navigation = props => {
           onClick={toggleMenu}
         >
           {t('nav-report-issue')}
-          {' '}
-          <FontAwesomeIcon icon={faExternalLinkAlt} size="xs" />
         </NavElement>
       </nav>
 
