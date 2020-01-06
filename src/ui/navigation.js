@@ -15,36 +15,23 @@ import {
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 
-// For browser windows with widths below this value, the menu button and
-// and expandable menu is shown. Otherwise, the menu entries are inline in the
-// header.
-const THRESHOLD = 700;
-
 // One element (link) in the navigation.
 const NavElement = ({ target, children, icon, ...rest }) => {
   const attrs = {
     sx: {
       color: 'white',
-      display: 'inline-block',
-      pl: '10px',
-      pr: '14px',
+      pl: ['20px', '10px'],
+      pr: ['20px', '14px'],
       textDecoration: 'none',
       fontSize: '18px',
+      height: ['auto', '100%'],
+      borderLeft: ['none', theme => `1px solid ${theme.colors.gray[3]}`],
+      display: ['block', 'inline-block'],
+      width: ['100%', 'auto'],
 
       '&:hover': {
         backgroundColor: 'gray.1',
       },
-
-      [`@media (min-width: ${THRESHOLD}px)`]: {
-        borderLeft: theme => `1px solid ${theme.colors.gray[3]}`,
-        height: '100%',
-      },
-      [`@media (max-width: ${THRESHOLD}px)`]: {
-        display: 'block',
-        width: '100%',
-        px: '20px',
-        border: 'none',
-      }
     },
     ...rest
   };
@@ -55,12 +42,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         width: '20px',
         display: 'inline-block',
         textAlign: 'right',
-        [`@media (min-width: ${THRESHOLD}px)`]: {
-          mr: '8px',
-        },
-        [`@media (max-width: ${THRESHOLD}px)`]: {
-          mr: '14px',
-        }
+        mr: ['14px', '8px'],
       }}>
         <FontAwesomeIcon icon={icon} />
       </div>
@@ -94,7 +76,7 @@ const Navigation = props => {
       <button
         onClick={toggleMenu}
         sx={{
-          display: 'none',
+          display: ['inline-block', 'none'],
           border: theme => `2px solid ${theme.colors.gray[3]}`,
           borderRadius: '10px',
           color: 'white',
@@ -107,9 +89,6 @@ const Navigation = props => {
             backgroundColor: 'gray.1',
           },
           '&:active': {},
-          [`@media (max-width: ${THRESHOLD}px)`]: {
-            display: 'inline-block',
-          },
         }}
       >
         {t('nav-open-menu-button')}
@@ -127,19 +106,18 @@ const Navigation = props => {
           }
         }}
         sx={{
-          [`@media (max-width: ${THRESHOLD}px)`]: {
-            top: theme => theme.heights.headerHeight,
-            position: 'absolute',
-            width: '100%',
-            backgroundColor: 'gray.0',
-            overflow: 'hidden',
-            zIndex: 10,
-            transition: 'height 0.25s ease-out 0s',
-            height: '0px',
-          },
-          [`@media (min-width: ${THRESHOLD}px)`]: {
-            height: '100% !important',
-          }
+          overflow: 'hidden',
+          zIndex: 10,
+          // This "!important" is necessary unfortunately to override the inline
+          // style set in the `ref` attribute above. Otherwise opening the menu
+          // in mobile view and switching to desktop view (e.g. by rotating
+          // phone) would result in a very strange artifact.
+          height: ['0px', '100% !important'],
+          top: [theme => theme.heights.headerHeight, 0],
+          position: ['absolute', 'static'],
+          width: ['100%', 'auto'],
+          backgroundColor: ['gray.0', 'none'],
+          transition: ['height 0.25s ease-out 0s', 'none'],
         }}
       >
         <NavElement target="/settings" icon={faWrench} onClick={toggleMenu}>
@@ -162,7 +140,7 @@ const Navigation = props => {
         onClick={toggleMenu}
         ref={n => n && (n.style.opacity = 1)}
         sx={{
-          display: isOpened ? 'block' : 'none',
+          display: [isOpened ? 'block' : 'none', 'none'],
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
           position: 'fixed',
           zIndex: -10,
@@ -172,9 +150,6 @@ const Navigation = props => {
           right: 0,
           opacity: 0,
           transition: 'opacity 0.25s ease-out 0s',
-          [`@media (min-width: ${THRESHOLD}px)`]: {
-            display: 'none',
-          }
         }}
       ></div>}
     </Fragment>

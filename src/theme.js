@@ -6,6 +6,7 @@ const heading = {
 };
 
 const base = {
+  breakpoints: ["700px"],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body: 'Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, system-ui, sans-serif',
