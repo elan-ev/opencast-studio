@@ -20,8 +20,8 @@ const NavElement = ({ target, children, icon, ...rest }) => {
   const attrs = {
     sx: {
       color: 'white',
-      pl: ['20px', '10px'],
-      pr: ['20px', '14px'],
+      pl: [3, '10px'],
+      pr: [3, '14px'],
       textDecoration: 'none',
       fontSize: '18px',
       height: ['auto', '100%'],
@@ -42,7 +42,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         width: '20px',
         display: 'inline-block',
         textAlign: 'right',
-        mr: ['14px', '8px'],
+        mr: [3, 2],
       }}>
         <FontAwesomeIcon icon={icon} />
       </div>
@@ -80,9 +80,9 @@ const Navigation = props => {
           border: theme => `2px solid ${theme.colors.gray[3]}`,
           borderRadius: '10px',
           color: 'white',
-          my: '3px',
-          px: '14px',
-          mx: '5px',
+          my: 1,
+          px: 3,
+          mx: 1,
           fontSize: '20px',
           backgroundColor: 'transparent',
           '&:hover': {
