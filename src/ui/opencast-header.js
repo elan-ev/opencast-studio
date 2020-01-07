@@ -31,7 +31,7 @@ function Brand() {
       <Link to="/">
         <picture>
           <source
-            media="(min-width: 769px)"
+            media="(min-width: 920px)"
             srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
           />
           <img
