@@ -23,7 +23,6 @@
   "state-paused": "توقف شده",
   "state-recording": "ضبط کردن",
   "state-waiting": "در حال انتظار",
-  "settings-header": "",
   "stop-button-title": "توقف در ضبط کردن",
   "toolbar-button-about": "درباره Opencast Studio",
   "toolbar-button-issues": "گزارش مشکل",
@@ -37,8 +36,5 @@
   "upload-settings-label-server-url": "آدرس سرور",
   "upload-settings-label-workflow-id": "شناسه گردش",
   "upload-settings-label-username": "نام کاربری",
-  "upload-settings-label-password": "رمز عبور",
-  "warning-https": "",
-  "warning-recorder-not-supported": "",
-  "warning-recorder-safari-hint": ""
+  "upload-settings-label-password": "رمز عبور"
 }
