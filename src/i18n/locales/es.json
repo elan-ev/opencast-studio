@@ -23,7 +23,6 @@
   "state-paused": "Pausado",
   "state-recording": "Grabando",
   "state-waiting": "Esperando",
-  "settings-header": "",
   "stop-button-title": "Detener grabación",
   "toolbar-button-about": "Acerca de Opencast Studio",
   "toolbar-button-issues": "Reportar problema",
@@ -37,8 +36,5 @@
   "upload-settings-label-server-url": "URL del servidor",
   "upload-settings-label-workflow-id": "Workflow ID",
   "upload-settings-label-username": "Usuario",
-  "upload-settings-label-password": "Contraseña",
-  "warning-https": "",
-  "warning-recorder-not-supported": "",
-  "warning-recorder-safari-hint": ""
+  "upload-settings-label-password": "Contraseña"
 }

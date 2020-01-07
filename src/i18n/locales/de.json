@@ -28,7 +28,6 @@
   "state-paused": "Pause",
   "state-recording": "Aufnahme",
   "state-waiting": "Warten",
-  "settings-header": "",
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen",
   "upload-settings-modal-title": "Einstellungen für das Hochladen",
@@ -38,8 +37,5 @@
   "upload-settings-label-server-url": "Server-URL",
   "upload-settings-label-workflow-id": "Workflow-ID",
   "upload-settings-label-username": "Benutzername",
-  "upload-settings-label-password": "Passwort",
-  "warning-https": "",
-  "warning-recorder-not-supported": "",
-  "warning-recorder-safari-hint": ""
+  "upload-settings-label-password": "Passwort"
 }
