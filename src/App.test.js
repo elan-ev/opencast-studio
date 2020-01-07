@@ -1,12 +1,17 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from "theme-ui";
+import { jsx, ThemeProvider } from "theme-ui";
 import { render } from '@testing-library/react';
 
 import App from './App';
 import defaultSettings from './default-settings';
+import theme from './theme';
 
 it('renders beta bubble', () => {
-  const { getByText } = render(<App defaultSettings={{ ...defaultSettings, connected: true }} />);
+  const { getByText } = render(
+    <ThemeProvider theme={theme}>
+      <App defaultSettings={{ ...defaultSettings, connected: true }} />
+    </ThemeProvider>
+  );
   expect(getByText('beta')).toBeInTheDocument();
 });

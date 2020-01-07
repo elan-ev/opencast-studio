@@ -6,6 +6,7 @@ const heading = {
 };
 
 const base = {
+  breakpoints: ["400px", "850px"],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body: 'Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, system-ui, sans-serif',
@@ -21,6 +22,9 @@ const base = {
   lineHeights: {
     body: 1.5,
     heading: 1.125
+  },
+  heights: {
+    headerHeight: '3em',
   },
   colors: {
     text: '#000',
