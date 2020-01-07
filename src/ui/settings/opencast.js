@@ -3,6 +3,8 @@
 import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import useForm from 'react-hook-form';
 import { Box, Button } from '@theme-ui/components';
 
@@ -14,27 +16,32 @@ import { Input, SettingsSection} from './elements';
 
 
 
-function OpencastSettings({ settingsManager, returnToTheStudio }) {
+function OpencastSettings({ settingsManager }) {
   const { t } = useTranslation();
   const [error, setError] = useState();
   const { errors, handleSubmit, register } = useForm({
     defaultValues: settingsManager.formValues().opencast
   });
+  const [status, setStatus] = useState('initial');
 
   async function onSubmit(data) {
     try {
+      setStatus('testing');
       const ocUploader = new OpencastAPI({
         ...settingsManager.settings().opencast,
         ...data,
       });
       const connected = await ocUploader.checkConnection();
       if (!connected) {
+        setStatus('error');
         setError(t('upload-settings-validation-error'));
         return;
       }
       settingsManager.saveSettings({ opencast: data });
-      returnToTheStudio();
+      setStatus('saved');
+      setError(null)
     } catch (error) {
+      setStatus('error');
       setError(t('message-server-unreachable'));
       console.log(error);
     }
@@ -50,6 +57,13 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
   if (fixedServerUrl && fixedWorkflowId && fixedLoginName && fixedLoginPassword) {
     return null;
   }
+
+  const icons = {
+    testing: faCircleNotch,
+    error: faExclamationCircle,
+    saved: faCheckCircle,
+  };
+  const icon = icons[status];
 
   return (
     <SettingsSection title={t('upload-settings-modal-header')}>
@@ -91,7 +105,14 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
           /> }
 
           <footer sx={{ mt: 4 }}>
-            <Button>{t('upload-settings-button-store')}</Button>
+            <Button sx={{ verticalAlign: 'middle' }}>
+              {t('upload-settings-button-store')}
+            </Button>
+            { icon && <FontAwesomeIcon
+              icon={icon}
+              sx={{ ml: '10px', fontSize: '30px', verticalAlign: 'middle' }}
+              spin={status === 'testing'}
+            /> }
           </footer>
         </form>
       </Box>
