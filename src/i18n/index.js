@@ -8,6 +8,8 @@ import elTranslations from './locales/el.json';
 import esTranslations from './locales/es.json';
 import faTranslations from './locales/fa.json';
 import frTranslations from './locales/fr.json';
+import nlTranslations from './locales/nl.json';
+import trTranslations from './locales/tr.json';
 
 const resources = {
   en: { translation: enTranslations },
@@ -15,7 +17,9 @@ const resources = {
   el: { translation: elTranslations },
   es: { translation: esTranslations },
   fa: { translation: faTranslations },
-  fr: { translation: frTranslations }
+  fr: { translation: frTranslations },
+  nl: { translation: nlTranslations },
+  tr: { translation: trTranslations }
 };
 
 i18n
