@@ -23,7 +23,10 @@ function OpencastSettings({ settingsManager, returnToTheStudio }) {
 
   async function onSubmit(data) {
     try {
-      const ocUploader = new OpencastAPI({ ...data, ...settingsManager.contextSettings });
+      const ocUploader = new OpencastAPI({
+        ...settingsManager.settings().opencast,
+        ...data,
+      });
       const connected = await ocUploader.checkConnection();
       if (!connected) {
         setError(t('upload-settings-validation-error'));
