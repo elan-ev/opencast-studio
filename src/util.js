@@ -31,7 +31,7 @@ export const isUserCaptureSupported = () =>
 
 // Checks if the browsers supports the `MediaRecorder` API required to actually
 // record the media streams.
-export const isRecordingSupported = () => typeof(MediaRecorder) !== 'undefined';
+export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 
 // Checks if this runs in Safari.
 export const onSafari = () => /Safari/i.test(navigator.userAgent);
