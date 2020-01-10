@@ -83,5 +83,6 @@
   "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "For Safari on iOS, you can enable the experimental feature 'MediaRecorder' in settings.",
+  "warning-missing-connection-settings": "Connection to Opencast is not configured: uploading is disabled. Please configure the connection in the settings.",
   "settings-back": "Back"
 }

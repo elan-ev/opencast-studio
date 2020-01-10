@@ -45,8 +45,7 @@ const Warnings = ({ settings }) => {
       { !opencastConfigured && (
         <div sx={{ p: 3 }}>
           <Notification isDanger>
-            Connection to Opencast is not configured: uploading is disabled.
-            Please configure the connection in the settings.
+            {t('warning-missing-connection-settings')}
           </Notification>
         </div>
       )}
