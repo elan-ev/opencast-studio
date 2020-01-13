@@ -11,7 +11,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.12.0",
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@mdx-js/react": "^1.5.3",
-    "@sentry/browser": "^5.10.2",
+    "@sentry/browser": "^5.11.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@theme-ui/components": "^0.2.50",
