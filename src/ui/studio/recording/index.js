@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box, Button, Container, Flex } from '@theme-ui/components';
+import { Box, Button, Flex } from '@theme-ui/components';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
