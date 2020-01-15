@@ -5,9 +5,8 @@ import { jsx, Styled } from 'theme-ui';
 import { faChalkboardTeacher, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Card, Flex, Heading, Text } from '@theme-ui/components';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import Toggle from 'react-toggle';
 
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
@@ -110,18 +109,6 @@ function DisplayStreamCard(props) {
 
 function UserStreamCard(props) {
   const { t } = useTranslation();
-  const [devices, setDevices] = useState([]);
-
-  useEffect(() => {
-    const enumerateDevices = async () => {
-      const devices = (await navigator.mediaDevices.enumerateDevices()).filter(
-        d => d.kind === 'videoinput'
-      );
-      setDevices(devices);
-    };
-
-    props.stream && enumerateDevices();
-  }, [props.stream]);
 
   return (
     <PreviewStream stream={props.stream} text={t('sources-select-user')}>
