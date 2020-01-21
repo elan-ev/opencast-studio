@@ -17,6 +17,7 @@
   "save-creation-button-discard": "Discard",
   "save-creation-button-save": "Save media",
   "save-creation-button-upload": "Upload to Opencast",
+  "save-creation-button-upload": "Uploaded to Opencast!",
   "save-creation-form-invalid": "Please set title and presenter",
   "save-creation-label-media": "Media",
   "save-creation-label-presenter": "Presenter",
