@@ -2,9 +2,9 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { act, cleanup, render, waitForElement } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import OpencastAPI, { mockCheckConnection } from '../../opencast-api';
+import OpencastAPI from '../../opencast-api';
 import SettingsPage from './page';
 import { SettingsManager } from '../../settings';
 
@@ -96,7 +96,7 @@ it('renders empty form with full OC settings', async () => {
     }
   });
 
-  const { getByText, getByLabelText, queryByLabelText, queryByText } = render(
+  const { getByText, queryByLabelText, queryByText } = render(
     <Router>
       <ThemeProvider theme={theme}>
         <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
