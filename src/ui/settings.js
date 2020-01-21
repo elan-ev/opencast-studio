@@ -25,13 +25,15 @@ function Settings(props) {
 
   async function handleSubmit(data) {
     try {
-      const ocUploader = new OpencastAPI({ ...data });
+      console.log("data:", data);
+      const ocUploader = new OpencastAPI({ ...data, ...props.settingsManager.contextSettings });
       const connected = await ocUploader.checkConnection();
       if (!connected) {
         setError(t('upload-settings-validation-error'));
         return;
       }
-      props.handleUpdate(data);
+      console.log(data);
+      props.settingsManager.saveSettings({ opencast: data });
       returnToTheStudio();
     } catch (error) {
       setError(t('message-server-unreachable'));
@@ -52,10 +54,11 @@ function Settings(props) {
       <main>
         {error && <Notification isDanger>{error}</Notification>}
 
-        {!props.settings.connected && <Notification>{t('settings-first-run')}</Notification>}
+        {props.settingsManager.showFirstRunSetup() &&
+          <Notification>{t('settings-first-run')}</Notification>}
 
         <SettingsForm
-          settings={props.settings}
+          settingsManager={props.settingsManager}
           handleSubmit={handleSubmit}
           handleCancel={returnToTheStudio}
         />

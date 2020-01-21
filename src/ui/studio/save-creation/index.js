@@ -84,7 +84,7 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
-    new OpencastAPI(props.settings).loginAndUpload(
+    new OpencastAPI(props.settings.opencast).loginAndUpload(
       // recording,
       recordings.filter(Boolean),
 

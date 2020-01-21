@@ -68,7 +68,7 @@ const Input = ({ errors, label, name, register, required, type = 'text', ...rest
 function SettingsForm(props) {
   const { t } = useTranslation();
   const { errors, handleSubmit, register, reset } = useForm({
-    defaultValues: props.settings
+    defaultValues: props.settingsManager.formValues().opencast
   });
 
   const onSubmit = data => {
@@ -80,45 +80,47 @@ function SettingsForm(props) {
     props.handleCancel(data);
   };
 
+  const contextSettings = props.settingsManager.contextSettings.opencast || {};
+
   return (
     <Container>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
+        { !contextSettings.serverUrl && <Input
           errors={errors}
           label={t('upload-settings-label-server-url')}
           name="serverUrl"
           register={register}
           required
-        />
+        /> }
 
-        <Input
+        { !contextSettings.workflowId && <Input
           errors={errors}
           label={t('upload-settings-label-workflow-id')}
           name="workflowId"
           register={register}
           required
-        />
+        /> }
 
-        <Input
+        { !contextSettings.loginName && <Input
           errors={errors}
           label={t('upload-settings-label-username')}
           name="loginName"
           register={register}
           required
-        />
+        /> }
 
-        <Input
+        { !contextSettings.loginPassword && <Input
           errors={errors}
           label={t('upload-settings-label-password')}
           name="loginPassword"
           register={register}
           required
           type="password"
-        />
+        /> }
 
         <footer sx={{ mt: 4 }}>
           <Button>{t('upload-settings-button-store')}</Button>
-          {props.settings.connected && (
+          {!props.settingsManager.showFirstRunSetup() && (
             <Button variant="text" onClick={onCancel}>
               {t('cancel-button-title')}
             </Button>
