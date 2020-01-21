@@ -20,6 +20,8 @@ function App({ settingsManager }) {
   const [settings, updateSettings] = useState(settingsManager.settings());
   settingsManager.onChange = newSettings => updateSettings(newSettings);
 
+  const [activeStep, updateActiveStep] = useState(0);
+
   return (
     <Provider>
       <Router basename={process.env.PUBLIC_URL || '/'}>
@@ -49,7 +51,11 @@ function App({ settingsManager }) {
               </Route>
 
               <Route path="/" exact>
-                <Studio settings={settings} />
+                <Studio
+                  settings={settings}
+                  activeStep={activeStep}
+                  updateActiveStep={updateActiveStep}
+                />
               </Route>
 
               <Route path="/*">

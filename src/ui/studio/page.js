@@ -10,10 +10,10 @@ import SaveCreation from './save-creation';
 import VideoSetup from './video-setup';
 import Recording from './recording';
 
-export default function SourcesPage({ settings }) {
+export default function SourcesPage({ settings, activeStep, updateActiveStep }) {
   return (
     <Fragment>
-      <Steps>
+      <Steps activeStep={activeStep} updateActiveStep={updateActiveStep}>
         <VideoSetup />
         <AudioSetup />
         <Recording settings={settings} />

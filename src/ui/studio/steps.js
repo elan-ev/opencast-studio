@@ -2,11 +2,9 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function Steps(props) {
-  const [activeStep, updateActiveStep] = useState(0);
-
+export default function Steps({ activeStep, updateActiveStep, ...props }) {
   const childProps = {
     currentStep: activeStep + 1,
     totalSteps: props.children?.length || 0,
