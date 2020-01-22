@@ -36,9 +36,6 @@ export default function MediaDevice({ onClick, title, icon, stream }) {
         muted
         sx={{
           outline: 'none',
-          position: 'absolute',
-          top: 0,
-          left: 0,
           width: '100%',
           height: '100%',
           zIndex: 2,
