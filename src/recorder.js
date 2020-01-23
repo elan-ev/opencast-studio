@@ -1,23 +1,6 @@
-import { isRecordingSupported } from './util';
-
-const findSupportedMimeType = list =>
-  isRecordingSupported() && 'isTypeSupported' in MediaRecorder
-    ? list.find(mimeType => MediaRecorder.isTypeSupported(mimeType)) || ''
-    : '';
-
 export default class Recorder {
   constructor(stream, options = {}) {
-    const mimeType =
-      options.mimeType ||
-      (stream.getVideoTracks().length
-        ? findSupportedMimeType([
-            'video/webm;codecs="vp9,opus"',
-            'video/webm;codecs="vp9.0,opus"',
-            'video/webm;codecs="avc1"',
-            'video/x-matroska;codecs="avc1"',
-            'video/webm;codecs="vp8,opus"'
-          ])
-        : findSupportedMimeType(['audio/ogg;codecs=opus', 'audio/webm;codecs=opus']));
+    const mimeType = options.mimeType || undefined;
 
     const _recData = [];
     this.recorder = new MediaRecorder(stream, { mimeType });
