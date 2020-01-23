@@ -24,32 +24,24 @@ const Warnings = ({ settings }) => {
   const opencastConfigured = OpencastAPI.areSettingsComplete(settings.opencast);
 
   return (
-    <React.Fragment>
+    <div sx={{ p: 3 }}>
       {!isRecordingSupported() && (
-        <div sx={{ p: 3 }}>
-          <Notification isDanger>
-            {t('warning-recorder-not-supported')}
-            {onSafari() && ' ' + t('warning-recorder-safari-hint')}
-          </Notification>
-        </div>
+        <Notification isDanger>
+          {t('warning-recorder-not-supported')}
+          {onSafari() && ' ' + t('warning-recorder-safari-hint')}
+        </Notification>
       )}
 
       { usingUnsecureConnection && (
-        <div sx={{ p: 3 }}>
-          <Notification isDanger>
-            {t('warning-https')}
-          </Notification>
-        </div>
+        <Notification isDanger>{t('warning-https')}</Notification>
       )}
 
       { !opencastConfigured && (
-        <div sx={{ p: 3 }}>
-          <Notification isDanger>
-            {t('warning-missing-connection-settings')}
-          </Notification>
-        </div>
+        <Notification isDanger>
+          {t('warning-missing-connection-settings')}
+        </Notification>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -33,12 +33,7 @@ function App({ settingsManager }) {
         >
           <OpencastHeader />
 
-          <main sx={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            '& > *:not(:first-of-type)': { flexGrow: 1 }
-          }}>
+          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <Warnings settings={settings} />
 
             <Switch>
