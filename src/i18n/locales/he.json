@@ -23,7 +23,6 @@
   "save-creation-label-title": "",
   "save-creation-modal-title": "",
   "save-creation-prompt": "",
-  "settings-first-run": "",
   "share-desktop": "",
   "share-camera": "",
   "state-paused": "",
@@ -71,5 +70,7 @@
   "upload-settings-label-password": "",
   "warning-https": "",
   "warning-recorder-not-supported": "",
-  "warning-recorder-safari-hint": ""
+  "warning-recorder-safari-hint": "",
+  "warning-missing-connection-settings": "",
+  "settings-back": ""
 }
