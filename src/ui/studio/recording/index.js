@@ -40,17 +40,14 @@ export default function Recording(props) {
     </Button>
   );
 
-  const overlayStyle = {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 1,
-    bg: 'videoOverlay'
-  };
-
   return (
-    <Flex as="main" sx={{ flexDirection: 'column', height: '100%', position: 'relative' }}>
-      <Box sx={{ ...overlayStyle, top: 0, pl: 2 }}>
+    <Flex sx={{
+      flexDirection: 'column',
+      height: '100%',
+      position: 'relative',
+      flexGrow: 1.
+    }}>
+      <Box sx={{ pl: 2, zIndex: 1, bg: 'videoOverlay' }}>
         <PromptAndProceed prev={<BackButton handlePrev={backToSetupVideo} />} />
       </Box>
 
