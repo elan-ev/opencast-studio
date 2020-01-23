@@ -25,7 +25,7 @@ export default function Steps({ activeStep, updateActiveStep, ...props }) {
       : null;
   });
 
-  return <div>{childrenWithProps}</div>;
+  return <React.Fragment>{childrenWithProps}</React.Fragment>;
 
   function firstStep() {
     goToStep(1);
