@@ -84,7 +84,7 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
-    new OpencastAPI(props.settings).loginAndUpload(
+    new OpencastAPI(props.settings.opencast).loginAndUpload(
       // recording,
       recordings.filter(Boolean),
 
@@ -117,6 +117,8 @@ export default function SaveCreation(props) {
   const handleCancel = () => {
     props.previousStep();
   };
+
+  const uploadPossible = OpencastAPI.areSettingsComplete(props.settings.opencast);
 
   return (
     <Container>
@@ -166,7 +168,7 @@ export default function SaveCreation(props) {
         <h2 sx={{ fontWeight: 'heading' }}>{t('save-creation-label-media')}</h2>
       </header>
 
-      <main sx={{ flex: 1 }}>
+      <div sx={{ flex: 1 }}>
         <div
           sx={{
             display: 'flex',
@@ -189,7 +191,7 @@ export default function SaveCreation(props) {
             ))
           )}
         </div>
-      </main>
+      </div>
 
       <footer
         sx={{
@@ -206,7 +208,12 @@ export default function SaveCreation(props) {
       >
         <Button
           onClick={handleUpload}
-          disabled={recordings.length === 0 || state.uploading || state.uploaded}
+          disabled={
+            recordings.length === 0 ||
+              state.uploading ||
+              state.uploaded ||
+              !uploadPossible
+          }
         >
           <FontAwesomeIcon icon={faUpload} />
           <span>

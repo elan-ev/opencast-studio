@@ -2,27 +2,25 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { Box, Flex } from '@theme-ui/components';
+import { Flex } from '@theme-ui/components';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 
-import useLocalStorage from './use-local-storage';
-import initial from './default-settings';
 import { Provider } from './recording-context';
 
 import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
-import Settings from './ui/settings';
 import Studio from './ui/studio/page';
+import SettingsPage from './ui/settings/page';
+import Warnings from './ui/warnings';
 
-const SETTINGS_KEY = 'ocStudioSettings';
 
-function App({ defaultSettings = initial }) {
-  const [settings, updateSettings] = useLocalStorage(SETTINGS_KEY, defaultSettings);
+function App({ settingsManager }) {
+  const [settings, updateSettings] = useState(settingsManager.settings());
+  settingsManager.onChange = newSettings => updateSettings(newSettings);
 
-  const handleUpdate = data => {
-    updateSettings(prevState => ({ ...prevState, ...data, connected: true }));
-  };
+  const [activeStep, updateActiveStep] = useState(0);
 
   return (
     <Provider>
@@ -35,28 +33,36 @@ function App({ defaultSettings = initial }) {
         >
           <OpencastHeader />
 
-          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', '& > *': { flexGrow: 1 } }}>
+          <main sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            '& > *:not(:first-of-type)': { flexGrow: 1 }
+          }}>
+            <Warnings settings={settings} />
+
             <Switch>
               <Route path="/settings" exact>
-                <Settings
-                  settings={settings}
-                  handleUpdate={handleUpdate}
-                />
+                <SettingsPage settingsManager={settingsManager} />
               </Route>
 
               <Route path="/about" exact>
                 <About />
               </Route>
 
-              <ConnectedRoute path="/" exact settings={settings}>
-                <Studio settings={settings} />
-              </ConnectedRoute>
+              <Route path="/" exact>
+                <Studio
+                  settings={settings}
+                  activeStep={activeStep}
+                  updateActiveStep={updateActiveStep}
+                />
+              </Route>
 
               <Route path="/*">
                 <Redirect to="/" />
               </Route>
             </Switch>
-          </Box>
+          </main>
         </Flex>
       </Router>
     </Provider>
@@ -67,29 +73,5 @@ App.propTypes = {
   defaultSettings: PropTypes.object
 };
 
-function ConnectedRoute({ children, settings, ...rest }) {
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        settings.connected ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/settings',
-              state: { from: location }
-            }}
-          />
-        )
-      }
-    />
-  );
-}
-
-ConnectedRoute.propTypes = {
-  children: PropTypes.object,
-  settings: PropTypes.object
-};
 
 export default App;
