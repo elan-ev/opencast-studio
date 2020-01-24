@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useRecordingState } from '../../../recording-context';
 
-import { PromptAndProceed } from '../elements';
+import { ActionButtons, PromptAndProceed } from '../elements';
 
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
@@ -45,7 +45,7 @@ export default function Recording(props) {
       flexDirection: 'column',
       height: '100%',
       position: 'relative',
-      flexGrow: 1.
+      flexGrow: 1,
     }}>
       <Box sx={{ pl: 2, zIndex: 1, bg: 'videoOverlay' }}>
         <PromptAndProceed prev={<BackButton handlePrev={backToSetupVideo} />} />
@@ -53,7 +53,11 @@ export default function Recording(props) {
 
       <MediaDevices />
 
-      <RecordingControls handleRecorded={handleRecorded} />
+      <div sx={{ mx: 3 }}>
+        <ActionButtons prev={{ onClick: backToSetupVideo }}>
+          <RecordingControls handleRecorded={handleRecorded} />
+        </ActionButtons>
+      </div>
     </Flex>
   );
 }

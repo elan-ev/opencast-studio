@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import { stopAudioCapture } from '../capturer';
-import { PromptAndProceed } from '../elements';
+import { ActionButtons, PromptAndProceed } from '../elements';
 
 import AudioMedia from './audio-media';
 
@@ -59,6 +59,11 @@ export default function AudioSetup(props) {
       </PromptAndProceed>
 
       <AudioMedia />
+
+      <ActionButtons
+        prev={{ onClick: backToSetupVideo }}
+        next={{ onClick: enterStudio }}
+      />
     </Container>
   );
 }
