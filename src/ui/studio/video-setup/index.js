@@ -20,7 +20,14 @@ import { useDispatch, useRecordingState } from '../../../recording-context';
 import Notification from '../../notification';
 
 import { stopCapture } from '../capturer';
-import { FadingNotification, PromptAndProceed, Tab, Tabs, TabPanel } from '../elements';
+import {
+  ActionButtons,
+  FadingNotification,
+  PromptAndProceed,
+  Tab,
+  Tabs,
+  TabPanel,
+} from '../elements';
 
 import DisplayAndUserMedia from './display-and-user-media';
 import DisplayMedia from './display-media';
@@ -109,6 +116,8 @@ export default function VideoSetup(props) {
           </TabPanel>
         </Fragment>
       )}
+
+      <ActionButtons next={{ onClick: chooseAudioSources, disabled: !hasStreams }} />
     </Container>
   );
 }

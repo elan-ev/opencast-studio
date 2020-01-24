@@ -3,9 +3,11 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Flex, Grid, Heading } from '@theme-ui/components';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Transition } from 'react-transition-group';
+import { useTranslation } from 'react-i18next';
 
 import Notification from '../notification';
 
@@ -78,6 +80,39 @@ export function Header({ button = null, text }) {
     <Flex as="header" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
       <Styled.h1>{text}</Styled.h1>
       {button}
+    </Flex>
+  );
+}
+
+// A div containing optional "back" and "next" buttons as well as the centered
+// children. The props `prev` and `next` are objects with the fields `onClick`
+// and `disabled`, both of which are forwarded to the `<Button>`.
+export function ActionButtons({ prev = null, next = null, children }) {
+  const { t } = useTranslation();
+
+  return (
+    <Flex sx={{ alignItems: 'center' }}>
+      <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>{
+        prev && (
+          <Button onClick={prev.onClick} disabled={prev.disabled}>
+            <FontAwesomeIcon icon={faCaretLeft} />
+            {t('back-button-label')}
+          </Button>
+        )
+      }</Box>
+      <Box>{children}</Box>
+      <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>{
+        next && (
+          <Button
+            sx={{ '& svg': { mr: 0, ml: 2 } }}
+            onClick={next.onClick}
+            disabled={next.disabled}
+          >
+            {t('next-button-label')}
+            <FontAwesomeIcon icon={faCaretRight} />
+          </Button>
+        )
+      }</Box>
     </Flex>
   );
 }
