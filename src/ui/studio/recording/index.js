@@ -25,8 +25,8 @@ export default function Recording(props) {
     props.nextStep();
   };
 
-  const backToSetupVideo = useCallback(() => {
-    props.firstStep();
+  const backToAudio = useCallback(() => {
+    props.previousStep();
   }, [props]);
 
   return (
@@ -39,7 +39,7 @@ export default function Recording(props) {
       <MediaDevices />
 
       <div sx={{ mx: 3 }}>
-        <ActionButtons prev={{ onClick: backToSetupVideo }}>
+        <ActionButtons prev={{ onClick: backToAudio }}>
           <RecordingControls handleRecorded={handleRecorded} />
         </ActionButtons>
       </div>
