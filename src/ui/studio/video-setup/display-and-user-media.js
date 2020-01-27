@@ -29,13 +29,12 @@ export default function SourceDisplayAndUserMedia() {
 
   const handleShare = useCallback(
     event => {
-      startDisplayCapture(dispatch).then(() => {
-        const userConstraints = {
-          video: { height: { ideal: 1080 }, facingMode: 'user' },
-          audio: false
-        };
-        startUserCapture(dispatch, userConstraints);
-      });
+      const userConstraints = {
+        video: { height: { ideal: 1080 }, facingMode: 'user' },
+        audio: false
+      };
+      startUserCapture(dispatch, userConstraints)
+        .then(() => startDisplayCapture(dispatch));
     },
     [dispatch]
   );
