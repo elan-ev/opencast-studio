@@ -106,7 +106,7 @@ export default function RecordingControls({ handleRecorded }) {
   };
 
   return (
-    <div sx={{ m: 0, mt: 2 }}>
+    <div sx={{ m: 0, mt: 2, width: '290px' }}>
       {recordingState !== 'inactive' && (
         <Beforeunload onBeforeunload={event => event.preventDefault()} />
       )}
