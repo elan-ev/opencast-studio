@@ -153,9 +153,9 @@ export function ShareButton({ children, disabled = false, handleClick, icon }) {
 export function SplitPane({ left, right, gap = 40, ...rest }) {
   const columns = Number(!!left) + Number(!!right);
   return (
-    <Grid gap={3} columns={[1, columns]} {...rest}>
-      {left && <Box>{left}</Box>}
-      {right && <Box>{right}</Box>}
+    <Grid gap={3} columns={[1, columns]} {...rest} sx={{ minHeight: 0 }}>
+      {left && <Box sx={{ minHeight: 0 }}>{left}</Box>}
+      {right && <Box sx={{ minHeight: 0 }}>{right}</Box>}
     </Grid>
   );
 }
@@ -185,8 +185,6 @@ export function Tabs(props) {
 
         alignItems: 'stretch',
         justifyContent: 'space-between',
-        overflow: 'hidden',
-        overflowX: 'auto',
         whiteSpace: 'nowrap'
       }}
     >

@@ -25,15 +25,10 @@ function App({ settingsManager }) {
   return (
     <Provider>
       <Router basename={process.env.PUBLIC_URL || '/'}>
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            minHeight: '100%'
-          }}
-        >
+        <Flex sx={{ flexDirection: 'column', height: '100%' }}>
           <OpencastHeader />
 
-          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '400px' }}>
             <Warnings settings={settings} />
 
             <Switch>

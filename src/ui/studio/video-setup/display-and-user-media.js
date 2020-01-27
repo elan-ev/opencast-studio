@@ -5,7 +5,7 @@ import { jsx, Styled } from 'theme-ui';
 import { faChalkboardTeacher, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Card, Flex, Heading, Text } from '@theme-ui/components';
-import { useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useDispatch, useRecordingState } from '../../../recording-context';
@@ -49,7 +49,7 @@ export default function SourceDisplayAndUserMedia() {
   );
 
   return (
-    <Box>
+    <Fragment>
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Styled.h2>{t('source-display-and-user-title')}</Styled.h2>
         {(state.displayStream || state.userStream) && (
@@ -84,7 +84,7 @@ export default function SourceDisplayAndUserMedia() {
           right={<UserStreamCard stream={state.userStream} />}
         />
       )}
-    </Box>
+    </Fragment>
   );
 }
 
@@ -121,7 +121,7 @@ function PreviewStream({ children, stream, text }) {
   const { width, height } = track?.getSettings() ?? {};
 
   return (
-    <Card>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <PreviewVideo stream={stream} />
       <Text p={2} color="muted">
         {text}

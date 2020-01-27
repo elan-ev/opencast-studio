@@ -63,8 +63,20 @@ export default function VideoSetup(props) {
     props.nextStep();
   }, [props]);
 
+  const tabContentStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '0 1 auto',
+    minHeight: 0,
+  };
+
   return (
-    <Container>
+    <Container sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '0 1 auto',
+      minHeight: 0,
+    }}>
       {anySupported && (
         <PromptAndProceed
           prev={null}
@@ -103,15 +115,15 @@ export default function VideoSetup(props) {
         <Notification isDanger>{t('studio-without-streams')}</Notification>
       ) : (
         <Fragment>
-          <TabPanel value={BOTH} index={activeTab}>
+          <TabPanel value={BOTH} index={activeTab} sx={tabContentStyle}>
             <DisplayAndUserMedia />
           </TabPanel>
 
-          <TabPanel value={DISPLAY} index={activeTab}>
+          <TabPanel value={DISPLAY} index={activeTab} sx={tabContentStyle}>
             <DisplayMedia />
           </TabPanel>
 
-          <TabPanel value={USER} index={activeTab}>
+          <TabPanel value={USER} index={activeTab} sx={tabContentStyle}>
             <UserMedia />
           </TabPanel>
         </Fragment>
