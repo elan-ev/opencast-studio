@@ -94,7 +94,11 @@ export function ActionButtons({ prev = null, next = null, children, sx }) {
     <Flex sx={{ alignItems: 'center', mt: 2 }}>
       <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>{
         prev && (
-          <Button onClick={prev.onClick} disabled={prev.disabled}>
+          <Button
+            sx={{ whiteSpace: 'nowrap' }}
+            onClick={prev.onClick}
+            disabled={prev.disabled}
+          >
             <FontAwesomeIcon icon={faCaretLeft} />
             {t('back-button-label')}
           </Button>
@@ -104,7 +108,7 @@ export function ActionButtons({ prev = null, next = null, children, sx }) {
       <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>{
         next && (
           <Button
-            sx={{ '& svg': { mr: 0, ml: 2 } }}
+            sx={{ whiteSpace: 'nowrap', '& svg': { mr: 0, ml: 2 } }}
             onClick={next.onClick}
             disabled={next.disabled}
           >
