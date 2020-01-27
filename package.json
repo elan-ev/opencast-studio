@@ -16,7 +16,7 @@
     "@testing-library/react": "^9.4.0",
     "@theme-ui/color": "^0.2.53",
     "@theme-ui/components": "^0.2.50",
-    "axios": "^0.19.1",
+    "axios": "^0.19.2",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "gh-pages": "^2.2.0",
