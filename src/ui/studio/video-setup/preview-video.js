@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { AspectRatio } from '@theme-ui/components';
 import { useEffect, useRef } from 'react';
 
 export default function PreviewVideo({ stream, ...props }) {
@@ -15,29 +14,18 @@ export default function PreviewVideo({ stream, ...props }) {
   }, [stream]);
 
   return (
-    <AspectRatio
-      ratio={16 / 9}
+    <video
+      ref={videoRef}
+      autoPlay
+      muted
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bg: 'gray.3'
+        minHeight: 0,
+        display: 'block',
+        width: '100%',
+        height: '100%',
+        // TODO: (mel) research this setting
+        // transform: 'rotateY(180deg)'
       }}
-      {...props}
-    >
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        sx={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain',
-          overflow: 'hidden'
-          // TODO: (mel) research this setting
-          // transform: 'rotateY(180deg)'
-        }}
-      />
-    </AspectRatio>
+    />
   );
 }

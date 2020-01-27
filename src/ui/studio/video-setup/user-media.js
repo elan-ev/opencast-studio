@@ -5,7 +5,7 @@ import { jsx, Styled } from 'theme-ui';
 import { faUser, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Card, Flex, Heading, Text } from '@theme-ui/components';
-import { useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useDispatch, useRecordingState } from '../../../recording-context';
@@ -38,7 +38,7 @@ export default function SourceUserMedia() {
   );
 
   return (
-    <Box>
+    <Fragment>
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Styled.h2>{t('source-user-title')}</Styled.h2>
         {state.userStream && (
@@ -70,7 +70,7 @@ export default function SourceUserMedia() {
       ) : (
         <PreviewStream stream={state.userStream} text={t('sources-select-user')}></PreviewStream>
       )}
-    </Box>
+    </Fragment>
   );
 }
 
@@ -79,7 +79,7 @@ function PreviewStream({ children, stream, text }) {
   const { width, height } = track?.getSettings();
 
   return (
-    <Card>
+    <Card sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto', minHeight: 0 }}>
       <PreviewVideo stream={stream} />
       <Text p={2} color="muted">
         {text}
