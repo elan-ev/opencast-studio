@@ -47,9 +47,14 @@ export default function VideoSetup(props) {
   const BOTH = 'both';
   const DISPLAY = 'display';
   const USER = 'user';
-  const [activeTab, setActiveTab] = useState(
-    (bothSupported && BOTH) || (displaySupported && DISPLAY) || (userSupported && USER)
-  );
+
+  const tab = (displayStream && userStream && BOTH)
+    || (displayStream && DISPLAY)
+    || (userStream && USER)
+    || (bothSupported && BOTH)
+    || (displaySupported && DISPLAY)
+    || (userSupported && USER);
+  const [activeTab, setActiveTab] = useState(tab);
 
   const handleTabChange = useCallback(
     (event, value) => {
