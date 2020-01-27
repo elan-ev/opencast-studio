@@ -25,7 +25,7 @@ function mixAudioIntoVideo(audioStream, videoStream) {
   return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
 }
 
-export default function RecordingControls({ handleRecorded }) {
+export default function RecordingControls({ handleRecorded, handleStart }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -47,6 +47,8 @@ export default function RecordingControls({ handleRecorded }) {
   }, [dispatch]);
 
   const record = () => {
+    handleStart();
+
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, 'desktop');
       const stream = mixAudioIntoVideo(audioStream, displayStream);
