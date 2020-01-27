@@ -87,11 +87,11 @@ export function Header({ button = null, text }) {
 // A div containing optional "back" and "next" buttons as well as the centered
 // children. The props `prev` and `next` are objects with the fields `onClick`
 // and `disabled`, both of which are forwarded to the `<Button>`.
-export function ActionButtons({ prev = null, next = null, children }) {
+export function ActionButtons({ prev = null, next = null, children, sx }) {
   const { t } = useTranslation();
 
   return (
-    <Flex sx={{ alignItems: 'center' }}>
+    <Flex sx={{ alignItems: 'center', mt: 2 }}>
       <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>{
         prev && (
           <Button onClick={prev.onClick} disabled={prev.disabled}>

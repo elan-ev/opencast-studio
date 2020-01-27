@@ -5,7 +5,7 @@ import { jsx, Styled } from 'theme-ui';
 import { faMicrophone, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Button, Card, Flex, Heading, Text } from '@theme-ui/components';
-import { useCallback } from 'react';
+import { Fragment, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useDispatch, useRecordingState } from '../../../recording-context';
@@ -36,7 +36,7 @@ export default function SourceAudioMedia() {
   );
 
   return (
-    <Box>
+    <Fragment>
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Styled.h2>{t('source-audio-title')}</Styled.h2>
         {audioStream && (
@@ -69,13 +69,21 @@ export default function SourceAudioMedia() {
       ) : (
         <PreviewStream stream={audioStream} text={t('sources-select-audio')}></PreviewStream>
       )}
-    </Box>
+    </Fragment>
   );
 }
 
 function PreviewStream({ children, stream, text }) {
   return (
-      <Card sx={{maxWidth: [400, 600]}}>
+    <Card sx={{
+      maxWidth: [400, 600],
+      mx: 'auto',
+      display: 'flex',
+      flexDirection: 'column' ,
+      width: '100%',
+      maxHeight: '350px',
+      flex: '1 0 auto',
+    }}>
       <PreviewAudio stream={stream} />
       <Text p={2} color="muted">
         {text}

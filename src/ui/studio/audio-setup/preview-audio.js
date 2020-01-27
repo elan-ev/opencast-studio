@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx, useThemeUI } from 'theme-ui';
 
-import { AspectRatio } from '@theme-ui/components';
 import Oscilloscope from 'oscilloscope';
 import { useEffect, useRef } from 'react';
 
@@ -28,17 +27,15 @@ export default function PreviewAudio({ stream, ...props }) {
   }, [theme.colors, stream]);
 
   return (
-    <AspectRatio
-      ratio={16 / 9}
+    <canvas
+      ref={canvasRef}
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bg: 'gray.3'
-      }}
-      {...props}
-    >
-      <canvas ref={canvasRef} sx={{ width: '100%', height: '80%' }} />
-    </AspectRatio>
+        width: '100%',
+        height: '100%',
+        bg: 'gray.3',
+        minHeight: 0,
+        flex: '1 0 0',
+       }}
+    />
   );
 }
