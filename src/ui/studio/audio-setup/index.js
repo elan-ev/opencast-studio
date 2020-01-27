@@ -40,7 +40,11 @@ export default function AudioSetup(props) {
   );
 
   return (
-    <Container>
+    <Container sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+    }}>
       <PromptAndProceed
         prev={<BackButton handlePrev={backToSetupVideo} />}
         next={
