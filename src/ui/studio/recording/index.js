@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useRecordingState } from '../../../recording-context';
 
@@ -21,6 +21,12 @@ export default function Recording(props) {
     }
   }, [props, state.displayStream, state.userStream]);
 
+
+
+  const [isRecording, setIsRecording] = useState(false);
+  const handleStart = () => {
+    setIsRecording(true);
+  };
   const handleRecorded = () => {
     props.nextStep();
   };
@@ -39,8 +45,8 @@ export default function Recording(props) {
       <MediaDevices />
 
       <div sx={{ mx: 3 }}>
-        <ActionButtons prev={{ onClick: backToAudio }}>
-          <RecordingControls handleRecorded={handleRecorded} />
+        <ActionButtons prev={!isRecording && { onClick: backToAudio }}>
+          <RecordingControls handleRecorded={handleRecorded} handleStart={handleStart} />
         </ActionButtons>
       </div>
     </Flex>
