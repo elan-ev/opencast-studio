@@ -7,8 +7,6 @@ import { Container } from '@theme-ui/components';
 import { Fragment, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import 'react-toggle/style.css';
-
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import Notification from '../../notification';
