@@ -3,7 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
-import { Container } from '@theme-ui/components';
+import { Box } from '@theme-ui/components';
 
 import LanguageSettings from './language';
 import OpencastSettings from './opencast';
@@ -13,7 +13,7 @@ const SettingsPage = ({ settingsManager }) => {
   const { t } = useTranslation();
 
   return (
-    <Container sx={{ p: 3 }}>
+    <Box sx={{ width: '100%', maxWidth: 960, mx: 'auto', p: 3 }}>
       <header>
         <Styled.h1>{t('settings-header')}</Styled.h1>
       </header>
@@ -21,7 +21,7 @@ const SettingsPage = ({ settingsManager }) => {
       <LanguageSettings />
 
       <OpencastSettings settingsManager={settingsManager} />
-    </Container>
+    </Box>
   );
 };
 

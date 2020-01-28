@@ -67,7 +67,7 @@ function OpencastSettings({ settingsManager }) {
 
   return (
     <SettingsSection title={t('upload-settings-modal-header')}>
-      <Box sx={{ maxWidth: 960, mx: 'auto' }}>
+      <Box>
         {error && <Notification isDanger>{error}</Notification>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
