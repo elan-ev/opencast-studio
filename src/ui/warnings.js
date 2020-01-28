@@ -4,7 +4,6 @@ import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 
 import Notification from './notification';
-import OpencastAPI from '../opencast-api';
 import {
   onSafari,
   isRecordingSupported,
@@ -33,15 +32,6 @@ const Warnings = ({ settings }) => {
       <Notification key="media-recorder" isDanger>
         {t('warning-recorder-not-supported')}
         {onSafari() && ' ' + t('warning-recorder-safari-hint')}
-      </Notification>
-    );
-  }
-
-  // Warn if the user has not yet configured the Opencast connection
-  if (!OpencastAPI.areSettingsComplete(settings.opencast)) {
-    warnings.push(
-      <Notification key="opencast-connection" isDanger>
-        {t('warning-missing-connection-settings')}
       </Notification>
     );
   }

@@ -9,7 +9,8 @@ import LanguageSettings from './language';
 import OpencastSettings from './opencast';
 
 
-const SettingsPage = ({ settingsManager }) => {
+const SettingsPage = ({ settingsManager, hasRecording }) => {
+  console.log(hasRecording);
   const { t } = useTranslation();
 
   return (
@@ -20,7 +21,7 @@ const SettingsPage = ({ settingsManager }) => {
 
       <LanguageSettings />
 
-      <OpencastSettings settingsManager={settingsManager} />
+      <OpencastSettings settingsManager={settingsManager} hasRecording={hasRecording} />
     </Box>
   );
 };

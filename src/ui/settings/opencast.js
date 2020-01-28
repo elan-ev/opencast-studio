@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import useForm from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { Box, Button } from '@theme-ui/components';
 
 import { useState } from 'react';
@@ -16,7 +17,7 @@ import { Input, SettingsSection} from './elements';
 
 
 
-function OpencastSettings({ settingsManager }) {
+function OpencastSettings({ settingsManager, hasRecording }) {
   const { t } = useTranslation();
   const [error, setError] = useState();
   const { errors, handleSubmit, register } = useForm({
@@ -113,6 +114,9 @@ function OpencastSettings({ settingsManager }) {
               sx={{ ml: '10px', fontSize: '30px', verticalAlign: 'middle' }}
               spin={status === 'testing'}
             /> }
+            { hasRecording && status === 'saved' && (
+              <Link to="/" sx={{ ml: 3 }}>{t('settings-back-to-recording')}</Link>
+            )}
           </footer>
         </form>
       </Box>
