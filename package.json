@@ -27,7 +27,6 @@
     "oscilloscope": "^1.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
-    "react-async": "^10.0.0-alpha.0",
     "react-beforeunload": "^2.1.0",
     "react-dom": "^16.12.0",
     "react-hook-form": "^3.29.4",
