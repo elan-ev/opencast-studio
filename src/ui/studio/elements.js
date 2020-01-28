@@ -1,88 +1,12 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import { Box, Button, Flex, Grid, Heading } from '@theme-ui/components';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Transition } from 'react-transition-group';
+import { Box, Button, Flex, Grid } from '@theme-ui/components';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-
-import Notification from '../notification';
-
-export function Fade({ children, duration = 300, ...rest }) {
-  const transitionStyles = {
-    entering: { opacity: 1 },
-    entered: { opacity: 1 },
-    exiting: { opacity: 0.5 },
-    exited: { opacity: 0.5 }
-  };
-  return (
-    <Transition timeout={duration} {...rest}>
-      {state => (
-        <Box
-          sx={{
-            transition: `opacity ${duration}ms ease-in-out`,
-            ...transitionStyles[state]
-          }}
-        >
-          {children}
-        </Box>
-      )}
-    </Transition>
-  );
-}
-
-export function FadeInLeft({ children, duration = 200, ...rest }) {
-  const transitionStyles = {
-    entering: { opacity: 1, transform: 'translate3d(-150%, 0, 0)' },
-    entered: { opacity: 1, transform: 'translate3d(0, 0, 0)' },
-
-    exiting: { opacity: 0.01, transform: 'translate3d(-150%, 0, 0)' },
-    exited: { opacity: 0.01, transform: 'translate3d(0, 0, 0)' }
-  };
-  return (
-    <Transition timeout={duration} {...rest}>
-      {state => (
-        <Box
-          sx={{
-            transition: `all ${duration}ms ease-in-out`,
-            ...transitionStyles[state]
-          }}
-        >
-          {children}
-        </Box>
-      )}
-    </Transition>
-  );
-}
-
-export function FadingNotification({ duration = 1000, text, ...rest }) {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, duration);
-    return () => clearTimeout(timer);
-  }, [duration]);
-
-  return (
-    <Fade in={visible} duration={duration} unmountOnExit>
-      <Notification sx={{ my: 2 }}>{text}</Notification>
-    </Fade>
-  );
-}
-
-export function Header({ button = null, text }) {
-  return (
-    <Flex as="header" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-      <Styled.h1>{text}</Styled.h1>
-      {button}
-    </Flex>
-  );
-}
 
 // A div containing optional "back" and "next" buttons as well as the centered
 // children. The props `prev` and `next` are objects with the fields `onClick`
@@ -92,21 +16,17 @@ export function ActionButtons({ prev = null, next = null, children, sx }) {
 
   return (
     <Flex sx={{ alignItems: 'center', mt: 2 }}>
-      <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>{
-        prev && (
-          <Button
-            sx={{ whiteSpace: 'nowrap' }}
-            onClick={prev.onClick}
-            disabled={prev.disabled}
-          >
+      <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
+        {prev && (
+          <Button sx={{ whiteSpace: 'nowrap' }} onClick={prev.onClick} disabled={prev.disabled}>
             <FontAwesomeIcon icon={faCaretLeft} />
             {t('back-button-label')}
           </Button>
-        )
-      }</Box>
+        )}
+      </Box>
       <Box>{children}</Box>
-      <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>{
-        next && (
+      <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>
+        {next && (
           <Button
             sx={{ whiteSpace: 'nowrap', '& svg': { mr: 0, ml: 2 } }}
             onClick={next.onClick}
@@ -115,33 +35,9 @@ export function ActionButtons({ prev = null, next = null, children, sx }) {
             {t('next-button-label')}
             <FontAwesomeIcon icon={faCaretRight} />
           </Button>
-        )
-      }</Box>
-    </Flex>
-  );
-}
-
-export function PromptAndProceed({ children, prev, next }) {
-  return (
-    <Box>
-      <Flex
-        sx={{
-          height: 50,
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <Box sx={{ minWidth: '100px' }}>{prev}</Box>
-        {children ? (
-          <Heading as="h3" sx={{ display: ['none', 'none', 'block'] }}>
-            {children}
-          </Heading>
-        ) : (
-          <Box />
         )}
-        <Box sx={{ minWidth: '100px' }}>{next}</Box>
-      </Flex>
-    </Box>
+      </Box>
+    </Flex>
   );
 }
 

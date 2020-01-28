@@ -1,29 +1,21 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretLeft, faDownload, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner } from '@theme-ui/components';
 import { useReducer } from 'react';
 import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
 
-import downloadBlob from '../../../download-blob';
 import OpencastAPI from '../../../opencast-api';
 import { useRecordingState } from '../../../recording-context';
 
 import Notification from '../../notification';
 
-import { PromptAndProceed } from '../elements';
-
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
-
-const getDownloadName = (deviceType, type, title) => {
-  const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
-  return `${flavor} ${type} - ${title || 'Recording'}.webm`;
-};
 
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
@@ -66,13 +58,6 @@ export default function SaveCreation(props) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     dispatch({ type: 'RECORDING_DATA_UPDATE', payload: [target.name, value] });
-  }
-
-  function handleSave() {
-    recordings.forEach(recording => {
-      const { deviceType, media } = recording;
-      downloadBlob(media, getDownloadName(deviceType, 'video', state.recordingData.title));
-    });
   }
 
   function handleUpload() {
@@ -121,23 +106,11 @@ export default function SaveCreation(props) {
   const uploadPossible = OpencastAPI.areSettingsComplete(props.settings.opencast);
 
   return (
-    <Container>
+    <Container sx={{ pt: 3 }}>
       {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
 
-      <PromptAndProceed
-        prev={
-          <Button onClick={handleCancel}>
-            <FontAwesomeIcon icon={faCaretLeft} />
-            {t('back-button-label')}
-          </Button>
-        }
-        sx={{ py: 3 }}
-      >
-        {t('save-creation-prompt')}
-      </PromptAndProceed>
-
       <header>
-        <h2 sx={{ fontWeight: 'heading' }}>{t('save-creation-modal-title')}</h2>
+        <Styled.h2>{t('save-creation-modal-title')}</Styled.h2>
       </header>
 
       <Box>
@@ -165,7 +138,7 @@ export default function SaveCreation(props) {
       </Box>
 
       <header>
-        <h2 sx={{ fontWeight: 'heading' }}>{t('save-creation-label-media')}</h2>
+        <Styled.h2>{t('save-creation-label-media')}</Styled.h2>
       </header>
 
       <div sx={{ flex: 1 }}>
@@ -208,12 +181,7 @@ export default function SaveCreation(props) {
       >
         <Button
           onClick={handleUpload}
-          disabled={
-            recordings.length === 0 ||
-              state.uploading ||
-              state.uploaded ||
-              !uploadPossible
-          }
+          disabled={recordings.length === 0 || state.uploading || state.uploaded || !uploadPossible}
         >
           <FontAwesomeIcon icon={faUpload} />
           <span>
@@ -225,14 +193,9 @@ export default function SaveCreation(props) {
           </span>
         </Button>
 
-        <Button onClick={handleSave} disabled={!recordings.length}>
-          <FontAwesomeIcon icon={faDownload} />
-          <span>{t('save-creation-button-save')}</span>
-        </Button>
-
         <Button onClick={handleCancel} variant="text">
           <FontAwesomeIcon icon={faTrash} />
-          <span>{t('save-creation-button-discard')}</span>
+          <span>{t('save-creation-button-discard-and-record')}</span>
         </Button>
       </footer>
     </Container>
