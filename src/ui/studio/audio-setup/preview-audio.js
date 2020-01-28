@@ -16,7 +16,7 @@ export default function PreviewAudio({ stream, ...props }) {
       ctx.lineWidth = 1;
       ctx.strokeStyle = theme.colors.primary;
 
-      const audioContext = new AudioContext();
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContext.createMediaStreamSource(stream);
       const scope = new Oscilloscope(source, { fftSize: 1024 });
       scope.animate(ctx);
