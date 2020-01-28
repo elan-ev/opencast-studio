@@ -1,10 +1,9 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import { Box } from '@theme-ui/components';
-
 
 // A styled `<input>`` element.
 export const Input = ({ errors, label, name, register, required, type = 'text', ...rest }) => {
@@ -67,16 +66,23 @@ export const Input = ({ errors, label, name, register, required, type = 'text', 
 };
 
 export const SettingsSection = ({ title, children }) => (
-  <Box sx={{
-    '&:not(:last-child)': {
-      mb: '45px'
-    }
-  }}>
-    <h2 sx={{
-      borderBottom: theme => `1px solid ${theme.colors.gray[2]}`,
-      pb: '2px',
-      margin: '15px 0',
-    }}>{ title }</h2>
-    { children }
+  <Box
+    sx={{
+      '&:not(:last-child)': {
+        mb: 5
+      }
+    }}
+  >
+    <Styled.h2
+      sx={{
+        borderBottom: theme => `1px solid ${theme.colors.gray[2]}`,
+        pb: 1,
+        my: 3,
+        mx: 0
+      }}
+    >
+      {title}
+    </Styled.h2>
+    {children}
   </Box>
 );

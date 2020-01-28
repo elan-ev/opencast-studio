@@ -1,9 +1,9 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
-import { Box } from '@theme-ui/components';
+import { Container } from '@theme-ui/components';
 
 import LanguageSettings from './language';
 import OpencastSettings from './opencast';
@@ -13,15 +13,15 @@ const SettingsPage = ({ settingsManager }) => {
   const { t } = useTranslation();
 
   return (
-    <Box sx={{ width: 700, maxWidth: '100%', mx: 'auto', px: 3, pb: 3 }}>
+    <Container sx={{ p: 3 }}>
       <header>
-        <h1>{t('settings-header')}</h1>
+        <Styled.h1>{t('settings-header')}</Styled.h1>
       </header>
 
       <LanguageSettings />
 
       <OpencastSettings settingsManager={settingsManager} />
-    </Box>
+    </Container>
   );
 };
 
