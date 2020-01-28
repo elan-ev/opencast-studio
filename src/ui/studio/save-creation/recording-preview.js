@@ -2,6 +2,10 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
+import { Box } from '@theme-ui/components';
+
 const RecordingPreview = ({ deviceType, title, type, url }) => {
   const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
   const downloadName = `${flavor} ${type} - ${title || 'Recording'}.webm`;
@@ -14,7 +18,8 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
     textAlign: 'center',
     padding: '0.5rem',
     margin: '0 0.5rem 0.5rem 0',
-    color: 'transparent'
+    color: 'transparent',
+    bg: 'background'
   };
 
   if (!url) {
@@ -25,19 +30,23 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
     );
   }
 
-   // Without this, some browsers show a black video element instead of the first frame.
-  let hasBeenReset = false;
-  const onCanPlayHandler = e => {
-    if (!hasBeenReset) {
-      e.target.currentTime = 0;
-      hasBeenReset = true;
-    }
-  };
-
   return (
-    <a sx={style} target="_blank" download={downloadName} href={url} rel="noopener noreferrer">
-      {deviceType}
+    <a
+      sx={{
+        ...style,
+        ':hover': {
+          video: { opacity: 0.2 },
+          svg: { color: 'text' }
+        }
+      }}
+      target="_blank"
+      download={downloadName}
+      href={url}
+      rel="noopener noreferrer"
+    >
       <video
+        autoPlay
+        muted
         sx={{
           position: 'absolute',
           maxWidth: '100%',
@@ -47,8 +56,18 @@ const RecordingPreview = ({ deviceType, title, type, url }) => {
           transform: 'translate(-50%, -50%)'
         }}
         src={url}
-        onCanPlay={onCanPlayHandler}
       ></video>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 1,
+          right: 1,
+          fontSize: 4,
+          color: 'white'
+        }}
+      >
+        <FontAwesomeIcon icon={faFileDownload} />
+      </Box>
     </a>
   );
 };
