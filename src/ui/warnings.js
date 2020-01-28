@@ -23,14 +23,14 @@ const Warnings = ({ settings }) => {
     window.location.hostname !== "127.0.0.1";
   if (usingUnsecureConnection) {
     warnings.push(
-      <Notification isDanger>{t('warning-https')}</Notification>
+        <Notification key="unsecure-connection" isDanger>{t('warning-https')}</Notification>
     );
   }
 
   // Warning about missing `MediaRecorder` support
   if (!isRecordingSupported()) {
     warnings.push(
-      <Notification isDanger>
+      <Notification key="media-recorder" isDanger>
         {t('warning-recorder-not-supported')}
         {onSafari() && ' ' + t('warning-recorder-safari-hint')}
       </Notification>
@@ -40,7 +40,7 @@ const Warnings = ({ settings }) => {
   // Warn if the user has not yet configured the Opencast connection
   if (!OpencastAPI.areSettingsComplete(settings.opencast)) {
     warnings.push(
-      <Notification isDanger>
+      <Notification key="opencast-connection" isDanger>
         {t('warning-missing-connection-settings')}
       </Notification>
     );
