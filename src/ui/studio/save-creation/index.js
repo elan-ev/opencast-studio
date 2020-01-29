@@ -107,7 +107,7 @@ export default function SaveCreation(props) {
   const uploadPossible = OpencastAPI.areSettingsComplete(props.settings.opencast);
 
   return (
-    <Container sx={{ pt: 3 }}>
+    <Container>
       {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
 
       <header>

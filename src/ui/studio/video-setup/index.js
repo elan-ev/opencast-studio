@@ -68,7 +68,6 @@ export default function VideoSetup(props) {
         flexDirection: 'column',
         flex: '0 1 auto',
         minHeight: 0,
-        pt: 3
       }}
     >
       {bothSupported && (

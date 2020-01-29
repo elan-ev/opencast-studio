@@ -61,7 +61,6 @@ export default function AudioSetup(props) {
         display: 'flex',
         flexDirection: 'column',
         flex: '1 0 auto',
-        pt: 3,
       }}
     >
       <Styled.h1 sx={{ textAlign: 'center' }}>{t('sources-audio-question')}</Styled.h1>

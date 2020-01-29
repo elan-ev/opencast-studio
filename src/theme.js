@@ -204,8 +204,7 @@ const base = {
   },
   container: {
     mx: 'auto',
-    px: 3,
-    pb: 3,
+    p: 3,
     maxWidth: ['none', 'none', 960, 1152, 1344]
   }
 };
