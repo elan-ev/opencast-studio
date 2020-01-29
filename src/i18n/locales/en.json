@@ -44,6 +44,9 @@
   "sources-audio-selection-link": "Select audio",
   "sources-audio-selection-prompt": "Please share your audio source (or proceed without any audio)",
   "sources-audio-selection-done": "Audio is now shared. Enter the studio!",
+  "sources-audio-question": "Record Audio?",
+  "sources-audio-microphone": "Microphone",
+  "sources-audio-without-audio": "Without audio",
 
   "sources-scenario-display-and-user": "Display and camera",
   "sources-scenario-display": "Display",
@@ -61,8 +64,8 @@
   "source-user-not-allowed-title": "The browser does not allow to share your camera.",
   "source-user-not-allowed-text": "To record your camera, click the camera sharing icon at the left of the address bar. There click the \"×\" next to the camera permissions, then reload.",
 
-  "source-audio-not-allowed-title": "The browser does not allow to share your microphone.",
-  "source-audio-not-allowed-text": "To record your microphone, click the microphone sharing icon at the left of the address bar. There click the \"×\" next to the mic permissions, then reload.",
+  "source-audio-not-allowed-title": "Cannot access your microphone.",
+  "source-audio-not-allowed-text": "Either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
   "sources-select-display": "Display",
   "sources-select-user": "Camera",
