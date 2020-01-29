@@ -183,7 +183,7 @@ export default function SaveCreation(props) {
         {!uploadPossible && (
           <Notification key="opencast-connection" isDanger>
             <Trans i18nKey="warning-missing-connection-settings">
-              Warning. <Link to="/settings">setting</Link>
+              Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>setting</Link>
             </Trans>
           </Notification>
         )}

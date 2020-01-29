@@ -14,16 +14,20 @@ import { useState } from 'react';
 import OpencastAPI from '../../opencast-api';
 import Notification from '../notification';
 import { Input, SettingsSection} from './elements';
+import { useRecordingState } from '../../recording-context';
 
 
 
-function OpencastSettings({ settingsManager, hasRecording }) {
+function OpencastSettings({ settingsManager }) {
   const { t } = useTranslation();
   const [error, setError] = useState();
   const { errors, handleSubmit, register } = useForm({
     defaultValues: settingsManager.formValues().opencast
   });
   const [status, setStatus] = useState('initial');
+
+  const { recordings } = useRecordingState();
+  const hasRecording = recordings.length > 0;
 
   async function onSubmit(data) {
     try {
@@ -115,7 +119,9 @@ function OpencastSettings({ settingsManager, hasRecording }) {
               spin={status === 'testing'}
             /> }
             { hasRecording && status === 'saved' && (
-              <Link to="/" sx={{ ml: 3 }}>{t('settings-back-to-recording')}</Link>
+              <Link to="/" sx={{ ml: 3, variant: 'styles.a' }}>
+                {t('settings-back-to-recording')}
+              </Link>
             )}
           </footer>
         </form>

@@ -33,7 +33,7 @@ function App({ settingsManager }) {
 
             <Switch>
               <Route path="/settings" exact>
-                <SettingsPage settingsManager={settingsManager} hasRecording={activeStep === 3}/>
+                <SettingsPage settingsManager={settingsManager} />
               </Route>
 
               <Route path="/about" exact>
