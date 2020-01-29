@@ -33,7 +33,7 @@
     "react-i18next": "^11.3.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
-    "theme-ui": "^0.2.52"
+    "theme-ui": "^0.3.1"
   },
   "repository": {
     "type": "git",
