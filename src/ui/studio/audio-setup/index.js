@@ -73,7 +73,7 @@ export default function AudioSetup(props) {
           mb: 3,
           flex: '1 0 auto',
           maxHeight: ['none', '350px'],
-          '& > :first-child': {
+          '& > :first-of-type': {
             mb: [3, 0],
             mr: [0, 3],
           },
@@ -126,7 +126,6 @@ const OptionButton = ({ children, icon, label, selected, onClick }) => {
         border: '2px solid black',
         borderRadius: '8px',
         flex: '0 1 50%',
-        // height: ['240px', '300px'],
         p: 2,
         ...selectedStyle
       }}
