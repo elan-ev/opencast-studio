@@ -32,9 +32,9 @@ const base = {
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
-    body: 400,
-    heading: 300,
-    bold: 700
+    body: 300,
+    heading: 600,
+    bold: 700,
   },
   lineHeights: {
     body: 1.5,
@@ -52,6 +52,16 @@ const base = {
     error: '#f14668',
     gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
     videoOverlay: 'rgba(255, 255, 255, 0.2)'
+  },
+  text: {
+    text: {
+      fontWeight: 'body',
+      fontSize: '18px',
+    },
+    heading: {
+      fontWeight: 'heading',
+      fontSize: '18px',
+    },
   },
   buttons: {
     primary: {
@@ -99,7 +109,8 @@ const base = {
     },
     h1: {
       ...heading,
-      fontSize: 5
+      mt: 0,
+      fontSize: 5,
     },
     h2: {
       ...heading,

@@ -87,6 +87,7 @@ const Navigation = props => {
           px: 3,
           mx: 1,
           fontSize: '20px',
+          whiteSpace: 'nowrap',
           backgroundColor: 'transparent',
           '&:hover': {
             backgroundColor: 'gray.1',
