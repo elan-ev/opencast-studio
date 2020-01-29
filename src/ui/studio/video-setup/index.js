@@ -3,9 +3,11 @@
 import { jsx } from 'theme-ui';
 
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
-import { Container } from '@theme-ui/components';
+import { Container, Flex } from '@theme-ui/components';
+import { Styled } from 'theme-ui';
 import { Fragment, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
@@ -61,46 +63,115 @@ export default function VideoSetup(props) {
     minHeight: 0
   };
 
+
   return (
     <Container
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        flex: '0 1 auto',
+        flex: '1 1 auto',
         minHeight: 0,
       }}
     >
-      {bothSupported && (
-        <Tabs onChange={handleTabChange} value={activeTab}>
-          <Tab
-            icon={faChalkboardTeacher}
+      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
+        {t('sources-video-question')}
+      </Styled.h1>
+
+      { !anySupported && (
+        <Notification isDanger>{t('sources-video-none-available')}</Notification>
+      )}
+
+      { anySupported && (
+        <Flex
+          sx={{
+            flexDirection: ['column', 'row'],
+            maxWidth: [270, 850],
+            width: '100%',
+            mx: ['auto', 'none'],
+            mb: 3,
+            flex: ['0 1 auto', '1 1 auto'],
+            maxHeight: ['none', '270px'],
+            minHeight: [0, ''],
+            justifyContent: ['flex-start', 'center'],
+            '& > :not(:last-of-type)': {
+              mb: [3, 0],
+              mr: [0, 3],
+            },
+          }}
+        >
+          { displaySupported && <OptionButton
+            label={t('sources-scenario-display')}
+            icon={faChalkboard}
+          />}
+          { bothSupported && <OptionButton
             label={t('sources-scenario-display-and-user')}
-            value={BOTH}
-          />
-          <Tab icon={faChalkboard} label={t('sources-scenario-display')} value={DISPLAY} />
-          <Tab icon={faUser} label={t('sources-scenario-user')} value={USER} />
-        </Tabs>
+            icon={faChalkboardTeacher}
+          />}
+          { userSupported && <OptionButton
+            label={t('sources-scenario-user')}
+            icon={faUser}
+          />}
+        </Flex>
       )}
 
-      {!anySupported ? (
-        <Notification isDanger>{t('studio-without-streams')}</Notification>
-      ) : (
-        <Fragment>
-          <TabPanel value={BOTH} index={activeTab} sx={tabContentStyle}>
-            <DisplayAndUserMedia />
-          </TabPanel>
-
-          <TabPanel value={DISPLAY} index={activeTab} sx={tabContentStyle}>
-            <DisplayMedia />
-          </TabPanel>
-
-          <TabPanel value={USER} index={activeTab} sx={tabContentStyle}>
-            <UserMedia />
-          </TabPanel>
-        </Fragment>
-      )}
 
       <ActionButtons next={{ onClick: chooseAudioSources, disabled: !hasStreams }} />
     </Container>
   );
 }
+
+const OptionButton = ({ icon, label, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      sx={{
+        fontFamily: 'inherit',
+        color: 'gray.0',
+        border: '2px solid black',
+        borderRadius: '8px',
+        flex: ['0 1 180px', '0 1 100%'],
+        minWidth: '180px',
+        maxWidth: '300px',
+        minHeight: ['120px', '150px'],
+        p: 2,
+      }}
+    >
+      <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
+        <FontAwesomeIcon icon={icon} size="3x"/>
+      </div>
+      <div sx={{ fontSize: 4 }}>{label}</div>
+    </button>
+  );
+};
+
+
+
+      // {bothSupported && (
+      //   <Tabs onChange={handleTabChange} value={activeTab}>
+      //     <Tab
+      //       icon={faChalkboardTeacher}
+      //       label={t('sources-scenario-display-and-user')}
+      //       value={BOTH}
+      //     />
+      //     <Tab icon={faChalkboard} label={t('sources-scenario-display')} value={DISPLAY} />
+      //     <Tab icon={faUser} label={t('sources-scenario-user')} value={USER} />
+      //   </Tabs>
+      // )}
+
+      // {!anySupported ? (
+      //   <Notification isDanger>{t('studio-without-streams')}</Notification>
+      // ) : (
+      //   <Fragment>
+      //     <TabPanel value={BOTH} index={activeTab} sx={tabContentStyle}>
+      //       <DisplayAndUserMedia />
+      //     </TabPanel>
+
+      //     <TabPanel value={DISPLAY} index={activeTab} sx={tabContentStyle}>
+      //       <DisplayMedia />
+      //     </TabPanel>
+
+      //     <TabPanel value={USER} index={activeTab} sx={tabContentStyle}>
+      //       <UserMedia />
+      //     </TabPanel>
+      //   </Fragment>
+      // )}
