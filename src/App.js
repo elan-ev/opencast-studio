@@ -28,7 +28,7 @@ function App({ settingsManager }) {
         <Flex sx={{ flexDirection: 'column', height: '100%' }}>
           <OpencastHeader />
 
-          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '400px' }}>
+          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
             <Warnings settings={settings} />
 
             <Switch>

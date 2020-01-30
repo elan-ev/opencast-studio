@@ -13,8 +13,8 @@ export default function PreviewAudio({ stream, ...props }) {
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = theme.colors.primary;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#f1c40f';
 
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContext.createMediaStreamSource(stream);
@@ -30,11 +30,12 @@ export default function PreviewAudio({ stream, ...props }) {
     <canvas
       ref={canvasRef}
       sx={{
-        width: '100%',
-        height: '100%',
-        bg: 'gray.3',
-        minHeight: 0,
-        flex: '1 0 0',
+        width: '80%',
+        height: '100px',
+        bg: 'rgba(0,0,0,0.8)',
+        m: 3,
+        mb: 0,
+        borderRadius: '7px',
        }}
     />
   );

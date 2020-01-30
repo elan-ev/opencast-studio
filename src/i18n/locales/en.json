@@ -40,29 +40,35 @@
 
   "sources-video-selection-prompt": "Please share your display and/or camera",
   "sources-video-selection-done": "Display and/or camera is now shared. Select your audio source!",
+  "sources-video-question": "What video source(s) to record?",
+  "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
+  "sources-video-reselect-source": "Reselect source",
 
   "sources-audio-selection-link": "Select audio",
   "sources-audio-selection-prompt": "Please share your audio source (or proceed without any audio)",
   "sources-audio-selection-done": "Audio is now shared. Enter the studio!",
+  "sources-audio-question": "Record Audio?",
+  "sources-audio-microphone": "Microphone",
+  "sources-audio-without-audio": "Without audio",
 
-  "sources-scenario-display-and-user": "Display and camera",
+  "sources-scenario-display-and-user": "Display & camera",
   "sources-scenario-display": "Display",
   "sources-scenario-user": "Camera",
 
-  "source-display-and-user-title": "Sharing Display and Camera",
-  "source-display-title": "Sharing Display",
-  "source-user-title": "Sharing Camera",
+  "source-display-and-user-title": "Display & Camera",
+  "source-display-title": "Display",
+  "source-user-title": "Camera",
   "source-audio-title": "Sharing Microphone",
   "source-share-prompt": "Start sharing",
 
-  "source-display-not-allowed-title": "The browser does not allow to share your desktop.",
-  "source-display-not-allowed-text": "To record your desktop, click the desktop sharing icon at the left of the address bar. There click the \"×\" next to the desktop sharing permission, then reload.",
+  "source-display-not-allowed-title": "Cannot access your display",
+  "source-display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
 
-  "source-user-not-allowed-title": "The browser does not allow to share your camera.",
-  "source-user-not-allowed-text": "To record your camera, click the camera sharing icon at the left of the address bar. There click the \"×\" next to the camera permissions, then reload.",
+  "source-user-not-allowed-title": "Cannot access your camera",
+  "source-user-not-allowed-text": "Either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
 
-  "source-audio-not-allowed-title": "The browser does not allow to share your microphone.",
-  "source-audio-not-allowed-text": "To record your microphone, click the microphone sharing icon at the left of the address bar. There click the \"×\" next to the mic permissions, then reload.",
+  "source-audio-not-allowed-title": "Cannot access your microphone.",
+  "source-audio-not-allowed-text": "Either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
   "sources-select-display": "Display",
   "sources-select-user": "Camera",
