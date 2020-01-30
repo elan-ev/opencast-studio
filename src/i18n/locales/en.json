@@ -42,6 +42,7 @@
   "sources-video-selection-done": "Display and/or camera is now shared. Select your audio source!",
   "sources-video-question": "What video source(s) to record?",
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
+  "sources-video-reselect-source": "Reselect source",
 
   "sources-audio-selection-link": "Select audio",
   "sources-audio-selection-prompt": "Please share your audio source (or proceed without any audio)",
@@ -54,9 +55,9 @@
   "sources-scenario-display": "Display",
   "sources-scenario-user": "Camera",
 
-  "source-display-and-user-title": "Sharing Display and Camera",
-  "source-display-title": "Sharing Display",
-  "source-user-title": "Sharing Camera",
+  "source-display-and-user-title": "Display & Camera",
+  "source-display-title": "Display",
+  "source-user-title": "Camera",
   "source-audio-title": "Sharing Microphone",
   "source-share-prompt": "Start sharing",
 
