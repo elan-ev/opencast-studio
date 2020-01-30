@@ -74,5 +74,5 @@
   "warning-recorder-not-supported": "Uw browser ondersteunt het opnemen van media streams niet.",
   "warning-recorder-safari-hint": "Voor Safari op iOS kunt u de experimentele functie 'MediaRecorder' inschakelen in instellingen.",
   "warning-missing-connection-settings": "",
-  "settings-back": ""
+  "settings-back-to-recording": ""
 }
