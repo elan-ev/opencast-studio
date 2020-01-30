@@ -32,7 +32,7 @@ export function SourcePreview({ reselectSource, title, warnings, streams }) {
   return (
     <Fragment>
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-        <Styled.h2>{ title }</Styled.h2>
+        <Styled.h2 sx={{ mt: 0 }}>{ title }</Styled.h2>
         <Box>
           <UnshareButton handleClick={reselectSource} />
         </Box>

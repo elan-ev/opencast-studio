@@ -111,6 +111,7 @@ const base = {
     h1: {
       ...heading,
       mt: 0,
+      mb: 3,
       fontSize: 5,
     },
     h2: {

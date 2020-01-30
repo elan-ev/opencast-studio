@@ -61,11 +61,11 @@
   "source-audio-title": "Sharing Microphone",
   "source-share-prompt": "Start sharing",
 
-  "source-display-not-allowed-title": "The browser does not allow to share your desktop.",
-  "source-display-not-allowed-text": "To record your desktop, click the desktop sharing icon at the left of the address bar. There click the \"×\" next to the desktop sharing permission, then reload.",
+  "source-display-not-allowed-title": "Cannot access your display",
+  "source-display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
 
-  "source-user-not-allowed-title": "The browser does not allow to share your camera.",
-  "source-user-not-allowed-text": "To record your camera, click the camera sharing icon at the left of the address bar. There click the \"×\" next to the camera permissions, then reload.",
+  "source-user-not-allowed-title": "Cannot access your camera",
+  "source-user-not-allowed-text": "Either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
 
   "source-audio-not-allowed-title": "Cannot access your microphone.",
   "source-audio-not-allowed-text": "Either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
