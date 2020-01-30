@@ -65,6 +65,9 @@ export default function VideoSetup(props) {
     setActiveSource(NONE);
   };
 
+  const nextDisabled = activeSource === NONE
+    || activeSource === BOTH ? (!displayStream || !userStream) : !hasStreams;
+
   // The warnings if we are not allowed to capture a stream.
   const userWarning = (state.userAllowed === false) && (
     <Notification isDanger>
@@ -172,7 +175,7 @@ export default function VideoSetup(props) {
 
       { body }
 
-      <ActionButtons next={{ onClick: () => props.nextStep(), disabled: !hasStreams }} />
+      <ActionButtons next={{ onClick: () => props.nextStep(), disabled: nextDisabled }} />
     </Container>
   );
 }
