@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import useForm from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { Box, Button } from '@theme-ui/components';
 
 import { useState } from 'react';
@@ -13,6 +14,7 @@ import { useState } from 'react';
 import OpencastAPI from '../../opencast-api';
 import Notification from '../notification';
 import { Input, SettingsSection} from './elements';
+import { useRecordingState } from '../../recording-context';
 
 
 
@@ -23,6 +25,9 @@ function OpencastSettings({ settingsManager }) {
     defaultValues: settingsManager.formValues().opencast
   });
   const [status, setStatus] = useState('initial');
+
+  const { recordings } = useRecordingState();
+  const hasRecording = recordings.length > 0;
 
   async function onSubmit(data) {
     try {
@@ -67,7 +72,7 @@ function OpencastSettings({ settingsManager }) {
 
   return (
     <SettingsSection title={t('upload-settings-modal-header')}>
-      <Box sx={{ maxWidth: 960, mx: 'auto' }}>
+      <Box>
         {error && <Notification isDanger>{error}</Notification>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -113,6 +118,11 @@ function OpencastSettings({ settingsManager }) {
               sx={{ ml: '10px', fontSize: '30px', verticalAlign: 'middle' }}
               spin={status === 'testing'}
             /> }
+            { hasRecording && status === 'saved' && (
+              <Link to="/" sx={{ ml: 3, variant: 'styles.a' }}>
+                {t('settings-back-to-recording')}
+              </Link>
+            )}
           </footer>
         </form>
       </Box>

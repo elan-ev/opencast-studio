@@ -71,6 +71,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
 const Navigation = props => {
   const [isOpened, updateIsOpened] = useState(false);
   const toggleMenu = () => updateIsOpened(!isOpened);
+  const closeMenu = () => updateIsOpened(false);
   const { t } = useTranslation();
 
   return (
@@ -123,19 +124,19 @@ const Navigation = props => {
           scrollX: ['none', 'none', 'auto'],
         }}
       >
-        <NavElement target="/" icon={faVideo} onClick={toggleMenu}>
+        <NavElement target="/" icon={faVideo} onClick={closeMenu}>
           {t('nav-recording')}
         </NavElement>
-        <NavElement target="/settings" icon={faWrench} onClick={toggleMenu}>
+        <NavElement target="/settings" icon={faWrench} onClick={closeMenu}>
           {t('nav-settings')}
         </NavElement>
-        <NavElement target="/about" icon={faInfoCircle} onClick={toggleMenu}>
+        <NavElement target="/about" icon={faInfoCircle} onClick={closeMenu}>
           {t('nav-about')}
         </NavElement>
         <NavElement
           target="https://github.com/elan-ev/opencast-studio/issues"
           icon={faGithub}
-          onClick={toggleMenu}
+          onClick={closeMenu}
         >
           {t('nav-report-issue')}
         </NavElement>
@@ -143,7 +144,7 @@ const Navigation = props => {
 
       {/* A black, half-transparent overlay over the body */}
       {isOpened && <div
-        onClick={toggleMenu}
+        onClick={closeMenu}
         ref={n => n && (n.style.opacity = 1)}
         sx={{
           display: [isOpened ? 'block' : 'none', isOpened ? 'block' : 'none', 'none'],

@@ -6,8 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner } from '@theme-ui/components';
 import { useReducer } from 'react';
+import { Link } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import OpencastAPI from '../../../opencast-api';
 import { useRecordingState } from '../../../recording-context';
@@ -179,6 +180,14 @@ export default function SaveCreation(props) {
           }
         }}
       >
+        {!uploadPossible && (
+          <Notification key="opencast-connection" isDanger>
+            <Trans i18nKey="warning-missing-connection-settings">
+              Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>setting</Link>
+            </Trans>
+          </Notification>
+        )}
+
         <Button
           onClick={handleUpload}
           disabled={recordings.length === 0 || state.uploading || state.uploaded || !uploadPossible}

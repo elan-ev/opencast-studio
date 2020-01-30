@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import OpencastAPI from '../../opencast-api';
 import SettingsPage from './page';
 import { SettingsManager } from '../../settings';
+import { Provider } from '../../recording-context';
 
 import theme from '../../theme';
 import { ThemeProvider } from 'theme-ui';
@@ -33,11 +34,13 @@ it('renders empty form with no settings', async () => {
   const settingsManager = new SettingsManager();
 
   const { getByText, getByLabelText } = render(
-    <Router>
-      <ThemeProvider theme={theme}>
-        <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
-      </ThemeProvider>
-    </Router>
+    <Provider>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
+        </ThemeProvider>
+      </Router>
+    </Provider>
   );
 
   expect(getByText('settings-header')).toBeInTheDocument();
@@ -64,11 +67,13 @@ it('renders empty form with partial OC settings', async () => {
   });
 
   const { getByText, getByLabelText, queryByLabelText } = render(
-    <Router>
-      <ThemeProvider theme={theme}>
-        <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
-      </ThemeProvider>
-    </Router>
+    <Provider>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
+        </ThemeProvider>
+      </Router>
+    </Provider>
   );
 
   expect(getByText('settings-header')).toBeInTheDocument();
@@ -97,11 +102,13 @@ it('renders empty form with full OC settings', async () => {
   });
 
   const { getByText, queryByLabelText, queryByText } = render(
-    <Router>
-      <ThemeProvider theme={theme}>
-        <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
-      </ThemeProvider>
-    </Router>
+    <Provider>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <SettingsPage settingsManager={settingsManager} handleUpdate={mockUpdate} />
+        </ThemeProvider>
+      </Router>
+    </Provider>
   );
 
   expect(getByText('settings-header')).toBeInTheDocument();
