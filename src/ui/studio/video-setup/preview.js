@@ -12,6 +12,11 @@ import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icon
 export function SourcePreview({ reselectSource, title, warnings, inputs }) {
   const { t } = useTranslation();
 
+  let hideUnshare = false;
+  for (const input of inputs) {
+    hideUnshare |= !input.stream && input.allowed !== false;
+  }
+
   let preview;
   switch (inputs.length) {
     case 1:
@@ -34,7 +39,7 @@ export function SourcePreview({ reselectSource, title, warnings, inputs }) {
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Styled.h2 sx={{ mt: 0 }}>{ title }</Styled.h2>
         <Box>
-          <UnshareButton handleClick={reselectSource} />
+          { hideUnshare ? null : <UnshareButton handleClick={reselectSource} />}
         </Box>
       </Flex>
 
