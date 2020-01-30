@@ -74,5 +74,5 @@
   "warning-recorder-not-supported": "Tarayıcınız medya akışlarını kaydetmeyi desteklemiyor.",
   "warning-recorder-safari-hint": "iOS'taki Safari için, ayarlardan deneysel 'MediaRecorder' özelliğini etkinleştirebilirsiniz.",
   "warning-missing-connection-settings": "",
-  "settings-back": ""
+  "settings-back-to-recording": ""
 }
