@@ -29,6 +29,8 @@ export default function AudioSetup(props) {
 
   const [active, updateActive] = useState(audioStream ? MICROPHONE : NONE);
 
+  const nextIsDisabled = active === NONE || (active === MICROPHONE && !audioStream);
+
   const backToSetupVideo = useCallback(() => {
     stopAudioCapture(audioStream, dispatch);
     props.previousStep();
@@ -106,7 +108,7 @@ export default function AudioSetup(props) {
 
       <ActionButtons
         prev={{ onClick: backToSetupVideo }}
-        next={{ onClick: enterStudio, disabled: active === NONE }}
+        next={{ onClick: enterStudio, disabled: nextIsDisabled }}
       />
     </Container>
   );
