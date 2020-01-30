@@ -47,22 +47,22 @@ export default function VideoSetup(props) {
   };
 
   const clickUser = async () => {
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
     setActiveSource(USER);
+    await startUserCapture(dispatch, USER_CONSTRAINTS);
   };
   const clickDisplay = async () => {
     await startDisplayCapture(dispatch);
     setActiveSource(DISPLAY);
   };
   const clickBoth = async () => {
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
     setActiveSource(BOTH);
+    await startUserCapture(dispatch, USER_CONSTRAINTS);
     await startDisplayCapture(dispatch);
   };
 
   const reselectSource = () => {
-    stopCapture(state, dispatch);
     setActiveSource(NONE);
+    stopCapture(state, dispatch);
   };
 
   const nextDisabled = activeSource === NONE
@@ -135,7 +135,7 @@ export default function VideoSetup(props) {
         title={t('source-user-title')}
         reselectSource={reselectSource}
         warnings={userWarning}
-        streams={[state.userStream]}
+        inputs={[{ stream: state.userStream, allowed: state.userAllowed }]}
       />;
       break;
     case DISPLAY:
@@ -143,7 +143,7 @@ export default function VideoSetup(props) {
         title={t('source-display-title')}
         reselectSource={reselectSource}
         warnings={displayWarning}
-        streams={[state.displayStream]}
+        inputs={[{ stream: state.displayStream, allowed: state.displayAllowed }]}
       />;
       break;
     case BOTH:
@@ -152,7 +152,10 @@ export default function VideoSetup(props) {
         title={t('source-display-and-user-title')}
         reselectSource={reselectSource}
         warnings={[displayWarning, userWarning]}
-        streams={[state.displayStream, state.userStream]}
+        inputs={[
+          { stream: state.displayStream, allowed: state.displayAllowed },
+          { stream: state.userStream, allowed: state.userAllowed },
+        ]}
       />;
       break;
     default:

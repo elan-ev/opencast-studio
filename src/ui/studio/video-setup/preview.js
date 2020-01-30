@@ -4,25 +4,25 @@ import { jsx, Styled } from 'theme-ui';
 
 import { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Card, Flex, Grid, Text } from '@theme-ui/components';
+import { Box, Button, Card, Flex, Grid, Text, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 
-export function SourcePreview({ reselectSource, title, warnings, streams }) {
+export function SourcePreview({ reselectSource, title, warnings, inputs }) {
   const { t } = useTranslation();
 
   let preview;
-  switch (streams.length) {
+  switch (inputs.length) {
     case 1:
-      preview = streams[0] && (
-        <StreamPreview stream={streams[0]} text={t('sources-select-user')} />
+      preview = (
+        <StreamPreview input={inputs[0]} text={t('sources-select-user')} />
       );
       break;
     case 2:
       preview = <Grid gap={3} columns={[1, 2]} sx={{ minHeight: 0 }}>
-        <StreamPreview text={t('sources-select-display')} stream={streams[0]} />
-        <StreamPreview text={t('sources-select-user')} stream={streams[1]} />
+        <StreamPreview input={inputs[0]} text={t('sources-select-display')} />
+        <StreamPreview input={inputs[1]} text={t('sources-select-user')} />
       </Grid>
       break;
     default:
@@ -44,13 +44,14 @@ export function SourcePreview({ reselectSource, title, warnings, streams }) {
   );
 }
 
-function StreamPreview({ stream, text }) {
+function StreamPreview({ input, text }) {
+  const stream = input.stream;
   const track = stream?.getVideoTracks()?.[0];
   const { width, height } = track?.getSettings() ?? {};
 
   return (
     <Card sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto', minHeight: 0 }}>
-      <PreviewVideo stream={stream} />
+      <PreviewVideo allowed={input.allowed} stream={stream} />
       <Text p={2} color="muted">
         {text}
         {track && `: ${width}×${height}`}
@@ -59,14 +60,37 @@ function StreamPreview({ stream, text }) {
   );
 }
 
-export const PreviewVideo = ({ stream, ...props }) => {
+export const PreviewVideo = ({ allowed, stream, ...props }) => {
   const videoRef = useRef();
-
   useEffect(() => {
-    videoRef.current.srcObject = stream;
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+    }
 
     return () => {};
   }, [stream]);
+
+  if (!stream) {
+    let inner;
+    if (allowed === false) {
+      inner = <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />;
+    } else {
+      inner = <Spinner size="75"/>;
+    }
+
+    return (
+      <div sx={{
+        width: '100%',
+        height: '100%',
+        minHeight: '120px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        { inner }
+      </div>
+    );
+  }
 
   return (
     <video
