@@ -32,7 +32,7 @@
     "react-hook-form": "^3.29.4",
     "react-i18next": "^11.3.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.3.1",
     "theme-ui": "^0.3.1"
   },
   "repository": {
