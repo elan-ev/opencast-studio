@@ -3,7 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { Container, Flex, Heading, Text } from '@theme-ui/components';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
@@ -16,20 +16,19 @@ import Notification from '../../notification';
 
 import PreviewAudio from './preview-audio';
 
+export const MICROPHONE = 'microphone';
+export const NO_AUDIO = 'no-audio';
+export const NONE = 'none';
+
 export default function AudioSetup(props) {
+  const { choice, updateChoice } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const state = useRecordingState();
   const audioStream = state.audioStream;
   const audioAllowed = state.audioAllowed;
 
-  const MICROPHONE = 'microphone';
-  const NO_AUDIO = 'no-audio';
-  const NONE = 'none';
-
-  const [active, updateActive] = useState(audioStream ? MICROPHONE : NONE);
-
-  const nextIsDisabled = active === NONE || (active === MICROPHONE && !audioStream);
+  const nextIsDisabled = choice === NONE || (choice === MICROPHONE && !audioStream);
 
   const backToSetupVideo = useCallback(() => {
     stopAudioCapture(audioStream, dispatch);
@@ -42,16 +41,16 @@ export default function AudioSetup(props) {
   }, [props]);
 
   const selectMicrophone = () => {
-    updateActive(MICROPHONE);
+    updateChoice(MICROPHONE);
     startAudioCapture(dispatch).then(success => {
       if (!success) {
-        updateActive(NONE);
+        updateChoice(NONE);
       }
     });
   };
 
   const selectNoAudio = () => {
-    updateActive(NO_AUDIO);
+    updateChoice(NO_AUDIO);
     if (audioStream) {
       stopAudioCapture(audioStream, dispatch);
     }
@@ -84,7 +83,7 @@ export default function AudioSetup(props) {
         <OptionButton
           icon={faMicrophone}
           label={t('sources-audio-microphone')}
-          selected={active === MICROPHONE}
+          selected={choice === MICROPHONE}
           onClick={selectMicrophone}
         >
           { audioStream && <PreviewAudio stream={audioStream} /> }
@@ -100,7 +99,7 @@ export default function AudioSetup(props) {
         <OptionButton
           icon={faMicrophoneSlash}
           label={t('sources-audio-without-audio')}
-          selected={active === NO_AUDIO}
+          selected={choice === NO_AUDIO}
           onClick={selectNoAudio}
         >
         </OptionButton>
