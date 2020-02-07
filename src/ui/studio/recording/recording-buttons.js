@@ -19,7 +19,6 @@ const Button = ({ large, ...rest }) => (
       position: 'relative',
       overflow: 'hidden',
       my: 0,
-      mx: large ? '1rem' : '0.5rem',
       padding: large ? '0.5rem' : '0.25rem',
       fontSize: large ? '5rem' : '2.5rem',
       lineHeight: large ? '5rem' : '2.5rem',
@@ -35,7 +34,7 @@ const Button = ({ large, ...rest }) => (
 
 export const PauseButton = props => (
   <Button onClick={props.onClick} title={props.title}>
-    <span className="fa-layers fa-fw">
+    <span className="fa-layers">
       <FontAwesomeIcon icon={faPauseCircle} />
     </span>
   </Button>
@@ -54,7 +53,7 @@ export const RecordButton = props => (
       ':disabled svg + svg': { color: '#bbb' }
     }}
   >
-    <span className="fa-layers fa-fw">
+    <span className="fa-layers">
       <FontAwesomeIcon icon={props.countdown ? faCircleNotch : faCircle} spin={props.countdown} />
       <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
     </span>
@@ -63,7 +62,7 @@ export const RecordButton = props => (
 
 export const ResumeButton = props => (
   <Button onClick={props.onClick} title={props.title}>
-    <span className="fa-layers fa-fw">
+    <span className="fa-layers">
       <FontAwesomeIcon icon={faPlayCircle} />
     </span>
   </Button>
