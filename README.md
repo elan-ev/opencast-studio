@@ -90,14 +90,16 @@ In the table, "(✔)" means partial support and/or major bugs are still present.
 | ---------- | ---------- | -------------- | -------------- | ------ | ----- |
 | Win10 | Chrome 77  | ✔              | ✔              | ✔      |
 | Win10 | Firefox 68 | ✔              | ✔              | ✔      |
-| Win10 | Edge 44    | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | ✘ | See [#242](https://github.com/elan-ev/opencast-studio/issues/242)
+| Win10 | Edge 79    | ✔              | ✔              | ✔      |
 | Linux      | Chrome 77  | ✔              | ✔              | ✔      |
 | Linux      | Firefox 68 | ✔              | ✔              | ✔      |
 | MacOS      | Firefox 70 | ✔              | ✔              | ✔      |
 | MacOS      | Chrome 78  | ✔              | ✔              | ✔      | Video file does not allow seeking
 | MacOS      | Safari 13  | ✔              | ✘              | ✘      | Recording seems to fail due to unsupported MIME type
 | Android    | Firefox 68 | ✔              | ✘              | ✔      |
-| Android    | Chrome 78  | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | (✔) [#243](https://github.com/elan-ev/opencast-studio/issues/243) | Low frame rate, fairly unusable
+| Android    | Chrome 78  | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | ✔ |
 | iOS        | Safari     | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | (✔) [#84](https://github.com/elan-ev/opencast-studio/issues/84) | Video rotated by 180° in recording, requires enabling experimental feature in settings
+| iOS        | Firefox    | ✘ | ✘ | ✘ | Non-Safari browsers on iOS are severely limited
+| iOS        | Chrome     | ✘ | ✘ | ✘ | Non-Safari browsers on iOS are severely limited
 
 Browsers/systems not listed in this table are not currently tested by us, so they might or might not work.
