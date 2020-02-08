@@ -4,62 +4,64 @@ import { jsx } from 'theme-ui';
 import { Component } from 'react';
 
 class Clock extends Component {
+  #last = null;
+  #timerID = null;
+  #isMounted = false;
+
   constructor(props) {
     super(props);
-    this.state = { time: 0, last: null };
+    this.state = { milliseconds: 0 };
+    this.#last = new Date();
+    this.#timerID = setInterval(() => this.tick(), 100);
+  }
+
+  componentDidMount() {
+    this.#isMounted = true;
   }
 
   componentWillUnmount() {
     this.stopTimer();
-  }
-
-  startTimer() {
-    this.setState({ time: 0, last: new Date() });
-    this.timerID = setInterval(() => this.tick(), 10);
+    this.#isMounted = false;
   }
 
   resumeTimer() {
     if (!this.timerId) {
-      this.timerID = setInterval(() => this.tick(), 10);
-      this.setState({ last: new Date() });
+      this.#timerID = setInterval(() => this.tick(), 100);
+      this.#last = new Date();
     }
   }
 
   stopTimer() {
-    clearInterval(this.timerID);
-    this.timerId = null;
+    clearInterval(this.#timerID);
+    this.#timerID = null;
   }
 
   componentDidUpdate(prevProps) {
     // recording state did not change
-    if (this.props.recordingState === prevProps.recordingState) {
+    if (this.props.isPaused === prevProps.isPaused) {
       return;
     }
 
-    if (this.props.recordingState !== 'recording') {
+    if (this.props.isPaused) {
       this.stopTimer();
-      return;
-    }
-
-    if (prevProps.recordingState === 'inactive') {
-      this.startTimer();
-    } else if (prevProps.recordingState === 'paused') {
+    } else {
       this.resumeTimer();
     }
   }
 
   tick() {
-    this.setState(state => {
+    if (this.#isMounted) {
       const now = new Date();
-      return {
-        time: state.time + (now - state.last),
-        last: now
-      };
-    });
+      const passed = now - this.#last;
+      this.#last = now;
+      this.setState(state => ({
+        milliseconds: state.milliseconds + passed,
+      }));
+    }
   }
 
   render() {
-    const duration = this.state.time;
+    const duration = this.state.milliseconds;
     let timeArr = [
       (duration / 3600000) >> 0,
       ((duration / 60000) >> 0) % 60,

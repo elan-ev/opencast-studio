@@ -10,7 +10,7 @@ import Recorder from '../../../recorder';
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
-import RecordingState from './recording-state';
+import Clock from './clock';
 
 function addRecordOnStop(dispatch, deviceType) {
   return ({ media, url }) => {
@@ -108,13 +108,13 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
   };
 
   return (
-    <div sx={{ m: 0, width: '290px' }}>
+    <div sx={{ m: 0, width: recordingState !== 'inactive' ? '290px' : 'auto' }}>
       {recordingState !== 'inactive' && (
         <Beforeunload onBeforeunload={event => event.preventDefault()} />
       )}
 
       <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
-        <div sx={{ flex: 1, textAlign: 'right' }}>
+        {recordingState !== 'inactive' && <div sx={{ flex: 1, textAlign: 'right' }}>
           {recordingState === 'recording' && (
             <PauseButton
               title={t('pause-button-title')}
@@ -130,7 +130,7 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
               onClick={handleResume}
             />
           )}
-        </div>
+        </div>}
 
         <div className="center">
           {recordingState === 'inactive' ? (
@@ -152,9 +152,9 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
           )}
         </div>
 
-        <div sx={{ flex: 1 }}>
-          <RecordingState recordingState={recordingState} />
-        </div>
+        {recordingState !== 'inactive' && <div sx={{ flex: 1 }}>
+          <Clock isPaused={recordingState === 'paused'} />
+        </div>}
       </div>
     </div>
   );
