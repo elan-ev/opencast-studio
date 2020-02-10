@@ -87,13 +87,13 @@ export default function VideoSetup(props) {
   );
 
   // The body depends on which source is currently selected.
-  let hideUnshare;
+  let hideActionButtons;
   let title;
   let body;
   switch (activeSource) {
     case NONE:
       title = t('sources-video-question');
-      hideUnshare = true;
+      hideActionButtons = true;
       if (anySupported) {
         body = (
           <Flex
@@ -137,7 +137,7 @@ export default function VideoSetup(props) {
 
     case USER:
       title = t('sources-video-user-selected');
-      hideUnshare = !state.userStream && state.userAllowed !== false;
+      hideActionButtons = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
         reselectSource={reselectSource}
         warnings={userWarning}
@@ -147,7 +147,7 @@ export default function VideoSetup(props) {
 
     case DISPLAY:
       title = t('sources-video-display-selected');
-      hideUnshare = !state.displayStream && state.displayAllowed !== false;
+      hideActionButtons = !state.displayStream && state.displayAllowed !== false;
       body = <SourcePreview
         reselectSource={reselectSource}
         warnings={displayWarning}
@@ -157,7 +157,7 @@ export default function VideoSetup(props) {
 
     case BOTH:
       title = t('sources-video-display-and-user-selected');
-      hideUnshare = (!state.userStream && state.userAllowed !== false)
+      hideActionButtons = (!state.userStream && state.userAllowed !== false)
         || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
         reselectSource={reselectSource}
@@ -188,15 +188,15 @@ export default function VideoSetup(props) {
 
       { body }
 
-      <ActionButtons
+      { !hideActionButtons && <ActionButtons
         next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
-        prev={hideUnshare ? null : {
+        prev={{
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
           danger: true,
         }}
-      />
+      />}
     </Container>
   );
 }
