@@ -51,8 +51,8 @@ export default function VideoSetup(props) {
     await startUserCapture(dispatch, USER_CONSTRAINTS);
   };
   const clickDisplay = async () => {
-    await startDisplayCapture(dispatch);
     setActiveSource(DISPLAY);
+    await startDisplayCapture(dispatch);
   };
   const clickBoth = async () => {
     setActiveSource(BOTH);
