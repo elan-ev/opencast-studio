@@ -88,9 +88,11 @@ export default function VideoSetup(props) {
 
   // The body depends on which source is currently selected.
   let hideUnshare;
+  let title;
   let body;
   switch (activeSource) {
     case NONE:
+      title = t('sources-video-question');
       hideUnshare = true;
       if (anySupported) {
         body = (
@@ -134,9 +136,9 @@ export default function VideoSetup(props) {
       break;
 
     case USER:
+      title = t('sources-video-user-selected');
       hideUnshare = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
-        title={t('source-user-title')}
         reselectSource={reselectSource}
         warnings={userWarning}
         inputs={[{ stream: state.userStream, allowed: state.userAllowed }]}
@@ -144,9 +146,9 @@ export default function VideoSetup(props) {
       break;
 
     case DISPLAY:
+      title = t('sources-video-display-selected');
       hideUnshare = !state.displayStream && state.displayAllowed !== false;
       body = <SourcePreview
-        title={t('source-display-title')}
         reselectSource={reselectSource}
         warnings={displayWarning}
         inputs={[{ stream: state.displayStream, allowed: state.displayAllowed }]}
@@ -154,10 +156,10 @@ export default function VideoSetup(props) {
       break;
 
     case BOTH:
+      title = t('sources-video-display-and-user-selected');
       hideUnshare = (!state.userStream && state.userAllowed !== false)
         || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
-        title={t('source-display-and-user-title')}
         reselectSource={reselectSource}
         warnings={[displayWarning, userWarning]}
         inputs={[
@@ -181,7 +183,7 @@ export default function VideoSetup(props) {
       }}
     >
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {t('sources-video-question')}
+        {title}
       </Styled.h1>
 
       { body }
