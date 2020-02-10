@@ -87,9 +87,11 @@ export default function VideoSetup(props) {
   );
 
   // The body depends on which source is currently selected.
+  let hideUnshare;
   let body;
   switch (activeSource) {
     case NONE:
+      hideUnshare = true;
       if (anySupported) {
         body = (
           <Flex
@@ -130,7 +132,9 @@ export default function VideoSetup(props) {
         body = <Notification isDanger>{t('sources-video-none-available')}</Notification>;
       }
       break;
+
     case USER:
+      hideUnshare = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
         title={t('source-user-title')}
         reselectSource={reselectSource}
@@ -138,7 +142,9 @@ export default function VideoSetup(props) {
         inputs={[{ stream: state.userStream, allowed: state.userAllowed }]}
       />;
       break;
+
     case DISPLAY:
+      hideUnshare = !state.displayStream && state.displayAllowed !== false;
       body = <SourcePreview
         title={t('source-display-title')}
         reselectSource={reselectSource}
@@ -146,8 +152,10 @@ export default function VideoSetup(props) {
         inputs={[{ stream: state.displayStream, allowed: state.displayAllowed }]}
       />;
       break;
+
     case BOTH:
-      // body = <DisplayAndUserMedia onReselect={reselectSource} />;
+      hideUnshare = (!state.userStream && state.userAllowed !== false)
+        || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
         title={t('source-display-and-user-title')}
         reselectSource={reselectSource}
@@ -178,7 +186,15 @@ export default function VideoSetup(props) {
 
       { body }
 
-      <ActionButtons next={{ onClick: () => props.nextStep(), disabled: nextDisabled }} />
+      <ActionButtons
+        next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
+        prev={hideUnshare ? null : {
+          onClick: reselectSource,
+          disabled: false,
+          label: 'sources-video-reselect-source',
+          danger: true,
+        }}
+      />
     </Container>
   );
 }

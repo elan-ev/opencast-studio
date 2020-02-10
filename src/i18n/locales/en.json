@@ -42,7 +42,7 @@
   "sources-video-selection-done": "Display and/or camera is now shared. Select your audio source!",
   "sources-video-question": "What video source(s) to record?",
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
-  "sources-video-reselect-source": "Reselect source",
+  "sources-video-reselect-source": "Reselect source(s)",
 
   "sources-audio-selection-link": "Select audio",
   "sources-audio-selection-prompt": "Please share your audio source (or proceed without any audio)",

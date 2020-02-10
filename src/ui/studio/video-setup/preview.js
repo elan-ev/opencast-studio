@@ -4,18 +4,13 @@ import { jsx, Styled } from 'theme-ui';
 
 import { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Card, Flex, Grid, Text, Spinner } from '@theme-ui/components';
+import { Button, Card, Flex, Grid, Text, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 
 export function SourcePreview({ reselectSource, title, warnings, inputs }) {
   const { t } = useTranslation();
-
-  let hideUnshare = false;
-  for (const input of inputs) {
-    hideUnshare |= !input.stream && input.allowed !== false;
-  }
 
   let preview;
   switch (inputs.length) {
@@ -38,9 +33,6 @@ export function SourcePreview({ reselectSource, title, warnings, inputs }) {
     <Fragment>
       <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Styled.h2 sx={{ mt: 0 }}>{ title }</Styled.h2>
-        <Box>
-          { hideUnshare ? null : <UnshareButton handleClick={reselectSource} />}
-        </Box>
       </Flex>
 
       { warnings }
