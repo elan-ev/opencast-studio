@@ -20,12 +20,8 @@ class OpencastAPI {
   }
 
   async checkConnection() {
-    try {
-      await this.login();
-      return !!(await this.validateState());
-    } catch (error) {
-      return false;
-    }
+    await this.login();
+    return !!(await this.validateState());
   }
 
   async loginAndUpload(

@@ -32,7 +32,7 @@
   "upload-notification": "Wird gerade hochgeladen",
   "upload-settings-modal-title": "Einstellungen für das Hochladen",
   "upload-settings-button-store": "Verbindungseinstellungen speichern",
-  "upload-settings-validation-error": "Ungültige Einstellungen. Bitte überprüfen und noch einmal probieren!",
+  "upload-settings-validation-error": "Ungültige Einstellungen. Benutzername/Password vermutlich inkorrekt. Bitte überprüfen und noch einmal probieren!",
   "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
   "upload-settings-label-workflow-id": "Workflow-ID",
