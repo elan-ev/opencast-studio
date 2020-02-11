@@ -81,6 +81,19 @@ function OpencastSettings({ settingsManager }) {
             label={t('upload-settings-label-server-url')}
             name="serverUrl"
             register={register}
+            validate={value => {
+              try {
+                const url = new URL(value);
+                return (url.protocol === 'https:' || url.protocol === 'http:')
+                  || t('upload-settings-invalid-url-http-start');
+              } catch (e) {
+                let err = t('upload-settings-invalid-url');
+                if (!value.startsWith('https://') && !value.startsWith('http://')) {
+                  err += " " + t('upload-settings-invalid-url-http-start');
+                }
+                return err;
+              }
+            }}
             required
           /> }
 
