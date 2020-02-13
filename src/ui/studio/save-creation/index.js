@@ -160,6 +160,7 @@ export default function SaveCreation(props) {
                 deviceType={recording.deviceType}
                 title={state.recordingData.title}
                 type="video"
+                mimeType={recording.mimeType}
                 url={recording.url}
               />
             ))

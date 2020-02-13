@@ -6,9 +6,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { Box } from '@theme-ui/components';
 
-const RecordingPreview = ({ deviceType, title, type, url }) => {
+import { onSafari } from '../../../util.js';
+
+const RecordingPreview = ({ deviceType, title, type, url, mimeType }) => {
   const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
-  const downloadName = `${flavor} ${type} - ${title || 'Recording'}.webm`;
+
+  // Determine the correct filename extension.
+  // TODO: we might want to parse the mime string in the future? But right now,
+  // browsers either record in webm or mp4.
+  let fileExt;
+  if (mimeType && mimeType.startsWith("video/webm")) {
+    fileExt = "webm";
+  } else if (mimeType && mimeType.startsWith("video/mp4")) {
+    fileExt = "mp4";
+  } else if (onSafari()) {
+    // Safari does not understand webm
+    fileExt = "mp4";
+  } else {
+    // If we know nothing, our best guess is webm.
+    fileExt = "webm";
+  }
+  const downloadName = `${flavor} ${type} - ${title || 'Recording'}.${fileExt}`;
 
   const style = {
     width: '8rem',
