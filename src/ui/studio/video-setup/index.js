@@ -103,10 +103,10 @@ export default function VideoSetup(props) {
               width: '100%',
               mx: ['auto', 'none'],
               mb: 3,
-              flex: ['0 1 auto', '1 1 auto'],
+              flex: '1 1 auto',
               maxHeight: ['none', '270px'],
               minHeight: [0, ''],
-              justifyContent: ['flex-start', 'center'],
+              justifyContent: 'center',
               '& > :not(:last-of-type)': {
                 mb: [3, 0],
                 mr: [0, 3],
@@ -186,7 +186,9 @@ export default function VideoSetup(props) {
         {title}
       </Styled.h1>
 
+      <Spacer />
       { body }
+      <Spacer />
 
       { !hideActionButtons && <ActionButtons
         next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
@@ -210,10 +212,11 @@ const OptionButton = ({ icon, label, onClick }) => {
         color: 'gray.0',
         border: '2px solid black',
         borderRadius: '8px',
-        flex: ['0 1 180px', '0 1 100%'],
+        flex: ['1 1 auto', '0 1 100%'],
         minWidth: '180px',
         maxWidth: '300px',
-        minHeight: ['120px', '150px'],
+        minHeight: '120px',
+        maxHeight: '250px',
         p: 2,
       }}
     >
@@ -224,3 +227,5 @@ const OptionButton = ({ icon, label, onClick }) => {
     </button>
   );
 };
+
+const Spacer = () => <div sx={{ flex: '1 0 0' }}></div>;
