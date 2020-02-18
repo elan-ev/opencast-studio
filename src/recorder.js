@@ -15,10 +15,11 @@ export default class Recorder {
     };
 
     this.recorder.onstop = () => {
-      const media = new Blob(_recData, { type: this.recorder.mimeType });
+      const mimeType = _recData[0].type || this.recorder.mimeType;
+      const media = new Blob(_recData, { type: mimeType });
       let url = URL.createObjectURL(media);
       this.recorder = null;
-      options.onStop && options.onStop({ url, media });
+      options.onStop && options.onStop({ url, media, mimeType });
     };
 
     this.isRecording = false;

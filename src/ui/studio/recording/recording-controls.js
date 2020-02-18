@@ -13,8 +13,8 @@ import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording
 import Clock from './clock';
 
 function addRecordOnStop(dispatch, deviceType) {
-  return ({ media, url }) => {
-    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url } });
+  return ({ media, url, mimeType }) => {
+    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType } });
   };
 }
 
