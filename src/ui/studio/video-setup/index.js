@@ -51,8 +51,8 @@ export default function VideoSetup(props) {
     await startUserCapture(dispatch, USER_CONSTRAINTS);
   };
   const clickDisplay = async () => {
-    await startDisplayCapture(dispatch);
     setActiveSource(DISPLAY);
+    await startDisplayCapture(dispatch);
   };
   const clickBoth = async () => {
     setActiveSource(BOTH);
@@ -87,9 +87,13 @@ export default function VideoSetup(props) {
   );
 
   // The body depends on which source is currently selected.
+  let hideActionButtons;
+  let title;
   let body;
   switch (activeSource) {
     case NONE:
+      title = t('sources-video-question');
+      hideActionButtons = true;
       if (anySupported) {
         body = (
           <Flex
@@ -130,26 +134,32 @@ export default function VideoSetup(props) {
         body = <Notification isDanger>{t('sources-video-none-available')}</Notification>;
       }
       break;
+
     case USER:
+      title = t('sources-video-user-selected');
+      hideActionButtons = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
-        title={t('source-user-title')}
         reselectSource={reselectSource}
         warnings={userWarning}
         inputs={[{ stream: state.userStream, allowed: state.userAllowed }]}
       />;
       break;
+
     case DISPLAY:
+      title = t('sources-video-display-selected');
+      hideActionButtons = !state.displayStream && state.displayAllowed !== false;
       body = <SourcePreview
-        title={t('source-display-title')}
         reselectSource={reselectSource}
         warnings={displayWarning}
         inputs={[{ stream: state.displayStream, allowed: state.displayAllowed }]}
       />;
       break;
+
     case BOTH:
-      // body = <DisplayAndUserMedia onReselect={reselectSource} />;
+      title = t('sources-video-display-and-user-selected');
+      hideActionButtons = (!state.userStream && state.userAllowed !== false)
+        || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
-        title={t('source-display-and-user-title')}
         reselectSource={reselectSource}
         warnings={[displayWarning, userWarning]}
         inputs={[
@@ -173,12 +183,20 @@ export default function VideoSetup(props) {
       }}
     >
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {t('sources-video-question')}
+        {title}
       </Styled.h1>
 
       { body }
 
-      <ActionButtons next={{ onClick: () => props.nextStep(), disabled: nextDisabled }} />
+      { !hideActionButtons && <ActionButtons
+        next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
+        prev={{
+          onClick: reselectSource,
+          disabled: false,
+          label: 'sources-video-reselect-source',
+          danger: true,
+        }}
+      />}
     </Container>
   );
 }
