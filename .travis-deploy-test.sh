@@ -36,8 +36,11 @@ git clone "git@github.com:elan-ev/studio-test.git"
 cd studio-test
 git checkout gh-pages
 
-# Add new content
+# Add new content, but remove large '.map' files
 mv "${srcpath}/build/" "${deploydir}"
+cd "${deploydir}/static/js/"
+rm *.map
+cd ../../../
 
 # Build new index
 echo '<html><body><ul>' > index.html
