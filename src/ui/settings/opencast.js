@@ -30,12 +30,13 @@ function OpencastSettings({ settingsManager }) {
   const hasRecording = recordings.length > 0;
 
   async function onSubmit(data) {
+    setStatus('testing');
+    const ocUploader = new OpencastAPI({
+      ...settingsManager.settings().opencast,
+      ...data,
+    });
+
     try {
-      setStatus('testing');
-      const ocUploader = new OpencastAPI({
-        ...settingsManager.settings().opencast,
-        ...data,
-      });
       const connected = await ocUploader.checkConnection();
       if (!connected) {
         setStatus('error');
@@ -46,9 +47,9 @@ function OpencastSettings({ settingsManager }) {
       setStatus('saved');
       setError(null)
     } catch (error) {
+      console.log(error);
       setStatus('error');
       setError(t('message-server-unreachable'));
-      console.log(error);
     }
   }
 
@@ -81,6 +82,19 @@ function OpencastSettings({ settingsManager }) {
             label={t('upload-settings-label-server-url')}
             name="serverUrl"
             register={register}
+            validate={value => {
+              try {
+                const url = new URL(value);
+                return (url.protocol === 'https:' || url.protocol === 'http:')
+                  || t('upload-settings-invalid-url-http-start');
+              } catch (e) {
+                let err = t('upload-settings-invalid-url');
+                if (!value.startsWith('https://') && !value.startsWith('http://')) {
+                  err += " " + t('upload-settings-invalid-url-http-start');
+                }
+                return err;
+              }
+            }}
             required
           /> }
 

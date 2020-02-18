@@ -6,7 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { Box } from '@theme-ui/components';
 
 // A styled `<input>`` element.
-export const Input = ({ errors, label, name, register, required, type = 'text', ...rest }) => {
+export const Input = ({
+  errors,
+  label,
+  name,
+  register,
+  required,
+  validate = undefined,
+  type = 'text',
+  ...rest
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -41,7 +50,10 @@ export const Input = ({ errors, label, name, register, required, type = 'text', 
             aria-describedby={`${name}Error`}
             autoComplete="off"
             name={name}
-            ref={register({ required })}
+            ref={register({
+              validate,
+              ...required ? { required: t('forms-validation-error-required') } : {},
+            })}
             sx={{ variant: 'styles.input' }}
             type={type}
             {...rest}
@@ -56,7 +68,7 @@ export const Input = ({ errors, label, name, register, required, type = 'text', 
                 mt: 1
               }}
             >
-              {t('forms-validation-error-required')}
+              {errors[name].message}
             </p>
           )}
         </div>
