@@ -4,7 +4,7 @@ import { jsx, ThemeProvider } from 'theme-ui';
 
 import { Global } from '@emotion/core';
 import * as Sentry from '@sentry/browser';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import GlobalStyle from './style/global-style';
@@ -12,53 +12,37 @@ import theme from './theme';
 
 import './i18n';
 import * as serviceWorker from './serviceWorker';
-import Loading from './loading';
 import { SettingsManager } from './settings';
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
 }
 
-// This async function does all the heavy initialization of the app.
-const init = () => {
-  const module = import('./App').then(module => module.default);
-  return Promise.all([module, SettingsManager.init()]);
+// Load the rest of the application and try to fetch the `settings.json`.
+const initialize = Promise.all([
+  import('./App').then(mod => mod.default),
+  SettingsManager.init(),
+]);
+
+const render = body => {
+  ReactDOM.render(body, document.getElementById('root'));
 };
 
-// This component shows a loading screen until `init` is finished; then the main
-// app is shown.
-const LoadingApp = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isPending, setPending] = useState(true);
+// After the initialization is done, render to the root element.
+initialize.then(
+  ([App, settingsManager]) => {
+    render(
+      <React.StrictMode>
+        <ThemeProvider theme={theme}>
+          <Global styles={GlobalStyle} />
+          <App settingsManager={settingsManager} />
+        </ThemeProvider>
+      </React.StrictMode>
+     );
+  },
 
-  useEffect(() => {
-    init()
-      .then(setData)
-      .catch(setError)
-      .finally(() => setPending(false));
-  }, []);
-
-  if (isPending) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return `Something went wrong: ${error.message}`;
-  }
-
-  let [App, settingsManager] = data;
-  return <App settingsManager={settingsManager} />;
-};
-
-ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Global styles={GlobalStyle} />
-      <LoadingApp />
-    </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  // This error case is vey unlikely to occur.
+  e => render(<p>{`Fatal error while loading app: ${e.message}`}</p>),
 );
 
 // If you want your app to work offline and load faster, you can change
