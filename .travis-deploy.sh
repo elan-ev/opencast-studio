@@ -22,11 +22,19 @@ cd "$reponame"
 
 # Prepare gh-pages branch
 if git checkout gh-pages; then
-  # Save CNAME
+  # Save CNAME and 404.html
   if [ -f CNAME ]; then
     cname="$(cat CNAME)"
   fi
+  if [ -f 404.html ]; then
+    cp 404.html ..
+  fi
+
+  # Remove all previous files
   git ls-files | while read -r f; do git rm -rf "$f"; done
+
+  # Restore 404.html
+  cp ../404.html . || :
 else
   git checkout --orphan gh-pages
   git ls-files | while read -r f; do rm -f "$f"; git rm --cached "$f"; done
