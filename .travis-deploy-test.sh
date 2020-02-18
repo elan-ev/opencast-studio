@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Starting Test deployment script"
+
 # Immediately cancel if there is no deployment key
 if [ -z "${STUDIO_TEST_DEPLOY_KEY}" ]; then
   echo No deployment key. Canceling deployment.
