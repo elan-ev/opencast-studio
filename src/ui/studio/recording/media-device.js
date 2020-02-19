@@ -4,12 +4,19 @@ import { jsx } from 'theme-ui';
 
 import { useEffect, useRef } from 'react';
 
-export default function MediaDevice({ onClick, title, icon, stream }) {
+export default function MediaDevice({ title, stream, paused }) {
   const videoRef = useRef();
 
   useEffect(() => {
     if (videoRef.current && typeof stream != 'undefined') {
-      videoRef.current.srcObject = stream;
+      if (!videoRef.current.srcObject) {
+        videoRef.current.srcObject = stream;
+      }
+      if (paused) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
     }
   });
 

@@ -11,6 +11,7 @@ import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
 import Clock from './clock';
+import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from './index.js';
 
 function addRecordOnStop(dispatch, deviceType) {
   return ({ media, url, mimeType }) => {
@@ -25,14 +26,17 @@ function mixAudioIntoVideo(audioStream, videoStream) {
   return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
 }
 
-export default function RecordingControls({ handleRecorded, handleStart }) {
+export default function RecordingControls({
+  handleRecorded,
+  recordingState,
+  setRecordingState,
+}) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { audioStream, displayStream, userStream } = useRecordingState();
 
   const [countdown, setCountdown] = useState(false);
-  const [recordingState, setRecordingState] = useState('inactive');
 
   const desktopRecorder = useRef(null);
   const videoRecorder = useRef(null);
@@ -47,8 +51,6 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
   }, [dispatch]);
 
   const record = () => {
-    handleStart();
-
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, 'desktop');
       const stream = mixAudioIntoVideo(audioStream, displayStream);
@@ -81,12 +83,12 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
   };
 
   const handlePause = () => {
-    setRecordingState('paused');
+    setRecordingState(STATE_PAUSED);
     pause();
   };
 
   const handleResume = () => {
-    setRecordingState('recording');
+    setRecordingState(STATE_RECORDING);
     resume();
   };
 
@@ -96,26 +98,26 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
     }
     setCountdown(true);
     setTimeout(() => {
-      setRecordingState('recording');
+      setRecordingState(STATE_RECORDING);
       setCountdown(false);
       record();
     }, 1000);
   };
 
   const handleStop = () => {
-    setRecordingState('inactive');
+    setRecordingState(STATE_INACTIVE);
     stop();
   };
 
   return (
-    <div sx={{ m: 0, width: recordingState !== 'inactive' ? '290px' : 'auto' }}>
-      {recordingState !== 'inactive' && (
+    <div sx={{ m: 0, width: recordingState !== STATE_INACTIVE ? '290px' : 'auto' }}>
+      {recordingState !== STATE_INACTIVE && (
         <Beforeunload onBeforeunload={event => event.preventDefault()} />
       )}
 
       <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
-        {recordingState !== 'inactive' && <div sx={{ flex: 1, textAlign: 'right' }}>
-          {recordingState === 'recording' && (
+        {recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: 'right' }}>
+          {recordingState === STATE_RECORDING && (
             <PauseButton
               title={t('pause-button-title')}
               recordingState={recordingState}
@@ -123,7 +125,7 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
             />
           )}
 
-          {recordingState === 'paused' && (
+          {recordingState === STATE_PAUSED && (
             <ResumeButton
               title={t('resume-button-title')}
               recordingState={recordingState}
@@ -133,7 +135,7 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
         </div>}
 
         <div className="center">
-          {recordingState === 'inactive' ? (
+          {recordingState === STATE_INACTIVE ? (
             <RecordButton
               large
               title={t('record-button-title')}
@@ -152,8 +154,8 @@ export default function RecordingControls({ handleRecorded, handleStart }) {
           )}
         </div>
 
-        {recordingState !== 'inactive' && <div sx={{ flex: 1 }}>
-          <Clock isPaused={recordingState === 'paused'} />
+        {recordingState !== STATE_INACTIVE && <div sx={{ flex: 1 }}>
+          <Clock isPaused={recordingState === STATE_PAUSED} />
         </div>}
       </div>
     </div>
