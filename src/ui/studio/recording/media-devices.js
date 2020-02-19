@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { faDesktop, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import MediaDevice from './media-device';
 import { STATE_PAUSED } from './index.js';
@@ -22,6 +21,7 @@ export default function MediaDevices({ recordingState }) {
         display: 'flex',
         flexDirection: ['column', 'row'],
         justifyContent: 'center',
+        minHeight: 0,
         flexWrap: 'wrap',
         '& > *': {
           flex: '1 0 50%'
