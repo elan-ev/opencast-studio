@@ -22,13 +22,18 @@ export default function MediaDevices({ recordingState }) {
         flex: 1,
         display: 'flex',
         position: 'relative',
-        flexDirection: ['column', 'row'],
+        flexDirection: 'row',
         justifyContent: 'center',
         minHeight: 0,
         flexWrap: 'wrap',
         '& > *': {
           flex: '1 0 50%'
-        }
+        },
+        // This magic ratio is just a "works well enough" value. Most videos
+        // will be 16:9 and this leads to good space usage in those cases.
+        '@media (max-aspect-ratio: 10/7)': {
+          flexDirection: 'column',
+        },
       }}
     >
       {paused && (
