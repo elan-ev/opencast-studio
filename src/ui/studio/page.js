@@ -9,6 +9,7 @@ import AudioSetup, { NONE } from './audio-setup';
 import SaveCreation from './save-creation';
 import VideoSetup from './video-setup';
 import Recording from './recording';
+import Review from './review';
 
 import {isRecordingSupported} from '../../util';
 
@@ -27,6 +28,7 @@ export default function Wizard({ settings, activeStep, updateActiveStep }) {
         <VideoSetup />
         <AudioSetup choice={audioChoice} updateChoice={updateAudioChoice} />
         <Recording settings={settings} />
+        <Review />
         <SaveCreation settings={settings} />
       </Steps>
     </Fragment>
