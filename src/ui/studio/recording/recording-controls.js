@@ -45,7 +45,6 @@ export default function RecordingControls({
 
   // reset after mounting
   useEffect(() => {
-    dispatch({ type: 'CLEAR_RECORDINGS' });
     desktopRecorder.current = null;
     videoRecorder.current = null;
   }, [dispatch]);

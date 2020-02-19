@@ -11,7 +11,7 @@ import { Beforeunload } from 'react-beforeunload';
 import { Trans, useTranslation } from 'react-i18next';
 
 import OpencastAPI from '../../../opencast-api';
-import { useRecordingState } from '../../../recording-context';
+import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import Notification from '../../notification';
 
@@ -53,6 +53,7 @@ const reducer = (state, action) => {
 export default function SaveCreation(props) {
   const { t } = useTranslation();
   const { recordings } = useRecordingState();
+  const recordingDispatch = useDispatch();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function handleInputChange(event) {
@@ -101,6 +102,7 @@ export default function SaveCreation(props) {
   }
 
   const handleCancel = () => {
+    recordingDispatch({ type: 'CLEAR_RECORDINGS' });
     props.previousStep();
   };
 
