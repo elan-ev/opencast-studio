@@ -31,6 +31,12 @@ button {
 #root {
   height: 100%;
 }
+
+@keyframes pulse {
+  from { opacity: 0.85 }
+  50% { opacity: 0.6 }
+  to { opacity: 0.85 }
+}
 `;
 
 export default GlobalStyle;
