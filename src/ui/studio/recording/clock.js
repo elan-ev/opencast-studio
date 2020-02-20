@@ -72,7 +72,7 @@ class Clock extends Component {
     }
     const content = timeArr.map(unit => (unit < 10 ? '0' : '') + unit).join(':');
 
-    return <span>{content}</span>;
+    return <span sx={{ fontSize: 3 }}>{content}</span>;
   }
 }
 

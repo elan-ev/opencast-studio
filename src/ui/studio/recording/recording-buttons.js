@@ -19,9 +19,10 @@ const Button = ({ large, ...rest }) => (
       position: 'relative',
       overflow: 'hidden',
       my: 0,
-      padding: large ? '0.5rem' : '0.25rem',
-      fontSize: large ? '5rem' : '2.5rem',
-      lineHeight: large ? '5rem' : '2.5rem',
+      mx: large ? '15px' : 0,
+      padding: 0,
+      fontSize: large ? '5rem' : '3.5rem',
+      lineHeight: large ? '5rem' : '3.5rem',
       svg: {
         margin: 0,
         padding: 0,
