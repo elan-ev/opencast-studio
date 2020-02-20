@@ -12,9 +12,16 @@ import { ActionButtons } from '../elements';
 import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
 
+
+export const STATE_INACTIVE = 'inactive';
+export const STATE_PAUSED = 'paused';
+export const STATE_RECORDING = 'recording';
+
+
 export default function Recording(props) {
   const state = useRecordingState();
 
+  const [recordingState, setRecordingState] = useState(STATE_INACTIVE);
   useEffect(() => {
     if (!(state.displayStream || state.userStream)) {
       props.firstStep();
@@ -22,11 +29,6 @@ export default function Recording(props) {
   }, [props, state.displayStream, state.userStream]);
 
 
-
-  const [isRecording, setIsRecording] = useState(false);
-  const handleStart = () => {
-    setIsRecording(true);
-  };
   const handleRecorded = () => {
     props.nextStep();
   };
@@ -42,11 +44,15 @@ export default function Recording(props) {
       position: 'relative',
       flexGrow: 1,
     }}>
-      <MediaDevices />
+      <MediaDevices recordingState={recordingState} />
 
-      <div sx={{ mx: 3 }}>
-        <ActionButtons prev={!isRecording && { onClick: backToAudio }}>
-          <RecordingControls handleRecorded={handleRecorded} handleStart={handleStart} />
+      <div sx={{ m: 3 }}>
+        <ActionButtons prev={recordingState === STATE_INACTIVE && { onClick: backToAudio }}>
+          <RecordingControls
+            handleRecorded={handleRecorded}
+            recordingState={recordingState}
+            setRecordingState={setRecordingState}
+          />
         </ActionButtons>
       </div>
     </Flex>

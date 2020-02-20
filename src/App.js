@@ -20,44 +20,49 @@ function App({ settingsManager }) {
   const [settings, updateSettings] = useState(settingsManager.settings());
   settingsManager.onChange = newSettings => updateSettings(newSettings);
 
+  return (
+    <Router basename={process.env.PUBLIC_URL || '/'}>
+      <Flex sx={{ flexDirection: 'column', height: '100%' }}>
+        <OpencastHeader />
+
+        <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
+          <Warnings settings={settings} />
+          <Routes settingsManager={settingsManager} settings={settings} />
+        </main>
+      </Flex>
+    </Router>
+  );
+}
+
+const Routes = ({ settings, settingsManager }) => {
   const [activeStep, updateActiveStep] = useState(0);
 
   return (
     <Provider>
-      <Router basename={process.env.PUBLIC_URL || '/'}>
-        <Flex sx={{ flexDirection: 'column', height: '100%' }}>
-          <OpencastHeader />
+      <Switch>
+        <Route path="/settings" exact>
+          <SettingsPage settingsManager={settingsManager} />
+        </Route>
 
-          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
-            <Warnings settings={settings} />
+        <Route path="/about" exact>
+          <About />
+        </Route>
 
-            <Switch>
-              <Route path="/settings" exact>
-                <SettingsPage settingsManager={settingsManager} />
-              </Route>
+        <Route path="/" exact>
+          <Studio
+            settings={settings}
+            activeStep={activeStep}
+            updateActiveStep={updateActiveStep}
+          />
+        </Route>
 
-              <Route path="/about" exact>
-                <About />
-              </Route>
-
-              <Route path="/" exact>
-                <Studio
-                  settings={settings}
-                  activeStep={activeStep}
-                  updateActiveStep={updateActiveStep}
-                />
-              </Route>
-
-              <Route path="/*">
-                <Redirect to="/" />
-              </Route>
-            </Switch>
-          </main>
-        </Flex>
-      </Router>
+        <Route path="/*">
+          <Redirect to="/" />
+        </Route>
+      </Switch>
     </Provider>
   );
-}
+};
 
 App.propTypes = {
   defaultSettings: PropTypes.object
