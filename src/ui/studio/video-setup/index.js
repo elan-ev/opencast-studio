@@ -188,7 +188,7 @@ export default function VideoSetup(props) {
 
       <Spacer />
       { body }
-      <Spacer />
+      <Spacer sx={{ mb: 3 }}/>
 
       { !hideActionButtons && <ActionButtons
         next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
@@ -228,4 +228,4 @@ const OptionButton = ({ icon, label, onClick }) => {
   );
 };
 
-const Spacer = () => <div sx={{ flex: '1 0 0' }}></div>;
+const Spacer = (rest) => <div sx={{ flex: '1 0 0' }} {...rest}></div>;

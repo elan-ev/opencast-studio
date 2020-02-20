@@ -46,7 +46,7 @@ export default function Recording(props) {
     }}>
       <MediaDevices recordingState={recordingState} />
 
-      <div sx={{ mx: 3 }}>
+      <div sx={{ m: 3 }}>
         <ActionButtons prev={recordingState === STATE_INACTIVE && { onClick: backToAudio }}>
           <RecordingControls
             handleRecorded={handleRecorded}

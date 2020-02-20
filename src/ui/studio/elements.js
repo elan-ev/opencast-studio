@@ -15,11 +15,11 @@ import { useTranslation } from 'react-i18next';
 // - `label` (optional): the button label translation string. If not specified,
 //   the label is 'back-button-label' or 'next-button-label'.
 // - `danger` (optional): forwarded to the `<Button>`, default: `false`.
-export function ActionButtons({ prev = null, next = null, children, sx }) {
+export function ActionButtons({ prev = null, next = null, children }) {
   const { t } = useTranslation();
 
   return (
-    <Flex sx={{ alignItems: 'center', mt: 2 }}>
+    <Flex sx={{ alignItems: 'end' }}>
       <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
         {prev && (
           <Button
