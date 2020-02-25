@@ -1,3 +1,5 @@
+import { aspectRatioOf } from './util.js';
+
 export default class Recorder {
   constructor(stream, options = {}) {
     const mimeType = options.mimeType || undefined;
@@ -17,9 +19,10 @@ export default class Recorder {
     this.recorder.onstop = () => {
       const mimeType = _recData[0].type || this.recorder.mimeType;
       const media = new Blob(_recData, { type: mimeType });
-      let url = URL.createObjectURL(media);
+      const url = URL.createObjectURL(media);
+      const aspectRatio = aspectRatioOf(stream);
       this.recorder = null;
-      options.onStop && options.onStop({ url, media, mimeType });
+      options.onStop && options.onStop({ url, media, mimeType, aspectRatio });
     };
 
     this.isRecording = false;
