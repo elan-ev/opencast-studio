@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { VideoBox } from '../elements.js';
+import { aspectRatioOf } from '../../../util.js';
 
 const SUBBOX_HEIGHT = 40;
 
@@ -20,7 +21,7 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
     case 1:
       children = [{
         body: <StreamPreview input={inputs[0]} text={t('sources-select-user')} />,
-        aspectRatio: aspectRatio(inputs[0].stream),
+        aspectRatio: aspectRatioOf(inputs[0].stream),
         extraHeight: SUBBOX_HEIGHT,
       }];
       break;
@@ -28,12 +29,12 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
       children = [
         {
           body: <StreamPreview input={inputs[0]} text={t('sources-select-display')} />,
-          aspectRatio: aspectRatio(inputs[0].stream),
+          aspectRatio: aspectRatioOf(inputs[0].stream),
           extraHeight: SUBBOX_HEIGHT,
         },
         {
           body: <StreamPreview input={inputs[1]} text={t('sources-select-user')} />,
-          aspectRatio: aspectRatio(inputs[1].stream),
+          aspectRatio: aspectRatioOf(inputs[1].stream),
           extraHeight: SUBBOX_HEIGHT,
         },
       ];
@@ -48,14 +49,6 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
       <VideoBox gap={20}>{ children }</VideoBox>
     </Fragment>
   );
-}
-
-// Returns the aspect ratio of a stream or the ratio 16/9 if the stream is null,
-// has not video tracks or any other reasons the width/height of the stream are
-// not accessible.
-function aspectRatio(stream) {
-  const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
-  return (width && height) ? width / height : 16 / 9;
 }
 
 function StreamPreview({ input, text }) {

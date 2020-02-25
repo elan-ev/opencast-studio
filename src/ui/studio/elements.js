@@ -147,7 +147,7 @@ export function VideoBox({ gap = 0, children }) {
           // bottom.
           const baseHeight = availableWidth / combinedAspectRatio;
           return {
-            rowHeights: children.map(c => baseHeight + c.extraHeight),
+            rowHeights: children.map(c => baseHeight + (c.extraHeight || 0)),
             rowWidths: children.map(c => baseHeight * c.aspectRatio),
           }
         }
@@ -165,14 +165,14 @@ export function VideoBox({ gap = 0, children }) {
           // right.
           const width = availableHeight * combinedAspectRatio;
           return {
-            colHeights: children.map(c => (width / c.aspectRatio) + c.extraHeight),
+            colHeights: children.map(c => (width / c.aspectRatio) + (c.extraHeight || 0)),
             colWidths: Array(2).fill(width),
           };
         } else {
           // Children width perfectly matches container, extra space top and
           // bottom.
           return {
-            colHeights: children.map(c => (width / c.aspectRatio) + c.extraHeight),
+            colHeights: children.map(c => (width / c.aspectRatio) + (c.extraHeight || 0)),
             colWidths: Array(2).fill(width),
           }
         }

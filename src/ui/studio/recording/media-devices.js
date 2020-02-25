@@ -3,12 +3,14 @@
 import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
-import MediaDevice from './media-device';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPause } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useRef } from 'react';
 
 import { useRecordingState } from '../../../recording-context';
 import { STATE_PAUSED } from './index.js';
+import { VideoBox } from '../elements.js';
+import { aspectRatioOf } from '../../../util.js';
 
 export default function MediaDevices({ recordingState }) {
   const { t } = useTranslation();
@@ -16,24 +18,48 @@ export default function MediaDevices({ recordingState }) {
 
   const paused = recordingState === STATE_PAUSED;
 
+  let children = [];
+  if (displayStream) {
+    children.push({
+      body: <MediaDevice title={t('share-desktop')} stream={displayStream} paused={paused} />,
+      aspectRatio: aspectRatioOf(displayStream),
+    });
+  }
+  if (userStream) {
+    children.push({
+      body: <MediaDevice title={t('share-camera')} stream={userStream} paused={paused} />,
+      aspectRatio: aspectRatioOf(userStream),
+    });
+  }
+
+  return <VideoBox gap={20}>{ children }</VideoBox>;
+}
+
+function MediaDevice({ title, stream, paused }) {
+  const videoRef = useRef();
+
+  useEffect(() => {
+    if (videoRef.current && typeof stream != 'undefined') {
+      if (!videoRef.current.srcObject) {
+        videoRef.current.srcObject = stream;
+      }
+      if (paused) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+    }
+  });
+
   return (
     <div
       sx={{
-        flex: 1,
-        display: 'flex',
         position: 'relative',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        minHeight: 0,
-        flexWrap: 'wrap',
-        '& > *': {
-          flex: '1 0 50%'
-        },
-        // This magic ratio is just a "works well enough" value. Most videos
-        // will be 16:9 and this leads to good space usage in those cases.
-        '@media (max-aspect-ratio: 10/7)': {
-          flexDirection: 'column',
-        },
+        backgroundColor: 'gray.3',
+        boxShadow: '0 2px 2px rgba(0, 0, 0, 0.35)',
+        overflow: 'hidden',
+        height: '100%',
+        cursor: stream ? 'initial' : 'pointer',
       }}
     >
       {paused && (
@@ -63,13 +89,17 @@ export default function MediaDevices({ recordingState }) {
         </div>
       )}
 
-      {displayStream && (
-        <MediaDevice title={t('share-desktop')} stream={displayStream} paused={paused} />
-      )}
-
-      {userStream && (
-        <MediaDevice title={t('share-camera')} stream={userStream} paused={paused} />
-      )}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        sx={{
+          outline: 'none',
+          width: '100%',
+          height: '100%',
+          background: 'transparent'
+        }}
+      ></video>
     </div>
   );
 }
