@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Container, Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -95,7 +95,8 @@ export default function VideoSetup(props) {
       title = t('sources-video-question');
       hideActionButtons = true;
       if (anySupported) {
-        body = (
+        body = <React.Fragment>
+          <Spacer />
           <Flex
             sx={{
               flexDirection: ['column', 'row'],
@@ -129,7 +130,8 @@ export default function VideoSetup(props) {
               onClick={clickUser}
             />}
           </Flex>
-        );
+          <Spacer />
+        </React.Fragment>;
       } else {
         body = <Notification isDanger>{t('sources-video-none-available')}</Notification>;
       }
@@ -186,9 +188,9 @@ export default function VideoSetup(props) {
         {title}
       </Styled.h1>
 
-      <Spacer />
       { body }
-      <Spacer sx={{ mb: 3 }}/>
+
+      <div sx={{ mb: 3 }}></div>
 
       { !hideActionButtons && <ActionButtons
         next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}

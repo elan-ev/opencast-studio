@@ -4,26 +4,39 @@ import { jsx } from 'theme-ui';
 
 import { Fragment, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Grid, Text, Spinner } from '@theme-ui/components';
+import { Button, Card, Text, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+import { VideoBox } from '../elements.js';
+
+const SUBBOX_HEIGHT = 40;
 
 export function SourcePreview({ reselectSource, warnings, inputs }) {
   const { t } = useTranslation();
 
-  let preview;
+  let children;
   switch (inputs.length) {
     case 1:
-      preview = (
-        <StreamPreview input={inputs[0]} text={t('sources-select-user')} />
-      );
+      children = [{
+        body: <StreamPreview input={inputs[0]} text={t('sources-select-user')} />,
+        aspectRatio: aspectRatio(inputs[0].stream),
+        extraHeight: SUBBOX_HEIGHT,
+      }];
       break;
     case 2:
-      preview = <Grid gap={3} columns={[1, 2]} sx={{ minHeight: 0 }}>
-        <StreamPreview input={inputs[0]} text={t('sources-select-display')} />
-        <StreamPreview input={inputs[1]} text={t('sources-select-user')} />
-      </Grid>
+      children = [
+        {
+          body: <StreamPreview input={inputs[0]} text={t('sources-select-display')} />,
+          aspectRatio: aspectRatio(inputs[0].stream),
+          extraHeight: SUBBOX_HEIGHT,
+        },
+        {
+          body: <StreamPreview input={inputs[1]} text={t('sources-select-user')} />,
+          aspectRatio: aspectRatio(inputs[1].stream),
+          extraHeight: SUBBOX_HEIGHT,
+        },
+      ];
       break;
     default:
       return <p>Something went very wrong</p>;
@@ -32,9 +45,17 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
   return (
     <Fragment>
       { warnings }
-      { preview }
+      <VideoBox gap={20}>{ children }</VideoBox>
     </Fragment>
   );
+}
+
+// Returns the aspect ratio of a stream or the ratio 16/9 if the stream is null,
+// has not video tracks or any other reasons the width/height of the stream are
+// not accessible.
+function aspectRatio(stream) {
+  const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
+  return (width && height) ? width / height : 16 / 9;
 }
 
 function StreamPreview({ input, text }) {
@@ -43,9 +64,9 @@ function StreamPreview({ input, text }) {
   const { width, height } = track?.getSettings() ?? {};
 
   return (
-    <Card sx={{ display: 'flex', flexDirection: 'column', flex: '0 1 auto', minHeight: 0 }}>
+    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
       <PreviewVideo allowed={input.allowed} stream={stream} />
-      <Text p={2} color="muted">
+      <Text p={2} color="muted" sx={{ height: `${SUBBOX_HEIGHT}px` }}>
         {text}
         {track && `: ${width}×${height}`}
       </Text>
