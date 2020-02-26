@@ -1,4 +1,3 @@
-import axios from 'axios';
 import merge from 'deepmerge';
 
 
@@ -56,20 +55,7 @@ export class SettingsManager {
       }
     }
 
-    // Try to retrieve the context settings.
-    const basepath = process.env.PUBLIC_URL || '/';
-    const url = `${window.location.origin}${basepath}${CONTEXT_SETTINGS_FILE}`;
-    try {
-      const response = await axios.get(url);
-      const contentType = response.headers['Content-Type'];
-      if (!contentType || contentType.startsWith('application/json')) {
-        self.contextSettings = response.data;
-      }
-    } catch (e) {
-      if (e) {
-        console.warn('Could not load `settings.json`!', e);
-      }
-    }
+    self.contextSettings = await SettingsManager.loadContextSettings() || {};
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
@@ -87,6 +73,46 @@ export class SettingsManager {
 
     return self;
   }
+
+  // Attempts to loads `settings.json`. If it fails for some reason, returns
+  // `null` and prints an appropriate message on console.
+  static async loadContextSettings() {
+    // Try to retrieve the context settings.
+    const basepath = process.env.PUBLIC_URL || '/';
+    const url = `${window.location.origin}${basepath}${CONTEXT_SETTINGS_FILE}`;
+    let response;
+    try {
+      response = await fetch(url);
+    } catch (e) {
+      console.warn('Could not access `settings.json` due to network error!', e || "");
+      return null;
+    }
+
+    if (response.status === 404) {
+      // If `settings.json` was not found, we silently ignore the error. We
+      // expecet many installation to now provide this file.
+      console.debug("`settings.json` returned 404: ignoring");
+      return null;
+    } else if (!response.ok) {
+      console.error(
+        `Fetching 'settings.json' failed: ${response.status} ${response.statusText}`
+      );
+      return null;
+    }
+
+    if (!response.headers.get('Content-Type').startsWith('application/json')) {
+      console.warn("'settings.json' request does not have Content-Type application/json");
+      return null;
+    }
+
+    try {
+      return await response.json();
+    } catch(e) {
+      console.error("Could not parse 'settings.json': ", e);
+      return null;
+    }
+  }
+
 
   // Stores the given `newSettings` as user settings. The given object might be
   // partial, i.e. only the new values can be specified. Values in `newSettings`
