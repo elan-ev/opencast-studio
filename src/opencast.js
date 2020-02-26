@@ -22,14 +22,17 @@ export class Opencast {
   // succeed.
   #currentUser = null;
 
+  // Creates a new instance. Static method instead of constructor because it
+  // needs to be async.
   static async init(settings) {
     let self = new Opencast();
     await self.updateSettings(settings);
-    console.log("initialized opencast: ", self);
+    console.debug("initialized opencast: ", self);
     return self;
   }
 
-
+  // Update this object with the given Opencast settings. This also updates the
+  // `#currentUser`.
   async updateSettings(settings) {
     if (!settings.serverUrl) {
       this.#state = STATE_UNCONFIGURED;
@@ -71,27 +74,22 @@ export class Opencast {
         throw e;
       }
     }
-    // if (this.#login) {
-    // } else {
-    //   // TODO: maybe check if the user is logged in anyway?
-    //   if (await this.checkConnection() !== null) {
-    //     this.#state = STATE_CONNECTED;
-    //   }
-    // }
   }
 
-  // async checkConnection() {
-  //   const me = await this.getInfoMe();
-  //   console.log(me);
-  //   return !!me;
-  // }
-
+  // Updates `#currentUser` by checking 'info/me.json'. If username and
+  // password are provided, this method first tries to login with this data.
+  //
+  // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
+  // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED`.
   async updateUser() {
-    // if (typeof this.#login === 'object') {
-    //   await login();
-    // }
+    // If the user wants to login via username/password, we need to do that
+    // now. If this fails, the exception will bubble up.
+    if (this.#login?.username && this.#login?.password) {
+      await this.login();
+    }
+
     const me = await this.getInfoMe();
-    console.log(me);
+    console.debug(me);
     this.#currentUser = me;
     if (me.user.username === 'anonymous') {
       if (this.#login) {
@@ -104,13 +102,24 @@ export class Opencast {
     }
   }
 
-  // async login() {
-  //   const body = `j_username=${this.#login.username}&j_password=${this.#login.password}`
-  //     + "&_spring_security_remember_me=on";
-  //   const url = `${this.server_url}/admin_ng/j_spring_security_check`;
-  //   return await this.jsonRequest(url, { method: 'post', body });
-  // }
+  // Logs into Opencast with `#login.username` and `#login.password`. If the
+  // request fails, this throws (as `request` does), otherwise the response is
+  // ignored. If the login data is correct, the browser should have set some
+  // cookies and a subsequent `info/me` request should show the logged in user.
+  async login() {
+    const body = `j_username=${this.#login.username}&j_password=${this.#login.password}`
+      + "&_spring_security_remember_me=on";
+    const url = `${this.server_url}/admin_ng/j_spring_security_check`;
+    return await this.request(url, {
+      method: 'post',
+      body,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  }
 
+  // Returns the response from the `info/me.json` endpoint.
   async getInfoMe() {
     return await this.jsonRequest("info/me.json");
   }
@@ -119,40 +128,9 @@ export class Opencast {
   //
   // On success, the parsed JSON is returned as object. If anything goes wrong,
   // a `RequestError` is thrown and the corresponding `this.#state` is set.
-  //
-  // If `this.#login` contains a username and password, these are used with HTTP
-  // Basic auth to authenticate.
   async jsonRequest(path, options = {}) {
     const url = `${this.#serverUrl}/${path}`;
-
-    let response;
-
-    let headers = {};
-    if (this.#login?.username && this.#login?.password) {
-      const encoded = btoa(unescape(encodeURIComponent(
-        this.#login.username + ':' + this.#login.password
-      )));
-      headers = { 'Authorization': `Basic ${encoded}` };
-    }
-
-    try {
-      response = await fetch(url, {
-        ...options,
-        credentials: 'same-origin',
-        redirect: 'manual',
-        headers,
-      });
-    } catch (e) {
-      this.#state = STATE_NETWORK_ERROR;
-      throw new RequestError(`network error when accessing '${url}': `, e);
-    }
-
-    if (!response.ok) {
-      this.#state = STATE_RESPONSE_NOT_OK;
-      throw new RequestError(
-        `unexpected ${response.status} ${response.statusText} response when accessing ${url}`
-      );
-    }
+    const response = await this.request(path, options);
 
     try {
       return await response.json();
@@ -160,6 +138,35 @@ export class Opencast {
       this.#state = STATE_INVALID_RESPONSE;
       throw new RequestError(`invalid response (invalid JSON) when accessing ${url}: `, e);
     }
+  }
+
+  // Sends a request to the Opencast API, returning the response object.
+  //
+  // If anything goes wrong, a `RequestError` is thrown and the corresponding
+  // `this.#state` is set.
+  async request(path, options = {}) {
+    const url = `${this.#serverUrl}/${path}`;
+
+    let response;
+    try {
+      response = await fetch(url, {
+        ...options,
+        credentials: 'include',
+        redirect: 'manual',
+      });
+    } catch (e) {
+      this.#state = STATE_NETWORK_ERROR;
+      throw new RequestError(`network error when accessing '${url}': `, e);
+    }
+
+    if (!response.ok && response.type !== 'opaqueredirect') {
+      this.#state = STATE_RESPONSE_NOT_OK;
+      throw new RequestError(
+        `unexpected ${response.status} ${response.statusText} response when accessing ${url}`
+      );
+    }
+
+    return response;
   }
 }
 

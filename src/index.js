@@ -26,7 +26,6 @@ const initialize = Promise
     SettingsManager.init(),
   ])
   .then(async ([App, settingsManager]) => {
-    console.log(settingsManager);
     const oc = await Opencast.init(settingsManager.settings().opencast);
     return [App, settingsManager, oc];
   })
