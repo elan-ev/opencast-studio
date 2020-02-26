@@ -1,3 +1,9 @@
+//; -*- mode: rjsx;-*-
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import React, { useState } from 'react';
+
+
 const STATE_UNCONFIGURED = 'unconfigured';
 const STATE_CONNECTED = 'connected';
 const STATE_LOGGED_IN = 'logged_in';
@@ -173,3 +179,18 @@ export class Opencast {
 function RequestError(msg) {
   this.msg = msg;
 }
+
+const Context = React.createContext(null);
+
+// Returns the current provided Opencast instance.
+export const useOpencast = () => React.useContext(Context);
+
+export const Provider = ({ initial, children }) => {
+  const [opencast, updateOpencast] = useState(initial);
+
+  return (
+    <Context.Provider value={opencast}>
+      {children}
+    </Context.Provider>
+  );
+};

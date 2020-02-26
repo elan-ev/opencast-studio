@@ -13,7 +13,7 @@ import theme from './theme';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
 import { SettingsManager } from './settings';
-import { Opencast } from './opencast';
+import { Opencast, Provider as OpencastProvider } from './opencast';
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
@@ -41,7 +41,9 @@ initialize.then(
       <React.StrictMode>
         <ThemeProvider theme={theme}>
           <Global styles={GlobalStyle} />
-          <App settingsManager={settingsManager} />
+          <OpencastProvider initial={opencast}>
+            <App settingsManager={settingsManager} />
+          </OpencastProvider>
         </ThemeProvider>
       </React.StrictMode>
      );
