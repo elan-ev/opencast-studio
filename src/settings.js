@@ -78,7 +78,10 @@ export class SettingsManager {
   // `null` and prints an appropriate message on console.
   static async loadContextSettings() {
     // Try to retrieve the context settings.
-    const basepath = process.env.PUBLIC_URL || '/';
+    let basepath = process.env.PUBLIC_URL || '/';
+    if (!basepath.endsWith('/')) {
+      basepath += '/';
+    }
     const url = `${window.location.origin}${basepath}${CONTEXT_SETTINGS_FILE}`;
     let response;
     try {
