@@ -50,7 +50,11 @@ initialize.then(
   },
 
   // This error case is vey unlikely to occur.
-  e => render(<p>{`Fatal error while loading app: ${e.message}`}</p>),
+  e => render(<p>
+    {`Fatal error while loading app: ${e.message}`}
+    <br />
+    This might be caused by a incorrect configuration by the system administrator.
+  </p>),
 );
 
 // If you want your app to work offline and load faster, you can change

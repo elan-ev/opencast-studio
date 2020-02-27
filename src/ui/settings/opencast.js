@@ -11,7 +11,17 @@ import { Box, Button } from '@theme-ui/components';
 
 import { useState } from 'react';
 
-import OpencastAPI from '../../opencast-api';
+import {
+  Opencast,
+  useOpencast,
+  STATE_LOGGED_IN,
+  STATE_NETWORK_ERROR,
+  STATE_RESPONSE_NOT_OK,
+  STATE_INVALID_RESPONSE,
+  STATE_INCORRECT_LOGIN,
+  STATE_CONNECTED,
+  STATE_UNCONFIGURED,
+} from '../../opencast';
 import Notification from '../notification';
 import { Input, SettingsSection} from './elements';
 import { useRecordingState } from '../../recording-context';
@@ -20,6 +30,7 @@ import { useRecordingState } from '../../recording-context';
 
 function OpencastSettings({ settingsManager }) {
   const { t } = useTranslation();
+  const opencast = useOpencast();
   const [error, setError] = useState();
   const { errors, handleSubmit, register } = useForm({
     defaultValues: settingsManager.formValues().opencast
@@ -31,36 +42,59 @@ function OpencastSettings({ settingsManager }) {
 
   async function onSubmit(data) {
     setStatus('testing');
-    const ocUploader = new OpencastAPI({
+    const oc = await Opencast.init({
       ...settingsManager.settings().opencast,
       ...data,
     });
 
-    try {
-      const connected = await ocUploader.checkConnection();
-      if (!connected) {
+    console.log(oc);
+
+    switch (oc.getState()) {
+      case STATE_LOGGED_IN:
+        opencast.setGlobalInstance(oc);
+        settingsManager.saveSettings({ opencast: data });
+        setStatus('saved');
+        setError(null);
+        break;
+
+      case STATE_NETWORK_ERROR:
         setStatus('error');
-        setError(t('upload-settings-validation-error'));
-        return;
-      }
-      settingsManager.saveSettings({ opencast: data });
-      setStatus('saved');
-      setError(null)
-    } catch (error) {
-      console.log(error);
-      setStatus('error');
-      setError(t('message-server-unreachable'));
+        setError(t('upload-settings-error-server-unreachable'));
+        break;
+      case STATE_RESPONSE_NOT_OK:
+        setStatus('error');
+        setError(t('upload-settings-error-response-not-ok'));
+        break;
+      case STATE_INVALID_RESPONSE:
+        setStatus('error');
+        setError(t('upload-settings-error-invalid-response'));
+        break;
+      case STATE_INCORRECT_LOGIN:
+        setStatus('error');
+        if (opencast.isLoginProvided()) {
+          setError(t('upload-settings-invalid-provided-login'));
+        } else {
+          setError(t('upload-settings-invalid-login-data'));
+        }
+        break;
+
+      case STATE_CONNECTED:    // <- login data is provided in some way -> state impossible
+      case STATE_UNCONFIGURED: // <- server URL is required -> state impossible
+      default:
+        console.error("bug: invalid state reached...");
+        setStatus('error');
+        setError('internal error :(');
     }
   }
 
-  const fixedServerUrl = settingsManager.isFixed('opencast.serverUrl');
-  const fixedWorkflowId = settingsManager.isFixed('opencast.workflowId');
-  const fixedLoginName = settingsManager.isFixed('opencast.loginName');
-  const fixedLoginPassword = settingsManager.isFixed('opencast.loginPassword');
+  const showServerUrl = settingsManager.isConfigurable('opencast.serverUrl');
+  const showWorkflowId = settingsManager.isConfigurable('opencast.workflowId');
+  const showUsername = settingsManager.isUsernameConfigurable();
+  const showPassword = settingsManager.isPasswordConfigurable();
 
   // If all settings are already specified by the context, we do not show
   // anything at all.
-  if (fixedServerUrl && fixedWorkflowId && fixedLoginName && fixedLoginPassword) {
+  if (!showServerUrl && !showWorkflowId && !showUsername && !showPassword) {
     return null;
   }
 
@@ -77,7 +111,7 @@ function OpencastSettings({ settingsManager }) {
         {error && <Notification isDanger>{error}</Notification>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          { !fixedServerUrl && <Input
+          { showServerUrl && <Input
             errors={errors}
             label={t('upload-settings-label-server-url')}
             name="serverUrl"
@@ -98,7 +132,7 @@ function OpencastSettings({ settingsManager }) {
             required
           /> }
 
-          { !fixedWorkflowId && <Input
+          { showWorkflowId && <Input
             errors={errors}
             label={t('upload-settings-label-workflow-id')}
             name="workflowId"
@@ -106,7 +140,7 @@ function OpencastSettings({ settingsManager }) {
             required
           /> }
 
-          { !fixedLoginName && <Input
+          { showUsername && <Input
             errors={errors}
             label={t('upload-settings-label-username')}
             name="loginName"
@@ -114,7 +148,7 @@ function OpencastSettings({ settingsManager }) {
             required
           /> }
 
-          { !fixedLoginPassword && <Input
+          { showPassword && <Input
             errors={errors}
             label={t('upload-settings-label-password')}
             name="loginPassword"

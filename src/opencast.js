@@ -3,14 +3,29 @@
 import { jsx } from 'theme-ui';
 import React, { useState } from 'react';
 
+// The server URL was not specified.
+export const STATE_UNCONFIGURED = 'unconfigured';
 
-const STATE_UNCONFIGURED = 'unconfigured';
-const STATE_CONNECTED = 'connected';
-const STATE_LOGGED_IN = 'logged_in';
-const STATE_NETWORK_ERROR = 'network_error';
-const STATE_RESPONSE_NOT_OK = 'response_not_ok';
-const STATE_INVALID_RESPONSE = 'invalid_response';
-const STATE_INCORRECT_LOGIN = 'incorrect_login';
+// The OC server is reachable but a login was not attempted and the current user
+// is anonymous.
+export const STATE_CONNECTED = 'connected';
+
+// The OC server is reachable and the user is authenticated.
+export const STATE_LOGGED_IN = 'logged_in';
+
+// Some network error occured when accessing the server.
+export const STATE_NETWORK_ERROR = 'network_error';
+
+// When accessing the OC API, the request returned as non-2xx code unexpectedly.
+// This likely indicates that the server is not actually a valid OC server.
+export const STATE_RESPONSE_NOT_OK = 'response_not_ok';
+
+// The API requested returned invalid JSON or unexpected data.
+export const STATE_INVALID_RESPONSE = 'invalid_response';
+
+// The server is reachable and a login was provided, but the login did not
+// succeed.
+export const STATE_INCORRECT_LOGIN = 'incorrect_login';
 
 
 export class Opencast {
@@ -28,6 +43,9 @@ export class Opencast {
   // succeed.
   #currentUser = null;
 
+  updateGlobalOc = null;
+
+
   // Creates a new instance. Static method instead of constructor because it
   // needs to be async.
   static async init(settings) {
@@ -35,6 +53,17 @@ export class Opencast {
     await self.updateSettings(settings);
     console.debug("initialized opencast: ", self);
     return self;
+  }
+
+  // Updates the global OC instance from `this` to `newInstance`. This should
+  // only be called when the settings are saved.
+  setGlobalInstance(newInstance) {
+    if (!this.updateGlobalOc) {
+      console.error("bug: 'updateGlobalOc' not set");
+    }
+
+    newInstance.updateGlobalOc = this.updateGlobalOc;
+    this.updateGlobalOc(newInstance);
   }
 
   // Update this object with the given Opencast settings. This also updates the
@@ -54,7 +83,7 @@ export class Opencast {
       : settings.serverUrl;
     this.#workflowId = settings.workflowId;
 
-    if (settings.loginProvided) {
+    if (settings.loginProvided === true) {
       // Here we can assume Studio is running within an Opencast instance and
       // the route to Studio is protected via login. This means that login
       // cookies are already present and we don't need to worry about that.
@@ -115,7 +144,7 @@ export class Opencast {
   async login() {
     const body = `j_username=${this.#login.username}&j_password=${this.#login.password}`
       + "&_spring_security_remember_me=on";
-    const url = `${this.server_url}/admin_ng/j_spring_security_check`;
+    const url = "/admin_ng/j_spring_security_check";
     return await this.request(url, {
       method: 'post',
       body,
@@ -174,6 +203,14 @@ export class Opencast {
 
     return response;
   }
+
+  getState() {
+    return this.#state;
+  }
+
+  isLoginProvided() {
+    return this.#login === true;
+  }
 }
 
 function RequestError(msg) {
@@ -187,6 +224,7 @@ export const useOpencast = () => React.useContext(Context);
 
 export const Provider = ({ initial, children }) => {
   const [opencast, updateOpencast] = useState(initial);
+  opencast.updateGlobalOc = updateOpencast;
 
   return (
     <Context.Provider value={opencast}>

@@ -104,7 +104,9 @@ export class SettingsManager {
     }
 
     if (!response.headers.get('Content-Type').startsWith('application/json')) {
-      console.warn("'settings.json' request does not have Content-Type application/json");
+      console.warn(
+        "'settings.json' request does not have 'Content-Type: application/json' -> ignoring..."
+      );
       return null;
     }
 
@@ -112,7 +114,7 @@ export class SettingsManager {
       return await response.json();
     } catch(e) {
       console.error("Could not parse 'settings.json': ", e);
-      return null;
+      throw new SyntaxError(`Could not parse 'settings.json': ${e}`);
     }
   }
 
@@ -139,10 +141,10 @@ export class SettingsManager {
     return merge(defaultSettings, this.#userSettings);
   }
 
-  // Returns whether a specific setting is fixed by the context setting or an
-  // URL setting. The path is given as string.
-  // Example: `manager.isFixed('opencast.loginName')`
-  isFixed(path) {
+  // Returns whether a specific setting is configurable by the user. It is not
+  // if the setting is fixed by the context setting or an URL setting. The path
+  // is given as string. Example: `manager.isConfigurable('opencast.loginName')`
+  isConfigurable(path) {
     let obj = merge(this.contextSettings, this.urlSettings);
     const segments = path.split('.');
     for (const segment of segments.slice(0, -1)) {
@@ -152,7 +154,16 @@ export class SettingsManager {
       obj = obj[segment];
     }
 
-    return segments[segments.length - 1] in obj;
+    return !(segments[segments.length - 1] in obj);
+  }
+
+  isUsernameConfigurable() {
+    let obj = merge(this.contextSettings, this.urlSettings);
+    return !('loginName' in obj.opencast) && obj.opencast?.loginProvided !== true;
+  }
+  isPasswordConfigurable() {
+    let obj = merge(this.contextSettings, this.urlSettings);
+    return !('loginPassword' in obj.opencast) && obj.opencast?.loginProvided !== true;
   }
 }
 
