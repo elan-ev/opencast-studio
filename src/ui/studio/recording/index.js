@@ -6,6 +6,7 @@ import { Flex } from '@theme-ui/components';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useRecordingState } from '../../../recording-context';
+import { useOpencast } from '../../../opencast';
 
 import { ActionButtons } from '../elements';
 
@@ -20,6 +21,7 @@ export const STATE_RECORDING = 'recording';
 
 export default function Recording(props) {
   const state = useRecordingState();
+  const opencast = useOpencast();
 
   const [recordingState, setRecordingState] = useState(STATE_INACTIVE);
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function Recording(props) {
 
 
   const handleRecorded = () => {
+    opencast.refreshConnection();
     props.nextStep();
   };
 

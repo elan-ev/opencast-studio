@@ -13,16 +13,22 @@ import theme from './theme';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
 import { SettingsManager } from './settings';
+import { Opencast, Provider as OpencastProvider } from './opencast';
 
 if (process.env.NODE_ENV === 'production') {
   Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
 }
 
 // Load the rest of the application and try to fetch the `settings.json`.
-const initialize = Promise.all([
-  import('./App').then(mod => mod.default),
-  SettingsManager.init(),
-]);
+const initialize = Promise
+  .all([
+    import('./App').then(mod => mod.default),
+    SettingsManager.init(),
+  ])
+  .then(async ([App, settingsManager]) => {
+    const oc = await Opencast.init(settingsManager.settings().opencast);
+    return [App, settingsManager, oc];
+  })
 
 const render = body => {
   ReactDOM.render(body, document.getElementById('root'));
@@ -30,19 +36,25 @@ const render = body => {
 
 // After the initialization is done, render to the root element.
 initialize.then(
-  ([App, settingsManager]) => {
+  ([App, settingsManager, opencast]) => {
     render(
       <React.StrictMode>
         <ThemeProvider theme={theme}>
           <Global styles={GlobalStyle} />
-          <App settingsManager={settingsManager} />
+          <OpencastProvider initial={opencast}>
+            <App settingsManager={settingsManager} />
+          </OpencastProvider>
         </ThemeProvider>
       </React.StrictMode>
      );
   },
 
   // This error case is vey unlikely to occur.
-  e => render(<p>{`Fatal error while loading app: ${e.message}`}</p>),
+  e => render(<p>
+    {`Fatal error while loading app: ${e.message}`}
+    <br />
+    This might be caused by a incorrect configuration by the system administrator.
+  </p>),
 );
 
 // If you want your app to work offline and load faster, you can change
