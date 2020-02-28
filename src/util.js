@@ -36,10 +36,8 @@ export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 // Checks if this runs in Safari.
 export const onSafari = () => /Safari/i.test(navigator.userAgent);
 
-// Returns the aspect ratio of a stream or the ratio 16/9 if the stream is null,
-// has not video tracks or any other reasons the width/height of the stream are
-// not accessible.
-export const aspectRatioOf = stream => {
+// Returns the dimensions as [w, h] array or `null` if there is no video track.
+export const dimensionsOf = stream => {
   const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
-  return (width && height) ? width / height : 16 / 9;
+  return [width, height];
 };

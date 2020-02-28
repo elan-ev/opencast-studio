@@ -70,7 +70,7 @@ const Preview = () => {
         }}
       ></video>
     ),
-    aspectRatio: recording.aspectRatio,
+    dimensions: () => recording.dimensions,
   }));
 
   return <VideoBox gap={20}>{ children }</VideoBox>;

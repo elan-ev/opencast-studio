@@ -8,8 +8,8 @@ import { Button, Card, Text, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-import { VideoBox } from '../elements.js';
-import { aspectRatioOf } from '../../../util.js';
+import { VideoBox, useVideoBoxResize } from '../elements.js';
+import { dimensionsOf } from '../../../util.js';
 
 const SUBBOX_HEIGHT = 40;
 
@@ -21,7 +21,7 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
     case 1:
       children = [{
         body: <StreamPreview input={inputs[0]} text={t('sources-select-user')} />,
-        aspectRatio: aspectRatioOf(inputs[0].stream),
+        dimensions: () => dimensionsOf(inputs[0].stream),
         extraHeight: SUBBOX_HEIGHT,
       }];
       break;
@@ -29,12 +29,12 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
       children = [
         {
           body: <StreamPreview input={inputs[0]} text={t('sources-select-display')} />,
-          aspectRatio: aspectRatioOf(inputs[0].stream),
+          dimensions: () => dimensionsOf(inputs[0].stream),
           extraHeight: SUBBOX_HEIGHT,
         },
         {
           body: <StreamPreview input={inputs[1]} text={t('sources-select-user')} />,
-          aspectRatio: aspectRatioOf(inputs[1].stream),
+          dimensions: () => dimensionsOf(inputs[1].stream),
           extraHeight: SUBBOX_HEIGHT,
         },
       ];
@@ -68,14 +68,24 @@ function StreamPreview({ input, text }) {
 }
 
 export const PreviewVideo = ({ allowed, stream, ...props }) => {
+  const resizeVideoBox = useVideoBoxResize();
+
   const videoRef = useRef();
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
+    const v = videoRef.current;
+    if (v) {
+      if (!v.srcObject) {
+        v.srcObject = stream;
+      }
+      v.addEventListener('resize', resizeVideoBox);
     }
 
-    return () => {};
-  }, [stream]);
+    return () => {
+      if (v) {
+        v.removeEventListener('resize', resizeVideoBox);
+      }
+    };
+  }, [stream, resizeVideoBox]);
 
   if (!stream) {
     let inner;

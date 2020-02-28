@@ -14,8 +14,8 @@ import Clock from './clock';
 import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from './index.js';
 
 function addRecordOnStop(dispatch, deviceType) {
-  return ({ media, url, mimeType, aspectRatio }) => {
-    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType, aspectRatio } });
+  return ({ media, url, mimeType, dimensions }) => {
+    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType, dimensions } });
   };
 }
 

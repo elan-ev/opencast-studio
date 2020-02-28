@@ -9,8 +9,8 @@ import { useEffect, useRef } from 'react';
 
 import { useRecordingState } from '../../../recording-context';
 import { STATE_PAUSED } from './index.js';
-import { VideoBox } from '../elements.js';
-import { aspectRatioOf } from '../../../util.js';
+import { VideoBox, useVideoBoxResize } from '../elements.js';
+import { dimensionsOf } from '../../../util.js';
 
 export default function MediaDevices({ recordingState }) {
   const { t } = useTranslation();
@@ -22,13 +22,13 @@ export default function MediaDevices({ recordingState }) {
   if (displayStream) {
     children.push({
       body: <MediaDevice title={t('share-desktop')} stream={displayStream} paused={paused} />,
-      aspectRatio: aspectRatioOf(displayStream),
+      dimensions: () => dimensionsOf(displayStream),
     });
   }
   if (userStream) {
     children.push({
       body: <MediaDevice title={t('share-camera')} stream={userStream} paused={paused} />,
-      aspectRatio: aspectRatioOf(userStream),
+      dimensions: () => dimensionsOf(userStream),
     });
   }
 
@@ -36,19 +36,25 @@ export default function MediaDevices({ recordingState }) {
 }
 
 function MediaDevice({ title, stream, paused }) {
+  const resizeVideoBox = useVideoBoxResize();
   const videoRef = useRef();
 
   useEffect(() => {
-    if (videoRef.current && typeof stream != 'undefined') {
-      if (!videoRef.current.srcObject) {
-        videoRef.current.srcObject = stream;
+    const v = videoRef.current;
+    if (v && typeof stream != 'undefined') {
+      if (!v.srcObject) {
+        v.srcObject = stream;
       }
+      v.addEventListener('resize', resizeVideoBox);
+
       if (paused) {
-        videoRef.current.pause();
+        v.pause();
       } else {
-        videoRef.current.play();
+        v.play();
       }
     }
+
+    return () => v.removeEventListener('resize', resizeVideoBox);
   });
 
   return (

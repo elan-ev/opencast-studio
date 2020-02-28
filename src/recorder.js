@@ -1,4 +1,4 @@
-import { aspectRatioOf } from './util.js';
+import { dimensionsOf } from './util.js';
 
 export default class Recorder {
   constructor(stream, options = {}) {
@@ -20,9 +20,9 @@ export default class Recorder {
       const mimeType = _recData[0].type || this.recorder.mimeType;
       const media = new Blob(_recData, { type: mimeType });
       const url = URL.createObjectURL(media);
-      const aspectRatio = aspectRatioOf(stream);
+      const dimensions = dimensionsOf(stream);
       this.recorder = null;
-      options.onStop && options.onStop({ url, media, mimeType, aspectRatio });
+      options.onStop && options.onStop({ url, media, mimeType, dimensions });
     };
 
     this.isRecording = false;
