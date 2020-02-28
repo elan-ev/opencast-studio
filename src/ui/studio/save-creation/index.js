@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 import { Trans, useTranslation } from 'react-i18next';
 
-import OpencastAPI from '../../../opencast-api';
+import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import Notification from '../../notification';
@@ -53,6 +53,7 @@ const reducer = (state, action) => {
 export default function SaveCreation(props) {
   const { t } = useTranslation();
   const { recordings } = useRecordingState();
+  const opencast = useOpencast();
   const recordingDispatch = useDispatch();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -62,7 +63,7 @@ export default function SaveCreation(props) {
     dispatch({ type: 'RECORDING_DATA_UPDATE', payload: [target.name, value] });
   }
 
-  function handleUpload() {
+  async function handleUpload() {
     const { title, presenter } = state.recordingData;
 
     if (title === '' || presenter === '') {
@@ -71,34 +72,25 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
-    new OpencastAPI(props.settings.opencast).loginAndUpload(
-      // recording,
-      recordings.filter(Boolean),
-
-      function onSuccess() {
-        dispatch({ type: 'UPLOAD_SUCCESS' });
-      },
-
-      function onLoginFailed() {
-        dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-login-failed') });
-        // TODO: (mel) We have to find a better way to ensure connection to OC
-        // this.props.handleOpenUploadSettings();
-      },
-
-      function onServerUnreachable(error) {
-        dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-server-unreachable') });
-        // TODO: (mel) We have to find a better way to ensure connection to OC
-        // this.props.handleOpenUploadSettings();
-      },
-
-      function onInetOrPermFailed(err) {
-        dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-conn-failed') });
-        // TODO: (mel) We have to find a better way to ensure connection to OC
-        // this.props.handleOpenUploadSettings();
-      },
+    const success = await opencast.upload({
+      recordings: recordings.filter(Boolean),
       title,
-      presenter
-    );
+      creator: presenter,
+    });
+
+    if (success) {
+      dispatch({ type: 'UPLOAD_SUCCESS' });
+    } else {
+      switch (opencast.getState()) {
+        case STATE_INCORRECT_LOGIN:
+          dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-login-failed') });
+          break;
+        default:
+          // TODO: this needs a better message and maybe some special cases.
+          dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-server-unreachable') });
+          break;
+      }
+    }
   }
 
   const handleCancel = () => {
@@ -106,7 +98,7 @@ export default function SaveCreation(props) {
     props.previousStep();
   };
 
-  const uploadPossible = OpencastAPI.areSettingsComplete(props.settings.opencast);
+  const uploadPossible = opencast.isReadyToUpload();
 
   return (
     <Container>

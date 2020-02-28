@@ -1,7 +1,9 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import equal from 'fast-deep-equal';
+
 
 // The server URL was not specified.
 export const STATE_UNCONFIGURED = 'unconfigured';
@@ -50,90 +52,108 @@ export class Opencast {
   // needs to be async.
   static async init(settings) {
     let self = new Opencast();
-    await self.updateSettings(settings);
-    console.debug("initialized opencast: ", self);
-    return self;
-  }
 
-  // Updates the global OC instance from `this` to `newInstance`. This should
-  // only be called when the settings are saved.
-  setGlobalInstance(newInstance) {
-    if (!this.updateGlobalOc) {
-      console.error("bug: 'updateGlobalOc' not set");
-    }
-
-    newInstance.updateGlobalOc = this.updateGlobalOc;
-    this.updateGlobalOc(newInstance);
-  }
-
-  // Update this object with the given Opencast settings. This also updates the
-  // `#currentUser`.
-  async updateSettings(settings) {
     if (!settings.serverUrl) {
-      this.#state = STATE_UNCONFIGURED;
-      this.#serverUrl = null;
-      this.#workflowId = null;
-      this.#login = null;
+      self.#state = STATE_UNCONFIGURED;
+      self.#serverUrl = null;
+      self.#workflowId = null;
+      self.#login = null;
 
       return;
     }
 
-    this.#serverUrl = settings.serverUrl.endsWith('/')
+    self.#serverUrl = settings.serverUrl.endsWith('/')
       ? settings.serverUrl.slice(0, -1)
       : settings.serverUrl;
-    this.#workflowId = settings.workflowId;
+    self.#workflowId = settings.workflowId;
 
     if (settings.loginProvided === true) {
       // Here we can assume Studio is running within an Opencast instance and
       // the route to Studio is protected via login. This means that login
       // cookies are already present and we don't need to worry about that.
-      this.#login = true;
+      self.#login = true;
     } else if (settings.loginName && settings.loginPassword) {
       // Studio is not running in OC context, but username and password are
       // provided.
-      this.#login = {
+      self.#login = {
         username: settings.loginName,
         password: settings.loginPassword,
       };
     } else {
       // Login is not yet provided.
-      this.#login = null;
+      self.#login = null;
     }
 
-    try {
-      await this.updateUser();
-    } catch (e) {
-      if (e instanceof RequestError) {
-        console.error(e.msg);
-      } else {
-        throw e;
+    await catchRequestError(async () => {
+      // If the user wants to login via username/password, we need to do that
+      // now. If this fails, the exception will bubble up.
+      if (self.#login?.username && self.#login?.password) {
+        await self.login();
       }
+
+      await self.updateUser();
+    });
+
+    return self;
+  }
+
+  // Updates the global OC instance from `this` to `newInstance`, IF the new
+  // instance is different. This should only be called when the settings are
+  // saved.
+  setGlobalInstance(newInstance) {
+    if (!this.updateGlobalOc) {
+      console.error("bug: 'updateGlobalOc' not set");
+    }
+
+    // We only update if the two instances are different (ignoring the
+    // `updateGlobalOc` key though).
+    newInstance.updateGlobalOc = this.updateGlobalOc;
+    if (!equal(this, newInstance)) {
+      this.updateGlobalOc(newInstance);
     }
   }
 
-  // Updates `#currentUser` by checking 'info/me.json'. If username and
-  // password are provided, this method first tries to login with this data.
+  // Refreshes the connection by requesting `info/me` unless the state is
+  // 'unconfigured'.
   //
-  // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
-  // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED`.
-  async updateUser() {
-    // If the user wants to login via username/password, we need to do that
-    // now. If this fails, the exception will bubble up.
-    if (this.#login?.username && this.#login?.password) {
-      await this.login();
+  // If the request errors or returns a different user, the globale Opencast
+  // instance is updated.
+  async refreshConnection() {
+    if (this.#state === STATE_UNCONFIGURED) {
+      return;
     }
 
-    const me = await this.getInfoMe();
-    console.debug(me);
-    this.#currentUser = me;
-    if (me.user.username === 'anonymous') {
-      if (this.#login) {
-        this.#state = STATE_INCORRECT_LOGIN;
-      } else {
-        this.#state = STATE_CONNECTED;
+    await catchRequestError(async () => {
+      // Request to `info/me`. If the user or the current state has changed
+      const changed = await this.updateUser();
+      if (changed) {
+        this.updateGlobalOc(this);
       }
+    });
+  }
+
+  // Updates `#currentUser` by checking 'info/me.json'.
+  //
+  // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
+  // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED`. This method returns whether
+  // the state or user object has changed in any way.
+  async updateUser() {
+    const newUser = await this.getInfoMe();
+
+    if (!equal(newUser, this.#currentUser)) {
+      this.#currentUser = newUser;
+      if (newUser.user.username === 'anonymous') {
+        if (this.#login) {
+          this.#state = STATE_INCORRECT_LOGIN;
+        } else {
+          this.#state = STATE_CONNECTED;
+        }
+      } else {
+        this.#state = STATE_LOGGED_IN;
+      }
+      return true;
     } else {
-      this.#state = STATE_LOGGED_IN;
+      return false;
     }
   }
 
@@ -204,18 +224,127 @@ export class Opencast {
     return response;
   }
 
+  // Uploads the given recordings with the given title and creator metadata. If
+  // the upload fails, `false` is returned and `getState` changes to an error
+  // state.
+  async upload({ recordings, title, creator }) {
+    // Refresh connection and check if we are ready to upload.
+    await this.refreshConnection();
+    if (!this.isReadyToUpload()) {
+      return false;
+    }
+
+    // Actually upload
+    try {
+      // Create new media package
+      let mediaPackage = await this.request("ingest/createMediaPackage")
+        .then(response => response.text());
+
+
+      // Prepare meta data
+      let base_dc = `<?xml version="1.0" encoding="UTF-8"?>
+        <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
+                    xmlns:dcterms="http://purl.org/dc/terms/"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <dcterms:created xsi:type="dcterms:W3CDTF">2001-01-01T01:01Z</dcterms:created>
+            <dcterms:creator>Creator not set</dcterms:creator>
+            <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
+            <dcterms:title>Title Not Set</dcterms:title>
+            <dcterms:spatial>Opencast Studio</dcterms:spatial>
+        </dublincore>`;
+
+      const dc = new DOMParser().parseFromString(base_dc, 'text/xml');
+      const dc_created = dc.getElementsByTagName('dcterms:created');
+      const dc_creator = dc.getElementsByTagName('dcterms:creator');
+      const dc_title = dc.getElementsByTagName('dcterms:title');
+
+      dc_created[0].textContent = new Date(Date.now()).toISOString();
+      dc_creator[0].textContent = creator;
+      dc_title[0].textContent = title;
+
+
+      // Add metadata to media package
+      const body = new FormData();
+      body.append('mediaPackage', mediaPackage);
+      body.append('dublinCore', new XMLSerializer().serializeToString(dc));
+      body.append('flavor', 'dublincore/episode');
+
+      mediaPackage = await this.request("ingest/addDCCatalog", { method: 'post', body })
+        .then(response => response.text());
+
+
+      // Add all recordings
+      for (const { deviceType, media } of recordings) {
+        let trackFlavor = 'presentation/source';
+        if (deviceType === 'desktop') {
+          trackFlavor = 'presentation/source';
+        } else if (deviceType === 'video') {
+          trackFlavor = 'presenter/source';
+        }
+
+        const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
+        const downloadName = `${flavor} - ${title || 'Recording'}.webm`;
+
+        const body = new FormData();
+        body.append('mediaPackage', mediaPackage);
+        body.append('flavor', trackFlavor);
+        body.append('tags', '');
+        body.append('BODY', media, downloadName);
+
+        mediaPackage = await this.request("ingest/addTrack", { method: 'post', body })
+          .then(response => response.text());
+      }
+
+
+      // Finalize/ingest media package
+      const ingestBody = new FormData();
+      ingestBody.append('mediaPackage', mediaPackage);
+      ingestBody.append('workflowDefinitionId', this.#workflowId);
+      await this.request("ingest/ingest", { method: 'post', body: ingestBody });
+
+      return true;
+    } catch(e) {
+      console.error("Error occured during upload: ", e);
+      return false;
+    }
+  }
+
+  // Returns the current state of the connection to the OC server.
   getState() {
     return this.#state;
   }
 
+  // Returns whether or not a login is already provided (i.e. we don't need to
+  // login manually).
   isLoginProvided() {
     return this.#login === true;
   }
+
+  // Returns whether or not the connection is ready to upload a video.
+  isReadyToUpload() {
+    return this.#state === STATE_LOGGED_IN;
+  }
 }
 
+
+// Internal error type, simply containing a string.
 function RequestError(msg) {
   this.msg = msg;
 }
+
+const catchRequestError = async (fn) => {
+  try {
+    return await fn();
+  } catch (e) {
+    if (e instanceof RequestError) {
+      console.error(e.msg);
+    } else {
+      throw e;
+    }
+    return null;
+  }
+};
+
 
 const Context = React.createContext(null);
 
@@ -224,7 +353,15 @@ export const useOpencast = () => React.useContext(Context);
 
 export const Provider = ({ initial, children }) => {
   const [opencast, updateOpencast] = useState(initial);
-  opencast.updateGlobalOc = updateOpencast;
+  opencast.updateGlobalOc = (newInstance) => {
+    // We create a shallow clone here to force rerendering.
+    updateOpencast({ ...newInstance });
+  };
+
+  // This debug output will be useful for future debugging sessions.
+  useEffect(() => {
+    console.debug("Current Opencast connection: ", opencast);
+  });
 
   return (
     <Context.Provider value={opencast}>
