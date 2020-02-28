@@ -159,10 +159,16 @@ export class SettingsManager {
 
   isUsernameConfigurable() {
     let obj = merge(this.contextSettings, this.urlSettings);
+    if (obj.opencast === undefined) {
+      return true;
+    }
     return !('loginName' in obj.opencast) && obj.opencast?.loginProvided !== true;
   }
   isPasswordConfigurable() {
     let obj = merge(this.contextSettings, this.urlSettings);
+    if (obj.opencast === undefined) {
+      return true;
+    }
     return !('loginPassword' in obj.opencast) && obj.opencast?.loginProvided !== true;
   }
 }
