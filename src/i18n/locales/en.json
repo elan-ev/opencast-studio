@@ -38,6 +38,8 @@
   "enter-studio": "Enter studio",
   "sources-enter-studio-without-audio": "Proceed w/o audio",
 
+  "confirm-discard-recordings": "Are you sure you want to discard your recordings? This cannot be undone!",
+
   "sources-video-selection-prompt": "Please share your display and/or camera",
   "sources-video-display-selected": "Display selected",
   "sources-video-display-and-user-selected": "Display & Camera selected",

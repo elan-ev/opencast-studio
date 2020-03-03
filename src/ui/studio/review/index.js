@@ -8,14 +8,19 @@ import { useTranslation } from 'react-i18next';
 import { Beforeunload } from 'react-beforeunload';
 
 import { ActionButtons, VideoBox } from '../elements';
-import { useRecordingState } from '../../../recording-context';
+import { useRecordingState, useDispatch } from '../../../recording-context';
 
 
 export default function Review(props) {
   const { t } = useTranslation();
+  const recordingDispatch = useDispatch();
 
   const handleBack = () => {
-    props.previousStep();
+    const doIt = window.confirm(t('confirm-discard-recordings'));
+    if (doIt) {
+      recordingDispatch({ type: 'CLEAR_RECORDINGS' });
+      props.previousStep();
+    }
   };
 
   const handleNext = () => {
@@ -42,7 +47,11 @@ export default function Review(props) {
       <div sx={{ mb: 3 }}></div>
 
       <ActionButtons
-        prev={{ onClick: handleBack }}
+        prev={{
+          onClick: handleBack,
+          danger: true,
+          label: 'save-creation-button-discard-and-record',
+        }}
         next={{ onClick: handleNext }}
       />
     </Flex>
