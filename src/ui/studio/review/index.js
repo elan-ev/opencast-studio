@@ -19,7 +19,7 @@ export default function Review(props) {
     const doIt = window.confirm(t('confirm-discard-recordings'));
     if (doIt) {
       recordingDispatch({ type: 'CLEAR_RECORDINGS' });
-      props.previousStep();
+      props.firstStep();
     }
   };
 
