@@ -22,7 +22,7 @@ export function ActionButtons({ prev = null, next = null, children }) {
   const { t } = useTranslation();
 
   return (
-    <Flex sx={{ alignItems: 'end' }}>
+    <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
       <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
         {prev && (
           <Button

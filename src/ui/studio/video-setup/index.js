@@ -104,7 +104,7 @@ export default function VideoSetup(props) {
               width: '100%',
               mx: ['auto', 'none'],
               mb: 3,
-              flex: '1 1 auto',
+              flex: '4 1 auto',
               maxHeight: ['none', '270px'],
               minHeight: [0, ''],
               justifyContent: 'center',
@@ -190,11 +190,11 @@ export default function VideoSetup(props) {
 
       { body }
 
-      <div sx={{ mb: 3 }}></div>
+      {activeSource !== NONE && <div sx={{ mb: 3 }}></div>}
 
-      { !hideActionButtons && <ActionButtons
-        next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
-        prev={{
+      {activeSource !== NONE && <ActionButtons
+        next={hideActionButtons ? null : { onClick: () => props.nextStep(), disabled: nextDisabled }}
+        prev={hideActionButtons ? null : {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
