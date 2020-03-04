@@ -88,7 +88,7 @@
   "upload-settings-invalid-provided-login": "",
   "warning-https": "",
   "warning-recorder-not-supported": "Tarayıcınız medya akışlarını kaydetmeyi desteklemiyor.",
-  "warning-recorder-safari-hint": "iOS'taki Safari için, ayarlardan deneysel 'MediaRecorder' özelliğini etkinleştirebilirsiniz.",
+  "warning-recorder-safari-hint": "",
   "warning-missing-connection-settings": "",
   "settings-back-to-recording": ""
 }
