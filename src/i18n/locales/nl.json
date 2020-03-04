@@ -88,7 +88,7 @@
   "upload-settings-invalid-provided-login": "",
   "warning-https": "De meeste browsers staan geen video-opname toe over een niet-versleutelde verbinding (HTTP). Schakel over naar HTTPS.",
   "warning-recorder-not-supported": "Uw browser ondersteunt het opnemen van media streams niet.",
-  "warning-recorder-safari-hint": "Voor Safari op iOS kunt u de experimentele functie 'MediaRecorder' inschakelen in instellingen.",
+  "warning-recorder-safari-hint": "",
   "warning-missing-connection-settings": "",
   "settings-back-to-recording": ""
 }
