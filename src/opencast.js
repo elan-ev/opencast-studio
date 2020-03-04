@@ -53,13 +53,13 @@ export class Opencast {
   static async init(settings) {
     let self = new Opencast();
 
-    if (!settings.serverUrl) {
+    if (!settings?.serverUrl) {
       self.#state = STATE_UNCONFIGURED;
       self.#serverUrl = null;
       self.#workflowId = null;
       self.#login = null;
 
-      return;
+      return self;
     }
 
     self.#serverUrl = settings.serverUrl.endsWith('/')
