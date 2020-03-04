@@ -15,7 +15,7 @@ import * as serviceWorker from './serviceWorker';
 import { SettingsManager } from './settings';
 import { Opencast, Provider as OpencastProvider } from './opencast';
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.REACT_APP_ENABLE_SENTRY === '1') {
   Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
 }
 
