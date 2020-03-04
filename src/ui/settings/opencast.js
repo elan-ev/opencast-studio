@@ -47,8 +47,6 @@ function OpencastSettings({ settingsManager }) {
       ...data,
     });
 
-    console.log(oc);
-
     switch (oc.getState()) {
       case STATE_LOGGED_IN:
         opencast.setGlobalInstance(oc);

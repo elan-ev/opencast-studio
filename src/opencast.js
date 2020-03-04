@@ -53,13 +53,13 @@ export class Opencast {
   static async init(settings) {
     let self = new Opencast();
 
-    if (!settings.serverUrl) {
+    if (!settings?.serverUrl) {
       self.#state = STATE_UNCONFIGURED;
       self.#serverUrl = null;
       self.#workflowId = null;
       self.#login = null;
 
-      return;
+      return self;
     }
 
     self.#serverUrl = settings.serverUrl.endsWith('/')
@@ -108,7 +108,13 @@ export class Opencast {
     // We only update if the two instances are different (ignoring the
     // `updateGlobalOc` key though).
     newInstance.updateGlobalOc = this.updateGlobalOc;
-    if (!equal(this, newInstance)) {
+    const changed = this.#state !== newInstance.#state
+      || this.#serverUrl !== newInstance.#serverUrl
+      || this.#workflowId !== newInstance.#workflowId
+      || !equal(this.#login, newInstance.#login)
+      || !equal(this.#currentUser, newInstance.#currentUser);
+
+    if (changed) {
       this.updateGlobalOc(newInstance);
     }
   }
@@ -352,10 +358,16 @@ const Context = React.createContext(null);
 export const useOpencast = () => React.useContext(Context);
 
 export const Provider = ({ initial, children }) => {
+  const [, updateDummy] = useState(0);
   const [opencast, updateOpencast] = useState(initial);
   opencast.updateGlobalOc = (newInstance) => {
-    // We create a shallow clone here to force rerendering.
-    updateOpencast({ ...newInstance });
+    updateOpencast(newInstance);
+
+    // If the object reference didn't change, we use this dummy state to force a
+    // rerender.
+    if (opencast === newInstance) {
+      updateDummy(old => old + 1);
+    }
   };
 
   // This debug output will be useful for future debugging sessions.
