@@ -141,35 +141,33 @@ export class SettingsManager {
     return merge(defaultSettings, this.#userSettings);
   }
 
+  fixedSettings() {
+    return merge(this.contextSettings, this.urlSettings);
+  }
+
   // Returns whether a specific setting is configurable by the user. It is not
   // if the setting is fixed by the context setting or an URL setting. The path
   // is given as string. Example: `manager.isConfigurable('opencast.loginName')`
   isConfigurable(path) {
-    let obj = merge(this.contextSettings, this.urlSettings);
+    let obj = this.fixedSettings();
     const segments = path.split('.');
-    for (const segment of segments.slice(0, -1)) {
+    for (const segment of segments) {
       if (!(segment in obj)) {
-        return false;
+        return true;
       }
       obj = obj[segment];
     }
 
-    return !(segments[segments.length - 1] in obj);
+    return false;
   }
 
   isUsernameConfigurable() {
-    let obj = merge(this.contextSettings, this.urlSettings);
-    if (obj.opencast === undefined) {
-      return true;
-    }
-    return !('loginName' in obj.opencast) && obj.opencast?.loginProvided !== true;
+    return this.isConfigurable('opencast.loginName')
+      && this.fixedSettings().opencast?.loginProvided !== true;
   }
   isPasswordConfigurable() {
-    let obj = merge(this.contextSettings, this.urlSettings);
-    if (obj.opencast === undefined) {
-      return true;
-    }
-    return !('loginPassword' in obj.opencast) && obj.opencast?.loginProvided !== true;
+    return this.isConfigurable('opencast.loginPassword')
+      && this.fixedSettings().opencast?.loginProvided !== true;
   }
 }
 
