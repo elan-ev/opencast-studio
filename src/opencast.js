@@ -84,15 +84,7 @@ export class Opencast {
       self.#login = null;
     }
 
-    await catchRequestError(async () => {
-      // If the user wants to login via username/password, we need to do that
-      // now. If this fails, the exception will bubble up.
-      if (self.#login?.username && self.#login?.password) {
-        await self.login();
-      }
-
-      await self.updateUser();
-    });
+    await catchRequestError(async () => await self.updateUser());
 
     return self;
   }
@@ -163,23 +155,6 @@ export class Opencast {
     }
   }
 
-  // Logs into Opencast with `#login.username` and `#login.password`. If the
-  // request fails, this throws (as `request` does), otherwise the response is
-  // ignored. If the login data is correct, the browser should have set some
-  // cookies and a subsequent `info/me` request should show the logged in user.
-  async login() {
-    const body = `j_username=${this.#login.username}&j_password=${this.#login.password}`
-      + "&_spring_security_remember_me=on";
-    const url = "/admin_ng/j_spring_security_check";
-    return await this.request(url, {
-      method: 'post',
-      body,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-  }
-
   // Returns the response from the `info/me.json` endpoint.
   async getInfoMe() {
     return await this.jsonRequest("info/me.json");
@@ -208,16 +183,32 @@ export class Opencast {
   async request(path, options = {}) {
     const url = `${this.#serverUrl}/${path}`;
 
+    // Add HTTP Basic Auth headers if username and password are provided.
+    let headers = {};
+    if (this.#login?.username && this.#login?.password) {
+      const encoded = btoa(unescape(encodeURIComponent(
+        this.#login.username + ':' + this.#login.password
+      )));
+      headers = { 'Authorization': `Basic ${encoded}` };
+    }
+
     let response;
     try {
       response = await fetch(url, {
         ...options,
-        credentials: 'include',
+        credentials: 'same-origin',
         redirect: 'manual',
+        headers,
       });
     } catch (e) {
       this.#state = STATE_NETWORK_ERROR;
       throw new RequestError(`network error when accessing '${url}': `, e);
+    }
+
+    // Handle 401 Bad credentials for HTTP Basic Auth
+    if (response.status === 401) {
+      this.#state = STATE_INCORRECT_LOGIN;
+      throw new RequestError("incorrect login data (request returned 401)");
     }
 
     if (!response.ok && response.type !== 'opaqueredirect') {
