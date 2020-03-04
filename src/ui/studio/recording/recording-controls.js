@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
 
@@ -35,8 +35,6 @@ export default function RecordingControls({
   const dispatch = useDispatch();
 
   const { audioStream, displayStream, userStream } = useRecordingState();
-
-  const [countdown, setCountdown] = useState(false);
 
   const desktopRecorder = useRef(null);
   const videoRecorder = useRef(null);
@@ -95,12 +93,8 @@ export default function RecordingControls({
     if (!hasStreams) {
       return;
     }
-    setCountdown(true);
-    setTimeout(() => {
-      setRecordingState(STATE_RECORDING);
-      setCountdown(false);
-      record();
-    }, 1000);
+    setRecordingState(STATE_RECORDING);
+    record();
   };
 
   const handleStop = () => {
@@ -141,7 +135,6 @@ export default function RecordingControls({
               recordingState={recordingState}
               onClick={handleRecord}
               disabled={!hasStreams}
-              countdown={countdown}
             />
           ) : (
             <StopButton
