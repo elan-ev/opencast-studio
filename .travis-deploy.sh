@@ -3,6 +3,7 @@
 set -eu
 
 srcpath="$(pwd)"
+export REACT_APP_ENABLE_SENTRY=1
 npm ci
 npm run build
 
