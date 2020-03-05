@@ -3,13 +3,13 @@
 import { jsx } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileDownload } from '@fortawesome/free-solid-svg-icons';
-import { Box } from '@theme-ui/components';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { Box, Button } from '@theme-ui/components';
 
 import { onSafari } from '../../../util.js';
 
-const RecordingPreview = ({ deviceType, title, type, url, mimeType }) => {
-  const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
+const RecordingPreview = ({ deviceType, type, url, mimeType }) => {
+  const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
 
   // Determine the correct filename extension.
   // TODO: we might want to parse the mime string in the future? But right now,
@@ -26,7 +26,7 @@ const RecordingPreview = ({ deviceType, title, type, url, mimeType }) => {
     // If we know nothing, our best guess is webm.
     fileExt = "webm";
   }
-  const downloadName = `${flavor} ${type} - ${title || 'Recording'}.${fileExt}`;
+  const downloadName = `oc-studio-${now_as_string()}-${flavor}.${fileExt}`;
 
   const style = {
     width: '8rem',
@@ -41,53 +41,58 @@ const RecordingPreview = ({ deviceType, title, type, url, mimeType }) => {
   };
 
   if (!url) {
-    return (
-      <a sx={style} target="_blank" href={url} download={downloadName} rel="noopener noreferrer">
-        {deviceType}
-      </a>
-    );
+    return null;
   }
 
   return (
-    <a
+    <div
       sx={{
-        ...style,
-        ':hover': {
-          video: { opacity: 0.2 },
-          svg: { color: 'text' }
-        }
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '0 0 auto',
+        mx: 3,
+        pb: '12px',
       }}
-      target="_blank"
-      download={downloadName}
-      href={url}
-      rel="noopener noreferrer"
     >
       <video
-        autoPlay
         muted
-        sx={{
-          position: 'absolute',
-          maxWidth: '100%',
-          maxHeight: '100%',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)'
-        }}
         src={url}
-      ></video>
-      <Box
         sx={{
-          position: 'absolute',
-          top: 1,
-          right: 1,
-          fontSize: 4,
-          color: 'white'
+          height: '180px',
+          maxWidth: '100%',
+          border: theme => `2px solid ${theme.colors.gray[1]}`,
         }}
+      ></video>
+      <Button
+        as="a"
+        sx={{
+          width: '100%',
+          maxWidth: '170px',
+          margin: 'auto',
+          mt: '10px',
+        }}
+        target="_blank"
+        download={downloadName}
+        href={url}
+        rel="noopener noreferrer"
       >
-        <FontAwesomeIcon icon={faFileDownload} />
-      </Box>
-    </a>
+        <FontAwesomeIcon icon={faDownload} />
+        Download
+      </Button>
+    </div>
   );
 };
 
 export default RecordingPreview;
+
+const now_as_string = () => {
+  const pad2 = n => n >= 10 ? '' + n : '0' + n;
+
+  const now = new Date();
+  return ''
+    + now.getFullYear() + '-'
+    + pad2(now.getMonth() + 1) + '-'
+    + pad2(now.getDate()) + '_'
+    + pad2(now.getHours()) + '-'
+    + pad2(now.getMinutes());
+};

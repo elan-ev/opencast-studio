@@ -104,11 +104,42 @@ export default function SaveCreation(props) {
     <Container>
       {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
 
-      <header>
-        <Styled.h2>{t('save-creation-modal-title')}</Styled.h2>
-      </header>
+      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
+        {t('save-creation-title')}
+      </Styled.h1>
 
-      <Box>
+      <Styled.h2
+        sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
+      >{t('save-creation-subsection-title-download')}</Styled.h2>
+
+      <div sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+      }}>
+        {recordings.length === 0 ? <Spinner /> : (
+          recordings.map((recording, index) => (
+            <RecordingPreview
+              key={index}
+              deviceType={recording.deviceType}
+              title={state.recordingData.title}
+              type="video"
+              mimeType={recording.mimeType}
+              url={recording.url}
+            />
+          ))
+        )}
+      </div>
+
+      <p>{t('save-creation-download-help')}</p>
+
+
+      <Styled.h2
+        sx={{ pb: 1, mt: '30px', borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
+      >{t('save-creation-subsection-title-upload')}</Styled.h2>
+
+      {/*<Box>
         {state.error && <Notification isDanger>{state.error}</Notification>}
         {state.uploading && <Notification>{t('upload-notification')}</Notification>}
         {state.uploaded && <Notification>{t('message-upload-complete')}</Notification>}
@@ -202,6 +233,7 @@ export default function SaveCreation(props) {
           <span>{t('save-creation-button-discard-and-record')}</span>
         </Button>
       </footer>
+      */}
     </Container>
   );
 }
