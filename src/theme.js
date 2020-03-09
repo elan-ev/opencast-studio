@@ -8,6 +8,7 @@ const heading = {
 };
 
 const baseButton = {
+  fontSize: 2,
   '& svg': {
     mr: 2
   },

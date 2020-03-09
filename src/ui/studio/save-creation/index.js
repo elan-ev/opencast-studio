@@ -3,9 +3,9 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner } from '@theme-ui/components';
-import { useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 import { Trans, useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
 import { useDispatch, useRecordingState } from '../../../recording-context';
 
 import Notification from '../../notification';
+import { ActionButtons } from '../elements';
 
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
@@ -57,6 +58,10 @@ export default function SaveCreation(props) {
   const recordingDispatch = useDispatch();
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  function handleBack() {
+    props.previousStep();
+  }
+
   function handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -93,63 +98,23 @@ export default function SaveCreation(props) {
     }
   }
 
-  const handleCancel = () => {
+  const handleNewRecording = () => {
     recordingDispatch({ type: 'CLEAR_RECORDINGS' });
-    props.previousStep();
+    props.firstStep();
   };
 
   const uploadPossible = opencast.isReadyToUpload();
 
-  return (
-    <Container>
-      {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
-
-      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {t('save-creation-title')}
-      </Styled.h1>
-
-      <Styled.h2
-        sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
-      >{t('save-creation-subsection-title-download')}</Styled.h2>
-
-      <div sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-      }}>
-        {recordings.length === 0 ? <Spinner /> : (
-          recordings.map((recording, index) => (
-            <RecordingPreview
-              key={index}
-              deviceType={recording.deviceType}
-              title={state.recordingData.title}
-              type="video"
-              mimeType={recording.mimeType}
-              url={recording.url}
-            />
-          ))
-        )}
-      </div>
-
-      <p>{t('save-creation-download-help')}</p>
-
-
-      <Styled.h2
-        sx={{ pb: 1, mt: '30px', borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
-      >{t('save-creation-subsection-title-upload')}</Styled.h2>
-
-      {/*<Box>
-        {state.error && <Notification isDanger>{state.error}</Notification>}
-        {state.uploading && <Notification>{t('upload-notification')}</Notification>}
-        {state.uploaded && <Notification>{t('message-upload-complete')}</Notification>}
-
+  const uploadBox = uploadPossible
+    ? (
+      <React.Fragment>
         <FormField label={t('save-creation-label-title')}>
           <Input
             name="title"
             autoComplete="off"
             value={state.recordingData.title}
             onChange={handleInputChange}
+            disabled={state.uploading || state.uploaded}
           />
         </FormField>
 
@@ -159,81 +124,102 @@ export default function SaveCreation(props) {
             autoComplete="off"
             value={state.recordingData.presenter}
             onChange={handleInputChange}
+            disabled={state.uploading || state.uploaded}
           />
         </FormField>
-      </Box>
-
-      <header>
-        <Styled.h2>{t('save-creation-label-media')}</Styled.h2>
-      </header>
-
-      <div sx={{ flex: 1 }}>
-        <div
-          sx={{
-            display: 'flex',
-            maxHeight: '6.5rem',
-            overflowY: 'auto',
-            flexWrap: 'wrap'
-          }}
-        >
-          {recordings.length === 0 ? (
-            <Spinner title={t('save-creation-waiting-for-recordings')} />
-          ) : (
-            recordings.map((recording, index) => (
-              <RecordingPreview
-                key={index}
-                deviceType={recording.deviceType}
-                title={state.recordingData.title}
-                type="video"
-                mimeType={recording.mimeType}
-                url={recording.url}
-              />
-            ))
-          )}
-        </div>
-      </div>
-
-      <footer
-        sx={{
-          mt: 4,
-          button: {
-            minWidth: 100,
-            width: ['100%', 'auto'],
-            '& + button': {
-              ml: [0, 2],
-              mt: [2, 'auto']
-            }
-          }
-        }}
-      >
-        {!uploadPossible && (
-          <Notification key="opencast-connection" isDanger>
-            <Trans i18nKey="warning-missing-connection-settings">
-              Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>setting</Link>
-            </Trans>
-          </Notification>
-        )}
 
         <Button
           onClick={handleUpload}
-          disabled={recordings.length === 0 || state.uploading || state.uploaded || !uploadPossible}
+          disabled={recordings.length === 0 || state.uploading || state.uploaded}
         >
           <FontAwesomeIcon icon={faUpload} />
-          <span>
-            {state.uploading
-              ? t('save-creation-button-uploading')
-              : state.uploaded
-              ? t('save-creation-button-uploaded')
-              : t('save-creation-button-upload')}
-          </span>
+          {
+            !opencast.prettyServerUrl() ? t('save-creation-button-upload') :
+              <Trans i18nKey="save-creation-upload-to">
+                Upload to <code sx={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  borderRadius: '5px',
+                  padding: '1px 3px',
+                }}>{{server: opencast.prettyServerUrl()}}</code>
+              </Trans>
+          }
         </Button>
+        <Box>
+          {state.error && <Notification isDanger>{state.error}</Notification>}
+          {state.uploading && <Notification>{t('upload-notification')}</Notification>}
+          {state.uploaded && <Notification>{t('message-upload-complete')}</Notification>}
+        </Box>
+      </React.Fragment>
+    ) : (
+      <Notification key="opencast-connection" isDanger>
+        <Trans i18nKey="warning-missing-connection-settings">
+          Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>settings</Link>
+        </Trans>
+      </Notification>
+    );
 
-        <Button onClick={handleCancel} variant="text">
-          <FontAwesomeIcon icon={faTrash} />
-          <span>{t('save-creation-button-discard-and-record')}</span>
-        </Button>
-      </footer>
-      */}
+  return (
+    <Container>
+      {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
+
+      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
+        {t('save-creation-title')}
+      </Styled.h1>
+
+      <div sx={{
+        display: 'flex',
+        flexDirection: ['column', 'column', 'row'],
+        '& > *': {
+          flex: '1 0 50%',
+          p: 2,
+        },
+      }}>
+        <div>
+          <Styled.h2
+            sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
+          >{t('save-creation-subsection-title-upload')}</Styled.h2>
+
+          <div sx={{ margin: 'auto' }}>
+            { uploadBox }
+          </div>
+        </div>
+
+        <div>
+          <Styled.h2
+            sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
+          >{t('save-creation-subsection-title-download')}</Styled.h2>
+
+          <div sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}>
+            {recordings.length === 0 ? <Spinner /> : (
+              recordings.map((recording, index) => (
+                <RecordingPreview
+                  key={index}
+                  deviceType={recording.deviceType}
+                  title={state.recordingData.title}
+                  type="video"
+                  mimeType={recording.mimeType}
+                  url={recording.url}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div sx={{ mb: '50px' }}></div>
+
+      <ActionButtons
+        next={null}
+        prev={{
+          onClick: handleBack,
+          disabled: false,
+        }}
+      />
     </Container>
   );
 }

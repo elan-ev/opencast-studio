@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
-import { Box, Button } from '@theme-ui/components';
+import { Button } from '@theme-ui/components';
 
 import { onSafari } from '../../../util.js';
 
@@ -28,18 +28,6 @@ const RecordingPreview = ({ deviceType, type, url, mimeType }) => {
   }
   const downloadName = `oc-studio-${now_as_string()}-${flavor}.${fileExt}`;
 
-  const style = {
-    width: '8rem',
-    height: '4.5rem',
-    position: 'relative',
-    backgroundColor: 'gray.3',
-    textAlign: 'center',
-    padding: '0.5rem',
-    margin: '0 0.5rem 0.5rem 0',
-    color: 'transparent',
-    bg: 'background'
-  };
-
   if (!url) {
     return null;
   }
@@ -50,7 +38,7 @@ const RecordingPreview = ({ deviceType, type, url, mimeType }) => {
         display: 'flex',
         flexDirection: 'column',
         flex: '0 0 auto',
-        mx: 3,
+        mx: 2,
         pb: '12px',
       }}
     >
@@ -58,7 +46,7 @@ const RecordingPreview = ({ deviceType, type, url, mimeType }) => {
         muted
         src={url}
         sx={{
-          height: '180px',
+          height: '150px',
           maxWidth: '100%',
           border: theme => `2px solid ${theme.colors.gray[1]}`,
         }}
