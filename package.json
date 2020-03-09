@@ -10,7 +10,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
-    "@sentry/browser": "^5.13.0",
+    "@sentry/browser": "^5.13.2",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^9.4.1",
     "@theme-ui/color": "^0.3.1",
