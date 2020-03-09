@@ -28,7 +28,7 @@
     "react": "^16.13.0",
     "react-beforeunload": "^2.1.0",
     "react-dom": "^16.13.0",
-    "react-hook-form": "^3.29.4",
+    "react-hook-form": "^5.0.2",
     "react-i18next": "^11.3.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
