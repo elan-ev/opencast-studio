@@ -28,7 +28,7 @@ export function ActionButtons({ prev = null, next = null, children }) {
           <Button
             sx={{
               whiteSpace: 'nowrap',
-              ...prev.danger === true ? { variant: 'buttons.danger' } : {}
+              ...prev.danger === true ? { variant: 'buttons.danger' } : { variant: 'buttons.text' }
             }}
             onClick={prev.onClick}
             disabled={prev.disabled}
