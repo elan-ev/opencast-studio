@@ -94,6 +94,12 @@ const reducer = (state, action) => {
     case 'UPLOAD_SUCCESS':
       return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED }};
 
+    case 'MARK_DOWNLOADED':
+      const mapped = state.recordings.map((recording, index) => (
+        index === action.payload ? { ...recording, downloaded: true } : recording
+      ));
+      return { ...state, recordings: mapped };
+
     case 'RESET':
       metaData = { ...defaultMetaData };
       return initialState();

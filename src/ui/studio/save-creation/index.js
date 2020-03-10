@@ -3,7 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner } from '@theme-ui/components';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -76,9 +76,15 @@ export default function SaveCreation(props) {
   }
 
   const handleNewRecording = () => {
-    dispatch({ type: 'RESET' });
-    props.firstStep();
+    const doIt = window.confirm(t('save-creation-new-recording-warning'));
+    if (doIt) {
+      dispatch({ type: 'RESET' });
+      props.firstStep();
+    }
   };
+
+  const allDownloaded = recordings.every(rec => rec.downloaded);
+  const possiblyDone = uploadState.state === STATE_UPLOADED || allDownloaded;
 
   const uploadPossible = opencast.isReadyToUpload();
 
@@ -149,7 +155,7 @@ export default function SaveCreation(props) {
     );
 
   return (
-    <Container>
+    <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
       {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
 
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
@@ -195,6 +201,8 @@ export default function SaveCreation(props) {
                   deviceType={recording.deviceType}
                   mimeType={recording.mimeType}
                   url={recording.url}
+                  downloaded={recording.downloaded}
+                  onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
                 />
               ))
             )}
@@ -202,15 +210,25 @@ export default function SaveCreation(props) {
         </div>
       </div>
 
-      <div sx={{ mb: '50px' }}></div>
+      <div sx={{ flex: '1 0 40px' }}></div>
 
       <ActionButtons
         next={null}
-        prev={{
+        prev={possiblyDone ? null : {
           onClick: handleBack,
           disabled: false,
         }}
-      />
+      >
+        { !possiblyDone ? null : (
+          <Button
+            sx={{ whiteSpace: 'nowrap' }}
+            onClick={handleNewRecording}
+          >
+            <FontAwesomeIcon icon={faRedoAlt} />
+            {t('save-creation-new-recording')}
+          </Button>
+        )}
+      </ActionButtons>
     </Container>
   );
 }

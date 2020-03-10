@@ -3,12 +3,12 @@
 import { jsx } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@theme-ui/components';
 
 import { onSafari } from '../../../util.js';
 
-const RecordingPreview = ({ deviceType, url, mimeType }) => {
+const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded }) => {
   const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
 
   // Determine the correct filename extension.
@@ -42,15 +42,36 @@ const RecordingPreview = ({ deviceType, url, mimeType }) => {
         pb: '12px',
       }}
     >
-      <video
-        muted
-        src={url}
-        sx={{
-          height: '150px',
-          maxWidth: '100%',
-          border: theme => `2px solid ${theme.colors.gray[1]}`,
-        }}
-      ></video>
+      <div sx={{
+        position: 'relative',
+        height: '150px',
+        border: theme => `2px solid ${theme.colors.gray[1]}`,
+      }}>
+        <video
+          muted
+          src={url}
+          sx={{
+            maxWidth: '100%',
+            height: '100%',
+          }}
+        ></video>
+        { downloaded && (
+          <div sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'primary',
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          }}>
+            <FontAwesomeIcon icon={faCheckCircle} size="4x" />
+          </div>
+        )}
+      </div>
       <Button
         as="a"
         sx={{
@@ -63,6 +84,7 @@ const RecordingPreview = ({ deviceType, url, mimeType }) => {
         download={downloadName}
         href={url}
         rel="noopener noreferrer"
+        onClick={onDownload}
       >
         <FontAwesomeIcon icon={faDownload} />
         Download

@@ -29,6 +29,8 @@
   "save-creation-subsection-title-upload": "Upload to Opencast",
   "save-creation-download-help": "You can download the recording to your local device. This is useful if, for example, you want to have a local backup of the videos, send the videos to someone, or to edit the recording in a video editing software.",
   "save-creation-upload-to": "Upload to <1>{{server}}</1>",
+  "save-creation-new-recording": "Start a new recording",
+  "save-creation-new-recording-warning": "By starting a new recording, you will discard the current ones. Are you sure?",
   "share-desktop": "Share desktop",
   "share-camera": "Share camera",
   "state-paused": "Paused",
