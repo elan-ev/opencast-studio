@@ -198,7 +198,6 @@ export default function VideoSetup(props) {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
-          danger: true,
         }}
       />}
     </Container>
