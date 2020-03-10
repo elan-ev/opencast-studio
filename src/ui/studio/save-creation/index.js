@@ -161,7 +161,10 @@ export default function SaveCreation(props) {
         flexDirection: ['column', 'column', 'row'],
         '& > *': {
           flex: '1 0 50%',
-          p: 2,
+          p: [2, 2, '0 32px'],
+          '&:last-child': {
+            borderLeft: ['none', 'none', theme => `1px solid ${theme.colors.gray[3]}`],
+          },
         },
       }}>
         <div>
@@ -182,7 +185,7 @@ export default function SaveCreation(props) {
           <div sx={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'center',
+            justifyContent: ['center', 'center', 'start'],
             flexWrap: 'wrap',
           }}>
             {recordings.length === 0 ? <Spinner /> : (
