@@ -5,58 +5,36 @@ import { jsx, Styled } from 'theme-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner } from '@theme-ui/components';
-import React, { useReducer } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
-import { useDispatch, useRecordingState } from '../../../recording-context';
+import {
+  metaData,
+  useDispatch,
+  useRecordingState,
+  STATE_ERROR,
+  STATE_UPLOADING,
+  STATE_UPLOADED,
+} from '../../../recording-context';
 
 import Notification from '../../notification';
+import {  } from '../page';
 import { ActionButtons } from '../elements';
 
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
+
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
-
-const initialState = {
-  error: null,
-  recordingData: { title: '', presenter: '' },
-  uploading: false,
-  uploaded: false
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'ERROR':
-      return { ...state, error: action.payload };
-
-    case 'RECORDING_DATA_UPDATE':
-      const [name, value] = action.payload;
-      return { ...state, recordingData: { ...state.recordingData, [name]: value } };
-
-    case 'UPLOAD_FAILURE':
-      return { ...state, error: action.payload, uploading: false, uploaded: false };
-
-    case 'UPLOAD_REQUEST':
-      return { ...state, error: null, uploading: true, uploaded: false };
-
-    case 'UPLOAD_SUCCESS':
-      return { ...state, error: null, uploading: false, uploaded: true };
-
-    default:
-      throw new Error();
-  }
-};
 
 export default function SaveCreation(props) {
   const { t } = useTranslation();
-  const { recordings } = useRecordingState();
   const opencast = useOpencast();
-  const recordingDispatch = useDispatch();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { recordings, upload: uploadState } = useRecordingState();
+  const dispatch = useDispatch();
 
   function handleBack() {
     props.previousStep();
@@ -64,15 +42,14 @@ export default function SaveCreation(props) {
 
   function handleInputChange(event) {
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    dispatch({ type: 'RECORDING_DATA_UPDATE', payload: [target.name, value] });
+    metaData[target.name] = target.value;
   }
 
   async function handleUpload() {
-    const { title, presenter } = state.recordingData;
+    const { title, presenter } = metaData;
 
     if (title === '' || presenter === '') {
-      dispatch({ type: 'ERROR', payload: t('save-creation-form-invalid') });
+      dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
       return;
     }
 
@@ -99,7 +76,7 @@ export default function SaveCreation(props) {
   }
 
   const handleNewRecording = () => {
-    recordingDispatch({ type: 'CLEAR_RECORDINGS' });
+    dispatch({ type: 'RESET' });
     props.firstStep();
   };
 
@@ -112,9 +89,9 @@ export default function SaveCreation(props) {
           <Input
             name="title"
             autoComplete="off"
-            value={state.recordingData.title}
+            defaultValue={metaData.title}
             onChange={handleInputChange}
-            disabled={state.uploading || state.uploaded}
+            disabled={uploadState.state === STATE_UPLOADING || uploadState.state === STATE_UPLOADED}
           />
         </FormField>
 
@@ -122,15 +99,19 @@ export default function SaveCreation(props) {
           <Input
             name="presenter"
             autoComplete="off"
-            value={state.recordingData.presenter}
+            defaultValue={metaData.presenter}
             onChange={handleInputChange}
-            disabled={state.uploading || state.uploaded}
+            disabled={uploadState.state === STATE_UPLOADING || uploadState.state === STATE_UPLOADED}
           />
         </FormField>
 
         <Button
           onClick={handleUpload}
-          disabled={recordings.length === 0 || state.uploading || state.uploaded}
+          disabled={
+            recordings.length === 0
+              || uploadState.state === STATE_UPLOADING
+              || uploadState.state === STATE_UPLOADED
+          }
         >
           <FontAwesomeIcon icon={faUpload} />
           {
@@ -144,10 +125,19 @@ export default function SaveCreation(props) {
               </Trans>
           }
         </Button>
-        <Box>
-          {state.error && <Notification isDanger>{state.error}</Notification>}
-          {state.uploading && <Notification>{t('upload-notification')}</Notification>}
-          {state.uploaded && <Notification>{t('message-upload-complete')}</Notification>}
+        <Box sx={{ mt: 2 }}>
+        {
+          (() => { switch (uploadState.state) {
+            case STATE_ERROR:
+              return <Notification isDanger>{uploadState.error}</Notification>;
+            case STATE_UPLOADING:
+              return <Notification>{t('upload-notification')}</Notification>;
+            case STATE_UPLOADED:
+              return <Notification>{t('message-upload-complete')}</Notification>;
+            default:
+              return null;
+          }})()
+        }
         </Box>
       </React.Fragment>
     ) : (
@@ -200,8 +190,6 @@ export default function SaveCreation(props) {
                 <RecordingPreview
                   key={index}
                   deviceType={recording.deviceType}
-                  title={state.recordingData.title}
-                  type="video"
                   mimeType={recording.mimeType}
                   url={recording.url}
                 />

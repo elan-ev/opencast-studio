@@ -4,9 +4,25 @@ import { jsx } from 'theme-ui';
 import { createContext, useContext, useReducer } from 'react';
 import { isDisplayCaptureSupported, isUserCaptureSupported } from './util';
 
+
 export const MICROPHONE = 'microphone';
 export const NO_AUDIO = 'no-audio';
 export const NONE = 'none';
+
+export const STATE_NOT_UPLOADED = 'not_uploaded';
+export const STATE_UPLOADING = 'uploading';
+export const STATE_UPLOADED = 'uploaded';
+export const STATE_ERROR = 'error';
+
+// We use this global variable (scoped to this module) to save all metadata
+// changes. We don't want to use state as that would lead to many useless
+// rerenders.
+const defaultMetaData = {
+  title: '',
+  presenter: '',
+};
+export let metaData = { ...defaultMetaData };
+
 
 const initialState = () => ({
   audioAllowed: null,
@@ -23,7 +39,12 @@ const initialState = () => ({
 
   audioChoice: NONE,
 
-  recordings: []
+  recordings: [],
+
+  upload: {
+    error: null,
+    state: STATE_NOT_UPLOADED,
+  },
 });
 
 const reducer = (state, action) => {
@@ -61,8 +82,21 @@ const reducer = (state, action) => {
     case 'ADD_RECORDING':
       return { ...state, recordings: [...state.recordings, action.payload] };
 
-    case 'CLEAR_RECORDINGS':
-      return { ...state, recordings: [] };
+    case 'UPLOAD_ERROR':
+      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
+
+    case 'UPLOAD_FAILURE':
+      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
+
+    case 'UPLOAD_REQUEST':
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING }};
+
+    case 'UPLOAD_SUCCESS':
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED }};
+
+    case 'RESET':
+      metaData = { ...defaultMetaData };
+      return initialState();
 
     default:
       throw new Error();

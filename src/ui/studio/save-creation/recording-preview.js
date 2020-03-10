@@ -8,7 +8,7 @@ import { Button } from '@theme-ui/components';
 
 import { onSafari } from '../../../util.js';
 
-const RecordingPreview = ({ deviceType, type, url, mimeType }) => {
+const RecordingPreview = ({ deviceType, url, mimeType }) => {
   const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
 
   // Determine the correct filename extension.
