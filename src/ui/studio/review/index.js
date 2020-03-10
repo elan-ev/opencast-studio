@@ -5,7 +5,6 @@ import { jsx, Styled } from 'theme-ui';
 import React, { useEffect } from 'react';
 import { Flex, Spinner } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
-import { Beforeunload } from 'react-beforeunload';
 
 import { ActionButtons, VideoBox } from '../elements';
 import { useRecordingState, useDispatch } from '../../../recording-context';
@@ -36,8 +35,6 @@ export default function Review(props) {
         padding: 3,
       }}
     >
-      <Beforeunload onBeforeunload={event => event.preventDefault()} />
-
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
         {t('review-heading')}
       </Styled.h1>

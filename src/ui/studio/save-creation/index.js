@@ -7,7 +7,6 @@ import { faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner } from '@theme-ui/components';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Beforeunload } from 'react-beforeunload';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
@@ -156,8 +155,6 @@ export default function SaveCreation(props) {
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
-      {recordings.length > 0 && <Beforeunload onBeforeunload={event => event.preventDefault()} />}
-
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
         {t('save-creation-title')}
       </Styled.h1>
