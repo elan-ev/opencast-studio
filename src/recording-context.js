@@ -4,6 +4,10 @@ import { jsx } from 'theme-ui';
 import { createContext, useContext, useReducer } from 'react';
 import { isDisplayCaptureSupported, isUserCaptureSupported } from './util';
 
+export const MICROPHONE = 'microphone';
+export const NO_AUDIO = 'no-audio';
+export const NONE = 'none';
+
 const initialState = () => ({
   audioAllowed: null,
   audioStream: null,
@@ -17,11 +21,16 @@ const initialState = () => ({
   userStream: null,
   userSupported: isUserCaptureSupported(),
 
+  audioChoice: NONE,
+
   recordings: []
 });
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'CHOOSE_AUDIO':
+      return { ...state, audioChoice: action.payload };
+
     case 'SHARE_AUDIO':
       return { ...state, audioStream: action.payload, audioAllowed: true };
 
