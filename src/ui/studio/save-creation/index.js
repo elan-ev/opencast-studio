@@ -3,8 +3,8 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
-import { Button, Box, Container, Spinner } from '@theme-ui/components';
+import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
+import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
@@ -87,8 +87,32 @@ export default function SaveCreation(props) {
 
   const uploadPossible = opencast.isReadyToUpload();
 
-  const uploadBox = uploadPossible
-    ? (
+  let uploadBox;
+  if (!uploadPossible) {
+    uploadBox = (
+      <Notification key="opencast-connection" isDanger>
+        <Trans i18nKey="warning-missing-connection-settings">
+          Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>settings</Link>
+        </Trans>
+      </Notification>
+    );
+  } else if (uploadState.state === STATE_UPLOADED) {
+    uploadBox = (
+      <React.Fragment>
+        <div sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '130px',
+          color: 'primary',
+        }}>
+          <FontAwesomeIcon icon={faCheckCircle} size="4x" />
+        </div>
+        <Text sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
+      </React.Fragment>
+    );
+  } else {
+    uploadBox = (
       <React.Fragment>
         <FormField label={t('save-creation-label-title')}>
           <Input
@@ -96,7 +120,7 @@ export default function SaveCreation(props) {
             autoComplete="off"
             defaultValue={metaData.title}
             onChange={handleInputChange}
-            disabled={uploadState.state === STATE_UPLOADING || uploadState.state === STATE_UPLOADED}
+            disabled={uploadState.state === STATE_UPLOADING}
           />
         </FormField>
 
@@ -106,17 +130,13 @@ export default function SaveCreation(props) {
             autoComplete="off"
             defaultValue={metaData.presenter}
             onChange={handleInputChange}
-            disabled={uploadState.state === STATE_UPLOADING || uploadState.state === STATE_UPLOADED}
+            disabled={uploadState.state === STATE_UPLOADING}
           />
         </FormField>
 
         <Button
           onClick={handleUpload}
-          disabled={
-            recordings.length === 0
-              || uploadState.state === STATE_UPLOADING
-              || uploadState.state === STATE_UPLOADED
-          }
+          disabled={recordings.length === 0 || uploadState.state === STATE_UPLOADING}
         >
           <FontAwesomeIcon icon={faUpload} />
           {
@@ -137,21 +157,14 @@ export default function SaveCreation(props) {
               return <Notification isDanger>{uploadState.error}</Notification>;
             case STATE_UPLOADING:
               return <Notification>{t('upload-notification')}</Notification>;
-            case STATE_UPLOADED:
-              return <Notification>{t('message-upload-complete')}</Notification>;
             default:
               return null;
           }})()
         }
         </Box>
       </React.Fragment>
-    ) : (
-      <Notification key="opencast-connection" isDanger>
-        <Trans i18nKey="warning-missing-connection-settings">
-          Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>settings</Link>
-        </Trans>
-      </Notification>
     );
+  }
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
