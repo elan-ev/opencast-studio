@@ -6,6 +6,7 @@ import { isDisplayCaptureSupported, isUserCaptureSupported } from './util';
 
 
 export const MICROPHONE = 'microphone';
+export const MICROPHONE_REQUEST = 'microphone_request';
 export const NO_AUDIO = 'no-audio';
 export const NONE = 'none';
 

@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 
-import { Container, Flex, Heading, Text } from '@theme-ui/components';
+import { Container, Flex, Heading, Spinner, Text } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,7 @@ import {
   useDispatch,
   useRecordingState,
   MICROPHONE,
+  MICROPHONE_REQUEST,
   NO_AUDIO,
   NONE,
 } from '../../../recording-context';
@@ -29,17 +30,17 @@ export default function AudioSetup(props) {
   const audioAllowed = state.audioAllowed;
 
   const nextIsDisabled = state.audioChoice === NONE
+    || state.audioChoice === MICROPHONE_REQUEST
     || (state.audioChoice === MICROPHONE && !audioStream);
 
   const backToSetupVideo = () => props.previousStep();
   const enterStudio = () => props.nextStep();
 
   const selectMicrophone = () => {
-    dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE });
+    dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE_REQUEST });
     startAudioCapture(dispatch).then(success => {
-      if (!success) {
-        dispatch({ type: 'CHOOSE_AUDIO', payload: NONE });
-      }
+      const payload = success ? MICROPHONE : NONE;
+      dispatch({ type: 'CHOOSE_AUDIO', payload });
     });
   };
 
@@ -81,8 +82,9 @@ export default function AudioSetup(props) {
           selected={state.audioChoice === MICROPHONE}
           onClick={selectMicrophone}
         >
+          { state.audioChoice === MICROPHONE_REQUEST && <Spinner size="75"/> }
           { audioStream && <PreviewAudio stream={audioStream} /> }
-          { audioAllowed === false && (
+          { audioAllowed === false && state.audioChoice !== MICROPHONE_REQUEST && (
             <Notification isDanger sx={{ mt: 2 }}>
               <Heading as="h3" mb={2}>
                 {t('source-audio-not-allowed-title')}
