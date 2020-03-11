@@ -12,7 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@sentry/browser": "^5.13.2",
     "@testing-library/jest-dom": "^5.1.1",
-    "@testing-library/react": "^9.4.1",
+    "@testing-library/react": "^9.5.0",
     "@theme-ui/color": "^0.3.1",
     "@theme-ui/components": "^0.3.1",
     "eslint-plugin-react": "^7.19.0",
