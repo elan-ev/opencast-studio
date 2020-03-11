@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { Flex } from '@theme-ui/components';
 import { useCallback, useEffect, useState } from 'react';
 
-import { useRecordingState, useDispatch } from '../../../recording-context';
+import { useStudioState, useDispatch } from '../../../studio-state';
 import { useOpencast } from '../../../opencast';
 
 import { ActionButtons } from '../elements';
@@ -21,7 +21,7 @@ export const STATE_RECORDING = 'recording';
 
 
 export default function Recording(props) {
-  const state = useRecordingState();
+  const state = useStudioState();
   const recordingDispatch = useDispatch();
   const opencast = useOpencast();
 

@@ -7,7 +7,7 @@ import { Flex, Spinner } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 
 import { ActionButtons, VideoBox } from '../elements';
-import { useRecordingState, useDispatch } from '../../../recording-context';
+import { useStudioState, useDispatch } from '../../../studio-state';
 
 
 export default function Review(props) {
@@ -56,7 +56,7 @@ export default function Review(props) {
 };
 
 const Preview = () => {
-  const { recordings } = useRecordingState();
+  const { recordings } = useStudioState();
   const { t } = useTranslation();
 
   const videoRefs = [React.createRef(), React.createRef()];

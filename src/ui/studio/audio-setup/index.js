@@ -9,12 +9,12 @@ import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-ico
 
 import {
   useDispatch,
-  useRecordingState,
+  useStudioState,
   MICROPHONE,
   MICROPHONE_REQUEST,
   NO_AUDIO,
   NONE,
-} from '../../../recording-context';
+} from '../../../studio-state';
 
 import { startAudioCapture, stopAudioCapture } from '../capturer';
 import { ActionButtons } from '../elements';
@@ -25,7 +25,7 @@ import PreviewAudio from './preview-audio';
 export default function AudioSetup(props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const state = useRecordingState();
+  const state = useStudioState();
   const audioStream = state.audioStream;
   const audioAllowed = state.audioAllowed;
 

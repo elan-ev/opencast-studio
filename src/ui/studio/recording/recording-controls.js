@@ -7,7 +7,7 @@ import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
 
 import Recorder from '../../../recorder';
-import { useDispatch, useRecordingState } from '../../../recording-context';
+import { useDispatch, useStudioState } from '../../../studio-state';
 
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
 import Clock from './clock';
@@ -34,7 +34,7 @@ export default function RecordingControls({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const { audioStream, displayStream, userStream } = useRecordingState();
+  const { audioStream, displayStream, userStream } = useStudioState();
 
   const desktopRecorder = useRef(null);
   const videoRecorder = useRef(null);

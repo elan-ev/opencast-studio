@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { useDispatch, useRecordingState } from '../../../recording-context';
+import { useDispatch, useStudioState } from '../../../studio-state';
 
 import Notification from '../../notification';
 
@@ -22,7 +22,7 @@ export default function VideoSetup(props) {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const state = useRecordingState();
+  const state = useStudioState();
   const { displayStream, userStream, displaySupported, userSupported } = state;
 
   const hasStreams = displayStream || userStream;

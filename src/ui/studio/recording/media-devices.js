@@ -7,14 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPause } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react';
 
-import { useRecordingState } from '../../../recording-context';
 import { STATE_PAUSED } from './index.js';
+import { useStudioState } from '../../../studio-state';
 import { VideoBox, useVideoBoxResize } from '../elements.js';
 import { dimensionsOf } from '../../../util.js';
 
 export default function MediaDevices({ recordingState }) {
   const { t } = useTranslation();
-  const { displayStream, userStream } = useRecordingState();
+  const { displayStream, userStream } = useStudioState();
 
   const paused = recordingState === STATE_PAUSED;
 

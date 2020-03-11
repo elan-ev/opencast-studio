@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 
-import { Provider, useRecordingState } from './recording-context';
+import { Provider, useStudioState } from './studio-state';
 
 import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
@@ -66,7 +66,7 @@ const Routes = ({ settings, settingsManager }) => {
 };
 
 const PreventClose = () => {
-  const { recordings } = useRecordingState();
+  const { recordings } = useStudioState();
   const handler = event => {
     if (recordings?.length > 0) {
       event.preventDefault();

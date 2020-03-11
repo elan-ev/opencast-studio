@@ -24,7 +24,7 @@ import {
 } from '../../opencast';
 import Notification from '../notification';
 import { Input, SettingsSection} from './elements';
-import { useRecordingState } from '../../recording-context';
+import { useStudioState } from '../../studio-state';
 
 
 
@@ -37,7 +37,7 @@ function OpencastSettings({ settingsManager }) {
   });
   const [status, setStatus] = useState('initial');
 
-  const { recordings } = useRecordingState();
+  const { recordings } = useStudioState();
   const hasRecording = recordings.length > 0;
 
   async function onSubmit(data) {

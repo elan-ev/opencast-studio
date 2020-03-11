@@ -125,7 +125,7 @@ export const Provider = ({ children }) => {
 
 export const useDispatch = () => useContext(dispatchContext);
 
-export const useRecordingState = (property = null) => {
+export const useStudioState = (property = null) => {
   const state = useContext(stateContext);
   return property !== null ? state[property] : state;
 };

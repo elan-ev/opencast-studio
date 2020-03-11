@@ -13,11 +13,11 @@ import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
 import {
   metaData,
   useDispatch,
-  useRecordingState,
+  useStudioState,
   STATE_ERROR,
   STATE_UPLOADING,
   STATE_UPLOADED,
-} from '../../../recording-context';
+} from '../../../studio-state';
 
 import Notification from '../../notification';
 import {  } from '../page';
@@ -32,7 +32,7 @@ const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 export default function SaveCreation(props) {
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState } = useRecordingState();
+  const { recordings, upload: uploadState } = useStudioState();
   const dispatch = useDispatch();
 
   function handleBack() {
