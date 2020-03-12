@@ -13,7 +13,12 @@ import { useDispatch, useStudioState } from '../../../studio-state';
 
 import Notification from '../../notification';
 
-import { stopCapture, startUserCapture, startDisplayCapture } from '../capturer';
+import {
+  startDisplayCapture,
+  startUserCapture,
+  stopDisplayCapture,
+  stopUserCapture
+} from '../capturer';
 import { ActionButtons } from '../elements';
 import { SourcePreview } from './preview';
 
@@ -62,7 +67,8 @@ export default function VideoSetup(props) {
 
   const reselectSource = () => {
     setActiveSource(NONE);
-    stopCapture(state, dispatch);
+    stopUserCapture(state.userStream, dispatch);
+    stopDisplayCapture(state.displayStream, dispatch);
   };
 
   const nextDisabled = activeSource === NONE
