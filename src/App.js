@@ -3,11 +3,11 @@
 import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+import { Beforeunload } from 'react-beforeunload';
 
-import { Provider } from './recording-context';
+import { Provider, useStudioState } from './studio-state';
 
 import About from './ui/about';
 import OpencastHeader from './ui/opencast-header';
@@ -39,6 +39,7 @@ const Routes = ({ settings, settingsManager }) => {
 
   return (
     <Provider>
+      <PreventClose />
       <Switch>
         <Route path="/settings" exact>
           <SettingsPage settingsManager={settingsManager} />
@@ -64,8 +65,15 @@ const Routes = ({ settings, settingsManager }) => {
   );
 };
 
-App.propTypes = {
-  defaultSettings: PropTypes.object
+const PreventClose = () => {
+  const { recordings } = useStudioState();
+  const handler = event => {
+    if (recordings?.length > 0) {
+      event.preventDefault();
+    }
+  };
+
+  return <Beforeunload onBeforeunload={handler} />;
 };
 
 

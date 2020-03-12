@@ -5,15 +5,20 @@ import { jsx } from 'theme-ui';
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Container, Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { useDispatch, useRecordingState } from '../../../recording-context';
+import { useDispatch, useStudioState } from '../../../studio-state';
 
 import Notification from '../../notification';
 
-import { stopCapture, startUserCapture, startDisplayCapture } from '../capturer';
+import {
+  startDisplayCapture,
+  startUserCapture,
+  stopDisplayCapture,
+  stopUserCapture
+} from '../capturer';
 import { ActionButtons } from '../elements';
 import { SourcePreview } from './preview';
 
@@ -22,7 +27,7 @@ export default function VideoSetup(props) {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const state = useRecordingState();
+  const state = useStudioState();
   const { displayStream, userStream, displaySupported, userSupported } = state;
 
   const hasStreams = displayStream || userStream;
@@ -62,7 +67,8 @@ export default function VideoSetup(props) {
 
   const reselectSource = () => {
     setActiveSource(NONE);
-    stopCapture(state, dispatch);
+    stopUserCapture(state.userStream, dispatch);
+    stopDisplayCapture(state.displayStream, dispatch);
   };
 
   const nextDisabled = activeSource === NONE
@@ -95,7 +101,8 @@ export default function VideoSetup(props) {
       title = t('sources-video-question');
       hideActionButtons = true;
       if (anySupported) {
-        body = (
+        body = <React.Fragment>
+          <Spacer />
           <Flex
             sx={{
               flexDirection: ['column', 'row'],
@@ -103,9 +110,8 @@ export default function VideoSetup(props) {
               width: '100%',
               mx: ['auto', 'none'],
               mb: 3,
-              flex: '1 1 auto',
+              flex: '4 1 auto',
               maxHeight: ['none', '270px'],
-              minHeight: [0, ''],
               justifyContent: 'center',
               '& > :not(:last-of-type)': {
                 mb: [3, 0],
@@ -129,7 +135,8 @@ export default function VideoSetup(props) {
               onClick={clickUser}
             />}
           </Flex>
-        );
+          <Spacer />
+        </React.Fragment>;
       } else {
         body = <Notification isDanger>{t('sources-video-none-available')}</Notification>;
       }
@@ -141,7 +148,9 @@ export default function VideoSetup(props) {
       body = <SourcePreview
         reselectSource={reselectSource}
         warnings={userWarning}
-        inputs={[{ stream: state.userStream, allowed: state.userAllowed }]}
+        inputs={[
+          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed }
+        ]}
       />;
       break;
 
@@ -151,7 +160,11 @@ export default function VideoSetup(props) {
       body = <SourcePreview
         reselectSource={reselectSource}
         warnings={displayWarning}
-        inputs={[{ stream: state.displayStream, allowed: state.displayAllowed }]}
+        inputs={[{
+          kind: t('sources-display'),
+          stream: state.displayStream,
+          allowed: state.displayAllowed,
+        }]}
       />;
       break;
 
@@ -163,8 +176,12 @@ export default function VideoSetup(props) {
         reselectSource={reselectSource}
         warnings={[displayWarning, userWarning]}
         inputs={[
-          { stream: state.displayStream, allowed: state.displayAllowed },
-          { stream: state.userStream, allowed: state.userAllowed },
+          {
+            kind: t('sources-display'),
+            stream: state.displayStream,
+            allowed: state.displayAllowed,
+          },
+          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed },
         ]}
       />;
       break;
@@ -186,17 +203,16 @@ export default function VideoSetup(props) {
         {title}
       </Styled.h1>
 
-      <Spacer />
       { body }
-      <Spacer sx={{ mb: 3 }}/>
 
-      { !hideActionButtons && <ActionButtons
-        next={{ onClick: () => props.nextStep(), disabled: nextDisabled }}
-        prev={{
+      {activeSource !== NONE && <div sx={{ mb: 3 }}></div>}
+
+      {activeSource !== NONE && <ActionButtons
+        next={hideActionButtons ? null : { onClick: () => props.nextStep(), disabled: nextDisabled }}
+        prev={hideActionButtons ? null : {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
-          danger: true,
         }}
       />}
     </Container>

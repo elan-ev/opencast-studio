@@ -2,13 +2,19 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 
-import { Container, Flex, Heading, Text } from '@theme-ui/components';
-import { useCallback } from 'react';
+import { Container, Flex, Heading, Spinner, Text } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 
-import { useDispatch, useRecordingState } from '../../../recording-context';
+import {
+  useDispatch,
+  useStudioState,
+  MICROPHONE,
+  MICROPHONE_REQUEST,
+  NO_AUDIO,
+  NONE,
+} from '../../../studio-state';
 
 import { startAudioCapture, stopAudioCapture } from '../capturer';
 import { ActionButtons } from '../elements';
@@ -16,41 +22,30 @@ import Notification from '../../notification';
 
 import PreviewAudio from './preview-audio';
 
-export const MICROPHONE = 'microphone';
-export const NO_AUDIO = 'no-audio';
-export const NONE = 'none';
-
 export default function AudioSetup(props) {
-  const { choice, updateChoice } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const state = useRecordingState();
+  const state = useStudioState();
   const audioStream = state.audioStream;
   const audioAllowed = state.audioAllowed;
 
-  const nextIsDisabled = choice === NONE || (choice === MICROPHONE && !audioStream);
+  const nextIsDisabled = state.audioChoice === NONE
+    || state.audioChoice === MICROPHONE_REQUEST
+    || (state.audioChoice === MICROPHONE && !audioStream);
 
-  const backToSetupVideo = useCallback(() => {
-    stopAudioCapture(audioStream, dispatch);
-    props.previousStep();
-  }, [dispatch, props, audioStream]);
-
-  const enterStudio = useCallback(() => {
-    // TODO: combine audio, user, display ?
-    props.nextStep();
-  }, [props]);
+  const backToSetupVideo = () => props.previousStep();
+  const enterStudio = () => props.nextStep();
 
   const selectMicrophone = () => {
-    updateChoice(MICROPHONE);
+    dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE_REQUEST });
     startAudioCapture(dispatch).then(success => {
-      if (!success) {
-        updateChoice(NONE);
-      }
+      const payload = success ? MICROPHONE : NONE;
+      dispatch({ type: 'CHOOSE_AUDIO', payload });
     });
   };
 
   const selectNoAudio = () => {
-    updateChoice(NO_AUDIO);
+    dispatch({ type: 'CHOOSE_AUDIO', payload: NO_AUDIO });
     if (audioStream) {
       stopAudioCapture(audioStream, dispatch);
     }
@@ -84,11 +79,12 @@ export default function AudioSetup(props) {
         <OptionButton
           icon={faMicrophone}
           label={t('sources-audio-microphone')}
-          selected={choice === MICROPHONE}
+          selected={state.audioChoice === MICROPHONE}
           onClick={selectMicrophone}
         >
+          { state.audioChoice === MICROPHONE_REQUEST && <Spinner size="75"/> }
           { audioStream && <PreviewAudio stream={audioStream} /> }
-          { audioAllowed === false && (
+          { audioAllowed === false && state.audioChoice !== MICROPHONE_REQUEST && (
             <Notification isDanger sx={{ mt: 2 }}>
               <Heading as="h3" mb={2}>
                 {t('source-audio-not-allowed-title')}
@@ -100,7 +96,7 @@ export default function AudioSetup(props) {
         <OptionButton
           icon={faMicrophoneSlash}
           label={t('sources-audio-without-audio')}
-          selected={choice === NO_AUDIO}
+          selected={state.audioChoice === NO_AUDIO}
           onClick={selectNoAudio}
         >
         </OptionButton>

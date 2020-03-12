@@ -321,6 +321,17 @@ export class Opencast {
   isReadyToUpload() {
     return this.#state === STATE_LOGGED_IN;
   }
+
+  // Returns the server URL in a form suitable to present to the user. Returns
+  // `null` if the server URL is not configured yet or if it is the same
+  // hostname as the one studio is running on.
+  prettyServerUrl() {
+    const url = this.#serverUrl;
+
+    return url && url.startsWith("https")
+      ? new URL(url).hostname
+      : null;
+  }
 }
 
 

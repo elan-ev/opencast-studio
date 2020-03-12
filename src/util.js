@@ -35,3 +35,9 @@ export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 
 // Checks if this runs in Safari.
 export const onSafari = () => /Safari/i.test(navigator.userAgent);
+
+// Returns the dimensions as [w, h] array or `null` if there is no video track.
+export const dimensionsOf = stream => {
+  const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
+  return [width, height];
+};

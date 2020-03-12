@@ -8,6 +8,7 @@ const heading = {
 };
 
 const baseButton = {
+  fontSize: 2,
   '& svg': {
     mr: 2
   },
@@ -88,6 +89,7 @@ const base = {
       ...baseButton,
       bg: 'background',
       color: 'text',
+      border: theme => `1px solid ${theme.colors.gray[1]}`,
       '&:not(:disabled):hover': {
         bg: 'gray.3'
       }
