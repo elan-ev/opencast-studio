@@ -112,7 +112,6 @@ export default function VideoSetup(props) {
               mb: 3,
               flex: '4 1 auto',
               maxHeight: ['none', '270px'],
-              minHeight: [0, ''],
               justifyContent: 'center',
               '& > :not(:last-of-type)': {
                 mb: [3, 0],
