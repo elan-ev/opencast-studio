@@ -33,15 +33,14 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
   }
 
   return (
-    <div
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: '0 0 auto',
-        mx: 2,
-        pb: '12px',
-      }}
-    >
+    <div sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '0 0 auto',
+      mx: 2,
+      pb: '12px',
+      alignItems: 'center',
+    }}>
       <div sx={{
         position: 'relative',
         height: '150px',
