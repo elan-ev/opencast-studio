@@ -14,13 +14,11 @@ import { dimensionsOf } from '../../../util.js';
 const SUBBOX_HEIGHT = 40;
 
 export function SourcePreview({ reselectSource, warnings, inputs }) {
-  const { t } = useTranslation();
-
   let children;
   switch (inputs.length) {
     case 1:
       children = [{
-        body: <StreamPreview input={inputs[0]} text={t('sources-select-user')} />,
+        body: <StreamPreview input={inputs[0]} text={inputs[0].kind} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
         extraHeight: SUBBOX_HEIGHT,
       }];
@@ -28,12 +26,12 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
     case 2:
       children = [
         {
-          body: <StreamPreview input={inputs[0]} text={t('sources-select-display')} />,
+          body: <StreamPreview input={inputs[0]} text={inputs[0].kind} />,
           dimensions: () => dimensionsOf(inputs[0].stream),
           extraHeight: SUBBOX_HEIGHT,
         },
         {
-          body: <StreamPreview input={inputs[1]} text={t('sources-select-user')} />,
+          body: <StreamPreview input={inputs[1]} text={inputs[1].kind} />,
           dimensions: () => dimensionsOf(inputs[1].stream),
           extraHeight: SUBBOX_HEIGHT,
         },
