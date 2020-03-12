@@ -35,12 +35,31 @@
 
   "confirm-discard-recordings": "Sind Sie sicher, dass Sie die Aufnahmen verwerfen wollen? Dies kann nicht rückgängig gemacht werden!",
 
+  "sources-video-display-selected": "Bildschirm ausgewählt",
+  "sources-video-display-and-user-selected": "Bildschirm & Kamera ausgewählt",
+  "sources-video-user-selected": "Kamera ausgewählt",
+  "sources-video-question": "Welche Videoquelle(n) aufnehmen?",
+  "sources-video-none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
+  "sources-video-reselect-source": "Quelle(n) neu auswählen",
+  "sources-scenario-display-and-user": "Bildschirm & Kamera",
+  "sources-scenario-display": "Bildschirm",
+  "sources-scenario-user": "Kamera",
+  "sources-display": "Bildschirm",
+  "sources-user": "Kamera",
+
+  "sources-audio-question": "Audio aufnehmen?",
+  "sources-audio-microphone": "Mikrofon",
+  "sources-audio-without-audio": "Ohne Audio",
+
   "share-desktop": "Bildschirm teilen",
   "share-camera": "Kamera teilen",
   "state-paused": "Pause",
   "state-recording": "Aufnahme",
   "state-waiting": "Warten",
   "settings-header": "Einstellungen",
+
+  "back-button-label": "Zurück",
+  "next-button-label": "Weiter",
 
   "review-heading": "Zufrieden mit der Aufnahme?",
 

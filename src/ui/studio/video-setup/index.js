@@ -149,7 +149,7 @@ export default function VideoSetup(props) {
         reselectSource={reselectSource}
         warnings={userWarning}
         inputs={[
-          { kind: t('sources-select-user'), stream: state.userStream, allowed: state.userAllowed }
+          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed }
         ]}
       />;
       break;
@@ -161,7 +161,7 @@ export default function VideoSetup(props) {
         reselectSource={reselectSource}
         warnings={displayWarning}
         inputs={[{
-          kind: t('sources-select-display'),
+          kind: t('sources-display'),
           stream: state.displayStream,
           allowed: state.displayAllowed,
         }]}
@@ -177,11 +177,11 @@ export default function VideoSetup(props) {
         warnings={[displayWarning, userWarning]}
         inputs={[
           {
-            kind: t('sources-select-display'),
+            kind: t('sources-display'),
             stream: state.displayStream,
             allowed: state.displayAllowed,
           },
-          { kind: t('sources-select-user'), stream: state.userStream, allowed: state.userAllowed },
+          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed },
         ]}
       />;
       break;

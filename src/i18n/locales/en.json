@@ -47,18 +47,13 @@
 
   "confirm-discard-recordings": "Are you sure you want to discard your recordings? This cannot be undone!",
 
-  "sources-video-selection-prompt": "Please share your display and/or camera",
   "sources-video-display-selected": "Display selected",
   "sources-video-display-and-user-selected": "Display & Camera selected",
   "sources-video-user-selected": "Camera selected",
-  "sources-video-selection-done": "Display and/or camera is now shared. Select your audio source!",
   "sources-video-question": "What video source(s) to record?",
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
   "sources-video-reselect-source": "Reselect source(s)",
 
-  "sources-audio-selection-link": "Select audio",
-  "sources-audio-selection-prompt": "Please share your audio source (or proceed without any audio)",
-  "sources-audio-selection-done": "Audio is now shared. Enter the studio!",
   "sources-audio-question": "Record Audio?",
   "sources-audio-microphone": "Microphone",
   "sources-audio-without-audio": "Without audio",
@@ -82,8 +77,8 @@
   "source-audio-not-allowed-title": "Cannot access your microphone.",
   "source-audio-not-allowed-text": "Either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
-  "sources-select-display": "Display",
-  "sources-select-user": "Camera",
+  "sources-display": "Display",
+  "sources-user": "Camera",
   "sources-select-audio": "Microphone",
 
   "source-display-and-user-usage": "Share your display, an application or a browser tab and your camera as well. Useful in scenarios like: Lorem ipsum dolor sit amet.",
