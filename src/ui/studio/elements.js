@@ -130,7 +130,7 @@ export function VideoBox({ gap = 0, children }) {
       return (
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
           <div ref={ref} sx={{ flex: '1 0 0', minHeight: 0, display: 'flex' }}>
-            <div sx={{ height: childHeight, width: childWidth, margin: 'auto' }}>
+            <div sx={{ height: childHeight, width: childWidth, minWidth: '180px', margin: 'auto' }}>
               { child.body }
             </div>
           </div>
@@ -237,10 +237,10 @@ export function VideoBox({ gap = 0, children }) {
               minHeight: 0,
             }}
           >
-            <div sx={{ height: heights[0], width: widths[0], margin: 'auto' }}>
+            <div sx={{ height: heights[0], width: widths[0], minWidth: '180px', margin: 'auto' }}>
               { children[0].body }
             </div>
-            <div sx={{ height: heights[1], width: widths[1], margin: 'auto' }}>
+            <div sx={{ height: heights[1], width: widths[1], minWidth: '180px', margin: 'auto' }}>
               { children[1].body }
             </div>
           </div>
