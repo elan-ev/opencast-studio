@@ -5,10 +5,12 @@ import { jsx } from 'theme-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@theme-ui/components';
+import { useTranslation } from 'react-i18next';
 
 import { onSafari } from '../../../util.js';
 
 const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded }) => {
+  const { t } = useTranslation();
   const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
 
   // Determine the correct filename extension.
@@ -89,7 +91,7 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
         onClick={onDownload}
       >
         <FontAwesomeIcon icon={faDownload} />
-        Download
+        {t('save-creation-download-button')}
       </Button>
     </div>
   );

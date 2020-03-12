@@ -47,7 +47,7 @@ export default function Review(props) {
         prev={{
           onClick: handleBack,
           danger: true,
-          label: 'save-creation-button-discard-and-record',
+          label: 'review-button-discard-and-record',
         }}
         next={{ onClick: handleNext }}
       />

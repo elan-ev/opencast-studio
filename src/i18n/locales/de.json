@@ -14,20 +14,36 @@
   "nav-settings": "Einstellungen",
   "nav-about": "Info",
   "nav-report-issue": "Problem melden",
+
+  "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
+
   "save-creation-button-discard": "Abbrechen",
   "save-creation-button-save": "Medien herunterladen",
   "save-creation-button-upload": "In Opencast hochladen",
-  "save-creation-form-invalid": "Bitte geben sie einen Titel und die Vortragenden an",
+  "save-creation-form-invalid": "Bitte geben Sie einen Titel und die Vortragenden an",
   "save-creation-label-media": "Medien",
   "save-creation-label-presenter": "Vortragende*r",
   "save-creation-label-title": "Titel",
   "save-creation-modal-title": "Produktionsdetails",
+  "save-creation-title": "Fast geschafft!",
+  "save-creation-subsection-title-download": "Aufnahme runterladen",
+  "save-creation-download-button": "Runterladen",
+  "save-creation-subsection-title-upload": "Zu Opencast hochladen",
+  "save-creation-upload-to": "Zu <1>{{server}}</1> hochladen",
+  "save-creation-new-recording": "Neue Aufzeichnung starten",
+  "save-creation-new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
+
+  "confirm-discard-recordings": "Sind Sie sicher, dass Sie die Aufnahmen verwerfen wollen? Dies kann nicht rückgängig gemacht werden!",
+
   "share-desktop": "Bildschirm teilen",
   "share-camera": "Kamera teilen",
   "state-paused": "Pause",
   "state-recording": "Aufnahme",
   "state-waiting": "Warten",
   "settings-header": "Einstellungen",
+
+  "review-heading": "Zufrieden mit der Aufnahme?",
+
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen",
   "upload-settings-modal-title": "Einstellungen für das Hochladen",
