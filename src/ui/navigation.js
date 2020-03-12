@@ -13,13 +13,17 @@ import {
   faInfoCircle,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 
 // One element (link) in the navigation.
-const NavElement = ({ target, children, icon, ...rest }) => {
-  const attrs = {
-    sx: {
+const NavElement = ({ target, children, icon, ...rest }) => (
+  <NavLink
+    to={target}
+    exact
+    activeStyle={{
+      backgroundColor: 'black',
+    }}
+    sx={{
       color: 'white',
       pl: [3, 3, '10px'],
       pr: [3, 3, '14px'],
@@ -33,39 +37,20 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       '&:hover': {
         backgroundColor: 'gray.1',
       },
-    },
-    ...rest
-  };
-
-  const inner = (
-    <Fragment>
-      <div sx={{
-        width: '20px',
-        display: 'inline-block',
-        textAlign: 'right',
-        mr: [3, 3, 2],
-      }}>
-        <FontAwesomeIcon icon={icon} />
-      </div>
-      {children}
-    </Fragment>
-  );
-
-  if (target.startsWith('/')) {
-    return (
-      <NavLink
-        to={target}
-        exact
-        activeStyle={{
-          backgroundColor: 'black',
-        }}
-        {...attrs}
-      >{inner}</NavLink>
-    );
-  } else {
-    return <a href={target} {...attrs}>{inner}</a>
-  }
-};
+    }}
+    {...rest}
+  >
+    <div sx={{
+      width: '20px',
+      display: 'inline-block',
+      textAlign: 'right',
+      mr: [3, 3, 2],
+    }}>
+      <FontAwesomeIcon icon={icon} />
+    </div>
+    {children}
+  </NavLink>
+);
 
 // The whole responsive navigation element.
 const Navigation = props => {
@@ -133,13 +118,6 @@ const Navigation = props => {
         </NavElement>
         <NavElement target="/about" icon={faInfoCircle} onClick={closeMenu}>
           {t('nav-about')}
-        </NavElement>
-        <NavElement
-          target="https://github.com/elan-ev/opencast-studio/issues"
-          icon={faGithub}
-          onClick={closeMenu}
-        >
-          {t('nav-report-issue')}
         </NavElement>
       </nav>
 

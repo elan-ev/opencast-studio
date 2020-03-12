@@ -27,6 +27,7 @@ deploydir="build-${builddate}-${TRAVIS_REPO_SLUG}-${buildno}-${srcbranch}"
 deploydir="$(echo "${deploydir}" | sed 's/[^a-Z0-9]/-/g')"
 export PUBLIC_URL="/${deploydir}"
 export REACT_APP_ENABLE_SENTRY=1
+export REACT_APP_INCLUDE_LEGAL_NOTICES=1
 npm ci
 npm run build
 

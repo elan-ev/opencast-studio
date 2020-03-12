@@ -1,35 +1,13 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
+import React from 'react';
 import { jsx, Styled } from 'theme-ui';
-import { Box, Container } from '@theme-ui/components';
+import { Container } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 
-const Code = props => (
-  <Box
-    sx={{
-      background: 'gray.2',
-      color: 'gray.1',
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderColor: 'gray.2',
-      borderLeftWidth: 3,
-      borderLeftColor: 'primary',
-      fontFamily: 'monospace',
-      lineHeight: 'body',
-      my: 3,
-      px: 3,
-      py: 2,
-      maxWidth: '100%',
-      overflow: 'auto',
-      pageBreakInside: 'avoid',
-      wordWrap: 'break-word'
-    }}
-    {...props}
-  />
-);
 
-function Impressum() {
+function LegalNotices() {
   return (
     <article>
       <Styled.h2>ELAN e.V.</Styled.h2>
@@ -81,87 +59,39 @@ function About(props) {
           <Styled.h1>Opencast Studio</Styled.h1>
         </header>
         <Styled.p>
-          A web-based recording studio for <Styled.a href="https://opencast.org">Opencast</Styled.a>
-          .
+          A web-based recording studio for <Styled.a href="https://opencast.org">Opencast</Styled.a>.
+        <Styled.p>
+        </Styled.p>
+          Opencast Studio allows you to record your camera, your display and your microphoneʼs audio.
+          You can then either download your recordings or upload them directly to an Opencast
+          instance (usually the one of your university).
         </Styled.p>
         <Styled.p>
-          This is free software under the terms of the{' '}
-          <Styled.a href="https://github.com/elan-ev/opencast-studio/blob/master/LICENSE">
-            MIT License
-          </Styled.a>{' '}
-          developed by the <Styled.a href="https://elan-ev.de">ELAN e.V.</Styled.a> in cooperation
-          with the <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a>.
-          {" Please report bugs or submit new features on the project's "}
-          <Styled.a href="https://github.com/elan-ev/opencast-studio">GitHub page</Styled.a>.
+          This application is free, open software developed{' '}
+          <Styled.a href="https://github.com/elan-ev/opencast-studio">on GitHub</Styled.a>.
         </Styled.p>
-        <Styled.p>
-          If you are interested in additional development or integrations into specific tools (e.g.
-          LMS), please contact{' '}
-          <Styled.a href="mailto:opencast-support@elan-ev.de">opencast-support@elan-ev.de</Styled.a>
-          .
-        </Styled.p>
+
         <Styled.h2>How it works</Styled.h2>
         <Styled.p>
-          {`Opencast Studio uses the recording capabilities build into browsers to record audio and video streams.
-            The recording happens in the user's browser.
-            No server is involved in the recording.
-            Finally, the recording is transferred directly from the users browser to the target Opencast.`}
-        </Styled.p>
-        <Styled.h2>Allow Studio to interact with your Opencast</Styled.h2>
-        <Styled.p>
-          For Studio to work with your Opencast, your need to allow this on your Opencast by serving
-          a special HTTP header. The mechanism used is called{' '}
-          <Styled.a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">
-            Cross-Origin Resource Sharing
-          </Styled.a>
-          .
-        </Styled.p>
-        <Styled.p>
-          {"Here is a list of the required headers in Nginx's configuration format:"}
-        </Styled.p>
-        <Code>
-          # Basic open CORS for studio.opencast.org
-          <br />
-          add_header Access-Control-Allow-Origin https://studio.opencast.org;
-          <br />
-          {"add_header Access-Control-Allow-Methods 'GET, POST';"}
-          <br />
-          add_header Access-Control-Allow-Credentials true;
-          <br />
-          {"add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization';"}
-        </Code>
-        <Styled.p>
-          For a complete configuration file, take a look at the{' '}
-          <Styled.a href="https://github.com/opencast/opencast-project-infrastructure/blob/9f09638e922d623cd4d3c91dd90aca39c421530d/ansible-allinone-demo-vm/roles/nginx/templates/nginx.conf#L158-L162">
-            test server configuration
-          </Styled.a>
-          .
+          Opencast Studio uses the recording capabilities built into modern browsers to record
+          audio and video streams. The recording happens in the userʼs browser and no server is
+          involved in the recording.
         </Styled.p>
 
-        <Styled.h2>Credits</Styled.h2>
-        <Styled.p>
-          Thanks to the following people and institutions for contributing to this project:
-        </Styled.p>
-        <ul>
-          <li>
-            <Styled.a href="https://github.com/slampunk">Duncan Smith</Styled.a> for starting this
-            project
-          </li>
-          <li>
-            <Styled.a href="https://github.com/cilt-uct">University of Cape Town (CILT)</Styled.a>
-            {' '}for letting Duncan start the project
-          </li>
-          <li>
-            <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a> for financial support and
-            testing
-          </li>
-          <li>
-            <Styled.a href="https://github.com/elan-ev">ELAN e.V.</Styled.a> for the final
-            development
-          </li>
-        </ul>
+        { process.env.REACT_APP_INCLUDE_LEGAL_NOTICES === '1' && (
+          <React.Fragment>
+            <Styled.h2>Support</Styled.h2>
+            <Styled.p>
+              If you are interested in additional development or want to introduce Opencast Studio
+              at your university, please contact{' '}
+              <Styled.a href="mailto:opencast-support@elan-ev.de">
+                opencast-support@elan-ev.de
+              </Styled.a>.
+            </Styled.p>
+          </React.Fragment>
+        )}
 
-        <Impressum />
+        { process.env.REACT_APP_INCLUDE_LEGAL_NOTICES === '1' && <LegalNotices /> }
 
         <Styled.h2>Version</Styled.h2>
         <Styled.p>
