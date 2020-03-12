@@ -150,6 +150,9 @@ export default function SaveCreation(props) {
               </Trans>
           }
         </Button>
+        { uploadState.state === STATE_UPLOADING && (
+          <Spinner size="40" sx={{ verticalAlign: 'middle', ml: 3 }}/>
+        )}
         <Box sx={{ mt: 2 }}>
         {
           (() => { switch (uploadState.state) {
