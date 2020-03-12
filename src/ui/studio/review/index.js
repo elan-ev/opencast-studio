@@ -153,6 +153,9 @@ const Preview = () => {
         key={index}
         controls
         src={recording.url}
+        // Without this, some browsers show a black video element instead of the first frame.
+        onLoadedData={e => e.target.currentTime = 0}
+        preload="auto"
         sx={{
           width: '100%',
           height: '100%',

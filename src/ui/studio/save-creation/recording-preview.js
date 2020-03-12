@@ -50,6 +50,9 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
         <video
           muted
           src={url}
+          // Without this, some browsers show a black video element instead of the first frame.
+          onLoadedData={e => e.target.currentTime = 0}
+          preload="auto"
           sx={{
             maxWidth: '100%',
             height: '100%',
