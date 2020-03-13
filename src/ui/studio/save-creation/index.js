@@ -99,7 +99,7 @@ export default function SaveCreation(props) {
           Warning.
           <Link
             to={{ pathname: "/settings", search: location.search }}
-            sx={{ variant: 'styles.a' }}
+            sx={{ variant: 'styles.a', color: '#ff2' }}
           >
             settings
           </Link>
