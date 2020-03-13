@@ -220,7 +220,7 @@ export class Opencast {
   // Uploads the given recordings with the given title and creator metadata. If
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
-  async upload({ recordings, title, creator, workflowId }) {
+  async upload({ recordings, title, creator, workflowId, seriesId }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -234,32 +234,11 @@ export class Opencast {
         .then(response => response.text());
 
 
-      // Prepare meta data
-      let base_dc = `<?xml version="1.0" encoding="UTF-8"?>
-        <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
-                    xmlns:dcterms="http://purl.org/dc/terms/"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <dcterms:created xsi:type="dcterms:W3CDTF">2001-01-01T01:01Z</dcterms:created>
-            <dcterms:creator>Creator not set</dcterms:creator>
-            <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
-            <dcterms:title>Title Not Set</dcterms:title>
-            <dcterms:spatial>Opencast Studio</dcterms:spatial>
-        </dublincore>`;
-
-      const dc = new DOMParser().parseFromString(base_dc, 'text/xml');
-      const dc_created = dc.getElementsByTagName('dcterms:created');
-      const dc_creator = dc.getElementsByTagName('dcterms:creator');
-      const dc_title = dc.getElementsByTagName('dcterms:title');
-
-      dc_created[0].textContent = new Date(Date.now()).toISOString();
-      dc_creator[0].textContent = creator;
-      dc_title[0].textContent = title;
-
-
       // Add metadata to media package
+      const dcc = dcCatalog({ creator, title, seriesId });
       const body = new FormData();
       body.append('mediaPackage', mediaPackage);
-      body.append('dublinCore', new XMLSerializer().serializeToString(dc));
+      body.append('dublinCore', dcc);
       body.append('flavor', 'dublincore/episode');
 
       mediaPackage = await this.request("ingest/addDCCatalog", { method: 'post', body })
@@ -395,6 +374,26 @@ export const Provider = ({ initial, children }) => {
 
 const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));
+}
+
+const dcCatalog = ({ creator, title, seriesId }) => {
+  const seriesLine = seriesId
+    ? `<dcterms:isPartOf>${escapeString(seriesId)}</dcterms:isPartOf>`
+    : '';
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+    <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
+                xmlns:dcterms="http://purl.org/dc/terms/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <dcterms:created xsi:type="dcterms:W3CDTF">
+          ${escapeString(new Date(Date.now()).toISOString())}
+        </dcterms:created>
+        <dcterms:creator>${escapeString(creator)}</dcterms:creator>
+        <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
+        <dcterms:title>${escapeString(title)}</dcterms:title>
+        <dcterms:spatial>Opencast Studio</dcterms:spatial>
+        ${seriesLine}
+    </dublincore>`;
 }
 
 const aclForRole = role => {
