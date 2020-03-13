@@ -44,6 +44,7 @@ fi
 
 # Add new content
 mv "${srcpath}"/build/* .
+cp "${srcpath}"/deploy-settings.json settings.json
 if [ -n "${cname:-}" ]; then
   echo "${cname}" > CNAME
 fi
