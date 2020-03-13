@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
@@ -30,6 +30,8 @@ import RecordingPreview from './recording-preview';
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 export default function SaveCreation(props) {
+  const location = useLocation();
+  const { settings } = props;
   const { t } = useTranslation();
   const opencast = useOpencast();
   const { recordings, upload: uploadState } = useStudioState();
@@ -53,10 +55,14 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
+    const workflowId = settings.upload?.workflowId;
+    const seriesId = settings.upload?.seriesId;
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
+      workflowId,
+      seriesId,
     });
 
     if (success) {
@@ -92,7 +98,13 @@ export default function SaveCreation(props) {
     uploadBox = (
       <Notification key="opencast-connection" isDanger>
         <Trans i18nKey="warning-missing-connection-settings">
-          Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>settings</Link>
+          Warning.
+          <Link
+            to={{ pathname: "/settings", search: location.search }}
+            sx={{ variant: 'styles.a', color: '#ff2' }}
+          >
+            settings
+          </Link>
         </Trans>
       </Notification>
     );
@@ -172,7 +184,7 @@ export default function SaveCreation(props) {
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {t('save-creation-title')}
+        { possiblyDone ? t('save-creation-title-done') : t('save-creation-title') }
       </Styled.h1>
 
       <div sx={{

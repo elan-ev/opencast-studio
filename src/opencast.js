@@ -33,7 +33,6 @@ export const STATE_INCORRECT_LOGIN = 'incorrect_login';
 export class Opencast {
   #state = STATE_UNCONFIGURED;
   #serverUrl = null;
-  #workflowId = null;
 
   // This can one of either:
   // - `null`: no login is provided and login data is not specified
@@ -56,7 +55,6 @@ export class Opencast {
     if (!settings?.serverUrl) {
       self.#state = STATE_UNCONFIGURED;
       self.#serverUrl = null;
-      self.#workflowId = null;
       self.#login = null;
 
       return self;
@@ -65,7 +63,6 @@ export class Opencast {
     self.#serverUrl = settings.serverUrl.endsWith('/')
       ? settings.serverUrl.slice(0, -1)
       : settings.serverUrl;
-    self.#workflowId = settings.workflowId;
 
     if (settings.loginProvided === true) {
       // Here we can assume Studio is running within an Opencast instance and
@@ -102,7 +99,6 @@ export class Opencast {
     newInstance.updateGlobalOc = this.updateGlobalOc;
     const changed = this.#state !== newInstance.#state
       || this.#serverUrl !== newInstance.#serverUrl
-      || this.#workflowId !== newInstance.#workflowId
       || !equal(this.#login, newInstance.#login)
       || !equal(this.#currentUser, newInstance.#currentUser);
 
@@ -224,7 +220,7 @@ export class Opencast {
   // Uploads the given recordings with the given title and creator metadata. If
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
-  async upload({ recordings, title, creator }) {
+  async upload({ recordings, title, creator, workflowId, seriesId }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -238,37 +234,27 @@ export class Opencast {
         .then(response => response.text());
 
 
-      // Prepare meta data
-      let base_dc = `<?xml version="1.0" encoding="UTF-8"?>
-        <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
-                    xmlns:dcterms="http://purl.org/dc/terms/"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <dcterms:created xsi:type="dcterms:W3CDTF">2001-01-01T01:01Z</dcterms:created>
-            <dcterms:creator>Creator not set</dcterms:creator>
-            <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
-            <dcterms:title>Title Not Set</dcterms:title>
-            <dcterms:spatial>Opencast Studio</dcterms:spatial>
-        </dublincore>`;
-
-      const dc = new DOMParser().parseFromString(base_dc, 'text/xml');
-      const dc_created = dc.getElementsByTagName('dcterms:created');
-      const dc_creator = dc.getElementsByTagName('dcterms:creator');
-      const dc_title = dc.getElementsByTagName('dcterms:title');
-
-      dc_created[0].textContent = new Date(Date.now()).toISOString();
-      dc_creator[0].textContent = creator;
-      dc_title[0].textContent = title;
-
-
       // Add metadata to media package
+      const dcc = dcCatalog({ creator, title, seriesId });
       const body = new FormData();
       body.append('mediaPackage', mediaPackage);
-      body.append('dublinCore', new XMLSerializer().serializeToString(dc));
+      body.append('dublinCore', dcc);
       body.append('flavor', 'dublincore/episode');
 
       mediaPackage = await this.request("ingest/addDCCatalog", { method: 'post', body })
         .then(response => response.text());
 
+
+      // Set ACLs to allow the current user to read and write this recording.
+      const acl = aclForRole(this.#currentUser.userRole);
+
+      const aclBody = new FormData();
+      aclBody.append('flavor', 'security/xacml+episode');
+      aclBody.append('mediaPackage', mediaPackage);
+      aclBody.append('BODY', new Blob([acl]), 'acl.xml');
+
+      mediaPackage = await this.request("ingest/addAttachment", { method: 'post', body: aclBody })
+        .then(response => response.text());
 
       // Add all recordings
       for (const { deviceType, media } of recordings) {
@@ -296,7 +282,9 @@ export class Opencast {
       // Finalize/ingest media package
       const ingestBody = new FormData();
       ingestBody.append('mediaPackage', mediaPackage);
-      ingestBody.append('workflowDefinitionId', this.#workflowId);
+      if (workflowId) {
+        ingestBody.append('workflowDefinitionId', workflowId);
+      }
       await this.request("ingest/ingest", { method: 'post', body: ingestBody });
 
       return true;
@@ -383,3 +371,79 @@ export const Provider = ({ initial, children }) => {
     </Context.Provider>
   );
 };
+
+const escapeString = s => {
+  return new XMLSerializer().serializeToString(new Text(s));
+}
+
+const dcCatalog = ({ creator, title, seriesId }) => {
+  const seriesLine = seriesId
+    ? `<dcterms:isPartOf>${escapeString(seriesId)}</dcterms:isPartOf>`
+    : '';
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+    <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
+                xmlns:dcterms="http://purl.org/dc/terms/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <dcterms:created xsi:type="dcterms:W3CDTF">
+          ${escapeString(new Date(Date.now()).toISOString())}
+        </dcterms:created>
+        <dcterms:creator>${escapeString(creator)}</dcterms:creator>
+        <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
+        <dcterms:title>${escapeString(title)}</dcterms:title>
+        <dcterms:spatial>Opencast Studio</dcterms:spatial>
+        ${seriesLine}
+    </dublincore>`;
+}
+
+const aclForRole = role => {
+  const escapedRole = escapeString(role);
+
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <Policy PolicyId="mediapackage-1"
+      RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides"
+      Version="2.0"
+      xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os">
+      <Rule RuleId="Administrator_read_Permit" Effect="Permit">
+        <Target>
+          <Actions>
+            <Action>
+              <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
+                <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
+              </ActionMatch>
+            </Action>
+          </Actions>
+        </Target>
+        <Condition>
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">${escapedRole}</AttributeValue>
+            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Apply>
+        </Condition>
+      </Rule>
+      <Rule RuleId="Administrator_write_Permit" Effect="Permit">
+        <Target>
+          <Actions>
+            <Action>
+              <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">write</AttributeValue>
+                <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
+              </ActionMatch>
+            </Action>
+          </Actions>
+        </Target>
+        <Condition>
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">${escapedRole}</AttributeValue>
+            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Apply>
+        </Condition>
+      </Rule>
+    </Policy>
+  `;
+}
