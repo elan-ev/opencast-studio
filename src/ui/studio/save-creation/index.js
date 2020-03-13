@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
@@ -30,6 +30,7 @@ import RecordingPreview from './recording-preview';
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 export default function SaveCreation(props) {
+  const location = useLocation();
   const { settings } = props;
   const { t } = useTranslation();
   const opencast = useOpencast();
@@ -95,7 +96,13 @@ export default function SaveCreation(props) {
     uploadBox = (
       <Notification key="opencast-connection" isDanger>
         <Trans i18nKey="warning-missing-connection-settings">
-          Warning. <Link to="/settings" sx={{ variant: 'styles.a' }}>settings</Link>
+          Warning.
+          <Link
+            to={{ pathname: "/settings", search: location.search }}
+            sx={{ variant: 'styles.a' }}
+          >
+            settings
+          </Link>
         </Trans>
       </Notification>
     );

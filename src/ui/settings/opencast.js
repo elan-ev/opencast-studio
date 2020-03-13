@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 import useForm from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Box, Button } from '@theme-ui/components';
 
 import { useState } from 'react';
@@ -29,6 +29,7 @@ import { useStudioState } from '../../studio-state';
 
 
 function OpencastSettings({ settingsManager }) {
+  const location = useLocation();
   const { t } = useTranslation();
   const opencast = useOpencast();
   const [error, setError] = useState();
@@ -156,7 +157,10 @@ function OpencastSettings({ settingsManager }) {
               spin={status === 'testing'}
             /> }
             { hasRecording && status === 'saved' && (
-              <Link to="/" sx={{ ml: 3, variant: 'styles.a' }}>
+              <Link
+                to={{ pathname: "/", search: location.search }}
+                sx={{ ml: 3, variant: 'styles.a' }}
+              >
                 {t('settings-back-to-recording')}
               </Link>
             )}

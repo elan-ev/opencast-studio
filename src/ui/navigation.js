@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,41 +16,48 @@ import {
 
 
 // One element (link) in the navigation.
-const NavElement = ({ target, children, icon, ...rest }) => (
-  <NavLink
-    to={target}
-    exact
-    activeStyle={{
-      backgroundColor: 'black',
-    }}
-    sx={{
-      color: 'white',
-      pl: [3, 3, '10px'],
-      pr: [3, 3, '14px'],
-      textDecoration: 'none',
-      fontSize: '18px',
-      height: ['auto', 'auto', '100%'],
-      borderLeft: ['none', 'none', theme => `1px solid ${theme.colors.gray[3]}`],
-      display: ['block', 'block', 'inline-block'],
-      width: ['100%', '100%', 'auto'],
+const NavElement = ({ target, children, icon, ...rest }) => {
+  const location = useLocation();
 
-      '&:hover': {
-        backgroundColor: 'gray.1',
-      },
-    }}
-    {...rest}
-  >
-    <div sx={{
-      width: '20px',
-      display: 'inline-block',
-      textAlign: 'right',
-      mr: [3, 3, 2],
-    }}>
-      <FontAwesomeIcon icon={icon} />
-    </div>
-    {children}
-  </NavLink>
-);
+  return (
+    <NavLink
+      to={{
+        pathname: target,
+        search: location.search,
+      }}
+      exact
+      activeStyle={{
+        backgroundColor: 'black',
+      }}
+      sx={{
+        color: 'white',
+        pl: [3, 3, '10px'],
+        pr: [3, 3, '14px'],
+        textDecoration: 'none',
+        fontSize: '18px',
+        height: ['auto', 'auto', '100%'],
+        borderLeft: ['none', 'none', theme => `1px solid ${theme.colors.gray[3]}`],
+        display: ['block', 'block', 'inline-block'],
+        width: ['100%', '100%', 'auto'],
+
+        '&:hover': {
+          backgroundColor: 'gray.1',
+        },
+      }}
+      {...rest}
+    >
+      <div sx={{
+        width: '20px',
+        display: 'inline-block',
+        textAlign: 'right',
+        mr: [3, 3, 2],
+      }}>
+        <FontAwesomeIcon icon={icon} />
+      </div>
+      {children}
+    </NavLink>
+  );
+}
 
 // The whole responsive navigation element.
 const Navigation = props => {

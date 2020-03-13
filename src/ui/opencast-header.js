@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import Navigation from './navigation';
 
@@ -26,9 +26,11 @@ const BetaBubble = props => (
 );
 
 function Brand() {
+  const location = useLocation();
+
   return (
     <span>
-      <Link to="/">
+      <Link to={{ pathname: "/", search: location.search }}>
         <picture>
           <source
             media="(min-width: 920px)"
