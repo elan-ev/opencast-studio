@@ -174,7 +174,6 @@ export class SettingsManager {
 const defaultSettings = {
   opencast: {
     serverUrl: 'https://develop.opencast.org/',
-    workflowId: 'fast',
     loginName: 'admin',
     loginPassword: 'opencast',
   }

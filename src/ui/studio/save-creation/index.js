@@ -30,6 +30,7 @@ import RecordingPreview from './recording-preview';
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 export default function SaveCreation(props) {
+  const { settings } = props;
   const { t } = useTranslation();
   const opencast = useOpencast();
   const { recordings, upload: uploadState } = useStudioState();
@@ -53,10 +54,12 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
+    const workflowId = settings.upload?.workflowId;
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
+      workflowId,
     });
 
     if (success) {

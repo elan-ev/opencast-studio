@@ -33,7 +33,6 @@ export const STATE_INCORRECT_LOGIN = 'incorrect_login';
 export class Opencast {
   #state = STATE_UNCONFIGURED;
   #serverUrl = null;
-  #workflowId = null;
 
   // This can one of either:
   // - `null`: no login is provided and login data is not specified
@@ -56,7 +55,6 @@ export class Opencast {
     if (!settings?.serverUrl) {
       self.#state = STATE_UNCONFIGURED;
       self.#serverUrl = null;
-      self.#workflowId = null;
       self.#login = null;
 
       return self;
@@ -65,7 +63,6 @@ export class Opencast {
     self.#serverUrl = settings.serverUrl.endsWith('/')
       ? settings.serverUrl.slice(0, -1)
       : settings.serverUrl;
-    self.#workflowId = settings.workflowId;
 
     if (settings.loginProvided === true) {
       // Here we can assume Studio is running within an Opencast instance and
@@ -102,7 +99,6 @@ export class Opencast {
     newInstance.updateGlobalOc = this.updateGlobalOc;
     const changed = this.#state !== newInstance.#state
       || this.#serverUrl !== newInstance.#serverUrl
-      || this.#workflowId !== newInstance.#workflowId
       || !equal(this.#login, newInstance.#login)
       || !equal(this.#currentUser, newInstance.#currentUser);
 
@@ -224,7 +220,7 @@ export class Opencast {
   // Uploads the given recordings with the given title and creator metadata. If
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
-  async upload({ recordings, title, creator }) {
+  async upload({ recordings, title, creator, workflowId }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -307,7 +303,9 @@ export class Opencast {
       // Finalize/ingest media package
       const ingestBody = new FormData();
       ingestBody.append('mediaPackage', mediaPackage);
-      ingestBody.append('workflowDefinitionId', this.#workflowId);
+      if (workflowId) {
+        ingestBody.append('workflowDefinitionId', workflowId);
+      }
       await this.request("ingest/ingest", { method: 'post', body: ingestBody });
 
       return true;

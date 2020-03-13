@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 
@@ -19,6 +19,10 @@ import Warnings from './ui/warnings';
 function App({ settingsManager }) {
   const [settings, updateSettings] = useState(settingsManager.settings());
   settingsManager.onChange = newSettings => updateSettings(newSettings);
+
+  useEffect(() => {
+    console.debug("Current settings: ", settings);
+  });
 
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>

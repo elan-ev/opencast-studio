@@ -86,13 +86,12 @@ function OpencastSettings({ settingsManager }) {
   }
 
   const showServerUrl = settingsManager.isConfigurable('opencast.serverUrl');
-  const showWorkflowId = settingsManager.isConfigurable('opencast.workflowId');
   const showUsername = settingsManager.isUsernameConfigurable();
   const showPassword = settingsManager.isPasswordConfigurable();
 
   // If all settings are already specified by the context, we do not show
   // anything at all.
-  if (!showServerUrl && !showWorkflowId && !showUsername && !showPassword) {
+  if (!showServerUrl && !showUsername && !showPassword) {
     return null;
   }
 
@@ -127,14 +126,6 @@ function OpencastSettings({ settingsManager }) {
                 return err;
               }
             }}
-            required
-          /> }
-
-          { showWorkflowId && <Input
-            errors={errors}
-            label={t('upload-settings-label-workflow-id')}
-            name="workflowId"
-            register={register}
             required
           /> }
 
