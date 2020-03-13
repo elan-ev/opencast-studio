@@ -270,6 +270,17 @@ export class Opencast {
         .then(response => response.text());
 
 
+      // Set ACLs to allow the current user to read and write this recording.
+      const acl = aclForRole(this.#currentUser.userRole);
+
+      const aclBody = new FormData();
+      aclBody.append('flavor', 'security/xacml+episode');
+      aclBody.append('mediaPackage', mediaPackage);
+      aclBody.append('BODY', new Blob([acl]), 'acl.xml');
+
+      mediaPackage = await this.request("ingest/addAttachment", { method: 'post', body: aclBody })
+        .then(response => response.text());
+
       // Add all recordings
       for (const { deviceType, media } of recordings) {
         let trackFlavor = 'presentation/source';
@@ -383,3 +394,59 @@ export const Provider = ({ initial, children }) => {
     </Context.Provider>
   );
 };
+
+const escapeString = s => {
+  return new XMLSerializer().serializeToString(new Text(s));
+}
+
+const aclForRole = role => {
+  const escapedRole = escapeString(role);
+
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <Policy PolicyId="mediapackage-1"
+      RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides"
+      Version="2.0"
+      xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os">
+      <Rule RuleId="Administrator_read_Permit" Effect="Permit">
+        <Target>
+          <Actions>
+            <Action>
+              <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
+                <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
+              </ActionMatch>
+            </Action>
+          </Actions>
+        </Target>
+        <Condition>
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">${escapedRole}</AttributeValue>
+            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Apply>
+        </Condition>
+      </Rule>
+      <Rule RuleId="Administrator_write_Permit" Effect="Permit">
+        <Target>
+          <Actions>
+            <Action>
+              <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">write</AttributeValue>
+                <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
+              </ActionMatch>
+            </Action>
+          </Actions>
+        </Target>
+        <Condition>
+          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">${escapedRole}</AttributeValue>
+            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </Apply>
+        </Condition>
+      </Rule>
+    </Policy>
+  `;
+}
