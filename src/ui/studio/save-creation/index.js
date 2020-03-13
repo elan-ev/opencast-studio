@@ -184,7 +184,7 @@ export default function SaveCreation(props) {
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {t('save-creation-title')}
+        { possiblyDone ? t('save-creation-title-done') : t('save-creation-title') }
       </Styled.h1>
 
       <div sx={{
