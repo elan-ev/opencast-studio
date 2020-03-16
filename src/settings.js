@@ -65,7 +65,9 @@ export class SettingsManager {
       let obj = self.urlSettings;
       const segments = key.split('.');
       segments.slice(0, -1).forEach((segment) => {
-        obj[segment] = {};
+        if (!(segment in obj)) {
+          obj[segment] = {};
+        }
         obj = obj[segment];
       });
       obj[segments[segments.length - 1]] = value;
