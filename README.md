@@ -1,9 +1,8 @@
 Opencast Studio
 ===============
 
-[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=react)
+[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
 ](https://travis-ci.com/elan-ev/opencast-studio)
-[![GitHub issues](https://img.shields.io/github/issues-raw/elan-ev/opencast-studio?color=blue)
 ](https://github.com/elan-ev/opencast-studio/issues)
 [![Crowdin](https://badges.crowdin.net/e/d961aac56447c193679dfdb5b349e683/localized.svg)
 ](https://elan-ev.crowdin.com/opencast-studio)
@@ -12,74 +11,14 @@ Opencast Studio
 
 A web-based recording studio for [Opencast](https://opencast.org).
 
-Opencast Studio uses the recording capabilities build into browsers to record
-audio and video streams. The recording happens in the user's browser. Finally,
-the recording is transferred directly from the users browser to the target
-Opencast.
-
-Demo at [studio.opencast.org](https://studio.opencast.org).
-
-
-Introduction
-------------
-
-Record your webcam, microphone, desktop or any mediastream sourced via WebRTC.
-
-1. Configure your Opencast server (gear symbol).
-2. Enable the devices you want to record.
-3. Click the recording button to start the recording.
-4. Click the stop button to finish the recording.
-5. Upload the recording.
+Opencast Studio uses the recording capabilities built into modern browsers to
+record audio and video streams. The recording happens completely in the user's
+browser: no server is involved in that part. Network access is only needed to
+initially load the application and to (optionally) upload the videos to an
+Opencast instance.
 
 
-Allow Studio to interact with your Opencast
--------------------------------------------
-
-For Studio to work with your Opencast, your need to allow this on your Opencast
-by serving a special HTTP header. The mechanism used is called Cross-Origin
-Resource Sharing .
-
-Here is a list of the required headers Nginx's configuration format:
-
-```
-# Basic open CORS for studio.opencast.org
-add_header Access-Control-Allow-Origin https://studio.opencast.org;
-add_header Access-Control-Allow-Methods 'GET, POST';
-add_header Access-Control-Allow-Credentials true;
-add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization';
-```
-
-For a complete configuration file, take a look at [the test server configuration
-](https://github.com/opencast/opencast-project-infrastructure/blob/9f09638e922d623cd4d3c91dd90aca39c421530d/ansible-allinone-demo-vm/roles/nginx/templates/nginx.conf#L158-L162).
-
-
-Build Instructions
-------------------
-
-Opencast Studio is mainly just meant to be used as a service and you do not
-need to build and/or install it yourself. Just head over to
-[studio.opencast.org](https://studio.opencast.org).
-
-Nevertheless, if you want to build it yourself, here are a few instructions:
-
-```sh
-% git clone git@github.com:elan-ev/opencast-studio.git
-% cd opencast-studio
-% npm install
-% npm run build
-```
-
-This will generate static content you can serve via any web server in `build/`.
-That's it.
-
-If you prefer to run a local **development** server directly, you can use instead:
-
-```sh
-% npm run start
-```
-
-Supported Browsers
-------------------
+## Supported Browsers
 
 The following table depicts the current state of browser support.
 Please note that Opencast Studio uses fairly new web technologies that are not yet (fully) supported by all browsers.
@@ -103,3 +42,125 @@ In the table, "(✔)" means partial support and/or major bugs are still present.
 | iOS        | Chrome     | ✘ | ✘ | ✘ | Non-Safari browsers on iOS are severely limited
 
 Browsers/systems not listed in this table are not currently tested by us, so they might or might not work.
+
+
+## Usage
+
+There are mainly two ways how to use Opencast Studio.
+
+### Standalone version at [`studio.opencast.org`](https://studio.opencast.org)
+
+This is the easiest solution in many situations. However, uploading your
+recording to your own/your institution's Opencast server becomes a bit more
+difficult.
+
+In order to upload to an Opencast server from `studio.opencast.org`, that server
+needs to be configured appropriately. In particular, CORS requests from Studio
+need to be allowed and return the status code 200. For nginx, you need to add
+this to your configuration:
+
+```
+# Alternatively, hardcode `studio.opencast.org` instead of `$http_origin` to
+# only allow requests from that origin.
+add_header Access-Control-Allow-Origin $http_origin always;
+add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
+add_header Access-Control-Allow-Credentials true always;
+add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization' always;
+
+# Always respond with 200 to OPTIONS requests as browsers do not accept
+# non-200 responses to CORS preflight requests.
+if ($request_method = OPTIONS) {
+    # NOTE: on older nginx versions, these two `add_header` lines cause errors.
+    # The quick'n'dirty fix is to remove those two lines: it still works.
+    add_header 'Access-Control-Max-Age' 1728000;
+    add_header 'Content-Length' 0;
+    return 200;
+}
+```
+
+### Self hosted/integrated in your Opencast
+
+Many institutions prefer a self-hosted solution. As this is a client-only
+application, you can simply build Opencast Studio and then serve the resulting
+static files.
+
+More easily even, Opencast Studio will be integrated into and shipped with
+Opencast itself – for versions ≥8.2. With this, you don't need to configure
+your webserver (as described above) and you are more flexible in terms of
+user authentication.
+
+
+## Configuration
+
+Opencast Studio can be configured in three different ways:
+
+- the user can manually configure certain things on the settings page,
+- the server can provide a `settings.json`, and
+- configuration values can be given via GET parameters in the URL.
+
+Settings configured by the user have the lowest priority and are overwritten by
+the other two ways of specifying settings. GET parameters also override settings
+given in `settings.json`. Additionally, on the settings page, values that are
+already preconfigured via `settings.json` or a GET parameter are hidden from the
+user.
+
+The following settings are currently understood by Studio. The column "shown to user" means whether or not the user can configure this value on the settings page (only if this value is not configured via `settings.json` or a GET parameter, of course).
+
+| Name | Example | Shown to user | Notes |
+| ---- | ------- | ---------------------- | ----- |
+| `opencast.serverUrl` | `https://develop.opencast.org` | ✔ | The server that recordings are uploaded to. Has to include `https://`. If this is set to an empty string, the domain Studio is deployed on is used. |
+| `opencast.loginName` | `peter` | ✔ | Username of the Opencast user to authenticate as |
+| `opencast.loginPassword` | `verysecure123` | ✔ | Password of the Opencast user to authenticate as |
+| `opencast.loginProvided` | `true` | ✘ | If this is set to `true`, `loginPassword` and `loginName` are ignored. Instead, Studio assumes that the user's browser is already authenticated (via cookies) at the Opencast server URL. This pretty much only makes sense if studio is deployed on the same domain as the target Opencast server (e.g. in the path `/studio`). |
+| `upload.seriesId` | `3fe9ea49-a671-4d1e-9669-0c96ff0f8f79` | ✘ | The ID of the series which the recording is a part of. When uploading the recording, it is automatically associated with that series. |
+| `upload.workflowId` | `fast` | ✘ | The workflow ID used to process the recording. |
+
+
+**Note**: all data configured via `settings.json` is as public as your Studio installation. For example, if your students can access your deployed studio app, they can also see the `settings.json`. This is particularly important if you want to preconfigure an Opencast user.
+
+
+#### Example `settings.json`
+
+```json
+{
+  "opencast": {
+    "serverUrl": "https://develop.opencast.org"
+  },
+  "upload": {
+    "workflowId": "fast",
+    "seriesId": "3fe9ea49-a671-4d1e-9669-0c96ff0f8f79",
+  }
+}
+```
+
+#### Example GET Parameters
+
+```
+https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=fast&seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
+```
+
+#### Debugging/Help
+
+To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
+
+
+## Build Instructions
+
+To build Studio yourself, execute these commands:
+
+```sh
+% git clone git@github.com:elan-ev/opencast-studio.git
+% cd opencast-studio
+% npm install
+% npm run build
+```
+
+This will generate static content you can serve via any web server in `build/`.
+That's it.
+
+If you prefer to run a local development server directly, you can use this
+instead:
+
+```sh
+% npm run start
+```
