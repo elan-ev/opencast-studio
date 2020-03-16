@@ -3,7 +3,6 @@ Opencast Studio
 
 [![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
 ](https://travis-ci.com/elan-ev/opencast-studio)
-](https://github.com/elan-ev/opencast-studio/issues)
 [![Crowdin](https://badges.crowdin.net/e/d961aac56447c193679dfdb5b349e683/localized.svg)
 ](https://elan-ev.crowdin.com/opencast-studio)
 [![MIT license](https://img.shields.io/github/license/elan-ev/opencast-studio)
@@ -95,11 +94,11 @@ user authentication.
 Opencast Studio can be configured in three different ways:
 
 - the user can manually configure certain things on the settings page,
-- the server can provide a `settings.json`, and
+- the server can provide a `settings.json` (only applicable if you deploy Studio yourself), and
 - configuration values can be given via GET parameters in the URL.
 
 Settings configured by the user have the lowest priority and are overwritten by
-the other two ways of specifying settings. GET parameters also override settings
+both, `settings.json` and GET parameters. GET parameters also override settings
 given in `settings.json`. Additionally, on the settings page, values that are
 already preconfigured via `settings.json` or a GET parameter are hidden from the
 user.
@@ -136,7 +135,7 @@ The following settings are currently understood by Studio. The column "shown to 
 #### Example GET Parameters
 
 ```
-https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=fast&seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
+https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=fast&upload.seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
 ```
 
 #### Debugging/Help
