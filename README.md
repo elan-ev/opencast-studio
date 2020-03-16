@@ -143,6 +143,14 @@ https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upl
 To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
 
 
+## APIs used by Studio
+
+Opencast Studio uses the following APIs. You have to make sure that these APIs are accessible to the user roles using Studio (usually `ROLE_STUDIO`).
+
+- `/ingest/*`
+- `/info/me.json`
+
+
 ## Build Instructions
 
 To build Studio yourself, execute these commands:
