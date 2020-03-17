@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 
 import { Provider, useStudioState } from './studio-state';
@@ -40,6 +40,7 @@ function App({ settingsManager }) {
 
 const Routes = ({ settings, settingsManager }) => {
   const [activeStep, updateActiveStep] = useState(0);
+  const location = useLocation();
 
   return (
     <Provider>
@@ -62,7 +63,7 @@ const Routes = ({ settings, settingsManager }) => {
         </Route>
 
         <Route path="/*">
-          <Redirect to="/" />
+          <Redirect to={{ pathname: "/", search: location.search }} />
         </Route>
       </Switch>
     </Provider>
