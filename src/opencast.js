@@ -266,7 +266,7 @@ export class Opencast {
         }
 
         const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
-        const downloadName = `${flavor} - ${title || 'Recording'}.webm`;
+        const downloadName = `${flavor} - ${title || 'Recording'}.mkv`;
 
         const body = new FormData();
         body.append('mediaPackage', mediaPackage);

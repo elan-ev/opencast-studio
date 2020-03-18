@@ -15,7 +15,7 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
 
   // Determine the correct filename extension.
   // TODO: we might want to parse the mime string in the future? But right now,
-  // browsers either record in webm or mp4.
+  // browsers either record in webm/mkv or mp4.
   let fileExt;
   if (mimeType && mimeType.startsWith("video/webm")) {
     fileExt = "webm";
@@ -25,8 +25,8 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
     // Safari does not understand webm
     fileExt = "mp4";
   } else {
-    // If we know nothing, our best guess is webm.
-    fileExt = "webm";
+    // If we know nothing, our best guess is mkv.
+    fileExt = "mkv";
   }
   const downloadName = `oc-studio-${now_as_string()}-${flavor}.${fileExt}`;
 
