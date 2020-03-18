@@ -1,4 +1,6 @@
 {
+  "nav-recording": "Enregistrement",
+  "save-creation-subsection-title-upload": "Télécharger sur Opencast",
   "forms-validation-error-required": "Ce champ est obligatoire.",
   "message-login-failed": "Connexion échouée. Veuillez vérifier votre mot de passe.",
   "message-server-unreachable": "Serveur injoignable: Vérifiez votre connexion internet et l'URL du serveur. Vérifiez également si votre Opencast permet l'accès via Studio.",

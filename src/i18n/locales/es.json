@@ -1,4 +1,6 @@
 {
+  "nav-recording": "Grabando",
+  "save-creation-subsection-title-upload": "Subir a Opencast",
   "forms-validation-error-required": "Este campo es requerido.",
   "message-login-failed": "Inicio de sesión erróneo. Por favor, compruebe su contraseña.",
   "message-server-unreachable": "Servidor inaccesible: Compruebe su conexión a Internet y la URL del servidor. También compruebe si Opencast permite el acceso a Studio.",

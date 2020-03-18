@@ -1,4 +1,6 @@
 {
+  "nav-recording": "Opnemen",
+  "save-creation-subsection-title-upload": "Uploaden naar Opencast",
   "forms-validation-error-required": "Dit veld is verplicht.",
   "message-login-failed": "Inloggen mislukt. Controleer uw wachtwoord.",
   "message-server-unreachable": "Server onbereikbaar: Controleer uw internetverbinding en de server-URL. Controleer ook of uw Opencast instantie toegang toestaat via Studio.",

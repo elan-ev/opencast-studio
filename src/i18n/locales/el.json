@@ -7,6 +7,8 @@
   "pause-button-title": "Παύση της εγγραφής",
   "record-button-title": "Έναρξη εγγραφής",
   "resume-button-title": "Συνέχιση της εγγραφής",
+  "nav-recording": "Εγγραφή",
+  "save-creation-subsection-title-upload": "Μεταφόρτωση στο Opencast",
   "save-creation-button-discard": "Απόρριψη",
   "save-creation-button-upload": "Μεταφόρτωση στο Opencast",
   "save-creation-form-invalid": "Παρακαλώ ορίστε τίτλο και παρουσιαστή",
