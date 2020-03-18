@@ -55,12 +55,10 @@
 
   "source-display-not-allowed-title": "Cannot access your display",
   "source-display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
-
   "source-user-not-allowed-title": "Cannot access your camera",
-  "source-user-not-allowed-text": "Either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
-
+  "source-user-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
   "source-audio-not-allowed-title": "Cannot access your microphone.",
-  "source-audio-not-allowed-text": "Either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
+  "source-audio-not-allowed-text": "Try selecting 'No Audio' and then reselecting 'Microphone'. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
   "sources-display": "Display",
   "sources-user": "Camera",
@@ -77,7 +75,7 @@
   "upload-settings-label-password": "Password",
   "upload-settings-invalid-url": "This is not a valid URL",
   "upload-settings-invalid-url-http-start": "The URL should start with 'https://' or 'http://'",
-  "upload-settings-error-server-unreachable": "The server you specified is not reachable. Possible causes: the server URL you specified is incorrect; your device is offline; the Opencast server is offline; the Opencast server is not correctly configured to allow CORS requests.",
+  "upload-settings-error-server-unreachable": "The server you specified is not reachable. Possible causes: the server URL you specified is incorrect; your device is offline; the Opencast server is offline; the Opencast server is not correctly configured to allow CORS requests from Opencast Studio.",
   "upload-settings-error-response-not-ok": "The server returned a non-OK answer to our request. This likely means that the server you specified is not a valid Opencast server.",
   "upload-settings-error-invalid-response": "The server returned an invalid response to our request. This likely means that the server you specified is not a valid Opencast server.",
   "upload-settings-invalid-login-data": "Could not log into Opencast server: the username/password you provided are invalid.",
