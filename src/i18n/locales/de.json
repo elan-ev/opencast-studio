@@ -1,10 +1,8 @@
 {
   "forms-validation-error-required": "Dieses Feld ist erforderlich.",
-  "message-conn-failed": "Probleme mit der Internet-Verbindung oder fehlende Berechtigungen.",
   "message-login-failed": "Login fehlgeschlagen. Bitte Passwort überprüfen.",
   "message-server-unreachable": "Der Server ist nicht erreichbar: Überprüfen Sie Ihre Internet-Verbindung und die Server-URL. Prüfen Sie auch ob Ihr Opencast Zugriff durch Studio erlaubt hat.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
-  "notification-title": "Hinweis:",
   "cancel-button-title": "Abbrechen",
   "pause-button-title": "Aufzeichnung pausieren",
   "record-button-title": "Aufzeichnung beginnen",
@@ -13,18 +11,13 @@
   "nav-recording": "Aufnahme",
   "nav-settings": "Einstellungen",
   "nav-about": "Info",
-  "nav-report-issue": "Problem melden",
 
   "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
 
-  "save-creation-button-discard": "Abbrechen",
-  "save-creation-button-save": "Medien herunterladen",
   "save-creation-button-upload": "In Opencast hochladen",
   "save-creation-form-invalid": "Bitte geben Sie einen Titel und die Vortragenden an",
-  "save-creation-label-media": "Medien",
   "save-creation-label-presenter": "Vortragende*r",
   "save-creation-label-title": "Titel",
-  "save-creation-modal-title": "Produktionsdetails",
   "save-creation-title": "Fast geschafft!",
   "save-creation-title-done": "Geschafft!",
   "save-creation-subsection-title-download": "Aufnahme runterladen",
@@ -48,6 +41,13 @@
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
 
+  "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
+  "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funkioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+  "source-user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
+  "source-user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funkioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
+  "source-audio-not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
+  "source-audio-not-allowed-text": "Versuchen Sie 'Ohne Audio' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+
   "sources-audio-question": "Audio aufnehmen?",
   "sources-audio-microphone": "Mikrofon",
   "sources-audio-without-audio": "Ohne Audio",
@@ -66,13 +66,24 @@
 
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen",
-  "upload-settings-modal-title": "Einstellungen für das Hochladen",
   "upload-settings-button-store": "Verbindungseinstellungen speichern",
-  "upload-settings-validation-error": "Ungültige Einstellungen. Benutzername/Password vermutlich inkorrekt. Bitte überprüfen und noch einmal probieren!",
   "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
-  "upload-settings-label-workflow-id": "Workflow-ID",
   "upload-settings-label-username": "Benutzername",
   "upload-settings-label-password": "Passwort",
+
+  "upload-settings-invalid-url": "Dies ist keine gültige URL.",
+  "upload-settings-invalid-url-http-start": "Die URL muss mit 'https://' oder 'http://' beginnen.",
+  "upload-settings-error-server-unreachable": "Der angegebene Server ist nicht erreichbar. Mögliche Ursachen: die angegebene Server-URL ist inkorrekt; Ihr Gerät ist nicht mit dem Internet verbunden; der angegebene Server ist offline; der angegebene Server ist nicht korrekt konfiguriert und erlaubt keine CORS-Anfragen von Opencast Studio.",
+  "upload-settings-error-response-not-ok": "Der Server hat mit einem nicht-200er Status geantwortet. Vermutlich heißt das, dass der angegebene Server kein gültiger Opencast-Server ist.",
+  "upload-settings-error-invalid-response": "Die Antwort des Servers ist ungültig. Vermutlich heißt das, dass der angegebene Server kein gültiger Opencast-Server ist.",
+  "upload-settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
+  "upload-settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
+
+  "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
+  "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
+  "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf MacOS Firefox oder Chrome zu nutzen.",
+  "warning-missing-connection-settings": "Die Verbindung zum Opencast Server wurde noch nicht vollständig hergestellt. Bitte konfigurieren Sie die Verbindung in <1>den Einstellungen</1> (die Aufnahme geht nicht verloren).",
+
   "settings-back-to-recording": "Zurück zur Aufnahme"
 }
