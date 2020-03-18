@@ -4,6 +4,8 @@ import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 
+import { recordingFileName } from './util.js';
+
 
 // The server URL was not specified.
 export const STATE_UNCONFIGURED = 'unconfigured';
@@ -257,7 +259,7 @@ export class Opencast {
         .then(response => response.text());
 
       // Add all recordings
-      for (const { deviceType, media } of recordings) {
+      for (const { deviceType, media, mimeType } of recordings) {
         let trackFlavor = 'presentation/source';
         if (deviceType === 'desktop') {
           trackFlavor = 'presentation/source';
@@ -265,8 +267,8 @@ export class Opencast {
           trackFlavor = 'presenter/source';
         }
 
-        const flavor = deviceType === 'desktop' ? 'Presentation' : 'Presenter';
-        const downloadName = `${flavor} - ${title || 'Recording'}.webm`;
+        const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
+        const downloadName = recordingFileName(mimeType, flavor);
 
         const body = new FormData();
         body.append('mediaPackage', mediaPackage);
