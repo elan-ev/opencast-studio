@@ -24,9 +24,10 @@ tar -czf ../$FILENAME *
 cd ..
 
 
-# Build version for root path installation
+# Build integrated version
 rm -rf build/
 export PUBLIC_URL=/studio
+export REACT_APP_SETTINGS_PATH="../ui/config/studio/settings.json"
 npm run build
 rm build/static/js/*.map
 
