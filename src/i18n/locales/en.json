@@ -1,10 +1,8 @@
 {
   "forms-validation-error-required": "This field is required.",
-  "message-conn-failed": "The internet connection failed or you are missing necessary permissions.",
   "message-login-failed": "Login failed. Please check your password.",
   "message-server-unreachable": "Server unreachable: Check your internet connection and the server URL. Also check if your Opencast allows access via Studio.",
   "message-upload-complete": "Upload complete!",
-  "notification-title": "Notice:",
   "cancel-button-title": "Cancel",
   "pause-button-title": "Pause recording",
   "record-button-title": "Start recording",
@@ -13,17 +11,11 @@
   "nav-recording": "Recording",
   "nav-settings": "Settings",
   "nav-about": "About",
-  "nav-report-issue": "Report Issue",
   "review-button-discard-and-record": "Discard and record again",
-  "save-creation-button-save": "Save media",
   "save-creation-button-upload": "Upload to Opencast",
-  "save-creation-button-uploaded": "Uploaded to Opencast!",
   "save-creation-form-invalid": "Please set title and presenter",
-  "save-creation-label-media": "Media",
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Title",
-  "save-creation-modal-title": "Production Details",
-  "save-creation-prompt": "Save or upload your recordings!",
   "save-creation-title": "Almost done!",
   "save-creation-title-done": "Done!",
   "save-creation-subsection-title-download": "Download recording",
@@ -42,9 +34,6 @@
   "back-button-label": "Back",
   "next-button-label": "Next",
 
-  "choose-sources": "Choose sources",
-  "enter-studio": "Enter studio",
-  "sources-enter-studio-without-audio": "Proceed w/o audio",
 
   "confirm-discard-recordings": "Are you sure you want to discard your recordings? This cannot be undone!",
 
@@ -63,11 +52,6 @@
   "sources-scenario-display": "Display",
   "sources-scenario-user": "Camera",
 
-  "source-display-and-user-title": "Display & Camera",
-  "source-display-title": "Display",
-  "source-user-title": "Camera",
-  "source-audio-title": "Sharing Microphone",
-  "source-share-prompt": "Start sharing",
 
   "source-display-not-allowed-title": "Cannot access your display",
   "source-display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
@@ -80,22 +64,15 @@
 
   "sources-display": "Display",
   "sources-user": "Camera",
-  "sources-select-audio": "Microphone",
 
-  "source-display-and-user-usage": "Share your display, an application or a browser tab and your camera as well. Useful in scenarios like: Lorem ipsum dolor sit amet.",
-  "source-display-usage": "Share your display, an application or a browser tab only. Useful in scenarios like:  Ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  "source-user-usage": "Share your camera. Useful in scenarios like: Duis aute irure dolor in reprehenderit in voluptate velit.",
 
   "review-heading": "Happy with your recording?",
 
   "stop-button-title": "Stop recording",
   "upload-notification": "Currently uploading",
-  "upload-settings-modal-title": "Opencast Upload Settings",
   "upload-settings-button-store": "Save connection settings",
-  "upload-settings-validation-error": "Invalid settings. Username/password are likely incorrect. Please verify and retry!",
   "upload-settings-modal-header": "Opencast Connection",
   "upload-settings-label-server-url": "Server URL",
-  "upload-settings-label-workflow-id": "Workflow ID",
   "upload-settings-label-username": "Username",
   "upload-settings-label-password": "Password",
   "upload-settings-invalid-url": "This is not a valid URL",

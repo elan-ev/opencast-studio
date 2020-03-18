@@ -1,10 +1,8 @@
 {
   "forms-validation-error-required": "Dieses Feld ist erforderlich.",
-  "message-conn-failed": "Probleme mit der Internet-Verbindung oder fehlende Berechtigungen.",
   "message-login-failed": "Login fehlgeschlagen. Bitte Passwort überprüfen.",
   "message-server-unreachable": "Der Server ist nicht erreichbar: Überprüfen Sie Ihre Internet-Verbindung und die Server-URL. Prüfen Sie auch ob Ihr Opencast Zugriff durch Studio erlaubt hat.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
-  "notification-title": "Hinweis:",
   "cancel-button-title": "Abbrechen",
   "pause-button-title": "Aufzeichnung pausieren",
   "record-button-title": "Aufzeichnung beginnen",
@@ -13,18 +11,13 @@
   "nav-recording": "Aufnahme",
   "nav-settings": "Einstellungen",
   "nav-about": "Info",
-  "nav-report-issue": "Problem melden",
 
   "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
 
-  "save-creation-button-discard": "Abbrechen",
-  "save-creation-button-save": "Medien herunterladen",
   "save-creation-button-upload": "In Opencast hochladen",
   "save-creation-form-invalid": "Bitte geben Sie einen Titel und die Vortragenden an",
-  "save-creation-label-media": "Medien",
   "save-creation-label-presenter": "Vortragende*r",
   "save-creation-label-title": "Titel",
-  "save-creation-modal-title": "Produktionsdetails",
   "save-creation-title": "Fast geschafft!",
   "save-creation-title-done": "Geschafft!",
   "save-creation-subsection-title-download": "Aufnahme runterladen",
@@ -66,12 +59,9 @@
 
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen",
-  "upload-settings-modal-title": "Einstellungen für das Hochladen",
   "upload-settings-button-store": "Verbindungseinstellungen speichern",
-  "upload-settings-validation-error": "Ungültige Einstellungen. Benutzername/Password vermutlich inkorrekt. Bitte überprüfen und noch einmal probieren!",
   "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
-  "upload-settings-label-workflow-id": "Workflow-ID",
   "upload-settings-label-username": "Benutzername",
   "upload-settings-label-password": "Passwort",
   "settings-back-to-recording": "Zurück zur Aufnahme"
