@@ -33,11 +33,57 @@ export const isUserCaptureSupported = () =>
 // record the media streams.
 export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 
-// Checks if this runs in Safari.
-export const onSafari = () => /Safari/i.test(navigator.userAgent);
+// Checks if this runs in Safari. Check from https://stackoverflow.com/a/23522755/
+export const onSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 // Returns the dimensions as [w, h] array or `null` if there is no video track.
 export const dimensionsOf = stream => {
   const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
   return [width, height];
+};
+
+// Converts the MIME type into a file extension.
+export const mimeToExt = mime => {
+  if (mime) {
+    const lowerMime = mime.toLowerCase();
+    if (lowerMime.startsWith("video/webm")) {
+      return "webm";
+    }
+    if (lowerMime.startsWith("video/mp4")) {
+      return "mp4";
+    }
+    if (lowerMime.startsWith("video/x-matroska")) {
+      return "mkv";
+    }
+    if (lowerMime.startsWith("video/avi")) {
+      return "avi";
+    }
+    if (lowerMime.startsWith("video/quicktime")) {
+      return "mov";
+    }
+  }
+
+  // If we know nothing, our best guess is webm; except for Safari which does
+  // not understand webm: there it's mp4.
+  return onSafari() ? "mp4" : "webm";
+}
+
+// Returns a suitable filename for a recording with the MIME type `mime` and the
+// given `flavor`. The latter should be either `presenter` or `presentation`.
+// `mime` can be null or a string and is converted to a file extension on a best
+// effort basis.
+export const recordingFileName = (mime, flavor) => {
+  return `oc-studio-${nowAsString()}-${flavor}.${mimeToExt(mime)}`;
+};
+
+const nowAsString = () => {
+  const pad2 = n => n >= 10 ? '' + n : '0' + n;
+
+  const now = new Date();
+  return ''
+    + now.getFullYear() + '-'
+    + pad2(now.getMonth() + 1) + '-'
+    + pad2(now.getDate()) + '_'
+    + pad2(now.getHours()) + '-'
+    + pad2(now.getMinutes());
 };
