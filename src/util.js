@@ -33,8 +33,8 @@ export const isUserCaptureSupported = () =>
 // record the media streams.
 export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 
-// Checks if this runs in Safari.
-export const onSafari = () => /Safari/i.test(navigator.userAgent);
+// Checks if this runs in Safari. Check from https://stackoverflow.com/a/23522755/
+export const onSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 // Returns the dimensions as [w, h] array or `null` if there is no video track.
 export const dimensionsOf = stream => {
