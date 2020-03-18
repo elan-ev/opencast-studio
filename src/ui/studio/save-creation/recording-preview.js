@@ -7,28 +7,12 @@ import { faDownload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 
-import { onSafari } from '../../../util.js';
+import { recordingFileName } from '../../../util.js';
 
 const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded }) => {
   const { t } = useTranslation();
   const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
-
-  // Determine the correct filename extension.
-  // TODO: we might want to parse the mime string in the future? But right now,
-  // browsers either record in webm or mp4.
-  let fileExt;
-  if (mimeType && mimeType.startsWith("video/webm")) {
-    fileExt = "webm";
-  } else if (mimeType && mimeType.startsWith("video/mp4")) {
-    fileExt = "mp4";
-  } else if (onSafari()) {
-    // Safari does not understand webm
-    fileExt = "mp4";
-  } else {
-    // If we know nothing, our best guess is webm.
-    fileExt = "webm";
-  }
-  const downloadName = `oc-studio-${now_as_string()}-${flavor}.${fileExt}`;
+  const downloadName = recordingFileName(mimeType, flavor);
 
   if (!url) {
     return null;
@@ -98,15 +82,3 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
 };
 
 export default RecordingPreview;
-
-const now_as_string = () => {
-  const pad2 = n => n >= 10 ? '' + n : '0' + n;
-
-  const now = new Date();
-  return ''
-    + now.getFullYear() + '-'
-    + pad2(now.getMonth() + 1) + '-'
-    + pad2(now.getDate()) + '_'
-    + pad2(now.getHours()) + '-'
-    + pad2(now.getMinutes());
-};
