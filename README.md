@@ -59,9 +59,7 @@ need to be allowed and return the status code 200. For nginx, you need to add
 this to your configuration:
 
 ```
-# Alternatively, hardcode `studio.opencast.org` instead of `$http_origin` to
-# only allow requests from that origin.
-add_header Access-Control-Allow-Origin $http_origin always;
+add_header Access-Control-Allow-Origin https://studio.opencast.org always;
 add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS' always;
 add_header Access-Control-Allow-Credentials true always;
 add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorization' always;
@@ -69,10 +67,10 @@ add_header Access-Control-Allow-Headers 'Origin,Content-Type,Accept,Authorizatio
 # Always respond with 200 to OPTIONS requests as browsers do not accept
 # non-200 responses to CORS preflight requests.
 if ($request_method = OPTIONS) {
-    # NOTE: on older nginx versions, these two `add_header` lines cause errors.
-    # The quick'n'dirty fix is to remove those two lines: it still works.
-    add_header 'Access-Control-Max-Age' 1728000;
-    add_header 'Content-Length' 0;
+    # On newer nginx versions, you can optionally send an
+    # Access-Control-Max-Age header to reduce the number of requests a browser
+    # will send.
+    #add_header 'Access-Control-Max-Age' 1728000;
     return 200;
 }
 ```
