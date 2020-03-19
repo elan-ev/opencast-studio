@@ -7,6 +7,7 @@ import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
 
 import Recorder from '../../../recorder';
+import { useSettings } from '../../../settings';
 import { useDispatch, useStudioState } from '../../../studio-state';
 
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
@@ -33,6 +34,7 @@ export default function RecordingControls({
 }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const settings = useSettings();
 
   const { audioStream, displayStream, userStream } = useStudioState();
 
@@ -51,14 +53,14 @@ export default function RecordingControls({
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, 'desktop');
       const stream = mixAudioIntoVideo(audioStream, displayStream);
-      desktopRecorder.current = new Recorder(stream, { onStop });
+      desktopRecorder.current = new Recorder(stream, settings.recording, { onStop });
       desktopRecorder.current.start();
     }
 
     if (userStream) {
       const onStop = addRecordOnStop(dispatch, 'video');
       const stream = mixAudioIntoVideo(audioStream, userStream);
-      videoRecorder.current = new Recorder(stream, { onStop });
+      videoRecorder.current = new Recorder(stream, settings.recording, { onStop });
       videoRecorder.current.start();
     }
   };

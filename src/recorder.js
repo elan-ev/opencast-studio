@@ -1,12 +1,30 @@
 import { dimensionsOf } from './util.js';
 
 export default class Recorder {
-  constructor(stream, options = {}) {
-    const mimeType = options.mimeType || undefined;
+  constructor(stream, settings, options = {}) {
+    // Figure out MIME type.
+    let mimeType = undefined;
+    if ('isTypeSupported' in MediaRecorder) {
+      const configuredMime = (settings?.mimes || [])
+        .find(mime => MediaRecorder.isTypeSupported(mime));
+      if (configuredMime) {
+        mimeType = configuredMime;
+        console.debug("using first supported MIME type from settings: ", configuredMime);
+      } else if (settings?.mimes) {
+        console.debug("None of the MIME types specified in settings are supported by "
+          + "this `MediaRecorder`");
+      }
+    } else if (settings?.mimes) {
+      console.debug("MIME types were specified, but `MediaRecorder.isTypeSupported` is not "
+        + "supported by your browser");
+    }
+
+
     const dimensions = dimensionsOf(stream);
+    const videoBitsPerSecond = settings?.videoBitrate || undefined;
 
     const _recData = [];
-    this.recorder = new MediaRecorder(stream, { mimeType });
+    this.recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
     this.recorder.ondataavailable = function(e) {
       if (e.data.size > 0) {
         _recData.push(e.data);

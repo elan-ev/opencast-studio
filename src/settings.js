@@ -393,6 +393,18 @@ const SCHEMA = {
     seriesId: 'string',
     workflowId: 'string',
   },
+  recording: {
+    videoBitrate: {
+      _type: 'int',
+      _validate: i => i > 0 || 'bitrate has to be positive',
+    },
+    mimes: {
+      _type: 'array',
+      _elements: {
+        _type: 'string',
+      }
+    }
+  }
 };
 
 

@@ -111,6 +111,8 @@ The following settings are currently understood by Studio. The column "shown to 
 | `opencast.loginProvided` | `true` | ✘ | If this is set to `true`, `loginPassword` and `loginName` are ignored. Instead, Studio assumes that the user's browser is already authenticated (via cookies) at the Opencast server URL. This pretty much only makes sense if studio is deployed on the same domain as the target Opencast server (e.g. in the path `/studio`). |
 | `upload.seriesId` | `3fe9ea49-a671-4d1e-9669-0c96ff0f8f79` | ✘ | The ID of the series which the recording is a part of. When uploading the recording, it is automatically associated with that series. |
 | `upload.workflowId` | `fast` | ✘ | The workflow ID used to process the recording. |
+| `recording.mimes` | `["video/mp4", "video/webm"]` | ✘ | A list of preferred MIME types used by the media recorder. Studio uses the first MIME type in that list for which `MediaRecorder.isTypeSupported` returns `true`. If none of the specified ones is supported or if the browser does not support `isTypeSupported`, then Studio lets the browser choose a MIME-type. |
+| `recording.videoBitrate` | `2000000` | ✘ | The target video bitrate of the recording in bits per second. Please note that specifying this for all users is usually a bad idea, as the video stream and situation is different for everyone. The resulting quality also largely depends on the browser's encoder. |
 
 
 **Note**: all data configured via `settings.json` is as public as your Studio installation. For example, if your students can access your deployed studio app, they can also see the `settings.json`. This is particularly important if you want to preconfigure an Opencast user.
