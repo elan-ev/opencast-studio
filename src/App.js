@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 
@@ -17,28 +17,21 @@ import Warnings from './ui/warnings';
 
 
 function App({ settingsManager }) {
-  const [settings, updateSettings] = useState(settingsManager.settings());
-  settingsManager.onChange = newSettings => updateSettings(newSettings);
-
-  useEffect(() => {
-    console.debug("Current settings: ", settings);
-  });
-
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
         <OpencastHeader />
 
         <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
-          <Warnings settings={settings} />
-          <Routes settingsManager={settingsManager} settings={settings} />
+          <Warnings />
+          <Routes settingsManager={settingsManager} />
         </main>
       </Flex>
     </Router>
   );
 }
 
-const Routes = ({ settings, settingsManager }) => {
+const Routes = ({ settingsManager }) => {
   const [activeStep, updateActiveStep] = useState(0);
   const location = useLocation();
 
@@ -56,7 +49,6 @@ const Routes = ({ settings, settingsManager }) => {
 
         <Route path="/" exact>
           <Studio
-            settings={settings}
             activeStep={activeStep}
             updateActiveStep={updateActiveStep}
           />

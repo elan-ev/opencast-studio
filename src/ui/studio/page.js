@@ -13,7 +13,7 @@ import Review from './review';
 import {isRecordingSupported} from '../../util';
 
 
-export default function Wizard({ settings, activeStep, updateActiveStep }) {
+export default function Wizard({ activeStep, updateActiveStep }) {
   // If recording is not supported we don't even let the user start the wizard.
   // A warning is shown already (in `warnings.js`).
   if (!isRecordingSupported()) {
@@ -24,9 +24,9 @@ export default function Wizard({ settings, activeStep, updateActiveStep }) {
     <Steps activeStep={activeStep} updateActiveStep={updateActiveStep}>
       <VideoSetup />
       <AudioSetup />
-      <Recording settings={settings} />
+      <Recording />
       <Review />
-      <SaveCreation settings={settings} />
+      <SaveCreation />
     </Steps>
   );
 }
