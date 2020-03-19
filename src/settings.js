@@ -52,21 +52,29 @@ export class SettingsManager {
     // Load the user settings from local storage
     const stored = window.localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored !== null) {
+      let rawUserSettings;
       try {
-        self.#userSettings = JSON.parse(stored);
+        rawUserSettings = JSON.parse(stored);
       } catch {
         console.warn("Could not parse settings stored in local storage. Ignoring.");
       }
+      self.#userSettings = self.validate(
+        rawUserSettings,
+        false,
+        'from local storage user settings',
+      );
     }
 
-    self.contextSettings = await SettingsManager.loadContextSettings() || {};
+    const rawContextSettings = await SettingsManager.loadContextSettings() || {};;
+    self.contextSettings = self.validate(rawContextSettings, false, 'specified in \'settings.json\'');
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
+    let rawUrlSettings = {};
     for (let [key, value] of urlParams) {
       // Create empty objects for full path (if the key contains '.') and set
       // the value at the end.
-      let obj = self.urlSettings;
+      let obj = rawUrlSettings;
       const segments = key.split('.');
       segments.slice(0, -1).forEach((segment) => {
         if (!(segment in obj)) {
@@ -76,6 +84,8 @@ export class SettingsManager {
       });
       obj[segments[segments.length - 1]] = value;
     }
+
+    self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');
 
     return self;
   }
@@ -175,7 +185,190 @@ export class SettingsManager {
     return this.isConfigurable('opencast.loginPassword')
       && this.fixedSettings().opencast?.loginProvided !== true;
   }
+
+  // Validate the given `obj` with the global settings `SCHEMA`. If `allowParse`
+  // is true, string values are attempted to parse into the expected type.
+  // `source` is just a string for error messages specifying where `obj` comes
+  // from.
+  validate(obj, allowParse, source) {
+    const parseBoolean = (s, path) => {
+      switch (s) {
+        case 'true':
+          return true;
+
+        case 'false':
+          return false;
+
+        default:
+          console.warn(
+            `Settings value '${path}' (${source}) can't be parsed as 'boolean' `
+            + ` (value: '${s}'). Ignoring.`
+          );
+          return null;
+      }
+    };
+
+    const parseInteger = (s, path) => {
+      if (/^[-+]?(\d+)$/.test(s)) {
+        return Number(s);
+      } else {
+        console.warn(
+          `Settings value '${path}' (${source}) can't be parsed as integer `
+          + `(value: '${s}'). Ignoring.`
+        );
+        return null;
+      }
+    };
+
+    const parseArray = (s, path) => {
+      try {
+        const parsed = JSON.parse(s);
+        if (!Array.isArray(parsed)) {
+          console.warn(
+            `Settings value '${path}' (${source}) is not an 'array' (value: '${s}'). Ignoring.`
+          );
+          return null;
+        }
+
+        return parsed;
+      } catch {
+        console.warn(
+          `Settings value '${path}' (${source}) can't be parsed as its `
+          + `expected type 'array' (value: '${s}'). Ignoring.`
+        );
+        return null;
+      }
+    };
+
+    // Validates `obj` with `schema`. `path` is the current path used for error
+    // messages.
+    const validate = (schema, obj, path) => {
+      if (typeof schema === 'string' || typeof schema._type === 'string') {
+        return validateValue(schema, obj, path);
+      } else {
+        return validateObj(schema, obj, path);
+      }
+    };
+
+    // Validate a settings value. `schema` should either be a string specifying
+    // the expected type or an object with these fields:
+    //
+    // - `_type`: a string specifying the expected type
+    // - `_validate` (optional): a function returning either `true` (validation
+    //   successful) or a string (validation error).
+    // - `_elements`: Only if `_type` is 'array'! Specifies type and validation
+    //   function for array elements. Object with fields `_type` and optionally
+    //   `_validate`.
+    const validateValue = (schema, value, path) => {
+      // Check the type of this value.
+      const expectedType = typeof schema === 'string' ? schema : schema._type;
+      const actualType = Array.isArray(value) ? 'array' : typeof value;
+
+      let out = null;
+      if (actualType === expectedType) {
+        out = value;
+      } else {
+        if (actualType === 'string' && allowParse) {
+          switch (expectedType) {
+            case 'boolean': out = parseBoolean(value, path); break;
+            case 'int': out = parseInteger(value, path); break;
+            case 'array': out = parseArray(value, path); break;
+            default:
+              console.warn(`internal bug: unknown type ${expectedType}. Ignoring ${path}.`);
+          }
+        } else {
+          console.warn(
+            `Settings value '${path}' (${source}) should be of type '${expectedType}', but is `
+            + `'${actualType}' (${value}). Ignoring.`
+          );
+        }
+      }
+
+      // Check type of array elements and validate those.
+      if (Array.isArray(out) && typeof schema === 'object' && '_elements' in schema) {
+        const expectedElementType = typeof schema._elements === 'string'
+          ? schema._elements
+          : schema._elements._type;
+
+        for (const elem of out) {
+          if (typeof elem !== expectedElementType) {
+            console.warn(
+              `Some elements of array value '${path}' (${source}) are not of type `
+              + `'${expectedElementType}'. Ignoring complete array.`
+            );
+            return null;
+          }
+
+          if (typeof schema._elements === 'object' && '_validate' in schema._elements) {
+            const validateResult = schema._elements._validate(elem);
+            if (validateResult !== true) {
+              console.warn(
+                `Validation of one element in array setting value '${path}' (${source}) `
+                + `failed: ${validateResult}. Ignoring complete array.`
+              );
+              return null;
+            }
+          }
+        }
+      }
+
+      // Run validation function if the type was correct and a validation is
+      // specified.
+      if (out !== null && typeof schema === 'object' && '_validate' in schema) {
+        const validateResult = schema._validate(out);
+        if (validateResult !== true) {
+          console.warn(
+            `Validation of setting value '${path}' (${source}) failed: ${validateResult}. `
+            + `Ignoring.`
+          );
+          return null;
+        }
+      }
+
+      return out;
+    };
+
+    // Validate a settings object/namespace. `schema` and `obj` need to be
+    // objects.
+    const validateObj = (schema, obj, path) => {
+      // We iterate through all keys of the given settings object, checking if
+      // each key is valid and recursively validating the value of that key.
+      let out = {};
+      for (const key of Object.keys(obj)) {
+        const newPath = path ? `${path}.${key}` : key;
+        if (key in schema) {
+          const value = validate(schema[key], obj[key], newPath);
+
+          // If `null` is returned, the validation failed and we ignore this
+          // value.
+          if (value !== null) {
+            out[key] = value;
+          }
+        } else {
+          console.warn(
+            `'${newPath}' (${source}) is not a valid settings key. Ignoring.`
+          );
+        }
+      }
+
+      return out;
+    };
+
+    return validate(SCHEMA, obj, "");
+  }
 }
+
+
+export const validateServerUrl = value => {
+  try {
+    const url = new URL(value);
+    return (url.protocol === 'https:' || url.protocol === 'http:')
+      || 'the URL does not start with "http:" or "https:"';
+  } catch (e) {
+    return 'not a valid URL';
+  }
+};
+
 
 const defaultSettings = {
   opencast: {
@@ -184,6 +377,24 @@ const defaultSettings = {
     loginPassword: 'opencast',
   }
 };
+
+// Defines all potential settings and their types
+const SCHEMA = {
+  opencast: {
+    serverUrl: {
+      _type: 'string',
+      _validate: validateServerUrl,
+    },
+    loginName: 'string',
+    loginPassword: 'string',
+    loginProvided: 'boolean',
+  },
+  upload: {
+    seriesId: 'string',
+    workflowId: 'string',
+  },
+};
+
 
 
 const Context = React.createContext(null);
