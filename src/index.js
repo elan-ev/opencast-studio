@@ -12,7 +12,7 @@ import theme from './theme';
 
 import './i18n';
 import * as serviceWorker from './serviceWorker';
-import { SettingsManager } from './settings';
+import { SettingsManager, Provider as SettingsProvider } from './settings';
 import { Opencast, Provider as OpencastProvider } from './opencast';
 
 if (process.env.REACT_APP_ENABLE_SENTRY === '1') {
@@ -42,7 +42,9 @@ initialize.then(
         <ThemeProvider theme={theme}>
           <Global styles={GlobalStyle} />
           <OpencastProvider initial={opencast}>
-            <App settingsManager={settingsManager} />
+            <SettingsProvider settingsManager={settingsManager}>
+              <App settingsManager={settingsManager} />
+            </SettingsProvider>
           </OpencastProvider>
         </ThemeProvider>
       </React.StrictMode>

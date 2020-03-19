@@ -10,6 +10,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
+import { useSettings } from '../../../settings';
 import {
   metaData,
   useDispatch,
@@ -31,7 +32,7 @@ const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 export default function SaveCreation(props) {
   const location = useLocation();
-  const { settings } = props;
+  const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
   const { recordings, upload: uploadState } = useStudioState();

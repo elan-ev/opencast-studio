@@ -1,3 +1,7 @@
+//; -*- mode: rjsx;-*-
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import React, { useEffect, useState } from 'react';
 import merge from 'deepmerge';
 
 
@@ -179,4 +183,26 @@ const defaultSettings = {
     loginName: 'admin',
     loginPassword: 'opencast',
   }
+};
+
+
+const Context = React.createContext(null);
+
+// Returns the current provided Opencast instance.
+export const useSettings = () => React.useContext(Context);
+
+export const Provider = ({ settingsManager, children }) => {
+  const [settings, updateSettings] = useState(settingsManager.settings());
+  settingsManager.onChange = newSettings => updateSettings(newSettings);
+
+  // This debug output will be useful for future debugging sessions.
+  useEffect(() => {
+    console.debug("Current settings: ", settings);
+  });
+
+  return (
+    <Context.Provider value={settings}>
+      {children}
+    </Context.Provider>
+  );
 };

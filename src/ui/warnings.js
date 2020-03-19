@@ -10,7 +10,7 @@ import {
 } from "../util";
 
 // Conditionally shows a number of warnings to help the user identify problems.
-const Warnings = ({ settings }) => {
+const Warnings = () => {
   const { t } = useTranslation();
 
   let warnings = [];
