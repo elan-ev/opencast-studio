@@ -84,7 +84,9 @@ export class SettingsManager {
     if (!basepath.endsWith('/')) {
       basepath += '/';
     }
-    const url = `${window.location.origin}${basepath}${CONTEXT_SETTINGS_FILE}`;
+
+    const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
+    const url = `${window.location.origin}${basepath}${settingsPath}`;
     let response;
     try {
       response = await fetch(url);
