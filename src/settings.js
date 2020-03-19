@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
-import merge from 'deepmerge';
+import deepmerge from 'deepmerge';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
@@ -395,6 +395,13 @@ const SCHEMA = {
   },
 };
 
+
+// Custumize array merge behavior
+let merge = (a, b) => {
+  return deepmerge(a, b, { arrayMerge });
+};
+merge.all = array => deepmerge.all(array, { arrayMerge })
+const arrayMerge = (destinationArray, sourceArray, options) => sourceArray;
 
 
 const Context = React.createContext(null);
