@@ -99,8 +99,12 @@ export class SettingsManager {
       basepath += '/';
     }
 
+    // Construct path to settings JSON file. If the `REACT_APP_SETTINGS_PATH` is
+    // given and starts with '/', it is interpreted as absolute path from the
+    // server root.
     const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
-    const url = `${window.location.origin}${basepath}${settingsPath}`;
+    const base = settingsPath.startsWith('/') ? '' : basepath;
+    const url = `${window.location.origin}${base}${settingsPath}`;
     let response;
     try {
       response = await fetch(url);
@@ -362,6 +366,10 @@ export class SettingsManager {
 
 
 export const validateServerUrl = value => {
+  if (value === '/' || value === '') {
+    return true;
+  }
+
   try {
     const url = new URL(value);
     return (url.protocol === 'https:' || url.protocol === 'http:')
