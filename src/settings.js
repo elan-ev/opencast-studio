@@ -366,6 +366,10 @@ export class SettingsManager {
 
 
 export const validateServerUrl = value => {
+  if (value === '/' || value === '') {
+    return true;
+  }
+
   try {
     const url = new URL(value);
     return (url.protocol === 'https:' || url.protocol === 'http:')
