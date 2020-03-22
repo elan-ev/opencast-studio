@@ -24,21 +24,21 @@ Please note that Opencast Studio uses fairly new web technologies that are not y
 That's usually the reason for why this app does not work on a particular browser/system.
 In the table, "(✔)" means partial support and/or major bugs are still present.
 
-| OS         | Browser    | Capture Camera | Capture Screen | Record | Notes |
-| ---------- | ---------- | -------------- | -------------- | ------ | ----- |
-| Win10 | Chrome 77  | ✔              | ✔              | ✔      |
-| Win10 | Firefox 68 | ✔              | ✔              | ✔      |
-| Win10 | Edge 79    | ✔              | ✔              | ✔      |
-| Linux      | Chrome 77  | ✔              | ✔              | ✔      |
-| Linux      | Firefox 68 | ✔              | ✔              | ✔      |
-| MacOS      | Firefox 70 | ✔              | ✔              | ✔      |
-| MacOS      | Chrome 78  | ✔              | ✔              | ✔      | Video file does not allow seeking
-| MacOS      | Safari 13  | ✔              | ✘              | ✘      | Recording seems to fail due to unsupported MIME type
-| Android    | Firefox 68 | ✔              | ✘              | ✔      |
-| Android    | Chrome 78  | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | ✔ |
-| iOS        | Safari     | (✔) [#217](https://github.com/elan-ev/opencast-studio/issues/217) | ✘ | (✔) [#84](https://github.com/elan-ev/opencast-studio/issues/84) | Video rotated by 180° in recording, requires enabling experimental feature in settings
-| iOS        | Firefox    | ✘ | ✘ | ✘ | Non-Safari browsers on iOS are severely limited
-| iOS        | Chrome     | ✘ | ✘ | ✘ | Non-Safari browsers on iOS are severely limited
+| OS      | Browser    | Capture Camera | Capture Screen | Record | Notes |
+| --------| ---------- | -------------- | -------------- | ------ | ----- |
+| Win10   | Chrome 77  | ✔   | ✔ | ✔   |
+| Win10   | Firefox 68 | ✔   | ✔ | ✔   |
+| Win10   | Edge 79    | ✔   | ✔ | ✔   |
+| Linux   | Chrome 77  | ✔   | ✔ | ✔   |
+| Linux   | Firefox 68 | ✔   | ✔ | ✔   |
+| MacOS   | Firefox 70 | ✔   | ✔ | ✔   |
+| MacOS   | Chrome 78  | ✔   | ✔ | ✔   | Video file does not allow seeking
+| MacOS   | Safari 13  | ✔   | ✘ | ✘   | Recording seems to fail due to unsupported MIME type
+| Android | Firefox 68 | ✔   | ✘ | ✔   |
+| Android | Chrome 78  | (✔) | ✘ | ✔   | No camera selection. See [issue #217](https://github.com/elan-ev/opencast-studio/issues/217)
+| iOS     | Safari     | (✘) | ✘ | (✘) | Many issues. For details see [issue #84](https://github.com/elan-ev/opencast-studio/issues/84)
+| iOS     | Firefox    | ✘   | ✘ | ✘   | Non-Safari browsers on iOS are severely limited
+| iOS     | Chrome     | ✘   | ✘ | ✘   | Non-Safari browsers on iOS are severely limited
 
 Browsers/systems not listed in this table are not currently tested by us, so they might or might not work.
 
@@ -47,7 +47,7 @@ Browsers/systems not listed in this table are not currently tested by us, so the
 
 There are mainly two ways how to use Opencast Studio.
 
-### Standalone version at [`studio.opencast.org`](https://studio.opencast.org)
+### Standalone Version at [studio.opencast.org](https://studio.opencast.org)
 
 This is the easiest solution in many situations. However, uploading your
 recording to your own/your institution's Opencast server becomes a bit more
@@ -75,7 +75,7 @@ if ($request_method = OPTIONS) {
 }
 ```
 
-### Self hosted/integrated in your Opencast
+### Self-hosted/Integrated in Opencast
 
 Many institutions prefer a self-hosted solution. As this is a client-only
 application, you can simply build Opencast Studio and then serve the resulting
@@ -134,6 +134,10 @@ The following settings are currently understood by Studio. The column "shown to 
 
 #### Example GET Parameters
 
+GET parameters can simply be attached to the studio URL if the form `…/?option1=value1&option2=value2&…`.
+They are an easy way to provide a link with specific settings to someone.
+An example of such a link would be:
+
 ```
 https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=fast&upload.seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
 ```
@@ -143,12 +147,16 @@ https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upl
 To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
 
 
-## APIs used by Studio
+## Opencast APIs used by Studio
 
-Opencast Studio uses the following APIs. You have to make sure that these APIs are accessible to the user roles using Studio (usually `ROLE_STUDIO`).
+Opencast Studio uses the following APIs:
 
 - `/ingest/*`
 - `/info/me.json`
+
+You have to make sure that these APIs are accessible to the user using Studio.
+In Opencast ≥8.2, providing a user with `ROLE_STUDIO` should grant a user all necessary rights.
+In older versions, you might need to create such a role in the security configuration (e.g. `mh_default_org.xml`) of Opencast.
 
 
 ## Build Instructions
@@ -171,3 +179,19 @@ instead:
 ```sh
 % npm run start
 ```
+
+### Additional Build Options
+
+By default, Studio expects to be deployed under the root path of a domain (e.g. https://studio.example.com/) and using a
+sub-path would not work (e.g. https://example.com/studio). This can be changed by using a number of build options. You
+can apply these options by exporting them as environment variable before starting the build process like this:
+
+```sh
+export OPTION=VALUE
+npm run build
+```
+
+| Option                    | Example            | Description
+| ------------------------- | ------------------ | -----------
+| `PUBLIC_URL`              | `/studio`          | Path from which Studio will be served
+| `REACT_APP_SETTINGS_PATH` | `/mysettings.json` | Path from which to load the configuration
