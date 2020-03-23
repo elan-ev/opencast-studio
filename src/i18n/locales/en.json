@@ -44,6 +44,7 @@
   "sources-video-question": "What video source(s) to record?",
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
   "sources-video-reselect-source": "Reselect source(s)",
+  "sources-video-no-cam-detected": "No camera detected",
 
   "sources-audio-question": "Record Audio?",
   "sources-audio-microphone": "Microphone",

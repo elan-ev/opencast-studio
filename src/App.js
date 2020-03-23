@@ -16,7 +16,7 @@ import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
 
 
-function App({ settingsManager }) {
+function App({ settingsManager, userHasWebcam }) {
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
@@ -24,14 +24,14 @@ function App({ settingsManager }) {
 
         <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
           <Warnings />
-          <Routes settingsManager={settingsManager} />
+          <Routes settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
         </main>
       </Flex>
     </Router>
   );
 }
 
-const Routes = ({ settingsManager }) => {
+const Routes = ({ settingsManager, userHasWebcam }) => {
   const [activeStep, updateActiveStep] = useState(0);
   const location = useLocation();
 
@@ -51,6 +51,7 @@ const Routes = ({ settingsManager }) => {
           <Studio
             activeStep={activeStep}
             updateActiveStep={updateActiveStep}
+            userHasWebcam={userHasWebcam}
           />
         </Route>
 

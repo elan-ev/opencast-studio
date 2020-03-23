@@ -87,3 +87,8 @@ const nowAsString = () => {
     + pad2(now.getHours()) + '-'
     + pad2(now.getMinutes());
 };
+
+export const userHasWebcam = async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices()
+  return devices.some(d => d.kind === 'videoinput');
+}
