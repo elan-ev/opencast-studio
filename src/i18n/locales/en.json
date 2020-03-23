@@ -3,6 +3,7 @@
   "message-login-failed": "Login failed. Please check your password.",
   "message-server-unreachable": "Server unreachable: Check your internet connection and the server URL. Also check if your Opencast allows access via Studio.",
   "message-upload-complete": "Upload complete!",
+  "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
   "cancel-button-title": "Cancel",
   "pause-button-title": "Pause recording",
   "record-button-title": "Start recording",
