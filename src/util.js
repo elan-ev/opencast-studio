@@ -92,3 +92,33 @@ export const userHasWebcam = async () => {
   const devices = await navigator.mediaDevices.enumerateDevices()
   return devices.some(d => d.kind === 'videoinput');
 }
+
+// Decodes the given hex string into a new string. If the given string contains
+// characters that are not hexadecimal digits or if the string's length is odd,
+// this function will throw an exception.
+export const decodeHexString = hex => {
+  if (hex.length % 2 !== 0) {
+    throw new SyntaxError('hex string does not have an even length');
+  }
+
+  const digitToNum = digit => {
+    if (digit >= '0' && digit <= '9') {
+      return digit.charCodeAt(0) - '0'.charCodeAt(0);
+    } else if (digit >= 'a' && digit <= 'f') {
+      return digit.charCodeAt(0) - 'a'.charCodeAt(0) + 10;
+    } else if (digit >= 'A' && digit <= 'F') {
+      return digit.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+    } else {
+      throw new RangeError(`invalid hex digit '${digit}'`);
+    }
+  };
+
+  let out = '';
+  for (let i = 0; i < hex.length; i += 2) {
+    const value = 16 * digitToNum(hex.substring(i, i + 1))
+      + digitToNum(hex.substring(i + 1, i + 2));
+    out += String.fromCharCode(value);
+  }
+
+  return out;
+};
