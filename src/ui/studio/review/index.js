@@ -8,11 +8,14 @@ import { useTranslation } from 'react-i18next';
 
 import { ActionButtons, VideoBox } from '../elements';
 import { useStudioState, useDispatch } from '../../../studio-state';
+import Notification from '../../notification';
 
 
 export default function Review(props) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
+  const { recordings } = useStudioState();
+  const emptyRecording = recordings.some(rec => rec.media.size === 0);
 
   const handleBack = () => {
     const doIt = window.confirm(t('confirm-discard-recordings'));
@@ -38,6 +41,10 @@ export default function Review(props) {
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
         {t('review-heading')}
       </Styled.h1>
+
+      { emptyRecording && (
+        <Notification isDanger>{t('review-error-empty-recording')}</Notification>
+      )}
 
       <Preview />
 
