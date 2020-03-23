@@ -21,10 +21,23 @@ export async function startAudioCapture(dispatch, deviceId = null) {
   }
 }
 
-export async function startDisplayCapture(
-  dispatch,
-  displayMediaOptions = { video: true, audio: false }
-) {
+export async function startDisplayCapture(dispatch, settings) {
+  const maxFps = settings.display?.maxFps
+    ? { frameRate: { max: settings.display.maxFps } }
+    : {};
+  const maxHeight = settings.display?.maxHeight
+    ? { height: { max: settings.display.maxHeight } }
+    : {};
+
+  const displayMediaOptions = {
+    video: {
+      cursor: 'always',
+      ...maxFps,
+      ...maxHeight,
+    },
+    audio: false,
+  };
+
   try {
     const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
     stream.getTracks().forEach(track => {

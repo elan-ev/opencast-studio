@@ -388,6 +388,11 @@ const defaultSettings = {
   }
 };
 
+const positiveInteger = name => ({
+  _type: 'int',
+  _validate: i => i > 0 || `'${name}' has to be positive`,
+});
+
 // Defines all potential settings and their types
 const SCHEMA = {
   opencast: {
@@ -404,17 +409,18 @@ const SCHEMA = {
     workflowId: 'string',
   },
   recording: {
-    videoBitrate: {
-      _type: 'int',
-      _validate: i => i > 0 || 'bitrate has to be positive',
-    },
+    videoBitrate: positiveInteger('bitrate'),
     mimes: {
       _type: 'array',
       _elements: {
         _type: 'string',
       }
-    }
-  }
+    },
+  },
+  'display': {
+    maxFps: positiveInteger('maxFps'),
+    maxHeight: positiveInteger('maxHeight'),
+  },
 };
 
 
