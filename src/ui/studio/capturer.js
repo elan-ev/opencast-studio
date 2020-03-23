@@ -29,7 +29,7 @@ export async function startDisplayCapture(dispatch, settings) {
     ? { height: { max: settings.display.maxHeight } }
     : {};
 
-  const displayMediaOptions = {
+  const constraints = {
     video: {
       cursor: 'always',
       ...maxFps,
@@ -39,7 +39,7 @@ export async function startDisplayCapture(dispatch, settings) {
   };
 
   try {
-    const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
     stream.getTracks().forEach(track => {
       track.onended = () => {
         dispatch({ type: 'UNSHARE_DISPLAY' });
@@ -55,16 +55,22 @@ export async function startDisplayCapture(dispatch, settings) {
   }
 }
 
-const defaultUserConstraints = {
-  audio: true,
-  video: {
-    width: { ideal: 1280, max: 1920 },
-    height: { ideal: 720, max: 1080 }
-  }
-};
+export async function startUserCapture(dispatch, settings) {
+  const maxFps = settings.camera?.maxFps
+    ? { frameRate: { max: settings.camera.maxFps } }
+    : {};
+  const maxHeight = settings.camera?.maxHeight
+    ? { height: { ideal: Math.min(1080, settings.camera.maxHeight), max: settings.camera.maxHeight } }
+    : { height: { ideal: 1080 } };
 
-export async function startUserCapture(dispatch, userMediaOptions = null) {
-  const constraints = userMediaOptions || defaultUserConstraints;
+  const constraints = {
+    video: {
+      facingMode: 'user',
+      ...maxFps,
+      ...maxHeight,
+    },
+    audio: false,
+  };
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);

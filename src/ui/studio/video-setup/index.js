@@ -48,14 +48,10 @@ export default function VideoSetup(props) {
       || NONE
   );
 
-  const USER_CONSTRAINTS = {
-    video: { height: { ideal: 1080 }, facingMode: 'user' },
-    audio: false
-  };
 
   const clickUser = async () => {
     setActiveSource(USER);
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
+    await startUserCapture(dispatch, settings);
   };
   const clickDisplay = async () => {
     setActiveSource(DISPLAY);
@@ -63,7 +59,7 @@ export default function VideoSetup(props) {
   };
   const clickBoth = async () => {
     setActiveSource(BOTH);
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
+    await startUserCapture(dispatch, settings);
     await startDisplayCapture(dispatch, settings);
   };
 

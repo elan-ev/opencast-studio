@@ -418,8 +418,12 @@ const SCHEMA = {
     },
   },
   'display': {
-    maxFps: positiveInteger('maxFps'),
-    maxHeight: positiveInteger('maxHeight'),
+    maxFps: positiveInteger('display.maxFps'),
+    maxHeight: positiveInteger('display.maxHeight'),
+  },
+  'camera': {
+    maxFps: positiveInteger('camera.maxFps'),
+    maxHeight: positiveInteger('camera.maxHeight'),
   },
 };
 
