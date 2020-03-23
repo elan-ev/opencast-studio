@@ -18,6 +18,7 @@ import {
   STATE_ERROR,
   STATE_UPLOADING,
   STATE_UPLOADED,
+  STATE_NOT_UPLOADED,
 } from '../../../studio-state';
 
 import Notification from '../../notification';
@@ -95,7 +96,7 @@ export default function SaveCreation(props) {
   const uploadPossible = opencast.isReadyToUpload();
 
   let uploadBox;
-  if (!uploadPossible) {
+  if (uploadState.state === STATE_NOT_UPLOADED && !uploadPossible) {
     uploadBox = (
       <Notification key="opencast-connection" isDanger>
         <Trans i18nKey="warning-missing-connection-settings">
