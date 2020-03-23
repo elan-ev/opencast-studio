@@ -76,7 +76,7 @@ export default function VideoSetup(props) {
 
   // The warnings if we are not allowed to capture a stream.
   const userWarning = (state.userAllowed === false) && (
-    <Notification isDanger>
+    <Notification key="user-stream-warning" isDanger>
       <Heading as="h3" mb={2}>
         {t('source-user-not-allowed-title')}
       </Heading>
@@ -84,7 +84,7 @@ export default function VideoSetup(props) {
     </Notification>
   );
   const displayWarning = (state.displayAllowed === false) && (
-    <Notification isDanger>
+    <Notification key="display-stream-warning" isDanger>
       <Heading as="h3" mb={2}>
         {t('source-display-not-allowed-title')}
       </Heading>
