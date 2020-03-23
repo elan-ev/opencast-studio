@@ -31,14 +31,14 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       sx={{
         color: 'white',
-        pl: [3, 3, '10px'],
-        pr: [3, 3, '14px'],
+        pl: [3, '10px'],
+        pr: [3, '14px'],
         textDecoration: 'none',
         fontSize: '18px',
-        height: ['auto', 'auto', '100%'],
-        borderLeft: ['none', 'none', theme => `1px solid ${theme.colors.gray[3]}`],
-        display: ['block', 'block', 'inline-block'],
-        width: ['100%', '100%', 'auto'],
+        height: ['auto', '100%'],
+        borderLeft: ['none', theme => `1px solid ${theme.colors.gray[3]}`],
+        display: ['block', 'inline-block'],
+        width: ['100%', 'auto'],
 
         '&:hover': {
           backgroundColor: 'gray.1',
@@ -71,7 +71,7 @@ const Navigation = props => {
       <button
         onClick={toggleMenu}
         sx={{
-          display: ['inline-block', 'inline-block', 'none'],
+          display: ['inline-block', 'none'],
           border: theme => `2px solid ${theme.colors.gray[3]}`,
           borderRadius: '10px',
           color: 'white',
@@ -108,13 +108,13 @@ const Navigation = props => {
           // style set in the `ref` attribute above. Otherwise opening the menu
           // in mobile view and switching to desktop view (e.g. by rotating
           // phone) would result in a very strange artifact.
-          height: ['0px', '0px', '100% !important'],
+          height: ['0px', '100% !important'],
           top: [theme => theme.heights.headerHeight, theme => theme.heights.headerHeight, 0],
-          position: ['absolute', 'absolute', 'static'],
-          width: ['100%', '100%', 'auto'],
-          backgroundColor: ['gray.0', 'gray.0', 'none'],
-          transition: ['height 0.25s ease-out 0s', 'height 0.25s ease-out 0s', 'none'],
-          scrollX: ['none', 'none', 'auto'],
+          position: ['absolute', 'static'],
+          width: ['100%', 'auto'],
+          backgroundColor: ['gray.0', 'none'],
+          transition: ['height 0.25s ease-out 0s', 'none'],
+          scrollX: ['none', 'auto'],
         }}
       >
         <NavElement target="/" icon={faVideo} onClick={closeMenu}>
@@ -133,7 +133,7 @@ const Navigation = props => {
         onClick={closeMenu}
         ref={n => n && (n.style.opacity = 1)}
         sx={{
-          display: [isOpened ? 'block' : 'none', isOpened ? 'block' : 'none', 'none'],
+          display: [isOpened ? 'block' : 'none', 'none'],
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
           position: 'fixed',
           zIndex: -10,
