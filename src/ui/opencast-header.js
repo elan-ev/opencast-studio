@@ -6,46 +6,24 @@ import { Link, useLocation } from 'react-router-dom';
 
 import Navigation from './navigation';
 
-const BetaBubble = props => (
-  <span
-    sx={{
-      position: 'relative',
-      top: '4px',
-      fontSize: '12pt',
-      verticalAlign: 'top',
-      display: ['none', 'inline'],
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderColor: 'gray.2',
-      borderRadius: 5,
-      padding: '2px',
-      color: 'gray.2'
-    }}
-    {...props}
-  />
-);
 
 function Brand() {
   const location = useLocation();
 
   return (
-    <span>
-      <Link to={{ pathname: "/", search: location.search }}>
-        <picture>
-          <source
-            media="(min-width: 920px)"
-            srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
-          />
-          <img
-            src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
-            alt="Opencast Studio"
-            sx={{ height: 50 }}
-          />
-        </picture>
-      </Link>
-
-      <BetaBubble>beta</BetaBubble>
-    </span>
+    <Link to={{ pathname: "/", search: location.search }}>
+      <picture>
+        <source
+          media="(min-width: 920px)"
+          srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
+        />
+        <img
+          src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
+          alt="Opencast Studio"
+          sx={{ height: 50 }}
+        />
+      </picture>
+    </Link>
   );
 }
 
