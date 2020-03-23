@@ -123,6 +123,7 @@ export default function SaveCreation(props) {
           <FontAwesomeIcon icon={faCheckCircle} size="4x" />
         </div>
         <Text sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
+        <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
       </React.Fragment>
     );
   } else {
