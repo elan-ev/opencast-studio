@@ -104,37 +104,3 @@ export function stopUserCapture(stream, dispatch) {
   stream && stream.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
 }
-
-// ----------------------------------------------------------------------------
-
-export function addAudioToStream(videoStream, audioStream, dispatch, actionType) {
-  if (videoStream) {
-    videoStream.getAudioTracks().forEach(track => track.stop());
-
-    const streamWithAudio = new MediaStream([
-      ...videoStream.getVideoTracks(),
-      ...audioStream.getAudioTracks()
-    ]);
-    dispatch({ type: actionType, payload: streamWithAudio });
-  }
-}
-
-export function removeAudioFromStream(stream, dispatch, actionType) {
-  if (stream) {
-    stream.getAudioTracks().forEach(track => track.stop());
-    const streamWithoutAudio = new MediaStream([...stream.getVideoTracks()]);
-    dispatch({ type: actionType, payload: streamWithoutAudio });
-  }
-}
-
-// ----------------------------------------------------------------------------
-
-export async function selectCamera(dispatch, deviceId) {
-  const constraints = { ...defaultUserConstraints, video: { deviceId } };
-  startUserCapture(dispatch, constraints);
-}
-
-export async function selectMicrophone(dispatch, deviceId) {
-  const constraints = { ...defaultUserConstraints, audio: { deviceId } };
-  startUserCapture(dispatch, constraints);
-}
