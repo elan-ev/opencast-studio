@@ -113,12 +113,11 @@ export const decodeHexString = hex => {
     }
   };
 
-  let out = '';
+  let bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    const value = 16 * digitToNum(hex.substring(i, i + 1))
+    bytes[i / 2] = 16 * digitToNum(hex.substring(i, i + 1))
       + digitToNum(hex.substring(i + 1, i + 2));
-    out += String.fromCharCode(value);
   }
 
-  return out;
+  return new TextDecoder().decode(bytes);
 };

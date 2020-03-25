@@ -147,7 +147,7 @@ An example of such a link would be:
 https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=fast&upload.seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
 ```
 
-You can also include your configuration in a JSON object, then encode it as hex string and pass it with the `config=` GET parameter. This might help to avoid problems if URLs (and thus the GET parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
+You can also include your configuration in a JSON object, encode it as UTF-8 string then encode that as hex string and pass it with the `config=` GET parameter. This might help to avoid problems if URLs (and thus the GET parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
 
 - Stringified JSON: `{"opencast":{"loginProvided":true}}`
 - Encoded as hex string:
