@@ -89,6 +89,10 @@ const nowAsString = () => {
 };
 
 export const userHasWebcam = async () => {
+  if (!('mediaDevices' in navigator)) {
+    return false;
+  }
+
   const devices = await navigator.mediaDevices.enumerateDevices()
   return devices.some(d => d.kind === 'videoinput');
 }
