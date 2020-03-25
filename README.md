@@ -159,6 +159,8 @@ You can also include your configuration in a JSON object, encode it as UTF-8 str
   https://studio.opencast.org?config=7B226F70656E63617374223A7B226C6F67696E50726F7669646564223A747275657D7D
   ```
 
+You can encode your JSON string as hex string with [this tool](https://onlineutf8tools.com/convert-utf8-to-hexadecimal), for example. Be sure to disable the options "Use Hex Radix Prefix" and "Use Extra Spacing".
+
 Note that this can't be used with other GET parameters. If `config=` is specified, all other parameters are ignored.
 
 
