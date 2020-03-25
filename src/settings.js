@@ -3,6 +3,7 @@
 import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
+import { decodeHexString } from './util';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
@@ -70,19 +71,51 @@ export class SettingsManager {
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
+
     let rawUrlSettings = {};
-    for (let [key, value] of urlParams) {
-      // Create empty objects for full path (if the key contains '.') and set
-      // the value at the end.
-      let obj = rawUrlSettings;
-      const segments = key.split('.');
-      segments.slice(0, -1).forEach((segment) => {
-        if (!(segment in obj)) {
-          obj[segment] = {};
+    if (urlParams.get('config')) {
+      // In this case, the GET parameter `config` is specified. We now expect a
+      // hex encoded stringified JSON object describing the configuration. This
+      // is possible in cases where special characters in GET parameters might
+      // get modified somehow (e.g. by an LMS). A config=hexstring only uses
+      // the most basic characters, so it should always work.
+
+      const encoded = urlParams.get('config');
+      try {
+        const decoded = decodeHexString(encoded);
+        rawUrlSettings = JSON.parse(decoded);
+      } catch (e) {
+        console.warn(
+          `Could not decode and parse hex-encoded JSON string given to GET parameter `
+          + `'config'. Ignoring. Error:`,
+          e,
+        );
+      }
+
+      for (const key of urlParams.keys()) {
+        if (key !== 'config') {
+          console.warn(
+            `URL GET parameter '${key}' is ignored as 'config' is specified. Either specify `
+            + ` all configuration via the 'config' GET parameter hex string or via direct GET `
+            + `parameters. Mixing is not allowed.`
+          );
         }
-        obj = obj[segment];
-      });
-      obj[segments[segments.length - 1]] = value;
+      }
+    } else {
+      // Interpret each get parameter as single configuration value.
+      for (let [key, value] of urlParams) {
+        // Create empty objects for full path (if the key contains '.') and set
+        // the value at the end.
+        let obj = rawUrlSettings;
+        const segments = key.split('.');
+        segments.slice(0, -1).forEach((segment) => {
+          if (!(segment in obj)) {
+            obj[segment] = {};
+          }
+          obj = obj[segment];
+        });
+        obj[segments[segments.length - 1]] = value;
+      }
     }
 
     self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');

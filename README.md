@@ -147,6 +147,23 @@ An example of such a link would be:
 https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=fast&upload.seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
 ```
 
+You can also include your configuration in a JSON object, encode it as UTF-8 string then encode that as hex string and pass it with the `config=` GET parameter. This might help to avoid problems if URLs (and thus the GET parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
+
+- Stringified JSON: `{"opencast":{"loginProvided":true}}`
+- Encoded as hex string:
+  ```
+  7B226F70656E63617374223A7B226C6F67696E50726F7669646564223A747275657D7D
+  ```
+- Pass to Studio:
+  ```
+  https://studio.opencast.org?config=7B226F70656E63617374223A7B226C6F67696E50726F7669646564223A747275657D7D
+  ```
+
+You can encode your JSON string as hex string with [this tool](https://onlineutf8tools.com/convert-utf8-to-hexadecimal), for example. Be sure to disable the options "Use Hex Radix Prefix" and "Use Extra Spacing".
+
+Note that this can't be used with other GET parameters. If `config=` is specified, all other parameters are ignored.
+
+
 #### Debugging/Help
 
 To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
