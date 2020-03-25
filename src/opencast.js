@@ -447,7 +447,7 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
   RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides"
   Version="2.0"
   xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os">
-  <Rule RuleId="Administrator_read_Permit" Effect="Permit">
+  <Rule RuleId="user_read_Permit" Effect="Permit">
     <Target>
       <Actions>
         <Action>
@@ -467,7 +467,7 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
       </Apply>
     </Condition>
   </Rule>
-  <Rule RuleId="Administrator_write_Permit" Effect="Permit">
+  <Rule RuleId="user_write_Permit" Effect="Permit">
     <Target>
       <Actions>
         <Action>
