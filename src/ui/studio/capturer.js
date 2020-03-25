@@ -21,12 +21,25 @@ export async function startAudioCapture(dispatch, deviceId = null) {
   }
 }
 
-export async function startDisplayCapture(
-  dispatch,
-  displayMediaOptions = { video: true, audio: false }
-) {
+export async function startDisplayCapture(dispatch, settings) {
+  const maxFps = settings.display?.maxFps
+    ? { frameRate: { max: settings.display.maxFps } }
+    : {};
+  const maxHeight = settings.display?.maxHeight
+    ? { height: { max: settings.display.maxHeight } }
+    : {};
+
+  const constraints = {
+    video: {
+      cursor: 'always',
+      ...maxFps,
+      ...maxHeight,
+    },
+    audio: false,
+  };
+
   try {
-    const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+    const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
     stream.getTracks().forEach(track => {
       track.onended = () => {
         dispatch({ type: 'UNSHARE_DISPLAY' });
@@ -42,16 +55,22 @@ export async function startDisplayCapture(
   }
 }
 
-const defaultUserConstraints = {
-  audio: true,
-  video: {
-    width: { ideal: 1280, max: 1920 },
-    height: { ideal: 720, max: 1080 }
-  }
-};
+export async function startUserCapture(dispatch, settings) {
+  const maxFps = settings.camera?.maxFps
+    ? { frameRate: { max: settings.camera.maxFps } }
+    : {};
+  const maxHeight = settings.camera?.maxHeight
+    ? { height: { ideal: Math.min(1080, settings.camera.maxHeight), max: settings.camera.maxHeight } }
+    : { height: { ideal: 1080 } };
 
-export async function startUserCapture(dispatch, userMediaOptions = null) {
-  const constraints = userMediaOptions || defaultUserConstraints;
+  const constraints = {
+    video: {
+      facingMode: 'user',
+      ...maxFps,
+      ...maxHeight,
+    },
+    audio: false,
+  };
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -90,38 +109,4 @@ export function stopDisplayCapture(stream, dispatch) {
 export function stopUserCapture(stream, dispatch) {
   stream && stream.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
-}
-
-// ----------------------------------------------------------------------------
-
-export function addAudioToStream(videoStream, audioStream, dispatch, actionType) {
-  if (videoStream) {
-    videoStream.getAudioTracks().forEach(track => track.stop());
-
-    const streamWithAudio = new MediaStream([
-      ...videoStream.getVideoTracks(),
-      ...audioStream.getAudioTracks()
-    ]);
-    dispatch({ type: actionType, payload: streamWithAudio });
-  }
-}
-
-export function removeAudioFromStream(stream, dispatch, actionType) {
-  if (stream) {
-    stream.getAudioTracks().forEach(track => track.stop());
-    const streamWithoutAudio = new MediaStream([...stream.getVideoTracks()]);
-    dispatch({ type: actionType, payload: streamWithoutAudio });
-  }
-}
-
-// ----------------------------------------------------------------------------
-
-export async function selectCamera(dispatch, deviceId) {
-  const constraints = { ...defaultUserConstraints, video: { deviceId } };
-  startUserCapture(dispatch, constraints);
-}
-
-export async function selectMicrophone(dispatch, deviceId) {
-  const constraints = { ...defaultUserConstraints, audio: { deviceId } };
-  startUserCapture(dispatch, constraints);
 }

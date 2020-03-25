@@ -113,9 +113,14 @@ The following settings are currently understood by Studio. The column "shown to 
 | `upload.workflowId` | `fast` | ✘ | The workflow ID used to process the recording. |
 | `recording.mimes` | `["video/mp4", "video/webm"]` | ✘ | A list of preferred MIME types used by the media recorder. Studio uses the first MIME type in that list for which `MediaRecorder.isTypeSupported` returns `true`. If none of the specified ones is supported or if the browser does not support `isTypeSupported`, then Studio lets the browser choose a MIME-type. |
 | `recording.videoBitrate` | `2000000` | ✘ | The target video bitrate of the recording in bits per second. Please note that specifying this for all users is usually a bad idea, as the video stream and situation is different for everyone. The resulting quality also largely depends on the browser's encoder. |
-
+| `display.maxHeight` | `1080` | ✘ | Passed as `height: { max: _ }` `MediaStreamConstraint` to `getDisplayMedia`. Resolutions larger than that should be scaled down by the browser. |
+| `display.maxFps` | `30` | ✘ | Passed as `framerate: { max: _ }` `MediaStreamConstraint` to `getDisplayMedia`. Most browsers capture with a maximum of 30 FPS by default anyway, so you might not need this. |
+| `camera.maxHeight` | `480` | ✘ | Passed as `height: { max: _ }` `MediaStreamConstraint` to `getUserMedia`. Different maximum heights can affect the aspect ratio of the video. |
+| `camera.maxFps` | `30` | ✘ | Passed as `framerate: { max: _ }` `MediaStreamConstraint` to `getUserMedia`. Setting this might lead to some users not being able to share their webcam! |
 
 **Note**: all data configured via `settings.json` is as public as your Studio installation. For example, if your students can access your deployed studio app, they can also see the `settings.json`. This is particularly important if you want to preconfigure an Opencast user.
+
+Please also note that all settings related to video capture or recording should be treated carefully. Setting any of those means that you know better than the user's browser, which is unlikely as the browser has exact information about screen resolution, connected cameras, CPU usage and the like. So before setting those for all of your users, make sure to test those settings first!
 
 
 #### Example `settings.json`

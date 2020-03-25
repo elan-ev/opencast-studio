@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useDispatch, useStudioState } from '../../../studio-state';
+import { useSettings } from '../../../settings';
 
 import Notification from '../../notification';
 
@@ -26,6 +27,7 @@ import { SourcePreview } from './preview';
 export default function VideoSetup(props) {
   const { t } = useTranslation();
 
+  const settings = useSettings();
   const dispatch = useDispatch();
   const state = useStudioState();
   const { displayStream, userStream, displaySupported, userSupported } = state;
@@ -46,23 +48,19 @@ export default function VideoSetup(props) {
       || NONE
   );
 
-  const USER_CONSTRAINTS = {
-    video: { height: { ideal: 1080 }, facingMode: 'user' },
-    audio: false
-  };
 
   const clickUser = async () => {
     setActiveSource(USER);
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
+    await startUserCapture(dispatch, settings);
   };
   const clickDisplay = async () => {
     setActiveSource(DISPLAY);
-    await startDisplayCapture(dispatch);
+    await startDisplayCapture(dispatch, settings);
   };
   const clickBoth = async () => {
     setActiveSource(BOTH);
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
-    await startDisplayCapture(dispatch);
+    await startUserCapture(dispatch, settings);
+    await startDisplayCapture(dispatch, settings);
   };
 
   const reselectSource = () => {
