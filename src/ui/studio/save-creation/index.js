@@ -57,14 +57,11 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
-    const workflowId = settings.upload?.workflowId;
-    const seriesId = settings.upload?.seriesId;
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
-      workflowId,
-      seriesId,
+      uploadSettings: settings.upload,
     });
 
     if (success) {

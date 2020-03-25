@@ -120,6 +120,15 @@ export class SettingsManager {
 
     self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');
 
+    // We have to do some special treatment of the `upload.acl` property. Users
+    // cannot set this setting, so we only have to check urlSettings and
+    // contextSettings.
+    if (typeof self.urlSettings.upload?.acl !== 'undefined') {
+      await SettingsManager.fetchAcl(self.urlSettings.upload);
+    } else if (typeof self.contextSettings.upload?.acl !== 'undefined') {
+      await SettingsManager.fetchAcl(self.contextSettings.upload);
+    }
+
     return self;
   }
 
@@ -173,6 +182,69 @@ export class SettingsManager {
     }
   }
 
+  static async fetchAcl(uploadSettings) {
+    if (uploadSettings.acl === 'false') {
+      uploadSettings.acl = false;
+      return;
+    } else if (typeof uploadSettings.acl === 'string') {
+      // Try to retrieve the context settings.
+      let basepath = process.env.PUBLIC_URL || '/';
+      if (!basepath.endsWith('/')) {
+        basepath += '/';
+      }
+
+      // Construct path to settings XML file. If the `uploadSettings.acl`
+      // starts with '/', it is interpreted as absolute path from the server
+      // root.
+      const base = uploadSettings.acl.startsWith('/') ? '' : basepath;
+      const url = `${window.location.origin}${base}${uploadSettings.acl}`;
+
+      // Try to download ACL template file
+      let response;
+      try {
+        response = await fetch(url);
+      } catch (e) {
+        console.error(
+          `Could not access ACL template '${url}' due to network error! Using default ACLs.`,
+          e || "",
+        );
+        uploadSettings.acl = true;
+        return;
+      }
+
+      // Check for 404 error
+      if (response.status === 404) {
+        console.error(`ACL template '${url}' returned 404! Using default ACLs`);
+        uploadSettings.acl = true;
+        return;
+      } else if (!response.ok) {
+        console.error(
+          `Fetching ACL template '${url}' failed: ${response.status} ${response.statusText}`
+        );
+        uploadSettings.acl = true;
+        return;
+      }
+
+      if (!response.headers.get('Content-Type').startsWith('application/xml')) {
+        console.warn(
+          `ACL template request '${url}' does not have 'Content-Type: application/xml'. `
+          + `Using default ACLs.`
+        );
+        uploadSettings.acl = true;
+        return null;
+      }
+
+      // Finally, set the setting to the template string.
+      uploadSettings.acl = await response.text();
+    } else {
+      uploadSettings.acl = true;
+      console.warn(
+        `'upload.acl' has invalid value (has to be 'false' or a path to an XML `
+        + `template file. Using default ACLs.`
+      );
+      return;
+    }
+  }
 
   // Stores the given `newSettings` as user settings. The given object might be
   // partial, i.e. only the new values can be specified. Values in `newSettings`
@@ -304,7 +376,7 @@ export class SettingsManager {
       const actualType = Array.isArray(value) ? 'array' : typeof value;
 
       let out = null;
-      if (actualType === expectedType) {
+      if (expectedType === 'any' || actualType === expectedType) {
         out = value;
       } else {
         if (actualType === 'string' && allowParse) {
@@ -440,6 +512,18 @@ const SCHEMA = {
   upload: {
     seriesId: 'string',
     workflowId: 'string',
+    // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
+    // done, this one of:
+    // - undefined: setting was not set.
+    // - `false`: do not send any ACLs when uploading
+    // - `true`: explictely send default ACLs when uploading (this is the default behavior)
+    // - ACL template string: already fetched ACL template string.
+    acl: {
+      _type: 'any',
+      _validate: v => (
+        v === false || typeof v === 'string' || `'upload.acl' needs to be 'false' or a string`
+      ),
+    },
   },
   recording: {
     videoBitrate: positiveInteger('bitrate'),

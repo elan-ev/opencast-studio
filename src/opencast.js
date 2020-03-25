@@ -3,6 +3,7 @@
 import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
+import Mustache from 'mustache';
 
 import { recordingFileName } from './util.js';
 
@@ -222,7 +223,10 @@ export class Opencast {
   // Uploads the given recordings with the given title and creator metadata. If
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
-  async upload({ recordings, title, creator, workflowId, seriesId }) {
+  async upload({ recordings, title, creator, uploadSettings }) {
+    const workflowId = uploadSettings?.workflowId;
+    const seriesId = uploadSettings?.seriesId;
+
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -247,16 +251,21 @@ export class Opencast {
         .then(response => response.text());
 
 
-      // Set ACLs to allow the current user to read and write this recording.
-      const acl = aclForRole(this.#currentUser.userRole);
+      // Set ACL to allow the current user to read and write this recording.
+      if (uploadSettings?.acl !== false) {
+        const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
+          ? DEFAULT_ACL_TEMPLATE
+          : uploadSettings?.acl;
+        const acl = this.constructAcl(template);
 
-      const aclBody = new FormData();
-      aclBody.append('flavor', 'security/xacml+episode');
-      aclBody.append('mediaPackage', mediaPackage);
-      aclBody.append('BODY', new Blob([acl]), 'acl.xml');
+        const aclBody = new FormData();
+        aclBody.append('flavor', 'security/xacml+episode');
+        aclBody.append('mediaPackage', mediaPackage);
+        aclBody.append('BODY', new Blob([acl]), 'acl.xml');
 
-      mediaPackage = await this.request("ingest/addAttachment", { method: 'post', body: aclBody })
-        .then(response => response.text());
+        mediaPackage = await this.request("ingest/addAttachment", { method: 'post', body: aclBody })
+          .then(response => response.text());
+      }
 
       // Add all recordings
       for (const { deviceType, media, mimeType } of recordings) {
@@ -321,6 +330,41 @@ export class Opencast {
     return url && url.startsWith("https")
       ? new URL(url).hostname
       : null;
+  }
+
+  // Constructs the ACL XML structure from the given template string.
+  constructAcl(template) {
+    if (!this.#currentUser) {
+      throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
+    }
+
+    // Prepare template "view": the values that can be used within the template.
+    let ltiCourseId = this.#currentUser.roles
+      .find(r => r.endsWith('_Learner') || r.endsWith('_Instructor'))
+      ?.replace('_Learner', '')
+      .replace('_Instructor', '');
+    if (ltiCourseId === 'LTI') {
+      ltiCourseId = undefined;
+    }
+
+    const roleOAuthUser = this.#currentUser.roles.find(r => r === 'ROLE_OAUTH_USER');
+
+    let defaultReadRoles = [this.#currentUser.userRole];
+    let defaultWriteRoles = [this.#currentUser.userRole];
+    if (ltiCourseId) {
+      defaultReadRoles.push(`${ltiCourseId}_Learner`, `${ltiCourseId}_Instructor`);
+      defaultWriteRoles.push(`${ltiCourseId}_Instructor`);
+    }
+
+    const view = {
+      userName: escapeString(this.#currentUser.user.username),
+      userRole: escapeString(this.#currentUser.userRole),
+      roleOAuthUser: escapeString(roleOAuthUser),
+      ltiCourseId: escapeString(ltiCourseId),
+      defaultReadRoles: defaultReadRoles.map(r => escapeString(r)),
+      defaultWriteRoles: defaultWriteRoles.map(r => escapeString(r)),
+    };
+    return Mustache.render(template, view);
   }
 }
 
@@ -398,54 +442,50 @@ const dcCatalog = ({ creator, title, seriesId }) => {
     </dublincore>`;
 }
 
-const aclForRole = role => {
-  const escapedRole = escapeString(role);
-
-  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-    <Policy PolicyId="mediapackage-1"
-      RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides"
-      Version="2.0"
-      xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os">
-      <Rule RuleId="Administrator_read_Permit" Effect="Permit">
-        <Target>
-          <Actions>
-            <Action>
-              <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
-                <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
-                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
-              </ActionMatch>
-            </Action>
-          </Actions>
-        </Target>
-        <Condition>
-          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">${escapedRole}</AttributeValue>
-            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Policy PolicyId="mediapackage-1"
+  RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides"
+  Version="2.0"
+  xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os">
+  <Rule RuleId="user_read_Permit" Effect="Permit">
+    <Target>
+      <Actions>
+        <Action>
+          <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
+            <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
               DataType="http://www.w3.org/2001/XMLSchema#string"/>
-          </Apply>
-        </Condition>
-      </Rule>
-      <Rule RuleId="Administrator_write_Permit" Effect="Permit">
-        <Target>
-          <Actions>
-            <Action>
-              <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
-                <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">write</AttributeValue>
-                <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
-                  DataType="http://www.w3.org/2001/XMLSchema#string"/>
-              </ActionMatch>
-            </Action>
-          </Actions>
-        </Target>
-        <Condition>
-          <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
-            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">${escapedRole}</AttributeValue>
-            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          </ActionMatch>
+        </Action>
+      </Actions>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ userRole }}</AttributeValue>
+        <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          DataType="http://www.w3.org/2001/XMLSchema#string"/>
+      </Apply>
+    </Condition>
+  </Rule>
+  <Rule RuleId="user_write_Permit" Effect="Permit">
+    <Target>
+      <Actions>
+        <Action>
+          <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">write</AttributeValue>
+            <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
               DataType="http://www.w3.org/2001/XMLSchema#string"/>
-          </Apply>
-        </Condition>
-      </Rule>
-    </Policy>
-  `;
-}
+          </ActionMatch>
+        </Action>
+      </Actions>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ userRole }}</AttributeValue>
+        <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          DataType="http://www.w3.org/2001/XMLSchema#string"/>
+      </Apply>
+    </Condition>
+  </Rule>
+</Policy>
+`;
