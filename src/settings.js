@@ -120,13 +120,13 @@ export class SettingsManager {
 
     self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');
 
-    // We have to do some special treatment of the `upload.acls` property. Users
+    // We have to do some special treatment of the `upload.acl` property. Users
     // cannot set this setting, so we only have to check urlSettings and
     // contextSettings.
-    if (typeof self.urlSettings.upload?.acls !== 'undefined') {
-      await SettingsManager.fetchAcls(self.urlSettings.upload);
-    } else if (typeof self.contextSettings.upload?.acls !== 'undefined') {
-      await SettingsManager.fetchAcls(self.contextSettings.upload);
+    if (typeof self.urlSettings.upload?.acl !== 'undefined') {
+      await SettingsManager.fetchAcl(self.urlSettings.upload);
+    } else if (typeof self.contextSettings.upload?.acl !== 'undefined') {
+      await SettingsManager.fetchAcl(self.contextSettings.upload);
     }
 
     return self;
@@ -182,22 +182,22 @@ export class SettingsManager {
     }
   }
 
-  static async fetchAcls(uploadSettings) {
-    if (uploadSettings.acls === 'false') {
-      uploadSettings.acls = false;
+  static async fetchAcl(uploadSettings) {
+    if (uploadSettings.acl === 'false') {
+      uploadSettings.acl = false;
       return;
-    } else if (typeof uploadSettings.acls === 'string') {
+    } else if (typeof uploadSettings.acl === 'string') {
       // Try to retrieve the context settings.
       let basepath = process.env.PUBLIC_URL || '/';
       if (!basepath.endsWith('/')) {
         basepath += '/';
       }
 
-      // Construct path to settings XML file. If the `uploadSettings.acls`
+      // Construct path to settings XML file. If the `uploadSettings.acl`
       // starts with '/', it is interpreted as absolute path from the server
       // root.
-      const base = uploadSettings.acls.startsWith('/') ? '' : basepath;
-      const url = `${window.location.origin}${base}${uploadSettings.acls}`;
+      const base = uploadSettings.acl.startsWith('/') ? '' : basepath;
+      const url = `${window.location.origin}${base}${uploadSettings.acl}`;
 
       // Try to download ACL template file
       let response;
@@ -208,20 +208,20 @@ export class SettingsManager {
           `Could not access ACL template '${url}' due to network error! Using default ACLs.`,
           e || "",
         );
-        uploadSettings.acls = true;
+        uploadSettings.acl = true;
         return;
       }
 
       // Check for 404 error
       if (response.status === 404) {
         console.error(`ACL template '${url}' returned 404! Using default ACLs`);
-        uploadSettings.acls = true;
+        uploadSettings.acl = true;
         return;
       } else if (!response.ok) {
         console.error(
           `Fetching ACL template '${url}' failed: ${response.status} ${response.statusText}`
         );
-        uploadSettings.acls = true;
+        uploadSettings.acl = true;
         return;
       }
 
@@ -230,16 +230,16 @@ export class SettingsManager {
           `ACL template request '${url}' does not have 'Content-Type: application/xml'. `
           + `Using default ACLs.`
         );
-        uploadSettings.acls = true;
+        uploadSettings.acl = true;
         return null;
       }
 
       // Finally, set the setting to the template string.
-      uploadSettings.acls = await response.text();
+      uploadSettings.acl = await response.text();
     } else {
-      uploadSettings.acls = true;
+      uploadSettings.acl = true;
       console.warn(
-        `'upload.acls' has invalid value (has to be 'false' or a path to an XML `
+        `'upload.acl' has invalid value (has to be 'false' or a path to an XML `
         + `template file. Using default ACLs.`
       );
       return;
@@ -512,16 +512,16 @@ const SCHEMA = {
   upload: {
     seriesId: 'string',
     workflowId: 'string',
-    // This gets some special treatment in `fetchAcls`. After `fetchAcls` is
+    // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
     // done, this one of:
     // - undefined: setting was not set.
     // - `false`: do not send any ACLs when uploading
     // - `true`: explictely send default ACLs when uploading (this is the default behavior)
     // - ACL template string: already fetched ACL template string.
-    acls: {
+    acl: {
       _type: 'any',
       _validate: v => (
-        v === false || typeof v === 'string' || `'upload.acls' needs to be 'false' or a string`
+        v === false || typeof v === 'string' || `'upload.acl' needs to be 'false' or a string`
       ),
     },
   },

@@ -111,7 +111,7 @@ The following settings are currently understood by Studio. The column "shown to 
 | `opencast.loginProvided` | `true` | ✘ | If this is set to `true`, `loginPassword` and `loginName` are ignored. Instead, Studio assumes that the user's browser is already authenticated (via cookies) at the Opencast server URL. This pretty much only makes sense if studio is deployed on the same domain as the target Opencast server (e.g. in the path `/studio`). |
 | `upload.seriesId` | `3fe9ea49-a671-4d1e-9669-0c96ff0f8f79` | ✘ | The ID of the series which the recording is a part of. When uploading the recording, it is automatically associated with that series. |
 | `upload.workflowId` | `fast` | ✘ | The workflow ID used to process the recording. |
-| `upload.acls` | `acls.xml` | ✘ | Defines which ACLs to send when uploading the recording. See below for more information. |
+| `upload.acl` | `acl.xml` | ✘ | Defines which ACL to send when uploading the recording. See below for more information. |
 | `recording.mimes` | `["video/mp4", "video/webm"]` | ✘ | A list of preferred MIME types used by the media recorder. Studio uses the first MIME type in that list for which `MediaRecorder.isTypeSupported` returns `true`. If none of the specified ones is supported or if the browser does not support `isTypeSupported`, then Studio lets the browser choose a MIME-type. |
 | `recording.videoBitrate` | `2000000` | ✘ | The target video bitrate of the recording in bits per second. Please note that specifying this for all users is usually a bad idea, as the video stream and situation is different for everyone. The resulting quality also largely depends on the browser's encoder. |
 | `display.maxHeight` | `1080` | ✘ | Passed as `height: { max: _ }` `MediaStreamConstraint` to `getDisplayMedia`. Resolutions larger than that should be scaled down by the browser. |
@@ -170,12 +170,12 @@ Note that this can't be used with other GET parameters. If `config=` is specifie
 To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
 
 
-#### Specify ACLs
+#### Specify ACL
 
-With `upload.acls` you can configure what ACLs are send (as an attachment) to the Opencast server when uploading. Possible values:
-- `true`: use default ACLs (this is the default behavior)
-- `false`: do not send any ACLs when uploading
-- Path to XML template (e.g. `acls.xml` or `/config/acls.xml`). A path to an XML file specifying the ACLs. If the path starts with `/` it is considered absolute on the current server and `server.url${path}` is loaded. If it doesn't start with `/`, `server.url/$PUBLIC_URL/${path}` is loaded.
+With `upload.acl` you can configure which ACL are sent (as an attachment) to the Opencast server when uploading. Possible values:
+- `true`: use the default ACL (this is the default behavior)
+- `false`: do not send an ACL when uploading
+- Path to XML template (e.g. `acl.xml` or `/config/acl.xml`). A path to an XML file specifying the ACL. If the path starts with `/` it is considered absolute on the current server and `server.url${path}` is loaded. If it doesn't start with `/`, `server.url/$PUBLIC_URL/${path}` is loaded.
 
 The ACL XML template is a Mustache template. The following variables are passed as view:
 

@@ -251,12 +251,12 @@ export class Opencast {
         .then(response => response.text());
 
 
-      // Set ACLs to allow the current user to read and write this recording.
-      if (uploadSettings?.acls !== false) {
-        const template = uploadSettings?.acls === true || (!uploadSettings?.acls)
+      // Set ACL to allow the current user to read and write this recording.
+      if (uploadSettings?.acl !== false) {
+        const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
           ? DEFAULT_ACL_TEMPLATE
-          : uploadSettings?.acls;
-        const acl = this.constructAcls(template);
+          : uploadSettings?.acl;
+        const acl = this.constructAcl(template);
 
         const aclBody = new FormData();
         aclBody.append('flavor', 'security/xacml+episode');
@@ -333,9 +333,9 @@ export class Opencast {
   }
 
   // Constructs the ACL XML structure from the given template string.
-  constructAcls(template) {
+  constructAcl(template) {
     if (!this.#currentUser) {
-      throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcls'`);
+      throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
     }
 
     // Prepare template "view": the values that can be used within the template.
