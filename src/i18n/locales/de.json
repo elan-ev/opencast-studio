@@ -36,6 +36,7 @@
   "sources-video-question": "Welche Videoquelle(n) aufnehmen?",
   "sources-video-none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
   "sources-video-reselect-source": "Quelle(n) neu auswählen",
+  "sources-video-no-cam-detected": "Keine Kamera erkannt",
   "sources-scenario-display-and-user": "Bildschirm & Kamera",
   "sources-scenario-display": "Bildschirm",
   "sources-scenario-user": "Kamera",

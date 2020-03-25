@@ -121,10 +121,15 @@ const OptionButton = ({ children, icon, label, selected, onClick }) => {
       sx={{
         fontFamily: 'inherit',
         color: 'gray.0',
+        backgroundColor: 'gray.4',
         border: '2px solid black',
         borderRadius: '8px',
         flex: '0 1 50%',
         p: 2,
+        '&:hover': selected ? {} : {
+          boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
+          backgroundColor: 'white',
+        },
         ...selectedStyle
       }}
     >

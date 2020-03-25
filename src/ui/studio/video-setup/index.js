@@ -71,6 +71,8 @@ export default function VideoSetup(props) {
     stopDisplayCapture(state.displayStream, dispatch);
   };
 
+  const userHasWebcam = props.userHasWebcam;
+
   const nextDisabled = activeSource === NONE
     || activeSource === BOTH ? (!displayStream || !userStream) : !hasStreams;
 
@@ -128,11 +130,13 @@ export default function VideoSetup(props) {
               label={t('sources-scenario-display-and-user')}
               icon={faChalkboardTeacher}
               onClick={clickBoth}
+              disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
             />}
             { userSupported && <OptionButton
               label={t('sources-scenario-user')}
               icon={faUser}
               onClick={clickUser}
+              disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
             />}
           </Flex>
           <Spacer />
@@ -219,14 +223,18 @@ export default function VideoSetup(props) {
   );
 }
 
-const OptionButton = ({ icon, label, onClick }) => {
+const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
+  const disabled = disabledText !== false;
+
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       sx={{
         fontFamily: 'inherit',
-        color: 'gray.0',
-        border: '2px solid black',
+        color: disabled ? 'gray.2' : 'gray.0',
+        border: theme => `2px solid ${disabled ? theme.colors.gray[2] : 'black'}`,
+        backgroundColor: 'gray.4',
         borderRadius: '8px',
         flex: ['1 1 auto', '0 1 100%'],
         minWidth: '180px',
@@ -234,12 +242,17 @@ const OptionButton = ({ icon, label, onClick }) => {
         minHeight: '120px',
         maxHeight: '250px',
         p: 2,
+        '&:hover': disabled ? {} : {
+          boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
+          backgroundColor: 'white',
+        },
       }}
     >
       <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
         <FontAwesomeIcon icon={icon} size="3x"/>
       </div>
       <div sx={{ fontSize: 4 }}>{label}</div>
+      <div sx={{ fontSize: 2, mt: 1 }}>{disabledText}</div>
     </button>
   );
 };
