@@ -31,9 +31,9 @@ In the table, "(✔)" means partial support and/or major bugs are still present.
 | Win10   | Edge 79    | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
 | Linux   | Chrome 77  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
 | Linux   | Firefox 68 | ✔   | ✔ | ✔   |
-| MacOS   | Chrome 78  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
-| MacOS   | Firefox 70 | ✔   | ✔ | ✔   |
-| MacOS   | Safari 13  | ✔   | ✘ | ✘   | Recording seems to fail due to unsupported MIME type
+| macOS   | Chrome 78  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
+| macOS   | Firefox 70 | ✔   | ✔ | ✔   |
+| macOS   | Safari 13  | ✔   | ✘ | ✘   | Recording seems to fail due to unsupported MIME type
 | Android | Chrome 78  | (✔) | ✘ | ✔   | No camera selection ([#217](https://github.com/elan-ev/opencast-studio/issues/217))
 | Android | Firefox 68 | ✔   | ✘ | ✔   |
 | iOS     | Safari     | (✘) | ✘ | (✘) | Many issues. For details see [issue #84](https://github.com/elan-ev/opencast-studio/issues/84)
