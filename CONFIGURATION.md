@@ -14,21 +14,173 @@ user.
 
 The following settings are currently understood by Studio. The column "shown to user" means whether or not the user can configure this value on the settings page (only if this value is not configured via `settings.json` or a GET parameter, of course).
 
-| Name | Example | Shown to user | Notes |
-| ---- | ------- | ---------------------- | ----- |
-| `opencast.serverUrl` | `https://develop.opencast.org` | ✔ | The server that recordings are uploaded to. Has to include `https://`. If this is set to an empty string, the domain Studio is deployed on is used. |
-| `opencast.loginName` | `peter` | ✔ | Username of the Opencast user to authenticate as |
-| `opencast.loginPassword` | `verysecure123` | ✔ | Password of the Opencast user to authenticate as |
-| `opencast.loginProvided` | `true` | ✘ | If this is set to `true`, `loginPassword` and `loginName` are ignored. Instead, Studio assumes that the user's browser is already authenticated (via cookies) at the Opencast server URL. This pretty much only makes sense if studio is deployed on the same domain as the target Opencast server (e.g. in the path `/studio`). |
-| `upload.seriesId` | `3fe9ea49-a671-4d1e-9669-0c96ff0f8f79` | ✘ | The ID of the series which the recording is a part of. When uploading the recording, it is automatically associated with that series. |
-| `upload.workflowId` | `fast` | ✘ | The workflow ID used to process the recording. |
-| `upload.acl` | `acl.xml` | ✘ | Defines which ACL to send when uploading the recording. See below for more information. |
-| `recording.mimes` | `["video/mp4", "video/webm"]` | ✘ | A list of preferred MIME types used by the media recorder. Studio uses the first MIME type in that list for which `MediaRecorder.isTypeSupported` returns `true`. If none of the specified ones is supported or if the browser does not support `isTypeSupported`, then Studio lets the browser choose a MIME-type. |
-| `recording.videoBitrate` | `2000000` | ✘ | The target video bitrate of the recording in bits per second. Please note that specifying this for all users is usually a bad idea, as the video stream and situation is different for everyone. The resulting quality also largely depends on the browser's encoder. |
-| `display.maxHeight` | `1080` | ✘ | Passed as `height: { max: _ }` `MediaStreamConstraint` to `getDisplayMedia`. Resolutions larger than that should be scaled down by the browser. |
-| `display.maxFps` | `30` | ✘ | Passed as `framerate: { max: _ }` `MediaStreamConstraint` to `getDisplayMedia`. Most browsers capture with a maximum of 30 FPS by default anyway, so you might not need this. |
-| `camera.maxHeight` | `480` | ✘ | Passed as `height: { max: _ }` `MediaStreamConstraint` to `getUserMedia`. Different maximum heights can affect the aspect ratio of the video. |
-| `camera.maxFps` | `30` | ✘ | Passed as `framerate: { max: _ }` `MediaStreamConstraint` to `getUserMedia`. Setting this might lead to some users not being able to share their webcam! |
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Example</th>
+      <th>Shown to user</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b><code>opencast.serverUrl</code></b></td>
+      <td>string</td>
+      <td><code>https://develop.opencast.org</code></td>
+      <td>✔</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">The server that recordings are uploaded to. Has to include <code>https://</code>. If this is set to an empty string, the domain Studio is deployed on is used.</td>
+    </tr>
+    <tr>
+      <td><b><code>opencast.loginName</code></b></td>
+      <td>string</td>
+      <td><code>peter</code></td>
+      <td>✔</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Username of the Opencast user to authenticate as.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>opencast.loginPassword</code></b></td>
+      <td>string</td>
+      <td><code>verysecure123</code></td>
+      <td>✔</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Password of the Opencast user to authenticate as.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>opencast.loginProvided</code></b></td>
+      <td>boolean</td>
+      <td><code>true</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        If this is set to <code>true</code>, <code>loginPassword</code> and <code>loginName</code> are ignored. Instead, Studio assumes that the user's browser is already authenticated (via cookies) at the Opencast server URL. This pretty much only makes sense if studio is deployed on the same domain as the target Opencast server (e.g. in the path <code>/studio</code>).
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>upload.seriesId</code></b></td>
+      <td>string</td>
+      <td><code>3fe9ea49-a671-4d1e-9669-0c96ff0f8f79</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        The ID of the series which the recording is a part of. When uploading the recording, it is automatically associated with that series.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>upload.workflowId</code></b></td>
+      <td>string</td>
+      <td><code>fast</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        The workflow ID used to process the recording.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>upload.acl</code></b></td>
+      <td>string or boolean</td>
+      <td><code>acl.xml</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Defines which ACL to send when uploading the recording. See below for more information.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>recording.mimes</code></b></td>
+      <td>array of strings</td>
+      <td><code>["video/mp4", "video/webm"]</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        A list of preferred MIME types used by the media recorder. Studio uses the first MIME type in that list for which <code>MediaRecorder.isTypeSupported</code> returns <code>true</code>. If none of the specified ones is supported or if the browser does not support <code>isTypeSupported</code>, then Studio lets the browser choose a MIME-type.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>recording.videoBitrate</code></b></td>
+      <td>positive integer</td>
+      <td><code>2000000</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        The target video bitrate of the recording in bits per second. Please note that specifying this for all users is usually a bad idea, as the video stream and situation is different for everyone. The resulting quality also largely depends on the browser's encoder.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>display.maxHeight</code></b></td>
+      <td>positive integer</td>
+      <td><code>1080</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Passed as <code>height: { max: _ }</code> <code>MediaStreamConstraint</code> to <code>getDisplayMedia</code>. Resolutions larger than that should be scaled down by the browser.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>display.maxFps</code></b></td>
+      <td>positive integer</td>
+      <td><code>30</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Passed as <code>framerate: { max: _ }</code> <code>MediaStreamConstraint</code> to <code>getDisplayMedia</code>. Most browsers capture with a maximum of 30 FPS by default anyway, so you might not need this.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>camera.maxHeight</code></b></td>
+      <td>positive integer</td>
+      <td><code>480</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Passed as <code>height: { max: _ }</code> <code>MediaStreamConstraint</code> to <code>getUserMedia</code>. Different maximum heights can affect the aspect ratio of the video.
+      </td>
+    </tr>
+    <tr>
+      <td><b><code>camera.maxFps</code></b></td>
+      <td>positive integer</td>
+      <td><code>30</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Passed as <code>framerate: { max: _ }</code> <code>MediaStreamConstraint</code> to <code>getUserMedia</code>. Setting this might lead to some users not being able to share their webcam!
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
 **Note**: all data configured via `settings.json` is as public as your Studio installation. For example, if your students can access your deployed studio app, they can also see the `settings.json`. This is particularly important if you want to preconfigure an Opencast user.
 
