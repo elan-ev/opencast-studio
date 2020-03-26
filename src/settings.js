@@ -414,6 +414,16 @@ const SCHEMA = {
         _type: 'string',
       }
     }
+  },
+  user: {
+    name: 'string',
+    email: 'string',
+  },
+  seriesList: {
+    _type: 'array',
+    _elements: {
+      _type: 'object',
+    }
   }
 };
 
