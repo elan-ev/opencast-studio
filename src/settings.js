@@ -225,13 +225,14 @@ export class SettingsManager {
         return;
       }
 
-      if (!response.headers.get('Content-Type').startsWith('application/xml')) {
+      // Warn if the content type of the request is unexpected. We still use the
+      // response as, opposed to `settings.xml`, the path is explicitly set.
+      const contentType = response.headers.get('Content-Type');
+      if (!contentType.startsWith('application/xml') && !contentType.startsWith('text/xml')) {
         console.warn(
-          `ACL template request '${url}' does not have 'Content-Type: application/xml'. `
-          + `Using default ACLs.`
+          `ACL template request '${url}' does not have 'Content-Type: application/xml' or 'Content-Type: text/xml'. `
+          + `This could be a bug. Using the response as ACL template anyway.`
         );
-        uploadSettings.acl = true;
-        return null;
       }
 
       // Finally, set the setting to the template string.
