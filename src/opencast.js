@@ -292,6 +292,9 @@ export class Opencast {
   // Uploads the given recordings to the current ingest process via
   // `ingest/addTrack`. Do not call this method outside of `upload`!
   async uploadTracks({ mediaPackage, recordings }) {
+    const totalBytes = recordings.map(r => r.media.size).reduce((a, b) => a + b, 0);
+    let finishedTracksBytes = 0;
+
     for (const { deviceType, media, mimeType } of recordings) {
       let trackFlavor = 'presentation/source';
       if (deviceType === 'desktop') {
@@ -309,8 +312,46 @@ export class Opencast {
       body.append('tags', '');
       body.append('BODY', media, downloadName);
 
-      mediaPackage = await this.request("ingest/addTrack", { method: 'post', body })
-        .then(response => response.text());
+      const url = `${this.#serverUrl}/ingest/addTrack`;
+      mediaPackage = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url);
+
+        // Add HTTP Basic Auth headers if username and password are provided.
+        if (this.#login?.username && this.#login?.password) {
+          const encoded = btoa(unescape(encodeURIComponent(
+            this.#login.username + ':' + this.#login.password
+          )));
+          xhr.setRequestHeader('Authorization', `Basic ${encoded}`);
+        }
+
+        xhr.onload = e => resolve(e.target.responseText);
+        xhr.onerror = () => {
+          // Handle 401 Bad credentials for HTTP Basic Auth
+          if (xhr.status === 401) {
+            this.#state = STATE_INCORRECT_LOGIN;
+            reject(new RequestError("incorrect login data (request returned 401)"));
+          } else {
+            this.#state = STATE_RESPONSE_NOT_OK;
+            reject(new RequestError(
+              `unexpected ${xhr.status} ${xhr.statusText} response when accessing ${url}`
+            ));
+          }
+        };
+        xhr.upload.onprogress = e => {
+          const totalLoaded = e.loaded + finishedTracksBytes;
+          console.log(`${Math.round((totalLoaded / totalBytes) * 100)}%`)
+        };
+
+        try {
+          xhr.send(body);
+        } catch (e) {
+          this.#state = STATE_NETWORK_ERROR;
+          reject(new RequestError(`network error when accessing '${url}': `, e));
+        }
+      });
+
+      finishedTracksBytes += media.size;
     }
 
     return mediaPackage;
