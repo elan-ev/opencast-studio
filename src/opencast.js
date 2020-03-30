@@ -224,9 +224,6 @@ export class Opencast {
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
   async upload({ recordings, title, creator, uploadSettings }) {
-    const workflowId = uploadSettings?.workflowId;
-    const seriesId = uploadSettings?.seriesId;
-
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -239,70 +236,97 @@ export class Opencast {
       let mediaPackage = await this.request("ingest/createMediaPackage")
         .then(response => response.text());
 
-
       // Add metadata to media package
-      const dcc = dcCatalog({ creator, title, seriesId });
-      const body = new FormData();
-      body.append('mediaPackage', mediaPackage);
-      body.append('dublinCore', dcc);
-      body.append('flavor', 'dublincore/episode');
+      mediaPackage = await this.addDcCatalog({ mediaPackage, uploadSettings, title, creator });
 
-      mediaPackage = await this.request("ingest/addDCCatalog", { method: 'post', body })
-        .then(response => response.text());
-
-
-      // Set ACL to allow the current user to read and write this recording.
+      // Set appropriate ACL unless the configuration says no.
       if (uploadSettings?.acl !== false) {
-        const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
-          ? DEFAULT_ACL_TEMPLATE
-          : uploadSettings?.acl;
-        const acl = this.constructAcl(template);
-
-        const aclBody = new FormData();
-        aclBody.append('flavor', 'security/xacml+episode');
-        aclBody.append('mediaPackage', mediaPackage);
-        aclBody.append('BODY', new Blob([acl]), 'acl.xml');
-
-        mediaPackage = await this.request("ingest/addAttachment", { method: 'post', body: aclBody })
-          .then(response => response.text());
+        mediaPackage = await this.attachAcl({ mediaPackage, uploadSettings });
       }
 
-      // Add all recordings
-      for (const { deviceType, media, mimeType } of recordings) {
-        let trackFlavor = 'presentation/source';
-        if (deviceType === 'desktop') {
-          trackFlavor = 'presentation/source';
-        } else if (deviceType === 'video') {
-          trackFlavor = 'presenter/source';
-        }
-
-        const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
-        const downloadName = recordingFileName(mimeType, flavor);
-
-        const body = new FormData();
-        body.append('mediaPackage', mediaPackage);
-        body.append('flavor', trackFlavor);
-        body.append('tags', '');
-        body.append('BODY', media, downloadName);
-
-        mediaPackage = await this.request("ingest/addTrack", { method: 'post', body })
-          .then(response => response.text());
-      }
-
+      // Add all recordings (this is the actual upload).
+      mediaPackage = await this.uploadTracks({ mediaPackage, recordings });
 
       // Finalize/ingest media package
-      const ingestBody = new FormData();
-      ingestBody.append('mediaPackage', mediaPackage);
-      if (workflowId) {
-        ingestBody.append('workflowDefinitionId', workflowId);
-      }
-      await this.request("ingest/ingest", { method: 'post', body: ingestBody });
+      await this.finishIngest({ mediaPackage, uploadSettings });
 
       return true;
     } catch(e) {
       console.error("Error occured during upload: ", e);
       return false;
     }
+  }
+
+  // Adds the DC Catalog with the given metadata to the current ingest process
+  // via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
+  async addDcCatalog({ mediaPackage, title, creator, uploadSettings }) {
+    const seriesId = uploadSettings?.seriesId;
+
+    const dcc = dcCatalog({ creator, title, seriesId });
+    const body = new FormData();
+    body.append('mediaPackage', mediaPackage);
+    body.append('dublinCore', dcc);
+    body.append('flavor', 'dublincore/episode');
+
+    return await this.request("ingest/addDCCatalog", { method: 'post', body })
+      .then(response => response.text());
+  }
+
+  // Adds the ACL to the current ingest process via `ingest/addAttachment`. Do
+  // not call this method outside of `upload`!
+  async attachAcl({ mediaPackage, uploadSettings }) {
+    const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
+      ? DEFAULT_ACL_TEMPLATE
+      : uploadSettings?.acl;
+    const acl = this.constructAcl(template);
+
+    const body = new FormData();
+    body.append('flavor', 'security/xacml+episode');
+    body.append('mediaPackage', mediaPackage);
+    body.append('BODY', new Blob([acl]), 'acl.xml');
+
+    return await this.request("ingest/addAttachment", { method: 'post', body: body })
+      .then(response => response.text());
+  }
+
+  // Uploads the given recordings to the current ingest process via
+  // `ingest/addTrack`. Do not call this method outside of `upload`!
+  async uploadTracks({ mediaPackage, recordings }) {
+    for (const { deviceType, media, mimeType } of recordings) {
+      let trackFlavor = 'presentation/source';
+      if (deviceType === 'desktop') {
+        trackFlavor = 'presentation/source';
+      } else if (deviceType === 'video') {
+        trackFlavor = 'presenter/source';
+      }
+
+      const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
+      const downloadName = recordingFileName(mimeType, flavor);
+
+      const body = new FormData();
+      body.append('mediaPackage', mediaPackage);
+      body.append('flavor', trackFlavor);
+      body.append('tags', '');
+      body.append('BODY', media, downloadName);
+
+      mediaPackage = await this.request("ingest/addTrack", { method: 'post', body })
+        .then(response => response.text());
+    }
+
+    return mediaPackage;
+  }
+
+  // Finishes the current ingest process via `ingest/ingest`. Do not call this
+  // method outside of `upload`!
+  async finishIngest({ mediaPackage, uploadSettings }) {
+    const workflowId = uploadSettings?.workflowId;
+
+    const body = new FormData();
+    body.append('mediaPackage', mediaPackage);
+    if (workflowId) {
+      body.append('workflowDefinitionId', workflowId);
+    }
+    await this.request("ingest/ingest", { method: 'post', body: body });
   }
 
   // Returns the current state of the connection to the OC server.
