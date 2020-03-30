@@ -10,7 +10,7 @@ import { Beforeunload } from 'react-beforeunload';
 import { Provider, useStudioState } from './studio-state';
 
 import About from './ui/about';
-import OpencastHeader from './ui/opencast-header';
+import Header from './ui/header';
 import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
@@ -20,7 +20,7 @@ function App({ settingsManager, userHasWebcam }) {
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
-        <OpencastHeader />
+        <Header />
 
         <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
           <Warnings />
