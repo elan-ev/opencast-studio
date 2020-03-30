@@ -63,6 +63,8 @@ export default function RecordingControls({
       videoRecorder.current = new Recorder(stream, settings.recording, { onStop });
       videoRecorder.current.start();
     }
+
+    dispatch({ type: 'START_RECORDING' });
   };
 
   const resume = () => {
@@ -79,6 +81,7 @@ export default function RecordingControls({
     desktopRecorder.current && desktopRecorder.current.stop();
     videoRecorder.current && videoRecorder.current.stop();
     handleRecorded();
+    dispatch({ type: 'STOP_RECORDING' });
   };
 
   const handlePause = () => {

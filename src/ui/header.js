@@ -14,9 +14,13 @@ import {
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { useStudioState } from '../studio-state';
+
 
 // The header, including a logo on the left and the navigation on the right.
 export default function Header() {
+  const { isRecording } = useStudioState();
+
   return (
     <header
       sx={{
@@ -39,8 +43,20 @@ export default function Header() {
         height: '100%',
         width: '100%',
       }}></div>
-      <Brand />
 
+      {/* This div is an overlay that is shown when a recording is currently active.
+          This prevents the user from visiting other pages while recording. */}
+      { isRecording && <div sx={{
+        backgroundColor: 'gray.0',
+        position: 'absolute',
+        zIndex: 20,
+        height: '100%',
+        width: '100%',
+        opacity: 0.75,
+      }}/>}
+
+      {/* Actual content */}
+      <Brand />
       <Navigation />
     </header>
   );
