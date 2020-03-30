@@ -37,6 +37,7 @@
 
 
   "confirm-discard-recordings": "Are you sure you want to discard your recordings? This cannot be undone!",
+  "confirm-cancel-recording": "You are currently recording! Are you sure you want to cancel and discard the recording?",
 
   "sources-video-display-selected": "Display selected",
   "sources-video-display-and-user-selected": "Display & Camera selected",

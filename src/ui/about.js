@@ -60,8 +60,8 @@ function About(props) {
         </header>
         <Styled.p>
           A web-based recording studio for <Styled.a href="https://opencast.org">Opencast</Styled.a>.
-        <Styled.p>
         </Styled.p>
+        <Styled.p>
           Opencast Studio allows you to record your camera, your display and your microphoneʼs audio.
           You can then either download your recordings or upload them directly to an Opencast
           instance (usually the one of your university).

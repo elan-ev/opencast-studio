@@ -3,14 +3,14 @@
 import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 
 import { Provider, useStudioState } from './studio-state';
 
 import About from './ui/about';
-import OpencastHeader from './ui/opencast-header';
+import Header from './ui/header';
 import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
@@ -19,14 +19,16 @@ import Warnings from './ui/warnings';
 function App({ settingsManager, userHasWebcam }) {
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
+      <Provider>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
-        <OpencastHeader />
+          <Header />
 
-        <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
-          <Warnings />
-          <Routes settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
-        </main>
-      </Flex>
+          <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
+            <Warnings />
+            <Routes settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
+          </main>
+        </Flex>
+      </Provider>
     </Router>
   );
 }
@@ -36,7 +38,7 @@ const Routes = ({ settingsManager, userHasWebcam }) => {
   const location = useLocation();
 
   return (
-    <Provider>
+    <Fragment>
       <PreventClose />
       <Switch>
         <Route path="/settings" exact>
@@ -59,7 +61,7 @@ const Routes = ({ settingsManager, userHasWebcam }) => {
           <Redirect to={{ pathname: "/", search: location.search }} />
         </Route>
       </Switch>
-    </Provider>
+    </Fragment>
   );
 };
 

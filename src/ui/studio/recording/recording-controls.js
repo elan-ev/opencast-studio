@@ -5,6 +5,7 @@ import { jsx } from 'theme-ui';
 import { useEffect, useRef } from 'react';
 import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from "react-router";
 
 import Recorder from '../../../recorder';
 import { useSettings } from '../../../settings';
@@ -43,11 +44,24 @@ export default function RecordingControls({
 
   const hasStreams = displayStream || userStream;
 
+  const history = useHistory();
+  let unblock = null;
+
   // reset after mounting
   useEffect(() => {
     desktopRecorder.current = null;
     videoRecorder.current = null;
-  }, [dispatch]);
+    history.listen(() => {
+      // This only happens when the user uses "back" or "forward" in their
+      // browser and they confirm they want to discard the recording.
+      if (recordingState !== 'STATE_INACTIVE') {
+        dispatch({ type: 'STOP_RECORDING' });
+      }
+      if (unblock) {
+        unblock();
+      }
+    });
+  });
 
   const record = () => {
     if (displayStream) {
@@ -63,6 +77,9 @@ export default function RecordingControls({
       videoRecorder.current = new Recorder(stream, settings.recording, { onStop });
       videoRecorder.current.start();
     }
+
+    dispatch({ type: 'START_RECORDING' });
+    unblock = history.block(t('confirm-cancel-recording'));
   };
 
   const resume = () => {
@@ -79,6 +96,10 @@ export default function RecordingControls({
     desktopRecorder.current && desktopRecorder.current.stop();
     videoRecorder.current && videoRecorder.current.stop();
     handleRecorded();
+    dispatch({ type: 'STOP_RECORDING' });
+    if (unblock) {
+      unblock();
+    }
   };
 
   const handlePause = () => {
