@@ -374,7 +374,14 @@ export class SettingsManager {
     const validateValue = (schema, value, path) => {
       // Check the type of this value.
       const expectedType = typeof schema === 'string' ? schema : schema._type;
-      const actualType = Array.isArray(value) ? 'array' : typeof value;
+      let actualType;
+      if (Array.isArray(value)) {
+        actualType = 'array';
+      } else if (Number.isInteger(value)) {
+        actualType = 'int';
+      } else {
+        actualType = typeof value;
+      }
 
       let out = null;
       if (expectedType === 'any' || actualType === expectedType) {
@@ -496,7 +503,7 @@ const defaultSettings = {
 
 const positiveInteger = name => ({
   _type: 'int',
-  _validate: i => i > 0 || `'${name}' has to be positive`,
+  _validate: i => i > 0 || `'${name}' has to be positive, but is '${i}'`,
 });
 
 // Defines all potential settings and their types
