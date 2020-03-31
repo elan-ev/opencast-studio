@@ -232,6 +232,8 @@ Note that this can't be used with other GET parameters. If `config=` is specifie
 
 To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
 
+You can also check the "Network" tab in the browser's dev tools. There you can see where Studio tries to fetch `settings.json` and your ACL template from and what your server returned.
+
 
 ### Specify ACL
 
