@@ -32,7 +32,6 @@ import RecordingPreview from './recording-preview';
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 export default function SaveCreation(props) {
-  const location = useLocation();
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
@@ -43,10 +42,6 @@ export default function SaveCreation(props) {
     props.previousStep();
   }
 
-  function handleInputChange(event) {
-    const target = event.target;
-    metaData[target.name] = target.value;
-  }
 
   async function handleUpload() {
     const { title, presenter } = metaData;
@@ -90,96 +85,21 @@ export default function SaveCreation(props) {
   const allDownloaded = recordings.every(rec => rec.downloaded);
   const possiblyDone = uploadState.state === STATE_UPLOADED || allDownloaded;
 
-  const uploadPossible = opencast.isReadyToUpload();
+  // Depending on the state, show a different thing in the upload box.
+  const uploadBox = (() => {
+    if (!opencast.isReadyToUpload() && uploadState.state === STATE_NOT_UPLOADED) {
+      return <ConnectionUnconfiguredWarning />;
+    }
 
-  let uploadBox;
-  if (uploadState.state === STATE_NOT_UPLOADED && !uploadPossible) {
-    uploadBox = (
-      <Notification key="opencast-connection" isDanger>
-        <Trans i18nKey="warning-missing-connection-settings">
-          Warning.
-          <Link
-            to={{ pathname: "/settings", search: location.search }}
-            sx={{ variant: 'styles.a', color: '#ff2' }}
-          >
-            settings
-          </Link>
-        </Trans>
-      </Notification>
-    );
-  } else if (uploadState.state === STATE_UPLOADED) {
-    uploadBox = (
-      <React.Fragment>
-        <div sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '130px',
-          color: 'primary',
-        }}>
-          <FontAwesomeIcon icon={faCheckCircle} size="4x" />
-        </div>
-        <Text sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
-        <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
-      </React.Fragment>
-    );
-  } else {
-    uploadBox = (
-      <React.Fragment>
-        <FormField label={t('save-creation-label-title')}>
-          <Input
-            name="title"
-            autoComplete="off"
-            defaultValue={metaData.title}
-            onChange={handleInputChange}
-            disabled={uploadState.state === STATE_UPLOADING}
-          />
-        </FormField>
-
-        <FormField label={t('save-creation-label-presenter')}>
-          <Input
-            name="presenter"
-            autoComplete="off"
-            defaultValue={metaData.presenter}
-            onChange={handleInputChange}
-            disabled={uploadState.state === STATE_UPLOADING}
-          />
-        </FormField>
-
-        <Button
-          onClick={handleUpload}
-          disabled={recordings.length === 0 || uploadState.state === STATE_UPLOADING}
-        >
-          <FontAwesomeIcon icon={faUpload} />
-          {
-            !opencast.prettyServerUrl() ? t('save-creation-button-upload') :
-              <Trans i18nKey="save-creation-upload-to">
-                Upload to <code sx={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                  borderRadius: '5px',
-                  padding: '1px 3px',
-                }}>{{server: opencast.prettyServerUrl()}}</code>
-              </Trans>
-          }
-        </Button>
-        { uploadState.state === STATE_UPLOADING && (
-          <Spinner size="40" sx={{ verticalAlign: 'middle', ml: 3 }}/>
-        )}
-        <Box sx={{ mt: 2 }}>
-        {
-          (() => { switch (uploadState.state) {
-            case STATE_ERROR:
-              return <Notification isDanger>{uploadState.error}</Notification>;
-            case STATE_UPLOADING:
-              return <Notification>{t('upload-notification')}</Notification>;
-            default:
-              return null;
-          }})()
-        }
-        </Box>
-      </React.Fragment>
-    );
-  }
+    switch (uploadState.state) {
+      case STATE_UPLOADING:
+        return <UploadProgress />;
+      case STATE_UPLOADED:
+        return <UploadSuccess />;
+      default: // STATE_NOT_UPLOADED or STATE_ERROR
+        return <UploadForm {...{ opencast, uploadState, recordings, handleUpload }} />
+    }
+  })();
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
@@ -213,25 +133,7 @@ export default function SaveCreation(props) {
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
           >{t('save-creation-subsection-title-download')}</Styled.h2>
 
-          <div sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: ['center', 'center', 'start'],
-            flexWrap: 'wrap',
-          }}>
-            {recordings.length === 0 ? <Spinner /> : (
-              recordings.map((recording, index) => (
-                <RecordingPreview
-                  key={index}
-                  deviceType={recording.deviceType}
-                  mimeType={recording.mimeType}
-                  url={recording.url}
-                  downloaded={recording.downloaded}
-                  onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
-                />
-              ))
-            )}
-          </div>
+          <DownloadBox recordings={recordings} dispatch={dispatch} />
         </div>
       </div>
 
@@ -255,5 +157,127 @@ export default function SaveCreation(props) {
         )}
       </ActionButtons>
     </Container>
+  );
+}
+
+const DownloadBox = ({ recordings, dispatch }) => (
+  <div sx={{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: ['center', 'center', 'start'],
+    flexWrap: 'wrap',
+  }}>
+    {recordings.length === 0 ? <Spinner /> : (
+      recordings.map((recording, index) => (
+        <RecordingPreview
+          key={index}
+          deviceType={recording.deviceType}
+          mimeType={recording.mimeType}
+          url={recording.url}
+          downloaded={recording.downloaded}
+          onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
+        />
+      ))
+    )}
+  </div>
+);
+
+// Shown if there is no working Opencast connection. Shows a warning and a link
+// to settings.
+const ConnectionUnconfiguredWarning = () => {
+  const location = useLocation();
+
+  return (
+    <Notification key="opencast-connection" isDanger>
+      <Trans i18nKey="warning-missing-connection-settings">
+        Warning.
+        <Link
+          to={{ pathname: "/settings", search: location.search }}
+          sx={{ variant: 'styles.a', color: '#ff2' }}
+        >
+          settings
+        </Link>
+      </Trans>
+    </Notification>
+  );
+}
+
+const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
+  const { t } = useTranslation();
+
+  function handleInputChange(event) {
+    const target = event.target;
+    metaData[target.name] = target.value;
+  }
+
+  const buttonLabel = !opencast.prettyServerUrl()
+    ? t('save-creation-button-upload')
+    : (
+      <Trans i18nKey="save-creation-upload-to">
+        Upload to <code sx={{
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          borderRadius: '5px',
+          padding: '1px 3px',
+        }}>{{server: opencast.prettyServerUrl()}}</code>
+      </Trans>
+    );
+
+  return (
+    <React.Fragment>
+      <FormField label={t('save-creation-label-title')}>
+        <Input
+          name="title"
+          autoComplete="off"
+          defaultValue={metaData.title}
+          onChange={handleInputChange}
+        />
+      </FormField>
+
+      <FormField label={t('save-creation-label-presenter')}>
+        <Input
+          name="presenter"
+          autoComplete="off"
+          defaultValue={metaData.presenter}
+          onChange={handleInputChange}
+        />
+      </FormField>
+
+      <Button onClick={handleUpload} disabled={recordings.length === 0}>
+        <FontAwesomeIcon icon={faUpload} />
+        { buttonLabel }
+      </Button>
+
+      <Box sx={{ mt: 2 }}>
+        { uploadState.state === STATE_ERROR && (
+          <Notification isDanger>{uploadState.error}</Notification>
+        )}
+      </Box>
+    </React.Fragment>
+  );
+}
+
+// Shown during upload. Shows a progressbar, TODO.
+const UploadProgress = () => {
+  return <Spinner size="40" />;
+}
+
+// Shown if the upload was successful. A big green checkmark and a text.
+const UploadSuccess = () => {
+  const { t } = useTranslation();
+
+  return (
+    <React.Fragment>
+      <div sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '130px',
+        color: 'primary',
+      }}>
+        <FontAwesomeIcon icon={faCheckCircle} size="4x" />
+      </div>
+      <Text sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
+      <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
+    </React.Fragment>
   );
 }
