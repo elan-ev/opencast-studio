@@ -71,7 +71,7 @@
   "review-error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
 
   "stop-button-title": "Stop recording",
-  "upload-notification": "Currently uploading",
+  "upload-notification": "Currently uploading...",
   "upload-settings-button-store": "Save connection settings",
   "upload-settings-modal-header": "Opencast Connection",
   "upload-settings-label-server-url": "Server URL",

@@ -1,11 +1,11 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx, Styled, Progress } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -42,6 +42,10 @@ export default function SaveCreation(props) {
     props.previousStep();
   }
 
+  const [progress, setProgress] = useState(0);
+  function onProgress(progress) {
+    setProgress(progress);
+  }
 
   async function handleUpload() {
     const { title, presenter } = metaData;
@@ -57,6 +61,7 @@ export default function SaveCreation(props) {
       title,
       creator: presenter,
       uploadSettings: settings.upload,
+      onProgress,
     });
 
     if (success) {
@@ -93,7 +98,7 @@ export default function SaveCreation(props) {
 
     switch (uploadState.state) {
       case STATE_UPLOADING:
-        return <UploadProgress />;
+        return <UploadProgress progress={progress} />;
       case STATE_UPLOADED:
         return <UploadSuccess />;
       default: // STATE_NOT_UPLOADED or STATE_ERROR
@@ -257,8 +262,23 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
 }
 
 // Shown during upload. Shows a progressbar, TODO.
-const UploadProgress = () => {
-  return <Spinner size="40" />;
+const UploadProgress = ({ progress }) => {
+  const { t } = useTranslation();
+  const roundedPercent = Math.min(100, Math.round(progress * 1000) / 10);
+
+  return (
+    <React.Fragment>
+      <div sx={{ display: 'flex', mb: 2 }}>
+        <Text variant='text'>{roundedPercent}%</Text>
+        <div sx={{ flex: 1 }} />
+        <Text variant='text'>?m left</Text>
+      </div>
+      <Progress max={1} value={progress} variant='styles.progress'>
+        { roundedPercent }
+      </Progress>
+      <Text variant='text' sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>
+    </React.Fragment>
+  );
 }
 
 // Shown if the upload was successful. A big green checkmark and a text.
@@ -276,7 +296,7 @@ const UploadSuccess = () => {
       }}>
         <FontAwesomeIcon icon={faCheckCircle} size="4x" />
       </div>
-      <Text sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
+      <Text variant='text' sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
       <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
     </React.Fragment>
   );

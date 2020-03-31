@@ -223,7 +223,7 @@ export class Opencast {
   // Uploads the given recordings with the given title and creator metadata. If
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
-  async upload({ recordings, title, creator, uploadSettings }) {
+  async upload({ recordings, title, creator, uploadSettings, onProgress }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -245,7 +245,7 @@ export class Opencast {
       }
 
       // Add all recordings (this is the actual upload).
-      mediaPackage = await this.uploadTracks({ mediaPackage, recordings });
+      mediaPackage = await this.uploadTracks({ mediaPackage, recordings, onProgress });
 
       // Finalize/ingest media package
       await this.finishIngest({ mediaPackage, uploadSettings });
@@ -291,11 +291,12 @@ export class Opencast {
 
   // Uploads the given recordings to the current ingest process via
   // `ingest/addTrack`. Do not call this method outside of `upload`!
-  async uploadTracks({ mediaPackage, recordings }) {
+  async uploadTracks({ mediaPackage, recordings, onProgress }) {
     const totalBytes = recordings.map(r => r.media.size).reduce((a, b) => a + b, 0);
     let finishedTracksBytes = 0;
 
     for (const { deviceType, media, mimeType } of recordings) {
+      const finishedBytes = finishedTracksBytes;
       let trackFlavor = 'presentation/source';
       if (deviceType === 'desktop') {
         trackFlavor = 'presentation/source';
@@ -339,8 +340,10 @@ export class Opencast {
           }
         };
         xhr.upload.onprogress = e => {
-          const totalLoaded = e.loaded + finishedTracksBytes;
-          console.log(`${Math.round((totalLoaded / totalBytes) * 100)}%`)
+          if (onProgress) {
+            const totalLoaded = e.loaded + finishedBytes;
+            onProgress(totalLoaded / totalBytes);
+          }
         };
 
         try {
