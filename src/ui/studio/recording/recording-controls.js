@@ -50,8 +50,6 @@ export default function RecordingControls({
 
   // reset after mounting
   useEffect(() => {
-    desktopRecorder.current = null;
-    videoRecorder.current = null;
     history.listen(() => {
       // This only happens when the user uses "back" or "forward" in their
       // browser and they confirm they want to discard the recording.

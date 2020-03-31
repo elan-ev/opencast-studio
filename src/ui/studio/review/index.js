@@ -150,7 +150,14 @@ const Preview = () => {
   });
 
   if (recordings.length === 0) {
-    return <Spinner title={t('save-creation-waiting-for-recordings')} />;
+    return <div sx={{
+      flex: 1,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      <Spinner title={t('save-creation-waiting-for-recordings')} />
+    </div>;
   }
 
   const children = recordings.map((recording, index) => ({
