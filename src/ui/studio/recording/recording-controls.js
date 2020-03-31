@@ -28,6 +28,8 @@ function mixAudioIntoVideo(audioStream, videoStream) {
   return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
 }
 
+let unblockers = [];
+
 export default function RecordingControls({
   handleRecorded,
   recordingState,
@@ -45,7 +47,6 @@ export default function RecordingControls({
   const hasStreams = displayStream || userStream;
 
   const history = useHistory();
-  let unblock = null;
 
   // reset after mounting
   useEffect(() => {
@@ -57,9 +58,9 @@ export default function RecordingControls({
       if (recordingState !== 'STATE_INACTIVE') {
         dispatch({ type: 'STOP_RECORDING' });
       }
-      if (unblock) {
-        unblock();
-      }
+
+      unblockers.forEach(b => b());
+      unblockers = [];
     });
   });
 
@@ -79,7 +80,7 @@ export default function RecordingControls({
     }
 
     dispatch({ type: 'START_RECORDING' });
-    unblock = history.block(t('confirm-cancel-recording'));
+    unblockers.push(history.block(t('confirm-cancel-recording')));
   };
 
   const resume = () => {
@@ -97,9 +98,8 @@ export default function RecordingControls({
     videoRecorder.current && videoRecorder.current.stop();
     handleRecorded();
     dispatch({ type: 'STOP_RECORDING' });
-    if (unblock) {
-      unblock();
-    }
+    unblockers.forEach(b => b());
+    unblockers = [];
   };
 
   const handlePause = () => {

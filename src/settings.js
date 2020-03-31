@@ -183,7 +183,7 @@ export class SettingsManager {
   }
 
   static async fetchAcl(uploadSettings) {
-    if (uploadSettings.acl === 'false') {
+    if (uploadSettings.acl === 'false' || uploadSettings.acl === false) {
       uploadSettings.acl = false;
       return;
     } else if (typeof uploadSettings.acl === 'string') {
