@@ -5,7 +5,7 @@ import { jsx, Styled, Progress } from 'theme-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -42,10 +42,72 @@ export default function SaveCreation(props) {
     props.previousStep();
   }
 
-  const [progress, setProgress] = useState(0);
+  const progressHistory = useRef([]);
+  const [secondsLeft, setSecondsLeft] = useState(null);
+  const [currentProgress, setCurrentProgress] = useState(0);
   function onProgress(progress) {
-    setProgress(progress);
+    setCurrentProgress(progress);
+
+    // ----- Time estimation -----
+    // We use a simple sliding average over the last few data points and assume
+    // that speed for the rest of the upload.
+
+    const now = Date.now();
+
+    // Add progress data point to history.
+    progressHistory.current.push({
+      timestamp: now,
+      progress,
+    });
+
+    // The size of the sliding window in milliseconds.
+    const WINDOW_SIZE_MS = 5000;
+    // The size of the sliding window in number of data points.
+    const WINDOW_SIZE_DATA_POINTS = 6;
+    // The number of datapoints below which we won't show a time estimate.
+    const MINIMUM_DATA_POINT_COUNT = 4;
+
+    // Find the first element within the window. We use the larger window of the
+    // two windows created by the two constraints (time and number of
+    // datapoints).
+    const windowStart = Math.min(
+      progressHistory.current.findIndex(p => (now - p.timestamp) < WINDOW_SIZE_MS),
+      Math.max(0, progressHistory.current.length - WINDOW_SIZE_DATA_POINTS),
+    );
+
+    // Remove all elements outside the window.
+    progressHistory.current.splice(0, windowStart);
+    const win = progressHistory.current;
+
+    if (win.length >= MINIMUM_DATA_POINT_COUNT) {
+      // Calculate the remaining time based on the average speed within the window.
+      const windowLength = now - win[0].timestamp;
+      const progressInWindow = progress - win[0].progress;
+      const progressPerSecond = (progressInWindow / windowLength) * 1000;
+      const progressLeft = 1 - progress;
+      const secondsLeft = Math.max(0, Math.round(progressLeft / progressPerSecond));
+
+      setSecondsLeft(secondsLeft);
+    }
   }
+
+  useEffect(() => {
+    // To still update the time estimation, we make sure to call `onProgress` at
+    // least every so often.
+    const interval = setInterval(() => {
+      if (uploadState.state !== STATE_UPLOADING) {
+        return;
+      }
+
+      const lastProgress = progressHistory.current[progressHistory.current.length - 1];
+      const timeSinceLastUpdate = Date.now() - lastProgress.timestamp;
+      if (timeSinceLastUpdate > 3000) {
+        onProgress(lastProgress.progress)
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
 
   async function handleUpload() {
     const { title, presenter } = metaData;
@@ -56,6 +118,10 @@ export default function SaveCreation(props) {
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
+    progressHistory.current.push({
+      timestamp: Date.now(),
+      progress: 0,
+    });
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
@@ -98,7 +164,7 @@ export default function SaveCreation(props) {
 
     switch (uploadState.state) {
       case STATE_UPLOADING:
-        return <UploadProgress progress={progress} />;
+        return <UploadProgress {...{ currentProgress, secondsLeft }} />;
       case STATE_UPLOADED:
         return <UploadSuccess />;
       default: // STATE_NOT_UPLOADED or STATE_ERROR
@@ -261,19 +327,46 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
   );
 }
 
-// Shown during upload. Shows a progressbar, TODO.
-const UploadProgress = ({ progress }) => {
+// Shown during upload. Shows a progressbar, the percentage of data already
+// uploaded and `secondsLeft` nicely formatted as human readable time.
+const UploadProgress = ({ currentProgress, secondsLeft }) => {
   const { t } = useTranslation();
-  const roundedPercent = Math.min(100, Math.round(progress * 1000) / 10);
+
+  // Progress as percent with one fractional digit, e.g. 27.3%.
+  const roundedPercent = Math.min(100, currentProgress * 100).toFixed(1);
+
+  // Nicely format the remaining time.
+  let prettyTime;
+  if (secondsLeft === null) {
+    prettyTime = null;
+  } else if (secondsLeft < 4) {
+    prettyTime = t('upload-time-a-few-seconds');
+  } else if (secondsLeft < 45) {
+    prettyTime = `${secondsLeft} ${t('upload-time-seconds')}`;
+  } else if (secondsLeft < 90) {
+    prettyTime = t('upload-time-a-minute');
+  } else if (secondsLeft < 45 * 60) {
+    prettyTime = `${Math.round(secondsLeft / 60)} ${t('upload-time-minutes')}`
+  } else if (secondsLeft < 90 * 60) {
+    prettyTime = t('upload-time-an-hour');
+  } else if (secondsLeft < 24 * 60 * 60) {
+    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t('upload-time-hours')}`
+  } else {
+    prettyTime = null;
+  }
 
   return (
     <React.Fragment>
       <div sx={{ display: 'flex', mb: 2 }}>
         <Text variant='text'>{roundedPercent}%</Text>
         <div sx={{ flex: 1 }} />
-        <Text variant='text'>?m left</Text>
+        <Text variant='text'>
+          {prettyTime && <Trans i18nKey="upload-time-left">
+            {{ time: prettyTime }} left
+          </Trans>}
+        </Text>
       </div>
-      <Progress max={1} value={progress} variant='styles.progress'>
+      <Progress max={1} value={currentProgress} variant='styles.progress'>
         { roundedPercent }
       </Progress>
       <Text variant='text' sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>

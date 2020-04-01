@@ -83,6 +83,14 @@
   "upload-settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
   "upload-settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
 
+  "upload-time-a-few-seconds": "wenige Sekunden",
+  "upload-time-a-minute": "eine Minute",
+  "upload-time-an-hour": "eine Stunde",
+  "upload-time-seconds": "Sekunden",
+  "upload-time-minutes": "Minuten",
+  "upload-time-hours": "Stunden",
+  "upload-time-left": "{{time}} verbleibend",
+
   "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
   "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf macOS Firefox oder Chrome zu nutzen.",
