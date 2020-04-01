@@ -401,6 +401,7 @@ const SCHEMA = {
   },
   upload: {
     seriesId: 'string',
+    seriesUrl: 'string',
     workflowId: 'string',
   },
   recording: {

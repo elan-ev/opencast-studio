@@ -27,6 +27,7 @@ import { ActionButtons } from '../elements';
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
+import { getSeries } from '../../../manchester';
 
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
@@ -44,20 +45,37 @@ export default function SaveCreation(props) {
 
   function handleInputChange(event) {
     const target = event.target;
-    metaData[target.name] = target.value;
+    let value = target.value;
+    if (target.tagName === 'SELECT') {
+      value = {
+        key: target.value,
+        value: target.options[target.selectedIndex].text,
+      }
+    }
+    metaData[target.name] = value;
   }
 
   async function handleUpload() {
-    const { title, presenter } = metaData;
+    const { title, presenter, series } = metaData;
 
-    if (title === '' || presenter === '') {
+    console.debug('Metadata: ', metaData);
+
+    if (title === '' || presenter === '' || series.key === '-1') {
       dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
       return;
     }
 
     dispatch({ type: 'UPLOAD_REQUEST' });
+
     const workflowId = settings.upload?.workflowId;
-    const seriesId = settings.upload?.seriesId;
+    let seriesId = settings.upload?.seriesId;
+
+    if(settings.upload?.seriesUrl) {
+      const result = await getSeries(settings.upload.seriesUrl, metaData.series.key, metaData.series.value);
+      console.debug('Series Info', result);
+      seriesId = result.seriesId;
+    }
+
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
@@ -125,6 +143,7 @@ export default function SaveCreation(props) {
       </React.Fragment>
     );
   } else {
+    metaData.presenter = settings.user?.name;
     uploadBox = (
       <React.Fragment>
         <FormField label={t('save-creation-label-title')}>
@@ -145,6 +164,22 @@ export default function SaveCreation(props) {
             onChange={handleInputChange}
             disabled={uploadState.state === STATE_UPLOADING}
           />
+        </FormField>
+
+        <FormField label={t('save-creation-label-series')}>
+          <select
+            sx={{ variant: 'styles.select' }}
+            name="series"
+            defaultValue={metaData.series.id}
+            onChange={handleInputChange}
+          >
+            <option value="-1">Please select...</option>
+            {settings.seriesList?.map(series => (
+              <option value={series.id} key={series.id}>
+                {series.title}
+              </option>
+            ))}
+          </select>
         </FormField>
 
         <Button

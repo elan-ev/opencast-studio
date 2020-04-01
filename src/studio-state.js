@@ -21,6 +21,7 @@ export const STATE_ERROR = 'error';
 const defaultMetaData = {
   title: '',
   presenter: '',
+  series: { key: '-1', value: '' },
 };
 export let metaData = { ...defaultMetaData };
 
@@ -84,16 +85,16 @@ const reducer = (state, action) => {
       return { ...state, recordings: [...state.recordings, action.payload] };
 
     case 'UPLOAD_ERROR':
-      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
+      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR } };
 
     case 'UPLOAD_FAILURE':
-      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
+      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR } };
 
     case 'UPLOAD_REQUEST':
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING }};
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING } };
 
     case 'UPLOAD_SUCCESS':
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED }};
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED } };
 
     case 'MARK_DOWNLOADED':
       const mapped = state.recordings.map((recording, index) => (
