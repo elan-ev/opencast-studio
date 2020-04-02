@@ -227,6 +227,9 @@ export class Opencast {
     const workflowId = uploadSettings?.workflowId;
     const seriesId = uploadSettings?.seriesId;
 
+    const email = uploadSettings?.email;
+    const source = uploadSettings?.source ?? '';
+
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -241,7 +244,7 @@ export class Opencast {
 
 
       // Add metadata to media package
-      const dcc = dcCatalog({ creator, title, seriesId });
+      const dcc = dcCatalog({ creator, title, seriesId, email, source });
       const body = new FormData();
       body.append('mediaPackage', mediaPackage);
       body.append('dublinCore', dcc);
@@ -422,7 +425,7 @@ const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));
 }
 
-const dcCatalog = ({ creator, title, seriesId }) => {
+const dcCatalog = ({ creator, title, seriesId, email, source }) => {
   const seriesLine = seriesId
     ? `<dcterms:isPartOf>${escapeString(seriesId)}</dcterms:isPartOf>`
     : '';
@@ -435,6 +438,8 @@ const dcCatalog = ({ creator, title, seriesId }) => {
           ${escapeString(new Date(Date.now()).toISOString())}
         </dcterms:created>
         <dcterms:creator>${escapeString(creator)}</dcterms:creator>
+        <dcterms:mediator>${escapeString(email)}</dcterms:mediator>
+        <dcterms:source>${escapeString(source)}</dcterms:source>
         <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
         <dcterms:title>${escapeString(title)}</dcterms:title>
         <dcterms:spatial>Opencast Studio</dcterms:spatial>

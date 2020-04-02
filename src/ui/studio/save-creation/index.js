@@ -57,11 +57,11 @@ export default function SaveCreation(props) {
   }
 
   async function handleUpload() {
-    const { title, presenter, series } = metaData;
+    const { title, presenter, email, series } = metaData;
 
     console.debug('Metadata: ', metaData);
 
-    if (title === '' || presenter === '' || series.key === '-1') {
+    if (title === '' || presenter === '' || series.key === '-1' || email === '') {
       dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
       return;
     }
@@ -69,19 +69,21 @@ export default function SaveCreation(props) {
     dispatch({ type: 'UPLOAD_REQUEST' });
 
     const workflowId = settings.upload?.workflowId;
-    let seriesId = settings.upload?.seriesId;
+    const uploadSettings = settings.upload;
+    uploadSettings.email = email;
 
     if(settings.upload?.seriesUrl) {
       const result = await getSeries(settings.upload.seriesUrl, metaData.series.key, metaData.series.value);
       console.debug('Series Info', result);
-      seriesId = result.seriesId;
+      uploadSettings.seriesId = result.seriesId;
+      uploadSettings.source = result.source;
     }
 
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
-      uploadSettings: settings.upload,
+      uploadSettings: uploadSettings,
     });
 
     if (success) {
@@ -145,6 +147,7 @@ export default function SaveCreation(props) {
     );
   } else {
     metaData.presenter = settings.user?.name;
+    metaData.email = settings.user?.email;
     uploadBox = (
       <React.Fragment>
         <FormField label={t('save-creation-label-title')}>
@@ -163,6 +166,17 @@ export default function SaveCreation(props) {
             autoComplete="off"
             defaultValue={metaData.presenter}
             onChange={handleInputChange}
+            disabled={uploadState.state === STATE_UPLOADING}
+          />
+        </FormField>
+
+        <FormField label={t('save-creation-label-email')}>
+          <Input
+            name="email"
+            autoComplete="off"
+            defaultValue={metaData.email}
+            onChange={handleInputChange}
+            type="email"
             disabled={uploadState.state === STATE_UPLOADING}
           />
         </FormField>
