@@ -71,7 +71,7 @@
   "review-error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
 
   "stop-button-title": "Stop recording",
-  "upload-notification": "Currently uploading",
+  "upload-notification": "Currently uploading...",
   "upload-settings-button-store": "Save connection settings",
   "upload-settings-modal-header": "Opencast Connection",
   "upload-settings-label-server-url": "Server URL",
@@ -84,6 +84,14 @@
   "upload-settings-error-invalid-response": "The server returned an invalid response to our request. This likely means that the server you specified is not a valid Opencast server.",
   "upload-settings-invalid-login-data": "Could not log into Opencast server: the username/password you provided are invalid.",
   "upload-settings-invalid-provided-login": "The server specifies that it provides an automatic login, but the request returned non-authenticated. This is either an internal bug of Opencast Studio or your system administrator misconfigured the server. There is nothing you can do :(",
+
+  "upload-time-a-few-seconds": "a few seconds",
+  "upload-time-a-minute": "a minute",
+  "upload-time-an-hour": "an hour",
+  "upload-time-seconds": "seconds",
+  "upload-time-minutes": "minutes",
+  "upload-time-hours": "hours",
+  "upload-time-left": "{{time}} left",
 
   "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",

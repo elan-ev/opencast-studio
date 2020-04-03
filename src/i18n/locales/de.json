@@ -68,7 +68,7 @@
   "review-error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
 
   "stop-button-title": "Aufzeichnung beenden",
-  "upload-notification": "Wird gerade hochgeladen",
+  "upload-notification": "Wird gerade hochgeladen...",
   "upload-settings-button-store": "Verbindungseinstellungen speichern",
   "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
@@ -82,6 +82,14 @@
   "upload-settings-error-invalid-response": "Die Antwort des Servers ist ungültig. Vermutlich heißt das, dass der angegebene Server kein gültiger Opencast-Server ist.",
   "upload-settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
   "upload-settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
+
+  "upload-time-a-few-seconds": "wenige Sekunden",
+  "upload-time-a-minute": "eine Minute",
+  "upload-time-an-hour": "eine Stunde",
+  "upload-time-seconds": "Sekunden",
+  "upload-time-minutes": "Minuten",
+  "upload-time-hours": "Stunden",
+  "upload-time-left": "{{time}} verbleibend",
 
   "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
