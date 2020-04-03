@@ -28,7 +28,7 @@ import { ActionButtons } from '../elements';
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
-import { getIngestInfo } from '../../../manchester';
+import { getIngestInfo, isCourseId } from '../../../manchester';
 
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
@@ -54,6 +54,19 @@ export default function SaveCreation(props) {
       }
     }
     metaData[target.name] = value;
+
+    if (target.name === 'series') {
+      const isCourse = isCourseId(target.value);
+      const visibility = document.getElementsByName('visibility')[0];
+      if (isCourse) {
+        visibility.value = '2';
+        metaData['visibility'] = {
+          key: visibility.value, 
+          value: visibility.options[visibility.selectedIndex].text
+        };
+      }
+      visibility.disabled = isCourse;
+    }
   }
 
   async function handleUpload() {

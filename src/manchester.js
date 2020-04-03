@@ -12,3 +12,8 @@ export async function getIngestInfo(ingestInfoUrl, metaData) {
   });
   return await response.json();
 }
+
+export function isCourseId(orgId) {
+  const re = /^I[0-9]{4}-(\w|\W)+/;
+  return re.test(orgId);
+}
