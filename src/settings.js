@@ -519,7 +519,7 @@ const SCHEMA = {
   },
   upload: {
     seriesId: 'string',
-    seriesUrl: 'string',
+    ingestInfoUrl: 'string',
     workflowId: 'string',
     // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
     // done, this one of:
@@ -560,6 +560,12 @@ const SCHEMA = {
   'camera': {
     maxFps: positiveInteger('camera.maxFps'),
     maxHeight: positiveInteger('camera.maxHeight'),
+  },
+  visibilityList: {
+    _type: 'array',
+    _elements: {
+      _type: 'object',
+    }
   },
 };
 

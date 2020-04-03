@@ -28,7 +28,7 @@ import { ActionButtons } from '../elements';
 import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
-import { getSeries } from '../../../manchester';
+import { getIngestInfo } from '../../../manchester';
 
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
@@ -71,12 +71,15 @@ export default function SaveCreation(props) {
     const workflowId = settings.upload?.workflowId;
     const uploadSettings = settings.upload;
     uploadSettings.email = email;
+    uploadSettings.visibility = metaData.visibility.key;
 
-    if(settings.upload?.seriesUrl) {
-      const result = await getSeries(settings.upload.seriesUrl, metaData.series.key, metaData.series.value);
-      console.debug('Series Info', result);
-      uploadSettings.seriesId = result.seriesId;
-      uploadSettings.source = result.source;
+    if(settings.upload?.ingestInfoUrl) {
+      const result = await getIngestInfo(settings.upload.ingestInfoUrl, metaData);
+      console.debug('Ingest Info', result);
+      uploadSettings.seriesId = result.series.seriesId;
+      uploadSettings.source = result.series.source;
+      uploadSettings.wf_properties = result.wf_properties;
+      uploadSettings.audience = result.audience;
     }
 
     const success = await opencast.upload({
@@ -187,11 +190,29 @@ export default function SaveCreation(props) {
             name="series"
             defaultValue={metaData.series.id}
             onChange={handleInputChange}
+            disabled={uploadState.state === STATE_UPLOADING}
           >
             <option value="-1">Please select...</option>
             {settings.seriesList?.map(series => (
               <option value={series.id} key={series.id}>
                 {series.title}
+              </option>
+            ))}
+          </select>
+        </FormField>
+
+        <FormField label={t('save-creation-label-visibility')}>
+          <select
+            sx={{ variant: 'styles.select' }}
+            name="visibility"
+            defaultValue={metaData.visibility.id}
+            onChange={handleInputChange}
+            disabled={uploadState.state === STATE_UPLOADING}
+          >
+            <option value="-1">Please select...</option>
+            {settings.visibilityList.map(visibility => (
+              <option value={visibility.id} key={visibility.id}>
+                {visibility.name}
               </option>
             ))}
           </select>

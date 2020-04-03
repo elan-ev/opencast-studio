@@ -23,6 +23,7 @@ const defaultMetaData = {
   presenter: '',
   email: '',
   series: { key: '-1', value: '' },
+  visibility: {key: '-1', value: ''},
 };
 export let metaData = { ...defaultMetaData };
 
