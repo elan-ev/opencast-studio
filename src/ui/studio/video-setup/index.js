@@ -156,7 +156,6 @@ export default function VideoSetup(props) {
       title = t('sources-video-user-selected');
       hideActionButtons = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
-        reselectSource={reselectSource}
         warnings={[userWarning, unexpectedEndWarning]}
         inputs={[{
           kind: t('sources-user'),
@@ -171,7 +170,6 @@ export default function VideoSetup(props) {
       title = t('sources-video-display-selected');
       hideActionButtons = !state.displayStream && state.displayAllowed !== false;
       body = <SourcePreview
-        reselectSource={reselectSource}
         warnings={[displayWarning, unexpectedEndWarning]}
         inputs={[{
           kind: t('sources-display'),
@@ -187,7 +185,6 @@ export default function VideoSetup(props) {
       hideActionButtons = (!state.userStream && state.userAllowed !== false)
         || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
-        reselectSource={reselectSource}
         warnings={[displayWarning, userWarning, unexpectedEndWarning]}
         inputs={[
           {
