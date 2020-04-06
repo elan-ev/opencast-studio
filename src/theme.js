@@ -203,6 +203,11 @@ const base = {
         borderColor: 'primary',
         boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
       }
+    },
+    progress: {
+      bg: '#ebebeb',
+      color: '#2fd682',
+      height: '8px',
     }
   },
   container: {
