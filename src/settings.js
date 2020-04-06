@@ -3,6 +3,7 @@
 import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
+import { decodeHexString } from './util';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
@@ -70,22 +71,63 @@ export class SettingsManager {
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
+
     let rawUrlSettings = {};
-    for (let [key, value] of urlParams) {
-      // Create empty objects for full path (if the key contains '.') and set
-      // the value at the end.
-      let obj = rawUrlSettings;
-      const segments = key.split('.');
-      segments.slice(0, -1).forEach((segment) => {
-        if (!(segment in obj)) {
-          obj[segment] = {};
+    if (urlParams.get('config')) {
+      // In this case, the GET parameter `config` is specified. We now expect a
+      // hex encoded stringified JSON object describing the configuration. This
+      // is possible in cases where special characters in GET parameters might
+      // get modified somehow (e.g. by an LMS). A config=hexstring only uses
+      // the most basic characters, so it should always work.
+
+      const encoded = urlParams.get('config');
+      try {
+        const decoded = decodeHexString(encoded);
+        rawUrlSettings = JSON.parse(decoded);
+      } catch (e) {
+        console.warn(
+          `Could not decode and parse hex-encoded JSON string given to GET parameter `
+          + `'config'. Ignoring. Error:`,
+          e,
+        );
+      }
+
+      for (const key of urlParams.keys()) {
+        if (key !== 'config') {
+          console.warn(
+            `URL GET parameter '${key}' is ignored as 'config' is specified. Either specify `
+            + ` all configuration via the 'config' GET parameter hex string or via direct GET `
+            + `parameters. Mixing is not allowed.`
+          );
         }
-        obj = obj[segment];
-      });
-      obj[segments[segments.length - 1]] = value;
+      }
+    } else {
+      // Interpret each get parameter as single configuration value.
+      for (let [key, value] of urlParams) {
+        // Create empty objects for full path (if the key contains '.') and set
+        // the value at the end.
+        let obj = rawUrlSettings;
+        const segments = key.split('.');
+        segments.slice(0, -1).forEach((segment) => {
+          if (!(segment in obj)) {
+            obj[segment] = {};
+          }
+          obj = obj[segment];
+        });
+        obj[segments[segments.length - 1]] = value;
+      }
     }
 
     self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');
+
+    // We have to do some special treatment of the `upload.acl` property. Users
+    // cannot set this setting, so we only have to check urlSettings and
+    // contextSettings.
+    if (typeof self.urlSettings.upload?.acl !== 'undefined') {
+      await SettingsManager.fetchAcl(self.urlSettings.upload);
+    } else if (typeof self.contextSettings.upload?.acl !== 'undefined') {
+      await SettingsManager.fetchAcl(self.contextSettings.upload);
+    }
 
     return self;
   }
@@ -140,6 +182,70 @@ export class SettingsManager {
     }
   }
 
+  static async fetchAcl(uploadSettings) {
+    if (uploadSettings.acl === 'false' || uploadSettings.acl === false) {
+      uploadSettings.acl = false;
+      return;
+    } else if (typeof uploadSettings.acl === 'string') {
+      // Try to retrieve the context settings.
+      let basepath = process.env.PUBLIC_URL || '/';
+      if (!basepath.endsWith('/')) {
+        basepath += '/';
+      }
+
+      // Construct path to settings XML file. If the `uploadSettings.acl`
+      // starts with '/', it is interpreted as absolute path from the server
+      // root.
+      const base = uploadSettings.acl.startsWith('/') ? '' : basepath;
+      const url = `${window.location.origin}${base}${uploadSettings.acl}`;
+
+      // Try to download ACL template file
+      let response;
+      try {
+        response = await fetch(url);
+      } catch (e) {
+        console.error(
+          `Could not access ACL template '${url}' due to network error! Using default ACLs.`,
+          e || "",
+        );
+        uploadSettings.acl = true;
+        return;
+      }
+
+      // Check for 404 error
+      if (response.status === 404) {
+        console.error(`ACL template '${url}' returned 404! Using default ACLs`);
+        uploadSettings.acl = true;
+        return;
+      } else if (!response.ok) {
+        console.error(
+          `Fetching ACL template '${url}' failed: ${response.status} ${response.statusText}`
+        );
+        uploadSettings.acl = true;
+        return;
+      }
+
+      // Warn if the content type of the request is unexpected. We still use the
+      // response as, opposed to `settings.xml`, the path is explicitly set.
+      const contentType = response.headers.get('Content-Type');
+      if (!contentType.startsWith('application/xml') && !contentType.startsWith('text/xml')) {
+        console.warn(
+          `ACL template request '${url}' does not have 'Content-Type: application/xml' or 'Content-Type: text/xml'. `
+          + `This could be a bug. Using the response as ACL template anyway.`
+        );
+      }
+
+      // Finally, set the setting to the template string.
+      uploadSettings.acl = await response.text();
+    } else {
+      uploadSettings.acl = true;
+      console.warn(
+        `'upload.acl' has invalid value (has to be 'false' or a path to an XML `
+        + `template file. Using default ACLs.`
+      );
+      return;
+    }
+  }
 
   // Stores the given `newSettings` as user settings. The given object might be
   // partial, i.e. only the new values can be specified. Values in `newSettings`
@@ -268,10 +374,17 @@ export class SettingsManager {
     const validateValue = (schema, value, path) => {
       // Check the type of this value.
       const expectedType = typeof schema === 'string' ? schema : schema._type;
-      const actualType = Array.isArray(value) ? 'array' : typeof value;
+      let actualType;
+      if (Array.isArray(value)) {
+        actualType = 'array';
+      } else if (Number.isInteger(value)) {
+        actualType = 'int';
+      } else {
+        actualType = typeof value;
+      }
 
       let out = null;
-      if (actualType === expectedType) {
+      if (expectedType === 'any' || actualType === expectedType) {
         out = value;
       } else {
         if (actualType === 'string' && allowParse) {
@@ -388,6 +501,11 @@ const defaultSettings = {
   }
 };
 
+const positiveInteger = name => ({
+  _type: 'int',
+  _validate: i => i > 0 || `'${name}' has to be positive, but is '${i}'`,
+});
+
 // Defines all potential settings and their types
 const SCHEMA = {
   opencast: {
@@ -403,12 +521,21 @@ const SCHEMA = {
     seriesId: 'string',
     seriesUrl: 'string',
     workflowId: 'string',
+    // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
+    // done, this one of:
+    // - undefined: setting was not set.
+    // - `false`: do not send any ACLs when uploading
+    // - `true`: explictely send default ACLs when uploading (this is the default behavior)
+    // - ACL template string: already fetched ACL template string.
+    acl: {
+      _type: 'any',
+      _validate: v => (
+        v === false || typeof v === 'string' || `'upload.acl' needs to be 'false' or a string`
+      ),
+    },
   },
   recording: {
-    videoBitrate: {
-      _type: 'int',
-      _validate: i => i > 0 || 'bitrate has to be positive',
-    },
+    videoBitrate: positiveInteger('bitrate'),
     mimes: {
       _type: 'array',
       _elements: {
@@ -424,8 +551,16 @@ const SCHEMA = {
     _type: 'array',
     _elements: {
       _type: 'object',
-    }
-  }
+    },
+  },
+  'display': {
+    maxFps: positiveInteger('display.maxFps'),
+    maxHeight: positiveInteger('display.maxHeight'),
+  },
+  'camera': {
+    maxFps: positiveInteger('camera.maxFps'),
+    maxHeight: positiveInteger('camera.maxHeight'),
+  },
 };
 
 

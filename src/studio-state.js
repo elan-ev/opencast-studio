@@ -41,6 +41,8 @@ const initialState = () => ({
 
   audioChoice: NONE,
 
+  isRecording: false,
+
   recordings: [],
 
   upload: {
@@ -80,6 +82,12 @@ const reducer = (state, action) => {
 
     case 'UNSHARE_USER':
       return { ...state, userStream: null };
+
+    case 'START_RECORDING':
+      return { ...state, isRecording: true };
+
+    case 'STOP_RECORDING':
+      return { ...state, isRecording: false };
 
     case 'ADD_RECORDING':
       return { ...state, recordings: [...state.recordings, action.payload] };

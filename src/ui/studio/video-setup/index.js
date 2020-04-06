@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useDispatch, useStudioState } from '../../../studio-state';
+import { useSettings } from '../../../settings';
 
 import Notification from '../../notification';
 
@@ -26,6 +27,7 @@ import { SourcePreview } from './preview';
 export default function VideoSetup(props) {
   const { t } = useTranslation();
 
+  const settings = useSettings();
   const dispatch = useDispatch();
   const state = useStudioState();
   const { displayStream, userStream, displaySupported, userSupported } = state;
@@ -46,23 +48,19 @@ export default function VideoSetup(props) {
       || NONE
   );
 
-  const USER_CONSTRAINTS = {
-    video: { height: { ideal: 1080 }, facingMode: 'user' },
-    audio: false
-  };
 
   const clickUser = async () => {
     setActiveSource(USER);
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
+    await startUserCapture(dispatch, settings);
   };
   const clickDisplay = async () => {
     setActiveSource(DISPLAY);
-    await startDisplayCapture(dispatch);
+    await startDisplayCapture(dispatch, settings);
   };
   const clickBoth = async () => {
     setActiveSource(BOTH);
-    await startUserCapture(dispatch, USER_CONSTRAINTS);
-    await startDisplayCapture(dispatch);
+    await startUserCapture(dispatch, settings);
+    await startDisplayCapture(dispatch, settings);
   };
 
   const reselectSource = () => {
@@ -71,12 +69,14 @@ export default function VideoSetup(props) {
     stopDisplayCapture(state.displayStream, dispatch);
   };
 
+  const userHasWebcam = props.userHasWebcam;
+
   const nextDisabled = activeSource === NONE
     || activeSource === BOTH ? (!displayStream || !userStream) : !hasStreams;
 
   // The warnings if we are not allowed to capture a stream.
   const userWarning = (state.userAllowed === false) && (
-    <Notification isDanger>
+    <Notification key="user-stream-warning" isDanger>
       <Heading as="h3" mb={2}>
         {t('source-user-not-allowed-title')}
       </Heading>
@@ -84,7 +84,7 @@ export default function VideoSetup(props) {
     </Notification>
   );
   const displayWarning = (state.displayAllowed === false) && (
-    <Notification isDanger>
+    <Notification key="display-stream-warning" isDanger>
       <Heading as="h3" mb={2}>
         {t('source-display-not-allowed-title')}
       </Heading>
@@ -128,11 +128,13 @@ export default function VideoSetup(props) {
               label={t('sources-scenario-display-and-user')}
               icon={faChalkboardTeacher}
               onClick={clickBoth}
+              disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
             />}
             { userSupported && <OptionButton
               label={t('sources-scenario-user')}
               icon={faUser}
               onClick={clickUser}
+              disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
             />}
           </Flex>
           <Spacer />
@@ -219,14 +221,18 @@ export default function VideoSetup(props) {
   );
 }
 
-const OptionButton = ({ icon, label, onClick }) => {
+const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
+  const disabled = disabledText !== false;
+
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       sx={{
         fontFamily: 'inherit',
-        color: 'gray.0',
-        border: '2px solid black',
+        color: disabled ? 'gray.2' : 'gray.0',
+        border: theme => `2px solid ${disabled ? theme.colors.gray[2] : 'black'}`,
+        backgroundColor: 'gray.4',
         borderRadius: '8px',
         flex: ['1 1 auto', '0 1 100%'],
         minWidth: '180px',
@@ -234,12 +240,17 @@ const OptionButton = ({ icon, label, onClick }) => {
         minHeight: '120px',
         maxHeight: '250px',
         p: 2,
+        '&:hover': disabled ? {} : {
+          boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
+          backgroundColor: 'white',
+        },
       }}
     >
       <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
         <FontAwesomeIcon icon={icon} size="3x"/>
       </div>
       <div sx={{ fontSize: 4 }}>{label}</div>
+      <div sx={{ fontSize: 2, mt: 1 }}>{disabledText}</div>
     </button>
   );
 };

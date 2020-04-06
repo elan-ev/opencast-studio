@@ -3,6 +3,7 @@
   "message-login-failed": "Login fehlgeschlagen. Bitte Passwort überprüfen.",
   "message-server-unreachable": "Der Server ist nicht erreichbar: Überprüfen Sie Ihre Internet-Verbindung und die Server-URL. Prüfen Sie auch ob Ihr Opencast Zugriff durch Studio erlaubt hat.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
+  "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
   "cancel-button-title": "Abbrechen",
   "pause-button-title": "Aufzeichnung pausieren",
   "record-button-title": "Aufzeichnung beginnen",
@@ -35,6 +36,7 @@
   "sources-video-question": "Welche Videoquelle(n) aufnehmen?",
   "sources-video-none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
   "sources-video-reselect-source": "Quelle(n) neu auswählen",
+  "sources-video-no-cam-detected": "Keine Kamera erkannt",
   "sources-scenario-display-and-user": "Bildschirm & Kamera",
   "sources-scenario-display": "Bildschirm",
   "sources-scenario-user": "Kamera",
@@ -63,6 +65,7 @@
   "next-button-label": "Weiter",
 
   "review-heading": "Zufrieden mit der Aufnahme?",
+  "review-error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
 
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen",
@@ -82,7 +85,7 @@
 
   "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
-  "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf MacOS Firefox oder Chrome zu nutzen.",
+  "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf macOS Firefox oder Chrome zu nutzen.",
   "warning-missing-connection-settings": "Die Verbindung zum Opencast Server wurde noch nicht vollständig hergestellt. Bitte konfigurieren Sie die Verbindung in <1>den Einstellungen</1> (die Aufnahme geht nicht verloren).",
 
   "settings-back-to-recording": "Zurück zur Aufnahme"

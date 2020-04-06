@@ -3,6 +3,7 @@
   "message-login-failed": "Login failed. Please check your password.",
   "message-server-unreachable": "Server unreachable: Check your internet connection and the server URL. Also check if your Opencast allows access via Studio.",
   "message-upload-complete": "Upload complete!",
+  "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
   "cancel-button-title": "Cancel",
   "pause-button-title": "Pause recording",
   "record-button-title": "Start recording",
@@ -37,6 +38,7 @@
 
 
   "confirm-discard-recordings": "Are you sure you want to discard your recordings? This cannot be undone!",
+  "confirm-cancel-recording": "You are currently recording! Are you sure you want to cancel and discard the recording?",
 
   "sources-video-display-selected": "Display selected",
   "sources-video-display-and-user-selected": "Display & Camera selected",
@@ -44,6 +46,7 @@
   "sources-video-question": "What video source(s) to record?",
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
   "sources-video-reselect-source": "Reselect source(s)",
+  "sources-video-no-cam-detected": "No camera detected",
 
   "sources-audio-question": "Record Audio?",
   "sources-audio-microphone": "Microphone",
@@ -66,6 +69,7 @@
 
 
   "review-heading": "Happy with your recording?",
+  "review-error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
 
   "stop-button-title": "Stop recording",
   "upload-notification": "Currently uploading",
@@ -84,7 +88,7 @@
 
   "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
-  "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on MacOS, we recommend switching to Chrome or Firefox.",
+  "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on macOS, we recommend switching to Chrome or Firefox.",
   "warning-missing-connection-settings": "Connection to Opencast is not fully established: uploading is disabled. Please configure the connection in <1>the settings</1> (you won't lose your recording).",
   "settings-back-to-recording": "Back to recording"
 }

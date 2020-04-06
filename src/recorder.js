@@ -28,6 +28,8 @@ export default class Recorder {
     this.recorder.ondataavailable = function(e) {
       if (e.data.size > 0) {
         _recData.push(e.data);
+      } else {
+        console.log("Recording data has size 0! ", e);
       }
     };
 
@@ -36,7 +38,7 @@ export default class Recorder {
     };
 
     this.recorder.onstop = () => {
-      const mimeType = _recData[0].type || this.recorder.mimeType;
+      const mimeType = _recData[0]?.type || this.recorder.mimeType;
       const media = new Blob(_recData, { type: mimeType });
       const url = URL.createObjectURL(media);
       this.recorder = null;
