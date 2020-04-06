@@ -30,6 +30,8 @@ import RecordingPreview from './recording-preview';
 
 import { getIngestInfo, isCourseId } from '../../../manchester';
 
+const LAST_PRESENTER_KEY = 'lastPresenter';
+
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 export default function SaveCreation(props) {
@@ -119,6 +121,9 @@ export default function SaveCreation(props) {
       dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
       return;
     }
+
+    // Store the presenter name in local storage
+    window.localStorage.setItem(LAST_PRESENTER_KEY, presenter);
 
     dispatch({ type: 'UPLOAD_REQUEST' });
 
@@ -321,6 +326,11 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
     }
   }
 
+  // If the user has not yet changed the value of the field and the last used
+  // presenter name is used in local storage, use that.
+  const presenterValue
+    = metaData.presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
+
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
     : (
@@ -348,7 +358,7 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
         <Input
           name="presenter"
           autoComplete="off"
-          defaultValue={metaData.presenter}
+          defaultValue={presenterValue}
           onChange={handleInputChange}
         />
       </FormField>
