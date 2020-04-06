@@ -117,7 +117,7 @@ export default function SaveCreation(props) {
 
     console.debug('Metadata: ', metaData);
 
-    if (title === '' || presenter === '' || series.key === '-1' || email === '') {
+    if (title === '' || presenter === '' || series.key === '-1' || visibility.key === '-1' || email === '') {
       dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
       return;
     }
