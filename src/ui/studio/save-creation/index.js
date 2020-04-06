@@ -251,6 +251,7 @@ const DownloadBox = ({ recordings, dispatch }) => (
           mimeType={recording.mimeType}
           url={recording.url}
           downloaded={recording.downloaded}
+          blob={recording.media}
           onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
         />
       ))
