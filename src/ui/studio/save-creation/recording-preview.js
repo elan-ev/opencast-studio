@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { recordingFileName } from '../../../util.js';
 
-const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded }) => {
+const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded, blob }) => {
   const { t } = useTranslation();
   const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
   const downloadName = recordingFileName(mimeType, flavor);
@@ -17,6 +17,25 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
   if (!url) {
     return null;
   }
+
+  // Get file size in human readable format. We use base-1000 XB instead of
+  // base-1024 XiB, as the latter would probably confuse some users and many
+  // file managers use base-1000 anyway. Notably, the windows file manager
+  // calculates with base-1024 but shows "XB". So it is lying.
+  const numBytes = blob.size;
+  const round = n => n < 10 ? n.toFixed(1) : Math.round(n);
+  const prettyFileSize = (() => {
+    if (numBytes < 1000) {
+      return `${numBytes} B`;
+    } else if (numBytes < 999_500) {
+      return `${round(numBytes / 1000)} KB`;
+    } else if (numBytes < 999_500_000) {
+      return `${round(numBytes / (1_000_000))} MB`;
+    } else {
+      return `${round(numBytes / (1_000_000_000))} GB`
+    }
+  })();
+
 
   return (
     <div sx={{
@@ -64,7 +83,7 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
         as="a"
         sx={{
           width: '100%',
-          maxWidth: '170px',
+          maxWidth: '205px',
           margin: 'auto',
           mt: '10px',
         }}
@@ -76,6 +95,7 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded })
       >
         <FontAwesomeIcon icon={faDownload} />
         {t('save-creation-download-button')}
+        {' '}({ prettyFileSize })
       </Button>
     </div>
   );
