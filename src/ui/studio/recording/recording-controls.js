@@ -63,6 +63,10 @@ export default function RecordingControls({
   });
 
   const record = () => {
+    // In theory, we should never have recordings at this point. But just to be
+    // sure, in case of a bug elsewhere, we clear the recordings here.
+    dispatch({ type: 'CLEAR_RECORDINGS' });
+
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, 'desktop');
       const stream = mixAudioIntoVideo(audioStream, displayStream);
