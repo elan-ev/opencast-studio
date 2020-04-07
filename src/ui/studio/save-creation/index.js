@@ -341,10 +341,13 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
 // Shown during upload. Shows a progressbar, the percentage of data already
 // uploaded and `secondsLeft` nicely formatted as human readable time.
 const UploadProgress = ({ currentProgress, secondsLeft }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Progress as percent with one fractional digit, e.g. 27.3%.
-  const roundedPercent = Math.min(100, currentProgress * 100).toFixed(1);
+  const roundedPercent = Math.min(100, currentProgress * 100).toLocaleString(i18n.language, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
 
   // Nicely format the remaining time.
   let prettyTime;
