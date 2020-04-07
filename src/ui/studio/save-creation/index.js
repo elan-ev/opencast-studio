@@ -291,6 +291,7 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
   // presenter name is used in local storage, use that.
   const presenterValue
     = metaData.presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
+  metaData.presenter = presenterValue;
 
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
