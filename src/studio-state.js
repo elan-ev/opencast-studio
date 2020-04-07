@@ -88,8 +88,20 @@ const reducer = (state, action) => {
     case 'STOP_RECORDING':
       return { ...state, isRecording: false };
 
+    case 'CLEAR_RECORDINGS':
+      return { ...state, recordings: [] };
+
     case 'ADD_RECORDING':
-      return { ...state, recordings: [...state.recordings, action.payload] };
+      // We remove all recordings with the same device type as the new one. This
+      // *should* in theory never happen as all recordings are cleared before
+      // new ones can be added. However, in rare case, this might not be true
+      // and the user ends up with strange recordings. Just to be sure, we
+      // remove old recordings here.
+      const recordings = [
+        ...state.recordings.filter(r => r.deviceType !== action.payload.deviceType),
+        action.payload,
+      ];
+      return { ...state, recordings };
 
     case 'UPLOAD_ERROR':
       return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
