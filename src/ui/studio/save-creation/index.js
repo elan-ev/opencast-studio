@@ -5,7 +5,7 @@ import { jsx, Styled, Progress } from 'theme-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -22,7 +22,6 @@ import {
 } from '../../../studio-state';
 
 import Notification from '../../notification';
-import {  } from '../page';
 import { ActionButtons } from '../elements';
 
 import FormField from './form-field';
@@ -32,6 +31,8 @@ import RecordingPreview from './recording-preview';
 const LAST_PRESENTER_KEY = 'lastPresenter';
 
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
+
+let progressHistory = [];
 
 export default function SaveCreation(props) {
   const settings = useSettings();
@@ -44,20 +45,14 @@ export default function SaveCreation(props) {
     props.previousStep();
   }
 
-  const progressHistory = useRef([]);
-  const [secondsLeft, setSecondsLeft] = useState(null);
-  const [currentProgress, setCurrentProgress] = useState(0);
   function onProgress(progress) {
-    setCurrentProgress(progress);
-
     // ----- Time estimation -----
     // We use a simple sliding average over the last few data points and assume
     // that speed for the rest of the upload.
-
     const now = Date.now();
 
     // Add progress data point to history.
-    progressHistory.current.push({
+    progressHistory.push({
       timestamp: now,
       progress,
     });
@@ -73,23 +68,30 @@ export default function SaveCreation(props) {
     // two windows created by the two constraints (time and number of
     // datapoints).
     const windowStart = Math.min(
-      progressHistory.current.findIndex(p => (now - p.timestamp) < WINDOW_SIZE_MS),
-      Math.max(0, progressHistory.current.length - WINDOW_SIZE_DATA_POINTS),
+      progressHistory.findIndex(p => (now - p.timestamp) < WINDOW_SIZE_MS),
+      Math.max(0, progressHistory.length - WINDOW_SIZE_DATA_POINTS),
     );
 
     // Remove all elements outside the window.
-    progressHistory.current.splice(0, windowStart);
-    const win = progressHistory.current;
+    progressHistory.splice(0, windowStart);
 
-    if (win.length >= MINIMUM_DATA_POINT_COUNT) {
+    let secondsLeft = null;
+    if (progressHistory.length >= MINIMUM_DATA_POINT_COUNT) {
       // Calculate the remaining time based on the average speed within the window.
-      const windowLength = now - win[0].timestamp;
-      const progressInWindow = progress - win[0].progress;
+      const windowLength = now - progressHistory[0].timestamp;
+      const progressInWindow = progress - progressHistory[0].progress;
       const progressPerSecond = (progressInWindow / windowLength) * 1000;
       const progressLeft = 1 - progress;
-      const secondsLeft = Math.max(0, Math.round(progressLeft / progressPerSecond));
+      secondsLeft = Math.max(0, Math.round(progressLeft / progressPerSecond));
+    }
 
-      setSecondsLeft(secondsLeft);
+    // Update state if anything changed. We actually check for equality here to
+    // avoid useless redraws.
+    if (uploadState.secondsLeft !== secondsLeft || uploadState.currentProgress !== progress) {
+      dispatch({
+        type: 'UPLOAD_PROGRESS_UPDATE',
+        payload: { secondsLeft, currentProgress: progress },
+      });
     }
   }
 
@@ -101,7 +103,7 @@ export default function SaveCreation(props) {
         return;
       }
 
-      const lastProgress = progressHistory.current[progressHistory.current.length - 1];
+      const lastProgress = progressHistory[progressHistory.length - 1];
       const timeSinceLastUpdate = Date.now() - lastProgress.timestamp;
       if (timeSinceLastUpdate > 3000) {
         onProgress(lastProgress.progress)
@@ -123,7 +125,7 @@ export default function SaveCreation(props) {
     window.localStorage.setItem(LAST_PRESENTER_KEY, presenter);
 
     dispatch({ type: 'UPLOAD_REQUEST' });
-    progressHistory.current.push({
+    progressHistory.push({
       timestamp: Date.now(),
       progress: 0,
     });
@@ -134,6 +136,7 @@ export default function SaveCreation(props) {
       uploadSettings: settings.upload,
       onProgress,
     });
+    progressHistory = [];
 
     if (success) {
       dispatch({ type: 'UPLOAD_SUCCESS' });
@@ -169,7 +172,10 @@ export default function SaveCreation(props) {
 
     switch (uploadState.state) {
       case STATE_UPLOADING:
-        return <UploadProgress {...{ currentProgress, secondsLeft }} />;
+        return <UploadProgress
+          currentProgress={uploadState.currentProgress}
+          secondsLeft={uploadState.secondsLeft}
+        />;
       case STATE_UPLOADED:
         return <UploadSuccess />;
       default: // STATE_NOT_UPLOADED or STATE_ERROR
@@ -187,7 +193,7 @@ export default function SaveCreation(props) {
         display: 'flex',
         flexDirection: ['column', 'column', 'row'],
         '& > *': {
-          flex: '1 0 50%',
+          flex: ['1 0 50%', '1 0 50%', '0'],
           p: [2, 2, '0 32px'],
           '&:last-child': {
             borderLeft: ['none', 'none', theme => `1px solid ${theme.colors.gray[3]}`],
@@ -291,6 +297,7 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
   // presenter name is used in local storage, use that.
   const presenterValue
     = metaData.presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
+  metaData.presenter = presenterValue;
 
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
@@ -341,10 +348,13 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
 // Shown during upload. Shows a progressbar, the percentage of data already
 // uploaded and `secondsLeft` nicely formatted as human readable time.
 const UploadProgress = ({ currentProgress, secondsLeft }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Progress as percent with one fractional digit, e.g. 27.3%.
-  const roundedPercent = Math.min(100, currentProgress * 100).toFixed(1);
+  const roundedPercent = Math.min(100, currentProgress * 100).toLocaleString(i18n.language, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
 
   // Nicely format the remaining time.
   let prettyTime;

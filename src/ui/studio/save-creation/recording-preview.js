@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { recordingFileName } from '../../../util.js';
 
 const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded, blob }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
   const downloadName = recordingFileName(mimeType, flavor);
 
@@ -23,7 +23,13 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded, b
   // file managers use base-1000 anyway. Notably, the windows file manager
   // calculates with base-1024 but shows "XB". So it is lying.
   const numBytes = blob.size;
-  const round = n => n < 10 ? n.toFixed(1) : Math.round(n);
+  const round = n => {
+    const digits = n < 10 ? 1 : 0;
+    return n.toLocaleString(i18n.language, {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    });
+  };
   const prettyFileSize = (() => {
     if (numBytes < 1000) {
       return `${numBytes} B`;
@@ -83,7 +89,7 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded, b
         as="a"
         sx={{
           width: '100%',
-          maxWidth: '205px',
+          maxWidth: '215px',
           margin: 'auto',
           mt: '10px',
         }}
