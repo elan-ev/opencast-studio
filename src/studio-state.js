@@ -47,6 +47,8 @@ const initialState = () => ({
   upload: {
     error: null,
     state: STATE_NOT_UPLOADED,
+    secondsLeft: null,
+    currentProgress: 0,
   },
 });
 
@@ -102,6 +104,13 @@ const reducer = (state, action) => {
 
     case 'UPLOAD_SUCCESS':
       return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED }};
+
+    case 'UPLOAD_PROGRESS_UPDATE':
+      return { ...state, upload: {
+        ...state.upload,
+        secondsLeft: action.payload.secondsLeft,
+        currentProgress: action.payload.currentProgress,
+      }};
 
     case 'MARK_DOWNLOADED':
       const mapped = state.recordings.map((recording, index) => (
