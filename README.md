@@ -134,7 +134,8 @@ export OPTION=VALUE
 npm run build
 ```
 
-| Option                    | Example            | Description
-| ------------------------- | ------------------ | -----------
-| `PUBLIC_URL`              | `/studio`          | Path from which Studio will be served
-| `REACT_APP_SETTINGS_PATH` | `/mysettings.json` | Path from which to load the configuration
+| Option                            | Example            | Description
+| --------------------------------- | ------------------ | -----------
+| `PUBLIC_URL`                      | `/studio`          | Path from which Studio will be served
+| `REACT_APP_SETTINGS_PATH`         | `/mysettings.json` | Path from which to load the configuration
+| `REACT_APP_INCLUDE_LEGAL_NOTICES` | `1`                | If the legal notices should be included on the about page
