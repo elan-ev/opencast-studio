@@ -54,7 +54,7 @@ function LegalNotices() {
 function About(props) {
   return (
     <Container>
-      <article>
+      <article sx={{ maxWidth: '900px', margin: '0 auto' }}>
         <header>
           <Styled.h1>Opencast Studio</Styled.h1>
         </header>
