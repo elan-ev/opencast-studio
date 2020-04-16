@@ -49,6 +49,10 @@ export class Opencast {
 
   updateGlobalOc = null;
 
+  IDS = new Map();
+
+  username = '';
+
 
   // Creates a new instance. Static method instead of constructor because it
   // needs to be async.
@@ -86,7 +90,45 @@ export class Opencast {
 
     await catchRequestError(async () => await self.updateUser());
 
+    await self.handleSeriesIDSelection();
+
     return self;
+  }
+
+
+  async getSeriesID() {
+    let headers = this.header();
+    let url = `${this.getServerUrl()}/admin-ng/series/series.json`
+    await fetch(url, {
+      credentials: 'same-origin',
+      redirect: 'manual',
+      headers,
+      method: 'get'
+    }).then(response => response.json()).then(data => {
+      for (let root in data) {
+        for (let enumerator in data[root]) {
+          this.IDS.set(data[root][enumerator]['id'], data[root][enumerator]['title']);
+        }
+      }
+    }).catch(error => this.IDS = {});
+
+  }
+
+
+
+  header() {
+    let headers = {};
+    if (this.getLoginUsername() && this.getLoginPassword()) {
+      const encoded = btoa(unescape(encodeURIComponent(
+          this.getLoginUsername() + ':' + this.getLoginPassword()
+      )));
+      headers = {'Authorization': `Basic ${encoded}`};
+    }
+    return headers;
+  }
+
+  async handleSeriesIDSelection() {
+    await this.getSeriesID();
   }
 
   // Updates the global OC instance from `this` to `newInstance`, IF the new
@@ -136,7 +178,7 @@ export class Opencast {
   // the state or user object has changed in any way.
   async updateUser() {
     const newUser = await this.getInfoMe();
-
+    this.username = newUser.user.name;
     if (!equal(newUser, this.#currentUser)) {
       this.#currentUser = newUser;
       if (newUser.user.username === 'anonymous') {
@@ -223,7 +265,7 @@ export class Opencast {
   // Uploads the given recordings with the given title and creator metadata. If
   // the upload fails, `false` is returned and `getState` changes to an error
   // state.
-  async upload({ recordings, title, creator, uploadSettings, onProgress }) {
+  async upload({ recordings, title,description, creator,seriesID , uploadSettings, onProgress }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     if (!this.isReadyToUpload()) {
@@ -237,7 +279,7 @@ export class Opencast {
         .then(response => response.text());
 
       // Add metadata to media package
-      mediaPackage = await this.addDcCatalog({ mediaPackage, uploadSettings, title, creator });
+      mediaPackage = await this.addDcCatalog({ mediaPackage, uploadSettings, title, creator,description, seriesID });
 
       // Set appropriate ACL unless the configuration says no.
       if (uploadSettings?.acl !== false) {
@@ -259,10 +301,11 @@ export class Opencast {
 
   // Adds the DC Catalog with the given metadata to the current ingest process
   // via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
-  async addDcCatalog({ mediaPackage, title, creator, uploadSettings }) {
-    const seriesId = uploadSettings?.seriesId;
+  async addDcCatalog({ mediaPackage, title, creator, description, seriesID, uploadSettings }) {
+    //const seriesId = uploadSettings?.seriesId;
+    let username = this.#currentUser.user.username;
 
-    const dcc = dcCatalog({ creator, title, seriesId });
+    const dcc = dcCatalog({ creator, title,description, seriesID, username });
     const body = new FormData();
     body.append('mediaPackage', mediaPackage);
     body.append('dublinCore', dcc);
@@ -384,6 +427,22 @@ export class Opencast {
     return this.#login === true;
   }
 
+  getLoginUsername(){
+    return this.#login?.username;
+  }
+
+  getLoginPassword(){
+    return this.#login?.password;
+  }
+
+  getServerUrl(){
+    return this.#serverUrl;
+  }
+
+  getFinalSeriesTitles(){
+    return this.IDS;
+  }
+
   // Returns whether or not the connection is ready to upload a video.
   isReadyToUpload() {
     return this.#state === STATE_LOGGED_IN;
@@ -490,10 +549,11 @@ const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));
 }
 
-const dcCatalog = ({ creator, title, seriesId }) => {
-  const seriesLine = seriesId
-    ? `<dcterms:isPartOf>${escapeString(seriesId)}</dcterms:isPartOf>`
-    : '';
+const dcCatalog = ({ creator, title, description, seriesID, username }) => {
+//  const seriesLine = seriesId
+//    ? `<dcterms:isPartOf>${escapeString(seriesId)}</dcterms:isPartOf>`
+//    : '';
+
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
@@ -505,8 +565,12 @@ const dcCatalog = ({ creator, title, seriesId }) => {
         <dcterms:creator>${escapeString(creator)}</dcterms:creator>
         <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
         <dcterms:title>${escapeString(title)}</dcterms:title>
+        <dcterms:description>${escapeString(description)}</dcterms:description>
         <dcterms:spatial>Opencast Studio</dcterms:spatial>
-        ${seriesLine}
+        <dcterms:isPartOf>${escapeString(seriesID)}</dcterms:isPartOf>
+        <dcterms:contributor>${escapeString(username)}</dcterms:contributor>
+        <dcterms:tou></dcterms:tou>
+
     </dublincore>`;
 }
 

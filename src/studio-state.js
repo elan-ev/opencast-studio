@@ -21,6 +21,8 @@ export const STATE_ERROR = 'error';
 const defaultMetaData = {
   title: '',
   presenter: '',
+  description: '',
+  seriesID: '',
 };
 export let metaData = { ...defaultMetaData };
 

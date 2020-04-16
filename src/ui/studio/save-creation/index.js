@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import React, { useEffect } from 'react';
+import Select from 'react-select';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -114,7 +115,7 @@ export default function SaveCreation(props) {
   });
 
   async function handleUpload() {
-    const { title, presenter } = metaData;
+    const {title, presenter, description, seriesID} = metaData;
 
     if (title === '' || presenter === '') {
       dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
@@ -132,7 +133,9 @@ export default function SaveCreation(props) {
     const success = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
+      description,
       creator: presenter,
+      seriesID,
       uploadSettings: settings.upload,
       onProgress,
     });
@@ -269,7 +272,6 @@ const DownloadBox = ({ recordings, dispatch }) => (
 // to settings.
 const ConnectionUnconfiguredWarning = () => {
   const location = useLocation();
-
   return (
     <Notification key="opencast-connection" isDanger>
       <Trans i18nKey="warning-missing-connection-settings">
@@ -287,10 +289,25 @@ const ConnectionUnconfiguredWarning = () => {
 
 const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
   const { t } = useTranslation();
+  let series = opencast.getFinalSeriesTitles();
+  let titles = [];
+  for (let keys of series.keys()){
+    let tmp = {value:keys,label:series.get(keys)};
+    titles.push(tmp);
+  }
+  
+
+  const enabledSeries = useSettings().upload?.enableSeries;
+  const displaySeries =  enabledSeries  == 'true' ? 'block' : 'none';
+
 
   function handleInputChange(event) {
     const target = event.target;
     metaData[target.name] = target.value;
+  }
+
+  function handleSelectChange(event){
+    metaData['seriesID'] = event.value;
   }
 
   // If the user has not yet changed the value of the field and the last used
@@ -330,6 +347,31 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
           onChange={handleInputChange}
         />
       </FormField>
+
+       <FormField label={t('save-creation-label-description')}>
+            <Input
+                name="description"
+                autoComplete="off"
+                defaultValue={metaData.description}
+                onChange={handleInputChange}
+                disabled={uploadState.state === STATE_UPLOADING}
+            />
+          </FormField>
+            <div sx={{
+              display : displaySeries,
+              marginBottom : '30px'
+            }}>
+
+                <FormField label={t('save-creation-label-series')}>
+                  <Select
+                    name="series"
+                    autoComplete="off"
+                    options={titles}
+                    onChange={handleSelectChange}
+                    disabled={uploadState.state === STATE_UPLOADING}
+                    />
+                </FormField>
+            </div>
 
       <Button onClick={handleUpload} disabled={recordings.length === 0}>
         <FontAwesomeIcon icon={faUpload} />
