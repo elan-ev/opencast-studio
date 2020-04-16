@@ -295,10 +295,10 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
     let tmp = {value:keys,label:series.get(keys)};
     titles.push(tmp);
   }
-  
+
 
   const enabledSeries = useSettings().upload?.enableSeries;
-  const displaySeries =  enabledSeries  == 'true' ? 'block' : 'none';
+  const displaySeries =  enabledSeries  === 'true' ? 'block' : 'none';
 
 
   function handleInputChange(event) {
