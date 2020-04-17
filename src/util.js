@@ -95,7 +95,7 @@ export const userHasWebcam = async () => {
     return false;
   }
 
-  const devices = await navigator.mediaDevices.enumerateDevices()
+  const devices = await navigator.mediaDevices.enumerateDevices();
   return devices.some(d => d.kind === 'videoinput');
 }
 

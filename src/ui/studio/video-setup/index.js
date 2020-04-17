@@ -55,6 +55,7 @@ export default function VideoSetup(props) {
   const clickUser = async () => {
     setActiveSource(VIDEO_SOURCE_USER);
     await startUserCapture(dispatch, settings);
+    await queryMediaDevices(dispatch);
   };
   const clickDisplay = async () => {
     setActiveSource(VIDEO_SOURCE_DISPLAY);
@@ -63,7 +64,10 @@ export default function VideoSetup(props) {
   const clickBoth = async () => {
     setActiveSource(VIDEO_SOURCE_BOTH);
     await startUserCapture(dispatch, settings);
-    await startDisplayCapture(dispatch, settings);
+    await Promise.all([
+      queryMediaDevices(dispatch),
+      startDisplayCapture(dispatch, settings),
+    ]);
   };
 
   const reselectSource = () => {
@@ -158,7 +162,7 @@ export default function VideoSetup(props) {
       body = <SourcePreview
         warnings={[userWarning, unexpectedEndWarning]}
         inputs={[{
-          kind: t('sources-user'),
+          isDesktop: false,
           stream: state.userStream,
           allowed: state.userAllowed,
           unexpectedEnd: state.userUnexpectedEnd,
@@ -172,7 +176,7 @@ export default function VideoSetup(props) {
       body = <SourcePreview
         warnings={[displayWarning, unexpectedEndWarning]}
         inputs={[{
-          kind: t('sources-display'),
+          isDesktop: true,
           stream: state.displayStream,
           allowed: state.displayAllowed,
           unexpectedEnd: state.displayUnexpectedEnd,
@@ -188,13 +192,13 @@ export default function VideoSetup(props) {
         warnings={[displayWarning, userWarning, unexpectedEndWarning]}
         inputs={[
           {
-            kind: t('sources-display'),
+            isDesktop: true,
             stream: state.displayStream,
             allowed: state.displayAllowed,
             unexpectedEnd: state.displayUnexpectedEnd,
           },
           {
-            kind: t('sources-user'),
+            isDesktop: false,
             stream: state.userStream,
             allowed: state.userAllowed,
             unexpectedEnd: state.userUnexpectedEnd,
@@ -277,3 +281,8 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
 };
 
 const Spacer = (rest) => <div sx={{ flex: '1 0 0' }} {...rest}></div>;
+
+const queryMediaDevices = async (dispatch) => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  dispatch({ type: 'UPDATE_MEDIA_DEVICES', payload: devices });
+};

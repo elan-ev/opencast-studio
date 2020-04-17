@@ -55,7 +55,7 @@ export async function startDisplayCapture(dispatch, settings) {
   }
 }
 
-export async function startUserCapture(dispatch, settings) {
+export async function startUserCapture(dispatch, settings, videoConstraints) {
   const maxFps = settings.camera?.maxFps
     ? { frameRate: { max: settings.camera.maxFps } }
     : {};
@@ -68,6 +68,7 @@ export async function startUserCapture(dispatch, settings) {
       facingMode: 'user',
       ...maxFps,
       ...maxHeight,
+      ...videoConstraints,
     },
     audio: false,
   };

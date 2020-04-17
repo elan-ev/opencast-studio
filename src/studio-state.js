@@ -22,6 +22,8 @@ export const STATE_ERROR = 'error';
 
 
 const initialState = () => ({
+  mediaDevices: [],
+
   audioAllowed: null,
   audioStream: null,
   audioUnexpectedEnd: false,
@@ -57,6 +59,10 @@ const initialState = () => ({
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'UPDATE_MEDIA_DEVICES':
+      console.log(action.payload);
+      return { ...state, mediaDevices: action.payload };
+
     case 'CHOOSE_AUDIO':
       return { ...state, audioChoice: action.payload };
 

@@ -10,6 +10,14 @@ import { faExclamationTriangle, faTimes, faCog } from '@fortawesome/free-solid-s
 
 import { VideoBox, useVideoBoxResize } from '../elements.js';
 import { dimensionsOf } from '../../../util.js';
+import { useDispatch, useStudioState } from '../../../studio-state';
+import { useSettings } from '../../../settings';
+import {
+  startDisplayCapture,
+  startUserCapture,
+  stopDisplayCapture,
+  stopUserCapture
+} from '../capturer';
 
 
 export function SourcePreview({ warnings, inputs }) {
@@ -17,18 +25,18 @@ export function SourcePreview({ warnings, inputs }) {
   switch (inputs.length) {
     case 1:
       children = [{
-        body: <StreamPreview input={inputs[0]} text={inputs[0].kind} />,
+        body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
       }];
       break;
     case 2:
       children = [
         {
-          body: <StreamPreview input={inputs[0]} text={inputs[0].kind} />,
+          body: <StreamPreview input={inputs[0]} />,
           dimensions: () => dimensionsOf(inputs[0].stream),
         },
         {
-          body: <StreamPreview input={inputs[1]} text={inputs[1].kind} />,
+          body: <StreamPreview input={inputs[1]} />,
           dimensions: () => dimensionsOf(inputs[1].stream),
         },
       ];
@@ -53,7 +61,7 @@ function StreamPreview({ input, text }) {
   return (
     <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
       <PreviewVideo allowed={input.allowed} unexpectedEnd={input.unexpectedEnd} stream={stream} />
-      <StreamSettings />
+      <StreamSettings isDesktop={input.isDesktop} />
     </Card>
   );
 }
@@ -117,7 +125,7 @@ const PreviewVideo = ({ allowed, stream, unexpectedEnd, ...props }) => {
   );
 };
 
-const StreamSettings = () => {
+const StreamSettings = ({ isDesktop }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -162,10 +170,69 @@ const StreamSettings = () => {
         height: isExpanded ? '100px' : 0,
         transition: 'height 0.2s',
         overflow: 'hidden',
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        fontSize: '18px',
       }}>
-
+        <div sx={{ p: 1 }}>
+          <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
+            <tbody>
+              { !isDesktop && <UserSettings /> }
+            </tbody>
+          </table>
+          blabla
+        </div>
       </div>
     </div>
   );
+};
+
+const UserSettings = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const settings = useSettings();
+  const state = useStudioState();
+
+  const currentDeviceId = state.userStream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;
+  let devices = [];
+  for (const d of state.mediaDevices) {
+    // Only intersted in video inputs
+    if (d.kind !== 'videoinput') {
+      continue;
+    }
+
+    // If we already have a device with that device ID, we ignore it.
+    if (devices.some(od => od.deviceId === d.deviceId)) {
+      continue;
+    }
+
+    devices.push(d);
+  }
+
+  const changeDevice = id => {
+    stopUserCapture(state.userStream, dispatch);
+    startUserCapture(dispatch, settings, { deviceId: { exact: id }});
+  };
+
+  return <Fragment>
+    <tr>
+      <td>{t('sources-video-device')}:</td>
+      <td>
+        <select
+          sx={{ fontSize: 'inherit', width: '100%' }}
+          value={currentDeviceId}
+          onChange={e => changeDevice(e.target.value)}
+        >
+          {
+            devices.map((d, i) => (
+              <option key={i} value={d.deviceId}>{ d.label }</option>
+            ))
+          }
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>Aspect ratio:</td>
+      <td>TODO</td>
+    </tr>
+  </Fragment>;
 };
