@@ -27,7 +27,7 @@ import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
 
-const LAST_PRESENTER_KEY = 'lastPresenter';
+const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
 const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
