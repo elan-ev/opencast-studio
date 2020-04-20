@@ -21,7 +21,7 @@
     "fast-deep-equal": "^3.0.0",
     "gh-pages": "^2.2.0",
     "i18next": "^19.4.1",
-    "i18next-browser-languagedetector": "^4.0.2",
+    "i18next-browser-languagedetector": "^4.1.1",
     "mustache": "^4.0.1",
     "mutationobserver-shim": "^0.3.5",
     "oscilloscope": "^1.1.0",
