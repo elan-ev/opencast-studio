@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Container, Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -18,6 +18,7 @@ import {
   VIDEO_SOURCE_NONE,
 } from '../../../studio-state';
 import { useSettings } from '../../../settings';
+import { deviceIdOf } from '../../../util';
 
 import Notification from '../../notification';
 
@@ -31,7 +32,8 @@ import { ActionButtons } from '../elements';
 import { SourcePreview } from './preview';
 
 
-export const LAST_VIDEO_DEVICE_KEY = 'ocStudioLastVideoDevice';
+const LAST_VIDEO_DEVICE_KEY = 'ocStudioLastVideoDevice';
+const CAMERA_ASPECT_RATIO_KEY = 'ocStudioCameraAspectRatio';
 
 export default function VideoSetup(props) {
   const { t } = useTranslation();
@@ -53,8 +55,57 @@ export default function VideoSetup(props) {
 
   const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', payload: s });
 
-  const lastDeviceId = window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY);
-  const userConstraints = lastDeviceId ? { deviceId: { ideal: lastDeviceId }} : {};
+  // Handle user preferences regarding the camera stream. Defaults are loaded
+  // from local storage.
+  const [cameraPreferences, setVideoPreferences] = useState({
+    deviceId: window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY),
+    aspectRatio: window.localStorage.getItem(CAMERA_ASPECT_RATIO_KEY) || 'auto',
+  });
+
+  // Creates a valid constraints object from the user preferences. The mapping
+  // is as follows:
+  //
+  // - deviceId: falsy (-> ignored) or string (-> passed on)
+  // - aspectRatio: '16:9' or '4:3' (-> passed on), ignored on any other value
+  const prefsToConstraints = prefs => ({
+    ...(prefs.deviceId && { deviceId: { ideal: prefs.deviceId }}),
+    ...(() => {
+      switch (prefs.aspectRatio) {
+        case '4:3': return { aspectRatio: { ideal: 4 / 3 }};
+        case '16:9': return { aspectRatio: { ideal: 16 / 9 }};
+        default: return {};
+      }
+    })(),
+  });
+  const userConstraints = prefsToConstraints(cameraPreferences);
+
+  // Callback passed to the components that allow the user to change the
+  // preferences. `newPrefs` is merged into the existing preferences, the
+  // resulting preferences are set and the webcam stream is re-requested with
+  // the updated constraints.
+  const updateCameraPrefs = newPrefs => {
+    // Merge and update preferences.
+    const merged = { ...cameraPreferences, ...newPrefs };
+    const constraints = prefsToConstraints(merged);
+    setVideoPreferences(merged);
+
+    // Update preferences in local storage. We don't update the device ID
+    // though, as that is done below in the `useEffect` invocation.
+    window.localStorage.setItem(CAMERA_ASPECT_RATIO_KEY, merged.aspectRatio);
+
+    // Apply new preferences by rerequesting camera stream.
+    stopUserCapture(userStream, dispatch);
+    startUserCapture(dispatch, settings, constraints);
+  };
+
+  // Store the camera device ID in local storage. We do this here, as we also
+  // want to remember the device the user initially selected.
+  useEffect(() => {
+    const cameraDeviceId = deviceIdOf(userStream);
+    if (cameraDeviceId) {
+      window.localStorage.setItem(LAST_VIDEO_DEVICE_KEY, cameraDeviceId);
+    }
+  });
 
   const clickUser = async () => {
     setActiveSource(VIDEO_SOURCE_USER);
@@ -171,6 +222,7 @@ export default function VideoSetup(props) {
           allowed: state.userAllowed,
           unexpectedEnd: state.userUnexpectedEnd,
         }]}
+        {...{ updateCameraPrefs, cameraPreferences }}
       />;
       break;
 
@@ -208,6 +260,7 @@ export default function VideoSetup(props) {
             unexpectedEnd: state.userUnexpectedEnd,
           },
         ]}
+        {...{ updateCameraPrefs, cameraPreferences }}
       />;
       break;
     default:

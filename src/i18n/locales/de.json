@@ -42,6 +42,8 @@
   "sources-scenario-user": "Kamera",
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
+  "sources-video-device": "Kamera",
+  "sources-video-aspect-ratio-auto": "auto",
 
   "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
   "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funkioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",

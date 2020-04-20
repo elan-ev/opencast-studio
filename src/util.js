@@ -42,6 +42,9 @@ export const dimensionsOf = stream => {
   return [width, height];
 };
 
+// Returns the devide ID of the video track of the given stream.
+export const deviceIdOf = stream => stream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;
+
 // Converts the MIME type into a file extension.
 export const mimeToExt = mime => {
   if (mime) {
