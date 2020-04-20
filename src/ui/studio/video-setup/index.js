@@ -31,6 +31,8 @@ import { ActionButtons } from '../elements';
 import { SourcePreview } from './preview';
 
 
+export const LAST_VIDEO_DEVICE_KEY = 'ocStudioLastVideoDevice';
+
 export default function VideoSetup(props) {
   const { t } = useTranslation();
 
@@ -51,10 +53,12 @@ export default function VideoSetup(props) {
 
   const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', payload: s });
 
+  const lastDeviceId = window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY);
+  const userConstraints = lastDeviceId ? { deviceId: { ideal: lastDeviceId }} : {};
 
   const clickUser = async () => {
     setActiveSource(VIDEO_SOURCE_USER);
-    await startUserCapture(dispatch, settings);
+    await startUserCapture(dispatch, settings, userConstraints);
     await queryMediaDevices(dispatch);
   };
   const clickDisplay = async () => {
@@ -63,7 +67,7 @@ export default function VideoSetup(props) {
   };
   const clickBoth = async () => {
     setActiveSource(VIDEO_SOURCE_BOTH);
-    await startUserCapture(dispatch, settings);
+    await startUserCapture(dispatch, settings, userConstraints);
     await Promise.all([
       queryMediaDevices(dispatch),
       startDisplayCapture(dispatch, settings),

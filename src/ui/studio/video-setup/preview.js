@@ -18,6 +18,7 @@ import {
   stopDisplayCapture,
   stopUserCapture
 } from '../capturer';
+import { LAST_VIDEO_DEVICE_KEY } from './index.js';
 
 
 export function SourcePreview({ warnings, inputs }) {
@@ -207,6 +208,12 @@ const UserSettings = () => {
 
     devices.push(d);
   }
+
+  useEffect(() => {
+    if (currentDeviceId) {
+      window.localStorage.setItem(LAST_VIDEO_DEVICE_KEY, currentDeviceId);
+    }
+  });
 
   const changeDevice = id => {
     stopUserCapture(state.userStream, dispatch);
