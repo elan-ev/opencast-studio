@@ -10,6 +10,11 @@ export const MICROPHONE_REQUEST = 'microphone_request';
 export const NO_AUDIO = 'no-audio';
 export const NONE = 'none';
 
+export const VIDEO_SOURCE_BOTH = 'both';
+export const VIDEO_SOURCE_DISPLAY = 'display';
+export const VIDEO_SOURCE_USER = 'user';
+export const VIDEO_SOURCE_NONE = 'none';
+
 export const STATE_NOT_UPLOADED = 'not_uploaded';
 export const STATE_UPLOADING = 'uploading';
 export const STATE_UPLOADED = 'uploaded';
@@ -41,6 +46,7 @@ const initialState = () => ({
   userUnexpectedEnd: false,
   userSupported: isUserCaptureSupported(),
 
+  videoChoice: VIDEO_SOURCE_NONE,
   audioChoice: NONE,
 
   isRecording: false,
@@ -59,6 +65,9 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'CHOOSE_AUDIO':
       return { ...state, audioChoice: action.payload };
+
+    case 'CHOOSE_VIDEO':
+      return { ...state, videoChoice: action.payload };
 
     case 'SHARE_AUDIO':
       return {
