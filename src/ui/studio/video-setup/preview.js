@@ -4,40 +4,34 @@ import { jsx } from 'theme-ui';
 
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Text, Spinner } from '@theme-ui/components';
+import { Card, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 
 import { VideoBox, useVideoBoxResize } from '../elements.js';
 import { deviceIdOf, dimensionsOf } from '../../../util.js';
-import { useDispatch, useStudioState } from '../../../studio-state';
-import { useSettings } from '../../../settings';
-import {
-  startDisplayCapture,
-  startUserCapture,
-  stopDisplayCapture,
-  stopUserCapture
-} from '../capturer';
-import { LAST_VIDEO_DEVICE_KEY } from './index.js';
+import { useStudioState } from '../../../studio-state';
 
 
-export function SourcePreview({ warnings, inputs, updateCameraPrefs, cameraPreferences }) {
+// Shows the preview for one or two input streams. The previews also show
+// preferences allowing the user to change the webcam and the like.
+export const SourcePreview = ({ warnings, inputs }) => {
   let children;
   switch (inputs.length) {
     case 1:
       children = [{
-        body: <StreamPreview input={inputs[0]} {...{ updateCameraPrefs, cameraPreferences }} />,
+        body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
       }];
       break;
     case 2:
       children = [
         {
-          body: <StreamPreview input={inputs[0]} {...{ updateCameraPrefs, cameraPreferences }} />,
+          body: <StreamPreview input={inputs[0]} />,
           dimensions: () => dimensionsOf(inputs[0].stream),
         },
         {
-          body: <StreamPreview input={inputs[1]} {...{ updateCameraPrefs, cameraPreferences }} />,
+          body: <StreamPreview input={inputs[1]} />,
           dimensions: () => dimensionsOf(inputs[1].stream),
         },
       ];
@@ -54,20 +48,15 @@ export function SourcePreview({ warnings, inputs, updateCameraPrefs, cameraPrefe
   );
 }
 
-function StreamPreview({ input, text, updateCameraPrefs, cameraPreferences }) {
-  const stream = input.stream;
-  const track = stream?.getVideoTracks()?.[0];
-  const { width, height } = track?.getSettings() ?? {};
+const StreamPreview = ({ input, text }) => (
+  <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+    <PreviewVideo input={input} />
+    <StreamSettings input={input} />
+  </Card>
+);
 
-  return (
-    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-      <PreviewVideo allowed={input.allowed} unexpectedEnd={input.unexpectedEnd} stream={stream} />
-      <StreamSettings isDesktop={input.isDesktop} {...{ updateCameraPrefs, cameraPreferences }} />
-    </Card>
-  );
-}
-
-const PreviewVideo = ({ allowed, stream, unexpectedEnd, ...props }) => {
+const PreviewVideo = ({ input }) => {
+  const { allowed, stream, unexpectedEnd } = input;
   const resizeVideoBox = useVideoBoxResize();
 
   const videoRef = useRef();
@@ -126,7 +115,8 @@ const PreviewVideo = ({ allowed, stream, unexpectedEnd, ...props }) => {
   );
 };
 
-const StreamSettings = ({ isDesktop, updateCameraPrefs, cameraPreferences }) => {
+const StreamSettings = ({ input }) => {
+  const { isDesktop, updatePrefs, prefs } = input;
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -177,7 +167,7 @@ const StreamSettings = ({ isDesktop, updateCameraPrefs, cameraPreferences }) => 
         <div sx={{ p: 1 }}>
           <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
             <tbody>
-              { !isDesktop && <UserSettings {...{ updateCameraPrefs, cameraPreferences }} /> }
+              { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
             </tbody>
           </table>
           blabla
@@ -187,10 +177,8 @@ const StreamSettings = ({ isDesktop, updateCameraPrefs, cameraPreferences }) => 
   );
 };
 
-const UserSettings = ({ updateCameraPrefs, cameraPreferences }) => {
+const UserSettings = ({ updatePrefs, prefs }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const settings = useSettings();
   const state = useStudioState();
 
   const currentDeviceId = deviceIdOf(state.userStream);
@@ -209,36 +197,8 @@ const UserSettings = ({ updateCameraPrefs, cameraPreferences }) => {
     devices.push(d);
   }
 
-  const changeDevice = id => updateCameraPrefs({ deviceId: id });
-  const changeAspectRatio = ratio => updateCameraPrefs({ aspectRatio: ratio });
-
-
-  const ArRadioBox = ({ id, value, checked }) => {
-    return <Fragment>
-      <input
-        type="radio"
-        id={id}
-        value={value}
-        checked={checked}
-        name="aspectRatio"
-        onChange={e => changeAspectRatio(e.target.value)}
-        sx={{
-          display: 'none',
-          '&+label': {
-            border: theme => `2px solid ${theme.colors.gray[0]}`,
-            p: '1px 4px',
-            borderRadius: '6px',
-            mx: 1,
-          },
-          '&:checked+label': {
-            bg: 'gray.0',
-            color: 'white',
-          },
-        }}
-      />
-      <label htmlFor={id}>{ value }</label>
-    </Fragment>;
-  };
+  const changeDevice = id => updatePrefs({ deviceId: id });
+  const changeAspectRatio = ratio => updatePrefs({ aspectRatio: ratio });
 
   return <Fragment>
     <tr>
@@ -260,22 +220,53 @@ const UserSettings = ({ updateCameraPrefs, cameraPreferences }) => {
     <tr>
       <td>Aspect ratio:</td>
       <td>
-        <ArRadioBox
+        <RadioButton
           id="ar-auto"
           value="auto"
-          checked={['4:3', '16:9'].every(x => cameraPreferences.aspectRatio !== x)}
+          name="aspectRatio"
+          onChange={changeAspectRatio}
+          checked={['4:3', '16:9'].every(x => prefs.aspectRatio !== x)}
         />
-        <ArRadioBox
+        <RadioButton
           id="ar-4-3"
           value="4:3"
-          checked={cameraPreferences.aspectRatio === '4:3'}
+          name="aspectRatio"
+          onChange={changeAspectRatio}
+          checked={prefs.aspectRatio === '4:3'}
         />
-        <ArRadioBox
+        <RadioButton
           id="ar-16-9"
           value="16:9"
-          checked={cameraPreferences.aspectRatio === '16:9'}
+          name="aspectRatio"
+          onChange={changeAspectRatio}
+          checked={prefs.aspectRatio === '16:9'}
         />
       </td>
     </tr>
+  </Fragment>;
+};
+
+// A styled radio input which looks like a button.
+const RadioButton = ({ id, value, checked, name, onChange }) => {
+  return <Fragment>
+    <input
+      type="radio"
+      onChange={e => onChange(e.target.value)}
+      {...{ id, value, checked, name }}
+      sx={{
+        display: 'none',
+        '&+label': {
+          border: theme => `2px solid ${theme.colors.gray[0]}`,
+          p: '1px 4px',
+          borderRadius: '6px',
+          mx: 1,
+        },
+        '&:checked+label': {
+          bg: 'gray.0',
+          color: 'white',
+        },
+      }}
+    />
+    <label htmlFor={id}>{ value }</label>
   </Fragment>;
 };
