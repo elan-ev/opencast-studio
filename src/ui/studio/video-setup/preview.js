@@ -49,7 +49,7 @@ export const SourcePreview = ({ warnings, inputs }) => {
 }
 
 const StreamPreview = ({ input, text }) => (
-  <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+  <Card sx={{ height: '100%', overflow: 'hidden' }}>
     <PreviewVideo input={input} />
     <StreamSettings input={input} />
   </Card>
@@ -120,7 +120,24 @@ const StreamSettings = ({ input }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const expandedHeight = useRef(null);
 
-  return (
+  return <Fragment>
+    <div sx={{
+      position: 'absolute',
+      top: isExpanded ? '8px' : '-30px',
+      left: 0,
+      right: 0,
+      textAlign: 'center',
+      transition: 'top 0.2s',
+    }}>
+      <span sx={{
+        color: 'gray.1',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: '10px',
+        p: 1,
+      }}>
+        <StreamInfo stream={input.stream} />
+      </span>
+    </div>
     <div sx={{
       position: 'absolute',
       left: 0,
@@ -176,11 +193,18 @@ const StreamSettings = ({ input }) => {
               { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
             </tbody>
           </table>
-          blabla
         </div>
       </div>
     </div>
-  );
+  </Fragment>;
+};
+
+const StreamInfo = ({ stream }) => {
+  const s = stream?.getVideoTracks()?.[0]?.getSettings();
+  const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : '';
+  const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
+
+  return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
 
 const UserSettings = ({ updatePrefs, prefs }) => {
