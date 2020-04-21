@@ -181,7 +181,6 @@ const StreamSettings = ({ input }) => {
         overflow: 'hidden',
         backgroundColor: 'rgba(255, 255, 255, 0.95)',
         fontSize: '18px',
-
       }}>
         <div
           // Obtain the actual content height as soon as the element is mounted.
@@ -191,6 +190,7 @@ const StreamSettings = ({ input }) => {
           <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
             <tbody>
               { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
+              <UniveralSettings {...{ isDesktop, updatePrefs, prefs }} />
             </tbody>
           </table>
         </div>
@@ -205,6 +205,40 @@ const StreamInfo = ({ stream }) => {
   const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
 
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
+};
+
+const UniveralSettings = ({ isDesktop, updatePrefs, prefs }) => {
+  const { t } = useTranslation();
+
+  const changeQuality = quality => updatePrefs({ quality });
+  const qualities = ['480p', '720p', '1080p', '1440p', '2160p'];
+  const kind = isDesktop ? 'desktop' : 'user';
+
+  return <Fragment>
+    <tr>
+      <td>{t('sources-video-quality')}:</td>
+      <td>
+        <RadioButton
+          id={`quality-auto-${kind}`}
+          value="auto"
+          name={`quality-${kind}`}
+          label={t('sources-video-quality-auto')}
+          onChange={changeQuality}
+          checked={qualities.every(q => prefs.quality !== q)}
+        />
+        {
+          qualities.map(q => <RadioButton
+            key={`${q}-${kind}`}
+            id={`quality-${q}-${kind}`}
+            value={q}
+            name={`quality-${kind}`}
+            onChange={changeQuality}
+            checked={prefs.quality === q}
+          />)
+        }
+      </td>
+    </tr>
+  </Fragment>;
 };
 
 const UserSettings = ({ updatePrefs, prefs }) => {

@@ -49,6 +49,8 @@
   "sources-video-device": "Device",
   "sources-video-aspect-ratio": "Aspect ratio",
   "sources-video-aspect-ratio-auto": "auto",
+  "sources-video-quality": "Quality",
+  "sources-video-quality-auto": "auto",
 
   "sources-audio-question": "Record Audio?",
   "sources-audio-microphone": "Microphone",

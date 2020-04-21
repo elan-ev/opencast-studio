@@ -21,7 +21,7 @@ export async function startAudioCapture(dispatch, deviceId = null) {
   }
 }
 
-export async function startDisplayCapture(dispatch, settings) {
+export async function startDisplayCapture(dispatch, settings, videoConstraints = {}) {
   const maxFps = settings.display?.maxFps
     ? { frameRate: { max: settings.display.maxFps } }
     : {};
@@ -34,6 +34,7 @@ export async function startDisplayCapture(dispatch, settings) {
       cursor: 'always',
       ...maxFps,
       ...maxHeight,
+      ...videoConstraints
     },
     audio: false,
   };

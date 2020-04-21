@@ -34,7 +34,8 @@ import { SourcePreview } from './preview';
 
 const LAST_VIDEO_DEVICE_KEY = 'ocStudioLastVideoDevice';
 const CAMERA_ASPECT_RATIO_KEY = 'ocStudioCameraAspectRatio';
-
+const CAMERA_QUALITY_KEY = 'ocStudioCameraQuality';
+const DISPLAY_QUALITY_KEY = 'ocStudioDisplayQuality';
 
 export default function VideoSetup({ nextStep, userHasWebcam }) {
   const { t } = useTranslation();
@@ -49,9 +50,14 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
   // Handle user preferences regarding the camera stream. Defaults are loaded
   // from local storage. That's also why we don't need to uplift this into
   // studio state.
-  const [cameraPreferences, setVideoPreferences] = useState({
+  const [cameraPreferences, setCameraPreferences] = useState({
     deviceId: window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY),
     aspectRatio: window.localStorage.getItem(CAMERA_ASPECT_RATIO_KEY) || 'auto',
+    quality: window.localStorage.getItem(CAMERA_QUALITY_KEY) || 'auto',
+  });
+
+  const [displayPreferences, setDisplayPreferences] = useState({
+    quality: window.localStorage.getItem(DISPLAY_QUALITY_KEY) || 'auto',
   });
 
   // Creates a valid constraints object from the user preferences. The mapping
@@ -68,8 +74,12 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
         default: return {};
       }
     })(),
+    ...(() => {
+      const mapping = { '480p': 480, '720p': 720, '1080p': 1080, '1440p': 1440, '2160p': 2160 };
+      const height = mapping[prefs.quality];
+      return height ? { height: { ideal: height }} : {};
+    })(),
   });
-  const userConstraints = prefsToConstraints(cameraPreferences);
 
   // Callback passed to the components that allow the user to change the
   // preferences. `newPrefs` is merged into the existing preferences, the
@@ -79,11 +89,12 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
     // Merge and update preferences.
     const merged = { ...cameraPreferences, ...newPrefs };
     const constraints = prefsToConstraints(merged);
-    setVideoPreferences(merged);
+    setCameraPreferences(merged);
 
     // Update preferences in local storage. We don't update the device ID
     // though, as that is done below in the `useEffect` invocation.
     window.localStorage.setItem(CAMERA_ASPECT_RATIO_KEY, merged.aspectRatio);
+    window.localStorage.setItem(CAMERA_QUALITY_KEY, merged.quality);
 
     // Apply new preferences by rerequesting camera stream.
     stopUserCapture(userStream, dispatch);
@@ -98,6 +109,20 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
       window.localStorage.setItem(LAST_VIDEO_DEVICE_KEY, cameraDeviceId);
     }
   });
+
+  const updateDisplayPrefs = newPrefs => {
+    // Merge and update preferences.
+    const merged = { ...displayPreferences, ...newPrefs };
+    const constraints = prefsToConstraints(merged);
+    setDisplayPreferences(merged);
+
+    // Update preferences in local storage.
+    window.localStorage.setItem(DISPLAY_QUALITY_KEY, merged.quality);
+
+    // Apply new preferences by rerequesting display stream.
+    stopDisplayCapture(displayStream, dispatch);
+    startDisplayCapture(dispatch, settings, constraints);
+  };
 
   const reselectSource = () => {
     setActiveSource(VIDEO_SOURCE_NONE);
@@ -149,15 +174,22 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
     isDesktop: true,
     stream: state.displayStream,
     allowed: state.displayAllowed,
-    prefs: null, // TODO
-    updatePrefs: null, // TODO
+    prefs: displayPreferences,
+    updatePrefs: updateDisplayPrefs,
     unexpectedEnd: state.displayUnexpectedEnd,
   };
   switch (activeSource) {
     case VIDEO_SOURCE_NONE:
+      const userConstraints = prefsToConstraints(cameraPreferences);
+      const displayConstraints = prefsToConstraints(displayPreferences);
       title = t('sources-video-question');
       hideActionButtons = true;
-      body = <SourceSelection {...{ setActiveSource, userConstraints, userHasWebcam }} />;
+      body = <SourceSelection {...{
+        setActiveSource,
+        userConstraints,
+        displayConstraints,
+        userHasWebcam,
+      }} />;
       break;
 
     case VIDEO_SOURCE_USER:
@@ -224,7 +256,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
   );
 }
 
-const SourceSelection = ({ setActiveSource, userConstraints, userHasWebcam }) => {
+const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints, userHasWebcam }) => {
   const { t } = useTranslation();
 
   const settings = useSettings();
@@ -239,14 +271,14 @@ const SourceSelection = ({ setActiveSource, userConstraints, userHasWebcam }) =>
   };
   const clickDisplay = async () => {
     setActiveSource(VIDEO_SOURCE_DISPLAY);
-    await startDisplayCapture(dispatch, settings);
+    await startDisplayCapture(dispatch, settings, displayConstraints);
   };
   const clickBoth = async () => {
     setActiveSource(VIDEO_SOURCE_BOTH);
     await startUserCapture(dispatch, settings, userConstraints);
     await Promise.all([
       queryMediaDevices(dispatch),
-      startDisplayCapture(dispatch, settings),
+      startDisplayCapture(dispatch, settings, displayConstraints),
     ]);
   };
 
