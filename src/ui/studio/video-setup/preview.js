@@ -218,12 +218,13 @@ const UserSettings = ({ updatePrefs, prefs }) => {
       </td>
     </tr>
     <tr>
-      <td>Aspect ratio:</td>
+      <td>{t('sources-video-aspect-ratio')}:</td>
       <td>
         <RadioButton
           id="ar-auto"
           value="auto"
           name="aspectRatio"
+          label={t('sources-video-aspect-ratio-auto')}
           onChange={changeAspectRatio}
           checked={['4:3', '16:9'].every(x => prefs.aspectRatio !== x)}
         />
@@ -247,7 +248,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
 };
 
 // A styled radio input which looks like a button.
-const RadioButton = ({ id, value, checked, name, onChange }) => {
+const RadioButton = ({ id, value, checked, name, onChange, label }) => {
   return <Fragment>
     <input
       type="radio"
@@ -267,6 +268,6 @@ const RadioButton = ({ id, value, checked, name, onChange }) => {
         },
       }}
     />
-    <label htmlFor={id}>{ value }</label>
+    <label htmlFor={id}>{ label || value }</label>
   </Fragment>;
 };

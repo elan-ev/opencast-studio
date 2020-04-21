@@ -43,6 +43,7 @@
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
   "sources-video-device": "Kamera",
+  "sources-video-aspect-ratio": "Seitenverhältnis",
   "sources-video-aspect-ratio-auto": "auto",
 
   "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
