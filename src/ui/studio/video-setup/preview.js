@@ -116,7 +116,7 @@ const PreviewVideo = ({ input }) => {
 };
 
 const StreamSettings = ({ input }) => {
-  const { isDesktop, updatePrefs, prefs } = input;
+  const { isDesktop, updatePrefs, prefs, stream } = input;
   const [isExpanded, setIsExpanded] = useState(false);
   const expandedHeight = useRef(null);
 
@@ -190,7 +190,7 @@ const StreamSettings = ({ input }) => {
           <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
             <tbody>
               { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
-              <UniveralSettings {...{ isDesktop, updatePrefs, prefs }} />
+              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream }} />
             </tbody>
           </table>
         </div>
@@ -207,12 +207,19 @@ const StreamInfo = ({ stream }) => {
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
 
-const UniveralSettings = ({ isDesktop, updatePrefs, prefs }) => {
+const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream }) => {
   const { t } = useTranslation();
 
   const changeQuality = quality => updatePrefs({ quality });
   const qualities = ['480p', '720p', '1080p', '1440p', '2160p'];
   const kind = isDesktop ? 'desktop' : 'user';
+
+  const [, currentHeight] = dimensionsOf(stream);
+  let fitState;
+  if (currentHeight && qualities.includes(prefs.quality)) {
+    const expectedHeight = parseInt(prefs.quality);
+    fitState = expectedHeight === currentHeight ? 'ok': 'warn';
+  }
 
   return <Fragment>
     <tr>
@@ -234,6 +241,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs }) => {
             name={`quality-${kind}`}
             onChange={changeQuality}
             checked={prefs.quality === q}
+            state={fitState}
           />)
         }
       </td>
@@ -259,6 +267,21 @@ const UserSettings = ({ updatePrefs, prefs }) => {
     }
 
     devices.push(d);
+  }
+
+  const ars = ['4:3', '16:9'];
+  const [width, height] = dimensionsOf(state.userStream);
+  let arState;
+  if (width && height && ars.includes(prefs.aspectRatio)) {
+    const currentAr = width / height;
+    const [w, h] = prefs.aspectRatio.split(':');
+    const expectedAr = Number(w) / Number(h)
+
+    // We have some range we accept as "good". You never know with these
+    // floats...
+    arState = (expectedAr * 0.97 < currentAr && currentAr < expectedAr / 0.97)
+      ? 'ok'
+      : 'warn';
   }
 
   const changeDevice = id => updatePrefs({ deviceId: id });
@@ -290,29 +313,30 @@ const UserSettings = ({ updatePrefs, prefs }) => {
           name="aspectRatio"
           label={t('sources-video-aspect-ratio-auto')}
           onChange={changeAspectRatio}
-          checked={['4:3', '16:9'].every(x => prefs.aspectRatio !== x)}
+          checked={ars.every(x => prefs.aspectRatio !== x)}
         />
-        <RadioButton
-          id="ar-4-3"
-          value="4:3"
-          name="aspectRatio"
-          onChange={changeAspectRatio}
-          checked={prefs.aspectRatio === '4:3'}
-        />
-        <RadioButton
-          id="ar-16-9"
-          value="16:9"
-          name="aspectRatio"
-          onChange={changeAspectRatio}
-          checked={prefs.aspectRatio === '16:9'}
-        />
+        {
+          ars.map(ar => <RadioButton
+            id={`ar-${ar}`}
+            value={ar}
+            name="aspectRatio"
+            onChange={changeAspectRatio}
+            checked={prefs.aspectRatio === ar}
+            state={arState}
+          />)
+        }
       </td>
     </tr>
   </Fragment>;
 };
 
 // A styled radio input which looks like a button.
-const RadioButton = ({ id, value, checked, name, onChange, label }) => {
+const RadioButton = ({ id, value, checked, name, onChange, label, state }) => {
+  const stateColorMap = {
+    'warn': '#ffe300',
+    'ok': '#51d18f',
+  };
+
   return <Fragment>
     <input
       type="radio"
@@ -328,7 +352,8 @@ const RadioButton = ({ id, value, checked, name, onChange, label }) => {
         },
         '&:checked+label': {
           bg: 'gray.0',
-          color: 'white',
+          color: state ? stateColorMap[state] : 'white',
+          fontWeight: 'bold',
         },
       }}
     />
