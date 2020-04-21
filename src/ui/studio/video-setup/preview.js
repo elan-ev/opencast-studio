@@ -118,6 +118,7 @@ const PreviewVideo = ({ input }) => {
 const StreamSettings = ({ input }) => {
   const { isDesktop, updatePrefs, prefs } = input;
   const [isExpanded, setIsExpanded] = useState(false);
+  const expandedHeight = useRef(null);
 
   return (
     <div sx={{
@@ -158,13 +159,18 @@ const StreamSettings = ({ input }) => {
         </div>
       </div>
       <div sx={{
-        height: isExpanded ? '100px' : 0,
+        height: isExpanded ? (expandedHeight.current || 'auto') : 0,
         transition: 'height 0.2s',
         overflow: 'hidden',
         backgroundColor: 'rgba(255, 255, 255, 0.95)',
         fontSize: '18px',
+
       }}>
-        <div sx={{ p: 1 }}>
+        <div
+          // Obtain the actual content height as soon as the element is mounted.
+          ref={r => { if (r) { expandedHeight.current = `${r.offsetHeight}px`; } }}
+          sx={{ p: 1, border: theme => `1px solid ${theme.colors.gray[0]}` }}
+        >
           <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
             <tbody>
               { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
