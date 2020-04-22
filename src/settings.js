@@ -519,6 +519,7 @@ const SCHEMA = {
   },
   upload: {
     enableSeries: 'string',
+    enableDescription: 'string',
     seriesId: 'string',
     workflowId: 'string',
     // This gets some special treatment in `fetchAcl`. After `fetchAcl` is

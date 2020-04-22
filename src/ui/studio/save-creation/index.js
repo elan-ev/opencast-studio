@@ -299,6 +299,8 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
 
   const enabledSeries = useSettings().upload?.enableSeries;
   const displaySeries =  enabledSeries  === 'true' ? 'block' : 'none';
+  const enableDescription = useSettings().upload?.enableDescription;
+  const displayDescription = enableDescription === 'true' ? 'block' : 'none';
 
 
   function handleInputChange(event) {
@@ -347,7 +349,10 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
           onChange={handleInputChange}
         />
       </FormField>
-
+      <div sx={{
+        display : displayDescription,
+        marginBottom : '30px'
+      }}>
        <FormField label={t('save-creation-label-description')}>
             <Input
                 name="description"
@@ -357,6 +362,7 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
                 disabled={uploadState.state === STATE_UPLOADING}
             />
           </FormField>
+      </div>
             <div sx={{
               display : displaySeries,
               marginBottom : '30px'
