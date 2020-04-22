@@ -318,6 +318,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
         {
           ars.map(ar => <RadioButton
             id={`ar-${ar}`}
+            key={`ar-${ar}`}
             value={ar}
             name="aspectRatio"
             onChange={changeAspectRatio}
