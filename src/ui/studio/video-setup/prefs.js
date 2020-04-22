@@ -112,7 +112,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
   const updatePrefs = newPrefs => {
     // Merge and update preferences.
     const merged = { ...prefs, ...newPrefs };
-    const constraints = prefsToConstraints(merged);
+    const constraints = prefsToConstraints(merged, true);
 
     // Update preferences in local storage and re-request stream. The latter
     // will cause the rerender.
