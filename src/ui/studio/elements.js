@@ -81,19 +81,14 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 // Each child in `children` needs to be an object with the following fields:
 //
 // - `body`: the rendered DOM.
-// - `aspectRatio`: the desired aspect ratio for the child.
-// - `extraHeight`: sometimes the rendered child has a fixed extra height (for
-//   example to render a title above or information below the video stream).
-//   This extra height is included in the calculation such that the child minus
-//   this extra height has the perfect `aspectRatio` as given above.
+// - `dimensions`: a function returning `[width, height]` of the child (also
+//   defining the aspect ratio).
 export function VideoBox({ gap = 0, children }) {
   const { ref, width = 1, height = 1 } = useResizeObserver();
 
   // This is a dummy state to force a rerender.
   const [, setForceCounter] = useState(0);
-  const forceRender = () => {
-    setForceCounter(v => v + 1);
-  };
+  const forceRender = () => setForceCounter(v => v + 1);
 
   // Setup the handler for when a video stream is resized.
   let dimensions = children.map(c => c.dimensions());
@@ -110,23 +105,20 @@ export function VideoBox({ gap = 0, children }) {
   switch (children.length) {
     case 1: {
       const child = children[0];
-      const extraChildHeight = child.extraHeight || 0;
       const aspectRatio = ar(child.dimensions());
-
 
       // Calculate size of child
       let childWidth;
       let childHeight;
 
-      const availableHeight = height - extraChildHeight;
-      if (width > availableHeight * aspectRatio) {
+      if (width > height * aspectRatio) {
         // Child height perfectly matches container, extra space left and right
-        childHeight = availableHeight + extraChildHeight;
-        childWidth = availableHeight * aspectRatio;
+        childHeight = height;
+        childWidth = height * aspectRatio;
       } else {
         // Child width perfectly matches container, extra space top and bottom
         childWidth = width;
-        childHeight = (width / aspectRatio) + extraChildHeight;
+        childHeight = (width / aspectRatio);
       }
 
       return (
@@ -163,23 +155,21 @@ export function VideoBox({ gap = 0, children }) {
 
       // Videos side by side (row).
       const { rowWidths, rowHeights } = (() => {
-        const extraHeight = Math.max(children[0].extraHeight || 0, children[1].extraHeight || 0);
-        const availableHeight = height - extraHeight;
         const availableWidth = width - gap;
         const combinedAspectRatio = aspectRatios[0] + aspectRatios[1];
-        if (availableWidth > availableHeight * combinedAspectRatio) {
+        if (availableWidth > height * combinedAspectRatio) {
           // Children height perfectly matches container, extra space left and
           // right.
           return {
-            rowHeights: Array(2).fill(availableHeight + extraHeight),
-            rowWidths: aspectRatios.map(ar => availableHeight * ar),
+            rowHeights: Array(2).fill(height),
+            rowWidths: aspectRatios.map(ar => height * ar),
           };
         } else {
           // Children width perfectly matches container, extra space top and
           // bottom.
           const baseHeight = availableWidth / combinedAspectRatio;
           return {
-            rowHeights: children.map(c => baseHeight + (c.extraHeight || 0)),
+            rowHeights: children.map(c => baseHeight),
             rowWidths: aspectRatios.map(ar => baseHeight * ar),
           }
         }
@@ -187,24 +177,22 @@ export function VideoBox({ gap = 0, children }) {
 
       // One video below the other (col/column).
       const { colWidths, colHeights } = (() => {
-        const extraHeight = gap + (children[0].extraHeight || 0) + (children[1].extraHeight || 0);
-        const availableHeight = height - extraHeight;
         const combinedAspectRatio =
           1 / ((1 / aspectRatios[0]) + (1 / aspectRatios[1]));
 
-        if (width > availableHeight * combinedAspectRatio) {
+        if (width > height * combinedAspectRatio) {
           // Children height perfectly matches container, extra space left and
           // right.
-          const width = availableHeight * combinedAspectRatio;
+          const width = height * combinedAspectRatio;
           return {
-            colHeights: children.map((c, i) => (width / aspectRatios[i]) + (c.extraHeight || 0)),
+            colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),
           };
         } else {
           // Children width perfectly matches container, extra space top and
           // bottom.
           return {
-            colHeights: children.map((c, i) => (width / aspectRatios[i]) + (c.extraHeight || 0)),
+            colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),
           }
         }
