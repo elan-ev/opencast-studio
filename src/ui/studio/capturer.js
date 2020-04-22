@@ -1,3 +1,11 @@
+const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
+  const maxField = maxHeight && { max: maxHeight };
+  const ideal = videoConstraints?.height?.ideal || fallbackIdeal;
+  const idealField = ideal && (maxHeight ? { ideal: Math.min(ideal, maxHeight) } : { ideal });
+
+  return { height: { ...maxField, ...idealField } };
+};
+
 export async function startAudioCapture(dispatch, deviceId = null) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -25,16 +33,14 @@ export async function startDisplayCapture(dispatch, settings, videoConstraints =
   const maxFps = settings.display?.maxFps
     ? { frameRate: { max: settings.display.maxFps } }
     : {};
-  const maxHeight = settings.display?.maxHeight
-    ? { height: { max: settings.display.maxHeight } }
-    : {};
+  const height = mergeHeightConstraint(settings.display?.maxHeight, videoConstraints);
 
   const constraints = {
     video: {
       cursor: 'always',
       ...maxFps,
-      ...maxHeight,
-      ...videoConstraints
+      ...videoConstraints,
+      ...height,
     },
     audio: false,
   };
@@ -60,16 +66,14 @@ export async function startUserCapture(dispatch, settings, videoConstraints) {
   const maxFps = settings.camera?.maxFps
     ? { frameRate: { max: settings.camera.maxFps } }
     : {};
-  const maxHeight = settings.camera?.maxHeight
-    ? { height: { ideal: Math.min(1080, settings.camera.maxHeight), max: settings.camera.maxHeight } }
-    : { height: { ideal: 1080 } };
+  const height = mergeHeightConstraint(settings.camera?.maxHeight, videoConstraints, 1080);
 
   const constraints = {
     video: {
       facingMode: 'user',
-      ...maxFps,
-      ...maxHeight,
       ...videoConstraints,
+      ...maxFps,
+      ...height,
     },
     audio: false,
   };
