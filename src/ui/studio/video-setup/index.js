@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Container, Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -18,7 +18,6 @@ import {
   VIDEO_SOURCE_NONE,
 } from '../../../studio-state';
 import { useSettings } from '../../../settings';
-import { deviceIdOf } from '../../../util';
 
 import Notification from '../../notification';
 
@@ -30,106 +29,23 @@ import {
 } from '../capturer';
 import { ActionButtons } from '../elements';
 import { SourcePreview } from './preview';
+import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 
-
-const LAST_VIDEO_DEVICE_KEY = 'ocStudioLastVideoDevice';
-const CAMERA_ASPECT_RATIO_KEY = 'ocStudioCameraAspectRatio';
-const CAMERA_QUALITY_KEY = 'ocStudioCameraQuality';
-const DISPLAY_QUALITY_KEY = 'ocStudioDisplayQuality';
 
 export default function VideoSetup({ nextStep, userHasWebcam }) {
   const { t } = useTranslation();
 
-  const settings = useSettings();
   const dispatch = useDispatch();
   const state = useStudioState();
   const { displayStream, userStream, videoChoice: activeSource } = state;
   const hasStreams = displayStream || userStream;
+
   const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', payload: s });
-
-  // Handle user preferences regarding the camera stream. Defaults are loaded
-  // from local storage. That's also why we don't need to uplift this into
-  // studio state.
-  const [cameraPreferences, setCameraPreferences] = useState({
-    deviceId: window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY),
-    aspectRatio: window.localStorage.getItem(CAMERA_ASPECT_RATIO_KEY) || 'auto',
-    quality: window.localStorage.getItem(CAMERA_QUALITY_KEY) || 'auto',
-  });
-
-  const [displayPreferences, setDisplayPreferences] = useState({
-    quality: window.localStorage.getItem(DISPLAY_QUALITY_KEY) || 'auto',
-  });
-
-  // Creates a valid constraints object from the user preferences. The mapping
-  // is as follows:
-  //
-  // - deviceId: falsy (-> ignored) or string (-> passed on)
-  // - aspectRatio: '16:9' or '4:3' (-> passed on), ignored on any other value
-  const prefsToConstraints = prefs => ({
-    ...(prefs.deviceId && { deviceId: { ideal: prefs.deviceId }}),
-    ...(() => {
-      switch (prefs.aspectRatio) {
-        case '4:3': return { aspectRatio: { ideal: 4 / 3 }};
-        case '16:9': return { aspectRatio: { ideal: 16 / 9 }};
-        default: return {};
-      }
-    })(),
-    ...(() => {
-      const mapping = { '480p': 480, '720p': 720, '1080p': 1080, '1440p': 1440, '2160p': 2160 };
-      const height = mapping[prefs.quality];
-      return height ? { height: { ideal: height }} : {};
-    })(),
-  });
-
-  // Callback passed to the components that allow the user to change the
-  // preferences. `newPrefs` is merged into the existing preferences, the
-  // resulting preferences are set and the webcam stream is re-requested with
-  // the updated constraints.
-  const updateCameraPrefs = newPrefs => {
-    // Merge and update preferences.
-    const merged = { ...cameraPreferences, ...newPrefs };
-    const constraints = prefsToConstraints(merged);
-    setCameraPreferences(merged);
-
-    // Update preferences in local storage. We don't update the device ID
-    // though, as that is done below in the `useEffect` invocation.
-    window.localStorage.setItem(CAMERA_ASPECT_RATIO_KEY, merged.aspectRatio);
-    window.localStorage.setItem(CAMERA_QUALITY_KEY, merged.quality);
-
-    // Apply new preferences by rerequesting camera stream.
-    stopUserCapture(userStream, dispatch);
-    startUserCapture(dispatch, settings, constraints);
-  };
-
-  // Store the camera device ID in local storage. We do this here, as we also
-  // want to remember the device the user initially selected.
-  useEffect(() => {
-    const cameraDeviceId = deviceIdOf(userStream);
-    if (cameraDeviceId) {
-      window.localStorage.setItem(LAST_VIDEO_DEVICE_KEY, cameraDeviceId);
-    }
-  });
-
-  const updateDisplayPrefs = newPrefs => {
-    // Merge and update preferences.
-    const merged = { ...displayPreferences, ...newPrefs };
-    const constraints = prefsToConstraints(merged);
-    setDisplayPreferences(merged);
-
-    // Update preferences in local storage.
-    window.localStorage.setItem(DISPLAY_QUALITY_KEY, merged.quality);
-
-    // Apply new preferences by rerequesting display stream.
-    stopDisplayCapture(displayStream, dispatch);
-    startDisplayCapture(dispatch, settings, constraints);
-  };
-
   const reselectSource = () => {
     setActiveSource(VIDEO_SOURCE_NONE);
-    stopUserCapture(state.userStream, dispatch);
-    stopDisplayCapture(state.displayStream, dispatch);
+    stopUserCapture(userStream, dispatch);
+    stopDisplayCapture(displayStream, dispatch);
   };
-
 
   const nextDisabled = activeSource === VIDEO_SOURCE_NONE
     || activeSource === VIDEO_SOURCE_BOTH ? (!displayStream || !userStream) : !hasStreams;
@@ -157,31 +73,27 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
     </Notification>
   );
 
-  // The body depends on which source is currently selected.
-  let hideActionButtons;
-  let title;
-  let body;
-
   const userInput = {
     isDesktop: false,
-    stream: state.userStream,
+    stream: userStream,
     allowed: state.userAllowed,
-    prefs: cameraPreferences,
-    updatePrefs: updateCameraPrefs,
     unexpectedEnd: state.userUnexpectedEnd,
   };
   const displayInput = {
     isDesktop: true,
-    stream: state.displayStream,
+    stream: displayStream,
     allowed: state.displayAllowed,
-    prefs: displayPreferences,
-    updatePrefs: updateDisplayPrefs,
     unexpectedEnd: state.displayUnexpectedEnd,
   };
+
+  // The body depends on which source is currently selected.
+  let hideActionButtons;
+  let title;
+  let body;
   switch (activeSource) {
     case VIDEO_SOURCE_NONE:
-      const userConstraints = prefsToConstraints(cameraPreferences);
-      const displayConstraints = prefsToConstraints(displayPreferences);
+      const userConstraints = prefsToConstraints(loadCameraPrefs());
+      const displayConstraints = prefsToConstraints(loadDisplayPrefs());
       title = t('sources-video-question');
       hideActionButtons = true;
       body = <SourceSelection {...{
@@ -194,7 +106,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
 
     case VIDEO_SOURCE_USER:
       title = t('sources-video-user-selected');
-      hideActionButtons = !state.userStream && state.userAllowed !== false;
+      hideActionButtons = !userStream && state.userAllowed !== false;
       body = <SourcePreview
         warnings={[userWarning, unexpectedEndWarning]}
         inputs={[userInput]}
@@ -203,7 +115,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
 
     case VIDEO_SOURCE_DISPLAY:
       title = t('sources-video-display-selected');
-      hideActionButtons = !state.displayStream && state.displayAllowed !== false;
+      hideActionButtons = !displayStream && state.displayAllowed !== false;
       body = <SourcePreview
         warnings={[displayWarning, unexpectedEndWarning]}
         inputs={[displayInput]}
@@ -212,8 +124,8 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
 
     case VIDEO_SOURCE_BOTH:
       title = t('sources-video-display-and-user-selected');
-      hideActionButtons = (!state.userStream && state.userAllowed !== false)
-        || (!state.displayStream && state.displayAllowed !== false);
+      hideActionButtons = (!userStream && state.userAllowed !== false)
+        || (!displayStream && state.displayAllowed !== false);
       body = <SourcePreview
         warnings={[displayWarning, userWarning, unexpectedEndWarning]}
         inputs={[displayInput, userInput]}
