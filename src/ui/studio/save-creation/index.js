@@ -127,16 +127,13 @@ export default function SaveCreation(props) {
 
     dispatch({ type: 'UPLOAD_REQUEST' });
 
-    settings.upload.email = email;
-    settings.upload.visibility = visibility.key;
+    settings.upload.metaData = metaData;
 
     if(settings.upload?.ingestInfoUrl) {
       const result = await getIngestInfo(settings.upload.ingestInfoUrl, metaData);
       console.debug('Ingest Info', result);
       settings.upload.seriesId = result.series.seriesId;
-      settings.upload.source = result.series.source;
-      settings.upload.wf_properties = result.wf_properties;
-      settings.upload.audience = result.audience;
+      settings.upload.ingestInfo = result;
     }
 
     progressHistory.current.push({

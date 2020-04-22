@@ -520,6 +520,7 @@ const SCHEMA = {
   upload: {
     seriesId: 'string',
     ingestInfoUrl: 'string',
+    ingestCallbackUrl: 'string',
     workflowId: 'string',
     // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
     // done, this one of:
