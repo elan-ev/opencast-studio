@@ -48,12 +48,24 @@ export const prefsToConstraints = (prefs, exactDevice = false) => {
 };
 
 // All aspect ratios the user can choose from.
-export const ASPECT_RATIOS = ['4:3', '16:9'];
+const ASPECT_RATIOS = ['4:3', '16:9'];
+
+// All quality options given to the user respecting the `maxHeight` from the
+// settings.
+const qualityOptions = maxHeight => {
+  const defaults = [480, 720, 1080, 1440, 2160];
+  let out = defaults.filter(q => !maxHeight || q <= maxHeight);
+  if (maxHeight && (out.length === 0 || out[out.length - 1] !== maxHeight)) {
+    out.push(maxHeight);
+  }
+
+  return out.map(n => `${n}p`);
+}
 
 // Converts the given aspect ratio label (one of the elements in
 // `ASPECT_RATIOS`) into the numerical ratio, e.g. 4/3 = 1.333. If the argument
 // is not a valid label, `null` is returned.
-export const parseAspectRatio = label => {
+const parseAspectRatio = label => {
   const mapping = {
     '4:3': 4 / 3,
     '16:9': 16 / 9,
@@ -64,7 +76,7 @@ export const parseAspectRatio = label => {
 
 // Converts the given quality label to the actual height as number. If the
 // argument is not a valid quality label (e.g. '720p'), `null` is returned.
-export const parseQuality = label => {
+const parseQuality = label => {
   if (!/^[0-9]+p$/.test(label)) {
     return null;
   }
@@ -203,7 +215,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
           <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
             <tbody>
               { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
-              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream }} />
+              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
             </tbody>
           </table>
         </div>
@@ -220,11 +232,12 @@ const StreamInfo = ({ stream }) => {
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
 
-const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream }) => {
+const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) => {
   const { t } = useTranslation();
 
   const changeQuality = quality => updatePrefs({ quality });
-  const qualities = ['480p', '720p', '1080p', '1440p', '2160p'];
+  const maxHeight = isDesktop ? settings.display?.maxHeight : settings.camera?.maxHeight;
+  const qualities = qualityOptions(maxHeight);
   const kind = isDesktop ? 'desktop' : 'user';
 
   const [, currentHeight] = dimensionsOf(stream);
