@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Flex } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
 
 // A div containing optional "back" and "next" buttons as well as the centered
@@ -72,7 +72,7 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 // `<div>` that maintains this exact aspect ratio. In the one child case, that
 // `<div>` also perfectly fits within the parent container. In the case of two
 // children, those children are laid out in such a way that the utilized screen
-// space is maximized.
+// space is maximized while both children have the same width or height.
 //
 // `children` has to be the length 1 or 2! The parameter `gap` specifies the
 // width of the empty space between the two children in the case that two
@@ -82,7 +82,8 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 //
 // - `body`: the rendered DOM.
 // - `dimensions`: a function returning `[width, height]` of the child (also
-//   defining the aspect ratio).
+//   defining the aspect ratio). We require the dimensions instead of only the
+//   aspect ratio to better detect changes in the video stream.
 export function VideoBox({ gap = 0, children }) {
   const { ref, width = 1, height = 1 } = useResizeObserver();
 
@@ -90,12 +91,26 @@ export function VideoBox({ gap = 0, children }) {
   const [, setForceCounter] = useState(0);
   const forceRender = () => setForceCounter(v => v + 1);
 
+  // We try to remember the last valid dimension. Otherwise, changing video
+  // preferences for a non-16:9 strean leads to visual noise: the box always
+  // changes between its aspect ratio and the fallback 16:9 ratio.
+  const lastDimensions = useRef(children.map(() => [undefined, undefined]));
+  const updateLastDimensions = newDimensions => {
+    newDimensions.forEach(([w, h], i) => {
+      if (w && h) {
+        lastDimensions.current[i] = [w, h];
+      }
+    });
+  }
+
   // Setup the handler for when a video stream is resized.
   let dimensions = children.map(c => c.dimensions());
+  updateLastDimensions(dimensions);
   const resizeVideoBox = () => {
     const newDimensions = children.map(c => c.dimensions());
     if (!equal(newDimensions, dimensions)) {
       dimensions = newDimensions;
+      updateLastDimensions(dimensions);
       forceRender();
     }
   }
@@ -105,7 +120,7 @@ export function VideoBox({ gap = 0, children }) {
   switch (children.length) {
     case 1: {
       const child = children[0];
-      const aspectRatio = ar(child.dimensions());
+      const aspectRatio = ar(lastDimensions.current[0]);
 
       // Calculate size of child
       let childWidth;
@@ -151,7 +166,7 @@ export function VideoBox({ gap = 0, children }) {
       // 1:0.75 respectively. We can now add those, resulting in 1:1.31.
       // Finally, we normalize with respect to height again: 0.76:1
 
-      const aspectRatios = children.map(c => ar(c.dimensions()));
+      const aspectRatios = lastDimensions.current.map(d => ar(d));
 
       // Videos side by side (row).
       const { rowWidths, rowHeights } = (() => {
