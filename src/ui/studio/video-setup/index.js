@@ -91,6 +91,11 @@ export default function VideoSetup(props) {
       <Text>{t('source-display-not-allowed-text')}</Text>
     </Notification>
   );
+  const unexpectedEndWarning = (state.userUnexpectedEnd || state.displayUnexpectedEnd) && (
+    <Notification key="unexpexted-stream-end-warning" isDanger>
+      <Text>{t('error-lost-video-stream')}</Text>
+    </Notification>
+  );
 
   // The body depends on which source is currently selected.
   let hideActionButtons;
@@ -149,10 +154,13 @@ export default function VideoSetup(props) {
       hideActionButtons = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
         reselectSource={reselectSource}
-        warnings={userWarning}
-        inputs={[
-          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed }
-        ]}
+        warnings={[userWarning, unexpectedEndWarning]}
+        inputs={[{
+          kind: t('sources-user'),
+          stream: state.userStream,
+          allowed: state.userAllowed,
+          unexpectedEnd: state.userUnexpectedEnd,
+        }]}
       />;
       break;
 
@@ -161,11 +169,12 @@ export default function VideoSetup(props) {
       hideActionButtons = !state.displayStream && state.displayAllowed !== false;
       body = <SourcePreview
         reselectSource={reselectSource}
-        warnings={displayWarning}
+        warnings={[displayWarning, unexpectedEndWarning]}
         inputs={[{
           kind: t('sources-display'),
           stream: state.displayStream,
           allowed: state.displayAllowed,
+          unexpectedEnd: state.displayUnexpectedEnd,
         }]}
       />;
       break;
@@ -176,14 +185,20 @@ export default function VideoSetup(props) {
         || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
         reselectSource={reselectSource}
-        warnings={[displayWarning, userWarning]}
+        warnings={[displayWarning, userWarning, unexpectedEndWarning]}
         inputs={[
           {
             kind: t('sources-display'),
             stream: state.displayStream,
             allowed: state.displayAllowed,
+            unexpectedEnd: state.displayUnexpectedEnd,
           },
-          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed },
+          {
+            kind: t('sources-user'),
+            stream: state.userStream,
+            allowed: state.userAllowed,
+            unexpectedEnd: state.userUnexpectedEnd,
+          },
         ]}
       />;
       break;

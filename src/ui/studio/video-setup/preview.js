@@ -56,7 +56,7 @@ function StreamPreview({ input, text }) {
 
   return (
     <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-      <PreviewVideo allowed={input.allowed} stream={stream} />
+      <PreviewVideo allowed={input.allowed} unexpectedEnd={input.unexpectedEnd} stream={stream} />
       <Text p={2} color="muted" sx={{ height: `${SUBBOX_HEIGHT}px` }}>
         {text}
         {track && `: ${width}×${height}`}
@@ -65,7 +65,7 @@ function StreamPreview({ input, text }) {
   );
 }
 
-export const PreviewVideo = ({ allowed, stream, ...props }) => {
+export const PreviewVideo = ({ allowed, stream, unexpectedEnd, ...props }) => {
   const resizeVideoBox = useVideoBoxResize();
 
   const videoRef = useRef();
@@ -87,7 +87,7 @@ export const PreviewVideo = ({ allowed, stream, ...props }) => {
 
   if (!stream) {
     let inner;
-    if (allowed === false) {
+    if (allowed === false || unexpectedEnd) {
       inner = <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />;
     } else {
       inner = <Spinner size="75"/>;

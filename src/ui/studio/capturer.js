@@ -42,7 +42,7 @@ export async function startDisplayCapture(dispatch, settings) {
     const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
     stream.getTracks().forEach(track => {
       track.onended = () => {
-        dispatch({ type: 'UNSHARE_DISPLAY' });
+        dispatch({ type: 'DISPLAY_UNEXPETED_END' });
       };
     });
 
@@ -76,7 +76,7 @@ export async function startUserCapture(dispatch, settings) {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     stream.getTracks().forEach(track => {
       track.onended = () => {
-        dispatch({ type: 'UNSHARE_USER' });
+        dispatch({ type: 'USER_UNEXPETED_END' });
       };
     });
     dispatch({ type: 'SHARE_USER', payload: stream });

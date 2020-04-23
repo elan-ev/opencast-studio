@@ -64,6 +64,9 @@
   "back-button-label": "Zurück",
   "next-button-label": "Weiter",
 
+  "error-lost-video-stream": "Video-Stream endete unerwartet! Wurde eine Kamera getrennt oder haben Sie versehentlich die Videofreigabe beendet?",
+  "error-lost-video-stream-end-recording": "Infolgedessen wurde die aktive Aufnahme vorzeitig beendet.",
+
   "review-heading": "Zufrieden mit der Aufnahme?",
   "review-error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
 

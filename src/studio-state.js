@@ -32,16 +32,18 @@ const initialState = () => ({
 
   displayAllowed: null,
   displayStream: null,
+  displayUnexpectedEnd: false,
   displaySupported: isDisplayCaptureSupported(),
 
   userAllowed: null,
   userStream: null,
+  userUnexpectedEnd: false,
   userSupported: isUserCaptureSupported(),
 
   audioChoice: NONE,
 
   isRecording: false,
-
+  prematureRecordingEnd: false,
   recordings: [],
 
   upload: {
@@ -67,28 +69,42 @@ const reducer = (state, action) => {
       return { ...state, audioStream: null };
 
     case 'SHARE_DISPLAY':
-      return { ...state, displayStream: action.payload, displayAllowed: true };
+      return {
+        ...state,
+        displayStream: action.payload,
+        displayAllowed: true,
+        displayUnexpectedEnd: false,
+      };
 
     case 'BLOCK_DISPLAY':
-      return { ...state, displayStream: null, displayAllowed: false };
+      return { ...state, displayStream: null, displayAllowed: false, displayUnexpectedEnd: false };
 
     case 'UNSHARE_DISPLAY':
-      return { ...state, displayStream: null };
+      return { ...state, displayStream: null, displayUnexpectedEnd: false };
+
+    case 'DISPLAY_UNEXPETED_END':
+      return { ...state, displayStream: null, displayUnexpectedEnd: true };
 
     case 'SHARE_USER':
-      return { ...state, userStream: action.payload, userAllowed: true };
+      return { ...state, userStream: action.payload, userAllowed: true, userUnexpectedEnd: false };
 
     case 'BLOCK_USER':
-      return { ...state, userStream: null, userAllowed: false };
+      return { ...state, userStream: null, userAllowed: false, userUnexpectedEnd: false };
 
     case 'UNSHARE_USER':
-      return { ...state, userStream: null };
+      return { ...state, userStream: null, userUnexpectedEnd: false };
+
+    case 'USER_UNEXPETED_END':
+      return { ...state, userStream: null, userUnexpectedEnd: true };
 
     case 'START_RECORDING':
       return { ...state, isRecording: true };
 
     case 'STOP_RECORDING':
       return { ...state, isRecording: false };
+
+    case 'STOP_RECORDING_PREMATURELY':
+      return { ...state, isRecording: false, prematureRecordingEnd: true };
 
     case 'CLEAR_RECORDINGS':
       return { ...state, recordings: [] };
