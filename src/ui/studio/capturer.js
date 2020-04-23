@@ -6,7 +6,7 @@ export async function startAudioCapture(dispatch, deviceId = null) {
     });
     stream.getTracks().forEach(track => {
       track.onended = () => {
-        dispatch({ type: 'UNSHARE_AUDIO' });
+        dispatch({ type: 'AUDIO_UNEXPETED_END' });
       };
     });
 

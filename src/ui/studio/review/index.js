@@ -44,9 +44,7 @@ export default function Review(props) {
 
       { prematureRecordingEnd && (
         <Notification isDanger>
-          <Text>
-            {t('error-lost-video-stream')} {t('error-lost-video-stream-end-recording')}
-          </Text>
+          <Text>{t('error-lost-stream-end-recording')}</Text>
         </Notification>
       )}
 

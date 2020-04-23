@@ -52,6 +52,11 @@ export default function Recording(props) {
           <Text>{t('error-lost-video-stream')}</Text>
         </Notification>
       )}
+      { state.audioUnexpectedEnd && (
+        <Notification isDanger>
+          <Text>{t('error-lost-audio-stream')}</Text>
+        </Notification>
+      )}
 
       <MediaDevices recordingState={recordingState} />
 

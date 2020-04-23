@@ -45,13 +45,15 @@ export default function RecordingControls({
     userStream,
     userUnexpectedEnd,
     displayUnexpectedEnd,
+    audioUnexpectedEnd,
   } = useStudioState();
 
 
   const desktopRecorder = useRef(null);
   const videoRecorder = useRef(null);
 
-  const canRecord = (displayStream || userStream) && !userUnexpectedEnd && ! displayUnexpectedEnd;
+  const canRecord = (displayStream || userStream)
+    && !userUnexpectedEnd && !displayUnexpectedEnd && !audioUnexpectedEnd;
 
   const history = useHistory();
 
@@ -98,7 +100,8 @@ export default function RecordingControls({
   };
 
   useEffect(() => {
-    if ((userUnexpectedEnd || displayUnexpectedEnd) && recordingState === STATE_RECORDING) {
+    const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
+    if (unexpectedEnd && recordingState === STATE_RECORDING) {
       stop(true);
     }
 

@@ -28,6 +28,7 @@ export let metaData = { ...defaultMetaData };
 const initialState = () => ({
   audioAllowed: null,
   audioStream: null,
+  audioUnexpectedEnd: false,
   audioSupported: isUserCaptureSupported(),
 
   displayAllowed: null,
@@ -60,13 +61,21 @@ const reducer = (state, action) => {
       return { ...state, audioChoice: action.payload };
 
     case 'SHARE_AUDIO':
-      return { ...state, audioStream: action.payload, audioAllowed: true };
+      return {
+        ...state,
+        audioStream: action.payload,
+        audioAllowed: true,
+        audioUnexpectedEnd: false,
+      };
 
     case 'BLOCK_AUDIO':
-      return { ...state, audioStream: null, audioAllowed: false };
+      return { ...state, audioStream: null, audioAllowed: false, audioUnexpectedEnd: false };
 
     case 'UNSHARE_AUDIO':
-      return { ...state, audioStream: null };
+      return { ...state, audioStream: null, audioUnexpectedEnd: false };
+
+    case 'AUDIO_UNEXPETED_END':
+      return { ...state, audioStream: null, audioUnexpectedEnd: true };
 
     case 'SHARE_DISPLAY':
       return {
