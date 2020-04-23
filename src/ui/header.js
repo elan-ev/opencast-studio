@@ -137,6 +137,7 @@ const Navigation = props => {
     <Fragment>
       <button
         onClick={toggleMenu}
+        title={t('nav-open-menu-button')}
         sx={{
           display: ['inline-block', 'none'],
           border: theme => `2px solid ${theme.colors.gray[3]}`,
@@ -184,13 +185,28 @@ const Navigation = props => {
           scrollX: ['none', 'auto'],
         }}
       >
-        <NavElement target="/" icon={faVideo} onClick={closeMenu}>
+        <NavElement
+          title={t('nav-recording')}
+          target="/"
+          icon={faVideo}
+          onClick={closeMenu}
+        >
           {t('nav-recording')}
         </NavElement>
-        <NavElement target="/settings" icon={faWrench} onClick={closeMenu}>
+        <NavElement
+          title={t('nav-settings')}
+          target="/settings"
+          icon={faWrench}
+          onClick={closeMenu}
+        >
           {t('nav-settings')}
         </NavElement>
-        <NavElement target="/about" icon={faInfoCircle} onClick={closeMenu}>
+        <NavElement
+          title={t('nav-about')}
+          target="/about"
+          icon={faInfoCircle}
+          onClick={closeMenu}
+        >
           {t('nav-about')}
         </NavElement>
       </nav>

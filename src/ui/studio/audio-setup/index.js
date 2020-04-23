@@ -118,6 +118,7 @@ const OptionButton = ({ children, icon, label, selected, onClick }) => {
   return (
     <button
       onClick={() => selected || onClick() }
+      title={label}
       sx={{
         fontFamily: 'inherit',
         color: 'gray.0',
