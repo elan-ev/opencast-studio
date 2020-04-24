@@ -116,7 +116,7 @@ const reducer = (state, action) => {
       return { ...state, isRecording: false, prematureRecordingEnd: true };
 
     case 'CLEAR_RECORDINGS':
-      return { ...state, recordings: [] };
+      return { ...state, recordings: [], prematureRecordingEnd: false };
 
     case 'ADD_RECORDING':
       // We remove all recordings with the same device type as the new one. This
