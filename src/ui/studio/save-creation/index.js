@@ -272,6 +272,7 @@ const DownloadBox = ({ recordings, dispatch }) => (
 // to settings.
 const ConnectionUnconfiguredWarning = () => {
   const location = useLocation();
+
   return (
     <Notification key="opencast-connection" isDanger>
       <Trans i18nKey="warning-missing-connection-settings">
@@ -289,18 +290,13 @@ const ConnectionUnconfiguredWarning = () => {
 
 const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
   const { t } = useTranslation();
-  let series = opencast.getFinalSeriesTitles();
-  let titles = [];
-  for (let keys of series.keys()){
-    let tmp = {value:keys,label:series.get(keys)};
-    titles.push(tmp);
+  const settings = useSettings();
+  const series = opencast.getFinalSeriesTitles();
+  const titles = [];
+  for (const keys of series.keys()){
+    titles.push({ value:keys,
+                  label:series.get(keys)});
   }
-
-
-  const enabledSeries = useSettings().upload?.enableSeries;
-  const displaySeries =  enabledSeries  === 'true' ? 'block' : 'none';
-  const enableDescription = useSettings().upload?.enableDescription;
-  const displayDescription = enableDescription === 'true' ? 'block' : 'none';
 
 
   function handleInputChange(event) {
@@ -349,35 +345,26 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
           onChange={handleInputChange}
         />
       </FormField>
-      <div sx={{
-        display : displayDescription,
-        marginBottom : '30px'
-      }}>
-       <FormField label={t('save-creation-label-description')}>
-            <Input
-                name="description"
-                autoComplete="off"
-                defaultValue={metaData.description}
-                onChange={handleInputChange}
-                disabled={uploadState.state === STATE_UPLOADING}
-            />
-          </FormField>
-      </div>
-            <div sx={{
-              display : displaySeries,
-              marginBottom : '30px'
-            }}>
-
-                <FormField label={t('save-creation-label-series')}>
-                  <Select
-                    name="series"
-                    autoComplete="off"
-                    options={titles}
-                    onChange={handleSelectChange}
-                    disabled={uploadState.state === STATE_UPLOADING}
-                    />
-                </FormField>
-            </div>
+      {settings.upload?.userProvidedDescription &&
+      <FormField label={t('save-creation-label-description')}>
+        <Input
+          name="description"
+          autoComplete="off"
+          defaultValue={metaData.description}
+          onChange={handleInputChange}
+          disabled={uploadState.state === STATE_UPLOADING}
+        />
+      </FormField>  }
+      {settings.upload?.enableSeriesSelection && !settings.upload?.hasOwnProperty('seriesId') &&
+      <FormField label={t('save-creation-label-series')}>
+        <Select
+          name="series"
+          autoComplete="off"
+          options={titles}
+          onChange={handleSelectChange}
+          disabled={uploadState.state === STATE_UPLOADING}
+          />
+      </FormField>}
 
       <Button onClick={handleUpload} disabled={recordings.length === 0}>
         <FontAwesomeIcon icon={faUpload} />

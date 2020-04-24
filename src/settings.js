@@ -518,8 +518,8 @@ const SCHEMA = {
     loginProvided: 'boolean',
   },
   upload: {
-    enableSeries: 'string',
-    enableDescription: 'string',
+    enableSeriesSelection: 'boolean',
+    userProvidedDescription: 'boolean',
     seriesId: 'string',
     workflowId: 'string',
     // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
