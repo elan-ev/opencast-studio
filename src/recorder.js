@@ -41,7 +41,11 @@ export default class Recorder {
       const mimeType = _recData[0]?.type || this.recorder.mimeType;
       const media = new Blob(_recData, { type: mimeType });
       const url = URL.createObjectURL(media);
+
+      // Reset this state.
       this.recorder = null;
+      this.isRecording = false;
+
       options.onStop && options.onStop({ url, media, mimeType, dimensions });
     };
 
@@ -71,7 +75,8 @@ export default class Recorder {
   }
 
   stop() {
-    this.recorder.stop();
-    this.isRecording = false;
+    if (this.isRecording) {
+      this.recorder.stop();
+    }
   }
 }

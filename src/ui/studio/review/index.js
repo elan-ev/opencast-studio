@@ -3,7 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 
 import React, { useEffect } from 'react';
-import { Flex, Spinner } from '@theme-ui/components';
+import { Flex, Spinner, Text } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 
 import { ActionButtons, VideoBox } from '../elements';
@@ -14,7 +14,7 @@ import Notification from '../../notification';
 export default function Review(props) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
-  const { recordings } = useStudioState();
+  const { recordings, prematureRecordingEnd } = useStudioState();
   const emptyRecording = recordings.some(rec => rec.media.size === 0);
 
   const handleBack = () => {
@@ -41,6 +41,12 @@ export default function Review(props) {
       <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
         {t('review-heading')}
       </Styled.h1>
+
+      { prematureRecordingEnd && (
+        <Notification isDanger>
+          <Text>{t('error-lost-stream-end-recording')}</Text>
+        </Notification>
+      )}
 
       { emptyRecording && (
         <Notification isDanger>{t('review-error-empty-recording')}</Notification>

@@ -26,8 +26,7 @@ export default function AudioSetup(props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const state = useStudioState();
-  const audioStream = state.audioStream;
-  const audioAllowed = state.audioAllowed;
+  const { audioStream, audioAllowed, audioUnexpectedEnd } = state;
 
   const nextIsDisabled = state.audioChoice === NONE
     || state.audioChoice === MICROPHONE_REQUEST
@@ -79,7 +78,7 @@ export default function AudioSetup(props) {
         <OptionButton
           icon={faMicrophone}
           label={t('sources-audio-microphone')}
-          selected={state.audioChoice === MICROPHONE}
+          selected={state.audioChoice === MICROPHONE && !audioUnexpectedEnd}
           onClick={selectMicrophone}
         >
           { state.audioChoice === MICROPHONE_REQUEST && <Spinner size="75"/> }
@@ -90,6 +89,11 @@ export default function AudioSetup(props) {
                 {t('source-audio-not-allowed-title')}
               </Heading>
               <Text variant='text'>{t('source-audio-not-allowed-text')}</Text>
+            </Notification>
+          )}
+          { audioUnexpectedEnd && (
+            <Notification isDanger sx={{ mt: 2 }}>
+              <Text variant='text'>{t('error-lost-audio-stream')}</Text>
             </Notification>
           )}
         </OptionButton>
