@@ -209,6 +209,8 @@ export default function VideoSetup(props) {
       return <p>Something went very wrong</p>;
   };
 
+  const hideReselectSource = hideActionButtons
+    && !state.userUnexpectedEnd && !state.displayUnexpectedEnd;
 
   return (
     <Container
@@ -228,8 +230,11 @@ export default function VideoSetup(props) {
       { activeSource !== VIDEO_SOURCE_NONE && <div sx={{ mb: 3 }} /> }
 
       { activeSource !== VIDEO_SOURCE_NONE && <ActionButtons
-        next={hideActionButtons ? null : { onClick: () => props.nextStep(), disabled: nextDisabled }}
-        prev={hideActionButtons ? null : {
+        next={hideActionButtons ? null : {
+          onClick: () => props.nextStep(),
+          disabled: nextDisabled,
+        }}
+        prev={hideReselectSource ? null : {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
