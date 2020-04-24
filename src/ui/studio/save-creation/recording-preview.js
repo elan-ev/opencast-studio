@@ -87,6 +87,7 @@ const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded, b
       </div>
       <Button
         as="a"
+        title={t('save-creation-download-button')}
         sx={{
           width: '100%',
           maxWidth: '215px',

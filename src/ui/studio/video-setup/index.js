@@ -228,6 +228,7 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
     <button
       onClick={onClick}
       disabled={disabled}
+      title={label}
       sx={{
         fontFamily: 'inherit',
         color: disabled ? 'gray.2' : 'gray.0',

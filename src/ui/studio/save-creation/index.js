@@ -231,6 +231,7 @@ export default function SaveCreation(props) {
         { !possiblyDone ? null : (
           <Button
             sx={{ whiteSpace: 'nowrap' }}
+            title={t('save-creation-new-recording')}
             onClick={handleNewRecording}
           >
             <FontAwesomeIcon icon={faRedoAlt} />
@@ -331,7 +332,11 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
         />
       </FormField>
 
-      <Button onClick={handleUpload} disabled={recordings.length === 0}>
+      <Button
+        title={t('save-creation-button-upload')}
+        onClick={handleUpload}
+        disabled={recordings.length === 0}
+      >
         <FontAwesomeIcon icon={faUpload} />
         { buttonLabel }
       </Button>
