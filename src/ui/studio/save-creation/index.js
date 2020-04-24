@@ -104,7 +104,7 @@ export default function SaveCreation(props) {
       }
 
       const lastProgress = progressHistory[progressHistory.length - 1];
-      const timeSinceLastUpdate = Date.now() - lastProgress.timestamp;
+      const timeSinceLastUpdate = Date.now() - (lastProgress?.timestamp || 0);
       if (timeSinceLastUpdate > 3000) {
         onProgress(lastProgress.progress)
       }
