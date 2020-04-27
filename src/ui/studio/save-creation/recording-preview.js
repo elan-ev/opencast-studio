@@ -9,10 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 import { recordingFileName } from '../../../util.js';
 
-const RecordingPreview = ({ deviceType, url, mimeType, onDownload, downloaded, blob }) => {
+
+const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
   const { t, i18n } = useTranslation();
-  const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
-  const downloadName = recordingFileName(mimeType, flavor);
+  const { deviceType, mimeType, url, downloaded, media: blob } = recording
+
+  const flavor = deviceType === 'desktop' ? t('sources-display') : t('sources-user');
+  const downloadName = recordingFileName({ mimeType, flavor, title, presenter });
 
   if (!url) {
     return null;
