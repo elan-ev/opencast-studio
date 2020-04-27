@@ -72,8 +72,10 @@ export const mimeToExt = mime => {
 // given `flavor`. The latter should be either `presenter` or `presentation`.
 // `mime` can be null or a string and is converted to a file extension on a best
 // effort basis.
-export const recordingFileName = (mime, flavor) => {
-  return `oc-studio-${nowAsString()}-${flavor}.${mimeToExt(mime)}`;
+export const recordingFileName = ({ mime, flavor, title, presenter }) => {
+  const titlePart = title ? ` - ${title}` : '';
+  const presenterPart = presenter ? ` - ${presenter}` : '';
+  return `${nowAsString()}${titlePart}${presenterPart} (${flavor}, OC Studio).${mimeToExt(mime)}`;
 };
 
 const nowAsString = () => {
@@ -83,7 +85,7 @@ const nowAsString = () => {
   return ''
     + now.getFullYear() + '-'
     + pad2(now.getMonth() + 1) + '-'
-    + pad2(now.getDate()) + '_'
+    + pad2(now.getDate()) + ' '
     + pad2(now.getHours()) + '-'
     + pad2(now.getMinutes());
 };

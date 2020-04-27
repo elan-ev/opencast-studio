@@ -20,15 +20,6 @@ export const STATE_UPLOADING = 'uploading';
 export const STATE_UPLOADED = 'uploaded';
 export const STATE_ERROR = 'error';
 
-// We use this global variable (scoped to this module) to save all metadata
-// changes. We don't want to use state as that would lead to many useless
-// rerenders.
-const defaultMetaData = {
-  title: '',
-  presenter: '',
-};
-export let metaData = { ...defaultMetaData };
-
 
 const initialState = () => ({
   audioAllowed: null,
@@ -52,6 +43,9 @@ const initialState = () => ({
   isRecording: false,
   prematureRecordingEnd: false,
   recordings: [],
+
+  title: '',
+  presenter: '',
 
   upload: {
     error: null,
@@ -164,8 +158,13 @@ const reducer = (state, action) => {
       ));
       return { ...state, recordings: mapped };
 
+    case 'UPDATE_TITLE':
+      return { ...state, title: action.payload };
+
+    case 'UPDATE_PRESENTER':
+      return { ...state, presenter: action.payload };
+
     case 'RESET':
-      metaData = { ...defaultMetaData };
       return initialState();
 
     default:

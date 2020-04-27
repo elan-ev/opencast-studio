@@ -245,7 +245,9 @@ export class Opencast {
       }
 
       // Add all recordings (this is the actual upload).
-      mediaPackage = await this.uploadTracks({ mediaPackage, recordings, onProgress });
+      mediaPackage = await this.uploadTracks(
+        { mediaPackage, recordings, onProgress, title, creator }
+      );
 
       // Finalize/ingest media package
       await this.finishIngest({ mediaPackage, uploadSettings });
@@ -291,7 +293,7 @@ export class Opencast {
 
   // Uploads the given recordings to the current ingest process via
   // `ingest/addTrack`. Do not call this method outside of `upload`!
-  async uploadTracks({ mediaPackage, recordings, onProgress }) {
+  async uploadTracks({ mediaPackage, recordings, onProgress, title, creator }) {
     const totalBytes = recordings.map(r => r.media.size).reduce((a, b) => a + b, 0);
     let finishedTracksBytes = 0;
 
@@ -305,7 +307,7 @@ export class Opencast {
       }
 
       const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
-      const downloadName = recordingFileName(mimeType, flavor);
+      const downloadName = recordingFileName({ mimeType, flavor, title, presenter: creator });
 
       const body = new FormData();
       body.append('mediaPackage', mediaPackage);

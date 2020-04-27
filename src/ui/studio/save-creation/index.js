@@ -12,7 +12,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
 import { useSettings } from '../../../settings';
 import {
-  metaData,
   useDispatch,
   useStudioState,
   STATE_ERROR,
@@ -38,7 +37,7 @@ export default function SaveCreation(props) {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState } = useStudioState();
+  const { recordings, upload: uploadState, title, presenter } = useStudioState();
   const dispatch = useDispatch();
 
   function handleBack() {
@@ -114,15 +113,10 @@ export default function SaveCreation(props) {
   });
 
   async function handleUpload() {
-    const { title, presenter } = metaData;
-
     if (title === '' || presenter === '') {
       dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
       return;
     }
-
-    // Store the presenter name in local storage
-    window.localStorage.setItem(LAST_PRESENTER_KEY, presenter);
 
     dispatch({ type: 'UPLOAD_REQUEST' });
     progressHistory.push({
@@ -179,7 +173,7 @@ export default function SaveCreation(props) {
       case STATE_UPLOADED:
         return <UploadSuccess />;
       default: // STATE_NOT_UPLOADED or STATE_ERROR
-        return <UploadForm {...{ opencast, uploadState, recordings, handleUpload }} />
+        return <UploadForm {...{ uploadState, handleUpload }} />
     }
   })();
 
@@ -215,7 +209,7 @@ export default function SaveCreation(props) {
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
           >{t('save-creation-subsection-title-download')}</Styled.h2>
 
-          <DownloadBox recordings={recordings} dispatch={dispatch} />
+          <DownloadBox recordings={recordings} dispatch={dispatch} {...{ title, presenter }} />
         </div>
       </div>
 
@@ -243,7 +237,7 @@ export default function SaveCreation(props) {
   );
 }
 
-const DownloadBox = ({ recordings, dispatch }) => (
+const DownloadBox = ({ recordings, dispatch, presenter, title }) => (
   <div sx={{
     display: 'flex',
     flexDirection: 'row',
@@ -254,11 +248,9 @@ const DownloadBox = ({ recordings, dispatch }) => (
       recordings.map((recording, index) => (
         <RecordingPreview
           key={index}
-          deviceType={recording.deviceType}
-          mimeType={recording.mimeType}
-          url={recording.url}
-          downloaded={recording.downloaded}
-          blob={recording.media}
+          recording={recording}
+          presenter={presenter}
+          title={title}
           onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
         />
       ))
@@ -286,19 +278,32 @@ const ConnectionUnconfiguredWarning = () => {
   );
 }
 
-const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
+const UploadForm = ({ uploadState, handleUpload }) => {
   const { t } = useTranslation();
+  const opencast = useOpencast();
+  const dispatch = useDispatch();
+  const { recordings, title, presenter } = useStudioState();
 
   function handleInputChange(event) {
     const target = event.target;
-    metaData[target.name] = target.value;
+    dispatch({
+      type: { title: 'UPDATE_TITLE', presenter: 'UPDATE_PRESENTER' }[target.name],
+      payload: target.value,
+    });
+
+    if (target.name === 'presenter') {
+      window.localStorage.setItem(LAST_PRESENTER_KEY, target.value);
+    }
   }
 
   // If the user has not yet changed the value of the field and the last used
   // presenter name is used in local storage, use that.
-  const presenterValue
-    = metaData.presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
-  metaData.presenter = presenterValue;
+  const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
+  useEffect(() => {
+    if (presenterValue !== presenter) {
+      dispatch({ type: 'UPDATE_PRESENTER', payload: presenterValue });
+    }
+  });
 
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
@@ -318,7 +323,7 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
         <Input
           name="title"
           autoComplete="off"
-          defaultValue={metaData.title}
+          defaultValue={title}
           onChange={handleInputChange}
         />
       </FormField>
