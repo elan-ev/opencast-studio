@@ -41,8 +41,7 @@
   "source-display-not-allowed-title": "Toegang tot het beeldscherm is niet mogelijk",
   "source-display-not-allowed-text": "Probeer de bron opnieuw te selecteren. Mocht dat niet werken, laadt u deze pagina dan opnieuw of staat u deze pagina handmatig toe om toegang te krijgen tot uw beeldscherm (meestal door op een knop naast de adresbalk van uw browser te klikken).",
   "source-user-not-allowed-title": "Toegang tot de camera is niet mogelijk",
-  "source-user-not-allowed-text": "Probeer de bron opnieuw te selecteren. Mocht dat niet werken, laadt u deze pagina dan opnieuw of staat u deze pagina handmatig toe om toegang te krijgen tot uw beeldscherm (meestal door op een knop naast de adresbalk van uw browser te klikken).
-  Probeer ook andere toepassingen die deze camera gebruiken af te sluiten: op sommige systemen kunnen camera's niet door meerdere programma' s tegelijk worden gebruikt.",
+  "source-user-not-allowed-text": "Probeer de bron opnieuw te selecteren. Mocht dat niet werken, laadt u deze pagina dan opnieuw of staat u deze pagina handmatig toe om toegang te krijgen tot uw beeldscherm (meestal door op een knop naast de adresbalk van uw browser te klikken). Probeer ook andere toepassingen die deze camera gebruiken af te sluiten: op sommige systemen kunnen camera's niet door meerdere programma' s tegelijk worden gebruikt.",
   "source-audio-not-allowed-title": "Toegang tot de microfoon niet mogelijk.",
   "source-audio-not-allowed-text": "Probeer 'Geen Audio' te selecteren en dan weer 'Microfoon'. Als dat niet werkt, laadt u deze pagina opnieuw of staat u deze pagina handmatig toe om toegang te krijgen tot uw microfoon (meestal met behulp van een knop naast de adresbalk van uw browser).",
   "sources-audio-question": "Audio opnemen?",
