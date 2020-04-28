@@ -24,6 +24,7 @@ const defaultMetaData = {
   email: '',
   series: { key: '-1', value: '' },
   visibility: {key: '-1', value: ''},
+  edit: false,
 };
 export let metaData = { ...defaultMetaData };
 

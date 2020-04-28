@@ -307,6 +307,9 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
         value: target.options[target.selectedIndex].text,
       }
     }
+    if (target.type === 'checkbox') {
+      value = target.checked;
+    }
     metaData[target.name] = value;
 
     if (target.name === 'series') {
@@ -315,7 +318,7 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
       if (isCourse) {
         visibility.value = '2';
         metaData['visibility'] = {
-          key: visibility.value, 
+          key: visibility.value,
           value: visibility.options[visibility.selectedIndex].text
         };
       }
@@ -400,6 +403,15 @@ const UploadForm = ({ opencast, uploadState, recordings, handleUpload }) => {
               </option>
             ))}
           </select>
+        </FormField>
+
+        <FormField label={t('save-creation-label-edit')}>
+          <input
+            name="edit"
+            defaultChecked={metaData.edit}
+            onChange={handleInputChange}
+            type="checkbox"
+          />
         </FormField>
 
       <Button onClick={handleUpload} disabled={recordings.length === 0}>

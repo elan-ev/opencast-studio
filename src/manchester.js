@@ -40,7 +40,7 @@ export async function db_addVideoDetails(mediapackage, workflow, uploadSettings)
   body.append('start', start);
   body.append('visibleType', visibileType);
 
-  const retval = {};
+  let retval = {};
   try {
     const response = await fetch(uploadSettings.ingestCallbackUrl, {
       credentials: 'same-origin',

@@ -374,6 +374,13 @@ export class Opencast {
     const workflowId = uploadSettings?.workflowId;
     const wf_properties = uploadSettings?.ingestInfo.wf_properties ?? [];
 
+    const edit = uploadSettings.metaData?.edit;
+    const email = uploadSettings.metaData?.email;
+    wf_properties.push({'key': 'editRecording', 'value': edit});
+    if (edit) {
+      wf_properties.push({'key': 'emailAddresses', 'value': email});
+    }
+
     const body = new FormData();
     body.append('mediaPackage', mediaPackage);
     if (workflowId) {
