@@ -206,7 +206,7 @@ const base = {
     },
     progress: {
       bg: '#ebebeb',
-      color: '#2fd682',
+      color: '#4ab57f',
       height: '8px',
     }
   },

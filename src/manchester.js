@@ -1,10 +1,10 @@
-export async function getIngestInfo(ingestInfoUrl, metaData) {
-  const code = metaData.series.key;
-  const title = metaData.series.value;
-  const visibility = metaData.visibility.key;
+export async function getIngestInfo(ingestInfoUrl, series, visibility) {
+  const code = series.key;
+  const title = series.value;
+  const visibile = visibility.key;
 
   const url = ingestInfoUrl + '?code=' + encodeURIComponent(code) + '&title=' +
-    encodeURIComponent(title) + '&visibility=' + encodeURIComponent(visibility);
+    encodeURIComponent(title) + '&visibility=' + encodeURIComponent(visibile);
 
   const response = await fetch(url, {
     credentials: 'same-origin',

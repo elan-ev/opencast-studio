@@ -54,7 +54,7 @@ function LegalNotices() {
 function About(props) {
   return (
     <Container>
-      <article>
+      <article sx={{ maxWidth: '900px', margin: '0 auto' }}>
         <header>
           <Styled.h1>Opencast Studio</Styled.h1>
         </header>
@@ -82,8 +82,17 @@ function About(props) {
           <React.Fragment>
             <Styled.h2>Support</Styled.h2>
             <Styled.p>
-              If you are interested in additional development or want to introduce Opencast Studio
-              at your university, please contact{' '}
+              If you are experiencing any difficulties or found any bugs,
+              please take a look at the{' '}
+              <Styled.a href="https://github.com/elan-ev/opencast-studio/issues">
+                issue tracker on GitHub
+              </Styled.a>.
+              Before filing a new issue, please check if one about your topic already exists.
+              We regularly check incoming issues and do our best to address bugs in a timely manner.
+            </Styled.p>
+            <Styled.p>
+              If you are interested in additional development
+              or want to support the development of Opencast Studio, please contact{' '}
               <Styled.a href="mailto:opencast-support@elan-ev.de">
                 opencast-support@elan-ev.de
               </Styled.a>.

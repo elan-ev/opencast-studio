@@ -5,11 +5,18 @@ import { jsx } from 'theme-ui';
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Container, Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { useDispatch, useStudioState } from '../../../studio-state';
+import {
+  useDispatch,
+  useStudioState,
+  VIDEO_SOURCE_BOTH,
+  VIDEO_SOURCE_DISPLAY,
+  VIDEO_SOURCE_USER,
+  VIDEO_SOURCE_NONE,
+} from '../../../studio-state';
 import { useSettings } from '../../../settings';
 
 import Notification from '../../notification';
@@ -30,49 +37,45 @@ export default function VideoSetup(props) {
   const settings = useSettings();
   const dispatch = useDispatch();
   const state = useStudioState();
-  const { displayStream, userStream, displaySupported, userSupported } = state;
+  const {
+    displayStream,
+    userStream,
+    displaySupported,
+    userSupported,
+    videoChoice: activeSource,
+  } = state;
 
   const hasStreams = displayStream || userStream;
   const anySupported = displaySupported || userSupported;
   const bothSupported = displaySupported && userSupported;
 
-  const BOTH = 'both';
-  const DISPLAY = 'display';
-  const USER = 'user';
-  const NONE = 'none';
-
-  const [activeSource, setActiveSource] = useState(
-    (displayStream && userStream && BOTH)
-      || (displayStream && DISPLAY)
-      || (userStream && USER)
-      || NONE
-  );
+  const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', payload: s });
 
 
   const clickUser = async () => {
-    setActiveSource(USER);
+    setActiveSource(VIDEO_SOURCE_USER);
     await startUserCapture(dispatch, settings);
   };
   const clickDisplay = async () => {
-    setActiveSource(DISPLAY);
+    setActiveSource(VIDEO_SOURCE_DISPLAY);
     await startDisplayCapture(dispatch, settings);
   };
   const clickBoth = async () => {
-    setActiveSource(BOTH);
+    setActiveSource(VIDEO_SOURCE_BOTH);
     await startUserCapture(dispatch, settings);
     await startDisplayCapture(dispatch, settings);
   };
 
   const reselectSource = () => {
-    setActiveSource(NONE);
+    setActiveSource(VIDEO_SOURCE_NONE);
     stopUserCapture(state.userStream, dispatch);
     stopDisplayCapture(state.displayStream, dispatch);
   };
 
   const userHasWebcam = props.userHasWebcam;
 
-  const nextDisabled = activeSource === NONE
-    || activeSource === BOTH ? (!displayStream || !userStream) : !hasStreams;
+  const nextDisabled = activeSource === VIDEO_SOURCE_NONE
+    || activeSource === VIDEO_SOURCE_BOTH ? (!displayStream || !userStream) : !hasStreams;
 
   // The warnings if we are not allowed to capture a stream.
   const userWarning = (state.userAllowed === false) && (
@@ -91,13 +94,18 @@ export default function VideoSetup(props) {
       <Text>{t('source-display-not-allowed-text')}</Text>
     </Notification>
   );
+  const unexpectedEndWarning = (state.userUnexpectedEnd || state.displayUnexpectedEnd) && (
+    <Notification key="unexpexted-stream-end-warning" isDanger>
+      <Text>{t('error-lost-video-stream')}</Text>
+    </Notification>
+  );
 
   // The body depends on which source is currently selected.
   let hideActionButtons;
   let title;
   let body;
   switch (activeSource) {
-    case NONE:
+    case VIDEO_SOURCE_NONE:
       title = t('sources-video-question');
       hideActionButtons = true;
       if (anySupported) {
@@ -144,46 +152,56 @@ export default function VideoSetup(props) {
       }
       break;
 
-    case USER:
+    case VIDEO_SOURCE_USER:
       title = t('sources-video-user-selected');
       hideActionButtons = !state.userStream && state.userAllowed !== false;
       body = <SourcePreview
         reselectSource={reselectSource}
-        warnings={userWarning}
-        inputs={[
-          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed }
-        ]}
-      />;
-      break;
-
-    case DISPLAY:
-      title = t('sources-video-display-selected');
-      hideActionButtons = !state.displayStream && state.displayAllowed !== false;
-      body = <SourcePreview
-        reselectSource={reselectSource}
-        warnings={displayWarning}
+        warnings={[userWarning, unexpectedEndWarning]}
         inputs={[{
-          kind: t('sources-display'),
-          stream: state.displayStream,
-          allowed: state.displayAllowed,
+          kind: t('sources-user'),
+          stream: state.userStream,
+          allowed: state.userAllowed,
+          unexpectedEnd: state.userUnexpectedEnd,
         }]}
       />;
       break;
 
-    case BOTH:
+    case VIDEO_SOURCE_DISPLAY:
+      title = t('sources-video-display-selected');
+      hideActionButtons = !state.displayStream && state.displayAllowed !== false;
+      body = <SourcePreview
+        reselectSource={reselectSource}
+        warnings={[displayWarning, unexpectedEndWarning]}
+        inputs={[{
+          kind: t('sources-display'),
+          stream: state.displayStream,
+          allowed: state.displayAllowed,
+          unexpectedEnd: state.displayUnexpectedEnd,
+        }]}
+      />;
+      break;
+
+    case VIDEO_SOURCE_BOTH:
       title = t('sources-video-display-and-user-selected');
       hideActionButtons = (!state.userStream && state.userAllowed !== false)
         || (!state.displayStream && state.displayAllowed !== false);
       body = <SourcePreview
         reselectSource={reselectSource}
-        warnings={[displayWarning, userWarning]}
+        warnings={[displayWarning, userWarning, unexpectedEndWarning]}
         inputs={[
           {
             kind: t('sources-display'),
             stream: state.displayStream,
             allowed: state.displayAllowed,
+            unexpectedEnd: state.displayUnexpectedEnd,
           },
-          { kind: t('sources-user'), stream: state.userStream, allowed: state.userAllowed },
+          {
+            kind: t('sources-user'),
+            stream: state.userStream,
+            allowed: state.userAllowed,
+            unexpectedEnd: state.userUnexpectedEnd,
+          },
         ]}
       />;
       break;
@@ -191,6 +209,8 @@ export default function VideoSetup(props) {
       return <p>Something went very wrong</p>;
   };
 
+  const hideReselectSource = hideActionButtons
+    && !state.userUnexpectedEnd && !state.displayUnexpectedEnd;
 
   return (
     <Container
@@ -207,11 +227,14 @@ export default function VideoSetup(props) {
 
       { body }
 
-      {activeSource !== NONE && <div sx={{ mb: 3 }}></div>}
+      { activeSource !== VIDEO_SOURCE_NONE && <div sx={{ mb: 3 }} /> }
 
-      {activeSource !== NONE && <ActionButtons
-        next={hideActionButtons ? null : { onClick: () => props.nextStep(), disabled: nextDisabled }}
-        prev={hideActionButtons ? null : {
+      { activeSource !== VIDEO_SOURCE_NONE && <ActionButtons
+        next={hideActionButtons ? null : {
+          onClick: () => props.nextStep(),
+          disabled: nextDisabled,
+        }}
+        prev={hideReselectSource ? null : {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
@@ -228,6 +251,7 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
     <button
       onClick={onClick}
       disabled={disabled}
+      title={label}
       sx={{
         fontFamily: 'inherit',
         color: disabled ? 'gray.2' : 'gray.0',

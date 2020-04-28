@@ -39,30 +39,29 @@ export default function RecordingControls({
   const dispatch = useDispatch();
   const settings = useSettings();
 
-  const { audioStream, displayStream, userStream } = useStudioState();
+  const {
+    audioStream,
+    displayStream,
+    userStream,
+    userUnexpectedEnd,
+    displayUnexpectedEnd,
+    audioUnexpectedEnd,
+  } = useStudioState();
+
 
   const desktopRecorder = useRef(null);
   const videoRecorder = useRef(null);
 
-  const hasStreams = displayStream || userStream;
+  const canRecord = (displayStream || userStream)
+    && !userUnexpectedEnd && !displayUnexpectedEnd && !audioUnexpectedEnd;
 
   const history = useHistory();
 
-  // reset after mounting
-  useEffect(() => {
-    history.listen(() => {
-      // This only happens when the user uses "back" or "forward" in their
-      // browser and they confirm they want to discard the recording.
-      if (recordingState !== 'STATE_INACTIVE') {
-        dispatch({ type: 'STOP_RECORDING' });
-      }
-
-      unblockers.forEach(b => b());
-      unblockers = [];
-    });
-  });
-
   const record = () => {
+    // In theory, we should never have recordings at this point. But just to be
+    // sure, in case of a bug elsewhere, we clear the recordings here.
+    dispatch({ type: 'CLEAR_RECORDINGS' });
+
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, 'desktop');
       const stream = mixAudioIntoVideo(audioStream, displayStream);
@@ -91,14 +90,35 @@ export default function RecordingControls({
     videoRecorder.current && videoRecorder.current.pause();
   };
 
-  const stop = () => {
+  const stop = (premature = false) => {
     desktopRecorder.current && desktopRecorder.current.stop();
     videoRecorder.current && videoRecorder.current.stop();
     handleRecorded();
-    dispatch({ type: 'STOP_RECORDING' });
+    dispatch({ type: premature ? 'STOP_RECORDING_PREMATURELY' : 'STOP_RECORDING' });
     unblockers.forEach(b => b());
     unblockers = [];
   };
+
+  useEffect(() => {
+    // Detect if a stream ended unexpectedly. In that was we want to stop the
+    // recording completely.
+    const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
+    if (unexpectedEnd && recordingState === STATE_RECORDING) {
+      stop(true);
+    }
+
+    history.listen(() => {
+      // This only happens when the user uses "back" or "forward" in their
+      // browser and they confirm they want to discard the recording.
+      if (recordingState !== 'STATE_INACTIVE') {
+        dispatch({ type: 'STOP_RECORDING' });
+      }
+
+      unblockers.forEach(b => b());
+      unblockers = [];
+    });
+  });
+
 
   const handlePause = () => {
     setRecordingState(STATE_PAUSED);
@@ -111,7 +131,7 @@ export default function RecordingControls({
   };
 
   const handleRecord = () => {
-    if (!hasStreams) {
+    if (!canRecord) {
       return;
     }
     setRecordingState(STATE_RECORDING);
@@ -155,7 +175,7 @@ export default function RecordingControls({
               title={t('record-button-title')}
               recordingState={recordingState}
               onClick={handleRecord}
-              disabled={!hasStreams}
+              disabled={!canRecord}
             />
           ) : (
             <StopButton
