@@ -507,6 +507,7 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
 // Shown if the upload was successful. A big green checkmark and a text.
 const UploadSuccess = () => {
   const { t } = useTranslation();
+  const { edit } = useStudioState();
 
   return (
     <React.Fragment>
@@ -520,7 +521,7 @@ const UploadSuccess = () => {
         <FontAwesomeIcon icon={faCheckCircle} size="4x" />
       </div>
       <Text variant='text' sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
-      <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
+      <Text sx={{ textAlign: 'center', mt: 2 }}>{edit ? t('message-upload-complete-explanation-edit') : 'message-upload-complete-explanation'}</Text>
     </React.Fragment>
   );
 }

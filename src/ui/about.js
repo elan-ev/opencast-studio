@@ -56,27 +56,74 @@ function About(props) {
     <Container>
       <article sx={{ maxWidth: '900px', margin: '0 auto' }}>
         <header>
-          <Styled.h1>Opencast Studio</Styled.h1>
+          <Styled.h1>Podcast Studio</Styled.h1>
         </header>
         <Styled.p>
-          A web-based recording studio for <Styled.a href="https://opencast.org">Opencast</Styled.a>.
+          Podcast Studio allows you to record a podcast in your browser which can
+          then be uploaded to the Podcast Video Portal.
         </Styled.p>
         <Styled.p>
-          Opencast Studio allows you to record your camera, your display and your microphoneʼs audio.
-          You can then either download your recordings or upload them directly to an Opencast
-          instance (usually the one of your university).
+          Podcast Studio recordings can be managed from the My Videos tab on the
+          Video Portal, just like uploaded videos.
         </Styled.p>
         <Styled.p>
-          This application is free, open software developed{' '}
-          <Styled.a href="https://github.com/elan-ev/opencast-studio">on GitHub</Styled.a>.
+          You can choose to record video from the display, camera or both together.
+          You need to ensure you have a camera connected if you wish to record
+          this as part of the podcast, and also a microphone must be connected to
+          record audio.
         </Styled.p>
 
-        <Styled.h2>How it works</Styled.h2>
-        <Styled.p>
-          Opencast Studio uses the recording capabilities built into modern browsers to record
-          audio and video streams. The recording happens in the userʼs browser and no server is
-          involved in the recording.
-        </Styled.p>
+        <Styled.h2>How to use</Styled.h2>
+        <Styled.ol>
+          <Styled.li>
+            If you want to record a presentation as part of the podcast, ensure it
+            is already open.
+          </Styled.li>
+          <Styled.li>
+            In the Recording tab, select what you want to record (display and/or
+            camera).
+          </Styled.li>
+          <Styled.li>
+            When choosing display, a popup will appear which allows you to
+            select what you want to record (you may need to grant permissions
+            to the browser to access your display/camera). The options for
+            selecting what to record appear slightly differently depending on the
+            browser you are using, but the options are:
+            <Styled.ul>
+              <Styled.li>
+                Your entire display: so whatever you see will be recorded
+              </Styled.li>
+              <Styled.li>
+                Choose a specific application window: so you can choose to
+                share Powerpoint, for example, or a browser tab/window
+              </Styled.li>
+            </Styled.ul>
+          </Styled.li>
+          <Styled.li>
+            Your selected resource will be shown in the Podcast Studio tab. Press
+            Next to continue.
+          </Styled.li>
+          <Styled.li>
+            Choose whether to record audio (with a microphone) or have no
+            audio on the podcast.
+          </Styled.li>
+          <Styled.li>
+            Press the record button (red circle) to begin the recording.
+          </Styled.li>
+          <Styled.li>
+            Once you have finished, press the stop button and you will be shown
+            a preview of the recording. Choose to discard and record again if
+            you wish, or press next to continue.
+          </Styled.li>
+          <Styled.li>
+            Add a title, choose where the video should be uploaded to, tick the
+            option to edit before publishing if you wish, then click upload.
+          </Styled.li>
+          <Styled.li>
+            Once the upload has been processed – you will receive an email with
+            a link to view it (and additionally to edit if this option was selected).
+          </Styled.li>
+        </Styled.ol>
 
         { process.env.REACT_APP_INCLUDE_LEGAL_NOTICES === '1' && (
           <React.Fragment>
@@ -108,7 +155,7 @@ function About(props) {
           commit{' '}
           <Styled.a
             aria-label="Git commit on GitHub"
-            href={"https://github.com/elan-ev/opencast-studio/commit/"
+            href={"https://github.com/UoM-Podcast/opencast-studio/commit/"
                   + process.env.REACT_APP_GIT_SHA }
             >
             {process.env.REACT_APP_GIT_SHA || '?'}

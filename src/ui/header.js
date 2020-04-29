@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useStudioState } from '../studio-state';
+import MediaQuery from 'react-responsive';
 
 
 // The header, including a logo on the left and the navigation on the right.
@@ -37,7 +38,7 @@ export default function Header() {
           the parent element, as the navigation overlay would otherwise occlude
           this background color */}
       <div sx={{
-        backgroundColor: 'gray.0',
+        backgroundColor: 'background',
         position: 'absolute',
         zIndex: -3,
         height: '100%',
@@ -66,19 +67,28 @@ const Brand = () => {
   const location = useLocation();
 
   return (
-    <Link to={{ pathname: "/", search: location.search }}>
-      <picture>
-        <source
-          media="(min-width: 920px)"
-          srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
-        />
-        <img
-          src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
-          alt="Opencast Studio"
-          sx={{ height: 50 }}
-        />
-      </picture>
-    </Link>
+    <Fragment>
+      <Link to={{ pathname: "/", search: location.search }}>
+        <picture>
+          <img
+            src={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
+            alt="Manchester University"
+            sx={{ height: 50 }}
+          />
+        </picture>
+      </Link>
+      <h1 sx={{
+        color: 'purple.0',
+        marginTop: 0,
+        overflow: 'hidden',
+        height: 50,
+        fontWeight: '100',
+      }}>
+        <MediaQuery minDeviceWidth={1050}>Podcast Studio: Desktop recording service</MediaQuery>
+        <MediaQuery minDeviceWidth={768} maxDeviceWidth={1049}>Podcast Studio</MediaQuery>
+        <MediaQuery maxDeviceWidth={767}>Studio</MediaQuery>
+      </h1>
+    </Fragment>
   );
 }
 
@@ -94,7 +104,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       exact
       activeStyle={{
-        backgroundColor: 'black',
+        backgroundColor: '#3b1850'
       }}
       sx={{
         color: 'white',
@@ -108,7 +118,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         width: ['100%', 'auto'],
 
         '&:hover': {
-          backgroundColor: 'gray.1',
+          backgroundColor: 'purple.2',
         },
       }}
       {...rest}
@@ -148,9 +158,9 @@ const Navigation = props => {
           mx: 1,
           fontSize: '20px',
           whiteSpace: 'nowrap',
-          backgroundColor: 'transparent',
+          backgroundColor: 'purple.0',
           '&:hover': {
-            backgroundColor: 'gray.1',
+            backgroundColor: 'purple.2',
           },
           '&:active': {},
         }}
@@ -180,7 +190,7 @@ const Navigation = props => {
           top: [theme => theme.heights.headerHeight, theme => theme.heights.headerHeight, 0],
           position: ['absolute', 'static'],
           width: ['100%', 'auto'],
-          backgroundColor: ['gray.0', 'none'],
+          backgroundColor: ['purple.0', 'none'],
           transition: ['height 0.25s ease-out 0s', 'none'],
           scrollX: ['none', 'auto'],
         }}
@@ -192,14 +202,6 @@ const Navigation = props => {
           onClick={closeMenu}
         >
           {t('nav-recording')}
-        </NavElement>
-        <NavElement
-          title={t('nav-settings')}
-          target="/settings"
-          icon={faWrench}
-          onClick={closeMenu}
-        >
-          {t('nav-settings')}
         </NavElement>
         <NavElement
           title={t('nav-about')}

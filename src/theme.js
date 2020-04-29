@@ -50,8 +50,9 @@ const base = {
     primary: '#47af7a',
     secondary: '#30c',
     muted: '#888888',
-    highlight: '#3498db',
+    highlight: '#ac6cd2',
     error: '#f14668',
+    purple: ['#6b2c90', '#3b1850', '#ac6cd2'],
     gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
     videoOverlay: 'rgba(255, 255, 255, 0.2)'
   },
