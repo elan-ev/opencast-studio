@@ -5,7 +5,7 @@
 import { jsx } from 'theme-ui';
 
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 
@@ -229,6 +229,20 @@ export const StreamSettings = ({ isDesktop, stream }) => {
             { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
             <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
           </div>
+
+          <div sx={{
+            backgroundColor: '#ebebeb',
+            m: 2,
+            py: 1,
+            px: 2,
+            fontSize: '16px',
+            lineHeight: '20px',
+            border: theme => `1px solid ${theme.colors.gray[2]}`,
+          }}>
+            <Trans i18nKey="sources-video-preferences-note">
+              <strong>Note:</strong> Explanation.
+            </Trans>
+          </div>
         </div>
       </div>
     </div>
@@ -276,7 +290,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) =
   }
 
   return <Fragment>
-    <PrefKey>{t('sources-video-quality')}:</PrefKey>
+    <PrefKey>{t('sources-video-quality')}*:</PrefKey>
     <PrefValue>
       <RadioButton
         id={`quality-auto-${kind}`}
@@ -355,7 +369,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
       </select>
     </PrefValue>
 
-    <PrefKey>{t('sources-video-aspect-ratio')}:</PrefKey>
+    <PrefKey>{t('sources-video-aspect-ratio')}*:</PrefKey>
     <PrefValue>
       <RadioButton
         id="ar-auto"
