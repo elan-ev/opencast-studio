@@ -39,10 +39,13 @@ export const SourcePreview = ({ warnings, inputs }) => {
       return <p>Something went very wrong</p>;
   }
 
+  // Below this value, the video preference menu looks awful.
+  const minWidth = 300;
+
   return (
     <Fragment>
       { warnings }
-      <VideoBox gap={20}>{ children }</VideoBox>
+      <VideoBox minWidth={minWidth} gap={20}>{ children }</VideoBox>
     </Fragment>
   );
 }

@@ -169,6 +169,10 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       left: 0,
       right: 0,
       bottom: 0,
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-end',
     }}>
       <div sx={{ textAlign: 'right' }}>
         <div
@@ -203,8 +207,9 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       </div>
       <div sx={{
         height: isExpanded ? (expandedHeight.current || 'auto') : 0,
+        flex: '0 1 auto',
         transition: 'height 0.2s',
-        overflow: 'hidden',
+        overflow: 'auto',
         backgroundColor: 'white',
         fontSize: '18px',
         boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
