@@ -214,12 +214,16 @@ export const StreamSettings = ({ isDesktop, stream }) => {
           ref={r => { if (r) { expandedHeight.current = `${r.offsetHeight}px`; } }}
           sx={{ p: 1, border: theme => `1px solid ${theme.colors.gray[0]}` }}
         >
-          <table sx={{ width: '100%', whiteSpace: 'nowrap' }} >
-            <tbody>
-              { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
-              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
-            </tbody>
-          </table>
+          <div sx={{
+            display: 'grid',
+            width: '100%',
+            gridTemplateColumns: 'auto 1fr',
+            gridGap: '6px 12px',
+            p: 1,
+          }} >
+            { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
+            <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
+          </div>
         </div>
       </div>
     </div>
@@ -233,6 +237,23 @@ const StreamInfo = ({ stream }) => {
 
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
+
+const PrefKey = ({ children }) => (
+  <div sx={{
+    gridColumn: '0 1',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    hyphens: 'auto',
+  }}>
+    { children }
+  </div>
+);
+const PrefValue = ({ children }) => (
+  <div sx={{ gridColumn: '1 2', overflowX: 'auto', lineHeight: '30px' }}>
+    { children }
+  </div>
+);
 
 const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) => {
   const { t } = useTranslation();
@@ -250,30 +271,30 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) =
   }
 
   return <Fragment>
-    <tr>
-      <td>{t('sources-video-quality')}:</td>
-      <td>
-        <RadioButton
-          id={`quality-auto-${kind}`}
-          value="auto"
-          name={`quality-${kind}`}
-          label={t('sources-video-quality-auto')}
-          onChange={changeQuality}
-          checked={qualities.every(q => prefs.quality !== q)}
-        />
-        {
-          qualities.map(q => <RadioButton
-            key={`${q}-${kind}`}
+    <PrefKey>{t('sources-video-quality')}:</PrefKey>
+    <PrefValue>
+      <RadioButton
+        id={`quality-auto-${kind}`}
+        value="auto"
+        name={`quality-${kind}`}
+        label={t('sources-video-quality-auto')}
+        onChange={changeQuality}
+        checked={qualities.every(q => prefs.quality !== q)}
+      />
+      {
+        qualities.map(q => <Fragment key={`${q}-${kind}`}>
+          <wbr />
+          <RadioButton
             id={`quality-${q}-${kind}`}
             value={q}
             name={`quality-${kind}`}
             onChange={changeQuality}
             checked={prefs.quality === q}
             state={fitState}
-          />)
-        }
-      </td>
-    </tr>
+          />
+        </Fragment>)
+      }
+    </PrefValue>
   </Fragment>;
 };
 
@@ -314,46 +335,45 @@ const UserSettings = ({ updatePrefs, prefs }) => {
   const changeAspectRatio = ratio => updatePrefs({ aspectRatio: ratio });
 
   return <Fragment>
-    <tr>
-      <td>{t('sources-video-device')}:</td>
-      <td>
-        <select
-          sx={{ variant: 'styles.select' }}
-          value={currentDeviceId}
-          onChange={e => changeDevice(e.target.value)}
-        >
-          {
-            devices.map((d, i) => (
-              <option key={i} value={d.deviceId}>{ d.label }</option>
-            ))
-          }
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>{t('sources-video-aspect-ratio')}:</td>
-      <td>
-        <RadioButton
-          id="ar-auto"
-          value="auto"
-          name="aspectRatio"
-          label={t('sources-video-aspect-ratio-auto')}
-          onChange={changeAspectRatio}
-          checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
-        />
+    <PrefKey>{t('sources-video-device')}:</PrefKey>
+    <PrefValue>
+      <select
+        sx={{ variant: 'styles.select' }}
+        value={currentDeviceId}
+        onChange={e => changeDevice(e.target.value)}
+      >
         {
-          ASPECT_RATIOS.map(ar => <RadioButton
+          devices.map((d, i) => (
+            <option key={i} value={d.deviceId}>{ d.label }</option>
+          ))
+        }
+      </select>
+    </PrefValue>
+
+    <PrefKey>{t('sources-video-aspect-ratio')}:</PrefKey>
+    <PrefValue>
+      <RadioButton
+        id="ar-auto"
+        value="auto"
+        name="aspectRatio"
+        label={t('sources-video-aspect-ratio-auto')}
+        onChange={changeAspectRatio}
+        checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
+      />
+      {
+        ASPECT_RATIOS.map(ar => <Fragment key={`ar-${ar}`}>
+          <wbr />
+          <RadioButton
             id={`ar-${ar}`}
-            key={`ar-${ar}`}
             value={ar}
             name="aspectRatio"
             onChange={changeAspectRatio}
             checked={prefs.aspectRatio === ar}
             state={arState}
-          />)
-        }
-      </td>
-    </tr>
+          />
+        </Fragment>)
+      }
+    </PrefValue>
   </Fragment>;
 };
 
