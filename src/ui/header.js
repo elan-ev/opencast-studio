@@ -73,7 +73,7 @@ const Brand = () => {
           <img
             src={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
             alt="Manchester University"
-            sx={{ height: 50 }}
+            sx={{ height: 72 }}
           />
         </picture>
       </Link>
@@ -84,8 +84,8 @@ const Brand = () => {
         height: 50,
         fontWeight: '100',
       }}>
-        <MediaQuery minDeviceWidth={1050}>Podcast Studio: Desktop recording service</MediaQuery>
-        <MediaQuery minDeviceWidth={768} maxDeviceWidth={1049}>Podcast Studio</MediaQuery>
+        <MediaQuery minDeviceWidth={1100}>Podcast Studio: Desktop recording service</MediaQuery>
+        <MediaQuery minDeviceWidth={768} maxDeviceWidth={1099}>Podcast Studio</MediaQuery>
         <MediaQuery maxDeviceWidth={767}>Studio</MediaQuery>
       </h1>
     </Fragment>
@@ -103,9 +103,6 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         search: location.search,
       }}
       exact
-      activeStyle={{
-        backgroundColor: '#3b1850'
-      }}
       sx={{
         color: 'white',
         pl: [3, '10px'],

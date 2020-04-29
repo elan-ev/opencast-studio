@@ -47,7 +47,7 @@ const base = {
   colors: {
     text: '#000',
     background: '#fff',
-    primary: '#47af7a',
+    primary: '#6b2c90',
     secondary: '#30c',
     muted: '#888888',
     highlight: '#ac6cd2',
@@ -207,7 +207,7 @@ const base = {
     },
     progress: {
       bg: '#ebebeb',
-      color: '#4ab57f',
+      color: 'purple.0',
       height: '8px',
     }
   },

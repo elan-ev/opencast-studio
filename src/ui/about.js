@@ -102,6 +102,8 @@ function About(props) {
           <Styled.li>
             Your selected resource will be shown in the Podcast Studio tab. Press
             Next to continue.
+            Note to remove the sharing bar from the bottom of the screen,
+            press <Styled.em>hide</Styled.em>.
           </Styled.li>
           <Styled.li>
             Choose whether to record audio (with a microphone) or have no
@@ -149,18 +151,6 @@ function About(props) {
 
         { process.env.REACT_APP_INCLUDE_LEGAL_NOTICES === '1' && <LegalNotices /> }
 
-        <Styled.h2>Version</Styled.h2>
-        <Styled.p>
-          Build date {process.env.REACT_APP_BUILD_DATE || '?'},
-          commit{' '}
-          <Styled.a
-            aria-label="Git commit on GitHub"
-            href={"https://github.com/UoM-Podcast/opencast-studio/commit/"
-                  + process.env.REACT_APP_GIT_SHA }
-            >
-            {process.env.REACT_APP_GIT_SHA || '?'}
-          </Styled.a>.
-        </Styled.p>
       </article>
     </Container>
   );

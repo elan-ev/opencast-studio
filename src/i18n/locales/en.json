@@ -47,7 +47,7 @@
   "sources-video-display-selected": "Display selected",
   "sources-video-display-and-user-selected": "Display & Camera selected",
   "sources-video-user-selected": "Camera selected",
-  "sources-video-question": "What video source(s) to record?",
+  "sources-video-question": "Choose what video source(s) to record?",
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
   "sources-video-reselect-source": "Reselect source(s)",
   "sources-video-no-cam-detected": "No camera detected",
