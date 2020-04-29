@@ -156,9 +156,10 @@ export const StreamSettings = ({ isDesktop, stream }) => {
     }}>
       <span sx={{
         color: 'gray.1',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'white',
         borderRadius: '10px',
         p: 1,
+        fontSize: '18px',
       }}>
         <StreamInfo stream={stream} />
       </span>
@@ -204,8 +205,9 @@ export const StreamSettings = ({ isDesktop, stream }) => {
         height: isExpanded ? (expandedHeight.current || 'auto') : 0,
         transition: 'height 0.2s',
         overflow: 'hidden',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'white',
         fontSize: '18px',
+        boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
       }}>
         <div
           // Obtain the actual content height as soon as the element is mounted.
@@ -316,7 +318,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
       <td>{t('sources-video-device')}:</td>
       <td>
         <select
-          sx={{ fontSize: 'inherit', width: '100%' }}
+          sx={{ variant: 'styles.select' }}
           value={currentDeviceId}
           onChange={e => changeDevice(e.target.value)}
         >
