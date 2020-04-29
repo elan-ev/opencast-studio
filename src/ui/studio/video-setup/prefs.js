@@ -4,10 +4,11 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
+import useResizeObserver from "use-resize-observer/polyfilled";
 
 import { useSettings } from '../../../settings';
 import { deviceIdOf, dimensionsOf } from '../../../util.js';
@@ -106,6 +107,16 @@ export const loadDisplayPrefs = () => ({
 export const StreamSettings = ({ isDesktop, stream }) => {
   const dispatch = useDispatch();
   const settings = useSettings();
+  const [expandedHeight, setExpandedHeight] = useState(0);
+  const { ref } = useResizeObserver({
+    // We don't use the height passed to the callback as we want the outer
+    // height. We also add a magic "4" here. 2 pixels are for the border of the
+    // outer div. The other two are "wiggle room". If we always set the height
+    // to fit exactly, this easily leads to unnessecary scrollbars appearing.
+    // This in turn might lead to rewrapping and then a change in height, in
+    // the worst case ending up in an infinite loop.
+    onResize: () => setExpandedHeight(ref.current?.offsetHeight + 4),
+  });
 
   // The current preferences and the callback to update them.
   const prefs = isDesktop ? loadDisplayPrefs() : loadCameraPrefs();
@@ -143,7 +154,6 @@ export const StreamSettings = ({ isDesktop, stream }) => {
 
   // State about expanding and hiding the settings.
   const [isExpanded, setIsExpanded] = useState(false);
-  const expandedHeight = useRef(null);
 
   return <Fragment>
     <div sx={{
@@ -206,42 +216,44 @@ export const StreamSettings = ({ isDesktop, stream }) => {
         </div>
       </div>
       <div sx={{
-        height: isExpanded ? (expandedHeight.current || 'auto') : 0,
+        height: isExpanded ? (expandedHeight || 'auto') : 0,
         flex: '0 1 auto',
         transition: 'height 0.2s',
-        overflow: 'auto',
+        overflow: 'hidden',
         backgroundColor: 'white',
         fontSize: '18px',
         boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
       }}>
-        <div
-          // Obtain the actual content height as soon as the element is mounted.
-          ref={r => { if (r) { expandedHeight.current = `${r.offsetHeight}px`; } }}
-          sx={{ p: 1, border: theme => `1px solid ${theme.colors.gray[0]}` }}
-        >
-          <div sx={{
-            display: 'grid',
-            width: '100%',
-            gridTemplateColumns: 'auto 1fr',
-            gridGap: '6px 12px',
-            p: 1,
-          }} >
-            { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
-            <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
-          </div>
+        <div sx={{
+          border: theme => `1px solid ${theme.colors.gray[0]}`,
+          height: '100%',
+          overflow: 'auto',
+        }}>
+          <div ref={ref} sx={{ p: 1, pb: '2px', }}>
+            <div sx={{
+              display: 'grid',
+              width: '100%',
+              gridTemplateColumns: 'auto 1fr',
+              gridGap: '6px 12px',
+              p: 1,
+            }} >
+              { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
+              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
+            </div>
 
-          <div sx={{
-            backgroundColor: '#ebebeb',
-            m: 2,
-            py: 1,
-            px: 2,
-            fontSize: '16px',
-            lineHeight: '20px',
-            border: theme => `1px solid ${theme.colors.gray[2]}`,
-          }}>
-            <Trans i18nKey="sources-video-preferences-note">
-              <strong>Note:</strong> Explanation.
-            </Trans>
+            <div sx={{
+              backgroundColor: '#ebebeb',
+              m: 2,
+              py: 1,
+              px: 2,
+              fontSize: '16px',
+              lineHeight: '20px',
+              border: theme => `1px solid ${theme.colors.gray[2]}`,
+            }}>
+              <Trans i18nKey="sources-video-preferences-note">
+                <strong>Note:</strong> Explanation.
+              </Trans>
+            </div>
           </div>
         </div>
       </div>
