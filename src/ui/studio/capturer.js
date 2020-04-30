@@ -97,16 +97,16 @@ export function stopCapture({ audioStream, displayStream, userStream }, dispatch
 }
 
 export function stopAudioCapture(stream, dispatch) {
-  stream && stream.getTracks().forEach(track => track.stop());
+  stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_AUDIO' });
 }
 
 export function stopDisplayCapture(stream, dispatch) {
-  stream && stream.getTracks().forEach(track => track.stop());
+  stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_DISPLAY' });
 }
 
 export function stopUserCapture(stream, dispatch) {
-  stream && stream.getTracks().forEach(track => track.stop());
+  stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
 }

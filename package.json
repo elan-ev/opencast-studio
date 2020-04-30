@@ -16,6 +16,7 @@
     "@theme-ui/color": "^0.3.1",
     "@theme-ui/components": "^0.3.1",
     "deepmerge": "^4.2.2",
+    "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "fast-deep-equal": "^3.0.0",

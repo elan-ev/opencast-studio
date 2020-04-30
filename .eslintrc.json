@@ -1,9 +1,12 @@
 {
   "extends": ["react-app", "plugin:react/recommended"],
+  "plugins": ["babel"],
 
   "rules": {
     "no-tabs": "error",
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "no-unused-expressions": "off",
+    "babel/no-unused-expressions": "warn"
   },
   "settings": {
     "react": {

@@ -42,7 +42,7 @@ export default class Recorder {
       this.recorder = null;
       this.isRecording = false;
 
-      options.onStop && options.onStop({ url, media, mimeType, dimensions });
+      options.onStop?.({ url, media, mimeType, dimensions });
     };
 
     this.isRecording = false;

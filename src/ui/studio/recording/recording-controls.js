@@ -81,18 +81,18 @@ export default function RecordingControls({
   };
 
   const resume = () => {
-    desktopRecorder.current && desktopRecorder.current.resume();
-    videoRecorder.current && videoRecorder.current.resume();
+    desktopRecorder.current?.resume();
+    videoRecorder.current?.resume();
   };
 
   const pause = () => {
-    desktopRecorder.current && desktopRecorder.current.pause();
-    videoRecorder.current && videoRecorder.current.pause();
+    desktopRecorder.current?.pause();
+    videoRecorder.current?.pause();
   };
 
   const stop = (premature = false) => {
-    desktopRecorder.current && desktopRecorder.current.stop();
-    videoRecorder.current && videoRecorder.current.stop();
+    desktopRecorder.current?.stop();
+    videoRecorder.current?.stop();
     handleRecorded();
     dispatch({ type: premature ? 'STOP_RECORDING_PREMATURELY' : 'STOP_RECORDING' });
     unblockers.forEach(b => b());
