@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useStudioState } from '../studio-state';
-
+import { useSettings } from '../settings';
 
 // The header, including a logo on the left and the navigation on the right.
 export default function Header() {
@@ -57,6 +57,7 @@ export default function Header() {
 
       {/* Actual content */}
       <Brand />
+      <Course />
       <Navigation />
     </header>
   );
@@ -79,6 +80,22 @@ const Brand = () => {
         />
       </picture>
     </Link>
+  );
+}
+
+const Course = () => {
+  const settings = useSettings();
+
+  return (
+    <Fragment>
+      <div sx={{
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+      }}>
+        {settings.studiotitle}
+      </div>
+    </Fragment>
   );
 }
 

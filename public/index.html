@@ -71,6 +71,11 @@
               l.hash
             );
           }
+          if (q.studiotitle) {
+            const cleanStudioTitle = decodeURIComponent(
+                q.studiotitle.replace(/\+/g, '%20'));
+            document.title = cleanStudioTitle + ' • ' + document.title;
+          }
         }
       }(window.location))
     </script>

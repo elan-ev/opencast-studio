@@ -25,6 +25,18 @@ The following settings are currently understood by Studio. The column "shown to 
   </thead>
   <tbody>
     <tr>
+      <td><b><code>studiotitle</code></b></td>
+      <td>string</td>
+      <td><code>ASQ: Aberglaube bei Tauben - SS 2020</code></td>
+      <td>✔</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Set a title. This is useful if configured for a course, for instance, using <code>upload.seriesId</code> and helps the user distinguish multiple Opencast Studio tabs.
+      </td>
+    </tr>
+    <tr>
       <td><b><code>opencast.serverUrl</code></b></td>
       <td>string</td>
       <td><code>https://develop.opencast.org</code></td>

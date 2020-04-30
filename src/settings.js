@@ -508,6 +508,7 @@ const positiveInteger = name => ({
 
 // Defines all potential settings and their types
 const SCHEMA = {
+  studiotitle: 'string',
   opencast: {
     serverUrl: {
       _type: 'string',
