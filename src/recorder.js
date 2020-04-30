@@ -33,10 +33,6 @@ export default class Recorder {
       }
     };
 
-    this.recorder.onerror = error => {
-      options.onError && options.onError(error);
-    };
-
     this.recorder.onstop = () => {
       const mimeType = _recData[0]?.type || this.recorder.mimeType;
       const media = new Blob(_recData, { type: mimeType });
