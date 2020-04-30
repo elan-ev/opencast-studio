@@ -1,6 +1,9 @@
 import { dimensionsOf } from './util.js';
 
 export default class Recorder {
+
+  #recorder
+
   constructor(stream, settings, options = {}) {
     // Figure out MIME type.
     let mimeType;
@@ -23,8 +26,8 @@ export default class Recorder {
     const videoBitsPerSecond = settings?.videoBitrate;
 
     let recData = [];
-    this.recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
-    this.recorder.ondataavailable = e => {
+    this.#recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
+    this.#recorder.ondataavailable = e => {
       if (e.data.size > 0) {
         recData.push(e.data);
       } else {
@@ -32,8 +35,8 @@ export default class Recorder {
       }
     };
 
-    this.recorder.onstop = () => {
-      const mimeType = recData[0]?.type || this.recorder.mimeType;
+    this.#recorder.onstop = () => {
+      const mimeType = recData[0]?.type || this.#recorder.mimeType;
       const media = new Blob(recData, { type: mimeType });
       const url = URL.createObjectURL(media);
 
@@ -45,18 +48,18 @@ export default class Recorder {
   }
 
   start() {
-    this.recorder.start();
+    this.#recorder.start();
   }
 
   pause() {
-    this.recorder.pause();
+    this.#recorder.pause();
   }
 
   resume() {
-    this.recorder.resume();
+    this.#recorder.resume();
   }
 
   stop() {
-    this.recorder.stop();
+    this.#recorder.stop();
   }
 }
