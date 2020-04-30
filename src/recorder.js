@@ -22,19 +22,19 @@ export default class Recorder {
     const dimensions = dimensionsOf(stream);
     const videoBitsPerSecond = settings?.videoBitrate;
 
-    const _recData = [];
+    const recData = [];
     this.recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
     this.recorder.ondataavailable = function(e) {
       if (e.data.size > 0) {
-        _recData.push(e.data);
+        recData.push(e.data);
       } else {
         console.log("Recording data has size 0! ", e);
       }
     };
 
     this.recorder.onstop = () => {
-      const mimeType = _recData[0]?.type || this.recorder.mimeType;
-      const media = new Blob(_recData, { type: mimeType });
+      const mimeType = recData[0]?.type || this.recorder.mimeType;
+      const media = new Blob(recData, { type: mimeType });
       const url = URL.createObjectURL(media);
 
       // Reset this state.
