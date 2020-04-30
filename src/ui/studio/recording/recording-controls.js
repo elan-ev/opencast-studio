@@ -100,7 +100,7 @@ export default function RecordingControls({
   };
 
   useEffect(() => {
-    // Detect if a stream ended unexpectedly. In that was we want to stop the
+    // Detect if a stream ended unexpectedly. In that case we want to stop the
     // recording completely.
     const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
     if (unexpectedEnd && recordingState === STATE_RECORDING) {
