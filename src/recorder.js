@@ -22,7 +22,7 @@ export default class Recorder {
     const dimensions = dimensionsOf(stream);
     const videoBitsPerSecond = settings?.videoBitrate;
 
-    const recData = [];
+    let recData = [];
     this.recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
     this.recorder.ondataavailable = e => {
       if (e.data.size > 0) {
@@ -38,7 +38,7 @@ export default class Recorder {
       const url = URL.createObjectURL(media);
 
       // Reset this state.
-      this.recorder = null;
+      recData = [];
 
       options.onStop?.({ url, media, mimeType, dimensions });
     };
