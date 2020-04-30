@@ -3,13 +3,12 @@ import { dimensionsOf } from './util.js';
 export default class Recorder {
   constructor(stream, settings, options = {}) {
     // Figure out MIME type.
-    let mimeType = undefined;
+    let mimeType;
     if ('isTypeSupported' in MediaRecorder) {
-      const configuredMime = (settings?.mimes || [])
+      mimeType = (settings?.mimes || [])
         .find(mime => MediaRecorder.isTypeSupported(mime));
-      if (configuredMime) {
-        mimeType = configuredMime;
-        console.debug("using first supported MIME type from settings: ", configuredMime);
+      if (mimeType) {
+        console.debug("using first supported MIME type from settings: ", mimeType);
       } else if (settings?.mimes) {
         console.debug("None of the MIME types specified in settings are supported by "
           + "this `MediaRecorder`");
