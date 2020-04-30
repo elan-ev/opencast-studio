@@ -24,7 +24,7 @@ export default class Recorder {
 
     const recData = [];
     this.recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
-    this.recorder.ondataavailable = function(e) {
+    this.recorder.ondataavailable = e => {
       if (e.data.size > 0) {
         recData.push(e.data);
       } else {
