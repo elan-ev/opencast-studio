@@ -22,7 +22,7 @@ function addRecordOnStop(dispatch, deviceType) {
 }
 
 function mixAudioIntoVideo(audioStream, videoStream) {
-  if (!audioStream || audioStream.getAudioTracks().length === 0) {
+  if (!(audioStream?.getAudioTracks().length)) {
     return videoStream;
   }
   return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);

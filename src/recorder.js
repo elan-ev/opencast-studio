@@ -21,7 +21,7 @@ export default class Recorder {
 
 
     const dimensions = dimensionsOf(stream);
-    const videoBitsPerSecond = settings?.videoBitrate || undefined;
+    const videoBitsPerSecond = settings?.videoBitrate;
 
     const _recData = [];
     this.recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
