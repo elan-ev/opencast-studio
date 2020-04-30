@@ -39,39 +39,24 @@ export default class Recorder {
 
       // Reset this state.
       this.recorder = null;
-      this.isRecording = false;
 
       options.onStop?.({ url, media, mimeType, dimensions });
     };
-
-    this.isRecording = false;
-    this.isPaused = false;
   }
 
   start() {
-    if (!this.isRecording) {
-      this.recorder.start();
-      this.isRecording = true;
-    }
+    this.recorder.start();
   }
 
   pause() {
-    if (!this.isPaused) {
-      this.recorder.pause();
-      this.isPaused = true;
-    }
+    this.recorder.pause();
   }
 
   resume() {
-    if (this.isPaused) {
-      this.recorder.resume();
-      this.isPaused = false;
-    }
+    this.recorder.resume();
   }
 
   stop() {
-    if (this.isRecording) {
-      this.recorder.stop();
-    }
+    this.recorder.stop();
   }
 }
