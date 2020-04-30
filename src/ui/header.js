@@ -32,6 +32,7 @@ export default function Header() {
         justifyContent: 'space-between',
         position: 'relative',
         zIndex: 3,
+        marginBottom: '25px',
       }}
     >
       {/* This div is used just for the background color. We can't set it for
