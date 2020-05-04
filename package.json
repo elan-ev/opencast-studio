@@ -30,7 +30,7 @@
     "react-beforeunload": "^2.2.0",
     "react-dom": "^16.13.1",
     "react-hook-form": "^3.29.4",
-    "react-i18next": "^11.3.5",
+    "react-i18next": "^11.4.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "theme-ui": "^0.3.1",
