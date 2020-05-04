@@ -6,7 +6,6 @@ import { Container } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobeEurope, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 
-
 function LegalNotices() {
   return (
     <article>
@@ -67,8 +66,12 @@ function About(props) {
           instance (usually the one of your university).
         </Styled.p>
         <Styled.p>
-          This application is free, open software developed{' '}
-          <Styled.a href="https://github.com/elan-ev/opencast-studio">on GitHub</Styled.a>.
+          This is free software under the terms of the{' '}
+          <Styled.a href="https://github.com/elan-ev/opencast-studio/blob/master/LICENSE">
+            MIT License
+          </Styled.a>{' '}
+          developed by the <Styled.a href="https://elan-ev.de">ELAN e.V.</Styled.a> in cooperation
+          with the <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a>.
         </Styled.p>
 
         <Styled.h2>How it works</Styled.h2>
@@ -99,6 +102,32 @@ function About(props) {
             </Styled.p>
           </React.Fragment>
         )}
+
+        <Styled.h2>Credits</Styled.h2>
+        <Styled.p>
+          Thanks to the following people and institutions for contributing to this project:
+        </Styled.p>
+        <ul>
+          <li>
+            <Styled.a href="https://github.com/slampunk">Duncan Smith</Styled.a> for starting this
+            project
+          </li>
+          <li>
+            <Styled.a href="https://github.com/cilt-uct">University of Cape Town (CILT)</Styled.a>
+            {' '}for letting Duncan start the project
+          </li>
+          <li>
+            <Styled.a href="https://ethz.ch">ETH Zürich</Styled.a> for financial support and
+            testing
+          </li>
+          <li>
+            <Styled.a href="https://github.com/elan-ev">ELAN e.V.</Styled.a> for the re-implementation
+            and the ongoing development
+          </li>
+          <li>
+            And many members from the Opencast community who helped along the way.
+          </li>
+        </ul>
 
         { process.env.REACT_APP_INCLUDE_LEGAL_NOTICES === '1' && <LegalNotices /> }
 
