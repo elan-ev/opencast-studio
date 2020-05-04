@@ -156,7 +156,9 @@ export default function SaveCreation(props) {
   };
 
   const allDownloaded = recordings.every(rec => rec.downloaded);
-  const possiblyDone = uploadState.state === STATE_UPLOADED || allDownloaded;
+  const possiblyDone = (uploadState.state === STATE_UPLOADED || allDownloaded)
+    && uploadState.state !== STATE_UPLOADING;
+  const hideBack = uploadState.state !== STATE_NOT_UPLOADED || allDownloaded;
 
   // Depending on the state, show a different thing in the upload box.
   const uploadBox = (() => {
@@ -217,7 +219,7 @@ export default function SaveCreation(props) {
 
       <ActionButtons
         next={null}
-        prev={possiblyDone ? null : {
+        prev={hideBack ? null : {
           onClick: handleBack,
           disabled: false,
         }}
