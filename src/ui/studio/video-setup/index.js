@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
-import { Container, Flex, Heading, Text } from '@theme-ui/components';
+import { Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -140,15 +140,17 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
     && !state.userUnexpectedEnd && !state.displayUnexpectedEnd;
 
   return (
-    <Container
+    <div
       sx={{
         display: 'flex',
         flexDirection: 'column',
         flex: '1 1 auto',
         minHeight: 0,
+        p: 3,
+        pt: [2, 2, 3],
       }}
     >
-      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
+      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['24px', '27px', '32px'] }}>
         { title }
       </Styled.h1>
 
@@ -164,7 +166,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
           label: 'sources-video-reselect-source',
         }}
       /> }
-    </Container>
+    </div>
   );
 }
 
