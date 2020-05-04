@@ -79,7 +79,7 @@ export const recordingFileName = ({ mime, flavor, title, presenter }) => {
 };
 
 const nowAsString = () => {
-  const pad2 = n => n >= 10 ? '' + n : '0' + n;
+  const pad2 = n => (n >= 10 ? '' : '0') + n;
 
   const now = new Date();
   return ''
