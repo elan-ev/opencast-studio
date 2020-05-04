@@ -7,7 +7,7 @@ import { useState, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 
-import { Provider, useStudioState, STATE_UPLOADED } from './studio-state';
+import { Provider, useStudioState, STATE_UPLOADED, STATE_UPLOADING } from './studio-state';
 
 import About from './ui/about';
 import Header from './ui/header';
@@ -69,9 +69,10 @@ const PreventClose = () => {
   const { recordings, upload } = useStudioState();
   const downloaded = recordings.every(rec => rec.downloaded);
   const uploaded = upload.state === STATE_UPLOADED;
+  const uploading = upload.state === STATE_UPLOADING;
 
   const handler = event => {
-    if (recordings?.length > 0 && !uploaded && !downloaded) {
+    if ((recordings?.length > 0 && !uploaded && !downloaded) || uploading) {
       event.preventDefault();
     }
   };
