@@ -3,6 +3,10 @@ import { dimensionsOf } from './util.js';
 export default class Recorder {
 
   #recorder
+  #data
+  #dimensions
+
+  onStop
 
   constructor(stream, settings, options = {}) {
     // Figure out MIME type.
@@ -22,29 +26,37 @@ export default class Recorder {
     }
 
 
-    const dimensions = dimensionsOf(stream);
+    this.#reset();
+
+    this.#dimensions = dimensionsOf(stream);
     const videoBitsPerSecond = settings?.videoBitrate;
+    this.onStop = options.onStop;
 
-    let recData = [];
     this.#recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond });
-    this.#recorder.ondataavailable = e => {
-      if (e.data.size > 0) {
-        recData.push(e.data);
-      } else {
-        console.log("Recording data has size 0! ", e);
-      }
-    };
+    this.#recorder.ondataavailable = this.#onDataAvailable;
+    this.#recorder.onstop = this.#onStop;
+  }
 
-    this.#recorder.onstop = () => {
-      const mimeType = recData[0]?.type || this.#recorder.mimeType;
-      const media = new Blob(recData, { type: mimeType });
-      const url = URL.createObjectURL(media);
+  #reset = () => {
+    this.#data = [];
+  }
 
-      // Reset this state.
-      recData = [];
+  #onDataAvailable = event => {
+    if (event.data.size > 0) {
+      this.#data.push(event.data);
+    } else {
+      console.log("Recording data has size 0!", event);
+    }
+  }
 
-      options.onStop?.({ url, media, mimeType, dimensions });
-    };
+  #onStop = event => {
+    const mimeType = this.#data[0]?.type || this.#recorder.mimeType;
+    const media = new Blob(this.#data, { type: mimeType });
+    const url = URL.createObjectURL(media);
+
+    this.#reset();
+
+    this.onStop?.({ url, media, mimeType, dimensions: this.#dimensions });
   }
 
   start() {
