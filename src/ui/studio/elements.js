@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Flex } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
 
 // A div containing optional "back" and "next" buttons as well as the centered
@@ -72,7 +72,7 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 // `<div>` that maintains this exact aspect ratio. In the one child case, that
 // `<div>` also perfectly fits within the parent container. In the case of two
 // children, those children are laid out in such a way that the utilized screen
-// space is maximized.
+// space is maximized while both children have the same width or height.
 //
 // `children` has to be the length 1 or 2! The parameter `gap` specifies the
 // width of the empty space between the two children in the case that two
@@ -81,26 +81,36 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 // Each child in `children` needs to be an object with the following fields:
 //
 // - `body`: the rendered DOM.
-// - `aspectRatio`: the desired aspect ratio for the child.
-// - `extraHeight`: sometimes the rendered child has a fixed extra height (for
-//   example to render a title above or information below the video stream).
-//   This extra height is included in the calculation such that the child minus
-//   this extra height has the perfect `aspectRatio` as given above.
-export function VideoBox({ gap = 0, children }) {
+// - `dimensions`: a function returning `[width, height]` of the child (also
+//   defining the aspect ratio). We require the dimensions instead of only the
+//   aspect ratio to better detect changes in the video stream.
+export function VideoBox({ gap = 0, minWidth = 180, children }) {
   const { ref, width = 1, height = 1 } = useResizeObserver();
 
   // This is a dummy state to force a rerender.
   const [, setForceCounter] = useState(0);
-  const forceRender = () => {
-    setForceCounter(v => v + 1);
-  };
+  const forceRender = () => setForceCounter(v => v + 1);
+
+  // We try to remember the last valid dimension. Otherwise, changing video
+  // preferences for a non-16:9 strean leads to visual noise: the box always
+  // changes between its aspect ratio and the fallback 16:9 ratio.
+  const lastDimensions = useRef(children.map(() => [undefined, undefined]));
+  const updateLastDimensions = newDimensions => {
+    newDimensions.forEach(([w, h], i) => {
+      if (w && h) {
+        lastDimensions.current[i] = [w, h];
+      }
+    });
+  }
 
   // Setup the handler for when a video stream is resized.
   let dimensions = children.map(c => c.dimensions());
+  updateLastDimensions(dimensions);
   const resizeVideoBox = () => {
     const newDimensions = children.map(c => c.dimensions());
     if (!equal(newDimensions, dimensions)) {
       dimensions = newDimensions;
+      updateLastDimensions(dimensions);
       forceRender();
     }
   }
@@ -110,29 +120,31 @@ export function VideoBox({ gap = 0, children }) {
   switch (children.length) {
     case 1: {
       const child = children[0];
-      const extraChildHeight = child.extraHeight || 0;
-      const aspectRatio = ar(child.dimensions());
-
+      const aspectRatio = ar(lastDimensions.current[0]);
 
       // Calculate size of child
       let childWidth;
       let childHeight;
 
-      const availableHeight = height - extraChildHeight;
-      if (width > availableHeight * aspectRatio) {
+      if (width > height * aspectRatio) {
         // Child height perfectly matches container, extra space left and right
-        childHeight = availableHeight + extraChildHeight;
-        childWidth = availableHeight * aspectRatio;
+        childHeight = height;
+        childWidth = height * aspectRatio;
       } else {
         // Child width perfectly matches container, extra space top and bottom
         childWidth = width;
-        childHeight = (width / aspectRatio) + extraChildHeight;
+        childHeight = (width / aspectRatio);
       }
 
       return (
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
           <div ref={ref} sx={{ flex: '1 0 0', minHeight: 0, display: 'flex' }}>
-            <div sx={{ height: childHeight, width: childWidth, minWidth: '180px', margin: 'auto' }}>
+            <div sx={{
+              height: childHeight,
+              width: childWidth,
+              minWidth: `${minWidth}px`,
+              margin: 'auto',
+            }}>
               { child.body }
             </div>
           </div>
@@ -159,27 +171,25 @@ export function VideoBox({ gap = 0, children }) {
       // 1:0.75 respectively. We can now add those, resulting in 1:1.31.
       // Finally, we normalize with respect to height again: 0.76:1
 
-      const aspectRatios = children.map(c => ar(c.dimensions()));
+      const aspectRatios = lastDimensions.current.map(d => ar(d));
 
       // Videos side by side (row).
       const { rowWidths, rowHeights } = (() => {
-        const extraHeight = Math.max(children[0].extraHeight || 0, children[1].extraHeight || 0);
-        const availableHeight = height - extraHeight;
         const availableWidth = width - gap;
         const combinedAspectRatio = aspectRatios[0] + aspectRatios[1];
-        if (availableWidth > availableHeight * combinedAspectRatio) {
+        if (availableWidth > height * combinedAspectRatio) {
           // Children height perfectly matches container, extra space left and
           // right.
           return {
-            rowHeights: Array(2).fill(availableHeight + extraHeight),
-            rowWidths: aspectRatios.map(ar => availableHeight * ar),
+            rowHeights: Array(2).fill(height),
+            rowWidths: aspectRatios.map(ar => height * ar),
           };
         } else {
           // Children width perfectly matches container, extra space top and
           // bottom.
           const baseHeight = availableWidth / combinedAspectRatio;
           return {
-            rowHeights: children.map(c => baseHeight + (c.extraHeight || 0)),
+            rowHeights: children.map(c => baseHeight),
             rowWidths: aspectRatios.map(ar => baseHeight * ar),
           }
         }
@@ -187,24 +197,22 @@ export function VideoBox({ gap = 0, children }) {
 
       // One video below the other (col/column).
       const { colWidths, colHeights } = (() => {
-        const extraHeight = gap + (children[0].extraHeight || 0) + (children[1].extraHeight || 0);
-        const availableHeight = height - extraHeight;
         const combinedAspectRatio =
           1 / ((1 / aspectRatios[0]) + (1 / aspectRatios[1]));
 
-        if (width > availableHeight * combinedAspectRatio) {
+        if (width > height * combinedAspectRatio) {
           // Children height perfectly matches container, extra space left and
           // right.
-          const width = availableHeight * combinedAspectRatio;
+          const width = height * combinedAspectRatio;
           return {
-            colHeights: children.map((c, i) => (width / aspectRatios[i]) + (c.extraHeight || 0)),
+            colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),
           };
         } else {
           // Children width perfectly matches container, extra space top and
           // bottom.
           return {
-            colHeights: children.map((c, i) => (width / aspectRatios[i]) + (c.extraHeight || 0)),
+            colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),
           }
         }
@@ -239,10 +247,20 @@ export function VideoBox({ gap = 0, children }) {
               minHeight: 0,
             }}
           >
-            <div sx={{ height: heights[0], width: widths[0], minWidth: '180px', margin: 'auto' }}>
+            <div sx={{
+              height: heights[0],
+              width: widths[0],
+              minWidth: `${minWidth}px`,
+              margin: 'auto',
+            }}>
               { children[0].body }
             </div>
-            <div sx={{ height: heights[1], width: widths[1], minWidth: '180px', margin: 'auto' }}>
+            <div sx={{
+              height: heights[1],
+              width: widths[1],
+              minWidth: `${minWidth}px`,
+              margin: 'auto',
+            }}>
               { children[1].body }
             </div>
           </div>

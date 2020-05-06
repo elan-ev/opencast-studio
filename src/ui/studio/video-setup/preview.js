@@ -3,37 +3,35 @@
 import { jsx } from 'theme-ui';
 
 import { Fragment, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Button, Card, Text, Spinner } from '@theme-ui/components';
+import { Card, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 import { VideoBox, useVideoBoxResize } from '../elements.js';
 import { dimensionsOf } from '../../../util.js';
+import { StreamSettings } from './prefs';
 
-const SUBBOX_HEIGHT = 40;
 
-export function SourcePreview({ reselectSource, warnings, inputs }) {
+// Shows the preview for one or two input streams. The previews also show
+// preferences allowing the user to change the webcam and the like.
+export const SourcePreview = ({ warnings, inputs }) => {
   let children;
   switch (inputs.length) {
     case 1:
       children = [{
-        body: <StreamPreview input={inputs[0]} text={inputs[0].kind} />,
+        body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
-        extraHeight: SUBBOX_HEIGHT,
       }];
       break;
     case 2:
       children = [
         {
-          body: <StreamPreview input={inputs[0]} text={inputs[0].kind} />,
+          body: <StreamPreview input={inputs[0]} />,
           dimensions: () => dimensionsOf(inputs[0].stream),
-          extraHeight: SUBBOX_HEIGHT,
         },
         {
-          body: <StreamPreview input={inputs[1]} text={inputs[1].kind} />,
+          body: <StreamPreview input={inputs[1]} />,
           dimensions: () => dimensionsOf(inputs[1].stream),
-          extraHeight: SUBBOX_HEIGHT,
         },
       ];
       break;
@@ -41,31 +39,26 @@ export function SourcePreview({ reselectSource, warnings, inputs }) {
       return <p>Something went very wrong</p>;
   }
 
+  // Below this value, the video preference menu looks awful.
+  const minWidth = 300;
+
   return (
     <Fragment>
       { warnings }
-      <VideoBox gap={20}>{ children }</VideoBox>
+      <VideoBox minWidth={minWidth} gap={20}>{ children }</VideoBox>
     </Fragment>
   );
 }
 
-function StreamPreview({ input, text }) {
-  const stream = input.stream;
-  const track = stream?.getVideoTracks()?.[0];
-  const { width, height } = track?.getSettings() ?? {};
+const StreamPreview = ({ input, text }) => (
+  <Card sx={{ height: '100%', overflow: 'hidden' }}>
+    <PreviewVideo input={input} />
+    <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
+  </Card>
+);
 
-  return (
-    <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
-      <PreviewVideo allowed={input.allowed} unexpectedEnd={input.unexpectedEnd} stream={stream} />
-      <Text p={2} color="muted" sx={{ height: `${SUBBOX_HEIGHT}px` }}>
-        {text}
-        {track && `: ${width}×${height}`}
-      </Text>
-    </Card>
-  );
-}
-
-export const PreviewVideo = ({ allowed, stream, unexpectedEnd, ...props }) => {
+const PreviewVideo = ({ input }) => {
+  const { allowed, stream, unexpectedEnd } = input;
   const resizeVideoBox = useVideoBoxResize();
 
   const videoRef = useRef();
@@ -121,16 +114,5 @@ export const PreviewVideo = ({ allowed, stream, unexpectedEnd, ...props }) => {
         // transform: 'rotateY(180deg)'
       }}
     />
-  );
-};
-
-export const UnshareButton = ({ handleClick }) => {
-  const { t } = useTranslation();
-
-  return (
-    <Button onClick={handleClick} variant="text">
-      <FontAwesomeIcon icon={faTimes} />
-      {t('sources-video-reselect-source')}
-    </Button>
   );
 };

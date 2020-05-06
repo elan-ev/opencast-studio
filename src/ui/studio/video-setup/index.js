@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
-import { Container, Flex, Heading, Text } from '@theme-ui/components';
+import { Flex, Heading, Text } from '@theme-ui/components';
 import { Styled } from 'theme-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,50 +29,23 @@ import {
 } from '../capturer';
 import { ActionButtons } from '../elements';
 import { SourcePreview } from './preview';
+import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 
 
-export default function VideoSetup(props) {
+export default function VideoSetup({ nextStep, userHasWebcam }) {
   const { t } = useTranslation();
 
-  const settings = useSettings();
   const dispatch = useDispatch();
   const state = useStudioState();
-  const {
-    displayStream,
-    userStream,
-    displaySupported,
-    userSupported,
-    videoChoice: activeSource,
-  } = state;
-
+  const { displayStream, userStream, videoChoice: activeSource } = state;
   const hasStreams = displayStream || userStream;
-  const anySupported = displaySupported || userSupported;
-  const bothSupported = displaySupported && userSupported;
 
   const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', payload: s });
-
-
-  const clickUser = async () => {
-    setActiveSource(VIDEO_SOURCE_USER);
-    await startUserCapture(dispatch, settings);
-  };
-  const clickDisplay = async () => {
-    setActiveSource(VIDEO_SOURCE_DISPLAY);
-    await startDisplayCapture(dispatch, settings);
-  };
-  const clickBoth = async () => {
-    setActiveSource(VIDEO_SOURCE_BOTH);
-    await startUserCapture(dispatch, settings);
-    await startDisplayCapture(dispatch, settings);
-  };
-
   const reselectSource = () => {
     setActiveSource(VIDEO_SOURCE_NONE);
-    stopUserCapture(state.userStream, dispatch);
-    stopDisplayCapture(state.displayStream, dispatch);
+    stopUserCapture(userStream, dispatch);
+    stopDisplayCapture(displayStream, dispatch);
   };
-
-  const userHasWebcam = props.userHasWebcam;
 
   const nextDisabled = activeSource === VIDEO_SOURCE_NONE
     || activeSource === VIDEO_SOURCE_BOTH ? (!displayStream || !userStream) : !hasStreams;
@@ -100,129 +73,85 @@ export default function VideoSetup(props) {
     </Notification>
   );
 
+  const userInput = {
+    isDesktop: false,
+    stream: userStream,
+    allowed: state.userAllowed,
+    unexpectedEnd: state.userUnexpectedEnd,
+  };
+  const displayInput = {
+    isDesktop: true,
+    stream: displayStream,
+    allowed: state.displayAllowed,
+    unexpectedEnd: state.displayUnexpectedEnd,
+  };
+
   // The body depends on which source is currently selected.
   let hideActionButtons;
   let title;
   let body;
   switch (activeSource) {
     case VIDEO_SOURCE_NONE:
+      const userConstraints = prefsToConstraints(loadCameraPrefs());
+      const displayConstraints = prefsToConstraints(loadDisplayPrefs());
       title = t('sources-video-question');
       hideActionButtons = true;
-      if (anySupported) {
-        body = <React.Fragment>
-          <Spacer />
-          <Flex
-            sx={{
-              flexDirection: ['column', 'row'],
-              maxWidth: [270, 850],
-              width: '100%',
-              mx: ['auto', 'none'],
-              mb: 3,
-              flex: '4 1 auto',
-              maxHeight: ['none', '270px'],
-              justifyContent: 'center',
-              '& > :not(:last-of-type)': {
-                mb: [3, 0],
-                mr: [0, 3],
-              },
-            }}
-          >
-            { displaySupported && <OptionButton
-              label={t('sources-scenario-display')}
-              icon={faChalkboard}
-              onClick={clickDisplay}
-            />}
-            { bothSupported && <OptionButton
-              label={t('sources-scenario-display-and-user')}
-              icon={faChalkboardTeacher}
-              onClick={clickBoth}
-              disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
-            />}
-            { userSupported && <OptionButton
-              label={t('sources-scenario-user')}
-              icon={faUser}
-              onClick={clickUser}
-              disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
-            />}
-          </Flex>
-          <Spacer />
-        </React.Fragment>;
-      } else {
-        body = <Notification isDanger>{t('sources-video-none-available')}</Notification>;
-      }
+      body = <SourceSelection {...{
+        setActiveSource,
+        userConstraints,
+        displayConstraints,
+        userHasWebcam,
+      }} />;
       break;
 
     case VIDEO_SOURCE_USER:
       title = t('sources-video-user-selected');
-      hideActionButtons = !state.userStream && state.userAllowed !== false;
+      hideActionButtons = !userStream && state.userAllowed !== false;
       body = <SourcePreview
-        reselectSource={reselectSource}
         warnings={[userWarning, unexpectedEndWarning]}
-        inputs={[{
-          kind: t('sources-user'),
-          stream: state.userStream,
-          allowed: state.userAllowed,
-          unexpectedEnd: state.userUnexpectedEnd,
-        }]}
+        inputs={[userInput]}
       />;
       break;
 
     case VIDEO_SOURCE_DISPLAY:
       title = t('sources-video-display-selected');
-      hideActionButtons = !state.displayStream && state.displayAllowed !== false;
+      hideActionButtons = !displayStream && state.displayAllowed !== false;
       body = <SourcePreview
-        reselectSource={reselectSource}
         warnings={[displayWarning, unexpectedEndWarning]}
-        inputs={[{
-          kind: t('sources-display'),
-          stream: state.displayStream,
-          allowed: state.displayAllowed,
-          unexpectedEnd: state.displayUnexpectedEnd,
-        }]}
+        inputs={[displayInput]}
       />;
       break;
 
     case VIDEO_SOURCE_BOTH:
       title = t('sources-video-display-and-user-selected');
-      hideActionButtons = (!state.userStream && state.userAllowed !== false)
-        || (!state.displayStream && state.displayAllowed !== false);
+      hideActionButtons = (!userStream && state.userAllowed !== false)
+        || (!displayStream && state.displayAllowed !== false);
       body = <SourcePreview
-        reselectSource={reselectSource}
         warnings={[displayWarning, userWarning, unexpectedEndWarning]}
-        inputs={[
-          {
-            kind: t('sources-display'),
-            stream: state.displayStream,
-            allowed: state.displayAllowed,
-            unexpectedEnd: state.displayUnexpectedEnd,
-          },
-          {
-            kind: t('sources-user'),
-            stream: state.userStream,
-            allowed: state.userAllowed,
-            unexpectedEnd: state.userUnexpectedEnd,
-          },
-        ]}
+        inputs={[displayInput, userInput]}
       />;
       break;
     default:
-      return <p>Something went very wrong</p>;
+      console.error('bug: active source has an unexpected value');
+      return <p>Something went very wrong (internal error) :-(</p>;
   };
 
   const hideReselectSource = hideActionButtons
     && !state.userUnexpectedEnd && !state.displayUnexpectedEnd;
 
   return (
-    <Container
+    <div
       sx={{
         display: 'flex',
         flexDirection: 'column',
         flex: '1 1 auto',
         minHeight: 0,
+        p: 3,
+        pt: [2, 2, 3],
       }}
     >
-      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {title}
+      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['24px', '27px', '32px'] }}>
+        { title }
       </Styled.h1>
 
       { body }
@@ -230,19 +159,87 @@ export default function VideoSetup(props) {
       { activeSource !== VIDEO_SOURCE_NONE && <div sx={{ mb: 3 }} /> }
 
       { activeSource !== VIDEO_SOURCE_NONE && <ActionButtons
-        next={hideActionButtons ? null : {
-          onClick: () => props.nextStep(),
-          disabled: nextDisabled,
-        }}
+        next={hideActionButtons ? null : { onClick: () => nextStep(), disabled: nextDisabled }}
         prev={hideReselectSource ? null : {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
         }}
-      />}
-    </Container>
+      /> }
+    </div>
   );
 }
+
+const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints, userHasWebcam }) => {
+  const { t } = useTranslation();
+
+  const settings = useSettings();
+  const dispatch = useDispatch();
+  const state = useStudioState();
+  const { displaySupported, userSupported } = state;
+
+  const clickUser = async () => {
+    setActiveSource(VIDEO_SOURCE_USER);
+    await startUserCapture(dispatch, settings, userConstraints);
+    await queryMediaDevices(dispatch);
+  };
+  const clickDisplay = async () => {
+    setActiveSource(VIDEO_SOURCE_DISPLAY);
+    await startDisplayCapture(dispatch, settings, displayConstraints);
+  };
+  const clickBoth = async () => {
+    setActiveSource(VIDEO_SOURCE_BOTH);
+    await startUserCapture(dispatch, settings, userConstraints);
+    await Promise.all([
+      queryMediaDevices(dispatch),
+      startDisplayCapture(dispatch, settings, displayConstraints),
+    ]);
+  };
+
+
+  if (!displaySupported && !userSupported) {
+    return <Notification isDanger>{t('sources-video-none-available')}</Notification>;
+  }
+
+  return <React.Fragment>
+    <Spacer />
+    <Flex
+      sx={{
+        flexDirection: ['column', 'row'],
+        maxWidth: [270, 850],
+        width: '100%',
+        mx: ['auto', 'none'],
+        mb: 3,
+        flex: '4 1 auto',
+        maxHeight: ['none', '270px'],
+        justifyContent: 'center',
+        '& > :not(:last-of-type)': {
+          mb: [3, 0],
+          mr: [0, 3],
+        },
+      }}
+    >
+      { displaySupported && <OptionButton
+        label={t('sources-scenario-display')}
+        icon={faChalkboard}
+        onClick={clickDisplay}
+      />}
+      { displaySupported && userSupported && <OptionButton
+        label={t('sources-scenario-display-and-user')}
+        icon={faChalkboardTeacher}
+        onClick={clickBoth}
+        disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
+      />}
+      { userSupported && <OptionButton
+        label={t('sources-scenario-user')}
+        icon={faUser}
+        onClick={clickUser}
+        disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
+      />}
+    </Flex>
+    <Spacer />
+  </React.Fragment>;
+};
 
 const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
   const disabled = disabledText !== false;
@@ -280,3 +277,8 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
 };
 
 const Spacer = (rest) => <div sx={{ flex: '1 0 0' }} {...rest}></div>;
+
+const queryMediaDevices = async (dispatch) => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  dispatch({ type: 'UPDATE_MEDIA_DEVICES', payload: devices });
+};
