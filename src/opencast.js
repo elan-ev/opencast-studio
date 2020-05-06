@@ -140,11 +140,7 @@ export class Opencast {
     if (!equal(newUser, this.#currentUser)) {
       this.#currentUser = newUser;
       if (newUser.user.username === 'anonymous') {
-        if (this.#login) {
-          this.#state = STATE_INCORRECT_LOGIN;
-        } else {
-          this.#state = STATE_CONNECTED;
-        }
+        this.#state = this.#login ? STATE_INCORRECT_LOGIN : STATE_CONNECTED;
       } else {
         this.#state = STATE_LOGGED_IN;
       }
@@ -171,7 +167,7 @@ export class Opencast {
       return await response.json();
     } catch(e) {
       this.#state = STATE_INVALID_RESPONSE;
-      throw new RequestError(`invalid response (invalid JSON) when accessing ${url}: `, e);
+      throw new InvalidJson(url, e);
     }
   }
 
@@ -201,20 +197,18 @@ export class Opencast {
       });
     } catch (e) {
       this.#state = STATE_NETWORK_ERROR;
-      throw new RequestError(`network error when accessing '${url}': `, e);
+      throw new NetworkError(url, e);
     }
 
     // Handle 401 Bad credentials for HTTP Basic Auth
     if (response.status === 401) {
       this.#state = STATE_INCORRECT_LOGIN;
-      throw new RequestError("incorrect login data (request returned 401)");
+      throw new BadCredentials(url);
     }
 
     if (!response.ok && response.type !== 'opaqueredirect') {
       this.#state = STATE_RESPONSE_NOT_OK;
-      throw new RequestError(
-        `unexpected ${response.status} ${response.statusText} response when accessing ${url}`
-      );
+      throw new NotOkResponse(response.status, response.statusText, url);
     }
 
     return response;
@@ -405,6 +399,7 @@ export class Opencast {
   // Constructs the ACL XML structure from the given template string.
   constructAcl(template) {
     if (!this.#currentUser) {
+      // Internal error: this should not happen.
       throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
     }
 
@@ -439,17 +434,48 @@ export class Opencast {
 }
 
 
-// Internal error type, simply containing a string.
-function RequestError(msg) {
-  this.msg = msg;
+// ===== Errors that can occur when accessing the Opencast API =====
+
+// Base error
+class RequestError extends Error {}
+
+// The fetch itself failed. This unfortunately can have many causes, including
+// blocked by browser, CORS, server not available, device offline, ...
+class NetworkError extends RequestError {
+  constructor(url, cause) {
+    super(`network error when accessing '${url}': ${cause}`);
+  }
 }
 
+// When requesting a JSON API but the response body is not valid JSON.
+class InvalidJson extends RequestError {
+  constructor(url, cause) {
+    super(`invalid JSON when accessing ${url}: ${cause}`);
+  }
+}
+
+// When the request returns 401.
+class BadCredentials extends RequestError {
+  constructor(url) {
+    super(`got 401 Bad credentials when accessing ${url}`);
+  }
+}
+
+// When the request returns a non-2xx status code.
+class NotOkResponse extends RequestError {
+  constructor(status, statusText, url) {
+    super(`unexpected ${status} ${statusText} response when accessing ${url}`);
+  }
+}
+
+// Calls the async function `fn`. In case of `RequestError`, the error is
+// printed and `null` is returned.
 const catchRequestError = async (fn) => {
   try {
     return await fn();
   } catch (e) {
     if (e instanceof RequestError) {
-      console.error(e.msg);
+      console.error(e);
     } else {
       throw e;
     }
@@ -457,6 +483,8 @@ const catchRequestError = async (fn) => {
   }
 };
 
+
+// ===== The Opencast context and `useOpencast` =====
 
 const Context = React.createContext(null);
 
@@ -487,6 +515,9 @@ export const Provider = ({ initial, children }) => {
     </Context.Provider>
   );
 };
+
+
+// ===== Stuff related to upload metadats =====
 
 const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));
