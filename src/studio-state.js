@@ -141,9 +141,6 @@ const reducer = (state, action) => {
     case 'UPLOAD_ERROR':
       return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
 
-    case 'UPLOAD_FAILURE':
-      return { ...state, upload: { ...state.upload, error: action.payload, state: STATE_ERROR }};
-
     case 'UPLOAD_REQUEST':
       return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING }};
 

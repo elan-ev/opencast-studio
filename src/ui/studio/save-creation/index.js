@@ -9,7 +9,13 @@ import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useOpencast, STATE_INCORRECT_LOGIN } from '../../../opencast';
+import {
+  useOpencast,
+  UPLOAD_SUCCESS,
+  UPLOAD_NETWORK_ERROR,
+  UPLOAD_NOT_AUTHORIZED,
+  UPLOAD_UNEXPECTED_RESPONSE,
+} from '../../../opencast';
 import { useSettings } from '../../../settings';
 import {
   useDispatch,
@@ -123,7 +129,7 @@ export default function SaveCreation(props) {
       timestamp: Date.now(),
       progress: 0,
     });
-    const success = await opencast.upload({
+    const result = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
@@ -132,18 +138,21 @@ export default function SaveCreation(props) {
     });
     progressHistory = [];
 
-    if (success) {
-      dispatch({ type: 'UPLOAD_SUCCESS' });
-    } else {
-      switch (opencast.getState()) {
-        case STATE_INCORRECT_LOGIN:
-          dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-login-failed') });
-          break;
-        default:
-          // TODO: this needs a better message and maybe some special cases.
-          dispatch({ type: 'UPLOAD_FAILURE', payload: t('message-server-unreachable') });
-          break;
-      }
+    switch (result) {
+      case UPLOAD_SUCCESS:
+        dispatch({ type: 'UPLOAD_SUCCESS' });
+        break;
+      case UPLOAD_NETWORK_ERROR:
+        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-network-error') });
+        break;
+      case UPLOAD_NOT_AUTHORIZED:
+        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-not-authorized') });
+        break;
+      case UPLOAD_UNEXPECTED_RESPONSE:
+        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-invalid-response') });
+        break;
+      default: // including UPLOAD_UNKNOWN_ERROR
+        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-unknown-error') });
     }
   }
 
