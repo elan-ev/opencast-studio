@@ -19,7 +19,7 @@ const resources = {
   fa: { translation: faTranslations },
   fr: { translation: frTranslations },
   nl: { translation: nlTranslations },
-  tr: { translation: trTranslations }
+  tr: { translation: trTranslations },
 };
 
 i18n
@@ -32,12 +32,12 @@ i18n
     keySeparator: false,
 
     interpolation: {
-      escapeValue: false
+      escapeValue: false,
     },
 
     detection: {
       order: ['localStorage', 'navigator'],
-    }
+    },
   });
 
 export default i18n;

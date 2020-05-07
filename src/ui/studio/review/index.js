@@ -33,19 +33,19 @@ export default function Review(props) {
     <StepContainer>
       <Styled.h1>{ t('review-heading') }</Styled.h1>
 
-      { prematureRecordingEnd && (
+      {prematureRecordingEnd && (
         <Notification isDanger>
           <Text>{t('error-lost-stream-end-recording')}</Text>
         </Notification>
       )}
 
-      { emptyRecording && (
+      {emptyRecording && (
         <Notification isDanger>{t('review-error-empty-recording')}</Notification>
       )}
 
       <Preview />
 
-      <div sx={{ mb: 3 }}></div>
+      <div sx={{ mb: 3 }} />
 
       <ActionButtons
         prev={{
@@ -173,10 +173,10 @@ const Preview = () => {
           backgroundColor: '#ccc',
           outline: 'none'
         }}
-      ></video>
+      />
     ),
     dimensions: () => recording.dimensions,
   }));
 
-  return <VideoBox gap={20}>{ children }</VideoBox>;
+  return <VideoBox gap={20}>{children}</VideoBox>;
 };

@@ -632,7 +632,7 @@ export const Provider = ({ initial, children }) => {
 
 const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));
-}
+};
 
 const dcCatalog = ({ creator, title, seriesId }) => {
   const seriesLine = seriesId
@@ -652,7 +652,7 @@ const dcCatalog = ({ creator, title, seriesId }) => {
         <dcterms:spatial>Opencast Studio</dcterms:spatial>
         ${seriesLine}
     </dublincore>`;
-}
+};
 
 const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Policy PolicyId="mediapackage-1"

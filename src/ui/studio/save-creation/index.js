@@ -301,7 +301,7 @@ const ConnectionUnconfiguredWarning = () => {
       </Trans>
     </Notification>
   );
-}
+};
 
 const UploadForm = ({ uploadState, handleUpload }) => {
   const { t } = useTranslation();
@@ -380,7 +380,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
       </Box>
     </React.Fragment>
   );
-}
+};
 
 const NotConnectedWarning = () => {
   const location = useLocation();
@@ -496,11 +496,11 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
   } else if (secondsLeft < 90) {
     prettyTime = t('upload-time-a-minute');
   } else if (secondsLeft < 45 * 60) {
-    prettyTime = `${Math.round(secondsLeft / 60)} ${t('upload-time-minutes')}`
+    prettyTime = `${Math.round(secondsLeft / 60)} ${t('upload-time-minutes')}`;
   } else if (secondsLeft < 90 * 60) {
     prettyTime = t('upload-time-an-hour');
   } else if (secondsLeft < 24 * 60 * 60) {
-    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t('upload-time-hours')}`
+    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t('upload-time-hours')}`;
   } else {
     prettyTime = null;
   }
@@ -522,7 +522,7 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
       <Text variant='text' sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>
     </React.Fragment>
   );
-}
+};
 
 // Shown if the upload was successful. A big green checkmark and a text.
 const UploadSuccess = () => {
@@ -543,4 +543,4 @@ const UploadSuccess = () => {
       <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
     </React.Fragment>
   );
-}
+};
