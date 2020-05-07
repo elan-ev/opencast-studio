@@ -440,6 +440,8 @@ export class Opencast {
       body.append('tags', '');
       body.append('BODY', media, downloadName);
 
+      // We have to upload with XHR here, as `fetch` does not currently offer a
+      // way to get the upload progress. Meh.
       const url = `${this.#serverUrl}/ingest/addTrack`;
       mediaPackage = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -456,14 +458,10 @@ export class Opencast {
         xhr.onload = e => resolve(e.target.responseText);
         xhr.onerror = () => {
           // Handle 401 Bad credentials for HTTP Basic Auth
-          if (xhr.status === 401) {
-            this.#state = STATE_INCORRECT_LOGIN;
-            reject(new RequestError("incorrect login data (request returned 401)"));
+          if (xhr.status === 401 || xhr.status === 403) {
+            reject(new Unauthorized(xhr.status, xhr.statusText, url));
           } else {
-            this.#state = STATE_RESPONSE_NOT_OK;
-            reject(new RequestError(
-              `unexpected ${xhr.status} ${xhr.statusText} response when accessing ${url}`
-            ));
+            reject(new NotOkResponse(xhr.status, xhr.statusText, url));
           }
         };
         xhr.upload.onprogress = e => {
@@ -476,8 +474,7 @@ export class Opencast {
         try {
           xhr.send(body);
         } catch (e) {
-          this.#state = STATE_NETWORK_ERROR;
-          reject(new RequestError(`network error when accessing '${url}': `, e));
+          reject(new NetworkError(url, e));
         }
       });
 
