@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import Mustache from 'mustache';
 
-import { recordingFileName } from './util.js';
+import { recordingFileName, sleep } from './util.js';
 
 
 // The server URL was not specified.
@@ -94,7 +94,12 @@ export class Opencast {
       self.#login = null;
     }
 
-    await self.updateUser();
+    // We wait for at most 300ms for those requests to succeed. In the vast
+    // majority of cases the requests should be done long before that. We just
+    // don't want to stall the loading of the app forever if the user is on slow
+    // internet. The information is not actually needed for anything important.
+    // It's mostly for debugging at this point.
+    await Promise.race([self.updateUser(), sleep(300)]);
 
     return self;
   }
