@@ -101,6 +101,12 @@ export class Opencast {
     // It's mostly for debugging at this point.
     await Promise.race([self.updateUser(), sleep(300)]);
 
+    // To avoid problems of session timeouts, we request `info/me` every 5
+    // minutes. The additional server load should be negligible, it won't
+    // notably stress the user's internet connection and is below almost all
+    // sensible timeouts.
+    setInterval(() => self.refreshConnection(), 5 * 60 * 1000);
+
     return self;
   }
 
