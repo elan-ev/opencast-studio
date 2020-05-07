@@ -32,6 +32,12 @@ export const STATE_INVALID_RESPONSE = 'invalid_response';
 // succeed.
 export const STATE_INCORRECT_LOGIN = 'incorrect_login';
 
+export const UPLOAD_SUCCESS = 'upload_success';
+export const UPLOAD_NETWORK_ERROR = 'upload_network_error';
+export const UPLOAD_NOT_AUTHORIZED = 'upload_not_authorized';
+export const UPLOAD_UNEXPECTED_RESPONSE = 'upload_unexpected_response';
+export const UPLOAD_UNKNOWN_ERROR = 'upload_unknown_error';
+
 
 export class Opencast {
   #state = STATE_UNCONFIGURED;
@@ -43,9 +49,13 @@ export class Opencast {
   // - `{ username, password }`: username and password are given
   #login = null;
 
-  // The response of `info/me.json` or `null` if requesting that API did not
+  // The response of `/info/me.json` or `null` if requesting that API did not
   // succeed.
   #currentUser = null;
+
+  // The response from `/lti` or `null` if the request failed for some reason or
+  // if `this.#login !== true`.
+  #ltiSession = null;
 
   updateGlobalOc = null;
 
@@ -84,7 +94,7 @@ export class Opencast {
       self.#login = null;
     }
 
-    await catchRequestError(async () => await self.updateUser());
+    await self.updateUser();
 
     return self;
   }
@@ -113,50 +123,130 @@ export class Opencast {
   // Refreshes the connection by requesting `info/me` unless the state is
   // 'unconfigured'.
   //
-  // If the request errors or returns a different user, the globale Opencast
+  // If the request errors or returns a different user, the global Opencast
   // instance is updated.
   async refreshConnection() {
     if (this.#state === STATE_UNCONFIGURED) {
       return;
     }
 
-    await catchRequestError(async () => {
-      // Request to `info/me`. If the user or the current state has changed
-      const changed = await this.updateUser();
-      if (changed) {
-        this.updateGlobalOc(this);
-      }
-    });
-  }
-
-  // Updates `#currentUser` by checking 'info/me.json'.
-  //
-  // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
-  // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED`. This method returns whether
-  // the state or user object has changed in any way.
-  async updateUser() {
-    const newUser = await this.getInfoMe();
-
-    if (!equal(newUser, this.#currentUser)) {
-      this.#currentUser = newUser;
-      if (newUser.user.username === 'anonymous') {
-        if (this.#login) {
-          this.#state = STATE_INCORRECT_LOGIN;
-        } else {
-          this.#state = STATE_CONNECTED;
-        }
-      } else {
-        this.#state = STATE_LOGGED_IN;
-      }
-      return true;
-    } else {
-      return false;
+    // Request to `info/me` and update if necessary.
+    const changed = await this.updateUser();
+    if (changed) {
+      this.updateGlobalOc(this);
     }
   }
 
-  // Returns the response from the `info/me.json` endpoint.
+  // Updates `#currentUser` and `#ltiSession` by checking 'info/me.json' and
+  // `/lti` respectively.
+  //
+  // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
+  // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED` (or any error state on request
+  // error). This method returns whether the state, user object or lti object
+  // has changed in any way.
+  async updateUser() {
+    // Try to request `info/me.json` and handle potential errors.
+    let newUser;
+    try {
+      newUser = await this.getInfoMe();
+    } catch (e) {
+      // If it's not our own error, rethrow it.
+      if (!(e instanceof RequestError)) {
+        throw e;
+      }
+
+      console.error('error when getting info/me', e);
+
+      const oldState = this.#state;
+
+      // Update state, depending on kind of error.
+      if (e instanceof NetworkError) {
+        this.#state = STATE_NETWORK_ERROR;
+      } else if (e instanceof Unauthorized) {
+        this.#state = STATE_INCORRECT_LOGIN;
+      } else if (e instanceof NotOkResponse) {
+        this.#state = STATE_RESPONSE_NOT_OK;
+      } else if (e instanceof UnexpectedRedirect) {
+        // This might be too much of an assumption, but we interpret any
+        // redirect as redirect to the login page, indicating that the user is
+        // not logged in/does not have sufficient rights. Usually
+        // `/info/me.json` is available to anonymous users, so we should never
+        // get redirected. But this can be reconfigured.
+        this.#state = STATE_INCORRECT_LOGIN;
+      } else if (e instanceof InvalidJson) {
+        this.#state = STATE_INVALID_RESPONSE;
+      }
+
+      const hasChanged = this.#currentUser === null || oldState !== this.#state;
+      this.#currentUser = null;
+      return hasChanged;
+    }
+
+    const userChanged = !equal(newUser, this.#currentUser);
+    if (userChanged) {
+      this.#currentUser = newUser;
+      if (newUser?.user?.username === 'anonymous') {
+        this.#state = this.#login ? STATE_INCORRECT_LOGIN : STATE_CONNECTED;
+      } else if (newUser?.user?.username) {
+        this.#state = STATE_LOGGED_IN;
+      } else {
+        this.#state = STATE_INVALID_RESPONSE;
+      }
+    }
+
+    // Only check LTI context information if we are in an integrated situation.
+    // If the user authenticates via username/password (via HTTP basic auth),
+    // there is never an LTI session. (Well, at least the people I talked to
+    // think so).
+    if (this.#login !== true) {
+      return userChanged;
+    }
+
+    // Attempt to fetch LTI information and handle potential errors.
+    let newLtiSession;
+    try {
+      newLtiSession = await this.getLti();
+    } catch (e) {
+      // If it's not our own error, rethrow it.
+      if (!(e instanceof RequestError)) {
+        throw e;
+      }
+
+      console.error('Error when getting LTI info: ', e);
+
+      const oldState = this.#state;
+
+      if (e instanceof NetworkError) {
+        // Highly unlikely as the previous request suceeded.
+        this.#state = STATE_NETWORK_ERROR;
+      } else if (e instanceof Unauthorized || e instanceof UnexpectedRedirect) {
+        // It might be that the user has not access to this endpoint. In this
+        // case, there is no LTI session. We do not switch to an error state.
+      } else {
+        // In the cases of strange or invalid responses, we just ignore it for
+        // now. I don't know when that would occur. No need to switch to an
+        // error state for now.
+      }
+
+      const hasChanged = this.#ltiSession === null || oldState !== this.#state;
+      this.#ltiSession = null;
+      return hasChanged;
+    }
+
+    const ltiChanged = !equal(newLtiSession, this.#ltiSession);
+    this.#ltiSession = newLtiSession;
+
+    return userChanged || ltiChanged;
+  }
+
+  // Returns the response from the `/info/me.json` endpoint.
   async getInfoMe() {
-    return await this.jsonRequest("info/me.json");
+    return await this.jsonRequest('info/me.json');
+  }
+
+  // Returns the response from the `/lti` endpoint.
+  async getLti() {
+    return await this.jsonRequest('lti');
   }
 
   // Sends a request to the Opencast API expecting a JSON response.
@@ -170,8 +260,7 @@ export class Opencast {
     try {
       return await response.json();
     } catch(e) {
-      this.#state = STATE_INVALID_RESPONSE;
-      throw new RequestError(`invalid response (invalid JSON) when accessing ${url}: `, e);
+      throw new InvalidJson(url, e);
     }
   }
 
@@ -200,34 +289,52 @@ export class Opencast {
         headers,
       });
     } catch (e) {
-      this.#state = STATE_NETWORK_ERROR;
-      throw new RequestError(`network error when accessing '${url}': `, e);
+      throw new NetworkError(url, e);
     }
 
     // Handle 401 Bad credentials for HTTP Basic Auth
-    if (response.status === 401) {
-      this.#state = STATE_INCORRECT_LOGIN;
-      throw new RequestError("incorrect login data (request returned 401)");
+    if (response.status === 401 || response.status === 403) {
+      throw new Unauthorized(response.status, response.statusText, url);
+    }
+
+    if (response.type === 'opaqueredirect') {
+      throw new UnexpectedRedirect(url);
     }
 
     if (!response.ok && response.type !== 'opaqueredirect') {
-      this.#state = STATE_RESPONSE_NOT_OK;
-      throw new RequestError(
-        `unexpected ${response.status} ${response.statusText} response when accessing ${url}`
-      );
+      throw new NotOkResponse(response.status, response.statusText, url);
     }
 
     return response;
   }
 
-  // Uploads the given recordings with the given title and creator metadata. If
-  // the upload fails, `false` is returned and `getState` changes to an error
-  // state.
+  // Uploads the given recordings with the given title and creator metadata.
+  //
+  // If the upload was successful, `UPLOAD_SUCCESS` is returned. Otherwise:
+  // - `UPLOAD_NETWORK_ERROR` if some kind of network error occurs.
+  // - `UPLOAD_NOT_AUTHORIZED` if some error occurs that indicates the user is
+  //   not logged in or lacking rights.
+  // - `UPLOAD_UNEXPECTED_RESPONSE` if the API returned data that we didn't
+  //   expect.
+  // - `UPLOAD_UNKNOWN_ERROR` if any other error occurs.
+  //
+  // At the start of this method, `refreshConnection` is called. That
+  // potentially changed the `state`.
   async upload({ recordings, title, creator, uploadSettings, onProgress }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
-    if (!this.isReadyToUpload()) {
-      return false;
+    switch (this.#state) {
+      case STATE_LOGGED_IN:
+        break;
+      case STATE_NETWORK_ERROR:
+        return UPLOAD_NETWORK_ERROR;
+      case STATE_INCORRECT_LOGIN:
+      case STATE_CONNECTED:
+        return UPLOAD_NOT_AUTHORIZED;
+      case STATE_INVALID_RESPONSE:
+        return UPLOAD_UNEXPECTED_RESPONSE;
+      default:
+        return UPLOAD_UNKNOWN_ERROR;
     }
 
     // Actually upload
@@ -252,10 +359,28 @@ export class Opencast {
       // Finalize/ingest media package
       await this.finishIngest({ mediaPackage, uploadSettings });
 
-      return true;
+      return UPLOAD_SUCCESS;
     } catch(e) {
+      // Any error not thrown by us is rethrown.
+      if (!(e instanceof RequestError)) {
+        throw e;
+      }
+
       console.error("Error occured during upload: ", e);
-      return false;
+
+      if (e instanceof NetworkError) {
+        return UPLOAD_NETWORK_ERROR;
+      } else if (e instanceof UnexpectedRedirect || e instanceof Unauthorized) {
+        // Again, we boldly assume that any redirect is a redirect to the login
+        // page. This might be wrong, but until someone has a problem, this is
+        // the sanest option IMO. A well-designed API shouldn't redirect in
+        // those cases, of course. But we are not dealing with such an API here.
+        return UPLOAD_NOT_AUTHORIZED;
+      } else if (e instanceof NotOkResponse) {
+        return UPLOAD_UNEXPECTED_RESPONSE;
+      } else {
+        return UPLOAD_UNKNOWN_ERROR;
+      }
     }
   }
 
@@ -405,6 +530,7 @@ export class Opencast {
   // Constructs the ACL XML structure from the given template string.
   constructAcl(template) {
     if (!this.#currentUser) {
+      // Internal error: this should not happen.
       throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
     }
 
@@ -439,24 +565,48 @@ export class Opencast {
 }
 
 
-// Internal error type, simply containing a string.
-function RequestError(msg) {
-  this.msg = msg;
+// ===== Errors that can occur when accessing the Opencast API =====
+
+// Base error
+class RequestError extends Error {}
+
+// The fetch itself failed. This unfortunately can have many causes, including
+// blocked by browser, CORS, server not available, device offline, ...
+class NetworkError extends RequestError {
+  constructor(url, cause) {
+    super(`network error when accessing '${url}': ${cause}`);
+  }
 }
 
-const catchRequestError = async (fn) => {
-  try {
-    return await fn();
-  } catch (e) {
-    if (e instanceof RequestError) {
-      console.error(e.msg);
-    } else {
-      throw e;
-    }
-    return null;
+// When requesting a JSON API but the response body is not valid JSON.
+class InvalidJson extends RequestError {
+  constructor(url, cause) {
+    super(`invalid JSON when accessing ${url}: ${cause}`);
   }
-};
+}
 
+// When the request returns 401.
+class Unauthorized extends RequestError {
+  constructor(status, statusText, url) {
+    super(`got ${status} ${statusText} when accessing ${url}`);
+  }
+}
+
+// When the request returns a non-2xx status code.
+class NotOkResponse extends RequestError {
+  constructor(status, statusText, url) {
+    super(`unexpected ${status} ${statusText} response when accessing ${url}`);
+  }
+}
+
+class UnexpectedRedirect extends RequestError {
+  constructor(url) {
+    super(`unexpected redirect when accessing ${url}`);
+  }
+}
+
+
+// ===== The Opencast context and `useOpencast` =====
 
 const Context = React.createContext(null);
 
@@ -487,6 +637,9 @@ export const Provider = ({ initial, children }) => {
     </Context.Provider>
   );
 };
+
+
+// ===== Stuff related to upload metadats =====
 
 const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));

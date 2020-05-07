@@ -25,6 +25,10 @@
   "save-creation-download-button": "Runterladen",
   "save-creation-subsection-title-upload": "Zu Opencast hochladen",
   "save-creation-upload-to": "Zu <1>{{server}}</1> hochladen",
+  "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internet-Verbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
+  "save-creation-upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
+  "save-creation-upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
+  "save-creation-upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
   "save-creation-new-recording": "Neue Aufzeichnung starten",
   "save-creation-new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
 
