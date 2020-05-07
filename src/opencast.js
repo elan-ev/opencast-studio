@@ -49,9 +49,13 @@ export class Opencast {
   // - `{ username, password }`: username and password are given
   #login = null;
 
-  // The response of `info/me.json` or `null` if requesting that API did not
+  // The response of `/info/me.json` or `null` if requesting that API did not
   // succeed.
   #currentUser = null;
+
+  // The response from `/lti` or `null` if the request failed for some reason or
+  // if `this.#login !== true`.
+  #ltiSession = null;
 
   updateGlobalOc = null;
 
@@ -133,12 +137,13 @@ export class Opencast {
     }
   }
 
-  // Updates `#currentUser` by checking 'info/me.json'.
+  // Updates `#currentUser` and `#ltiSession` by checking 'info/me.json' and
+  // `/lti` respectively.
   //
   // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
   // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED` (or any error state on request
-  // error). This method returns whether the state or user object has changed in
-  // any way.
+  // error). This method returns whether the state, user object or lti object
+  // has changed in any way.
   async updateUser() {
     // Try to request `info/me.json` and handle potential errors.
     let newUser;
@@ -150,7 +155,9 @@ export class Opencast {
         throw e;
       }
 
-      console.error(e);
+      console.error('error when getting info/me', e);
+
+      const oldState = this.#state;
 
       // Update state, depending on kind of error.
       if (e instanceof NetworkError) {
@@ -170,12 +177,13 @@ export class Opencast {
         this.#state = STATE_INVALID_RESPONSE;
       }
 
-      const hasChanged = this.#currentUser === null;
+      const hasChanged = this.#currentUser === null || oldState !== this.#state;
       this.#currentUser = null;
       return hasChanged;
     }
 
-    if (!equal(newUser, this.#currentUser)) {
+    const userChanged = !equal(newUser, this.#currentUser);
+    if (userChanged) {
       this.#currentUser = newUser;
       if (newUser?.user?.username === 'anonymous') {
         this.#state = this.#login ? STATE_INCORRECT_LOGIN : STATE_CONNECTED;
@@ -184,15 +192,61 @@ export class Opencast {
       } else {
         this.#state = STATE_INVALID_RESPONSE;
       }
-      return true;
-    } else {
-      return false;
     }
+
+    // Only check LTI context information if we are in an integrated situation.
+    // If the user authenticates via username/password (via HTTP basic auth),
+    // there is never an LTI session. (Well, at least the people I talked to
+    // think so).
+    if (this.#login !== true) {
+      return userChanged;
+    }
+
+    // Attempt to fetch LTI information and handle potential errors.
+    let newLtiSession;
+    try {
+      newLtiSession = await this.getLti();
+    } catch (e) {
+      // If it's not our own error, rethrow it.
+      if (!(e instanceof RequestError)) {
+        throw e;
+      }
+
+      console.error('Error when getting LTI info: ', e);
+
+      const oldState = this.#state;
+
+      if (e instanceof NetworkError) {
+        // Highly unlikely as the previous request suceeded.
+        this.#state = STATE_NETWORK_ERROR;
+      } else if (e instanceof Unauthorized || e instanceof UnexpectedRedirect) {
+        // It might be that the user has not access to this endpoint. In this
+        // case, there is no LTI session. We do not switch to an error state.
+      } else {
+        // In the cases of strange or invalid responses, we just ignore it for
+        // now. I don't know when that would occur. No need to switch to an
+        // error state for now.
+      }
+
+      const hasChanged = this.#ltiSession === null || oldState !== this.#state;
+      this.#ltiSession = null;
+      return hasChanged;
+    }
+
+    const ltiChanged = !equal(newLtiSession, this.#ltiSession);
+    this.#ltiSession = newLtiSession;
+
+    return userChanged || ltiChanged;
   }
 
-  // Returns the response from the `info/me.json` endpoint.
+  // Returns the response from the `/info/me.json` endpoint.
   async getInfoMe() {
-    return await this.jsonRequest("info/me.json");
+    return await this.jsonRequest('info/me.json');
+  }
+
+  // Returns the response from the `/lti` endpoint.
+  async getLti() {
+    return await this.jsonRequest('lti');
   }
 
   // Sends a request to the Opencast API expecting a JSON response.
