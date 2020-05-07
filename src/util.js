@@ -69,7 +69,7 @@ export const mimeToExt = mime => {
   // If we know nothing, our best guess is webm; except for Safari which does
   // not understand webm: there it's mp4.
   return onSafari() ? "mp4" : "webm";
-}
+};
 
 // Returns a suitable filename for a recording with the MIME type `mime` and the
 // given `flavor`. The latter should be either `presenter` or `presentation`.
@@ -82,7 +82,7 @@ export const recordingFileName = ({ mime, flavor, title, presenter }) => {
 };
 
 const nowAsString = () => {
-  const pad2 = n => n >= 10 ? '' + n : '0' + n;
+  const pad2 = n => (n >= 10 ? '' : '0') + n;
 
   const now = new Date();
   return ''
@@ -100,7 +100,7 @@ export const userHasWebcam = async () => {
 
   const devices = await navigator.mediaDevices.enumerateDevices();
   return devices.some(d => d.kind === 'videoinput');
-}
+};
 
 // Decodes the given hex string into a new string. If the given string contains
 // characters that are not hexadecimal digits or if the string's length is odd,

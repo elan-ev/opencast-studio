@@ -16,6 +16,7 @@
     "@theme-ui/color": "^0.3.1",
     "@theme-ui/components": "^0.3.1",
     "deepmerge": "^4.2.2",
+    "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "fast-deep-equal": "^3.0.0",
@@ -44,8 +45,8 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') react-scripts start",
-    "build": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') react-scripts build",
+    "start": "EXTEND_ESLINT=true REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') react-scripts start",
+    "build": "EXTEND_ESLINT=true REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') react-scripts build",
     "lint": "eslint src/",
     "pretest": "npm run lint",
     "test": "react-scripts test",

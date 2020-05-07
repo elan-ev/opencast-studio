@@ -22,7 +22,7 @@ function addRecordOnStop(dispatch, deviceType) {
 }
 
 function mixAudioIntoVideo(audioStream, videoStream) {
-  if (!audioStream || audioStream.getAudioTracks().length === 0) {
+  if (!(audioStream?.getAudioTracks().length)) {
     return videoStream;
   }
   return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
@@ -81,18 +81,18 @@ export default function RecordingControls({
   };
 
   const resume = () => {
-    desktopRecorder.current && desktopRecorder.current.resume();
-    videoRecorder.current && videoRecorder.current.resume();
+    desktopRecorder.current?.resume();
+    videoRecorder.current?.resume();
   };
 
   const pause = () => {
-    desktopRecorder.current && desktopRecorder.current.pause();
-    videoRecorder.current && videoRecorder.current.pause();
+    desktopRecorder.current?.pause();
+    videoRecorder.current?.pause();
   };
 
   const stop = (premature = false) => {
-    desktopRecorder.current && desktopRecorder.current.stop();
-    videoRecorder.current && videoRecorder.current.stop();
+    desktopRecorder.current?.stop();
+    videoRecorder.current?.stop();
     handleRecorded();
     dispatch({ type: premature ? 'STOP_RECORDING_PREMATURELY' : 'STOP_RECORDING' });
     unblockers.forEach(b => b());
@@ -100,7 +100,7 @@ export default function RecordingControls({
   };
 
   useEffect(() => {
-    // Detect if a stream ended unexpectedly. In that was we want to stop the
+    // Detect if a stream ended unexpectedly. In that case we want to stop the
     // recording completely.
     const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
     if (unexpectedEnd && recordingState === STATE_RECORDING) {
