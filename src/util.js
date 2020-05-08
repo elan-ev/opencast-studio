@@ -130,3 +130,6 @@ export const decodeHexString = hex => {
 
   return new TextDecoder().decode(bytes);
 };
+
+// Returns a promise that resolves after `ms` milliseconds.
+export const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
