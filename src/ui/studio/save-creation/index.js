@@ -3,16 +3,26 @@
 import { jsx, Styled, Progress } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faUpload, faRedoAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheckCircle,
+  faUpload,
+  faRedoAlt,
+  faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { usePageVisibility } from 'react-page-visibility';
 
 import {
   useOpencast,
   STATE_UNCONFIGURED,
   STATE_CONNECTED,
+  STATE_NETWORK_ERROR,
+  STATE_INCORRECT_LOGIN,
+  STATE_RESPONSE_NOT_OK,
+  STATE_INVALID_RESPONSE,
   UPLOAD_SUCCESS,
   UPLOAD_NETWORK_ERROR,
   UPLOAD_NOT_AUTHORIZED,
@@ -334,6 +344,8 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
   return (
     <React.Fragment>
+      <NotConnectedWarning />
+
       <FormField label={t('save-creation-label-title')}>
         <Input
           name="title"
@@ -369,6 +381,72 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     </React.Fragment>
   );
 }
+
+const NotConnectedWarning = () => {
+  const opencast = useOpencast();
+  const { t } = useTranslation();
+  const isVisible = usePageVisibility();
+
+  // In an error state, we are retrying every 5 seconds. We only busy poll if
+  // the page is actually active to not waste resources.
+  const [retrying, setRetrying] = useState(false);
+  useEffect(() => {
+    if (!opencast.isReadyToUpload() && !retrying && isVisible) {
+      setTimeout(async () => {
+        setRetrying(true);
+        await opencast.refreshConnection();
+        setRetrying(false);
+      }, 5000);
+    }
+  })
+
+  // If the connection is established, we don't show the warning.
+  if (opencast.isReadyToUpload()) {
+    return null;
+  }
+
+  // Piece together the warning message depending on the situation.
+  let problem;
+  let onceResolved;
+  switch (opencast.getState()) {
+    case STATE_NETWORK_ERROR:
+      problem = t('save-creation-warn-unreachable');
+      onceResolved = t('save-creation-warn-once-reestablished');
+      break;
+    case STATE_INCORRECT_LOGIN:
+      problem = opencast.isLoginProvided()
+        ? t('save-creation-warn-session-expired')
+        : t('save-creation-warn-login-failed');
+      onceResolved = t('save-creation-warn-once-problem-solved');
+      break;
+    case STATE_RESPONSE_NOT_OK:
+    case STATE_INVALID_RESPONSE:
+      problem = t('save-creation-warn-server-problem');
+      onceResolved = null;
+      break;
+    default:
+      problem = 'Internal error :-(';
+  }
+
+  return (
+    <Notification isDanger>
+      <div sx={{ textAlign: 'center', fontSize: '40px', lineHeight: 1.3 }}>
+        { retrying
+          ? <Spinner size='40' />
+          : <FontAwesomeIcon icon={faExclamationTriangle} />
+        }
+      </div>
+      <p>{ problem }</p>
+      <p sx={{ mb: 0 }}>
+        { onceResolved }
+        { onceResolved && ' ' }
+        { t('save-creation-warn-upload-anyway') }
+        { ' ' }
+        { t('save-creation-warn-download-hint') }
+      </p>
+    </Notification>
+  );
+};
 
 // Shown during upload. Shows a progressbar, the percentage of data already
 // uploaded and `secondsLeft` nicely formatted as human readable time.
