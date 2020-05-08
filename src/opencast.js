@@ -188,8 +188,11 @@ export class Opencast {
         this.#state = STATE_INVALID_RESPONSE;
       }
 
-      const hasChanged = this.#currentUser === null || oldState !== this.#state;
+      const hasChanged = this.#currentUser !== null
+        || this.ltiSession !== null
+        || oldState !== this.#state;
       this.#currentUser = null;
+      this.#ltiSession = null;
       return hasChanged;
     }
 
@@ -210,7 +213,9 @@ export class Opencast {
     // there is never an LTI session. (Well, at least the people I talked to
     // think so).
     if (this.#login !== true) {
-      return userChanged;
+      const hasChanged = userChanged || this.#ltiSession !== null;
+      this.#ltiSession = null;
+      return hasChanged;
     }
 
     // Attempt to fetch LTI information and handle potential errors.
@@ -239,7 +244,7 @@ export class Opencast {
         // error state for now.
       }
 
-      const hasChanged = this.#ltiSession === null || oldState !== this.#state;
+      const hasChanged = userChanged || this.#ltiSession !== null || oldState !== this.#state;
       this.#ltiSession = null;
       return hasChanged;
     }
