@@ -27,7 +27,7 @@ import {
   stopDisplayCapture,
   stopUserCapture
 } from '../capturer';
-import { ActionButtons } from '../elements';
+import { ActionButtons, StepContainer } from '../elements';
 import { SourcePreview } from './preview';
 import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 
@@ -140,19 +140,8 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
     && !state.userUnexpectedEnd && !state.displayUnexpectedEnd;
 
   return (
-    <div
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: '1 1 auto',
-        minHeight: 0,
-        p: 3,
-        pt: [2, 2, 3],
-      }}
-    >
-      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['24px', '27px', '32px'] }}>
-        { title }
-      </Styled.h1>
+    <StepContainer>
+      <Styled.h1>{ title }</Styled.h1>
 
       { body }
 
@@ -166,7 +155,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
           label: 'sources-video-reselect-source',
         }}
       /> }
-    </div>
+    </StepContainer>
   );
 }
 

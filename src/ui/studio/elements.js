@@ -10,6 +10,27 @@ import { useTranslation } from 'react-i18next';
 import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
 
+
+// A full width flex container for some steps of the wizard.
+export const StepContainer = ({ children }) => (
+  <div
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1 1 auto',
+      justifyContent: 'space-between',
+      p: 3,
+      pt: [2, 2, 3],
+      '& > h1': {
+        textAlign: 'center',
+        fontSize: ['24px', '27px', '32px'] ,
+      },
+    }}
+  >
+    { children }
+  </div>
+);
+
 // A div containing optional "back" and "next" buttons as well as the centered
 // children. The props `prev` and `next` are objects with the follwing fields:
 //

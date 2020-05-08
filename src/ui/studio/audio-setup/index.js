@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 
-import { Container, Flex, Heading, Spinner, Text } from '@theme-ui/components';
+import { Flex, Heading, Spinner, Text } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +17,7 @@ import {
 } from '../../../studio-state';
 
 import { startAudioCapture, stopAudioCapture } from '../capturer';
-import { ActionButtons } from '../elements';
+import { ActionButtons, StepContainer } from '../elements';
 import Notification from '../../notification';
 
 import PreviewAudio from './preview-audio';
@@ -51,15 +51,8 @@ export default function AudioSetup(props) {
   };
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: '1 1 auto',
-        justifyContent: 'space-between',
-      }}
-    >
-      <Styled.h1 sx={{ textAlign: 'center' }}>{t('sources-audio-question')}</Styled.h1>
+    <StepContainer>
+      <Styled.h1>{t('sources-audio-question')}</Styled.h1>
       <Flex
         sx={{
           flexDirection: ['column', 'row'],
@@ -110,7 +103,7 @@ export default function AudioSetup(props) {
         prev={{ onClick: backToSetupVideo }}
         next={{ onClick: enterStudio, disabled: nextIsDisabled }}
       />
-    </Container>
+    </StepContainer>
   );
 }
 
