@@ -532,14 +532,7 @@ export class Opencast {
     }
 
     // Prepare template "view": the values that can be used within the template.
-    let ltiCourseId = this.#currentUser.roles
-      .find(r => r.endsWith('_Learner') || r.endsWith('_Instructor'))
-      ?.replace('_Learner', '')
-      .replace('_Instructor', '');
-    if (ltiCourseId === 'LTI') {
-      ltiCourseId = undefined;
-    }
-
+    const ltiCourseId = this.#ltiSession?.context_id;
     const roleOAuthUser = this.#currentUser.roles.find(r => r === 'ROLE_OAUTH_USER');
 
     let defaultReadRoles = [this.#currentUser.userRole];
