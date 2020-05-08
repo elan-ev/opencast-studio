@@ -247,7 +247,7 @@ The ACL XML template is a Mustache template. The following variables are passed 
 - `userName`: the username of the currnet user (e.g. `admin`)
 - `userRole`: the user role of the current user (e.g. `ROLE_USER_ADMIN`)
 - `roleOAuthUser`: `"ROLE_OAUTH_USER"` if this role is in `user.roles` or `undefined` otherwise
-- `ltiCourseId`: the LTI course ID extracted from user roles that end with `_Learner` or `_Instructor`. `undefined` if no such roles are within `user.roles`.
+- `ltiCourseId`: the `context_id` taken from the `/lti` endpoint or `undefined` if the field does not exist.
 - `defaultReadRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `ltiCourseId` is defined, also contains `"${ltiCourseId}_Learner"` and `"${ltiCourseId}_Instructor"`.
 - `defaultWriteRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `ltiCourseId` is defined, also contains `"${ltiCourseId}_Instructor"`.
 
