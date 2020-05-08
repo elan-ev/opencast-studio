@@ -11,6 +11,8 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import {
   useOpencast,
+  STATE_UNCONFIGURED,
+  STATE_CONNECTED,
   UPLOAD_SUCCESS,
   UPLOAD_NETWORK_ERROR,
   UPLOAD_NOT_AUTHORIZED,
@@ -171,7 +173,9 @@ export default function SaveCreation(props) {
 
   // Depending on the state, show a different thing in the upload box.
   const uploadBox = (() => {
-    if (!opencast.isReadyToUpload() && uploadState.state === STATE_NOT_UPLOADED) {
+    const showUnconfiguredWarning = uploadState.state === STATE_NOT_UPLOADED
+      && (opencast.getState() === STATE_UNCONFIGURED || opencast.getState() === STATE_CONNECTED);
+    if (showUnconfiguredWarning) {
       return <ConnectionUnconfiguredWarning />;
     }
 
