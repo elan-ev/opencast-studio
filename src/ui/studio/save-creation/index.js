@@ -55,7 +55,7 @@ export default function SaveCreation(props) {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState, title, presenter } = useStudioState();
+  const { recordings, upload: uploadState, title, presenter, start, end } = useStudioState();
   const dispatch = useDispatch();
 
   function handleBack() {
@@ -145,6 +145,8 @@ export default function SaveCreation(props) {
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
+      start,
+      end,
       uploadSettings: settings.upload,
       onProgress,
     });

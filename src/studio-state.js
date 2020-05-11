@@ -47,6 +47,9 @@ const initialState = () => ({
   title: '',
   presenter: '',
 
+  start: null,
+  end: null,
+
   upload: {
     error: null,
     state: STATE_NOT_UPLOADED,
@@ -163,6 +166,12 @@ const reducer = (state, action) => {
 
     case 'UPDATE_PRESENTER':
       return { ...state, presenter: action.payload };
+
+    case 'UPDATE_START':
+      return { ...state, start: action.payload };
+
+    case 'UPDATE_END':
+      return { ...state, end: action.payload };
 
     case 'RESET':
       return initialState();
