@@ -14,7 +14,7 @@ import './i18n';
 import * as serviceWorker from './serviceWorker';
 import { SettingsManager, Provider as SettingsProvider } from './settings';
 import { Opencast, Provider as OpencastProvider } from './opencast';
-import { userHasWebcam } from './util';
+import { userHasWebcam, sleep } from './util';
 
 if (process.env.REACT_APP_ENABLE_SENTRY === '1') {
   Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
@@ -30,7 +30,18 @@ const initialize = Promise.all([
 
   // Load the settings and initialize Opencast
   SettingsManager.init().then(async settingsManager => {
-    const oc = await Opencast.init(settingsManager.settings().opencast);
+
+    // We wait for at most 300ms for `updateUser` to return. In the vast
+    // majority of cases, it should be done long before that timeout. We just
+    // don't want to stall the loading of the app forever if the user is on slow
+    // internet. The information is not actually needed for anything important
+    // in the beginning. It's mostly for debugging at this point.
+    const oc = new Opencast(settingsManager.settings().opencast);
+    await Promise.race([
+      oc.refreshConnection(),
+      sleep(300),
+    ]);
+
     return [settingsManager, oc];
   }),
 ]);
