@@ -414,15 +414,18 @@ const NotConnectedWarning = () => {
       onceResolved = t('save-creation-warn-once-reestablished');
       break;
     case STATE_INCORRECT_LOGIN:
-      problem = opencast.isLoginProvided()
-        ? t('save-creation-warn-session-expired')
-        : t('save-creation-warn-login-failed');
-      onceResolved = t('save-creation-warn-once-problem-solved');
+      if (opencast.isLoginProvided()) {
+        problem = t('save-creation-warn-session-expired');
+        onceResolved = t('save-creation-warn-once-refreshed');
+      } else {
+        problem = t('save-creation-warn-login-failed');
+        onceResolved = t('save-creation-warn-once-logged-in');
+      }
       break;
     case STATE_RESPONSE_NOT_OK:
     case STATE_INVALID_RESPONSE:
-      problem = t('save-creation-warn-server-problem');
-      onceResolved = null;
+      problem = t('save-creation-warn-server-problem')
+        + ' ' + t('save-creation-warn-download-hint');
       break;
     default:
       problem = 'Internal error :-(';
@@ -436,14 +439,14 @@ const NotConnectedWarning = () => {
           : <FontAwesomeIcon icon={faExclamationTriangle} />
         }
       </div>
-      <p>{ problem }</p>
-      <p sx={{ mb: 0 }}>
-        { onceResolved }
-        { onceResolved && ' ' }
-        { t('save-creation-warn-upload-anyway') }
-        { ' ' }
-        { t('save-creation-warn-download-hint') }
-      </p>
+      <p sx={{ mb: 0 }}>{ problem }</p>
+      { onceResolved && (
+        <p sx={{ mb: 0 }}>
+          { onceResolved }
+          { onceResolved && ' ' }
+          { t('save-creation-warn-download-hint') }
+        </p>
+      )}
     </Notification>
   );
 };
