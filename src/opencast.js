@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import Mustache from 'mustache';
 
-import { recordingFileName, sleep } from './util.js';
+import { recordingFileName } from './util.js';
 
 
 // The server URL was not specified.
@@ -60,20 +60,14 @@ export class Opencast {
   updateGlobalOc = null;
 
 
-  // Creates a new instance. Static method instead of constructor because it
-  // needs to be async.
-  static async init(settings) {
-    let self = new Opencast();
-
+  constructor(settings) {
+    // If the server URL is not given, we stay in unconfigured state and
+    // immediately return.
     if (!settings?.serverUrl) {
-      self.#state = STATE_UNCONFIGURED;
-      self.#serverUrl = null;
-      self.#login = null;
-
-      return self;
+      return;
     }
 
-    self.#serverUrl = settings.serverUrl.endsWith('/')
+    this.#serverUrl = settings.serverUrl.endsWith('/')
       ? settings.serverUrl.slice(0, -1)
       : settings.serverUrl;
 
@@ -81,54 +75,34 @@ export class Opencast {
       // Here we can assume Studio is running within an Opencast instance and
       // the route to Studio is protected via login. This means that login
       // cookies are already present and we don't need to worry about that.
-      self.#login = true;
+      this.#login = true;
     } else if (settings.loginName && settings.loginPassword) {
       // Studio is not running in OC context, but username and password are
       // provided.
-      self.#login = {
+      this.#login = {
         username: settings.loginName,
         password: settings.loginPassword,
       };
     } else {
       // Login is not yet provided.
-      self.#login = null;
+      this.#login = null;
     }
+  }
 
-    // We wait for at most 300ms for those requests to succeed. In the vast
-    // majority of cases the requests should be done long before that. We just
-    // don't want to stall the loading of the app forever if the user is on slow
-    // internet. The information is not actually needed for anything important.
-    // It's mostly for debugging at this point.
-    await Promise.race([self.updateUser(), sleep(300)]);
-
-    // To avoid problems of session timeouts, we request `info/me` every 5
-    // minutes. The additional server load should be negligible, it won't
-    // notably stress the user's internet connection and is below almost all
-    // sensible timeouts.
-    setInterval(() => self.refreshConnection(), 5 * 60 * 1000);
-
+  // Creates a new instance from the settings and calls `updateUser` on it.
+  static async init(settings) {
+    let self = new Opencast(settings);
+    await self.updateUser();
     return self;
   }
 
-  // Updates the global OC instance from `this` to `newInstance`, IF the new
-  // instance is different. This should only be called when the settings are
-  // saved.
+  // Updates the global OC instance from `this` to `newInstance`.
   setGlobalInstance(newInstance) {
     if (!this.updateGlobalOc) {
       console.error("bug: 'updateGlobalOc' not set");
     }
 
-    // We only update if the two instances are different (ignoring the
-    // `updateGlobalOc` key though).
-    newInstance.updateGlobalOc = this.updateGlobalOc;
-    const changed = this.#state !== newInstance.#state
-      || this.#serverUrl !== newInstance.#serverUrl
-      || !equal(this.#login, newInstance.#login)
-      || !equal(this.#currentUser, newInstance.#currentUser);
-
-    if (changed) {
-      this.updateGlobalOc(newInstance);
-    }
+    this.updateGlobalOc(newInstance);
   }
 
   // Refreshes the connection by requesting `info/me` unless the state is
@@ -137,14 +111,14 @@ export class Opencast {
   // If the request errors or returns a different user, the global Opencast
   // instance is updated.
   async refreshConnection() {
-    if (this.#state === STATE_UNCONFIGURED) {
+    if (this.#serverUrl === null) {
       return;
     }
 
     // Request to `info/me` and update if necessary.
     const changed = await this.updateUser();
     if (changed) {
-      this.updateGlobalOc(this);
+      this.updateGlobalOc?.(this);
     }
   }
 
@@ -635,6 +609,14 @@ export const Provider = ({ initial, children }) => {
   // This debug output will be useful for future debugging sessions.
   useEffect(() => {
     console.debug("Current Opencast connection: ", opencast);
+
+    // To avoid problems of session timeouts, we request `info/me` every 5
+    // minutes. The additional server load should be negligible, it won't
+    // notably stress the user's internet connection and is below almost all
+    // sensible timeouts.
+    const interval = setInterval(() => opencast.refreshConnection(), 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   });
 
   return (
