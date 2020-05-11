@@ -2,9 +2,12 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 
-import { useRef, useEffect } from 'react';
-import { Spinner, Text } from '@theme-ui/components';
-import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
+import { Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle } from 'react';
+import { Link, IconButton, Flex, Spinner, Text } from '@theme-ui/components';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { ActionButtons, StepContainer, VideoBox } from '../elements';
 import { useStudioState, useDispatch } from '../../../studio-state';
@@ -14,8 +17,10 @@ import Notification from '../../notification';
 export default function Review(props) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
-  const { recordings, prematureRecordingEnd } = useStudioState();
+  const { recordings, prematureRecordingEnd, start, end } = useStudioState();
   const emptyRecording = recordings.some(rec => rec.media.size === 0);
+  const previewController = useRef();
+  const [currentTime, setCurrentTime] = useState(0);
 
   const handleBack = () => {
     const doIt = window.confirm(t('confirm-discard-recordings'));
@@ -43,7 +48,39 @@ export default function Review(props) {
         <Notification isDanger>{t('review-error-empty-recording')}</Notification>
       )}
 
-      <Preview />
+      <Preview ref={previewController} onTimeUpdate={event => {
+        setCurrentTime(event.target.currentTime);
+      }} />
+
+      <Flex
+        sx={{
+          justifyContent: 'space-between',
+        }}
+      >
+        <div>
+          <CutControls
+            marker="start"
+            value={start}
+            control={end}
+            invariant={(start, end) => start < end}
+            { ...{ currentTime } }
+            { ... { previewController } }
+            { ...{ recordingDispatch } }
+          />
+        </div>
+
+        <div sx={{ textAlign: 'right' }}>
+          <CutControls
+            marker="end"
+            value={end}
+            control={start}
+            invariant={(end, start) => start < end}
+            { ...{ currentTime } }
+            { ... { previewController } }
+            { ...{ recordingDispatch } }
+          />
+        </div>
+      </Flex>
 
       <div sx={{ mb: 3 }} />
 
@@ -59,7 +96,46 @@ export default function Review(props) {
   );
 };
 
-const Preview = () => {
+const CutControls = (
+  { marker, value, control, invariant, currentTime, previewController, recordingDispatch }
+) => {
+  const { t } = useTranslation();
+  return <Fragment>
+    {value == null
+      ? t(`review-no-${marker}`)
+      : <Fragment>
+        <Trans { ...{ t } } i18nKey={`review-${marker}`}>
+          {{ [marker]: value }} <Link href="" onClick={event => {
+            event.preventDefault();
+            previewController.current.currentTime = value;
+          }} />
+        </Trans>
+        <IconButton title={t(`review-remove-${marker}-end`)} onClick={
+          () => recordingDispatch({
+            type: `UPDATE_${marker.toUpperCase()}`,
+            payload: null,
+          })
+        }><FontAwesomeIcon icon={faTrash}/></IconButton>
+      </Fragment>}<br />
+
+    <button disabled={control != null && !invariant(currentTime, control)} onClick={() => {
+      let value = previewController.current.currentTime;
+      // We disable the buttons when the generated values would be invalid,
+      // but we rely on `timeupdate` events for that, which are not guaranteed
+      // to be timely, so we still have to check the invariant when actually
+      // updating the state. Here we decided to just clamp the value appropriately.
+      if (control != null && !invariant(value, control)) {
+          value = control;
+      }
+      recordingDispatch({
+        type: `UPDATE_${marker.toUpperCase()}`,
+        payload: value,
+      });
+    }}>{t(`review-set-${marker}`)}</button>
+  </Fragment>;
+};
+
+const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
   const { recordings } = useStudioState();
   const { t } = useTranslation();
 
@@ -69,6 +145,18 @@ const Preview = () => {
     ? (recordings[0].deviceType === 'desktop' ? 0 : 1)
     : null;
 
+  // The index of the last video ref that received an event (0 or 1).
+  const lastOrigin = useRef();
+
+  useImperativeHandle(ref, () => ({
+    get currentTime() {
+      return videoRefs[lastOrigin.current || 0].current.currentTime;
+    },
+    set currentTime(currentTime) {
+      videoRefs[lastOrigin.current || 0].current.currentTime = currentTime;
+    }
+  }));
+
   // Setup synchronization between both video elements
   useEffect(() => {
     if (recordings.length === 2 && videoRefs[0].current && videoRefs[1].current) {
@@ -77,9 +165,6 @@ const Preview = () => {
       // we mute the desktop video, as there the audio/video synchronization is
       // not as critical.
       videoRefs[desktopIndex].current.volume = 0;
-
-      // The index of the last video ref that received an event (0 or 1).
-      let lastOrigin = null;
 
       const va = videoRefs[0].current;
       const vb = videoRefs[1].current;
@@ -97,7 +182,7 @@ const Preview = () => {
 
         const wrapListener = origin => event => {
           if (!weTriggered) {
-            lastOrigin = origin;
+            lastOrigin.current = origin;
             handler(event, videoRefs[origin].current, videoRefs[1 - origin].current);
           }
 
@@ -187,6 +272,7 @@ const Preview = () => {
         src={recording.url}
         // Without this, some browsers show a black video element instead of the first frame.
         onLoadedData={e => e.target.currentTime = 0}
+        onTimeUpdate={onTimeUpdate}
         preload="auto"
         sx={{
           width: '100%',
@@ -200,4 +286,4 @@ const Preview = () => {
   }));
 
   return <VideoBox gap={20}>{children}</VideoBox>;
-};
+});

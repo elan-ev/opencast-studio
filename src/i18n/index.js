@@ -33,6 +33,25 @@ i18n
 
     interpolation: {
       escapeValue: false,
+      format: (value, format, lng) => {
+        switch (format) {
+        case 'duration-seconds':
+          const seconds = Math.floor(value % 60);
+          value /= 60;
+          const minutes = Math.floor(value % 60);
+          value /= 60;
+          const hours = Math.floor(value % 60);
+          let result = [minutes, seconds].map(
+            unit => (unit < 10 ? '0' : '') + unit
+          );
+          if (hours) {
+            result.unshift(hours);
+          }
+          return result.join(':');
+        default:
+          return value;
+        }
+      },
     },
 
     detection: {
