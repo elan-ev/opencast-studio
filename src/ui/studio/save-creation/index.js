@@ -383,6 +383,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 }
 
 const NotConnectedWarning = () => {
+  const location = useLocation();
   const opencast = useOpencast();
   const { t } = useTranslation();
   const isVisible = usePageVisibility();
@@ -430,7 +431,17 @@ const NotConnectedWarning = () => {
         t('save-creation-warn-session-expired');
         onceResolved = t('save-creation-warn-once-refreshed');
       } else {
-        problem = t('save-creation-warn-login-failed');
+        problem = (
+          <Trans i18nKey='save-creation-warn-login-failed'>
+            Failed.
+            <Link
+              to={{ pathname: "/settings", search: location.search }}
+              sx={{ variant: 'styles.a', color: '#ff2' }}
+            >
+              settings
+            </Link>
+          </Trans>
+        );
         onceResolved = t('save-creation-warn-once-logged-in');
       }
       break;
