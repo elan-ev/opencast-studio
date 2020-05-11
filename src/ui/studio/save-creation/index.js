@@ -415,7 +415,19 @@ const NotConnectedWarning = () => {
       break;
     case STATE_INCORRECT_LOGIN:
       if (opencast.isLoginProvided()) {
-        problem = t('save-creation-warn-session-expired');
+        const referrer = document.referrer;
+        problem = (
+          <Trans i18nKey='save-creation-warn-session-expired'>
+            Foo
+            {
+              (referrer && !referrer.includes(window.origin || ''))
+                ? <Styled.a href={referrer} target='_blank' sx={{ color: '#ff2' }}>bar</Styled.a>
+                : <React.Fragment>bar</React.Fragment>
+            }
+            baz
+          </Trans>
+        );
+        t('save-creation-warn-session-expired');
         onceResolved = t('save-creation-warn-once-refreshed');
       } else {
         problem = t('save-creation-warn-login-failed');

@@ -34,7 +34,7 @@
   "save-creation-warn-once-logged-in": "Once you are correctly logged in, this warning will disappear.",
   "save-creation-warn-unreachable": "The Opencast server is currently unreachable. Please check your internet connection! If you are connected to the internet, this is likely a temporary problem with the Opencast server.",
   "save-creation-warn-server-problem": "An unknown problem occurred when connecting to the Opencast server.",
-  "save-creation-warn-session-expired": "It seems like your Opencast session has expired. To refresh the session, try opening the website from which you started Opencast Studio in another browser tab.",
+  "save-creation-warn-session-expired": "It seems like your Opencast session has expired. To refresh the session, try opening <1>the website from which you started Opencast Studio</1> in another browser tab.",
   "save-creation-warn-login-failed": "Login on the Opencast server failed. Please check your login credentials in the settings.",
 
   "save-creation-new-recording": "Start a new recording",
