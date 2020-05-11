@@ -133,7 +133,7 @@ const Preview = () => {
           // this backup solution, it should be below 50ms at all time. That's
           // what testing showed.
           const diff = Math.abs(va.currentTime - vb.currentTime);
-          if (diff > 0.15 && lastOrigin) {
+          if (diff > 0.15 && lastOrigin != null) {
             const origin = videoRefs[lastOrigin].current;
             const target = videoRefs[lastOrigin === 0 ? 1 : 0].current;
             target.currentTime = origin.currentTime;
