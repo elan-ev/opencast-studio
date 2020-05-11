@@ -1,7 +1,5 @@
 {
   "forms-validation-error-required": "Dieses Feld ist erforderlich.",
-  "message-login-failed": "Login fehlgeschlagen. Bitte Passwort überprüfen.",
-  "message-server-unreachable": "Der Server ist nicht erreichbar: Überprüfen Sie Ihre Internetverbindung und die Server-URL. Prüfen Sie auch ob Ihr Opencast Zugriff durch Studio erlaubt hat.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
   "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
   "cancel-button-title": "Abbrechen",
