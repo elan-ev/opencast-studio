@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 
-import React, { useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Spinner, Text } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 
@@ -63,7 +63,8 @@ const Preview = () => {
   const { recordings } = useStudioState();
   const { t } = useTranslation();
 
-  const videoRefs = [React.createRef(), React.createRef()];
+  const videoRefs = [useRef(), useRef()];
+
   const desktopIndex = recordings.length === 2
     ? (recordings[0].deviceType === 'desktop' ? 0 : 1)
     : null;
