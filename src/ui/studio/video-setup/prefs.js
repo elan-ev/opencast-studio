@@ -11,7 +11,7 @@ import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 import useResizeObserver from "use-resize-observer/polyfilled";
 
 import { useSettings } from '../../../settings';
-import { deviceIdOf, dimensionsOf } from '../../../util.js';
+import { dimensionsOf } from '../../../util.js';
 import { useDispatch, useStudioState } from '../../../studio-state';
 import {
   startDisplayCapture,
@@ -438,3 +438,6 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state }) => {
     <label htmlFor={id}>{ label || value }</label>
   </Fragment>;
 };
+
+// Returns the devide ID of the video track of the given stream.
+export const deviceIdOf = stream => stream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;

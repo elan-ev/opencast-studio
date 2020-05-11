@@ -42,9 +42,6 @@ export const dimensionsOf = stream => {
   return [width, height];
 };
 
-// Returns the devide ID of the video track of the given stream.
-export const deviceIdOf = stream => stream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;
-
 // Converts the MIME type into a file extension.
 export const mimeToExt = mime => {
   if (mime) {
@@ -133,3 +130,9 @@ export const decodeHexString = hex => {
 
 // Returns a promise that resolves after `ms` milliseconds.
 export const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
+
+// Obtains all media devices and stores them into the global state.
+export const queryMediaDevices = async (dispatch) => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  dispatch({ type: 'UPDATE_MEDIA_DEVICES', payload: devices });
+};

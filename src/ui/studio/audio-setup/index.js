@@ -19,6 +19,7 @@ import {
 import { startAudioCapture, stopAudioCapture } from '../capturer';
 import { ActionButtons, StepContainer } from '../elements';
 import Notification from '../../notification';
+import { queryMediaDevices } from '../../../util';
 
 import PreviewAudio from './preview-audio';
 
@@ -35,12 +36,12 @@ export default function AudioSetup(props) {
   const backToSetupVideo = () => props.previousStep();
   const enterStudio = () => props.nextStep();
 
-  const selectMicrophone = () => {
+  const selectMicrophone = async () => {
     dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE_REQUEST });
-    startAudioCapture(dispatch).then(success => {
-      const payload = success ? MICROPHONE : NONE;
-      dispatch({ type: 'CHOOSE_AUDIO', payload });
-    });
+    const success = await startAudioCapture(dispatch);
+    dispatch({ type: 'CHOOSE_AUDIO', payload: success ? MICROPHONE : NONE });
+
+    await queryMediaDevices(dispatch);
   };
 
   const selectNoAudio = () => {
@@ -49,6 +50,32 @@ export default function AudioSetup(props) {
       stopAudioCapture(audioStream, dispatch);
     }
   };
+
+  const currentDeviceId = audioStream?.getAudioTracks()?.[0]?.getSettings()?.deviceId;
+  let devices = [];
+  for (const d of state.mediaDevices) {
+    // Only intersted in audio inputs
+    if (d.kind !== 'audioinput') {
+      continue;
+    }
+
+    // If we already have a device with that device ID, we ignore it.
+    if (devices.some(od => od.deviceId === d.deviceId)) {
+      continue;
+    }
+
+    devices.push(d);
+  }
+
+  const changeDevice = async deviceId => {
+    dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE_REQUEST });
+    if (audioStream) {
+      stopAudioCapture(audioStream, dispatch);
+    }
+
+    const success = await startAudioCapture(dispatch, { exact: deviceId });
+    dispatch({ type: 'CHOOSE_AUDIO', payload: success ? MICROPHONE : NONE });
+  }
 
   return (
     <StepContainer>
@@ -74,6 +101,19 @@ export default function AudioSetup(props) {
           selected={state.audioChoice === MICROPHONE && !audioUnexpectedEnd}
           onClick={selectMicrophone}
         >
+          { audioStream && devices.length > 0 && (
+            <select
+              sx={{ variant: 'styles.select' }}
+              value={currentDeviceId}
+              onChange={e => changeDevice(e.target.value)}
+            >
+              {
+                devices.map((d, i) => (
+                  <option key={i} value={d.deviceId}>{ d.label }</option>
+                ))
+              }
+            </select>
+          )}
           { state.audioChoice === MICROPHONE_REQUEST && <Spinner size="75"/> }
           { audioStream && <PreviewAudio stream={audioStream} /> }
           { audioAllowed === false && state.audioChoice !== MICROPHONE_REQUEST && (

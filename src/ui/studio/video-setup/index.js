@@ -19,6 +19,7 @@ import {
 } from '../../../studio-state';
 import { useSettings } from '../../../settings';
 
+import { queryMediaDevices } from '../../../util';
 import Notification from '../../notification';
 
 import {
@@ -266,8 +267,3 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
 };
 
 const Spacer = (rest) => <div sx={{ flex: '1 0 0' }} {...rest}></div>;
-
-const queryMediaDevices = async (dispatch) => {
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  dispatch({ type: 'UPDATE_MEDIA_DEVICES', payload: devices });
-};
