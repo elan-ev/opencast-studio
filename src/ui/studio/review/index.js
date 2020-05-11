@@ -84,6 +84,9 @@ const Preview = () => {
       const va = videoRefs[0].current;
       const vb = videoRefs[1].current;
 
+      // Collect event listeners in here for later removal
+      const eventListeners = [new Map(), new Map()];
+
       // Helper function to add event listener to both video streams. Assumes that
       // the refs are valid, i.e. `current` is pointing to the video element.
       const installEventHandlers = (eventName, handler) => {
@@ -92,23 +95,27 @@ const Preview = () => {
         // we always react with one action that triggers one event.
         let weTriggered = false;
 
+        const wrapListener = origin => event => {
+          if (!weTriggered) {
+            lastOrigin = origin;
+            handler(event, videoRefs[origin].current, videoRefs[1 - origin].current);
+          }
+
+          weTriggered = !weTriggered;
+        };
+
         // Add event listener for both video elements
-        va.addEventListener(eventName, event => {
-          if (!weTriggered) {
-            lastOrigin = 0;
-            handler(event, va, vb);
-          }
+        for (const i of [0, 1]) {
+          const listener = wrapListener(i);
+          videoRefs[i].current.addEventListener(eventName, listener);
 
-          weTriggered = !weTriggered;
-        });
-        vb.addEventListener(eventName, event => {
-          if (!weTriggered) {
-            lastOrigin = 1;
-            handler(event, vb, va);
+          let listeners = eventListeners[i].get(eventName);
+          if (!listeners) {
+            listeners = [];
+            eventListeners[i].set(eventName, listeners);
           }
-
-          weTriggered = !weTriggered;
-        });
+          listeners.push(listener);
+        }
       };
 
       // Actuall install the handlers for different events
@@ -126,6 +133,7 @@ const Preview = () => {
 
       // Install backup synchronization that runs regularly.
       let frameCounter = 0;
+      let fixRequest;
       const fixTime = () => {
         // Only run every 60 frames.
         if (frameCounter % 60 === 0) {
@@ -133,17 +141,29 @@ const Preview = () => {
           // this backup solution, it should be below 50ms at all time. That's
           // what testing showed.
           const diff = Math.abs(va.currentTime - vb.currentTime);
-          if (diff > 0.15 && lastOrigin != null) {
-            const origin = videoRefs[lastOrigin].current;
-            const target = videoRefs[lastOrigin === 0 ? 1 : 0].current;
+          if (diff > 0.15 && lastOrigin.current != null) {
+            const origin = videoRefs[lastOrigin.current].current;
+            const target = videoRefs[lastOrigin.current === 0 ? 1 : 0].current;
             target.currentTime = origin.currentTime;
           }
         }
 
         frameCounter++;
-        window.requestAnimationFrame(fixTime);
+        fixRequest = window.requestAnimationFrame(fixTime);
       };
-      window.requestAnimationFrame(fixTime);
+      fixRequest = window.requestAnimationFrame(fixTime);
+
+      return () => {
+        for (const i of [0, 1]) {
+          for (const [name, listeners] of eventListeners[i]) {
+            for (const listener of listeners) {
+              videoRefs[i].current.removeEventListener(name, listener);
+            }
+          }
+        }
+
+        window.cancelAnimationFrame(fixRequest);
+      };
     }
   });
 
