@@ -1,7 +1,5 @@
 {
   "forms-validation-error-required": "This field is required.",
-  "message-login-failed": "Login failed. Please check your password.",
-  "message-server-unreachable": "Server unreachable: Check your internet connection and the server URL. Also check if your Opencast allows access via Studio.",
   "message-upload-complete": "Upload complete!",
   "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
   "cancel-button-title": "Cancel",
@@ -26,7 +24,17 @@
   "save-creation-upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
   "save-creation-upload-invalid-response": "Upload failed: an unexpected response was returned.",
   "save-creation-upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
-  "save-creation-upload-unknown-error": "Upload failed: un unknown error occured.",
+  "save-creation-upload-unknown-error": "Upload failed: an unknown error occurred.",
+
+  "save-creation-warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it.",
+  "save-creation-warn-once-reestablished": "Once the connection is reestablished, this warning will disappear.",
+  "save-creation-warn-once-refreshed": "Once the session is refreshed, this warning will disappear.",
+  "save-creation-warn-once-logged-in": "Once you are correctly logged in, this warning will disappear.",
+  "save-creation-warn-unreachable": "The Opencast server is currently unreachable. Please check your internet connection! If you are connected to the internet, this is likely a temporary problem with the Opencast server.",
+  "save-creation-warn-server-problem": "An unknown problem occurred when connecting to the Opencast server.",
+  "save-creation-warn-session-expired": "It seems like your Opencast session has expired. To refresh the session, try opening <1>the website from which you started Opencast Studio</1> in another browser tab and return here.",
+  "save-creation-warn-login-failed": "Logging into the Opencast server failed. Please check your login credentials in <1>the settings</1>.",
+
   "save-creation-new-recording": "Start a new recording",
   "save-creation-new-recording-warning": "By starting a new recording, the current recordings will be discarded in this application (uploaded or download recordings are not affected). Are you sure?",
   "share-desktop": "Share desktop",

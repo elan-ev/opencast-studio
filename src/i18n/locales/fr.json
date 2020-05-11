@@ -1,7 +1,5 @@
 {
   "forms-validation-error-required": "Ce champ est obligatoire.",
-  "message-login-failed": "La connexion a échoué. Veuillez vérifier votre mot de passe.",
-  "message-server-unreachable": "Serveur injoignable : Vérifiez votre connexion Internet et l'URL du serveur. Vérifiez également si votre Opencast permet l'accès via le Studio.",
   "message-upload-complete": "Téléchargement terminé!",
   "message-upload-complete-explanation": "Votre enregistrement va maintenant être traité par Opencast.",
   "cancel-button-title": "Annuler",

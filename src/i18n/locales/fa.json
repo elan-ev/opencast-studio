@@ -2,8 +2,6 @@
   "nav-recording": "ضبط کردن",
   "save-creation-subsection-title-upload": "آپلود در Opencast",
   "forms-validation-error-required": "این زمینه مورد نیاز است.",
-  "message-login-failed": "ورود ناموفق بود ، لطفا رمز عبور خود را بررسی کنید.",
-  "message-server-unreachable": "سرور در دسترس نیست: اتصال به اینترنت و سرور اینترنتی خود را بررسی کنید! همچنین بررسی کنید که آیا Opencast Instance شما از این سایت پشتیبانی می کند یا خیر.",
   "message-upload-complete": "آپلود کامل شد!",
   "cancel-button-title": "لغو کردن",
   "pause-button-title": "مکث در ضبط کردن",

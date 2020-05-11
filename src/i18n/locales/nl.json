@@ -1,7 +1,5 @@
 {
   "forms-validation-error-required": "Dit veld is verplicht.",
-  "message-login-failed": "Inloggen mislukt. Controleer uw wachtwoord.",
-  "message-server-unreachable": "Server onbereikbaar: Controleer uw internetverbinding en de server-URL. Controleer ook of uw Opencast instantie toegang toestaat via Studio.",
   "message-upload-complete": "Upload voltooid!",
   "message-upload-complete-explanation": "Uw opname wordt nu verwerkt door Opencast.",
   "cancel-button-title": "Annuleer",

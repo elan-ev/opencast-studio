@@ -1,7 +1,5 @@
 {
   "forms-validation-error-required": "Dieses Feld ist erforderlich.",
-  "message-login-failed": "Login fehlgeschlagen. Bitte Passwort überprüfen.",
-  "message-server-unreachable": "Der Server ist nicht erreichbar: Überprüfen Sie Ihre Internet-Verbindung und die Server-URL. Prüfen Sie auch ob Ihr Opencast Zugriff durch Studio erlaubt hat.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
   "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
   "cancel-button-title": "Abbrechen",
@@ -25,10 +23,20 @@
   "save-creation-download-button": "Runterladen",
   "save-creation-subsection-title-upload": "Zu Opencast hochladen",
   "save-creation-upload-to": "Zu <1>{{server}}</1> hochladen",
-  "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internet-Verbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
+  "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
   "save-creation-upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
   "save-creation-upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
   "save-creation-upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
+
+  "save-creation-warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren.",
+  "save-creation-warn-once-reestablished": "Sobald die Verbindung wiederhergestellt ist, wird diese Warnung verschwinden.",
+  "save-creation-warn-once-refreshed": "Sobald die Sitzung erneuert ist, wird diese Warnung verschwinden.",
+  "save-creation-warn-once-logged-in": "Sobald die Anmeldung gelingt, wird diese Warnung verschwinden.",
+  "save-creation-warn-unreachable": "Der Opencast-Server ist derzeitig nicht erreichbar. Bitte prüfen Sie Ihre Internetverbindung! Falls Sie mit dem Internet verbunden sind, handelt es sich vermutlich um ein vorübergehendes Problem mit dem Opencast-Server.",
+  "save-creation-warn-server-problem": "Ein unbekanntes Problem trat beim Verbinden zum Opencast-Server auf.",
+  "save-creation-warn-session-expired": "Es scheint, als wäre Ihre Opencast-Sitzung abgelaufen. Um diese zu erneuern, versuchen Sie <1>die Webseite, von der Sie Opencast Studio gestartet haben,</1> in einem anderen Browser-Tab zu öffnen und hierher zurückzukehren.",
+  "save-creation-warn-login-failed": "Die Anmeldung beim Opencast-Server schlug fehl. Bitte prüfen Sie Ihre Anmeldedaten in <1>den Einstellungen</1>.",
+
   "save-creation-new-recording": "Neue Aufzeichnung starten",
   "save-creation-new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
 
@@ -54,9 +62,9 @@
   "sources-video-preferences-note": "<0>*Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
 
   "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
-  "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funkioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+  "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
   "source-user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
-  "source-user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funkioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
+  "source-user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
   "source-audio-not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
   "source-audio-not-allowed-text": "Versuchen Sie 'Ohne Audio' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
 
