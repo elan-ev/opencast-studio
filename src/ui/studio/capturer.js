@@ -19,13 +19,11 @@ export async function startAudioCapture(dispatch, deviceId = null) {
     });
 
     dispatch({ type: 'SHARE_AUDIO', payload: stream });
-    return true;
   } catch (err) {
     // TODO: there several types of exceptions; certainly we should differentiate here one day
     console.error('Error: ' + err);
 
     dispatch({ type: 'BLOCK_AUDIO' });
-    return false;
   }
 }
 

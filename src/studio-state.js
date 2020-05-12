@@ -5,10 +5,8 @@ import { createContext, useContext, useReducer } from 'react';
 import { isDisplayCaptureSupported, isUserCaptureSupported } from './util';
 
 
-export const MICROPHONE = 'microphone';
-export const MICROPHONE_REQUEST = 'microphone_request';
-export const NO_AUDIO = 'no-audio';
-export const NONE = 'none';
+export const AUDIO_SOURCE_MICROPHONE = 'microphone';
+export const AUDIO_SOURCE_NONE = 'none';
 
 export const VIDEO_SOURCE_BOTH = 'both';
 export const VIDEO_SOURCE_DISPLAY = 'display';
@@ -40,7 +38,7 @@ const initialState = () => ({
   userSupported: isUserCaptureSupported(),
 
   videoChoice: VIDEO_SOURCE_NONE,
-  audioChoice: NONE,
+  audioChoice: AUDIO_SOURCE_NONE,
 
   isRecording: false,
   prematureRecordingEnd: false,
