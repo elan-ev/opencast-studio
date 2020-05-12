@@ -20,7 +20,7 @@ import {
 import { startAudioCapture, stopAudioCapture } from '../capturer';
 import { ActionButtons, StepContainer } from '../elements';
 import Notification from '../../notification';
-import { queryMediaDevices } from '../../../util';
+import { queryMediaDevices, getUniqueDevices } from '../../../util';
 
 import PreviewAudio from './preview-audio';
 
@@ -59,20 +59,7 @@ export default function AudioSetup(props) {
 
   // Stuff related to the device selection
   const currentDeviceId = audioStream?.getAudioTracks()?.[0]?.getSettings()?.deviceId;
-  let devices = [];
-  for (const d of state.mediaDevices) {
-    // Only intersted in audio inputs
-    if (d.kind !== 'audioinput') {
-      continue;
-    }
-
-    // If we already have a device with that device ID, we ignore it.
-    if (devices.some(od => od.deviceId === d.deviceId)) {
-      continue;
-    }
-
-    devices.push(d);
-  }
+  const devices = getUniqueDevices(state.mediaDevices, 'audioinput');
 
   // We write the currently used device ID to local storage to remember it
   // between visits of Studio.

@@ -136,3 +136,24 @@ export const queryMediaDevices = async (dispatch) => {
   const devices = await navigator.mediaDevices.enumerateDevices();
   dispatch({ type: 'UPDATE_MEDIA_DEVICES', payload: devices });
 };
+
+// Filters the `allDevices` array such that only devices with the given `kind`
+// are included and no two devices have the same `deviceId`.
+export const getUniqueDevices = (allDevices, kind) => {
+  let out = [];
+  for (const d of allDevices) {
+    // Only interested in one kind of device.
+    if (d.kind !== kind) {
+      continue;
+    }
+
+    // If we already have a device with that device ID, we ignore it.
+    if (out.some(od => od.deviceId === d.deviceId)) {
+      continue;
+    }
+
+    out.push(d);
+  }
+
+  return out;
+};
