@@ -105,7 +105,7 @@ export default function AudioSetup(props) {
         >
           { audioStream && devices.length > 0 && (
             <select
-              sx={{ variant: 'styles.select' }}
+              sx={{ variant: 'styles.select', my: 3, width: '90%' }}
               value={currentDeviceId}
               onChange={e => changeDevice(e.target.value)}
             >

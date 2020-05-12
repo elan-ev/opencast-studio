@@ -33,8 +33,6 @@ export default function PreviewAudio({ stream, ...props }) {
         width: '80%',
         height: '100px',
         bg: 'rgba(0,0,0,0.8)',
-        m: 3,
-        mb: 0,
         borderRadius: '7px',
        }}
     />
