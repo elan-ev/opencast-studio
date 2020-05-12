@@ -3,6 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { Flex, Heading, Spinner, Text } from '@theme-ui/components';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +24,9 @@ import { queryMediaDevices } from '../../../util';
 
 import PreviewAudio from './preview-audio';
 
+
+const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
+
 export default function AudioSetup(props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -37,8 +41,9 @@ export default function AudioSetup(props) {
   const enterStudio = () => props.nextStep();
 
   const selectMicrophone = async () => {
+    const deviceId = window.localStorage.getItem(LAST_AUDIO_DEVICE_KEY);
     dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE_REQUEST });
-    const success = await startAudioCapture(dispatch);
+    const success = await startAudioCapture(dispatch, deviceId ? { ideal: deviceId } : null);
     dispatch({ type: 'CHOOSE_AUDIO', payload: success ? MICROPHONE : NONE });
 
     await queryMediaDevices(dispatch);
@@ -51,6 +56,8 @@ export default function AudioSetup(props) {
     }
   };
 
+
+  // Stuff related to the device selection
   const currentDeviceId = audioStream?.getAudioTracks()?.[0]?.getSettings()?.deviceId;
   let devices = [];
   for (const d of state.mediaDevices) {
@@ -66,6 +73,14 @@ export default function AudioSetup(props) {
 
     devices.push(d);
   }
+
+  // We write the currently used device ID to local storage to remember it
+  // between visits of Studio.
+  useEffect(() => {
+    if (currentDeviceId) {
+      window.localStorage.setItem(LAST_AUDIO_DEVICE_KEY, currentDeviceId);
+    }
+  });
 
   const changeDevice = async deviceId => {
     dispatch({ type: 'CHOOSE_AUDIO', payload: MICROPHONE_REQUEST });
