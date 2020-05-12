@@ -2,26 +2,30 @@ import css from '@emotion/css/macro'
 
 const GlobalStyle = css`
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html, body, button, input {
-    font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
+  font-family: Ubuntu, Roboto, "Open Sans", "Segoe UI", "Helvetica Neue", Verdana, sans-serif;
 }
 
 body {
-    overflow-x: hidden;
+  overflow-x: auto;
 }
 
 label, button:not(:disabled) {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 button {
-    outline: none;
+  outline: none;
 }
 
 #root {
+  /* Of the most common mobile phones, the smallest viewport width is
+     320 (iPhone 5). */
+  min-width: 320px;
+  overflow-x: hidden;
   height: 100%;
 }
 

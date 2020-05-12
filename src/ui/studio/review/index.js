@@ -3,10 +3,10 @@
 import { jsx, Styled } from 'theme-ui';
 
 import React, { useEffect } from 'react';
-import { Flex, Spinner, Text } from '@theme-ui/components';
+import { Spinner, Text } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 
-import { ActionButtons, VideoBox } from '../elements';
+import { ActionButtons, StepContainer, VideoBox } from '../elements';
 import { useStudioState, useDispatch } from '../../../studio-state';
 import Notification from '../../notification';
 
@@ -30,17 +30,8 @@ export default function Review(props) {
   };
 
   return (
-    <Flex
-      sx={{
-        flexDirection: 'column',
-        height: '100%',
-        flexGrow: 1,
-        padding: 3,
-      }}
-    >
-      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
-        {t('review-heading')}
-      </Styled.h1>
+    <StepContainer>
+      <Styled.h1>{ t('review-heading') }</Styled.h1>
 
       { prematureRecordingEnd && (
         <Notification isDanger>
@@ -64,7 +55,7 @@ export default function Review(props) {
         }}
         next={{ onClick: handleNext }}
       />
-    </Flex>
+    </StepContainer>
   );
 };
 

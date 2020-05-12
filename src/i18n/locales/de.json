@@ -66,11 +66,14 @@
   "source-user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
   "source-user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
   "source-audio-not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
-  "source-audio-not-allowed-text": "Versuchen Sie 'Ohne Audio' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+  "source-audio-not-allowed-text": "Versuchen Sie 'Audio neu auswählen' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
 
   "sources-audio-question": "Audio aufnehmen?",
   "sources-audio-microphone": "Mikrofon",
+  "sources-audio-microphone-selected": "Mikrofon ausgewählt",
   "sources-audio-without-audio": "Ohne Audio",
+  "sources-audio-reselect-audio": "Audio neu auswählen",
+  "sources-audio-device": "Gerät",
 
   "share-desktop": "Bildschirm teilen",
   "share-camera": "Kamera teilen",

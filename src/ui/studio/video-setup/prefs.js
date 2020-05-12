@@ -11,7 +11,7 @@ import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 import useResizeObserver from "use-resize-observer/polyfilled";
 
 import { useSettings } from '../../../settings';
-import { deviceIdOf, dimensionsOf } from '../../../util.js';
+import { dimensionsOf, getUniqueDevices } from '../../../util';
 import { useDispatch, useStudioState } from '../../../studio-state';
 import {
   startDisplayCapture,
@@ -334,20 +334,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
   const state = useStudioState();
 
   const currentDeviceId = deviceIdOf(state.userStream);
-  let devices = [];
-  for (const d of state.mediaDevices) {
-    // Only intersted in video inputs
-    if (d.kind !== 'videoinput') {
-      continue;
-    }
-
-    // If we already have a device with that device ID, we ignore it.
-    if (devices.some(od => od.deviceId === d.deviceId)) {
-      continue;
-    }
-
-    devices.push(d);
-  }
+  const devices =getUniqueDevices(state.mediaDevices, 'videoinput');
 
   const [width, height] = dimensionsOf(state.userStream);
   let arState;
@@ -438,3 +425,6 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state }) => {
     <label htmlFor={id}>{ label || value }</label>
   </Fragment>;
 };
+
+// Returns the devide ID of the video track of the given stream.
+export const deviceIdOf = stream => stream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;

@@ -10,6 +10,27 @@ import { useTranslation } from 'react-i18next';
 import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
 
+
+// A full width flex container for some steps of the wizard.
+export const StepContainer = ({ children }) => (
+  <div
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1 1 auto',
+      justifyContent: 'space-between',
+      p: 3,
+      pt: [2, 2, 3],
+      '& > h1': {
+        textAlign: 'center',
+        fontSize: ['24px', '27px', '32px'] ,
+      },
+    }}
+  >
+    { children }
+  </div>
+);
+
 // A div containing optional "back" and "next" buttons as well as the centered
 // children. The props `prev` and `next` are objects with the follwing fields:
 //
@@ -197,13 +218,14 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
 
       // One video below the other (col/column).
       const { colWidths, colHeights } = (() => {
+        const availableHeight = height - gap;
         const combinedAspectRatio =
           1 / ((1 / aspectRatios[0]) + (1 / aspectRatios[1]));
 
-        if (width > height * combinedAspectRatio) {
+        if (width > availableHeight * combinedAspectRatio) {
           // Children height perfectly matches container, extra space left and
           // right.
-          const width = height * combinedAspectRatio;
+          const width = availableHeight * combinedAspectRatio;
           return {
             colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),

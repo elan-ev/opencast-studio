@@ -67,7 +67,10 @@
 
   "sources-audio-question": "Record Audio?",
   "sources-audio-microphone": "Microphone",
+  "sources-audio-microphone-selected": "Microphone selected",
   "sources-audio-without-audio": "Without audio",
+  "sources-audio-reselect-audio": "Reselect audio",
+  "sources-audio-device": "Device",
 
   "sources-scenario-display-and-user": "Display & camera",
   "sources-scenario-display": "Display",
@@ -79,7 +82,7 @@
   "source-user-not-allowed-title": "Cannot access your camera",
   "source-user-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
   "source-audio-not-allowed-title": "Cannot access your microphone.",
-  "source-audio-not-allowed-text": "Try selecting 'No Audio' and then reselecting 'Microphone'. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
+  "source-audio-not-allowed-text": "Try selecting 'Reselect audio' and then selecting 'Microphone' again. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
   "sources-display": "Display",
   "sources-user": "Camera",

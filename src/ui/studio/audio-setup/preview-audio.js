@@ -1,13 +1,12 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, useThemeUI } from 'theme-ui';
+import { jsx } from 'theme-ui';
 
 import Oscilloscope from 'oscilloscope';
 import { useEffect, useRef } from 'react';
 
-export default function PreviewAudio({ stream, ...props }) {
+export default function PreviewAudio({ stream }) {
   const canvasRef = useRef();
-  const { theme } = useThemeUI();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,17 +23,19 @@ export default function PreviewAudio({ stream, ...props }) {
       return () => scope.stop();
     }
     return () => {};
-  }, [theme.colors, stream]);
+  }, [stream]);
 
   return (
     <canvas
       ref={canvasRef}
+      width='800px'
+      height='200px'
       sx={{
-        width: '80%',
-        height: '100px',
+        width: '100%',
+        maxHeight: '200px',
+        minHeight: 0,
+        flex: '1 0 70px',
         bg: 'rgba(0,0,0,0.8)',
-        m: 3,
-        mb: 0,
         borderRadius: '7px',
        }}
     />
