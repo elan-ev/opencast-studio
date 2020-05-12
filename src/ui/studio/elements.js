@@ -218,13 +218,14 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
 
       // One video below the other (col/column).
       const { colWidths, colHeights } = (() => {
+        const availableHeight = height - gap;
         const combinedAspectRatio =
           1 / ((1 / aspectRatios[0]) + (1 / aspectRatios[1]));
 
-        if (width > height * combinedAspectRatio) {
+        if (width > availableHeight * combinedAspectRatio) {
           // Children height perfectly matches container, extra space left and
           // right.
-          const width = height * combinedAspectRatio;
+          const width = availableHeight * combinedAspectRatio;
           return {
             colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),
