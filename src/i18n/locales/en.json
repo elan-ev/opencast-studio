@@ -100,6 +100,7 @@
   "review-set-start": "Set start",
   "review-set-end": "Set end",
   "review-remove-start-end": "Remove",
+  "review-part-will-be-removed": "This part will be removed",
 
   "stop-button-title": "Stop recording",
   "upload-notification": "Currently uploading...",

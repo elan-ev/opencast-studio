@@ -12,6 +12,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ActionButtons, StepContainer, VideoBox } from '../elements';
 import { useStudioState, useDispatch } from '../../../studio-state';
 import Notification from '../../notification';
+import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
 
 
 export default function Review(props) {
@@ -136,7 +137,7 @@ const CutControls = (
 };
 
 const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
-  const { recordings } = useStudioState();
+  const { recordings, start, end } = useStudioState();
   const { t } = useTranslation();
 
   const videoRefs = [useRef(), useRef()];
@@ -165,6 +166,9 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
     0: false,
     1: false,
   });
+
+  // This will be updated in `onTimeUpdate` below.
+  const [overlayVisible, setOverlayVisible] = useState(false);
 
   // Setup synchronization between both video elements
   useEffect(() => {
@@ -278,38 +282,61 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
 
   const children = recordings.map((recording, index) => ({
     body: (
-      <video
-        ref={videoRefs[index]}
-        key={index}
-        controls
-        src={recording.url}
-        onLoadedData={event => {
-          // Force the browser to calculate the duration of the stream
-          // by seeking way past its end. *fingers crossed*
-          // We reset this later in an effect. (See above.)
-          // Also without setting the current time once initially,
-          // some browsers show a black video element instead of the first frame.
-          event.target.currentTime = Number.MAX_VALUE;
-        }}
-        onTimeUpdate={event => {
-          if (!durationCalculated[index]) {
-            event.target.currentTime = 0;
-            setDurationCalculated(durationCalculated => ({
-              ...durationCalculated,
-              [index]: true,
-            }));
-          } else {
-            onTimeUpdate(event);
-          }
-        }}
-        preload="auto"
-        sx={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: '#ccc',
-          outline: 'none'
-        }}
-      />
+      <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
+        { overlayVisible && <div sx={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+          }}>
+            <CutOutIcon sx={{ height: '4em' }}/>
+            <p sx={{ my: 3 }}>{ t('review-part-will-be-removed') }</p>
+          </div>
+        }
+        <video
+          ref={videoRefs[index]}
+          key={index}
+          controls
+          src={recording.url}
+          onLoadedData={event => {
+            // Force the browser to calculate the duration of the stream
+            // by seeking way past its end. *fingers crossed*
+            // We reset this later in an effect. (See above.)
+            // Also without setting the current time once initially,
+            // some browsers show a black video element instead of the first frame.
+            event.target.currentTime = Number.MAX_VALUE;
+          }}
+          onTimeUpdate={event => {
+            if (!durationCalculated[index]) {
+              event.target.currentTime = 0;
+              setDurationCalculated(durationCalculated => ({
+                ...durationCalculated,
+                [index]: true,
+              }));
+            } else {
+              const currentTime = event.target.currentTime;
+              const visible = (start !== null && currentTime < start) || (end !== null && currentTime > end);
+              setOverlayVisible(visible);
+              onTimeUpdate(event);
+            }
+          }}
+          preload="auto"
+          sx={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#ccc',
+            outline: 'none'
+          }}
+        />
+      </div>
     ),
     dimensions: () => recording.dimensions,
   }));
