@@ -54,7 +54,8 @@ export class Opencast {
   #currentUser = null;
 
   // The response from `/lti` or `null` if the request failed for some reason or
-  // if `this.#login !== true`.
+  // if `this.#login !== true`. Note though, that this can also be the empty
+  // object, indicating that there is no LTI session.
   #ltiSession = null;
 
   updateGlobalOc = null;
