@@ -157,8 +157,21 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
     }
   }));
 
+  // Some browsers don't calculate the duration for the recorded videos
+  // preventing us from seeking in the video. We force it below
+  // in the event handlers of the video elements, but we want to hold off
+  // on some effects until that calculation is done.
+  const [durationCalculated, setDurationCalculated] = useState({
+    0: false,
+    1: false,
+  });
+
   // Setup synchronization between both video elements
   useEffect(() => {
+    if (!(durationCalculated[0] && durationCalculated[1])) {
+      return;
+    }
+
     if (recordings.length === 2 && videoRefs[0].current && videoRefs[1].current) {
       // If we have two recordings, both will have audio. But the user doesn't
       // want to hear audio twice, so we mute one video element. Particularly,
@@ -270,9 +283,25 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
         key={index}
         controls
         src={recording.url}
-        // Without this, some browsers show a black video element instead of the first frame.
-        onLoadedData={e => e.target.currentTime = 0}
-        onTimeUpdate={onTimeUpdate}
+        onLoadedData={event => {
+          // Force the browser to calculate the duration of the stream
+          // by seeking way past its end. *fingers crossed*
+          // We reset this later in an effect. (See above.)
+          // Also without setting the current time once initially,
+          // some browsers show a black video element instead of the first frame.
+          event.target.currentTime = Number.MAX_VALUE;
+        }}
+        onTimeUpdate={event => {
+          if (!durationCalculated[index]) {
+            event.target.currentTime = 0;
+            setDurationCalculated(durationCalculated => ({
+              ...durationCalculated,
+              [index]: true,
+            }));
+          } else {
+            onTimeUpdate(event);
+          }
+        }}
         preload="auto"
         sx={{
           width: '100%',
