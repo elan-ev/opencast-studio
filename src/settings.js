@@ -542,6 +542,9 @@ const SCHEMA = {
       }
     },
   },
+  review: {
+    disableCutting: 'boolean',
+  },
   display: {
     maxFps: positiveInteger('display.maxFps'),
     maxHeight: positiveInteger('display.maxHeight'),

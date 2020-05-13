@@ -11,6 +11,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { ActionButtons, StepContainer, VideoBox } from '../elements';
 import { useStudioState, useDispatch } from '../../../studio-state';
+import { useSettings } from '../../../settings';
 import Notification from '../../notification';
 import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
 import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
@@ -75,6 +76,7 @@ export default function Review(props) {
 const VideoControls = ({ currentTime, previewController }) => {
   const { start, end } = useStudioState();
   const recordingDispatch = useDispatch();
+  const settings = useSettings();
 
   return (
     <Flex
@@ -86,20 +88,20 @@ const VideoControls = ({ currentTime, previewController }) => {
         }
       }}
     >
-      <CutControls
+      {settings.review?.disableCutting || <CutControls
         marker="start"
         value={start}
         control={end}
         invariant={(start, end) => start < end}
         { ...{ recordingDispatch, previewController, currentTime } }
-      />
-      <CutControls
+      />}
+      {settings.review?.disableCutting || <CutControls
         marker="end"
         value={end}
         control={start}
         invariant={(end, start) => start < end}
         { ...{ recordingDispatch, previewController, currentTime } }
-      />
+      />}
     </Flex>
   );
 };
