@@ -24,6 +24,7 @@ export default function Review(props) {
   const emptyRecording = recordings.some(rec => rec.media.size === 0);
   const previewController = useRef();
   const [currentTime, setCurrentTime] = useState(0);
+  const [previewReady, setPreviewReady] = useState();
 
   const handleBack = () => {
     const doIt = window.confirm(t('confirm-discard-recordings'));
@@ -62,19 +63,9 @@ export default function Review(props) {
         <Notification isDanger>{t('review-error-empty-recording')}</Notification>
       )}
 
-      {
-        recordings.length === expectedRecordings
-          ? <Fragment>
-            <Preview ref={previewController} onTimeUpdate={event => {
-              setCurrentTime(event.target.currentTime);
-            }} />
-
-            <div sx={{ mb: 3 }} />
-
-            <VideoControls {...{ previewController, currentTime }} />
-          </Fragment>
-
-          : <div sx={{
+      {(
+        !previewReady || recordings.length !== expectedRecordings
+      ) && <div sx={{
             flex: 1,
             display: 'flex',
             alignItems: 'center',
@@ -83,6 +74,25 @@ export default function Review(props) {
             <Spinner title={t('save-creation-waiting-for-recordings')} />
           </div>
       }
+      {recordings.length === expectedRecordings && <div sx={previewReady ? {
+        display: 'flex',
+        flex: '1 1 auto',
+        flexDirection: 'column'
+      } : {
+        display: 'none'
+      }}>
+        <Preview
+          ref={previewController}
+          onTimeUpdate={event => {
+            setCurrentTime(event.target.currentTime);
+          }}
+          onReady={() => setPreviewReady(true)}
+        />
+
+        <div sx={{ mb: 3 }} />
+
+        <VideoControls {...{ previewController, currentTime }} />
+      </div>}
 
       <div sx={{ mb: 3 }} />
 
@@ -200,7 +210,7 @@ const CutControls = (
     : <Fragment>{ button }{ state }</Fragment>;
 };
 
-const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
+const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   const { recordings, start, end } = useStudioState();
   const { t } = useTranslation();
 
@@ -226,17 +236,21 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
   // preventing us from seeking in the video. We force it below
   // in the event handlers of the video elements, but we want to hold off
   // on some effects until that calculation is done.
-  const [durationCalculated, setDurationCalculated] = useState({
-    0: false,
-    1: false,
-  });
+  const durationCalculationProgress = [useRef(), useRef()];
+  const [durationsCalculated, setDurationsCalculated] = useState();
 
   // This will be updated in `onTimeUpdate` below.
   const [overlayVisible, setOverlayVisible] = useState(false);
 
+  useEffect(() => {
+    if (durationsCalculated) {
+      onReady();
+    }
+  }, [onReady, durationsCalculated]);
+
   // Setup synchronization between both video elements
   useEffect(() => {
-    if (!(durationCalculated[0] && durationCalculated[1])) {
+    if (!durationsCalculated) {
       return;
     }
 
@@ -366,21 +380,33 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
             // Also without setting the current time once initially,
             // some browsers show a black video element instead of the first frame.
             event.target.currentTime = Number.MAX_VALUE;
+            durationCalculationProgress[index].current = 'started';
           }}
-          onTimeUpdate={event => {
-            if (!durationCalculated[index]) {
-              event.target.currentTime = 0;
-              setDurationCalculated(durationCalculated => ({
-                ...durationCalculated,
-                [index]: true,
-              }));
-            } else {
-              const currentTime = event.target.currentTime;
-              const visible = (start !== null && currentTime < start) || (end !== null && currentTime > end);
-              setOverlayVisible(visible);
-              onTimeUpdate(event);
-            }
-          }}
+          onTimeUpdate={durationsCalculated ? event => {
+            const currentTime = event.target.currentTime;
+            const visible = (start !== null && currentTime < start) || (end !== null && currentTime > end);
+            setOverlayVisible(visible);
+            onTimeUpdate(event);
+          } : event => {
+            if (!durationsCalculated) {
+              switch (durationCalculationProgress[index].current) {
+              case 'started':
+                event.target.currentTime = 0;
+                durationCalculationProgress[index].current = 'done';
+                break;
+              case 'done':
+                if (durationCalculationProgress.filter(
+                  p => p.current === 'done'
+                ).length === recordings.length) {
+                  setDurationsCalculated(true);
+                }
+                break;
+              default:
+                // Appease the linter
+                break;
+              }
+            }}
+          }
           preload="auto"
           sx={{
             width: '100%',
