@@ -120,6 +120,7 @@ const ControlBox = ({ previewController, currentTime }) => (
 
 const Scrubber = ({ previewController, currentTime }) => {
   const duration = previewController.current?.duration || Infinity;
+  const { start, end } = useStudioState();
 
   const setTime = mouseEvent => {
     const x = mouseEvent.clientX - mouseEvent.target.getBoundingClientRect().x;
@@ -128,6 +129,13 @@ const Scrubber = ({ previewController, currentTime }) => {
       previewController.current.currentTime = progress * duration;
     }
   }
+
+  const cutStyle = {
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 0, 0, 0.5)',
+    height: '100%',
+    boxSizing: 'content-box',
+  };
 
   return (
     <div sx={{ p: 2 }}>
@@ -168,6 +176,18 @@ const Scrubber = ({ previewController, currentTime }) => {
             height: '100%',
             opacity: 0.5,
           }} />
+          { (start && start > 0) && <div sx={{
+            left: 0,
+            borderRight: '2px solid black',
+            width: `${(start / duration) * 100}%`,
+            ...cutStyle,
+          }} /> }
+          { (end && end < duration) && <div sx={{
+            right: 0,
+            borderLeft: '2px solid black',
+            width: `${((duration - end) / duration) * 100}%`,
+            ...cutStyle,
+          }} /> }
         </div>
       </div>
     </div>
