@@ -3,7 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 import { Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle } from 'react';
 import { Link, IconButton, Flex, Spinner, Text } from '@theme-ui/components';
@@ -197,6 +197,24 @@ const VideoControls = ({ currentTime, previewController }) => {
         invariant={(start, end) => start < end}
         { ...{ recordingDispatch, previewController, currentTime } }
       />}
+      <button
+        sx={{ backgroundColor: 'transparent', border: 'none', mx: 3 }}
+        onClick={() => {
+          const controller = previewController.current;
+          if (controller) {
+            if (controller.isPlaying) {
+              controller.pause();
+            } else if (controller.isReadyToPlay) {
+              controller.play();
+            }
+          }
+        }}
+      >
+        <FontAwesomeIcon
+          icon={previewController.current?.isPlaying ? faPause : faPlay}
+          sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 } }}
+        />
+      </button>
       {settings.review?.disableCutting || <CutControls
         marker="end"
         value={end}
@@ -280,6 +298,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   const { t } = useTranslation();
 
   const videoRefs = [useRef(), useRef()];
+  const allVideos = videoRefs.slice(0, recordings.length);
 
   const desktopIndex = recordings.length === 2
     ? (recordings[0].deviceType === 'desktop' ? 0 : 1)
@@ -297,6 +316,20 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     },
     get duration() {
       return videoRefs[lastOrigin.current || 0].current?.duration;
+    },
+    get isPlaying() {
+      const v = videoRefs[lastOrigin.current || 0].current;
+      return v && v.currentTime > 0 && !v.paused && !v.ended;
+    },
+    get isReadyToPlay() {
+      // State 2 means "at least enough data to play one frame"
+      return allVideos.every(r => r.current.readyState >= 2);
+    },
+    play() {
+      allVideos.forEach(r => r.current.play());
+    },
+    pause() {
+      allVideos.forEach(r => r.current.pause());
     },
   }));
 
