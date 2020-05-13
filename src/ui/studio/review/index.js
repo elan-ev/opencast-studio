@@ -91,7 +91,7 @@ export default function Review(props) {
 
         <div sx={{ mb: 3 }} />
 
-        <VideoControls {...{ previewController, currentTime }} />
+        <ControlBox {...{ previewController, currentTime }} />
       </div>}
 
       <div sx={{ mb: 3 }} />
@@ -108,6 +108,72 @@ export default function Review(props) {
   );
 };
 
+const ControlBox = ({ previewController, currentTime }) => (
+  <div sx={{
+    backgroundColor: 'gray.4',
+    borderRadius: '8px',
+  }}>
+    <VideoControls {...{ previewController, currentTime }} />
+    <Scrubber {...{ previewController, currentTime }} />
+  </div>
+);
+
+const Scrubber = ({ previewController, currentTime }) => {
+  const duration = previewController.current?.duration || Infinity;
+
+  const setTime = mouseEvent => {
+    const x = mouseEvent.clientX - mouseEvent.target.getBoundingClientRect().x;
+    const progress = x / mouseEvent.target.clientWidth;
+    if (previewController.current) {
+      previewController.current.currentTime = progress * duration;
+    }
+  }
+
+  return (
+    <div sx={{ p: 2 }}>
+      <div sx={{ py: 1, position: 'relative' }}>
+        <div
+          onClick={e => setTime(e)}
+          onMouseMove={e => {
+            // Ignore unless only the primary button is pressed (`buttons` is a
+            // bitset).
+            if (e.buttons === 1) {
+              // TODO: maybe debounce this? Browsers seem to somewhat debounce
+              // that already.
+              setTime(e);
+            }
+          }}
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            cursor: 'pointer',
+            top: 0,
+            zIndex: 10,
+          }}
+        />
+        <div sx={{
+          position: 'relative',
+          backgroundColor: 'gray.3',
+          height: '10px',
+          width: '100%',
+          borderRadius: '5px',
+          overflow: 'hidden',
+        }}>
+          <div sx={{
+            position: 'absolute',
+            left: 0,
+            width: `${(currentTime / duration) * 100}%`,
+            backgroundColor: 'black',
+            height: '100%',
+            opacity: 0.5,
+          }} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const VideoControls = ({ currentTime, previewController }) => {
   const { start, end } = useStudioState();
   const recordingDispatch = useDispatch();
@@ -116,6 +182,7 @@ const VideoControls = ({ currentTime, previewController }) => {
   return (
     <Flex
       sx={{
+        p: 2,
         justifyContent: 'center',
         alignItems: 'flex-end',
         '& > *': {
@@ -186,8 +253,6 @@ const CutControls = (
         });
       }}
       sx={{
-        // backgroundColor: '#f5f5f5',
-        // border: '1px solid #c5c5c5',
         backgroundColor: 'transparent',
         border: 'none',
         pt: '4px',
@@ -229,7 +294,10 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     },
     set currentTime(currentTime) {
       videoRefs[lastOrigin.current || 0].current.currentTime = currentTime;
-    }
+    },
+    get duration() {
+      return videoRefs[lastOrigin.current || 0].current?.duration;
+    },
   }));
 
   // Some browsers don't calculate the duration for the recorded videos
