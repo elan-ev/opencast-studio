@@ -312,7 +312,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
       return videoRefs[lastOrigin.current || 0].current.currentTime;
     },
     set currentTime(currentTime) {
-      videoRefs[lastOrigin.current || 0].current.currentTime = currentTime;
+      allVideos.forEach(r => r.current.currentTime = currentTime);
     },
     get duration() {
       return videoRefs[lastOrigin.current || 0].current?.duration;
@@ -355,7 +355,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     }
   }, [onReady, durationsCalculated]);
 
-  // Setup synchronization between both video elements
+  // Setup backup synchronization between both video elements
   useEffect(() => {
     if (!durationsCalculated) {
       return;
@@ -371,54 +371,8 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
       const va = videoRefs[0].current;
       const vb = videoRefs[1].current;
 
-      // Collect event listeners in here for later removal
-      const eventListeners = [new Map(), new Map()];
-
-      // Helper function to add event listener to both video streams. Assumes that
-      // the refs are valid, i.e. `current` is pointing to the video element.
-      const installEventHandlers = (eventName, handler) => {
-        // Stores if the event was triggered by us (the code) as opposed to "by
-        // the user". This always flips as the user triggers the first event and
-        // we always react with one action that triggers one event.
-        let weTriggered = false;
-
-        const wrapListener = origin => event => {
-          if (!weTriggered) {
-            lastOrigin.current = origin;
-            handler(event, videoRefs[origin].current, videoRefs[1 - origin].current);
-          }
-
-          weTriggered = !weTriggered;
-        };
-
-        // Add event listener for both video elements
-        for (const i of [0, 1]) {
-          const listener = wrapListener(i);
-          videoRefs[i].current.addEventListener(eventName, listener);
-
-          let listeners = eventListeners[i].get(eventName);
-          if (!listeners) {
-            listeners = [];
-            eventListeners[i].set(eventName, listeners);
-          }
-          listeners.push(listener);
-        }
-      };
-
-      // Actuall install the handlers for different events
-      installEventHandlers('play', (event, origin, target) => {
-        target.currentTime = origin.currentTime;
-        target.play();
-      });
-      installEventHandlers('pause', (event, origin, target) => {
-        target.currentTime = origin.currentTime;
-        target.pause();
-      });
-      installEventHandlers('seeking', (event, origin, target) => {
-        target.currentTime = origin.currentTime;
-      });
-
-      // Install backup synchronization that runs regularly.
+      // We regularly check if both video elements diverge too much from one
+      // another.
       let frameCounter = 0;
       let fixRequest;
       const fixTime = () => {
@@ -440,17 +394,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
       };
       fixRequest = window.requestAnimationFrame(fixTime);
 
-      return () => {
-        for (const i of [0, 1]) {
-          for (const [name, listeners] of eventListeners[i]) {
-            for (const listener of listeners) {
-              videoRefs[i].current.removeEventListener(name, listener);
-            }
-          }
-        }
-
-        window.cancelAnimationFrame(fixRequest);
-      };
+      return () => window.cancelAnimationFrame(fixRequest);
     }
   });
 
@@ -478,7 +422,6 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
         <video
           ref={videoRefs[index]}
           key={index}
-          controls
           src={recording.url}
           onLoadedData={event => {
             // Force the browser to calculate the duration of the stream
