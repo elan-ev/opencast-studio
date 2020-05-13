@@ -239,8 +239,14 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   const durationCalculationProgress = [useRef(), useRef()];
   const [durationsCalculated, setDurationsCalculated] = useState();
 
-  // This will be updated in `onTimeUpdate` below.
-  const [overlayVisible, setOverlayVisible] = useState(false);
+  // Some logic to decide whether we currently are in a part of the video that
+  // will be removed. The state will be updated in `onTimeUpdate` below and is
+  // only here to trigger a rerender: the condition for rendering the overlay is
+  // below.
+  const isInCutRegion = time => (start !== null && time < start) || (end !== null && time > end);
+  const currentTime = videoRefs[lastOrigin.current || 0].current?.currentTime || 0;
+  const overlayVisible = isInCutRegion(currentTime);
+  const [, setOverlayVisible] = useState(overlayVisible);
 
   useEffect(() => {
     if (durationsCalculated) {
@@ -384,8 +390,8 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
           }}
           onTimeUpdate={durationsCalculated ? event => {
             const currentTime = event.target.currentTime;
-            const visible = (start !== null && currentTime < start) || (end !== null && currentTime > end);
-            setOverlayVisible(visible);
+            setOverlayVisible(isInCutRegion(currentTime));
+
             onTimeUpdate(event);
           } : event => {
             if (!durationsCalculated) {
