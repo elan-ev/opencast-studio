@@ -20,7 +20,7 @@ import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
 export default function Review(props) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
-  const { recordings, prematureRecordingEnd } = useStudioState();
+  const { recordings, prematureRecordingEnd, videoChoice } = useStudioState();
   const emptyRecording = recordings.some(rec => rec.media.size === 0);
   const previewController = useRef();
   const [currentTime, setCurrentTime] = useState(0);
@@ -37,6 +37,17 @@ export default function Review(props) {
     props.nextStep();
   };
 
+  const expectedRecordings = (() => {
+    switch (videoChoice) {
+    case 'none':
+      return 0;
+    case 'both':
+      return 2;
+    default:
+      return 1;
+    }
+  })();
+
   return (
     <StepContainer>
       <Styled.h1>{ t('review-heading') }</Styled.h1>
@@ -51,13 +62,27 @@ export default function Review(props) {
         <Notification isDanger>{t('review-error-empty-recording')}</Notification>
       )}
 
-      <Preview ref={previewController} onTimeUpdate={event => {
-        setCurrentTime(event.target.currentTime);
-      }} />
+      {
+        recordings.length === expectedRecordings
+          ? <Fragment>
+            <Preview ref={previewController} onTimeUpdate={event => {
+              setCurrentTime(event.target.currentTime);
+            }} />
 
-      <div sx={{ mb: 3 }} />
+            <div sx={{ mb: 3 }} />
 
-      <VideoControls {...{ previewController, currentTime }} />
+            <VideoControls {...{ previewController, currentTime }} />
+          </Fragment>
+
+          : <div sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Spinner title={t('save-creation-waiting-for-recordings')} />
+          </div>
+      }
 
       <div sx={{ mb: 3 }} />
 
@@ -215,7 +240,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
       return;
     }
 
-    if (recordings.length === 2 && videoRefs[0].current && videoRefs[1].current) {
+    if (recordings.length === 2) {
       // If we have two recordings, both will have audio. But the user doesn't
       // want to hear audio twice, so we mute one video element. Particularly,
       // we mute the desktop video, as there the audio/video synchronization is
@@ -307,17 +332,6 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
       };
     }
   });
-
-  if (recordings.length === 0) {
-    return <div sx={{
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      <Spinner title={t('save-creation-waiting-for-recordings')} />
-    </div>;
-  }
 
   const children = recordings.map((recording, index) => ({
     body: (
