@@ -13,12 +13,13 @@ import { ActionButtons, StepContainer, VideoBox } from '../elements';
 import { useStudioState, useDispatch } from '../../../studio-state';
 import Notification from '../../notification';
 import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
+import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
 
 
 export default function Review(props) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
-  const { recordings, prematureRecordingEnd, start, end } = useStudioState();
+  const { recordings, prematureRecordingEnd } = useStudioState();
   const emptyRecording = recordings.some(rec => rec.media.size === 0);
   const previewController = useRef();
   const [currentTime, setCurrentTime] = useState(0);
@@ -53,35 +54,9 @@ export default function Review(props) {
         setCurrentTime(event.target.currentTime);
       }} />
 
-      <Flex
-        sx={{
-          justifyContent: 'space-between',
-        }}
-      >
-        <div>
-          <CutControls
-            marker="start"
-            value={start}
-            control={end}
-            invariant={(start, end) => start < end}
-            { ...{ currentTime } }
-            { ... { previewController } }
-            { ...{ recordingDispatch } }
-          />
-        </div>
+      <div sx={{ mb: 3 }} />
 
-        <div sx={{ textAlign: 'right' }}>
-          <CutControls
-            marker="end"
-            value={end}
-            control={start}
-            invariant={(end, start) => start < end}
-            { ...{ currentTime } }
-            { ... { previewController } }
-            { ...{ recordingDispatch } }
-          />
-        </div>
-      </Flex>
+      <VideoControls {...{ previewController, currentTime }} />
 
       <div sx={{ mb: 3 }} />
 
@@ -97,14 +72,46 @@ export default function Review(props) {
   );
 };
 
+const VideoControls = ({ currentTime, previewController }) => {
+  const { start, end } = useStudioState();
+  const recordingDispatch = useDispatch();
+
+  return (
+    <Flex
+      sx={{
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        '& > *': {
+          mx: 2,
+        }
+      }}
+    >
+      <CutControls
+        marker="start"
+        value={start}
+        control={end}
+        invariant={(start, end) => start < end}
+        { ...{ recordingDispatch, previewController, currentTime } }
+      />
+      <CutControls
+        marker="end"
+        value={end}
+        control={start}
+        invariant={(end, start) => start < end}
+        { ...{ recordingDispatch, previewController, currentTime } }
+      />
+    </Flex>
+  );
+};
+
 const CutControls = (
   { marker, value, control, invariant, currentTime, previewController, recordingDispatch }
 ) => {
   const { t } = useTranslation();
-  return <Fragment>
-    {value == null
-      ? t(`review-no-${marker}`)
-      : <Fragment>
+
+  const state = (
+    <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left' }}>
+      { value !== null && <Fragment>
         <Trans { ...{ t } } i18nKey={`review-${marker}`}>
           {{ [marker]: value }} <Link href="" onClick={event => {
             event.preventDefault();
@@ -116,24 +123,54 @@ const CutControls = (
             type: `UPDATE_${marker.toUpperCase()}`,
             payload: null,
           })
-        }><FontAwesomeIcon icon={faTrash}/></IconButton>
-      </Fragment>}<br />
+        }>
+          <FontAwesomeIcon icon={faTrash} />
+        </IconButton>
+      </Fragment> }
+    </div>
+  );
 
-    <button disabled={control != null && !invariant(currentTime, control)} onClick={() => {
-      let value = previewController.current.currentTime;
-      // We disable the buttons when the generated values would be invalid,
-      // but we rely on `timeupdate` events for that, which are not guaranteed
-      // to be timely, so we still have to check the invariant when actually
-      // updating the state. Here we decided to just clamp the value appropriately.
-      if (control != null && !invariant(value, control)) {
-          value = control;
-      }
-      recordingDispatch({
-        type: `UPDATE_${marker.toUpperCase()}`,
-        payload: value,
-      });
-    }}>{t(`review-set-${marker}`)}</button>
-  </Fragment>;
+  const button = (
+    <button
+      title={t(`review-set-${marker}`)}
+      disabled={control != null && !invariant(currentTime, control)}
+      onClick={() => {
+        let value = previewController.current.currentTime;
+        // We disable the buttons when the generated values would be invalid,
+        // but we rely on `timeupdate` events for that, which are not guaranteed
+        // to be timely, so we still have to check the invariant when actually
+        // updating the state. Here we decided to just clamp the value appropriately.
+        if (control != null && !invariant(value, control)) {
+            value = control;
+        }
+        recordingDispatch({
+          type: `UPDATE_${marker.toUpperCase()}`,
+          payload: value,
+        });
+      }}
+      sx={{
+        // backgroundColor: '#f5f5f5',
+        // border: '1px solid #c5c5c5',
+        backgroundColor: 'transparent',
+        border: 'none',
+        pt: '4px',
+        px: '8px',
+        borderRadius: '4px',
+        '&:disabled': {
+          opacity: 0.4,
+        },
+        '&:not(:disabled):hover': {
+          backgroundColor: '#ddd'
+        },
+      }}
+    >
+      <CutHereIcon sx={{ height: '32px', transform: marker === 'end' ? 'scaleX(-1)' : '' }} />
+    </button>
+  );
+
+  return marker === 'start'
+    ? <Fragment>{ state }{ button }</Fragment>
+    : <Fragment>{ button }{ state }</Fragment>;
 };
 
 const Preview = forwardRef(function _Preview({ onTimeUpdate }, ref) {
