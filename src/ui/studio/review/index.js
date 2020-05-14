@@ -128,7 +128,7 @@ const Scrubber = ({ previewController, currentTime }) => {
     if (previewController.current) {
       previewController.current.currentTime = progress * duration;
     }
-  }
+  };
 
   const cutStyle = {
     position: 'absolute',
