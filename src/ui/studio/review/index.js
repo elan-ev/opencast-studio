@@ -272,10 +272,20 @@ const CutControls = (
     </div>
   );
 
+  const disabled = (() => {
+    if (currentTime <= 0 || currentTime >= previewController.current?.duration) {
+      return true;
+    }
+    if (control != null && !invariant(currentTime, control)) {
+      return true;
+    }
+    return false;
+  })();
+
   const button = (
     <button
       title={t(`review-set-${marker}`)}
-      disabled={control != null && !invariant(currentTime, control)}
+      {...{ disabled }}
       onClick={() => {
         let value = previewController.current.currentTime;
         // We disable the buttons when the generated values would be invalid,
