@@ -17,6 +17,11 @@ import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
 import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
 
 
+// In some situation we would like to set the current time to 0 or check for it.
+// Thanks to a browser bug, setting the current time to 0 fails. Using a number
+// slightly higher works thought. So we use this 1ms time for now. Sigh.
+const ALMOST_ZERO = 0.001;
+
 export default function Review(props) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
@@ -273,7 +278,7 @@ const CutControls = (
   );
 
   const disabled = (() => {
-    if (currentTime <= 0 || currentTime >= previewController.current?.duration) {
+    if (currentTime <= ALMOST_ZERO || currentTime >= previewController.current?.duration) {
       return true;
     }
     if (control != null && !invariant(currentTime, control)) {
@@ -471,7 +476,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
             if (!durationsCalculated) {
               switch (durationCalculationProgress[index].current) {
               case 'started':
-                event.target.currentTime = 0;
+                event.target.currentTime = ALMOST_ZERO;
                 durationCalculationProgress[index].current = 'done';
                 break;
               case 'done':
