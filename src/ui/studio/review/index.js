@@ -176,13 +176,13 @@ const Scrubber = ({ previewController, currentTime }) => {
             height: '100%',
             opacity: 0.5,
           }} />
-          { (start && start > 0) && <div sx={{
+          { (start != null && start > 0) && <div sx={{
             left: 0,
             borderRight: '2px solid black',
             width: `${(start / duration) * 100}%`,
             ...cutStyle,
           }} /> }
-          { (end && end < duration) && <div sx={{
+          { (end != null && end < duration) && <div sx={{
             right: 0,
             borderLeft: '2px solid black',
             width: `${((duration - end) / duration) * 100}%`,
