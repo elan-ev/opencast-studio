@@ -102,6 +102,7 @@
   "review-set-end": "Set end",
   "review-remove-start-end": "Remove",
   "review-part-will-be-removed": "This part will be removed",
+  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 
   "stop-button-title": "Stop recording",
   "upload-notification": "Currently uploading...",

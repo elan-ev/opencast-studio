@@ -203,8 +203,11 @@ const VideoControls = ({ currentTime, previewController }) => {
   const { start, end } = useStudioState();
   const recordingDispatch = useDispatch();
   const settings = useSettings();
+  const { t } = useTranslation();
 
-  return (
+  const duration = previewController.current?.duration;
+
+  return <div sx={{ textAlign: 'center' }}>
     <Flex
       sx={{
         p: 2,
@@ -248,7 +251,8 @@ const VideoControls = ({ currentTime, previewController }) => {
         { ...{ recordingDispatch, previewController, currentTime } }
       />}
     </Flex>
-  );
+    {t('review-player-progress', { currentTime, duration })}
+  </div>;
 };
 
 const CutControls = (

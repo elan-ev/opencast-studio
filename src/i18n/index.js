@@ -36,6 +36,9 @@ i18n
       format: (value, format, lng) => {
         switch (format) {
         case 'duration-seconds':
+          if (value == null) {
+            return '-:--:--';
+          }
           const seconds = Math.floor(value % 60);
           value /= 60;
           const minutes = Math.floor(value % 60);
