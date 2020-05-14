@@ -437,7 +437,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
             right: 0,
             top: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backgroundColor: 'rgba(0, 0, 0, 0.65)',
             color: 'white',
             display: 'flex',
             flexDirection: 'column',
