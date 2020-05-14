@@ -19,7 +19,7 @@
   "save-creation-title-done": "Done!",
   "save-creation-subsection-title-download": "Download recording",
   "save-creation-download-button": "Download",
-  "save-creation-download-cut-warning": "Unfortunately, cutting the video currently only works when uploading. The start/end part you removed in the previous step will still be contained in the downloaded video.",
+  "save-creation-download-cut-warning": "Cutting the video currently only works when uploading to Opencast. The parts you marked for removal in the previous step will still be contained in the downloaded video.",
   "save-creation-subsection-title-upload": "Upload to Opencast",
   "save-creation-upload-to": "Upload to <1>{{server}}</1>",
   "save-creation-upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
