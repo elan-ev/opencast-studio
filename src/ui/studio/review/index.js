@@ -132,7 +132,7 @@ const Scrubber = ({ previewController, currentTime }) => {
 
   const cutStyle = {
     position: 'absolute',
-    backgroundColor: 'rgba(255, 0, 0, 0.5)',
+    backgroundColor: 'gray.3',
     height: '100%',
     boxSizing: 'content-box',
   };
@@ -162,20 +162,12 @@ const Scrubber = ({ previewController, currentTime }) => {
         />
         <div sx={{
           position: 'relative',
-          backgroundColor: 'gray.3',
+          backgroundColor: '#6bc295',
           height: '10px',
           width: '100%',
           borderRadius: '5px',
           overflow: 'hidden',
         }}>
-          <div sx={{
-            position: 'absolute',
-            left: 0,
-            width: `${(currentTime / duration) * 100}%`,
-            backgroundColor: 'black',
-            height: '100%',
-            opacity: 0.5,
-          }} />
           { (start != null && start > 0) && <div sx={{
             left: 0,
             borderRight: '2px solid black',
@@ -188,6 +180,14 @@ const Scrubber = ({ previewController, currentTime }) => {
             width: `${((duration - end) / duration) * 100}%`,
             ...cutStyle,
           }} /> }
+          <div sx={{
+            position: 'absolute',
+            left: 0,
+            width: `${(currentTime / duration) * 100}%`,
+            backgroundColor: 'black',
+            height: '100%',
+            opacity: 0.3,
+          }} />
         </div>
       </div>
     </div>
