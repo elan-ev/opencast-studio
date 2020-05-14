@@ -178,6 +178,18 @@ The following settings are currently understood by Studio. The column "shown to 
         Passed as <code>framerate: { max: _ }</code> <code>MediaStreamConstraint</code> to <code>getUserMedia</code>. Setting this might lead to some users not being able to share their webcam!
       </td>
     </tr>
+    <tr>
+      <td><b><code>review.disableCutting</code></b></td>
+      <td>boolean</td>
+      <td><code>true</code></td>
+      <td>✘</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="3">
+        Disables and hides the cutting tools from the review page when set to <code>true</code>. By default, this is <code>false</code>. It only makes sense to set this to <code>true</code> if your workflows can't handle the cutting information (SMIL file). The default Studio worflow in Opencast 8.4 and newer supports this.
+      </td>
+    </tr>
   </tbody>
 </table>
 
