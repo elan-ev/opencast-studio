@@ -12,7 +12,7 @@ import { recordingFileName } from '../../../util.js';
 
 const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
   const { t, i18n } = useTranslation();
-  const { deviceType, mimeType, url, downloaded, media: blob } = recording
+  const { deviceType, mimeType, url, downloaded, media: blob } = recording;
 
   const flavor = deviceType === 'desktop' ? t('sources-display') : t('sources-user');
   const downloadName = recordingFileName({ mimeType, flavor, title, presenter });

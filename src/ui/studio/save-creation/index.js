@@ -10,7 +10,7 @@ import {
   faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import React, { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { usePageVisibility } from 'react-page-visibility';
@@ -55,7 +55,7 @@ export default function SaveCreation(props) {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState, title, presenter } = useStudioState();
+  const { recordings, upload: uploadState, title, presenter, start, end } = useStudioState();
   const dispatch = useDispatch();
 
   function handleBack() {
@@ -145,6 +145,8 @@ export default function SaveCreation(props) {
       recordings: recordings.filter(Boolean),
       title,
       creator: presenter,
+      start,
+      end,
       uploadSettings: settings.upload,
       onProgress,
     });
@@ -234,7 +236,7 @@ export default function SaveCreation(props) {
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
           >{t('save-creation-subsection-title-download')}</Styled.h2>
 
-          <DownloadBox recordings={recordings} dispatch={dispatch} {...{ title, presenter }} />
+          <DownloadBox dispatch={dispatch} {...{ title, presenter }} />
         </div>
       </div>
 
@@ -262,26 +264,40 @@ export default function SaveCreation(props) {
   );
 }
 
-const DownloadBox = ({ recordings, dispatch, presenter, title }) => (
-  <div sx={{
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: ['center', 'center', 'start'],
-    flexWrap: 'wrap',
-  }}>
-    {recordings.length === 0 ? <Spinner /> : (
-      recordings.map((recording, index) => (
-        <RecordingPreview
-          key={index}
-          recording={recording}
-          presenter={presenter}
-          title={title}
-          onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
-        />
-      ))
-    )}
-  </div>
-);
+const DownloadBox = ({ presenter, title }) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { recordings, start, end } = useStudioState();
+
+  return (
+    <Fragment>
+      { (start !== null || end !== null) && (
+        <Notification sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <FontAwesomeIcon icon={faExclamationTriangle} sx={{ fontSize: '26px', mb: 3 }} />
+          <p sx={{ m: 0 }}>{ t('save-creation-download-cut-warning') }</p>
+        </Notification>
+      )}
+      <div sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: ['center', 'center', 'start'],
+        flexWrap: 'wrap',
+      }}>
+        {recordings.length === 0 ? <Spinner /> : (
+          recordings.map((recording, index) => (
+            <RecordingPreview
+              key={index}
+              recording={recording}
+              presenter={presenter}
+              title={title}
+              onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
+            />
+          ))
+        )}
+      </div>
+    </Fragment>
+  );
+}
 
 // Shown if there is no working Opencast connection. Shows a warning and a link
 // to settings.
@@ -301,7 +317,7 @@ const ConnectionUnconfiguredWarning = () => {
       </Trans>
     </Notification>
   );
-}
+};
 
 const UploadForm = ({ uploadState, handleUpload }) => {
   const { t } = useTranslation();
@@ -343,7 +359,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     );
 
   return (
-    <React.Fragment>
+    <Fragment>
       <NotConnectedWarning />
 
       <FormField label={t('save-creation-label-title')}>
@@ -378,9 +394,9 @@ const UploadForm = ({ uploadState, handleUpload }) => {
           <Notification isDanger>{uploadState.error}</Notification>
         )}
       </Box>
-    </React.Fragment>
+    </Fragment>
   );
-}
+};
 
 const NotConnectedWarning = () => {
   const location = useLocation();
@@ -423,7 +439,7 @@ const NotConnectedWarning = () => {
             {
               (referrer && !referrer.includes(window.origin || ''))
                 ? <Styled.a href={referrer} target='_blank' sx={{ color: '#ff2' }}>bar</Styled.a>
-                : <React.Fragment>bar</React.Fragment>
+                : <Fragment>bar</Fragment>
             }
             baz
           </Trans>
@@ -496,17 +512,17 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
   } else if (secondsLeft < 90) {
     prettyTime = t('upload-time-a-minute');
   } else if (secondsLeft < 45 * 60) {
-    prettyTime = `${Math.round(secondsLeft / 60)} ${t('upload-time-minutes')}`
+    prettyTime = `${Math.round(secondsLeft / 60)} ${t('upload-time-minutes')}`;
   } else if (secondsLeft < 90 * 60) {
     prettyTime = t('upload-time-an-hour');
   } else if (secondsLeft < 24 * 60 * 60) {
-    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t('upload-time-hours')}`
+    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t('upload-time-hours')}`;
   } else {
     prettyTime = null;
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <div sx={{ display: 'flex', mb: 2 }}>
         <Text variant='text'>{roundedPercent}%</Text>
         <div sx={{ flex: 1 }} />
@@ -520,16 +536,16 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
         { roundedPercent }
       </Progress>
       <Text variant='text' sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>
-    </React.Fragment>
+    </Fragment>
   );
-}
+};
 
 // Shown if the upload was successful. A big green checkmark and a text.
 const UploadSuccess = () => {
   const { t } = useTranslation();
 
   return (
-    <React.Fragment>
+    <Fragment>
       <div sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -541,6 +557,6 @@ const UploadSuccess = () => {
       </div>
       <Text variant='text' sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
       <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
-    </React.Fragment>
+    </Fragment>
   );
-}
+};

@@ -21,6 +21,7 @@
   "save-creation-title-done": "Geschafft!",
   "save-creation-subsection-title-download": "Aufnahme runterladen",
   "save-creation-download-button": "Runterladen",
+  "save-creation-download-cut-warning": "Der Videoschnitt funktioniert zurzeit leider nur, wenn Sie Ihre Aufnahme hochladen. In dem Video, was Sie hier herunterladen können, sind die im vorherigen Schritt entfernten Teile immer noch enthalten.",
   "save-creation-subsection-title-upload": "Zu Opencast hochladen",
   "save-creation-upload-to": "Zu <1>{{server}}</1> hochladen",
   "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
@@ -91,6 +92,14 @@
 
   "review-heading": "Zufrieden mit der Aufnahme?",
   "review-error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
+  "review-start": "Anfang: <2>{{start, duration-seconds}}</2>",
+  "review-end": "Ende: <2>{{end, duration-seconds}}</2>",
+  "review-no-start": "Kein Anfang festgelegt",
+  "review-no-end": "Kein Ende festgelegt",
+  "review-set-start": "Anfang festlegen",
+  "review-set-end": "Ende festlegen",
+  "review-remove-start-end": "Entfernen",
+  "review-part-will-be-removed": "Dieser Teil wird entfernt",
 
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen...",

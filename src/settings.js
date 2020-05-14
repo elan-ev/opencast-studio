@@ -498,7 +498,7 @@ const defaultSettings = {
     serverUrl: 'https://develop.opencast.org/',
     loginName: 'admin',
     loginPassword: 'opencast',
-  }
+  },
 };
 
 const positiveInteger = name => ({
@@ -542,11 +542,14 @@ const SCHEMA = {
       }
     },
   },
-  'display': {
+  review: {
+    disableCutting: 'boolean',
+  },
+  display: {
     maxFps: positiveInteger('display.maxFps'),
     maxHeight: positiveInteger('display.maxHeight'),
   },
-  'camera': {
+  camera: {
     maxFps: positiveInteger('camera.maxFps'),
     maxHeight: positiveInteger('camera.maxHeight'),
   },

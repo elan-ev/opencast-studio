@@ -311,7 +311,7 @@ export class Opencast {
   //
   // At the start of this method, `refreshConnection` is called. That
   // potentially changed the `state`.
-  async upload({ recordings, title, creator, uploadSettings, onProgress }) {
+  async upload({ recordings, title, creator, start, end, uploadSettings, onProgress }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     switch (this.#state) {
@@ -346,6 +346,17 @@ export class Opencast {
       mediaPackage = await this.uploadTracks(
         { mediaPackage, recordings, onProgress, title, creator }
       );
+
+      if (start != null || end != null) {
+        mediaPackage = await this.addCuttingInformation({
+          mediaPackage,
+          // We set the defaults here, instead of in the state,
+          // so that we don't even have to send a SMIL catalog,
+          // when the user didn't cut at all.
+          start: start || 0,
+          end: end || Number.MAX_VALUE,
+        });
+      }
 
       // Finalize/ingest media package
       await this.finishIngest({ mediaPackage, uploadSettings });
@@ -404,6 +415,16 @@ export class Opencast {
     body.append('BODY', new Blob([acl]), 'acl.xml');
 
     return await this.request("ingest/addAttachment", { method: 'post', body: body })
+      .then(response => response.text());
+  }
+
+  // Adds a SMIL catalog for Opencast to cut the video during processing
+  addCuttingInformation({ mediaPackage, start, end }) {
+    const body = new FormData();
+    body.append('flavor', 'smil/cutting');
+    body.append('mediaPackage', mediaPackage);
+    body.append('BODY', new Blob([smil({ start, end })]), 'cutting.smil');
+    return this.request("ingest/addCatalog", { method: 'post', body })
       .then(response => response.text());
   }
 
@@ -632,7 +653,7 @@ export const Provider = ({ initial, children }) => {
 
 const escapeString = s => {
   return new XMLSerializer().serializeToString(new Text(s));
-}
+};
 
 const dcCatalog = ({ creator, title, seriesId }) => {
   const seriesLine = seriesId
@@ -652,7 +673,7 @@ const dcCatalog = ({ creator, title, seriesId }) => {
         <dcterms:spatial>Opencast Studio</dcterms:spatial>
         ${seriesLine}
     </dublincore>`;
-}
+};
 
 const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Policy PolicyId="mediapackage-1"
@@ -700,4 +721,14 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
     </Condition>
   </Rule>
 </Policy>
+`;
+
+const smil = ({ start, end }) => `
+  <smil xmlns="http://www.w3.org/ns/SMIL">
+    <body>
+      <par>
+        <video clipBegin="${start}s" clipEnd="${end}s" />
+      </par>
+    </body>
+  </smil>
 `;

@@ -122,7 +122,7 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
         lastDimensions.current[i] = [w, h];
       }
     });
-  }
+  };
 
   // Setup the handler for when a video stream is resized.
   let dimensions = children.map(c => c.dimensions());
@@ -134,7 +134,7 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
       updateLastDimensions(dimensions);
       forceRender();
     }
-  }
+  };
 
   const ar = ([width, height]) => width && height ? width / height : 16 / 9;
 
@@ -212,7 +212,7 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
           return {
             rowHeights: children.map(c => baseHeight),
             rowWidths: aspectRatios.map(ar => baseHeight * ar),
-          }
+          };
         }
       })();
 
@@ -236,7 +236,7 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
           return {
             colHeights: children.map((c, i) => (width / aspectRatios[i])),
             colWidths: Array(2).fill(width),
-          }
+          };
         }
       })();
 
