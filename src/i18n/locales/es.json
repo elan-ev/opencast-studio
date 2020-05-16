@@ -83,7 +83,7 @@
   "source-user-not-allowed-title": "No se puede acceder a su cámara",
   "source-user-not-allowed-text": "Intenta volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su cámara (generalmente a través de un botón al lado de la barra de direcciones de su navegador). Si eso no ayuda, intente cerrar otras aplicaciones que puedan usar esa cámara: con algunos sistemas operativos, solo una aplicación puede tener acceso a la cámara.",
   "source-audio-not-allowed-title": "No se puede acceder a su micrófono",
-  "source-audio-not-allowed-text": "Intente seleccionar 'Sin audio' y luego vuelva a seleccionar 'Micrófono'. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su micrófono (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
+  "source-audio-not-allowed-text": "Intente seleccionar 'Volver a seleccionar el audio' y luego vuelva a seleccionar 'Micrófono'. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su micrófono (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
 
   "sources-display": "Pantalla",
   "sources-user": "Cámara",
@@ -126,7 +126,7 @@
   "upload-time-minutes": "minutos",
   "upload-time-hours": "horas",
   "upload-time-left": "queda {{time}}",
-  
+
   "warning-https": "La mayoría de los navegadores no permiten la captura de video a través de una conexión no segura (HTTP). Por favor cambie a HTTPS.",
   "warning-recorder-not-supported": "Su navegador no soporta la grabación de transmisiones multimedia.",
   "warning-recorder-safari-hint": "Si está utilizando Safari, puede habilitar la función experimental 'MediaRecorder' en la configuración. Sin embargo, en macOS, recomendamos cambiar a Chrome o Firefox.",
