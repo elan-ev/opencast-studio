@@ -226,6 +226,7 @@ const VideoControls = ({ currentTime, previewController }) => {
         { ...{ recordingDispatch, previewController, currentTime } }
       />}
       <button
+        title={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}
         sx={{ backgroundColor: 'transparent', border: 'none', mx: 3 }}
         onClick={() => {
           const controller = previewController.current;

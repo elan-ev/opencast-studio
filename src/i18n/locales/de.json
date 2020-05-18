@@ -100,6 +100,8 @@
   "review-set-end": "Ende festlegen",
   "review-remove-start-end": "Entfernen",
   "review-part-will-be-removed": "Dieser Teil wird entfernt",
+  "review-play": "Abspielen",
+  "review-pause": "Pausieren",
 
   "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Wird gerade hochgeladen...",
