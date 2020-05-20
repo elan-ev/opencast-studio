@@ -128,8 +128,15 @@ const Scrubber = ({ previewController, currentTime }) => {
   const { start, end } = useStudioState();
 
   const setTime = mouseEvent => {
-    const x = mouseEvent.clientX - mouseEvent.target.getBoundingClientRect().x;
-    const progress = x / mouseEvent.target.clientWidth;
+    const rect = mouseEvent.target.getBoundingClientRect()
+    const x = mouseEvent.clientX - rect.x;
+    let progress = x / rect.width;
+    if (progress < 0) {
+      progress = 0;
+    } else if (progress > 1) {
+      progress = 1;
+    }
+
     if (previewController.current) {
       previewController.current.currentTime = progress * duration;
     }
@@ -226,6 +233,7 @@ const VideoControls = ({ currentTime, previewController }) => {
         { ...{ recordingDispatch, previewController, currentTime } }
       />}
       <button
+        title={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}
         sx={{ backgroundColor: 'transparent', border: 'none', mx: 3 }}
         onClick={() => {
           const controller = previewController.current;

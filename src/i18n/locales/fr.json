@@ -94,8 +94,10 @@
   "review-end": "Fin: <2>{{end, duration-seconds}}</2>",
   "review-no-start": "Aucun début défini",
   "review-no-end": "Aucune fin définie",
-  "review-set-start": "Définir le début",
-  "review-set-end": "Définir la fin",
+  "review-set-start": "Définir l'heure actuelle comme début",
+  "review-set-end": "Définir l'heure actuelle comme fin",
+  "review-play": "Jouer",
+  "review-pause": "Pause",
   "review-remove-start-end": "Retirer",
   "review-part-will-be-removed": "Cette section sera retirée",
 
