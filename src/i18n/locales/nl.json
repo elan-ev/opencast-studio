@@ -110,8 +110,10 @@
   "review-end": "Einde: <2>{{end, duration-seconds}}</2>",
   "review-no-start": "Geen start set",
   "review-no-end": "Geen einde set",
-  "review-set-start": "Set start",
-  "review-set-end": "Set einde",
+  "review-set-start": "Stel de actuele tijd in als starttijd",
+  "review-set-end": "Stel de actuele tijd in als eindtijd",
+  "review-play": "Afspelen",
+  "review-pause": "Pauze",
   "review-remove-start-end": "Verwijder",
   "review-part-will-be-removed": "Dit deel wordt verwijderd.",
   "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}"
