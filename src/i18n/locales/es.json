@@ -19,7 +19,7 @@
   "save-creation-title-done": "Hecho!",
   "save-creation-subsection-title-download": "Descargar la grabación",
   "save-creation-download-button": "Descargar",
-  "save-creation-download-cut-warning": "Cortar el video actualmente sólo funciona cuando se sube a Opencast. Las partes que marcó para eliminación en el paso anterior seguirán estando en el vídeo descargado.",
+  "save-creation-download-cut-warning": "En este momento, cortar el video sólo funciona cuando se sube a Opencast. Las partes que marcó para eliminación en el paso anterior seguirán estando en el vídeo descargado.",
   "save-creation-subsection-title-upload": "Subir a Opencast",
   "save-creation-upload-to": "Subir a <1>{{server}}</1>",
   "save-creation-upload-network-error": "Fallo en la subida: error de red. Por favor, compruebe su conexión a Internet. Otras posibles causas: el servidor de Opencast no está accesible o está mal configurado.",
@@ -31,7 +31,7 @@
   "save-creation-warn-once-reestablished": "Una vez que se reestablezca la conexión, esta advertencia desaparecerá.",
   "save-creation-warn-once-refreshed": "Una vez que la sesión se refresque, esta advertencia desaparecerá.",
   "save-creation-warn-once-logged-in": "Una vez que esté correctamente identificado, esta advertencia desaparecerá.",
-  "save-creation-warn-unreachable": "El servidor de Opencast es inalcanzable actualmente. Por favor, compruebe su conexión a Internet. Si está conectado a Internet, es probable que sea un problema temporal con el servidor de Opencast.",
+  "save-creation-warn-unreachable": "El servidor de Opencast es inalcanzable en este momento. Por favor, compruebe su conexión a Internet. Si está conectado a Internet, es probable que sea un problema temporal con el servidor de Opencast.",
   "save-creation-warn-server-problem": "Ocurrió un problema desconocido conectando con el servidor de Opencast.",
   "save-creation-warn-session-expired": "Parece que tu sesión de Opencast ha expirado. Para refrescar la sesión, intente abrir <1> el sitio web desde el que inició Opencast Studio</1> en otra pestaña del navegador y vuelva aquí.",
   "save-creation-warn-login-failed": "La identificación con el servidor de Opencast falló. Por favor, compruebe sus credenciales de acceso en <1>la configuración</1>.",
@@ -50,7 +50,7 @@
 
 
   "confirm-discard-recordings": "¿Está seguro que quiere descartar tu grabación? ¡Esto no se puede deshacer!",
-  "confirm-cancel-recording": "¡Actualmente estás grabando! ¿Estás seguro que deseas cancelar y descartar la grabación?",
+  "confirm-cancel-recording": "En este momento estás grabando! ¿Estás seguro que deseas cancelar y descartar la grabación?",
 
   "sources-video-display-selected": "Pantalla seleccionada",
   "sources-video-display-and-user-selected": "Pantalla y cámara seleccionada",
@@ -107,7 +107,7 @@
   "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 
   "stop-button-title": "Detener grabación",
-  "upload-notification": "Actualmente subiendo",
+  "upload-notification": "En este momento se está subiendo...",
   "upload-settings-button-store": "Guardar ajustes",
   "upload-settings-modal-header": "Configurar subida a Opencast",
   "upload-settings-label-server-url": "URL del servidor",
