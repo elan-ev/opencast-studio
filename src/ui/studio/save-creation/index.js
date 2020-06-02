@@ -120,10 +120,14 @@ export default function SaveCreation(props) {
         return;
       }
 
-      const lastProgress = progressHistory[progressHistory.length - 1];
-      const timeSinceLastUpdate = Date.now() - (lastProgress?.timestamp || 0);
-      if (timeSinceLastUpdate > 3000) {
-        onProgress(lastProgress.progress)
+      if (!progressHistory.length) {
+        onProgress(0);
+      } else {
+        const lastProgress = progressHistory[progressHistory.length - 1];
+        const timeSinceLastUpdate = Date.now() - lastProgress.timestamp;
+        if (timeSinceLastUpdate > 3000) {
+            onProgress(lastProgress.progress);
+        }
       }
     }, 1000);
 
