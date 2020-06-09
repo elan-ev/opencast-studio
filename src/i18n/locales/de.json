@@ -21,7 +21,7 @@
   "save-creation-title-done": "Geschafft!",
   "save-creation-subsection-title-download": "Aufnahme runterladen",
   "save-creation-download-button": "Runterladen",
-  "save-creation-download-cut-warning": "Der Videoschnitt funktioniert zurzeit leider nur, wenn Sie Ihre Aufnahme hochladen. In dem Video, was Sie hier herunterladen können, sind die im vorherigen Schritt entfernten Teile immer noch enthalten.",
+  "save-creation-download-cut-warning": "Der Videoschnitt funktioniert zurzeit leider nur, wenn Sie Ihre Aufnahme hochladen. In dem Video, das Sie hier herunterladen können, sind die im vorherigen Schritt entfernten Teile immer noch enthalten.",
   "save-creation-subsection-title-upload": "Zu Opencast hochladen",
   "save-creation-upload-to": "Zu <1>{{server}}</1> hochladen",
   "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
