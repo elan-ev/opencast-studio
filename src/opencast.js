@@ -394,7 +394,7 @@ export class Opencast {
     const dcc = dcCatalog({ creator, title, seriesId });
     const body = new FormData();
     body.append('mediaPackage', mediaPackage);
-    body.append('dublinCore', dcc);
+    body.append('dublinCore', encodeURIComponent(dcc));
     body.append('flavor', 'dublincore/episode');
 
     return await this.request("ingest/addDCCatalog", { method: 'post', body })
