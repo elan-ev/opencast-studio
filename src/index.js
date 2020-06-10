@@ -17,7 +17,10 @@ import { Opencast, Provider as OpencastProvider } from './opencast';
 import { userHasWebcam, sleep } from './util';
 
 if (process.env.REACT_APP_ENABLE_SENTRY === '1') {
-  Sentry.init({ dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4' });
+  Sentry.init({
+    dsn: 'https://66e6b4dc3d59463fa34272abcb5da6b1@sentry.virtuos.uos.de/4',
+    release: `oc-studio-${process.env.REACT_APP_GIT_SHA}`,
+  });
 }
 
 // Load the rest of the application and try to fetch the `settings.json`.
