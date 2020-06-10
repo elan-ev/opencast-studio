@@ -134,7 +134,8 @@ export OPTION=VALUE
 npm run build
 ```
 
-| Option                    | Example            | Description
-| ------------------------- | ------------------ | -----------
-| `PUBLIC_URL`              | `/studio`          | Path from which Studio will be served
-| `REACT_APP_SETTINGS_PATH` | `/mysettings.json` | Path from which to load the configuration
+| Option                            | Example            | Description
+| --------------------------------- | ------------------ | -----------
+| `PUBLIC_URL`                      | `/studio`          | Path from which Studio will be served
+| `REACT_APP_SETTINGS_PATH`         | `/mysettings.json` | Path from which to load the configuration
+| `REACT_APP_INCLUDE_LEGAL_NOTICES` | `1`                | Set to `1` to include legal notices and information about ELAN e.V., any other value or having this variable not set will not include them. Unless you are working for ELAN e.V. there is probably no reason for you to use this variable.
