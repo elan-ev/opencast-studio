@@ -6,8 +6,8 @@ const languages = [
   { short: 'es', long: 'Español', rtl: false },
   { short: 'fa', long: 'Farsi', rtl: true },
   { short: 'fr', long: 'Français', rtl: false },
-  { short: 'tr', long: 'Turkish', rtl: false },
   { short: 'sl', long: 'Slovenščina', rtl: false },
+  { short: 'tr', long: 'Turkish', rtl: false },
 ];
 
 export default languages;

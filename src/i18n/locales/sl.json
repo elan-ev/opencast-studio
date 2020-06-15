@@ -44,7 +44,7 @@
   "sources-video-display-and-user-selected": "Zaslon & video kamera izbrana",
   "sources-video-user-selected": "Video kamera je izbrana",
   "sources-video-question": "Izberite željeni video vir za snemanje",
-  "sources-video-none-available": "Vaš brskalnik / naprava ne podpira zajema zaslona ali video kamere:-(",
+  "sources-video-none-available": "Vaš brskalnik / naprava ne podpira zajema zaslona ali video kamere :-(",
   "sources-video-reselect-source": "Ponovno izberi vir(e)",
   "sources-video-no-cam-detected": "Video kamera ni bila zaznana",
 
@@ -72,7 +72,7 @@
   "error-lost-stream-end-recording": "Video ali avdio snemanje se je nepričakovano končalo in zaradi tega je bilo aktivno snemanje predčasno zaustavljeno! Ali se je prekinila povezava s video kamero ali mikrofonom? Ali ste po naključju zamenjali kamero ali avdio povezavo oziroma preklicali potrebna dovoljenja?",
 
   "review-heading": "Ali si zadovoljen z video posnetkom?",
-  "review-error-empty-recording": "Napaka: vaš posnetek je popolnoma prazen. Ste mogoče snemanje ustavili skoraj takoj po tem, ko ste ga začeli? Poleg tega se prepričajte, da je vaš sistem dovolj zmogljiv za snemanje videa. (to morda ne velja, če druga aplikacija močno obrremenjuje vaš sistem ali pa če je vaša računalnik zelo star). V primeru  da je vaš sistem dovolj zmogljiiv za viideo snemanje, ter snemali več kot nekaj sekund in še vedno vidite to napako: Prosimo prijavite to kot napako na GitHubu.",
+  "review-error-empty-recording": "Napaka: vaš posnetek je popolnoma prazen. Ste mogoče snemanje ustavili skoraj takoj po tem, ko ste ga začeli? Poleg tega se prepričajte, da je vaš sistem dovolj zmogljiv za snemanje videa. (to morda ne velja, če druga aplikacija močno obrremenjuje vaš sistem ali pa če je vaša računalnik zelo star). V primeru da je vaš sistem dovolj zmogljiiv za viideo snemanje, ter snemali več kot nekaj sekund in še vedno vidite to napako: Prosimo prijavite to kot napako na GitHub.",
 
   "stop-button-title": "Prekini snemanje",
   "upload-notification": "Trenutno nalaga ...",
@@ -100,6 +100,6 @@
   "warning-https": "Večina brskalnikov ne dovoljuje zajema video posnetkov prek nešifrirane povezave (HTTP). Preklopite na HTTPS.",
   "warning-recorder-not-supported": "Vaš brskalnik ne podpira snemanja video posnetkov.",
   "warning-recorder-safari-hint": "Če uporabljate Safari, lahko v nastavitvah omogočite eksperimentalno funkcijo »MediaRecorder«. V Apple MacOS-u priporočamo prehod na Chrome ali Firefox.",
-  "warning-missing-connection-settings": "Povezava z Opencastom ni v celoti vzpostavljena: nalaganje je onemogočeno. Konfigurirajte povezavo v <1> nastavitvah </1> (posnetka ne boste izgubili).",
+  "warning-missing-connection-settings": "Povezava z Opencastom ni v celoti vzpostavljena: nalaganje je onemogočeno. Konfigurirajte povezavo v <1>nastavitvah</1> (posnetka ne boste izgubili).",
   "settings-back-to-recording": "Nazaj na snemanje"
 }
