@@ -3,11 +3,12 @@
 import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
+import parseToml from '@iarna/toml/parse-string';
 import { decodeHexString } from './util';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
-const CONTEXT_SETTINGS_FILE = 'settings.json';
+const CONTEXT_SETTINGS_FILE = 'settings.toml';
 
 // Responsible for obtaining settings from different places (context settings,
 // local storage, query parameter) and merging them appropriately.
@@ -46,7 +47,7 @@ export class SettingsManager {
   }
 
   // Creates a new `Settings` instance by loading user settings from local
-  // storage and attempting to load context settings from `/settings.json`.
+  // storage and attempting to load context settings from the server..
   static async init() {
     let self = new SettingsManager();
 
@@ -66,8 +67,8 @@ export class SettingsManager {
       );
     }
 
-    const rawContextSettings = await SettingsManager.loadContextSettings() || {};;
-    self.contextSettings = self.validate(rawContextSettings, false, 'specified in \'settings.json\'');
+    const rawContextSettings = await SettingsManager.loadContextSettings() || {};
+    self.contextSettings = self.validate(rawContextSettings, false, 'from server settings file');
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
@@ -132,8 +133,9 @@ export class SettingsManager {
     return self;
   }
 
-  // Attempts to loads `settings.json`. If it fails for some reason, returns
-  // `null` and prints an appropriate message on console.
+  // Attempts to load `settings.toml` (or REACT_APP_SETTINGS_PATH is that's
+  // specified) from the server. If it fails for some reason, returns `null` and
+  // prints an appropriate message on console.
   static async loadContextSettings() {
     // Try to retrieve the context settings.
     let basepath = process.env.PUBLIC_URL || '/';
@@ -141,7 +143,7 @@ export class SettingsManager {
       basepath += '/';
     }
 
-    // Construct path to settings JSON file. If the `REACT_APP_SETTINGS_PATH` is
+    // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
     // given and starts with '/', it is interpreted as absolute path from the
     // server root.
     const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
@@ -151,34 +153,43 @@ export class SettingsManager {
     try {
       response = await fetch(url);
     } catch (e) {
-      console.warn('Could not access `settings.json` due to network error!', e || "");
+      console.warn(`Could not access '${settingsPath}' due to network error!`, e || "");
       return null;
     }
 
     if (response.status === 404) {
-      // If `settings.json` was not found, we silently ignore the error. We
-      // expecet many installation to now provide this file.
-      console.debug("`settings.json` returned 404: ignoring");
+      // If the settings file was not found, we silently ignore the error. We
+      // expect many installation to provide this file.
+      console.debug(`'${settingsPath}' returned 404: ignoring`);
       return null;
     } else if (!response.ok) {
       console.error(
-        `Fetching 'settings.json' failed: ${response.status} ${response.statusText}`
+        `Fetching '${settingsPath}' failed: ${response.status} ${response.statusText}`
       );
       return null;
     }
 
-    if (!response.headers.get('Content-Type').startsWith('application/json')) {
-      console.warn(
-        "'settings.json' request does not have 'Content-Type: application/json' -> ignoring..."
-      );
+    if (response.headers.get('Content-Type')?.startsWith('text/html')) {
+      console.warn(`'${settingsPath}' request has 'Content-Type: text/html' -> ignoring...`);
       return null;
     }
 
-    try {
-      return await response.json();
-    } catch(e) {
-      console.error("Could not parse 'settings.json': ", e);
-      throw new SyntaxError(`Could not parse 'settings.json': ${e}`);
+    // TODO: once we drop support for Opencast 8, the JSON branch can be
+    // removed.
+    if (settingsPath.endsWith('.json')) {
+      try {
+        return await response.json();
+      } catch(e) {
+        console.error(`Could not parse '${settingsPath}' as JSON: `, e);
+        throw new SyntaxError(`Could not parse '${settingsPath}' as JSON: ${e}`);
+      }
+    } else {
+      try {
+        return parseToml(await response.text());
+      } catch (e) {
+        console.error(`Could not parse '${settingsPath}' as JSON: `, e);
+        throw new SyntaxError(`Could not parse '${settingsPath}' as JSON: ${e}`);
+      }
     }
   }
 

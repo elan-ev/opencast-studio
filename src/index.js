@@ -23,7 +23,8 @@ if (process.env.REACT_APP_ENABLE_SENTRY === '1') {
   });
 }
 
-// Load the rest of the application and try to fetch the `settings.json`.
+// Load the rest of the application and try to fetch the settings file from the
+// server.
 const initialize = Promise.all([
   // Load rest of the application code
   import('./App').then(mod => mod.default),
