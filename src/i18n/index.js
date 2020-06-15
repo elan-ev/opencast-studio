@@ -9,6 +9,7 @@ import esTranslations from './locales/es.json';
 import faTranslations from './locales/fa.json';
 import frTranslations from './locales/fr.json';
 import nlTranslations from './locales/nl.json';
+import slTranslations from './locales/sl.json';
 import trTranslations from './locales/tr.json';
 
 const resources = {
@@ -19,6 +20,7 @@ const resources = {
   fa: { translation: faTranslations },
   fr: { translation: frTranslations },
   nl: { translation: nlTranslations },
+  sl: { translation: slTranslations },
   tr: { translation: trTranslations },
 };
 
