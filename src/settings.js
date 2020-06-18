@@ -82,15 +82,41 @@ export class SettingsManager {
       // the most basic characters, so it should always work.
 
       const encoded = urlParams.get('config');
+      let decoded;
       try {
-        const decoded = decodeHexString(encoded);
-        rawUrlSettings = JSON.parse(decoded);
+        decoded = decodeHexString(encoded);
       } catch (e) {
         console.warn(
-          `Could not decode and parse hex-encoded JSON string given to GET parameter `
-          + `'config'. Ignoring. Error:`,
+          `Could not decode hex-encoded JSON string given to GET parameter `
+            + `'config'. Ignoring. Error:`,
           e,
         );
+      }
+
+      // TODO: once we drop support for Opencast 8, the JSON branch and parts of
+      // the error messages can be removed.
+      if (decoded.trimStart().startsWith('{')) {
+        try {
+          rawUrlSettings = JSON.parse(decoded);
+        } catch (e) {
+          console.warn(
+            `Could not parse (as JSON) decoded hex-string given to GET parameter 'config'. `
+              + `(If you meant to pass TOML, make sure it does not start with '{'!) `
+              + `Ignoring. Error:`,
+            e,
+          );
+        }
+      } else {
+        try {
+          rawUrlSettings = parseToml(decoded);
+        } catch (e) {
+          console.warn(
+            `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
+              + `(If you meant to pass JSON, make sure it starts with '{'!) `
+              + `Ignoring. Error:`,
+            e,
+          );
+        }
       }
 
       for (const key of urlParams.keys()) {

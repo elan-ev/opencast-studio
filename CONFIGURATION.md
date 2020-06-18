@@ -140,22 +140,32 @@ https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upl
 
 Note that each key is a "path" like `opencast.serverUrl`. The first part of that path is the "section" in the TOML file shown above (e.g. `[opencast]`).
 
-TODO
-You can also include your configuration in a JSON object, encode it as UTF-8 string then encode that as hex string and pass it with the `config=` GET parameter. This might help to avoid problems if URLs (and thus the GET parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
+You can also put the settings in TOML file, then encode that as a hex string and pass it with the `config=` GET parameter. This might help to avoid problems if URLs (and thus the GET parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
 
-- Stringified JSON: `{"opencast":{"loginProvided":true}}`
+- TOML string:
+  ```
+  [opencast]
+  loginProvided = true
+  ```
 - Encoded as hex string:
   ```
-  7B226F70656E63617374223A7B226C6F67696E50726F7669646564223A747275657D7D
+  5b6f70656e636173745d0a6c6f67696e50726f7669646564203d2074727565
   ```
 - Pass to Studio:
   ```
-  https://studio.opencast.org?config=7B226F70656E63617374223A7B226C6F67696E50726F7669646564223A747275657D7D
+  https://studio.opencast.org?config=5b6f70656e636173745d0a6c6f67696e50726f7669646564203d2074727565
   ```
 
-You can encode your JSON string as hex string with [this tool](https://onlineutf8tools.com/convert-utf8-to-hexadecimal), for example. Be sure to disable the options "Use Hex Radix Prefix" and "Use Extra Spacing".
+You can encode your TOML as hex string with [this tool](https://onlineutf8tools.com/convert-utf8-to-hexadecimal), for example. Be sure to disable the options "Use Hex Radix Prefix" and "Use Extra Spacing".
 
-Note that this can't be used with other GET parameters. If `config=` is specified, all other parameters are ignored.
+Note that if `config=` is specified, all other parameters are ignored!
+
+**Backwards compatibility note:** in previous versions, this parameter was an
+encoded JSON object instead of TOML. Passing JSON in this way is now deprecated,
+but ist still supported until Studio drops support for Opencast 8. As all
+stringified JSON objects have to start with `{` and TOML cannot start with `{`,
+Studio has an easy way to see whether your parameter is JSON or TOML. But again:
+JSON support is dropped in future versions and you are encouraged to use TOML.
 
 
 ## Debugging/Help
