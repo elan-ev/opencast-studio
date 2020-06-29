@@ -139,3 +139,10 @@ npm run build
 | `PUBLIC_URL`                      | `/studio`          | Path from which Studio will be served
 | `REACT_APP_SETTINGS_PATH`         | `/mysettings.json` | Path from which to load the configuration
 | `REACT_APP_INCLUDE_LEGAL_NOTICES` | `1`                | Set to `1` to include legal notices and information about ELAN e.V., any other value or having this variable not set will not include them. Unless you are working for ELAN e.V. there is probably no reason for you to use this variable.
+
+
+## Branches
+
+- `master` is the main development branch and targets the `develop` branch Opencast version (currently Opencast 9). New releases are mainly released from `master`.
+- `production` is updates whenever a new release is published and always points to the latest release. This branch is automatically deployed to `studio.opencast.org`.
+- `opencast-8` is a maintenance branch that targets Opencast 8. Only bug fixes are backported.
