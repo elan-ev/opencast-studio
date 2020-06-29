@@ -312,148 +312,29 @@ export class SettingsManager {
   // `source` is just a string for error messages specifying where `obj` comes
   // from.
   validate(obj, allowParse, source) {
-    const parseBoolean = (s, path) => {
-      switch (s) {
-        case 'true':
-          return true;
-
-        case 'false':
-          return false;
-
-        default:
-          console.warn(
-            `Settings value '${path}' (${source}) can't be parsed as 'boolean' `
-            + ` (value: '${s}'). Ignoring.`
-          );
-          return null;
-      }
-    };
-
-    const parseInteger = (s, path) => {
-      if (/^[-+]?(\d+)$/.test(s)) {
-        return Number(s);
-      } else {
-        console.warn(
-          `Settings value '${path}' (${source}) can't be parsed as integer `
-          + `(value: '${s}'). Ignoring.`
-        );
-        return null;
-      }
-    };
-
-    const parseArray = (s, path) => {
-      try {
-        const parsed = JSON.parse(s);
-        if (!Array.isArray(parsed)) {
-          console.warn(
-            `Settings value '${path}' (${source}) is not an 'array' (value: '${s}'). Ignoring.`
-          );
-          return null;
-        }
-
-        return parsed;
-      } catch {
-        console.warn(
-          `Settings value '${path}' (${source}) can't be parsed as its `
-          + `expected type 'array' (value: '${s}'). Ignoring.`
-        );
-        return null;
-      }
-    };
-
     // Validates `obj` with `schema`. `path` is the current path used for error
     // messages.
     const validate = (schema, obj, path) => {
-      if (typeof schema === 'string' || typeof schema._type === 'string') {
+      if (typeof schema === 'function') {
         return validateValue(schema, obj, path);
       } else {
         return validateObj(schema, obj, path);
       }
     };
 
-    // Validate a settings value. `schema` should either be a string specifying
-    // the expected type or an object with these fields:
-    //
-    // - `_type`: a string specifying the expected type
-    // - `_validate` (optional): a function returning either `true` (validation
-    //   successful) or a string (validation error).
-    // - `_elements`: Only if `_type` is 'array'! Specifies type and validation
-    //   function for array elements. Object with fields `_type` and optionally
-    //   `_validate`.
-    const validateValue = (schema, value, path) => {
-      // Check the type of this value.
-      const expectedType = typeof schema === 'string' ? schema : schema._type;
-      let actualType;
-      if (Array.isArray(value)) {
-        actualType = 'array';
-      } else if (Number.isInteger(value)) {
-        actualType = 'int';
-      } else {
-        actualType = typeof value;
+    // Validate a settings value with a validation function. Returns the final
+    // value of the setting or `null` if it should be ignored.
+    const validateValue = (validation, value, path) => {
+      try {
+        const newValue = validation(value, allowParse);
+        return newValue === undefined ? value : newValue;
+      } catch (e) {
+        console.warn(
+          `Validation of setting '${path}' (${source}) with value '${value}' failed: `
+            + `${e}. Ignoring.`
+        );
+        return null;
       }
-
-      let out = null;
-      if (expectedType === 'any' || actualType === expectedType) {
-        out = value;
-      } else {
-        if (actualType === 'string' && allowParse) {
-          switch (expectedType) {
-            case 'boolean': out = parseBoolean(value, path); break;
-            case 'int': out = parseInteger(value, path); break;
-            case 'array': out = parseArray(value, path); break;
-            default:
-              console.warn(`internal bug: unknown type ${expectedType}. Ignoring ${path}.`);
-          }
-        } else {
-          console.warn(
-            `Settings value '${path}' (${source}) should be of type '${expectedType}', but is `
-            + `'${actualType}' (${value}). Ignoring.`
-          );
-        }
-      }
-
-      // Check type of array elements and validate those.
-      if (Array.isArray(out) && typeof schema === 'object' && '_elements' in schema) {
-        const expectedElementType = typeof schema._elements === 'string'
-          ? schema._elements
-          : schema._elements._type;
-
-        for (const elem of out) {
-          if (typeof elem !== expectedElementType) {
-            console.warn(
-              `Some elements of array value '${path}' (${source}) are not of type `
-              + `'${expectedElementType}'. Ignoring complete array.`
-            );
-            return null;
-          }
-
-          if (typeof schema._elements === 'object' && '_validate' in schema._elements) {
-            const validateResult = schema._elements._validate(elem);
-            if (validateResult !== true) {
-              console.warn(
-                `Validation of one element in array setting value '${path}' (${source}) `
-                + `failed: ${validateResult}. Ignoring complete array.`
-              );
-              return null;
-            }
-          }
-        }
-      }
-
-      // Run validation function if the type was correct and a validation is
-      // specified.
-      if (out !== null && typeof schema === 'object' && '_validate' in schema) {
-        const validateResult = schema._validate(out);
-        if (validateResult !== true) {
-          console.warn(
-            `Validation of setting value '${path}' (${source}) failed: ${validateResult}. `
-            + `Ignoring.`
-          );
-          return null;
-        }
-      }
-
-      return out;
     };
 
     // Validate a settings object/namespace. `schema` and `obj` need to be
@@ -487,21 +368,8 @@ export class SettingsManager {
 }
 
 
-export const validateServerUrl = value => {
-  if (value === '/' || value === '') {
-    return true;
-  }
-
-  try {
-    const url = new URL(value);
-    return (url.protocol === 'https:' || url.protocol === 'http:')
-      || 'the URL does not start with "http:" or "https:"';
-  } catch (e) {
-    return 'not a valid URL';
-  }
-};
-
-
+// The values prefilled on the settings page. These settings are *not* used
+// automatically, they are just the defaults for the UI.
 const defaultSettings = {
   opencast: {
     serverUrl: 'https://develop.opencast.org/',
@@ -510,57 +378,145 @@ const defaultSettings = {
   },
 };
 
-const positiveInteger = name => ({
-  _type: 'int',
-  _validate: i => i > 0 || `'${name}' has to be positive, but is '${i}'`,
-});
+// Validation functions for different types.
+const types = {
+  'string': (v, allowParse) => {
+    if (typeof v !== 'string') {
+      throw new Error("is not a string, but should be");
+    }
+  },
+  'int': (v, allowParse) => {
+    if (Number.isInteger(v)) {
+      return v;
+    }
 
-// Defines all potential settings and their types
+    if (allowParse) {
+      if (/^[-+]?(\d+)$/.test(v)) {
+        return Number(v);
+      }
+
+      throw new Error("can't be parsed as integer");
+    } else {
+      throw new Error("is not an integer");
+    }
+  },
+  'boolean': (v, allowParse) => {
+    if (typeof v === 'boolean') {
+      return;
+    }
+
+    if (allowParse) {
+      if (v === 'true') {
+        return true;
+      }
+      if (v === 'false') {
+        return false;
+      }
+      throw new Error("can't be parsed as boolean");
+    } else {
+      throw new Error("is not a boolean");
+    }
+  },
+  positiveInteger: (v, allowParse) => {
+    let i = types.int(v, allowParse);
+    if (i <= 0) {
+      throw new Error("has to be positive, but isn't");
+    }
+
+    return i;
+  },
+  "array": elementType => {
+    return (v, allowParse) => {
+      if (typeof v === 'string' && allowParse) {
+        try {
+          v = JSON.parse(v);
+        } catch {
+          throw new Error("can't be parsed as array");
+        }
+      }
+
+      if (!Array.isArray(v)) {
+        throw new Error("is not an array");
+      }
+
+      return v.map(element => {
+        try {
+          const newValue = elementType(element, allowParse);
+          return newValue === undefined ? element : newValue;
+        } catch (err) {
+          throw new Error(`failed to validate element '${element}' of array: ${err}`);
+        }
+      });
+    };
+  },
+};
+
+// Defines all potential settings and their types.
+//
+// Each setting value has to be a validation function. Such a function takes two
+// arguments: the input value `v` and the boolean `allowParse` which specifies
+// whether the input might be parsed into the correct type (this is only `true`
+// for GET parameters). The validation should throw an error if the input value
+// is not valid for the setting. If the function returns `undefined`, the input
+// value is valid and used. If the validator returns a different value, the
+// input is valid, but is replaced by that new value. See the `types` object
+// above for some examples.
 const SCHEMA = {
   opencast: {
-    serverUrl: {
-      _type: 'string',
-      _validate: validateServerUrl,
+    serverUrl: v => {
+      types.string(v);
+
+      if (v === '/' || v === '') {
+        return;
+      }
+
+      const url = new URL(v);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        throw new Error('the URL does not start with "http:" or "https:"');
+      }
+
+      // TODO: we could return the `URL` here or do other adjustments
     },
-    loginName: 'string',
-    loginPassword: 'string',
-    loginProvided: 'boolean',
+    loginName: types.string,
+    loginPassword: types.string,
+    loginProvided: types.boolean,
   },
   upload: {
-    seriesId: 'string',
-    workflowId: 'string',
+    seriesId: types.string,
+    workflowId: types.string,
     // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
     // done, this one of:
     // - undefined: setting was not set.
     // - `false`: do not send any ACLs when uploading
     // - `true`: explictely send default ACLs when uploading (this is the default behavior)
     // - ACL template string: already fetched ACL template string.
-    acl: {
-      _type: 'any',
-      _validate: v => (
-        v === false || typeof v === 'string' || `'upload.acl' needs to be 'false' or a string`
-      ),
+    acl: (v, allowParse) => {
+      if ((allowParse && v === 'false') || v === false) {
+        return false;
+      }
+
+      console.log(v);
+      if (typeof v === 'string') {
+        return;
+      }
+
+      throw new Error("needs to be 'false' or a string");
     },
   },
   recording: {
-    videoBitrate: positiveInteger('bitrate'),
-    mimes: {
-      _type: 'array',
-      _elements: {
-        _type: 'string',
-      }
-    },
+    videoBitrate: types.positiveInteger,
+    mimes: types.array(types.string),
   },
   review: {
-    disableCutting: 'boolean',
+    disableCutting: types.boolean,
   },
   display: {
-    maxFps: positiveInteger('display.maxFps'),
-    maxHeight: positiveInteger('display.maxHeight'),
+    maxFps: types.positiveInteger,
+    maxHeight: types.positiveInteger,
   },
   camera: {
-    maxFps: positiveInteger('camera.maxFps'),
-    maxHeight: positiveInteger('camera.maxHeight'),
+    maxFps: types.positiveInteger,
+    maxHeight: types.positiveInteger,
   },
 };
 
