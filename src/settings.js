@@ -76,10 +76,10 @@ export class SettingsManager {
     let rawUrlSettings = {};
     if (urlParams.get('config')) {
       // In this case, the GET parameter `config` is specified. We now expect a
-      // hex encoded stringified JSON object describing the configuration. This
-      // is possible in cases where special characters in GET parameters might
-      // get modified somehow (e.g. by an LMS). A config=hexstring only uses
-      // the most basic characters, so it should always work.
+      // hex encoded TOML file describing the configuration. This is possible in
+      // cases where special characters in GET parameters might get modified
+      // somehow (e.g. by an LMS). A config=hexstring only uses the most basic
+      // characters, so it should always work.
 
       const encoded = urlParams.get('config');
       let decoded;
@@ -87,36 +87,19 @@ export class SettingsManager {
         decoded = decodeHexString(encoded);
       } catch (e) {
         console.warn(
-          `Could not decode hex-encoded JSON string given to GET parameter `
-            + `'config'. Ignoring. Error:`,
+          `Could not decode hex-encoded string given to GET parameter 'config'. Ignoring. Error:`,
           e,
         );
       }
 
-      // TODO: once we drop support for Opencast 8, the JSON branch and parts of
-      // the error messages can be removed.
-      if (decoded.trimStart().startsWith('{')) {
-        try {
-          rawUrlSettings = JSON.parse(decoded);
-        } catch (e) {
-          console.warn(
-            `Could not parse (as JSON) decoded hex-string given to GET parameter 'config'. `
-              + `(If you meant to pass TOML, make sure it does not start with '{'!) `
-              + `Ignoring. Error:`,
-            e,
-          );
-        }
-      } else {
-        try {
-          rawUrlSettings = parseToml(decoded);
-        } catch (e) {
-          console.warn(
-            `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
-              + `(If you meant to pass JSON, make sure it starts with '{'!) `
-              + `Ignoring. Error:`,
-            e,
-          );
-        }
+      try {
+        rawUrlSettings = parseToml(decoded);
+      } catch (e) {
+        console.warn(
+          `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
+            + `Ignoring. Error:`,
+          e,
+        );
       }
 
       for (const key of urlParams.keys()) {
@@ -200,22 +183,11 @@ export class SettingsManager {
       return null;
     }
 
-    // TODO: once we drop support for Opencast 8, the JSON branch can be
-    // removed.
-    if (settingsPath.endsWith('.json')) {
-      try {
-        return await response.json();
-      } catch(e) {
-        console.error(`Could not parse '${settingsPath}' as JSON: `, e);
-        throw new SyntaxError(`Could not parse '${settingsPath}' as JSON: ${e}`);
-      }
-    } else {
-      try {
-        return parseToml(await response.text());
-      } catch (e) {
-        console.error(`Could not parse '${settingsPath}' as JSON: `, e);
-        throw new SyntaxError(`Could not parse '${settingsPath}' as JSON: ${e}`);
-      }
+    try {
+      return parseToml(await response.text());
+    } catch (e) {
+      console.error(`Could not parse '${settingsPath}' as TOML: `, e);
+      throw new SyntaxError(`Could not parse '${settingsPath}' as TOML: ${e}`);
     }
   }
 

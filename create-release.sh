@@ -23,25 +23,13 @@ tar -czf ../$FILENAME *
 cd ..
 
 
-# Build integrated version for Opencast 8.x
-rm -rf build/
-export PUBLIC_URL=/studio
-export REACT_APP_SETTINGS_PATH="/ui/config/studio/settings.json"
-npm run build
-
-FILENAME="oc-studio-$(date --utc +%F)-integrated-8.tar.gz"
-cd build
-tar -czf ../$FILENAME *
-cd ..
-
-
-# Build integrated version for Opencast 9.x
+# Build integrated version
 rm -rf build/
 export PUBLIC_URL=/studio
 export REACT_APP_SETTINGS_PATH="/ui/config/studio/settings.toml"
 npm run build
 
-FILENAME="oc-studio-$(date --utc +%F)-integrated-9.tar.gz"
+FILENAME="oc-studio-$(date --utc +%F)-integrated.tar.gz"
 cd build
 tar -czf ../$FILENAME *
 cd ..

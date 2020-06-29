@@ -12,12 +12,6 @@ given in `settings.toml`. Additionally, on the settings page, values that are
 already preconfigured via `settings.toml` or a GET parameter are hidden from the
 user.
 
-**Backwards compatibility note:** in previous versions, `settings.toml` was
-`settings.json`. JSON settings are now deprecated, but are still supported until
-Studio drops support for Opencast 8. To continue using the JSON configuration
-file, you have to specify `REACT_APP_SETTINGS_PATH` and it has to end with
-`.json`. This is correctly set in the released versions for Opencast 8.
-
 
 ## Possible configuration values
 
@@ -159,13 +153,6 @@ You can also put the settings in TOML file, then encode that as a hex string and
 You can encode your TOML as hex string with [this tool](https://onlineutf8tools.com/convert-utf8-to-hexadecimal), for example. Be sure to disable the options "Use Hex Radix Prefix" and "Use Extra Spacing".
 
 Note that if `config=` is specified, all other parameters are ignored!
-
-**Backwards compatibility note:** in previous versions, this parameter was an
-encoded JSON object instead of TOML. Passing JSON in this way is now deprecated,
-but ist still supported until Studio drops support for Opencast 8. As all
-stringified JSON objects have to start with `{` and TOML cannot start with `{`,
-Studio has an easy way to see whether your parameter is JSON or TOML. But again:
-JSON support is dropped in future versions and you are encouraged to use TOML.
 
 
 ## Debugging/Help
