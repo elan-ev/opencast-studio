@@ -72,8 +72,16 @@ parameter as well. See further below for information on that.
 # The workflow ID used to process the recording.
 #workflowId = "studio-upload"
 
-# Defines which ACL to send when uploading the recording.
+# Defines which ACL to send when uploading the recording. See
+# `CONFIGURATION.md` for more information.
 #acl = false
+# -OR-
+#acl = """
+#<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+#<Policy ...>
+#  ...
+#</Policy>
+#"""
 
 
 [recording]
@@ -161,7 +169,7 @@ Note that if `config=` is specified, all other parameters are ignored!
 
 To check if your configuration is correctly applied, you can open Studio in your browser and open the developer tools console (via F12). Studio prints the merged settings and the current state of the connection to the Opencast server there.
 
-You can also check the "Network" tab in the browser's dev tools. There you can see where Studio tries to fetch `settings.toml` and your ACL template from and what your server returned.
+You can also check the "Network" tab in the browser's dev tools. There you can see where Studio tries to fetch `settings.toml` from and what your server returned.
 
 
 ### Specify ACL
@@ -169,9 +177,10 @@ You can also check the "Network" tab in the browser's dev tools. There you can s
 With `upload.acl` you can configure which ACL is sent (as an attachment) to the Opencast server when uploading. Possible values:
 - `true`: use the default ACL (this is the default behavior)
 - `false`: do not send an ACL when uploading
-- Path to XML template (e.g. `acl.xml` or `/config/acl.xml`). A path to an XML file specifying the ACL. If the path starts with `/` it is considered absolute on the current server and `server.url${path}` is loaded. If it doesn't start with `/`, `server.url/${PUBLIC_URL}/${path}` is loaded.
+- A string containing a valid ACL XML template (note the `"""` multi line string in TOML)
 
-The ACL XML template is a Mustache template. The following variables are passed as view:
+The ACL XML template is a [Mustache template](https://mustache.github.io/mustache.5.html).
+The following variables are passed as view:
 
 - `userName`: the username of the currnet user (e.g. `admin`).
 - `userRole`: the user role of the current user (e.g. `ROLE_USER_ADMIN`).
