@@ -26,7 +26,7 @@ cd ..
 # Build integrated version
 rm -rf build/
 export PUBLIC_URL=/studio
-export REACT_APP_SETTINGS_PATH="/ui/config/studio/settings.json"
+export REACT_APP_SETTINGS_PATH="/ui/config/studio/settings.toml"
 npm run build
 
 FILENAME="oc-studio-$(date --utc +%F)-integrated.tar.gz"

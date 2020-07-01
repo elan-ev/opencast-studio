@@ -3,11 +3,12 @@
 import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
+import parseToml from '@iarna/toml/parse-string';
 import { decodeHexString } from './util';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
-const CONTEXT_SETTINGS_FILE = 'settings.json';
+const CONTEXT_SETTINGS_FILE = 'settings.toml';
 
 // Responsible for obtaining settings from different places (context settings,
 // local storage, query parameter) and merging them appropriately.
@@ -46,7 +47,7 @@ export class SettingsManager {
   }
 
   // Creates a new `Settings` instance by loading user settings from local
-  // storage and attempting to load context settings from `/settings.json`.
+  // storage and attempting to load context settings from the server..
   static async init() {
     let self = new SettingsManager();
 
@@ -66,8 +67,8 @@ export class SettingsManager {
       );
     }
 
-    const rawContextSettings = await SettingsManager.loadContextSettings() || {};;
-    self.contextSettings = self.validate(rawContextSettings, false, 'specified in \'settings.json\'');
+    const rawContextSettings = await SettingsManager.loadContextSettings() || {};
+    self.contextSettings = self.validate(rawContextSettings, false, 'from server settings file');
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
@@ -75,19 +76,28 @@ export class SettingsManager {
     let rawUrlSettings = {};
     if (urlParams.get('config')) {
       // In this case, the GET parameter `config` is specified. We now expect a
-      // hex encoded stringified JSON object describing the configuration. This
-      // is possible in cases where special characters in GET parameters might
-      // get modified somehow (e.g. by an LMS). A config=hexstring only uses
-      // the most basic characters, so it should always work.
+      // hex encoded TOML file describing the configuration. This is possible in
+      // cases where special characters in GET parameters might get modified
+      // somehow (e.g. by an LMS). A config=hexstring only uses the most basic
+      // characters, so it should always work.
 
       const encoded = urlParams.get('config');
+      let decoded;
       try {
-        const decoded = decodeHexString(encoded);
-        rawUrlSettings = JSON.parse(decoded);
+        decoded = decodeHexString(encoded);
       } catch (e) {
         console.warn(
-          `Could not decode and parse hex-encoded JSON string given to GET parameter `
-          + `'config'. Ignoring. Error:`,
+          `Could not decode hex-encoded string given to GET parameter 'config'. Ignoring. Error:`,
+          e,
+        );
+      }
+
+      try {
+        rawUrlSettings = parseToml(decoded);
+      } catch (e) {
+        console.warn(
+          `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
+            + `Ignoring. Error:`,
           e,
         );
       }
@@ -120,20 +130,12 @@ export class SettingsManager {
 
     self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');
 
-    // We have to do some special treatment of the `upload.acl` property. Users
-    // cannot set this setting, so we only have to check urlSettings and
-    // contextSettings.
-    if (typeof self.urlSettings.upload?.acl !== 'undefined') {
-      await SettingsManager.fetchAcl(self.urlSettings.upload);
-    } else if (typeof self.contextSettings.upload?.acl !== 'undefined') {
-      await SettingsManager.fetchAcl(self.contextSettings.upload);
-    }
-
     return self;
   }
 
-  // Attempts to loads `settings.json`. If it fails for some reason, returns
-  // `null` and prints an appropriate message on console.
+  // Attempts to load `settings.toml` (or REACT_APP_SETTINGS_PATH is that's
+  // specified) from the server. If it fails for some reason, returns `null` and
+  // prints an appropriate message on console.
   static async loadContextSettings() {
     // Try to retrieve the context settings.
     let basepath = process.env.PUBLIC_URL || '/';
@@ -141,7 +143,7 @@ export class SettingsManager {
       basepath += '/';
     }
 
-    // Construct path to settings JSON file. If the `REACT_APP_SETTINGS_PATH` is
+    // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
     // given and starts with '/', it is interpreted as absolute path from the
     // server root.
     const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
@@ -151,99 +153,32 @@ export class SettingsManager {
     try {
       response = await fetch(url);
     } catch (e) {
-      console.warn('Could not access `settings.json` due to network error!', e || "");
+      console.warn(`Could not access '${settingsPath}' due to network error!`, e || "");
       return null;
     }
 
     if (response.status === 404) {
-      // If `settings.json` was not found, we silently ignore the error. We
-      // expecet many installation to now provide this file.
-      console.debug("`settings.json` returned 404: ignoring");
+      // If the settings file was not found, we silently ignore the error. We
+      // expect many installation to provide this file.
+      console.debug(`'${settingsPath}' returned 404: ignoring`);
       return null;
     } else if (!response.ok) {
       console.error(
-        `Fetching 'settings.json' failed: ${response.status} ${response.statusText}`
+        `Fetching '${settingsPath}' failed: ${response.status} ${response.statusText}`
       );
       return null;
     }
 
-    if (!response.headers.get('Content-Type').startsWith('application/json')) {
-      console.warn(
-        "'settings.json' request does not have 'Content-Type: application/json' -> ignoring..."
-      );
+    if (response.headers.get('Content-Type')?.startsWith('text/html')) {
+      console.warn(`'${settingsPath}' request has 'Content-Type: text/html' -> ignoring...`);
       return null;
     }
 
     try {
-      return await response.json();
-    } catch(e) {
-      console.error("Could not parse 'settings.json': ", e);
-      throw new SyntaxError(`Could not parse 'settings.json': ${e}`);
-    }
-  }
-
-  static async fetchAcl(uploadSettings) {
-    if (uploadSettings.acl === 'false' || uploadSettings.acl === false) {
-      uploadSettings.acl = false;
-      return;
-    } else if (typeof uploadSettings.acl === 'string') {
-      // Try to retrieve the context settings.
-      let basepath = process.env.PUBLIC_URL || '/';
-      if (!basepath.endsWith('/')) {
-        basepath += '/';
-      }
-
-      // Construct path to settings XML file. If the `uploadSettings.acl`
-      // starts with '/', it is interpreted as absolute path from the server
-      // root.
-      const base = uploadSettings.acl.startsWith('/') ? '' : basepath;
-      const url = `${window.location.origin}${base}${uploadSettings.acl}`;
-
-      // Try to download ACL template file
-      let response;
-      try {
-        response = await fetch(url);
-      } catch (e) {
-        console.error(
-          `Could not access ACL template '${url}' due to network error! Using default ACLs.`,
-          e || "",
-        );
-        uploadSettings.acl = true;
-        return;
-      }
-
-      // Check for 404 error
-      if (response.status === 404) {
-        console.error(`ACL template '${url}' returned 404! Using default ACLs`);
-        uploadSettings.acl = true;
-        return;
-      } else if (!response.ok) {
-        console.error(
-          `Fetching ACL template '${url}' failed: ${response.status} ${response.statusText}`
-        );
-        uploadSettings.acl = true;
-        return;
-      }
-
-      // Warn if the content type of the request is unexpected. We still use the
-      // response as, opposed to `settings.xml`, the path is explicitly set.
-      const contentType = response.headers.get('Content-Type');
-      if (!contentType.startsWith('application/xml') && !contentType.startsWith('text/xml')) {
-        console.warn(
-          `ACL template request '${url}' does not have 'Content-Type: application/xml' or 'Content-Type: text/xml'. `
-          + `This could be a bug. Using the response as ACL template anyway.`
-        );
-      }
-
-      // Finally, set the setting to the template string.
-      uploadSettings.acl = await response.text();
-    } else {
-      uploadSettings.acl = true;
-      console.warn(
-        `'upload.acl' has invalid value (has to be 'false' or a path to an XML `
-        + `template file. Using default ACLs.`
-      );
-      return;
+      return parseToml(await response.text());
+    } catch (e) {
+      console.error(`Could not parse '${settingsPath}' as TOML: `, e);
+      throw new SyntaxError(`Could not parse '${settingsPath}' as TOML: ${e}`);
     }
   }
 
@@ -303,148 +238,29 @@ export class SettingsManager {
   // `source` is just a string for error messages specifying where `obj` comes
   // from.
   validate(obj, allowParse, source) {
-    const parseBoolean = (s, path) => {
-      switch (s) {
-        case 'true':
-          return true;
-
-        case 'false':
-          return false;
-
-        default:
-          console.warn(
-            `Settings value '${path}' (${source}) can't be parsed as 'boolean' `
-            + ` (value: '${s}'). Ignoring.`
-          );
-          return null;
-      }
-    };
-
-    const parseInteger = (s, path) => {
-      if (/^[-+]?(\d+)$/.test(s)) {
-        return Number(s);
-      } else {
-        console.warn(
-          `Settings value '${path}' (${source}) can't be parsed as integer `
-          + `(value: '${s}'). Ignoring.`
-        );
-        return null;
-      }
-    };
-
-    const parseArray = (s, path) => {
-      try {
-        const parsed = JSON.parse(s);
-        if (!Array.isArray(parsed)) {
-          console.warn(
-            `Settings value '${path}' (${source}) is not an 'array' (value: '${s}'). Ignoring.`
-          );
-          return null;
-        }
-
-        return parsed;
-      } catch {
-        console.warn(
-          `Settings value '${path}' (${source}) can't be parsed as its `
-          + `expected type 'array' (value: '${s}'). Ignoring.`
-        );
-        return null;
-      }
-    };
-
     // Validates `obj` with `schema`. `path` is the current path used for error
     // messages.
     const validate = (schema, obj, path) => {
-      if (typeof schema === 'string' || typeof schema._type === 'string') {
+      if (typeof schema === 'function') {
         return validateValue(schema, obj, path);
       } else {
         return validateObj(schema, obj, path);
       }
     };
 
-    // Validate a settings value. `schema` should either be a string specifying
-    // the expected type or an object with these fields:
-    //
-    // - `_type`: a string specifying the expected type
-    // - `_validate` (optional): a function returning either `true` (validation
-    //   successful) or a string (validation error).
-    // - `_elements`: Only if `_type` is 'array'! Specifies type and validation
-    //   function for array elements. Object with fields `_type` and optionally
-    //   `_validate`.
-    const validateValue = (schema, value, path) => {
-      // Check the type of this value.
-      const expectedType = typeof schema === 'string' ? schema : schema._type;
-      let actualType;
-      if (Array.isArray(value)) {
-        actualType = 'array';
-      } else if (Number.isInteger(value)) {
-        actualType = 'int';
-      } else {
-        actualType = typeof value;
+    // Validate a settings value with a validation function. Returns the final
+    // value of the setting or `null` if it should be ignored.
+    const validateValue = (validation, value, path) => {
+      try {
+        const newValue = validation(value, allowParse);
+        return newValue === undefined ? value : newValue;
+      } catch (e) {
+        console.warn(
+          `Validation of setting '${path}' (${source}) with value '${value}' failed: `
+            + `${e}. Ignoring.`
+        );
+        return null;
       }
-
-      let out = null;
-      if (expectedType === 'any' || actualType === expectedType) {
-        out = value;
-      } else {
-        if (actualType === 'string' && allowParse) {
-          switch (expectedType) {
-            case 'boolean': out = parseBoolean(value, path); break;
-            case 'int': out = parseInteger(value, path); break;
-            case 'array': out = parseArray(value, path); break;
-            default:
-              console.warn(`internal bug: unknown type ${expectedType}. Ignoring ${path}.`);
-          }
-        } else {
-          console.warn(
-            `Settings value '${path}' (${source}) should be of type '${expectedType}', but is `
-            + `'${actualType}' (${value}). Ignoring.`
-          );
-        }
-      }
-
-      // Check type of array elements and validate those.
-      if (Array.isArray(out) && typeof schema === 'object' && '_elements' in schema) {
-        const expectedElementType = typeof schema._elements === 'string'
-          ? schema._elements
-          : schema._elements._type;
-
-        for (const elem of out) {
-          if (typeof elem !== expectedElementType) {
-            console.warn(
-              `Some elements of array value '${path}' (${source}) are not of type `
-              + `'${expectedElementType}'. Ignoring complete array.`
-            );
-            return null;
-          }
-
-          if (typeof schema._elements === 'object' && '_validate' in schema._elements) {
-            const validateResult = schema._elements._validate(elem);
-            if (validateResult !== true) {
-              console.warn(
-                `Validation of one element in array setting value '${path}' (${source}) `
-                + `failed: ${validateResult}. Ignoring complete array.`
-              );
-              return null;
-            }
-          }
-        }
-      }
-
-      // Run validation function if the type was correct and a validation is
-      // specified.
-      if (out !== null && typeof schema === 'object' && '_validate' in schema) {
-        const validateResult = schema._validate(out);
-        if (validateResult !== true) {
-          console.warn(
-            `Validation of setting value '${path}' (${source}) failed: ${validateResult}. `
-            + `Ignoring.`
-          );
-          return null;
-        }
-      }
-
-      return out;
     };
 
     // Validate a settings object/namespace. `schema` and `obj` need to be
@@ -478,21 +294,8 @@ export class SettingsManager {
 }
 
 
-export const validateServerUrl = value => {
-  if (value === '/' || value === '') {
-    return true;
-  }
-
-  try {
-    const url = new URL(value);
-    return (url.protocol === 'https:' || url.protocol === 'http:')
-      || 'the URL does not start with "http:" or "https:"';
-  } catch (e) {
-    return 'not a valid URL';
-  }
-};
-
-
+// The values prefilled on the settings page. These settings are *not* used
+// automatically, they are just the defaults for the UI.
 const defaultSettings = {
   opencast: {
     serverUrl: 'https://develop.opencast.org/',
@@ -501,57 +304,147 @@ const defaultSettings = {
   },
 };
 
-const positiveInteger = name => ({
-  _type: 'int',
-  _validate: i => i > 0 || `'${name}' has to be positive, but is '${i}'`,
-});
+// Validation functions for different types.
+const types = {
+  'string': (v, allowParse) => {
+    if (typeof v !== 'string') {
+      throw new Error("is not a string, but should be");
+    }
+  },
+  'int': (v, allowParse) => {
+    if (Number.isInteger(v)) {
+      return v;
+    }
 
-// Defines all potential settings and their types
+    if (allowParse) {
+      if (/^[-+]?(\d+)$/.test(v)) {
+        return Number(v);
+      }
+
+      throw new Error("can't be parsed as integer");
+    } else {
+      throw new Error("is not an integer");
+    }
+  },
+  'boolean': (v, allowParse) => {
+    if (typeof v === 'boolean') {
+      return;
+    }
+
+    if (allowParse) {
+      if (v === 'true') {
+        return true;
+      }
+      if (v === 'false') {
+        return false;
+      }
+      throw new Error("can't be parsed as boolean");
+    } else {
+      throw new Error("is not a boolean");
+    }
+  },
+  positiveInteger: (v, allowParse) => {
+    let i = types.int(v, allowParse);
+    if (i <= 0) {
+      throw new Error("has to be positive, but isn't");
+    }
+
+    return i;
+  },
+  "array": elementType => {
+    return (v, allowParse) => {
+      if (typeof v === 'string' && allowParse) {
+        try {
+          v = JSON.parse(v);
+        } catch {
+          throw new Error("can't be parsed as array");
+        }
+      }
+
+      if (!Array.isArray(v)) {
+        throw new Error("is not an array");
+      }
+
+      return v.map(element => {
+        try {
+          const newValue = elementType(element, allowParse);
+          return newValue === undefined ? element : newValue;
+        } catch (err) {
+          throw new Error(`failed to validate element '${element}' of array: ${err}`);
+        }
+      });
+    };
+  },
+};
+
+// Defines all potential settings and their types.
+//
+// Each setting value has to be a validation function. Such a function takes two
+// arguments: the input value `v` and the boolean `allowParse` which specifies
+// whether the input might be parsed into the correct type (this is only `true`
+// for GET parameters). The validation should throw an error if the input value
+// is not valid for the setting. If the function returns `undefined`, the input
+// value is valid and used. If the validator returns a different value, the
+// input is valid, but is replaced by that new value. See the `types` object
+// above for some examples.
 const SCHEMA = {
   opencast: {
-    serverUrl: {
-      _type: 'string',
-      _validate: validateServerUrl,
+    serverUrl: v => {
+      types.string(v);
+
+      if (v === '/' || v === '') {
+        return;
+      }
+
+      const url = new URL(v);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+        throw new Error('the URL does not start with "http:" or "https:"');
+      }
+
+      // TODO: we could return the `URL` here or do other adjustments
     },
-    loginName: 'string',
-    loginPassword: 'string',
-    loginProvided: 'boolean',
+    loginName: types.string,
+    loginPassword: types.string,
+    loginProvided: types.boolean,
   },
   upload: {
-    seriesId: 'string',
-    workflowId: 'string',
+    seriesId: types.string,
+    workflowId: types.string,
     // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
     // done, this one of:
     // - undefined: setting was not set.
     // - `false`: do not send any ACLs when uploading
     // - `true`: explictely send default ACLs when uploading (this is the default behavior)
     // - ACL template string: already fetched ACL template string.
-    acl: {
-      _type: 'any',
-      _validate: v => (
-        v === false || typeof v === 'string' || `'upload.acl' needs to be 'false' or a string`
-      ),
+    acl: (v, allowParse) => {
+      if ((allowParse && v === 'false') || v === false) {
+        return false;
+      }
+      if ((allowParse && v === 'true') || v === true) {
+        return true;
+      }
+
+      if (typeof v === 'string') {
+        return;
+      }
+
+      throw new Error("needs to be 'true', 'false' or a string");
     },
   },
   recording: {
-    videoBitrate: positiveInteger('bitrate'),
-    mimes: {
-      _type: 'array',
-      _elements: {
-        _type: 'string',
-      }
-    },
+    videoBitrate: types.positiveInteger,
+    mimes: types.array(types.string),
   },
   review: {
-    disableCutting: 'boolean',
+    disableCutting: types.boolean,
   },
   display: {
-    maxFps: positiveInteger('display.maxFps'),
-    maxHeight: positiveInteger('display.maxHeight'),
+    maxFps: types.positiveInteger,
+    maxHeight: types.positiveInteger,
   },
   camera: {
-    maxFps: positiveInteger('camera.maxFps'),
-    maxHeight: positiveInteger('camera.maxHeight'),
+    maxFps: types.positiveInteger,
+    maxHeight: types.positiveInteger,
   },
 };
 
