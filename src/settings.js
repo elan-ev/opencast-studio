@@ -424,6 +424,7 @@ const SCHEMA = {
 
       throw new Error("needs to be 'true', 'false' or a string");
     },
+    dcc: types.string,
   },
   recording: {
     videoBitrate: types.positiveInteger,

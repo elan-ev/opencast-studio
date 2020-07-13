@@ -149,7 +149,7 @@ export default function SaveCreation(props) {
     const result = await opencast.upload({
       recordings: recordings.filter(Boolean),
       title,
-      creator: presenter,
+      presenter,
       start,
       end,
       uploadSettings: settings.upload,

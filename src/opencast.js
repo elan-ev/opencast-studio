@@ -299,7 +299,7 @@ export class Opencast {
     return response;
   }
 
-  // Uploads the given recordings with the given title and creator metadata.
+  // Uploads the given recordings with the given title and presenter metadata.
   //
   // If the upload was successful, `UPLOAD_SUCCESS` is returned. Otherwise:
   // - `UPLOAD_NETWORK_ERROR` if some kind of network error occurs.
@@ -311,7 +311,7 @@ export class Opencast {
   //
   // At the start of this method, `refreshConnection` is called. That
   // potentially changed the `state`.
-  async upload({ recordings, title, creator, start, end, uploadSettings, onProgress }) {
+  async upload({ recordings, title, presenter, start, end, uploadSettings, onProgress }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     switch (this.#state) {
@@ -335,7 +335,7 @@ export class Opencast {
         .then(response => response.text());
 
       // Add metadata to media package
-      mediaPackage = await this.addDcCatalog({ mediaPackage, uploadSettings, title, creator });
+      mediaPackage = await this.addDcCatalog({ mediaPackage, uploadSettings, title, presenter });
 
       // Set appropriate ACL unless the configuration says no.
       if (uploadSettings?.acl !== false) {
@@ -344,7 +344,7 @@ export class Opencast {
 
       // Add all recordings (this is the actual upload).
       mediaPackage = await this.uploadTracks(
-        { mediaPackage, recordings, onProgress, title, creator }
+        { mediaPackage, recordings, onProgress, title, presenter }
       );
 
       if (start != null || end != null) {
@@ -388,10 +388,11 @@ export class Opencast {
 
   // Adds the DC Catalog with the given metadata to the current ingest process
   // via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
-  async addDcCatalog({ mediaPackage, title, creator, uploadSettings }) {
+  async addDcCatalog({ mediaPackage, title, presenter, uploadSettings }) {
     const seriesId = uploadSettings?.seriesId;
+    const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
+    const dcc = this.constructDcc(template, { presenter, title, seriesId });
 
-    const dcc = dcCatalog({ creator, title, seriesId });
     const body = new FormData();
     body.append('mediaPackage', mediaPackage);
     body.append('dublinCore', encodeURIComponent(dcc));
@@ -430,7 +431,7 @@ export class Opencast {
 
   // Uploads the given recordings to the current ingest process via
   // `ingest/addTrack`. Do not call this method outside of `upload`!
-  async uploadTracks({ mediaPackage, recordings, onProgress, title, creator }) {
+  async uploadTracks({ mediaPackage, recordings, onProgress, title, presenter }) {
     const totalBytes = recordings.map(r => r.media.size).reduce((a, b) => a + b, 0);
     let finishedTracksBytes = 0;
 
@@ -444,7 +445,7 @@ export class Opencast {
       }
 
       const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
-      const downloadName = recordingFileName({ mimeType, flavor, title, presenter: creator });
+      const downloadName = recordingFileName({ mimeType, flavor, title, presenter });
 
       const body = new FormData();
       body.append('mediaPackage', mediaPackage);
@@ -564,6 +565,24 @@ export class Opencast {
     };
     return Mustache.render(template, view);
   }
+
+  constructDcc(template, { title, presenter, seriesId }) {
+    // Prepare template "view": the values that can be used within the template.
+    const view = {
+      user: this.#currentUser,
+      lti: this.#ltiSession,
+      title,
+      presenter,
+      seriesId,
+      now: new Date(Date.now()).toISOString(),
+    };
+
+    const originalEscape = Mustache.escape;
+    Mustache.escape = escapeString;
+    const out = Mustache.render(template, view);
+    Mustache.escape = originalEscape;
+    return out;
+  }
 }
 
 
@@ -651,29 +670,20 @@ export const Provider = ({ initial, children }) => {
 
 // ===== Stuff related to upload metadats =====
 
-const escapeString = s => {
-  return new XMLSerializer().serializeToString(new Text(s));
-};
+const escapeString = s => new XMLSerializer().serializeToString(new Text(s));
 
-const dcCatalog = ({ creator, title, seriesId }) => {
-  const seriesLine = seriesId
-    ? `<dcterms:isPartOf>${escapeString(seriesId)}</dcterms:isPartOf>`
-    : '';
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-    <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
-                xmlns:dcterms="http://purl.org/dc/terms/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <dcterms:created xsi:type="dcterms:W3CDTF">
-          ${escapeString(new Date(Date.now()).toISOString())}
-        </dcterms:created>
-        <dcterms:creator>${escapeString(creator)}</dcterms:creator>
-        <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
-        <dcterms:title>${escapeString(title)}</dcterms:title>
-        <dcterms:spatial>Opencast Studio</dcterms:spatial>
-        ${seriesLine}
-    </dublincore>`;
-};
+const DEFAULT_DCC_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
+<dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
+            xmlns:dcterms="http://purl.org/dc/terms/"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dcterms:created xsi:type="dcterms:W3CDTF">{{ now }}</dcterms:created>
+    <dcterms:title>{{ title }}</dcterms:title>
+    {{#presenter}}<dcterms:creator>{{ presenter }}</dcterms:creator>{{/presenter}}
+    {{#seriesId}}<dcterms:isPartOf>{{ seriesId }}</dcterms:isPartOf>{{/seriesId}}
+    <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
+    <dcterms:spatial>Opencast Studio</dcterms:spatial>
+</dublincore>
+`;
 
 const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Policy PolicyId="mediapackage-1"
