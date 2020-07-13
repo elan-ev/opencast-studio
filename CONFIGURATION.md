@@ -240,17 +240,16 @@ With `upload.acl` you can configure which ACL is sent (as an attachment) to the 
 - `false`: do not send an ACL when uploading
 - A string containing a valid ACL XML template (note the `"""` multi line string in TOML)
 
-The ACL XML template is a [Mustache template](https://mustache.github.io/mustache.5.html).
+The ACL XML template is a [Mustache.js template](https://mustache.github.io/mustache.5.html).
 The following variables are passed as view:
 
-- `userName`: the username of the currnet user (e.g. `admin`).
-- `userRole`: the user role of the current user (e.g. `ROLE_USER_ADMIN`).
+- `user`: the object returned by `/info/me.json` describing the current user. Guaranteed to be truthy, specifically: not `null`.
+- `lti`: the object returned by `/lti` which describes the current LTI session. Might be `null` (e.g. meaning there is no LTI session).
 - `roleOAuthUser`: `"ROLE_OAUTH_USER"` if this role is in `user.roles` or `undefined` otherwise.
-- `ltiCourseId`: the `context_id` taken from the `/lti` endpoint or `undefined` if the field does not exist.
-- `defaultReadRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `ltiCourseId` is defined, also contains `"${ltiCourseId}_Learner"` and `"${ltiCourseId}_Instructor"`.
-- `defaultWriteRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `ltiCourseId` is defined, also contains `"${ltiCourseId}_Instructor"`.
+- `defaultReadRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `lti.context_id` is defined, also contains `"${lti.context_id}_Learner"` and `"${lti.context_id}_Instructor"`.
+- `defaultWriteRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `lti.context_id` is defined, also contains `"${lti.context_id}_Instructor"`.
 
-The default ACL template simply gives read and write access to `userRole`:
+The default ACL template simply gives read and write access to `user.userRole`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -272,7 +271,7 @@ The default ACL template simply gives read and write access to `userRole`:
     </Target>
     <Condition>
       <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
-        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ userRole }}</AttributeValue>
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ user.userRole }}</AttributeValue>
         <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
           DataType="http://www.w3.org/2001/XMLSchema#string"/>
       </Apply>
@@ -292,7 +291,7 @@ The default ACL template simply gives read and write access to `userRole`:
     </Target>
     <Condition>
       <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
-        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ userRole }}</AttributeValue>
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ user.userRole }}</AttributeValue>
         <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
           DataType="http://www.w3.org/2001/XMLSchema#string"/>
       </Apply>

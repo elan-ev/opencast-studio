@@ -556,14 +556,18 @@ export class Opencast {
     }
 
     const view = {
-      userName: escapeString(this.#currentUser.user.username),
-      userRole: escapeString(this.#currentUser.userRole),
-      roleOAuthUser: escapeString(roleOAuthUser),
-      ltiCourseId: escapeString(ltiCourseId),
-      defaultReadRoles: defaultReadRoles.map(r => escapeString(r)),
-      defaultWriteRoles: defaultWriteRoles.map(r => escapeString(r)),
+      user: this.#currentUser,
+      lti: this.#ltiSession,
+      roleOAuthUser,
+      defaultReadRoles,
+      defaultWriteRoles,
     };
-    return Mustache.render(template, view);
+
+    const originalEscape = Mustache.escape;
+    Mustache.escape = escapeString;
+    const out = Mustache.render(template, view);
+    Mustache.escape = originalEscape;
+    return out;
   }
 
   constructDcc(template, { title, presenter, seriesId }) {
@@ -668,7 +672,7 @@ export const Provider = ({ initial, children }) => {
 };
 
 
-// ===== Stuff related to upload metadats =====
+// ===== Stuff related to upload metadata =====
 
 const escapeString = s => new XMLSerializer().serializeToString(new Text(s));
 
@@ -704,7 +708,7 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
     </Target>
     <Condition>
       <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
-        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ userRole }}</AttributeValue>
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ user.userRole }}</AttributeValue>
         <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
           DataType="http://www.w3.org/2001/XMLSchema#string"/>
       </Apply>
@@ -724,7 +728,7 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
     </Target>
     <Condition>
       <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
-        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ userRole }}</AttributeValue>
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ user.userRole }}</AttributeValue>
         <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
           DataType="http://www.w3.org/2001/XMLSchema#string"/>
       </Apply>
