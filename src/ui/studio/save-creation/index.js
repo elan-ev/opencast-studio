@@ -30,7 +30,7 @@ import {
   UPLOAD_NOT_AUTHORIZED,
   UPLOAD_UNEXPECTED_RESPONSE,
 } from '../../../opencast';
-import { useSettings } from '../../../settings';
+import { useSettings, FORM_FIELD_HIDDEN, FORM_FIELD_REQUIRED } from '../../../settings';
 import {
   useDispatch,
   useStudioState,
@@ -352,6 +352,10 @@ const ConnectionUnconfiguredWarning = () => {
 };
 
 const UploadForm = ({ uploadState, handleUpload }) => {
+  const settings = useSettings().upload;
+  const titleField = settings.titleField || FORM_FIELD_REQUIRED;
+  const presenterField = settings.presenterField || FORM_FIELD_REQUIRED;
+
   const { t } = useTranslation();
   const opencast = useOpencast();
   const dispatch = useDispatch();
@@ -400,25 +404,25 @@ const UploadForm = ({ uploadState, handleUpload }) => {
       <NotConnectedWarning />
 
       <form>
-        <Input
+        { titleField !== FORM_FIELD_HIDDEN && <Input
           name="title"
           label={t('save-creation-label-title')}
-          required
+          required={titleField === FORM_FIELD_REQUIRED}
           onChange={handleInputChange}
           autoComplete="off"
           defaultValue={title}
           {...{ errors, register }}
-        />
+        />}
 
-        <Input
+        { presenterField !== FORM_FIELD_HIDDEN && <Input
           name="presenter"
           label={t('save-creation-label-presenter')}
-          required
+          required={presenterField === FORM_FIELD_REQUIRED}
           onChange={handleInputChange}
           autoComplete="off"
           defaultValue={presenterValue}
           {...{ errors, register }}
-        />
+        />}
 
         <Button
           title={t('save-creation-button-upload')}
