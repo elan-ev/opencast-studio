@@ -410,12 +410,6 @@ const SCHEMA = {
   upload: {
     seriesId: types.string,
     workflowId: types.string,
-    // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
-    // done, this one of:
-    // - undefined: setting was not set.
-    // - `false`: do not send any ACLs when uploading
-    // - `true`: explictely send default ACLs when uploading (this is the default behavior)
-    // - ACL template string: already fetched ACL template string.
     acl: (v, allowParse) => {
       if ((allowParse && v === 'false') || v === false) {
         return false;
