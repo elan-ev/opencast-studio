@@ -14,6 +14,7 @@ import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import useForm from 'react-hook-form';
 import { usePageVisibility } from 'react-page-visibility';
 
 import {
@@ -41,14 +42,12 @@ import {
 
 import Notification from '../../notification';
 import { ActionButtons } from '../elements';
+import { Input } from '../../elements';
 
-import FormField from './form-field';
 import RecordingPreview from './recording-preview';
 
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
-
-const Input = props => <input sx={{ variant: 'styles.input' }} {...props} />;
 
 let progressHistory = [];
 
@@ -136,11 +135,6 @@ export default function SaveCreation(props) {
   });
 
   async function handleUpload() {
-    if (title === '' || presenter === '') {
-      dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-form-invalid') });
-      return;
-    }
-
     dispatch({ type: 'UPLOAD_REQUEST' });
     progressHistory.push({
       timestamp: Date.now(),
@@ -362,7 +356,13 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const opencast = useOpencast();
   const dispatch = useDispatch();
   const { recordings, title, presenter } = useStudioState();
+  const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
 
+  const { errors, handleSubmit, register } = useForm();
+
+  // This is a bit ugly, but works. We want to make sure that the `title` and
+  // `presenter` values in the studio state always equal the current value in
+  // the input.
   function handleInputChange(event) {
     const target = event.target;
     dispatch({
@@ -377,7 +377,6 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
   // If the user has not yet changed the value of the field and the last used
   // presenter name is used in local storage, use that.
-  const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
   useEffect(() => {
     if (presenterValue !== presenter) {
       dispatch({ type: 'UPDATE_PRESENTER', payload: presenterValue });
@@ -400,32 +399,36 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     <Fragment>
       <NotConnectedWarning />
 
-      <FormField label={t('save-creation-label-title')}>
+      <form>
         <Input
           name="title"
+          label={t('save-creation-label-title')}
+          required
+          onChange={handleInputChange}
           autoComplete="off"
           defaultValue={title}
-          onChange={handleInputChange}
+          {...{ errors, register }}
         />
-      </FormField>
 
-      <FormField label={t('save-creation-label-presenter')}>
         <Input
           name="presenter"
+          label={t('save-creation-label-presenter')}
+          required
+          onChange={handleInputChange}
           autoComplete="off"
           defaultValue={presenterValue}
-          onChange={handleInputChange}
+          {...{ errors, register }}
         />
-      </FormField>
 
-      <Button
-        title={t('save-creation-button-upload')}
-        onClick={handleUpload}
-        disabled={recordings.length === 0}
-      >
-        <FontAwesomeIcon icon={faUpload} />
-        { buttonLabel }
-      </Button>
+        <Button
+          title={t('save-creation-button-upload')}
+          disabled={recordings.length === 0}
+          onClick={handleSubmit(handleUpload)}
+        >
+          <FontAwesomeIcon icon={faUpload} />
+          { buttonLabel }
+        </Button>
+      </form>
 
       <Box sx={{ mt: 2 }}>
         { uploadState.state === STATE_ERROR && (
