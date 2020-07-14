@@ -413,11 +413,13 @@ const NotConnectedWarning = () => {
   const [retrying, setRetrying] = useState(false);
   useEffect(() => {
     if (!opencast.isReadyToUpload() && !retrying && isVisible) {
-      setTimeout(async () => {
+      const id = setTimeout(async () => {
         setRetrying(true);
         await opencast.refreshConnection();
         setRetrying(false);
       }, 5000);
+
+      return () => clearTimeout(id);
     }
   })
 
