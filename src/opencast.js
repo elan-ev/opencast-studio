@@ -545,22 +545,10 @@ export class Opencast {
     }
 
     // Prepare template "view": the values that can be used within the template.
-    const ltiCourseId = this.#ltiSession?.context_id;
-    const roleOAuthUser = this.#currentUser.roles.find(r => r === 'ROLE_OAUTH_USER');
-
-    let defaultReadRoles = [this.#currentUser.userRole];
-    let defaultWriteRoles = [this.#currentUser.userRole];
-    if (ltiCourseId) {
-      defaultReadRoles.push(`${ltiCourseId}_Learner`, `${ltiCourseId}_Instructor`);
-      defaultWriteRoles.push(`${ltiCourseId}_Instructor`);
-    }
-
     const view = {
       user: this.#currentUser,
       lti: this.#ltiSession,
-      roleOAuthUser,
-      defaultReadRoles,
-      defaultWriteRoles,
+      roleOAuthUser: this.#currentUser.roles.find(r => r === 'ROLE_OAUTH_USER'),
     };
 
     const originalEscape = Mustache.escape;

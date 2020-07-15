@@ -246,8 +246,6 @@ The following variables are passed as view:
 - `user`: the object returned by `/info/me.json` describing the current user. Guaranteed to be truthy, specifically: not `null`.
 - `lti`: the object returned by `/lti` which describes the current LTI session. Might be `null` (e.g. meaning there is no LTI session).
 - `roleOAuthUser`: `"ROLE_OAUTH_USER"` if this role is in `user.roles` or `undefined` otherwise.
-- `defaultReadRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `lti.context_id` is defined, also contains `"${lti.context_id}_Learner"` and `"${lti.context_id}_Instructor"`.
-- `defaultWriteRoles`: a convenience array of roles that usually have read access. Always contains `userRole`. If `lti.context_id` is defined, also contains `"${lti.context_id}_Instructor"`.
 
 The default ACL template simply gives read and write access to `user.userRole`:
 
