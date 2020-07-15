@@ -8,6 +8,7 @@ import {
   faUpload,
   faRedoAlt,
   faExclamationTriangle,
+  faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import { Fragment, useEffect, useState } from 'react';
@@ -174,14 +175,6 @@ export default function SaveCreation(props) {
     }
   }
 
-  const handleNewRecording = () => {
-    const doIt = window.confirm(t('save-creation-new-recording-warning'));
-    if (doIt) {
-      dispatch({ type: 'RESET' });
-      props.firstStep();
-    }
-  };
-
   const allDownloaded = recordings.every(rec => rec.downloaded);
   const possiblyDone = (uploadState.state === STATE_UPLOADED || allDownloaded)
     && uploadState.state !== STATE_UPLOADING;
@@ -253,20 +246,61 @@ export default function SaveCreation(props) {
           disabled: false,
         }}
       >
-        { !possiblyDone ? null : (
-          <Button
-            sx={{ whiteSpace: 'nowrap' }}
-            title={t('save-creation-new-recording')}
-            onClick={handleNewRecording}
-          >
-            <FontAwesomeIcon icon={faRedoAlt} />
-            {t('save-creation-new-recording')}
-          </Button>
-        )}
+        { possiblyDone && <PostAction
+          goToFirstStep={props.firstStep}
+        />}
       </ActionButtons>
     </Container>
   );
 }
+
+const PostAction = ({ goToFirstStep }) => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const settings = useSettings();
+
+  const handleNewRecording = () => {
+    const doIt = window.confirm(t('save-creation-new-recording-warning'));
+    if (doIt) {
+      dispatch({ type: 'RESET' });
+      goToFirstStep();
+    }
+  };
+
+  let returnAction;
+  if (settings.return?.target) {
+    const label = settings.return?.label
+      ? t('save-creation-return-to', { label: settings.return.label })
+      : t('save-creation-return-to-no-label');
+
+    returnAction = (
+      <Button
+        as='a'
+        title={label}
+        href={settings.return.target}
+        sx={{ whiteSpace: 'nowrap', fontWeight: 400, mb: 2 }}
+      >
+        <FontAwesomeIcon icon={faTimesCircle} />
+        { label }
+      </Button>
+    );
+  }
+
+  return (
+    <div sx={{ display: 'flex', flexDirection: 'column' }}>
+      { returnAction }
+
+      <Button
+        sx={{ whiteSpace: 'nowrap' }}
+        title={t('save-creation-new-recording')}
+        onClick={handleNewRecording}
+      >
+        <FontAwesomeIcon icon={faRedoAlt} />
+        {t('save-creation-new-recording')}
+      </Button>
+    </div>
+  );
+};
 
 const DownloadBox = ({ presenter, title }) => {
   const { t } = useTranslation();

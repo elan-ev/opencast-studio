@@ -36,6 +36,8 @@
   "save-creation-warn-session-expired": "It seems like your Opencast session has expired. To refresh the session, try opening <1>the website from which you started Opencast Studio</1> in another browser tab and return here.",
   "save-creation-warn-login-failed": "Logging into the Opencast server failed. Please check your login credentials in <1>the settings</1>.",
 
+  "save-creation-return-to": "Exit and go back to {{label}}",
+  "save-creation-return-to-no-label": "Exit and go back to previous page",
   "save-creation-new-recording": "Start a new recording",
   "save-creation-new-recording-warning": "By starting a new recording, the current recordings will be discarded in this application (uploaded or download recordings are not affected). Are you sure?",
   "share-desktop": "Share desktop",

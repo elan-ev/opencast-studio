@@ -446,10 +446,19 @@ const SCHEMA = {
     maxFps: types.positiveInteger,
     maxHeight: types.positiveInteger,
   },
+  return: {
+    label: types.string,
+    target: (v, allowParse) => {
+      types.string(v, allowParse);
+      if (!(v.startsWith('/') || v.startsWith('http'))) {
+        throw new Error(`has to start with '/' or 'http'`);
+      }
+    },
+  },
 };
 
 
-// Custumize array merge behavior
+// Customize array merge behavior
 let merge = (a, b) => {
   return deepmerge(a, b, { arrayMerge });
 };
