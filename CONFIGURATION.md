@@ -233,7 +233,7 @@ By default, this template is used:
 </dublincore>
 ```
 
-### Specify ACL
+## Specify ACL
 
 With `upload.acl` you can configure which ACL is sent (as an attachment) to the Opencast server when uploading. Possible values:
 - `true`: use the default ACL (this is the default behavior)
@@ -241,11 +241,25 @@ With `upload.acl` you can configure which ACL is sent (as an attachment) to the 
 - A string containing a valid ACL XML template (note the `"""` multi line string in TOML)
 
 The ACL XML template is a [Mustache.js template](https://mustache.github.io/mustache.5.html).
+Summary of the template format: you can insert variables with `{{ foo }}`.
+You can also access subfields like `{{ foo.bar }}` (if `foo` or `bar` is `null`, the expression just evaluates to the empty string).
+Conditionals/loops work with the `{{ #foo }} ... {{ /foo }}` syntax:
+if `foo` is falsey, the body between both "tags" is not emitted; if `foo` is a list, the body is repeated for each element; if `foo` is truthy, the body is emitted once.
+See the Mustache documentation for more information.
+
 The following variables are passed as view:
 
-- `user`: the object returned by `/info/me.json` describing the current user. Guaranteed to be truthy, specifically: not `null`.
+- `user`: the object returned by `/info/me.json` describing the current user. Guaranteed to be truthy.
 - `lti`: the object returned by `/lti` which describes the current LTI session. Might be `null` (e.g. meaning there is no LTI session).
 - `roleOAuthUser`: `"ROLE_OAUTH_USER"` if this role is in `user.roles` or `undefined` otherwise.
+
+Please note that the user using Studio (and thus ingesting the recording) has to have write access to it.
+Otherwise, processing will fail.
+
+#### Examples
+
+<details>
+<summary>The default ACL template</summary>
 
 The default ACL template simply gives read and write access to `user.userRole`:
 
@@ -297,3 +311,106 @@ The default ACL template simply gives read and write access to `user.userRole`:
   </Rule>
 </Policy>
 ```
+
+</details>
+
+
+<details>
+<summary>Also giving access to LTI instructors</summary>
+
+This extends the default template and additionally gives read and write access to the LTI instructors (`{{ lti.context_id }}_Instructor`), *if* the user comes from an LTI session.
+Note the use of conditionals `{{ #lti.context_id }} ... {{ /lti.context_id }}`.
+If you also want to add read access for learners, just add another `<Rule>` with `{{ lti.context_id }}_Learner`.
+
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Policy PolicyId="mediapackage-1"
+  RuleCombiningAlgId="urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:permit-overrides"
+  Version="2.0"
+  xmlns="urn:oasis:names:tc:xacml:2.0:policy:schema:os">
+  <Rule RuleId="user_read_Permit" Effect="Permit">
+    <Target>
+      <Actions>
+        <Action>
+          <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
+            <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </ActionMatch>
+        </Action>
+      </Actions>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ user.userRole }}</AttributeValue>
+        <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          DataType="http://www.w3.org/2001/XMLSchema#string"/>
+      </Apply>
+    </Condition>
+  </Rule>
+  <Rule RuleId="user_write_Permit" Effect="Permit">
+    <Target>
+      <Actions>
+        <Action>
+          <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">write</AttributeValue>
+            <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </ActionMatch>
+        </Action>
+      </Actions>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ user.userRole }}</AttributeValue>
+        <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          DataType="http://www.w3.org/2001/XMLSchema#string"/>
+      </Apply>
+    </Condition>
+  </Rule>
+  {{ #lti.context_id }}
+  <Rule RuleId="user_read_Permit" Effect="Permit">
+    <Target>
+      <Actions>
+        <Action>
+          <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">read</AttributeValue>
+            <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </ActionMatch>
+        </Action>
+      </Actions>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ lti.context_id }}_Instructor</AttributeValue>
+        <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          DataType="http://www.w3.org/2001/XMLSchema#string"/>
+      </Apply>
+    </Condition>
+  </Rule>
+  <Rule RuleId="user_write_Permit" Effect="Permit">
+    <Target>
+      <Actions>
+        <Action>
+          <ActionMatch MatchId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+            <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">write</AttributeValue>
+            <ActionAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:action:action-id"
+              DataType="http://www.w3.org/2001/XMLSchema#string"/>
+          </ActionMatch>
+        </Action>
+      </Actions>
+    </Target>
+    <Condition>
+      <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-is-in">
+        <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#string">{{ lti.context_id }}_Instructor</AttributeValue>
+        <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:2.0:subject:role"
+          DataType="http://www.w3.org/2001/XMLSchema#string"/>
+      </Apply>
+    </Condition>
+  </Rule>
+  {{ /lti.context_id }}
+</Policy>
+```
+
+</details>
