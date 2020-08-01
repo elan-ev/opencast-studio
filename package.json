@@ -31,7 +31,7 @@
     "react": "^16.13.1",
     "react-beforeunload": "^2.2.1",
     "react-dom": "^16.13.1",
-    "react-hook-form": "^3.29.4",
+    "react-hook-form": "^6.2.0",
     "react-i18next": "^11.7.0",
     "react-page-visibility": "^6.2.0",
     "react-router-dom": "^5.2.0",
