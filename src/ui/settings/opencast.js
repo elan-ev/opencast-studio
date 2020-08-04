@@ -23,7 +23,8 @@ import {
   STATE_UNCONFIGURED,
 } from '../../opencast';
 import Notification from '../notification';
-import { Input, SettingsSection} from './elements';
+import { SettingsSection } from './elements';
+import { Input } from '../elements';
 import { useStudioState } from '../../studio-state';
 
 

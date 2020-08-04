@@ -10,6 +10,10 @@ import { decodeHexString } from './util';
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
 const CONTEXT_SETTINGS_FILE = 'settings.toml';
 
+export const FORM_FIELD_HIDDEN = 'hidden';
+export const FORM_FIELD_OPTIONAL = 'optional';
+export const FORM_FIELD_REQUIRED = 'required';
+
 // Responsible for obtaining settings from different places (context settings,
 // local storage, query parameter) and merging them appropriately.
 export class SettingsManager {
@@ -377,6 +381,16 @@ const types = {
   },
 };
 
+// Specifies what to do with a metadata field.
+const metaDataField = v => {
+  if (![FORM_FIELD_HIDDEN, FORM_FIELD_OPTIONAL, FORM_FIELD_REQUIRED].includes(v)) {
+    throw new Error(
+      `has to be either '${FORM_FIELD_HIDDEN}', '${FORM_FIELD_OPTIONAL}' or `
+        + `'${FORM_FIELD_REQUIRED}', but is '${v}'`
+    );
+  }
+}
+
 // Defines all potential settings and their types.
 //
 // Each setting value has to be a validation function. Such a function takes two
@@ -410,12 +424,6 @@ const SCHEMA = {
   upload: {
     seriesId: types.string,
     workflowId: types.string,
-    // This gets some special treatment in `fetchAcl`. After `fetchAcl` is
-    // done, this one of:
-    // - undefined: setting was not set.
-    // - `false`: do not send any ACLs when uploading
-    // - `true`: explictely send default ACLs when uploading (this is the default behavior)
-    // - ACL template string: already fetched ACL template string.
     acl: (v, allowParse) => {
       if ((allowParse && v === 'false') || v === false) {
         return false;
@@ -430,6 +438,9 @@ const SCHEMA = {
 
       throw new Error("needs to be 'true', 'false' or a string");
     },
+    dcc: types.string,
+    titleField: metaDataField,
+    presenterField: metaDataField,
   },
   recording: {
     videoBitrate: types.positiveInteger,
