@@ -382,7 +382,7 @@ const types = {
 };
 
 // Specifies what to do with a metadata field.
-const metaDataField = (v, _) => {
+const metaDataField = v => {
   if (![FORM_FIELD_HIDDEN, FORM_FIELD_OPTIONAL, FORM_FIELD_REQUIRED].includes(v)) {
     throw new Error(
       `has to be either '${FORM_FIELD_HIDDEN}', '${FORM_FIELD_OPTIONAL}' or `

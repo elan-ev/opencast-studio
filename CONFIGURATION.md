@@ -72,8 +72,8 @@ parameter as well. See further below for information on that.
 # The workflow ID used to process the recording.
 #workflowId = "studio-upload"
 
-# Defines which ACL to send when uploading the recording. See
-# `CONFIGURATION.md` for more information.
+# Defines which ACL to send when uploading the recording. See below for
+# more information.
 #acl = false
 # -OR-
 #acl = """
@@ -83,8 +83,7 @@ parameter as well. See further below for information on that.
 #</Policy>
 #"""
 
-# Defines a custom DC-Catalog (as a template). See `CONFIGURATION.md` for more
-# information.
+# Defines a custom DC-Catalog (as a template). See below for more information.
 #dcc = """
 #<?xml version="1.0" encoding="UTF-8"?>
 #<dublincore ...>
@@ -209,7 +208,7 @@ This makes sense if you want to set custom fields or change some metadata behavi
 It can either be undefined (default, in which case the default DCC is used) or a string.
 
 The string is a [Mustache.js template](https://mustache.github.io/mustache.5.html).
-The following variables are passed as view:
+The following variables are passed as "view" (i.e. you can access those in your template):
 
 - `user`: the object returned by `/info/me.json` describing the current user. Guaranteed to be truthy, specifically: not `null`.
 - `lti`: the object returned by `/lti` which describes the current LTI session. Might be `null` (e.g. meaning there is no LTI session).
@@ -227,8 +226,8 @@ By default, this template is used:
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <dcterms:created xsi:type="dcterms:W3CDTF">{{ now }}</dcterms:created>
     <dcterms:title>{{ title }}</dcterms:title>
-    {{#presenter}}<dcterms:creator>{{ presenter }}</dcterms:creator>{{/presenter}}
-    {{#seriesId}}<dcterms:isPartOf>{{ seriesId }}</dcterms:isPartOf>{{/seriesId}}
+    {{ #presenter }}<dcterms:creator>{{ presenter }}</dcterms:creator>{{ /presenter }}
+    {{ #seriesId }}<dcterms:isPartOf>{{ seriesId }}</dcterms:isPartOf>{{ /seriesId }}
     <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
     <dcterms:spatial>Opencast Studio</dcterms:spatial>
 </dublincore>

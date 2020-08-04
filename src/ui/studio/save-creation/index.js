@@ -352,9 +352,10 @@ const ConnectionUnconfiguredWarning = () => {
 };
 
 const UploadForm = ({ uploadState, handleUpload }) => {
-  const settings = useSettings().upload;
-  const titleField = settings.titleField || FORM_FIELD_REQUIRED;
-  const presenterField = settings.presenterField || FORM_FIELD_REQUIRED;
+  const {
+    titleField = FORM_FIELD_REQUIRED,
+    presenterField = FORM_FIELD_REQUIRED,
+  } = useSettings().upload;
 
   const { t } = useTranslation();
   const opencast = useOpencast();
@@ -412,7 +413,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
           autoComplete="off"
           defaultValue={title}
           {...{ errors, register }}
-        />}
+        /> }
 
         { presenterField !== FORM_FIELD_HIDDEN && <Input
           name="presenter"
@@ -422,7 +423,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
           autoComplete="off"
           defaultValue={presenterValue}
           {...{ errors, register }}
-        />}
+        /> }
 
         <Button
           title={t('save-creation-button-upload')}

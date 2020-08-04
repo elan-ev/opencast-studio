@@ -574,7 +574,7 @@ export class Opencast {
       title,
       presenter,
       seriesId,
-      now: new Date(Date.now()).toISOString(),
+      now: new Date().toISOString(),
     };
 
     const originalEscape = Mustache.escape;
@@ -678,8 +678,8 @@ const DEFAULT_DCC_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <dcterms:created xsi:type="dcterms:W3CDTF">{{ now }}</dcterms:created>
     <dcterms:title>{{ title }}</dcterms:title>
-    {{#presenter}}<dcterms:creator>{{ presenter }}</dcterms:creator>{{/presenter}}
-    {{#seriesId}}<dcterms:isPartOf>{{ seriesId }}</dcterms:isPartOf>{{/seriesId}}
+    {{ #presenter }}<dcterms:creator>{{ presenter }}</dcterms:creator>{{ /presenter }}
+    {{ #seriesId }}<dcterms:isPartOf>{{ seriesId }}</dcterms:isPartOf>{{ /seriesId }}
     <dcterms:extent xsi:type="dcterms:ISO8601">PT5.568S</dcterms:extent>
     <dcterms:spatial>Opencast Studio</dcterms:spatial>
 </dublincore>

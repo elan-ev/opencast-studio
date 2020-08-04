@@ -20,7 +20,7 @@ export const Input = ({
   label,
   name,
   required,
-  validate = undefined,
+  validate,
   type = 'text',
   ...rest
 }) => {
