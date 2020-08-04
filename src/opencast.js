@@ -551,11 +551,7 @@ export class Opencast {
       roleOAuthUser: this.#currentUser.roles.find(r => r === 'ROLE_OAUTH_USER'),
     };
 
-    const originalEscape = Mustache.escape;
-    Mustache.escape = escapeString;
-    const out = Mustache.render(template, view);
-    Mustache.escape = originalEscape;
-    return out;
+    return renderTemplate(template, view);
   }
 
   constructDcc(template, { title, presenter, seriesId }) {
@@ -569,11 +565,7 @@ export class Opencast {
       now: new Date().toISOString(),
     };
 
-    const originalEscape = Mustache.escape;
-    Mustache.escape = escapeString;
-    const out = Mustache.render(template, view);
-    Mustache.escape = originalEscape;
-    return out;
+    return renderTemplate(template, view);
   }
 }
 
@@ -663,6 +655,14 @@ export const Provider = ({ initial, children }) => {
 // ===== Stuff related to upload metadata =====
 
 const escapeString = s => new XMLSerializer().serializeToString(new Text(s));
+
+const renderTemplate = (template, view) => {
+  const originalEscape = Mustache.escape;
+  Mustache.escape = escapeString;
+  const out = Mustache.render(template, view);
+  Mustache.escape = originalEscape;
+  return out;
+}
 
 const DEFAULT_DCC_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
 <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"
