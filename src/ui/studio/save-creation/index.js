@@ -355,7 +355,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const {
     titleField = FORM_FIELD_REQUIRED,
     presenterField = FORM_FIELD_REQUIRED,
-  } = useSettings().upload;
+  } = useSettings().upload || {};
 
   const { t } = useTranslation();
   const opencast = useOpencast();
