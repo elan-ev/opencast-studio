@@ -45,18 +45,30 @@ Browsers/systems not listed in this table are not currently tested by us, so the
 
 ## Usage
 
-There are mainly two ways how to use Opencast Studio.
+There are mainly three ways how to use Opencast Studio.
+
+### Integrated in Opencast
+
+Starting with Opencast 8.2, Opencast Studio is integrated into and shipped with
+Opencast itself. If you have an Opencast system already, this will be the
+easiest solution for you. See [the Opencast documentation about the module
+'studio'](https://docs.opencast.org/develop/admin/#modules/studio/) for more
+information.
 
 ### Standalone Version at [studio.opencast.org](https://studio.opencast.org)
 
-This is the easiest solution in many situations. However, uploading your
-recording to your own/your institution's Opencast server becomes a bit more
-difficult.
+You are free to use the publicly deployed version. However, there are two
+caveats.
 
-In order to upload to an Opencast server from `studio.opencast.org`, that server
-needs to be configured appropriately. In particular, CORS requests from Studio
-need to be allowed and return the status code 200. For nginx, you need to add
-this to your configuration:
+For one, `studio.opencast.org` is updated fairly regularly with the newest
+version and is not tested as thoroughly as the Studio version integrated into
+Opencast releases. That means that it might occasionally not work or introduce
+backwards incompatible changes (mostly related to settings) at any time.
+
+Additionally, in order to upload to your Opencast server from
+`studio.opencast.org`, that server needs to be configured appropriately. In
+particular, CORS requests from Studio need to be allowed and return the status
+code 200. For nginx, you need to add this to your configuration:
 
 ```
 add_header Access-Control-Allow-Origin https://studio.opencast.org always;
@@ -75,16 +87,11 @@ if ($request_method = OPTIONS) {
 }
 ```
 
-### Self-hosted/Integrated in Opencast
+### Self-hosted standalone version
 
-Many institutions prefer a self-hosted solution. As this is a client-only
-application, you can simply build Opencast Studio and then serve the resulting
-static files.
+As Studio is a client-only application, you can simply build it and then serve
+the resulting static files. This is rarely necessary, however.
 
-More easily even, Opencast Studio will be integrated into and shipped with
-Opencast itself – for versions ≥8.2. With this, you don't need to configure
-your webserver (as described above) and you are more flexible in terms of
-user authentication.
 
 ## Configuration
 
