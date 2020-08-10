@@ -50,7 +50,7 @@ There are mainly three ways how to use Opencast Studio.
 ### Integrated in Opencast
 
 Starting with Opencast 8.2, Opencast Studio is integrated into and shipped with
-Opencast itself. If you have an Opencast system already, this will be the
+Opencast itself. If you have an Opencast system already, this is the
 easiest solution for you. See [the Opencast documentation about the module
 'studio'](https://docs.opencast.org/develop/admin/#modules/studio/) for more
 information.
@@ -90,7 +90,7 @@ if ($request_method = OPTIONS) {
 ### Self-hosted standalone version
 
 As Studio is a client-only application, you can simply build it and then serve
-the resulting static files. This is rarely necessary, however.
+the resulting static files.
 
 
 ## Configuration
