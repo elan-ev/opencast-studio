@@ -64,7 +64,7 @@ export class Opencast {
   constructor(settings) {
     // If the server URL is not given, we stay in unconfigured state and
     // immediately return.
-    if (!settings?.serverUrl) {
+    if (settings?.serverUrl == null) {
       return;
     }
 

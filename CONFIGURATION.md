@@ -31,10 +31,10 @@ parameter as well. See further below for information on that.
 
 [opencast]
 # URL of the Opencast server that recordings are uploaded to. Has to include
-# `https://`. If this is set to an empty string, Studio uses the domain it is
-# deployed on. This mostly makes sense for Studio integrated into Opencast. If
-# this value is not defined, the user can specify the server URL on the settings
-# page.
+# `https://`. If this is set to an empty string or '/', Studio uses the domain
+# it is deployed on. This mostly makes sense for Studio integrated into
+# Opencast. If this value is not defined, the user can specify the server URL
+# on the settings page.
 #serverUrl = "https://opencast.my-university.net"
 
 # Username of the Opencast user to authenticate as. Specifying this value in
