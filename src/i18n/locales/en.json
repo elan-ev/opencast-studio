@@ -102,7 +102,7 @@
   "review-no-end": "No end set",
   "review-set-start": "Set current time as start",
   "review-set-end": "Set current time as end",
-  "review-remove-start-end": "Remove",
+  "review-remove-cut-point": "Remove",
   "review-part-will-be-removed": "This part will be removed",
   "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
   "review-play": "Play",

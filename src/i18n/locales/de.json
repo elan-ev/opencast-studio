@@ -100,7 +100,7 @@
   "review-no-end": "Kein Ende festgelegt",
   "review-set-start": "Aktuelle Zeit als Anfang festlegen",
   "review-set-end": "Aktuelle Zeit als Ende festlegen",
-  "review-remove-start-end": "Entfernen",
+  "review-remove-cut-point": "Entfernen",
   "review-part-will-be-removed": "Dieser Teil wird entfernt",
   "review-play": "Abspielen",
   "review-pause": "Pausieren",

@@ -277,7 +277,7 @@ const CutControls = (
             previewController.current.currentTime = value;
           }} />
         </Trans>
-        <IconButton title={t(`review-remove-${marker}-end`)} onClick={
+        <IconButton title={t(`review-remove-cut-point`, { context: marker })} onClick={
           () => recordingDispatch({
             type: `UPDATE_${marker.toUpperCase()}`,
             payload: null,
