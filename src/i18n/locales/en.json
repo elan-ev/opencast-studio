@@ -61,6 +61,7 @@
   "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
   "sources-video-reselect-source": "Reselect source(s)",
   "sources-video-no-cam-detected": "No camera detected",
+  "sources-video-display-not-supported": "Display capture not supported",
   "sources-video-device": "Device",
   "sources-video-aspect-ratio": "Aspect ratio",
   "sources-video-aspect-ratio-auto": "auto",

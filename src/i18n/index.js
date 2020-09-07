@@ -41,17 +41,25 @@ i18n
           if (value == null) {
             return '-:--:--';
           }
-          const seconds = Math.floor(value % 60);
+
+          const seconds = value % 60;
           value /= 60;
           const minutes = Math.floor(value % 60);
           value /= 60;
           const hours = Math.floor(value % 60);
-          let result = [minutes, seconds].map(
-            unit => (unit < 10 ? '0' : '') + unit
-          );
+
+          const secondsString = seconds.toLocaleString(lng, {
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 1,
+          });
+          let result = [
+            (minutes < 10 ? '0' : '') + minutes,
+            (seconds < 10 ? '0' : '') + secondsString,
+          ];
           if (hours) {
             result.unshift(hours);
           }
+
           return result.join(':');
         default:
           return value;

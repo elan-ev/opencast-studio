@@ -175,10 +175,14 @@ const Scrubber = ({ previewController, currentTime }) => {
         <div sx={{
           position: 'relative',
           backgroundColor: '#6bc295',
-          height: '10px',
+          height: '12px',
           width: '100%',
-          borderRadius: '5px',
+          borderRadius: '6px',
           overflow: 'hidden',
+          '@media not (any-pointer: fine)': {
+            height: '20px',
+            borderRadius: '10px',
+          }
         }}>
           { (start != null && start > 0) && <div sx={{
             left: 0,
