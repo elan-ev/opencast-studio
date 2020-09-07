@@ -231,7 +231,7 @@ export default function SaveCreation(props) {
         </div>
       </div>
 
-      <div sx={{ flex: '1 0 40px' }}></div>
+      <div sx={{ flex: '1 0 32px' }}></div>
 
       <ActionButtons
         next={null}
