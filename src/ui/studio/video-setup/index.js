@@ -19,7 +19,7 @@ import {
 } from '../../../studio-state';
 import { useSettings } from '../../../settings';
 
-import { queryMediaDevices } from '../../../util';
+import { queryMediaDevices, onMobileDevice } from '../../../util';
 import Notification from '../../notification';
 
 import {
@@ -209,16 +209,21 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
         },
       }}
     >
-      { displaySupported && <OptionButton
+      { (displaySupported || !onMobileDevice()) && <OptionButton
         label={t('sources-scenario-display')}
         icon={faChalkboard}
         onClick={clickDisplay}
+        disabledText={displaySupported ? false : t('sources-video-display-not-supported')}
       />}
-      { displaySupported && userSupported && <OptionButton
+      { (displaySupported || !onMobileDevice()) && userSupported && <OptionButton
         label={t('sources-scenario-display-and-user')}
         icon={faChalkboardTeacher}
         onClick={clickBoth}
-        disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
+        disabledText={
+          displaySupported
+            ? (userHasWebcam ? false : t('sources-video-no-cam-detected'))
+            : t('sources-video-display-not-supported')
+        }
       />}
       { userSupported && <OptionButton
         label={t('sources-scenario-user')}
