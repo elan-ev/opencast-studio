@@ -67,7 +67,7 @@ const Brand = () => {
 
   return (
     <Link to={{ pathname: "/", search: location.search }}>
-      <picture>
+      <picture sx={{ display: 'block', height: theme => theme.heights.headerHeight }}>
         <source
           media="(min-width: 920px)"
           srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
@@ -75,7 +75,7 @@ const Brand = () => {
         <img
           src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
           alt="Opencast Studio"
-          sx={{ height: 50 }}
+          sx={{ height: theme => theme.heights.headerHeight }}
         />
       </picture>
     </Link>
