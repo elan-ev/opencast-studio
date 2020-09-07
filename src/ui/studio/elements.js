@@ -105,7 +105,7 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 // - `dimensions`: a function returning `[width, height]` of the child (also
 //   defining the aspect ratio). We require the dimensions instead of only the
 //   aspect ratio to better detect changes in the video stream.
-export function VideoBox({ gap = 0, minWidth = 180, children }) {
+export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }) {
   const { ref, width = 1, height = 1 } = useResizeObserver();
 
   // This is a dummy state to force a rerender.
@@ -159,7 +159,7 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
 
       return (
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
-          <div ref={ref} sx={{ flex: '1 0 0', minHeight: 0, display: 'flex' }}>
+          <div ref={ref} sx={{ flex: '1 0 0', minHeight, display: 'flex' }}>
             <div sx={{
               height: childHeight,
               width: childWidth,
@@ -266,7 +266,7 @@ export function VideoBox({ gap = 0, minWidth = 180, children }) {
               display: 'flex',
               flexDirection,
               justifyContent: 'space-between',
-              minHeight: 0,
+              minHeight,
             }}
           >
             <div sx={{
