@@ -263,21 +263,26 @@ const PostAction = ({ goToFirstStep }) => {
 
   let returnAction;
   if (settings.return?.target) {
-    const label = settings.return?.label
-      ? t('save-creation-return-to', { label: settings.return.label })
-      : t('save-creation-return-to-no-label');
+    if (isAllowedReturnTarget(settings)) {
+      const label = settings.return?.label
+        ? t('save-creation-return-to', { label: settings.return.label })
+        : t('save-creation-return-to-no-label');
 
-    returnAction = (
-      <Button
-        as='a'
-        title={label}
-        href={settings.return.target}
-        sx={{ whiteSpace: 'nowrap', fontWeight: 400, mb: 2 }}
-      >
-        <FontAwesomeIcon icon={faTimesCircle} />
-        { label }
-      </Button>
-    );
+      returnAction = (
+        <Button
+          as='a'
+          title={label}
+          href={settings.return.target}
+          sx={{ whiteSpace: 'nowrap', fontWeight: 400, mb: 2 }}
+        >
+          <FontAwesomeIcon icon={faTimesCircle} />
+          { label }
+        </Button>
+      );
+    } else {
+      console.warn("the given 'return.target' is not allowed "
+        + "(check 'return.allowedDomains' in 'settings.toml')");
+    }
   }
 
   return (
@@ -294,6 +299,19 @@ const PostAction = ({ goToFirstStep }) => {
       </Button>
     </div>
   );
+};
+
+const isAllowedReturnTarget = settings => {
+  let targetUrl;
+  try {
+    targetUrl = new URL(settings.return.target, window.location);
+  } catch (e) {
+    return false;
+  }
+
+  const allowedDomains = [window.location.hostname, ...(settings.return?.allowedDomains || [])];
+  return allowedDomains.some(domain => targetUrl.hostname === domain)
+    && (targetUrl.protocol === 'https:' || targetUrl.protocol === 'http:');
 };
 
 const DownloadBox = ({ presenter, title }) => {

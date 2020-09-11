@@ -489,6 +489,7 @@ const SCHEMA = {
     maxHeight: types.positiveInteger,
   },
   return: {
+    allowedDomains: onlyFromServer(types.array(types.string)),
     label: types.string,
     target: (v, allowParse) => {
       types.string(v, allowParse);

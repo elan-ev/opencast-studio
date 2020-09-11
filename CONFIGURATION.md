@@ -149,13 +149,20 @@ parameter as well. See further below for information on that.
 # right above the "start a new recording" button. This button links to the
 # value of this key. Setting this value is usually done via GET parameters, as
 # a global configuration often does not make sense. You also probably want to
-# set `return.label`.
-#target = "https://my-lsm.me.com/course?id=123"
+# set `return.label`. Also see `return.allowedDomains`.
+#target = "https://my-lms.me.com/course?id=123"
 
 # Label for the site that `return.target` links to. Usually the name of your
 # LMS. The English button label is "Exit and go back to {{return.label}}". This
 # value is only used if `return.target` is set!
 #label = "Stud.IP"
+
+# A list of domains that are allowed for `return.target` links. The domain on
+# which Studio is served is always allowed.
+#
+# Note: this setting can ONLY be set via `settings.toml` and not via GET
+# parameter.
+#allowedDomains = ["mylms.myuniversity.de"]
 ```
 
 
