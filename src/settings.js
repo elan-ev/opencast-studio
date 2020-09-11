@@ -67,12 +67,18 @@ export class SettingsManager {
       self.#userSettings = self.validate(
         rawUserSettings,
         false,
+        SRC_LOCAL_STORAGE,
         'from local storage user settings',
       );
     }
 
     const rawContextSettings = await SettingsManager.loadContextSettings() || {};
-    self.contextSettings = self.validate(rawContextSettings, false, 'from server settings file');
+    self.contextSettings = self.validate(
+      rawContextSettings,
+      false,
+      SRC_SERVER,
+      'from server settings file',
+    );
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
@@ -132,7 +138,7 @@ export class SettingsManager {
       }
     }
 
-    self.urlSettings = self.validate(rawUrlSettings, true, 'given as URL GET parameter');
+    self.urlSettings = self.validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
 
     return self;
   }
@@ -238,10 +244,11 @@ export class SettingsManager {
   }
 
   // Validate the given `obj` with the global settings `SCHEMA`. If `allowParse`
-  // is true, string values are attempted to parse into the expected type.
-  // `source` is just a string for error messages specifying where `obj` comes
-  // from.
-  validate(obj, allowParse, source) {
+  // is true, string values are attempted to parse into the expected type. `src`
+  // must be one of `SRC_SERVER`, `SRC_URL` or `SRC_LOCAL_STORAGE`.
+  // `srcDescription` is just a string for error messages specifying where `obj`
+  // comes from.
+  validate(obj, allowParse, src, sourceDescription) {
     // Validates `obj` with `schema`. `path` is the current path used for error
     // messages.
     const validate = (schema, obj, path) => {
@@ -256,11 +263,11 @@ export class SettingsManager {
     // value of the setting or `null` if it should be ignored.
     const validateValue = (validation, value, path) => {
       try {
-        const newValue = validation(value, allowParse);
+        const newValue = validation(value, allowParse, src);
         return newValue === undefined ? value : newValue;
       } catch (e) {
         console.warn(
-          `Validation of setting '${path}' (${source}) with value '${value}' failed: `
+          `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
             + `${e}. Ignoring.`
         );
         return null;
@@ -285,7 +292,7 @@ export class SettingsManager {
           }
         } else {
           console.warn(
-            `'${newPath}' (${source}) is not a valid settings key. Ignoring.`
+            `'${newPath}' (${sourceDescription}) is not a valid settings key. Ignoring.`
           );
         }
       }
@@ -356,7 +363,7 @@ const types = {
     return i;
   },
   "array": elementType => {
-    return (v, allowParse) => {
+    return (v, allowParse, src) => {
       if (typeof v === 'string' && allowParse) {
         try {
           v = JSON.parse(v);
@@ -371,7 +378,7 @@ const types = {
 
       return v.map(element => {
         try {
-          const newValue = elementType(element, allowParse);
+          const newValue = elementType(element, allowParse, src);
           return newValue === undefined ? element : newValue;
         } catch (err) {
           throw new Error(`failed to validate element '${element}' of array: ${err}`);
@@ -390,6 +397,22 @@ const metaDataField = v => {
     );
   }
 }
+
+// A validator wrapper that errors of the source of the value is NOT
+// `settings.toml`.
+const onlyFromServer = inner => (v, allowParse, src) => {
+  if (src !== SRC_SERVER) {
+    throw new Error(`this configuration cannot be specified via the URL or local storage, `
+      + `but must be specified in 'settings.toml'`);
+  }
+
+  return inner(v, allowParse, src);
+}
+
+// Sources that values can come from.
+const SRC_SERVER = 'src-server';
+const SRC_URL = 'src-url';
+const SRC_LOCAL_STORAGE = 'src-local-storage';
 
 // Defines all potential settings and their types.
 //
