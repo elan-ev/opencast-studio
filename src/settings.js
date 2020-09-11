@@ -83,7 +83,6 @@ export class SettingsManager {
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
 
-    let rawUrlSettings = {};
     if (urlParams.get('config')) {
       // In this case, the GET parameter `config` is specified. We now expect a
       // hex encoded TOML file describing the configuration. This is possible in
@@ -102,6 +101,7 @@ export class SettingsManager {
         );
       }
 
+      let rawUrlSettings = {};
       try {
         rawUrlSettings = parseToml(decoded);
       } catch (e) {
@@ -121,8 +121,16 @@ export class SettingsManager {
           );
         }
       }
+
+      self.urlSettings = self.validate(
+        rawUrlSettings,
+        false,
+        SRC_URL,
+        'given as URL `config` GET parameter',
+      );
     } else {
       // Interpret each get parameter as single configuration value.
+      let rawUrlSettings = {};
       for (let [key, value] of urlParams) {
         // Create empty objects for full path (if the key contains '.') and set
         // the value at the end.
@@ -136,9 +144,9 @@ export class SettingsManager {
         });
         obj[segments[segments.length - 1]] = value;
       }
-    }
 
-    self.urlSettings = self.validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
+      self.urlSettings = self.validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
+    }
 
     return self;
   }
