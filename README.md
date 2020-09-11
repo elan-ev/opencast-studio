@@ -3,8 +3,6 @@ Opencast Studio
 
 [![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
 ](https://travis-ci.com/elan-ev/opencast-studio)
-[![Crowdin](https://badges.crowdin.net/e/d961aac56447c193679dfdb5b349e683/localized.svg)
-](https://elan-ev.crowdin.com/opencast-studio)
 [![MIT license](https://img.shields.io/github/license/elan-ev/opencast-studio)
 ](https://github.com/elan-ev/opencast-studio/blob/master/LICENSE)
 
@@ -34,7 +32,7 @@ In the table, "(✔)" means partial support and/or major bugs are still present.
 | macOS   | Chrome 78  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
 | macOS   | Firefox 70 | ✔   | ✔ | ✔   |
 | macOS   | Safari 13  | ✔   | ✘ | ✘   | Recording seems to fail due to unsupported MIME type
-| Android | Chrome 78  | (✔) | ✘ | ✔   | No camera selection ([#217](https://github.com/elan-ev/opencast-studio/issues/217))
+| Android | Chrome 78  | ✔   | ✘ | ✔   |
 | Android | Firefox 68 | ✔   | ✘ | ✔   |
 | iOS     | Safari     | (✘) | ✘ | (✘) | Many issues. For details see [issue #84](https://github.com/elan-ev/opencast-studio/issues/84)
 | iOS     | Firefox    | ✘   | ✘ | ✘   | Non-Safari browsers on iOS are severely limited
