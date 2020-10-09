@@ -25,18 +25,13 @@ cd "$reponame"
 # Prepare gh-pages branch
 if git checkout gh-pages; then
   # Save CNAME and 404.html
-  if [ -f CNAME ]; then
-    cname="$(cat CNAME)"
-  fi
-  if [ -f 404.html ]; then
-    cp 404.html ..
-  fi
+  cp CNAME 404.html .. || :
 
   # Remove all previous files
   git ls-files | while read -r f; do git rm -rf "$f"; done
 
-  # Restore 404.html
-  cp ../404.html . || :
+  # Restore 404.html and CNAME
+  cp ../404.html ../CNAME . || :
 else
   git checkout --orphan gh-pages
   git ls-files | while read -r f; do rm -f "$f"; git rm --cached "$f"; done
@@ -45,9 +40,6 @@ fi
 # Add new content
 mv "${srcpath}"/build/* .
 cp "${srcpath}"/.deploy-settings.toml settings.toml
-if [ -n "${cname:-}" ]; then
-  echo "${cname}" > CNAME
-fi
 git add ./*
 commit="$(cd "${srcpath}" && git log --oneline --no-decorate -n1 "${TRAVIS_COMMIT}")"
 git commit -m "Build #${TRAVIS_BUILD_NUMBER} ($(date)) | ${commit}"
