@@ -40,7 +40,7 @@ git checkout gh-pages
 
 # Add new content, but remove large '.map' files
 mv "${srcpath}/build/" "${deploydir}"
-cp "${srcpath}"/deploy-settings.json "${deploydir}/settings.json"
+cp "${srcpath}"/.deploy-settings.toml "${deploydir}/settings.toml"
 cd "${deploydir}/static/js/"
 rm *.map
 cd ../../../
