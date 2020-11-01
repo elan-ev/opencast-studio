@@ -9,7 +9,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.31",
     "@fortawesome/free-brands-svg-icons": "^5.15.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.0",
-    "@fortawesome/react-fontawesome": "^0.1.11",
+    "@fortawesome/react-fontawesome": "^0.1.12",
     "@iarna/toml": "^2.2.5",
     "@sentry/browser": "^5.24.2",
     "@testing-library/jest-dom": "^5.11.4",
