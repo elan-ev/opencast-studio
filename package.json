@@ -28,7 +28,7 @@
     "mutationobserver-shim": "^0.3.7",
     "oscilloscope": "^1.2.0",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-beforeunload": "^2.3.0",
     "react-dom": "^16.13.1",
     "react-hook-form": "^3.29.4",
