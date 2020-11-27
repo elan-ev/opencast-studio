@@ -73,8 +73,8 @@ export const mimeToExt = mime => {
 // `mime` can be null or a string and is converted to a file extension on a best
 // effort basis.
 export const recordingFileName = ({ mime, flavor, title, presenter }) => {
-  const titlePart = title ? ` - ${title}` : '';
-  const presenterPart = presenter ? ` - ${presenter}` : '';
+  const titlePart = (title ? ` - ${title}` : '').substring(0, 50);
+  const presenterPart = (presenter ? ` - ${presenter}` : '').substring(0, 50);
   return `${nowAsString()}${titlePart}${presenterPart} (${flavor}, OC Studio).${mimeToExt(mime)}`;
 };
 
