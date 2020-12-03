@@ -11,7 +11,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
     "@iarna/toml": "^2.2.5",
-    "@sentry/browser": "^5.27.2",
+    "@sentry/browser": "^5.28.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^9.5.0",
     "@theme-ui/color": "^0.3.1",
