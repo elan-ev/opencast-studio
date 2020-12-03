@@ -30,7 +30,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-beforeunload": "^2.3.0",
-    "react-dom": "^16.13.1",
+    "react-dom": "^16.14.0",
     "react-hook-form": "^3.29.4",
     "react-i18next": "^11.7.3",
     "react-page-visibility": "^6.2.0",
