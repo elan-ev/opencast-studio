@@ -33,7 +33,7 @@
     "react-dom": "^16.14.0",
     "react-hook-form": "^3.29.4",
     "react-i18next": "^11.7.3",
-    "react-page-visibility": "^6.2.0",
+    "react-page-visibility": "^6.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "theme-ui": "^0.3.4",
