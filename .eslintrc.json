@@ -1,13 +1,13 @@
 {
   "extends": ["react-app", "plugin:react/recommended"],
-  "plugins": ["babel"],
+  "plugins": ["@babel"],
 
   "rules": {
     "no-tabs": "error",
     "react/jsx-pascal-case": "off",
     "react/prop-types": 0,
     "no-unused-expressions": "off",
-    "babel/no-unused-expressions": "warn"
+    "@babel/no-unused-expressions": "warn"
   },
   "settings": {
     "react": {
