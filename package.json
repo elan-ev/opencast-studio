@@ -12,7 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@iarna/toml": "^2.2.5",
     "@sentry/browser": "^5.28.0",
-    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^9.5.0",
     "@theme-ui/color": "^0.3.1",
     "@theme-ui/components": "^0.3.4",
