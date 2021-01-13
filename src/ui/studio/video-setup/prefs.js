@@ -54,7 +54,7 @@ const ASPECT_RATIOS = ['4:3', '16:9'];
 // All quality options given to the user respecting the `maxHeight` from the
 // settings.
 const qualityOptions = maxHeight => {
-  const defaults = [480, 720, 1080, 1440, 2160];
+  const defaults = [360, 480, 720, 1080, 1440, 2160];
   let out = defaults.filter(q => !maxHeight || q <= maxHeight);
   if (maxHeight && (out.length === 0 || out[out.length - 1] !== maxHeight)) {
     out.push(maxHeight);
