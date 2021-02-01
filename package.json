@@ -36,7 +36,7 @@
     "react-page-visibility": "^6.4.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.4",
-    "theme-ui": "^0.3.4",
+    "theme-ui": "^0.3.5",
     "use-resize-observer": "^6.1.0"
   },
   "repository": {
