@@ -150,6 +150,11 @@ parameter as well. See further below for information on that.
 # value of this key. Setting this value is usually done via GET parameters, as
 # a global configuration often does not make sense. You also probably want to
 # set `return.label`. Also see `return.allowedDomains`.
+#
+# Remember to URL-encode the URL if you set it as GET parameter, e.g.
+# `https://foo.org/?a=1&b=2` would be `https%3A%2F%2Ffoo.org%2F%3Fa%3D1%26b%3D2`.
+# To be precise, Studio uses `URLSearchParams` to retrieve the values of GET
+# parameters.
 #target = "https://my-lms.me.com/course?id=123"
 
 # Label for the site that `return.target` links to. Usually the name of your
