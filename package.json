@@ -16,7 +16,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^9.5.0",
     "@theme-ui/color": "^0.3.5",
-    "@theme-ui/components": "^0.3.5",
+    "@theme-ui/components": "^0.6.1",
     "deepmerge": "^4.2.2",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^2.5.1",
