@@ -13,3 +13,34 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm test
+
+
+    # Prepare (test) deployment
+    - name: Determine public URL
+      id: public_url
+      run: |
+        if [[ "$GITHUB_REPOSITORY" == "elan-ev/opencast-studio" ]] && [ "$GITHUB_REF" == "refs/heads/production" ]; then
+          builddate="$(date --utc '+%Y%m%d%H%M%S')"
+          buildno="$(printf '%06d' "${{ github.run_id }}")"
+          deploydir="build-${builddate}-${GITHUB_REPOSITORY}-${buildno}-${srcbranch}"
+          deploydir="$(echo "${deploydir}" | sed 's/[^a-Z0-9]/-/g')"
+          echo "::set-output name=public_url::${deploydir}"
+        else
+          echo "::set-output name=public_url::"
+        fi
+
+    - name: Build for deployment
+      env:
+        REACT_APP_ENABLE_SENTRY: 1
+        REACT_APP_INCLUDE_LEGAL_NOTICES: 1
+        PUBLIC_URL: ${{ steps.public_url.outputs.public_url }}
+      run: npm run build
+
+    # Archive files to be used in the `deploy` workflow
+    - name: Archive deployment files as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-deployment-files
+        path: |
+          build
+          .deploy-settings.toml

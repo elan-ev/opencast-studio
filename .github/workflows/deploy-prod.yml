@@ -1,0 +1,79 @@
+name: Deploy production
+
+on:
+  workflow_run:
+    workflows: ["Build & test"]
+    branches: [production]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Prepare gh-pages branch
+      run: |
+        git fetch
+        if git checkout gh-pages; then
+          # Save CNAME and 404.html
+          tmpdir=$(mktemp)
+          cp CNAME 404.html $tmpdir || :
+
+          # Remove all previous files
+          git ls-files | while read -r f; do git rm -rf "$f"; done
+
+          # Restore 404.html and CNAME
+          cp $tmpdir/404.html $tmpdir/CNAME . || :
+        else
+          git checkout --orphan gh-pages
+          git ls-files | while read -r f; do rm -f "$f"; git rm --cached "$f"; done
+        fi
+
+    # Unfortunately we cannot use `actions/download-artifact` here since that
+    # only allows to download artifacts from the same run.
+    - name: Download artifacts from build workflow
+      uses: actions/github-script@v3.1.0
+      with:
+        script: |
+          const artifacts = await github.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: ${{ github.event.workflow_run.id }},
+          });
+          const deployFiles = artifacts.data.artifacts
+              .filter(a => a.name == "test-deployment-files")[0];
+          const download = await github.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: deployFiles.id,
+              archive_format: 'zip',
+          });
+
+          const fs = require('fs');
+          fs.writeFileSync('${{github.workspace}}/artifacts.zip', Buffer.from(download.data));
+
+          // The artifact is not needed anymore
+          github.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: deployFiles.id,
+          })
+
+    - name: extract artifacts
+      run: unzip artifacts.zip
+
+    - name: Prepare deployment files
+      run: |
+        mv .deploy-settings.toml settings.toml
+        mv build/* .
+        rmdir build
+
+    - name: Commit and push
+      run: |
+        git add .
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'noreply@github.com'
+        git commit -m "Deploy ${{ github.event.workflow_run.head_sha }} ($(date))"
+        git push origin gh-pages
