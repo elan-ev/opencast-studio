@@ -1,0 +1,87 @@
+name: Test Deploy
+
+on:
+  workflow_run:
+    workflows: ["Build & test"]
+    branches-ignore: [production]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    if: github.event.workflow_run.conclusion == 'success' && github.repository_owner == 'elan-ev'
+    steps:
+    - name: Prepare deploy key
+      run: |
+        mkdir ~/.ssh
+        chmod 700 ~/.ssh
+        echo "${{ secrets.STUDIO_TEST_DEPLOY_KEY }}" | base64 -d > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    # Unfortunately we cannot use `actions/download-artifact` here since that
+    # only allows to download artifacts from the same run.
+    - name: Download artifacts from build workflow
+      uses: actions/github-script@v3.1.0
+      with:
+        script: |
+          const artifacts = await github.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: ${{ github.event.workflow_run.id }},
+          });
+          const deployFiles = artifacts.data.artifacts
+              .filter(a => a.name == "test-deployment-files")[0];
+          const download = await github.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: deployFiles.id,
+              archive_format: 'zip',
+          });
+
+          const fs = require('fs');
+          fs.writeFileSync('${{github.workspace}}/artifacts.zip', Buffer.from(download.data));
+
+          // The artifact is not needed anymore
+          github.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: deployFiles.id,
+          })
+
+    - name: extract artifacts
+      run: unzip artifacts.zip
+
+    - name: Checkout test deployment repo
+      run: |
+        rm -rf studio-test || :
+        git clone "git@github.com:elan-ev/studio-test.git"
+        cd studio-test
+        git checkout gh-pages
+
+    - name: Prepare deployment files
+      run: |
+        deploydir=$(cat deploydir.tmp)
+        mkdir studio-test/${deploydir}
+        mv .deploy-settings.toml studio-test/${deploydir}/settings.toml
+        rm build/static/js/*.map
+        mv build/* studio-test/${deploydir}/
+        rmdir build
+
+    - name: Build new index HTML
+      working-directory: studio-test
+      run: |
+        echo '<html><body><ul>' > index.html
+        find . -maxdepth 1 -name 'build*' -type d \
+          | sort -r \
+          | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
+        echo '</ul></body></html>' >> index.html
+
+    - name: Commit and push
+      working-directory: studio-test
+      run: |
+        git add .
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'noreply@github.com'
+        git commit -m "Deploy ${{ github.event.workflow_run.head_sha }} ($(date))"
+        git push origin gh-pages

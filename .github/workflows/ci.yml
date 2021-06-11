@@ -20,14 +20,22 @@ jobs:
       id: public_url
       run: |
         if [[ "$GITHUB_REPOSITORY" == "elan-ev/opencast-studio" ]] && [ "$GITHUB_REF" == "refs/heads/production" ]; then
-          builddate="$(date --utc '+%Y%m%d%H%M%S')"
-          buildno="$(printf '%06d' "${{ github.run_id }}")"
-          deploydir="build-${builddate}-${GITHUB_REPOSITORY}-${buildno}-${srcbranch}"
-          deploydir="$(echo "${deploydir}" | sed 's/[^a-Z0-9]/-/g')"
-          echo "::set-output name=public_url::${deploydir}"
+          deploydir="/"
         else
-          echo "::set-output name=public_url::"
+          builddate="$(date --utc '+%Y-%m-%d_%H-%M-%S')"
+          buildno="$(printf '%06d' "${{ github.run_id }}")"
+          if [[ $GITHUB_REF == refs/pull/* ]]; then
+            tmp="${GITHUB_REF#refs/pull/}"
+            prnum="${tmp%/merge}"
+            deploydir="${builddate}-pr${prnum}-${buildno}"
+          else
+            branch="${GITHUB_REF#refs/heads/}"
+            deploydir="${builddate}-${{ github.repository_owner }}-${buildno}-${branch}"
+          fi
+          deploydir="/$(echo "${deploydir}" | LC_ALL=C sed -e 's/[^a-zA-Z0-9\-_]/-/g')"
         fi
+        echo "::set-output name=public_url::${deploydir}"
+        echo ${deploydir} > deploydir.tmp
 
     - name: Build for deployment
       env:
@@ -44,3 +52,4 @@ jobs:
         path: |
           build
           .deploy-settings.toml
+          deploydir.tmp
