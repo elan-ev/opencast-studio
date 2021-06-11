@@ -18,7 +18,7 @@ jobs:
         git fetch
         if git checkout gh-pages; then
           # Save CNAME and 404.html
-          tmpdir=$(mktemp)
+          tmpdir=$(mktemp -d)
           cp CNAME 404.html $tmpdir || :
 
           # Remove all previous files
@@ -69,6 +69,7 @@ jobs:
         mv .deploy-settings.toml settings.toml
         mv build/* .
         rmdir build
+        rm deploydir.tmp
 
     - name: Commit and push
       run: |
