@@ -21,7 +21,6 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "fast-deep-equal": "^3.1.3",
-    "gh-pages": "^3.2.0",
     "i18next": "^20.3.1",
     "i18next-browser-languagedetector": "^6.1.1",
     "mustache": "^4.2.0",
@@ -46,7 +45,6 @@
   "homepage": "https://studio.opencast.org",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "EXTEND_ESLINT=true REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') react-scripts start",
     "build": "EXTEND_ESLINT=true REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') react-scripts build",
     "lint": "eslint src/",
