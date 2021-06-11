@@ -1,0 +1,55 @@
+name: Build & test
+
+on: [pull_request, push]
+
+jobs:
+  main:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+    - run: npm ci
+    - run: npm run build
+    - run: npm test
+
+
+    # Prepare (test) deployment
+    - name: Determine public URL
+      id: public_url
+      run: |
+        if [[ "$GITHUB_REPOSITORY" == "elan-ev/opencast-studio" ]] && [ "$GITHUB_REF" == "refs/heads/production" ]; then
+          deploydir="/"
+        else
+          builddate="$(date --utc '+%Y-%m-%d_%H-%M-%S')"
+          buildno="$(printf '%06d' "${{ github.run_id }}")"
+          if [[ $GITHUB_REF == refs/pull/* ]]; then
+            tmp="${GITHUB_REF#refs/pull/}"
+            prnum="${tmp%/merge}"
+            deploydir="${builddate}-pr${prnum}-${buildno}"
+          else
+            branch="${GITHUB_REF#refs/heads/}"
+            deploydir="${builddate}-${{ github.repository_owner }}-${buildno}-${branch}"
+          fi
+          deploydir="/$(echo "${deploydir}" | LC_ALL=C sed -e 's/[^a-zA-Z0-9\-_]/-/g')"
+        fi
+        echo "::set-output name=public_url::${deploydir}"
+        echo ${deploydir} > deploydir.tmp
+
+    - name: Build for deployment
+      env:
+        REACT_APP_ENABLE_SENTRY: 1
+        REACT_APP_INCLUDE_LEGAL_NOTICES: 1
+        PUBLIC_URL: ${{ steps.public_url.outputs.public_url }}
+      run: npm run build
+
+    # Archive files to be used in the `deploy` workflow
+    - name: Archive deployment files as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-deployment-files
+        path: |
+          build
+          .deploy-settings.toml
+          deploydir.tmp
