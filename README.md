@@ -1,8 +1,8 @@
 Opencast Studio
 ===============
 
-[![Build Status](https://travis-ci.com/elan-ev/opencast-studio.svg?branch=master)
-](https://travis-ci.com/elan-ev/opencast-studio)
+[![CI status of master](https://img.shields.io/github/workflow/status/elan-ev/opencast-studio/Build%20&%20test/master)
+](https://github.com/elan-ev/opencast-studio/actions?query=branch%3Amaster)
 [![MIT license](https://img.shields.io/github/license/elan-ev/opencast-studio)
 ](https://github.com/elan-ev/opencast-studio/blob/master/LICENSE)
 
