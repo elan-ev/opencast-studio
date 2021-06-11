@@ -72,7 +72,7 @@ jobs:
       working-directory: studio-test
       run: |
         echo '<html><body><ul>' > index.html
-        find . -maxdepth 1 -name 'build*' -type d \
+        find . -maxdepth 1 -name '20*' -type d \
           | sort -r \
           | sed 's/^\(.*\)$/<li><a href=\1>\1<\/a><\/li>/' >> index.html
         echo '</ul></body></html>' >> index.html
