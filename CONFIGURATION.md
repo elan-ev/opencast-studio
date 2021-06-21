@@ -1,7 +1,5 @@
 # Configuration
 
-> **Note**: this is the documentation on the `master` branch, targetting Opencast 9. If you are interested in documentation about the Studio version that shipped with the current stable Opencast 8, please see [the `opencast-8` branch](https://github.com/elan-ev/opencast-studio/blob/opencast-8/CONFIGURATION.md).
-
 Opencast Studio can be configured in three different ways:
 
 - the user can manually configure certain things on the settings page,
