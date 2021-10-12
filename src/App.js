@@ -17,11 +17,12 @@ import Warnings from './ui/warnings';
 
 
 function App({ settingsManager, userHasWebcam }) {
+  console.log(settingsManager)
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Provider>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
-          <Header />
+          {settingsManager.urlSettings.opencast ? settingsManager.urlSettings.opencast.show_header === false ? null : <Header/> : <Header/>}
 
           <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
             <Warnings />
