@@ -47,8 +47,8 @@ export class SettingsManager {
       if (values.userSettings) {
         this.#userSettings = values.userSettings;
       }
-      if(values.show_header) {
-        this.show_header = values.show_header;
+      if(values.hide_header) {
+        this.hide_header = values.hide_header;
       }
     }
   }
@@ -454,7 +454,7 @@ const SCHEMA = {
     loginName: types.string,
     loginPassword: types.string,
     loginProvided: types.boolean,
-    show_header: types.boolean,
+    hide_header: types.boolean,
   },
   upload: {
     seriesId: types.string,

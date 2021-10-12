@@ -22,7 +22,7 @@ function App({ settingsManager, userHasWebcam }) {
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Provider>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
-          {settingsManager.urlSettings.opencast ? settingsManager.urlSettings.opencast.show_header === false ? null : <Header/> : <Header/>}
+          {(settingsManager.urlSettings.opencast && settingsManager.urlSettings.opencast.hide_header === true) ? null : <Header/>}
 
           <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
             <Warnings />

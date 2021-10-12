@@ -58,7 +58,7 @@ export class Opencast {
   // object, indicating that there is no LTI session.
   #ltiSession = null;
 
-  #show_header = true;
+  #hide_header = false;
 
   updateGlobalOc = null;
 
@@ -70,8 +70,8 @@ export class Opencast {
       return;
     }
 
-    if(settings?.show_header === false){
-      this.#show_header = false;
+    if(settings?.hide_header === true){
+      this.#hide_header = true;
     }
 
     this.#serverUrl = settings.serverUrl.endsWith('/')
