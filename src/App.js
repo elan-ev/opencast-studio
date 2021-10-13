@@ -17,7 +17,6 @@ import Warnings from './ui/warnings';
 
 
 function App({ settingsManager, userHasWebcam }) {
-  console.log(settingsManager)
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Provider>
