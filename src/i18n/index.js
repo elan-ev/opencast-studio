@@ -11,6 +11,7 @@ import frTranslations from './locales/fr.json';
 import nlTranslations from './locales/nl.json';
 import slTranslations from './locales/sl.json';
 import trTranslations from './locales/tr.json';
+import zhTranslations from './locales/zh.json';
 
 const resources = {
   en: { translation: enTranslations },
@@ -22,6 +23,7 @@ const resources = {
   nl: { translation: nlTranslations },
   sl: { translation: slTranslations },
   tr: { translation: trTranslations },
+  zh: { translation: zhTranslations },
 };
 
 i18n
