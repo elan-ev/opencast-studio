@@ -90,6 +90,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
       </div>
       <Button
         as="a"
+        role="button"
         title={t('save-creation-download-button')}
         sx={{
           width: '100%',

@@ -220,7 +220,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
         flex: '0 1 auto',
         transition: 'height 0.2s',
         overflow: 'hidden',
-        backgroundColor: 'white',
+        backgroundColor: 'background',
         fontSize: '18px',
         boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
       }}>
@@ -242,7 +242,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
             </div>
 
             <div sx={{
-              backgroundColor: '#ebebeb',
+              backgroundColor: 'var(--theme-ui-colors-info)',
               m: 2,
               py: 1,
               px: 2,

@@ -116,6 +116,7 @@ export default function Review(props) {
 const ControlBox = ({ previewController, currentTime }) => (
   <div sx={{
     backgroundColor: 'gray.4',
+    color: 'var(--theme-ui-colors-controls)',
     borderRadius: '8px',
   }}>
     <VideoControls {...{ previewController, currentTime }} />
