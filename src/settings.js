@@ -498,6 +498,9 @@ const SCHEMA = {
       }
     },
   },
+  theme: {
+    customCSS: types.string,
+  },
 };
 
 

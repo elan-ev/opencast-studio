@@ -6,6 +6,9 @@ import { Flex } from '@theme-ui/components';
 import { useState, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
+import { Global } from '@emotion/core';
+import { useSettings } from './settings';
+
 
 import { Provider, useStudioState, STATE_UPLOADED, STATE_UPLOADING } from './studio-state';
 
@@ -17,8 +20,10 @@ import Warnings from './ui/warnings';
 
 
 function App({ settingsManager, userHasWebcam }) {
+  const settings = useSettings();
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
+      <Global styles={settings.theme.customCSS || ''}/>
       <Provider>
       <Flex sx={{ flexDirection: 'column', height: '100%' }}>
           <Header />
