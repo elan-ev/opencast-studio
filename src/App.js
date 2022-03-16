@@ -23,11 +23,10 @@ function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
-      <Global styles={settings.theme.customCSS || ''}/>
+      <Global styles={settings.theme?.customCSS || ''}/>
       <Provider>
-      <Flex sx={{ flexDirection: 'column', height: '100%' }}>
+        <Flex sx={{ flexDirection: 'column', height: '100%' }}>
           <Header />
-
           <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
             <Warnings />
             <Routes settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
