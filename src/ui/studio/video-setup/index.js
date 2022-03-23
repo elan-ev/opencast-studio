@@ -258,7 +258,7 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
         p: 2,
         '&:hover': disabled ? {} : {
           boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
-          backgroundColor: 'white',
+          filter: 'brightness(1.2)',
         },
       }}
     >
