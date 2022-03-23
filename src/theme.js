@@ -47,6 +47,7 @@ const base = {
   colors: {
     text: '#000',
     background: '#fff',
+    button_fg: '#fff',
     primary: '#47af7a',
     secondary: '#30c',
     muted: '#888888',
@@ -69,9 +70,9 @@ const base = {
     primary: {
       ...baseButton,
       bg: 'primary',
-      color: 'background',
-      '&:not(:disabled):hover': {
-        bg: darken('primary', 0.03)
+      color: 'button_fg',
+      '&:not(:disabled):hover,&:not(:disabled):focus': {
+        bg: 'var(--theme-ui-colors-btn-hover)'
       },
       '&:disabled': {
         bg: 'gray.1'
@@ -80,7 +81,7 @@ const base = {
     danger: {
       ...baseButton,
       bg: 'error',
-      color: 'background',
+      color: 'button_fg',
       '&:not(:disabled):hover': {
         bg: darken('error', 0.03)
       }
@@ -108,7 +109,10 @@ const base = {
     root: {
       fontFamily: 'body',
       lineHeight: 'body',
-      fontWeight: 'body'
+      fontWeight: 'body',
+      '--theme-ui-colors-btn-hover': darken('primary', 0.03),
+      '--theme-ui-colors-controls': '#000',
+      '--theme-ui-colors-info': '#f5f5f5',
     },
     h1: {
       ...heading,
