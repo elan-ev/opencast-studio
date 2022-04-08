@@ -34,6 +34,33 @@ button {
   50% { opacity: 0.6 }
   to { opacity: 0.85 }
 }
+
+a {
+  border-left: 1px solid #dddddd;
+}
+
+*:focus {
+  /* Provide a fallback style for browsers
+    that don't support :focus-visible */
+  outline: 2px solid red;
+  background: transparent;
+}
+
+@supports selector(*:focus-visible) {
+  *:focus, button:focus, select:focus, input:focus, a:focus, svg:focus  {
+    /* Remove the focus indicator on mouse-focus for browsers
+       that do support :focus-visible */
+    outline: none !important;
+    background: transparent;
+  }
+}
+
+*:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible, svg:focus-visible {
+  border: 5px solid darkorange;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+}
+
 `;
 
 export default GlobalStyle;

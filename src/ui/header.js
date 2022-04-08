@@ -103,7 +103,6 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
-        borderLeft: ['none', theme => `1px solid ${theme.colors.gray[3]}`],
         display: ['block', 'inline-block'],
         width: ['100%', 'auto'],
 
