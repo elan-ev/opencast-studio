@@ -229,7 +229,7 @@ const OptionButton = ({ children, icon, label, onClick }) => {
         p: 2,
         '&:hover': {
           boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
-          backgroundColor: 'white',
+          filter: 'brightness(1.2)',
         },
       }}
     >
