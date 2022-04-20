@@ -35,31 +35,17 @@ button {
   to { opacity: 0.85 }
 }
 
-a {
-  border-left: 1px solid #dddddd;
+/* Remove outline for non-keyboard :focus */
+*:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: 0 0 0 rgb(255, 255, 255) !important;
 }
 
-*:focus {
-  /* Provide a fallback style for browsers
-    that don't support :focus-visible */
-  outline: 2px solid red;
-  background: transparent;
+*:focus-visible {
+  outline: 2px solid #286244 !important;
+  box-shadow: 0 0 5px 3px inset #8ec8aa !important;
 }
 
-@supports selector(*:focus-visible) {
-  *:focus, button:focus, select:focus, input:focus, a:focus, svg:focus  {
-    /* Remove the focus indicator on mouse-focus for browsers
-       that do support :focus-visible */
-    outline: none !important;
-    background: transparent;
-  }
-}
-
-*:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible, svg:focus-visible {
-  border: 5px solid darkorange;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-}
 
 `;
 

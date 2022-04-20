@@ -185,9 +185,10 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       justifyContent: 'flex-end',
     }}>
       <div sx={{ textAlign: 'right' }}>
-        <div
+        <button
           onClick={() => setIsExpanded(old => !old)}
           sx={{
+            border: 'none',
             display: 'inline-block',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             color: 'white',
@@ -213,7 +214,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
               width: '1em !important',
             }}
           />
-        </div>
+        </button>
       </div>
       <div sx={{
         height: isExpanded ? (expandedHeight || 'auto') : 0,
@@ -224,7 +225,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
         fontSize: '18px',
         boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
       }}>
-        <div sx={{
+        <div tabIndex={'-1'} sx={{
           border: theme => `1px solid ${theme.colors.gray[0]}`,
           height: '100%',
           overflow: 'auto',
@@ -237,8 +238,8 @@ export const StreamSettings = ({ isDesktop, stream }) => {
               gridGap: '6px 12px',
               p: 1,
             }} >
-              { !isDesktop && <UserSettings {...{ updatePrefs, prefs }} /> }
-              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings }} />
+              { !isDesktop && <UserSettings {...{ updatePrefs, prefs, isExpanded }} /> }
+              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings, isExpanded }} />
             </div>
 
             <div sx={{
@@ -286,7 +287,7 @@ const PrefValue = ({ children }) => (
   </div>
 );
 
-const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) => {
+const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isExpanded }) => {
   const { t } = useTranslation();
 
   const changeQuality = quality => updatePrefs({ quality });
@@ -305,6 +306,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) =
     <PrefKey>{t('sources-video-quality')}*:</PrefKey>
     <PrefValue>
       <RadioButton
+        isExpanded={isExpanded}
         id={`quality-auto-${kind}`}
         value="auto"
         name={`quality-${kind}`}
@@ -316,6 +318,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) =
         qualities.map(q => <Fragment key={`${q}-${kind}`}>
           <wbr />
           <RadioButton
+            isExpanded={isExpanded}
             id={`quality-${q}-${kind}`}
             value={q}
             name={`quality-${kind}`}
@@ -329,7 +332,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings }) =
   </Fragment>;
 };
 
-const UserSettings = ({ updatePrefs, prefs }) => {
+const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
   const { t } = useTranslation();
   const state = useStudioState();
 
@@ -355,7 +358,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
   return <Fragment>
     <PrefKey>{t('sources-video-device')}:</PrefKey>
     <PrefValue>
-      <select
+      <select tabIndex={isExpanded ? '0' : '-1'}
         sx={{ variant: 'styles.select' }}
         value={currentDeviceId}
         onChange={e => changeDevice(e.target.value)}
@@ -371,6 +374,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
     <PrefKey>{t('sources-video-aspect-ratio')}*:</PrefKey>
     <PrefValue>
       <RadioButton
+        isExpanded={isExpanded}
         id="ar-auto"
         value="auto"
         name="aspectRatio"
@@ -382,6 +386,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
         ASPECT_RATIOS.map(ar => <Fragment key={`ar-${ar}`}>
           <wbr />
           <RadioButton
+            isExpanded={isExpanded}
             id={`ar-${ar}`}
             value={ar}
             name="aspectRatio"
@@ -396,7 +401,7 @@ const UserSettings = ({ updatePrefs, prefs }) => {
 };
 
 // A styled radio input which looks like a button.
-const RadioButton = ({ id, value, checked, name, onChange, label, state }) => {
+const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpanded }) => {
   const stateColorMap = {
     'warn': '#ffe300',
     'ok': '#51d18f',
@@ -422,7 +427,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state }) => {
         },
       }}
     />
-    <label htmlFor={id}>{ label || value }</label>
+    <label tabIndex={isExpanded ? '0' : '-1'} onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ) && onChange(value)} htmlFor={id}>{ label || value }</label>
   </Fragment>;
 };
 

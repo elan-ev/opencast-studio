@@ -66,7 +66,7 @@ const Brand = () => {
   const location = useLocation();
 
   return (
-    <Link to={{ pathname: "/", search: location.search }}>
+    <Link to={{ pathname: "/", search: location.search }} tabIndex={'-1'}>
       <picture sx={{ display: 'block', height: theme => theme.heights.headerHeight }}>
         <source
           media="(min-width: 920px)"
@@ -103,6 +103,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
+        borderLeft: ['none', theme => `1px solid ${theme.colors.gray[3]}`],
         display: ['block', 'inline-block'],
         width: ['100%', 'auto'],
 

@@ -113,6 +113,7 @@ function MediaDevice({ title, stream, paused }) {
         ref={videoRef}
         autoPlay
         muted
+        tabIndex={'-1'}
         sx={{
           outline: 'none',
           width: '100%',
