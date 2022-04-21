@@ -42,11 +42,16 @@ button {
 }
 
 *:focus-visible {
-  outline: 2px solid #286244 !important;
-  box-shadow: 0 0 5px 3px inset #8ec8aa !important;
+  outline: 5px solid #2e724f !important;
+  outline-offset: -5px;
 }
 
-
+button:focus-visible {
+  outline: 5px solid #2e724f !important;
+  outline-offset: -3px;
+  background-color: #f5f5f5 !important;
+  color: black;
+}
 `;
 
 export default GlobalStyle;

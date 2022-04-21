@@ -204,6 +204,12 @@ export const StreamSettings = ({ isDesktop, stream }) => {
             '&:hover > svg': {
               transform: isExpanded ? 'none' : 'rotate(45deg)',
             },
+            '&:focus-visible': {
+              outline: '5px solid #8ec8aa !important',
+              outlineOffset: '-3px',
+              backgroundColor: '#286244 !important',
+              color: 'white !important'
+            },
           }}
         >
           <FontAwesomeIcon
@@ -427,7 +433,11 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpan
         },
       }}
     />
-    <label tabIndex={isExpanded ? '0' : '-1'} onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ) && onChange(value)} htmlFor={id}>{ label || value }</label>
+    <label
+      tabIndex={isExpanded ? '0' : '-1'}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ) && onChange(value)}
+      htmlFor={id}
+    >{ label || value }</label>
   </Fragment>;
 };
 

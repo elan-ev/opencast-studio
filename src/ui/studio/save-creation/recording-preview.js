@@ -97,6 +97,10 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
           maxWidth: '215px',
           margin: 'auto',
           mt: '10px',
+          '&:focus-visible': {
+            backgroundColor: '#f5f5f5 !important',
+            color: 'black !important'
+          },
         }}
         target="_blank"
         download={downloadName}

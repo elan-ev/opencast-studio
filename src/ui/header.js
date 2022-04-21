@@ -110,6 +110,10 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         '&:hover': {
           backgroundColor: 'gray.1',
         },
+        ':focus-visible': {
+          outline: '5px solid #8ec8aa !important',
+          outlineOffset: '-5px',
+        },
       }}
       {...rest}
     >
