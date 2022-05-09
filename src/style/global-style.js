@@ -49,8 +49,6 @@ button {
 button:focus-visible {
   outline: 5px solid #2e724f !important;
   outline-offset: -3px;
-  background-color: #f5f5f5 !important;
-  color: black;
 }
 `;
 
