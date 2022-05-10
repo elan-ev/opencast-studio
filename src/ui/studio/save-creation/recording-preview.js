@@ -60,7 +60,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
         height: '150px',
         border: theme => `2px solid ${theme.colors.gray[1]}`,
       }}>
-        <video
+        <video tabIndex={'-1'}
           muted
           src={url}
           // Without this, some browsers show a black video element instead of the first frame.
@@ -97,6 +97,10 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
           maxWidth: '215px',
           margin: 'auto',
           mt: '10px',
+          '&:focus-visible': {
+            backgroundColor: '#f5f5f5 !important',
+            color: 'black !important'
+          },
         }}
         target="_blank"
         download={downloadName}

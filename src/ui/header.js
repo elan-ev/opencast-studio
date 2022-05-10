@@ -64,9 +64,16 @@ export default function Header() {
 
 const Brand = () => {
   const location = useLocation();
+  const { isRecording } = useStudioState();
 
   return (
-    <Link to={{ pathname: "/", search: location.search }}>
+    <Link to={{ pathname: "/", search: location.search }}
+          tabIndex={isRecording ? '-1' : '0'}
+          sx={{':focus-visible': {
+            outline: '5px solid #8ec8aa !important',
+            outlineOffset: '-5px',
+          }
+    }}>
       <picture sx={{ display: 'block', height: theme => theme.heights.headerHeight }}>
         <source
           media="(min-width: 920px)"
@@ -85,6 +92,7 @@ const Brand = () => {
 // One element (link) in the navigation.
 const NavElement = ({ target, children, icon, ...rest }) => {
   const location = useLocation();
+  const { isRecording } = useStudioState();
 
   return (
     <NavLink
@@ -92,6 +100,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         pathname: target,
         search: location.search,
       }}
+      tabIndex={isRecording ? '-1' : '0'}
       exact
       activeStyle={{
         backgroundColor: 'black',
@@ -109,6 +118,10 @@ const NavElement = ({ target, children, icon, ...rest }) => {
 
         '&:hover': {
           backgroundColor: 'gray.1',
+        },
+        ':focus-visible': {
+          outline: '5px solid #8ec8aa !important',
+          outlineOffset: '-5px',
         },
       }}
       {...rest}

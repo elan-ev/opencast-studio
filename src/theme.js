@@ -82,7 +82,7 @@ const base = {
       ...baseButton,
       bg: 'error',
       color: 'button_fg',
-      '&:not(:disabled):hover': {
+      '&:not(:disabled):hover, &:not(:disabled):focus': {
         bg: darken('error', 0.03)
       }
     },
@@ -91,7 +91,7 @@ const base = {
       bg: 'background',
       color: 'text',
       border: theme => `1px solid ${theme.colors.gray[1]}`,
-      '&:not(:disabled):hover': {
+      '&:not(:disabled):hover, &:not(:disabled):focus': {
         bg: 'gray.3'
       }
     }

@@ -48,7 +48,7 @@ export const RecordButton = props => (
     large={props.large ? 1 : 0}
     disabled={props.disabled || props.countdown}
     sx={{
-      color: '#bd181c',
+      color: '#bd181c !important',
       'svg + svg': { color: '#e22319' },
       ':disabled': { color: '#aaa' },
       ':disabled svg + svg': { color: '#bbb' }
@@ -76,6 +76,8 @@ export const StopButton = props => (
     large={!!props.large}
     sx={{ color: '#bd181c' }}
   >
-    <FontAwesomeIcon icon={faStopCircle} />
+    <FontAwesomeIcon icon={faStopCircle}
+      sx={{color: '#bd181c !important',}}
+    />
   </Button>
 );

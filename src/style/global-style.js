@@ -34,6 +34,22 @@ button {
   50% { opacity: 0.6 }
   to { opacity: 0.85 }
 }
+
+/* Remove outline for non-keyboard :focus */
+*:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: 0 0 0 rgb(255, 255, 255) !important;
+}
+
+*:focus-visible {
+  outline: 5px solid #2e724f !important;
+  outline-offset: -5px;
+}
+
+button:focus-visible {
+  outline: 5px solid #2e724f !important;
+  outline-offset: -3px;
+}
 `;
 
 export default GlobalStyle;

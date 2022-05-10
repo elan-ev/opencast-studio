@@ -509,7 +509,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
               }
             }}
           }
-          preload="auto"
+          preload="auto" tabIndex={'-1'}
           sx={{
             width: '100%',
             height: '100%',
