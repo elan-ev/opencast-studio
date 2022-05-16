@@ -54,7 +54,6 @@ export function ActionButtons({ prev = null, next = null, children }) {
             onClick={prev.onClick}
             disabled={prev.disabled}
             danger={prev.danger || false}
-            title={t(prev.label || 'back-button-label')}
           >
             <FontAwesomeIcon icon={faCaretLeft} />
             {t(prev.label || 'back-button-label')}
@@ -72,7 +71,6 @@ export function ActionButtons({ prev = null, next = null, children }) {
             }}
             onClick={next.onClick}
             disabled={next.disabled}
-            title={t(next.label || 'next-button-label')}
           >
             {t(next.label || 'next-button-label')}
             <FontAwesomeIcon icon={faCaretRight} />

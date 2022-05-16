@@ -15,6 +15,7 @@ import { useSettings } from '../../../settings';
 import Notification from '../../notification';
 import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
 import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
+import Tooltip from '../../../Tooltip';
 
 
 // In some situation we would like to set the current time to 0 or check for it.
@@ -237,25 +238,26 @@ const VideoControls = ({ currentTime, previewController }) => {
         invariant={(start, end) => start < end}
         { ...{ recordingDispatch, previewController, currentTime } }
       />}
-      <button
-        title={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}
-        sx={{ backgroundColor: 'transparent', border: 'none', mx: 3 }}
-        onClick={() => {
-          const controller = previewController.current;
-          if (controller) {
-            if (controller.isPlaying) {
-              controller.pause();
-            } else if (controller.isReadyToPlay) {
-              controller.play();
+      <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
+        <button
+          sx={{ backgroundColor: 'transparent', border: 'none', mx: 3 }}
+          onClick={() => {
+            const controller = previewController.current;
+            if (controller) {
+              if (controller.isPlaying) {
+                controller.pause();
+              } else if (controller.isReadyToPlay) {
+                controller.play();
+              }
             }
-          }
-        }}
-      >
-        <FontAwesomeIcon
-          icon={previewController.current?.isPlaying ? faPause : faPlay}
-          sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 } }}
-        />
-      </button>
+          }}
+        >
+          <FontAwesomeIcon
+            icon={previewController.current?.isPlaying ? faPause : faPlay}
+            sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 } }}
+          />
+        </button>
+      </Tooltip>
       {settings.review?.disableCutting || <CutControls
         marker="end"
         value={end}
@@ -282,14 +284,16 @@ const CutControls = (
             previewController.current.currentTime = value;
           }} />
         </Trans>
-        <IconButton title={t(`review-remove-cut-point`, { context: marker })} onClick={
-          () => recordingDispatch({
-            type: `UPDATE_${marker.toUpperCase()}`,
-            payload: null,
-          })
-        }>
-          <FontAwesomeIcon icon={faTrash} />
-        </IconButton>
+        <Tooltip content={t(`review-remove-cut-point`)}>
+          <IconButton context={marker} onClick={
+            () => recordingDispatch({
+              type: `UPDATE_${marker.toUpperCase()}`,
+              payload: null,
+            })
+          }>
+            <FontAwesomeIcon icon={faTrash} />
+          </IconButton>
+        </Tooltip>
       </Fragment> }
     </div>
   );
@@ -305,8 +309,8 @@ const CutControls = (
   })();
 
   const button = (
+    <Tooltip content={t(`review-set-${marker}`)}>
     <button
-      title={t(`review-set-${marker}`)}
       {...{ disabled }}
       onClick={() => {
         let value = previewController.current.currentTime;
@@ -337,7 +341,7 @@ const CutControls = (
       }}
     >
       <CutHereIcon sx={{ height: '32px', transform: marker === 'end' ? 'scaleX(-1)' : '' }} />
-    </button>
+    </button></Tooltip>
   );
 
   return marker === 'start'

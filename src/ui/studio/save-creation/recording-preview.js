@@ -91,7 +91,6 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
       <Button
         as="a"
         role="button"
-        title={t('save-creation-download-button')}
         sx={{
           width: '100%',
           maxWidth: '215px',

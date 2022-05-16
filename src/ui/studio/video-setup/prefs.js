@@ -19,6 +19,7 @@ import {
   stopDisplayCapture,
   stopUserCapture
 } from '../capturer';
+import Tooltip from '../../../Tooltip';
 
 
 // Creates a valid constraints object from the given preferences. The mapping
@@ -117,6 +118,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
     // the worst case ending up in an infinite loop.
     onResize: () => setExpandedHeight(ref.current?.offsetHeight + 4),
   });
+  const { t } = useTranslation();
 
   // The current preferences and the callback to update them.
   const prefs = isDesktop ? loadDisplayPrefs() : loadCameraPrefs();
@@ -183,44 +185,46 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
-    }}>
+    }}>    
       <div sx={{ textAlign: 'right' }}>
-        <button
-          onClick={() => setIsExpanded(old => !old)}
-          sx={{
-            border: 'none',
-            display: 'inline-block',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            color: 'white',
-            p: '6px',
-            m: 2,
-            fontSize: '30px',
-            lineHeight: '1em',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            '&:hover': {
-              backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            },
-            '&:hover > svg': {
-              transform: isExpanded ? 'none' : 'rotate(45deg)',
-            },
-            '&:focus-visible': {
-              outline: '5px solid #8ec8aa !important',
-              outlineOffset: '-3px',
-              backgroundColor: '#286244 !important',
-              color: 'white !important'
-            },
-          }}
-        >
-          <FontAwesomeIcon
-            icon={isExpanded ? faTimes : faCog}
-            fixedWidth
+        <Tooltip content={isExpanded ? t('video-settings-close') : t('video-settings-open') }>
+          <button
+            onClick={() => setIsExpanded(old => !old)}
             sx={{
-              transition: isExpanded ? 'none' : 'transform 0.2s',
-              width: '1em !important',
+              border: 'none',
+              display: 'inline-block',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              p: '6px',
+              m: 2,
+              fontSize: '30px',
+              lineHeight: '1em',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              },
+              '&:hover > svg': {
+                transform: isExpanded ? 'none' : 'rotate(45deg)',
+              },
+              '&:focus-visible': {
+                outline: '5px solid #8ec8aa !important',
+                outlineOffset: '-3px',
+                backgroundColor: '#286244 !important',
+                color: 'white !important'
+              },
             }}
-          />
-        </button>
+          >
+            <FontAwesomeIcon
+              icon={isExpanded ? faTimes : faCog}
+              fixedWidth
+              sx={{
+                transition: isExpanded ? 'none' : 'transform 0.2s',
+                width: '1em !important',
+              }}
+            />
+          </button>
+        </Tooltip>
       </div>
       <div sx={{
         height: isExpanded ? (expandedHeight || 'auto') : 0,
