@@ -50,6 +50,10 @@ button:focus-visible {
   outline: 5px solid #2e724f !important;
   outline-offset: -3px;
 }
+
+.tippy-box[data-theme~='studio'] > .tippy-arrow::before {
+  color: #43a472;
+}
 `;
 
 export default GlobalStyle;

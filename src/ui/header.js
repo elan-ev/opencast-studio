@@ -199,7 +199,6 @@ const Navigation = props => {
         }}
       >
         <NavElement
-          title={t('nav-recording')}
           target="/"
           icon={faVideo}
           onClick={closeMenu}
@@ -207,7 +206,6 @@ const Navigation = props => {
           {t('nav-recording')}
         </NavElement>
         <NavElement
-          title={t('nav-settings')}
           target="/settings"
           icon={faWrench}
           onClick={closeMenu}
@@ -215,7 +213,6 @@ const Navigation = props => {
           {t('nav-settings')}
         </NavElement>
         <NavElement
-          title={t('nav-about')}
           target="/about"
           icon={faInfoCircle}
           onClick={closeMenu}

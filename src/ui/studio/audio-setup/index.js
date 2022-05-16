@@ -218,7 +218,6 @@ const OptionButton = ({ children, icon, label, onClick }) => {
   return (
     <button
       onClick={onClick}
-      title={label}
       sx={{
         fontFamily: 'inherit',
         color: 'gray.0',

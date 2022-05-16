@@ -149,7 +149,7 @@ function OpencastSettings({ settingsManager }) {
           /> }
 
           <footer sx={{ mt: 4 }}>
-            <Button title={t('upload-settings-button-store')} sx={{ verticalAlign: 'middle' }}>
+            <Button sx={{ verticalAlign: 'middle' }}>
               {t('upload-settings-button-store')}
             </Button>
             { icon && <FontAwesomeIcon

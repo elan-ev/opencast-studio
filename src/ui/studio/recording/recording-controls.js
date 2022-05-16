@@ -15,6 +15,8 @@ import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording
 import Clock from './clock';
 import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from './index.js';
 
+import Tooltip from '../../../Tooltip';
+
 function addRecordOnStop(dispatch, deviceType) {
   return ({ media, url, mimeType, dimensions }) => {
     dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType, dimensions } });
@@ -152,38 +154,42 @@ export default function RecordingControls({
       <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
         {recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: 'right' }}>
           {recordingState === STATE_RECORDING && (
-            <PauseButton
-              title={t('pause-button-title')}
-              recordingState={recordingState}
-              onClick={handlePause}
-            />
+            <Tooltip content={t('pause-button-title')} offset={[0,50]}>
+              <PauseButton
+                recordingState={recordingState}
+                onClick={handlePause}
+              />
+            </Tooltip>
           )}
 
           {recordingState === STATE_PAUSED && (
-            <ResumeButton
-              title={t('resume-button-title')}
-              recordingState={recordingState}
-              onClick={handleResume}
-            />
+            <Tooltip content={t('resume-button-title')} offset={[0,50]}>
+              <ResumeButton
+                recordingState={recordingState}
+                onClick={handleResume}
+              />
+            </Tooltip>
           )}
         </div>}
 
         <div className="center">
           {recordingState === STATE_INACTIVE ? (
-            <RecordButton
-              large
-              title={t('record-button-title')}
-              recordingState={recordingState}
-              onClick={handleRecord}
-              disabled={!canRecord}
-            />
+            <Tooltip content={t('record-button-title')} offset={[0,50]}>
+              <RecordButton
+                large
+                recordingState={recordingState}
+                onClick={handleRecord}
+                disabled={!canRecord}
+              />
+            </Tooltip>
           ) : (
-            <StopButton
-              large
-              title={t('stop-button-title')}
-              recordingState={recordingState}
-              onClick={handleStop}
-            />
+            <Tooltip content={t('stop-button-title')} offset={[0,50]}>
+              <StopButton
+                large
+                recordingState={recordingState}
+                onClick={handleStop}
+              />
+            </Tooltip>
           )}
         </div>
 
