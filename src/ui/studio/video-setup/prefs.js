@@ -187,7 +187,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       justifyContent: 'flex-end',
     }}>    
       <div sx={{ textAlign: 'right' }}>
-        <Tooltip content={isExpanded ? t('video-settings-close') : t('video-settings-open') }>
+        <Tooltip offset={[0, 25]} content={isExpanded ? t('video-settings-close') : t('video-settings-open') }>
           <button
             onClick={() => setIsExpanded(old => !old)}
             sx={{
