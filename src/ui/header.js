@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, useColorMode } from 'theme-ui';
 
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Fragment, useState } from 'react';
@@ -20,6 +20,7 @@ import { useStudioState } from '../studio-state';
 // The header, including a logo on the left and the navigation on the right.
 export default function Header() {
   const { isRecording } = useStudioState();
+  const [ colorMode ] = useColorMode();
 
   return (
     <header
@@ -37,7 +38,7 @@ export default function Header() {
           the parent element, as the navigation overlay would otherwise occlude
           this background color */}
       <div sx={{
-        backgroundColor: 'gray.0',
+        backgroundColor: colorMode === 'light' ? 'gray.0' : 'gray.4',
         position: 'absolute',
         zIndex: -3,
         height: '100%',
@@ -93,6 +94,7 @@ const Brand = () => {
 const NavElement = ({ target, children, icon, ...rest }) => {
   const location = useLocation();
   const { isRecording } = useStudioState();
+  const [ colorMode ] = useColorMode();
 
   return (
     <NavLink
@@ -112,12 +114,12 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
-        borderLeft: ['none', theme => `1px solid ${theme.colors.gray[3]}`],
+        borderLeft: ['none', theme => colorMode === 'light' ? `1px solid ${theme.colors.gray[3]}` : `1px solid ${theme.colors.gray[1]}`],
         display: ['block', 'inline-block'],
         width: ['100%', 'auto'],
 
         '&:hover': {
-          backgroundColor: 'gray.1',
+          backgroundColor: colorMode === 'light' ? 'gray.1' : 'gray.3',
         },
         ':focus-visible': {
           outline: '5px solid #8ec8aa !important',
@@ -145,6 +147,7 @@ const Navigation = props => {
   const toggleMenu = () => updateIsOpened(!isOpened);
   const closeMenu = () => updateIsOpened(false);
   const { t } = useTranslation();
+  const [colorMode] = useColorMode();
 
   return (
     <Fragment>
@@ -193,7 +196,7 @@ const Navigation = props => {
           top: [theme => theme.heights.headerHeight, theme => theme.heights.headerHeight, 0],
           position: ['absolute', 'static'],
           width: ['100%', 'auto'],
-          backgroundColor: ['gray.0', 'none'],
+          backgroundColor: colorMode === 'light' ? ['gray.0', 'none'] : ['gray.4', 'none'],
           transition: ['height 0.25s ease-out 0s', 'none'],
           scrollX: ['none', 'auto'],
         }}

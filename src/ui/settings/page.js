@@ -7,6 +7,7 @@ import { Box } from '@theme-ui/components';
 
 import LanguageSettings from './language';
 import OpencastSettings from './opencast';
+import ColorModeSettings from './colorMode';
 
 
 const SettingsPage = ({ settingsManager }) => {
@@ -15,11 +16,10 @@ const SettingsPage = ({ settingsManager }) => {
   return (
     <Box sx={{ width: '100%', maxWidth: 960, mx: 'auto', p: 3 }}>
       <header>
-        <Styled.h1>{t('settings-header')}</Styled.h1>
+        <Styled.h1 sx={{ mb: '1.5em' }}>{t('settings-header')}</Styled.h1>
       </header>
-
+      <ColorModeSettings />
       <LanguageSettings />
-
       <OpencastSettings settingsManager={settingsManager} />
     </Box>
   );

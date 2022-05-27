@@ -36,6 +36,7 @@
     "react-hook-form": "^3.29.4",
     "react-i18next": "^11.16.7",
     "react-page-visibility": "^7.0.0",
+    "react-responsive": "^8.2.0",
     "react-router-dom": "^5.3.1",
     "react-scripts": "^4.0.3",
     "theme-ui": "^0.3.5",

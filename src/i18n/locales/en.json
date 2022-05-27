@@ -139,5 +139,9 @@
   "settings-back-to-recording": "Back to recording",
 
   "video-settings-open": "Open video settings",
-  "video-settings-close": "Close video settings"
+  "video-settings-close": "Close video settings",
+  
+  "settings-theme-appearance": "Appearance",
+  "settings-theme-dark": "Switch to Darkmode",
+  "settings-theme-light": "Switch to Lightmode"
 }

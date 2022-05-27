@@ -36,7 +36,7 @@ const Button = ({ large, ...rest }) => (
 export const PauseButton = props => (
   <Button onClick={props.onClick} title={props.title}>
     <span className="fa-layers">
-      <FontAwesomeIcon icon={faPauseCircle} />
+      <FontAwesomeIcon icon={faPauseCircle} sx={{ color: 'text' }} />
     </span>
   </Button>
 );
@@ -64,7 +64,7 @@ export const RecordButton = props => (
 export const ResumeButton = props => (
   <Button onClick={props.onClick} title={props.title}>
     <span className="fa-layers">
-      <FontAwesomeIcon icon={faPlayCircle} />
+      <FontAwesomeIcon icon={faPlayCircle} sx={{ color: 'text' }} />
     </span>
   </Button>
 );

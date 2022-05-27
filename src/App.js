@@ -1,6 +1,7 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, useColorMode } from 'theme-ui';
+import { useMediaQuery } from 'react-responsive';
 
 import { Flex } from '@theme-ui/components';
 import { useState, Fragment } from 'react';
@@ -21,6 +22,13 @@ import Warnings from './ui/warnings';
 
 function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();
+  // This comma must remain set, otherwise you get the error "setColorMode is not a function"
+  const [, setColorMode] = useColorMode();
+
+  useMediaQuery({
+    query: '(prefers-color-scheme: dark)',
+  }, undefined, (isdarkPrefered) => setColorMode(isdarkPrefered ? 'dark' : 'light'))
+
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Global styles={settings.theme?.customCSS || ''}/>

@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled, Progress } from 'theme-ui';
+import { jsx, Styled, Progress, useColorMode } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -353,14 +353,17 @@ const DownloadBox = ({ presenter, title }) => {
 // to settings.
 const ConnectionUnconfiguredWarning = () => {
   const location = useLocation();
+  const [colorMode] = useColorMode();
 
   return (
-    <Notification key="opencast-connection" isDanger>
+    <Notification key="opencast-connection" isDanger
+      sx={{ color: colorMode === 'light' ? '#fff' : 'rgba(255, 255, 255, 0.9)' }}
+    >
       <Trans i18nKey="warning-missing-connection-settings">
         Warning.
         <Link
           to={{ pathname: "/settings", search: location.search }}
-          sx={{ variant: 'styles.a', color: '#ff2' }}
+          sx={{ variant: 'styles.a', color: colorMode === 'light' ? '#ff2' : 'rgba(255, 255, 34, 0.8)' }}
         >
           settings
         </Link>

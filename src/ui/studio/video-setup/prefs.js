@@ -2,7 +2,7 @@
 
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, useColorMode } from 'theme-ui';
 
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -156,6 +156,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
 
   // State about expanding and hiding the settings.
   const [isExpanded, setIsExpanded] = useState(false);
+  const [colorMode] = useColorMode();
 
   return <Fragment>
     <div sx={{
@@ -167,7 +168,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       transition: 'top 0.2s',
     }}>
       <span sx={{
-        color: 'gray.1',
+        color: colorMode === 'light' ? 'gray.1' : 'gray.3',
         backgroundColor: 'white',
         borderRadius: '10px',
         p: 1,
@@ -253,7 +254,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
             </div>
 
             <div sx={{
-              backgroundColor: 'var(--theme-ui-colors-info)',
+              backgroundColor: 'gray.4',
               m: 2,
               py: 1,
               px: 2,
@@ -412,9 +413,13 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
 
 // A styled radio input which looks like a button.
 const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpanded }) => {
+
+  const [colorMode] = useColorMode();
+
   const stateColorMap = {
-    'warn': '#ffe300',
-    'ok': '#51d18f',
+    // slight darker colors for darkmode
+    'warn': colorMode === 'light' ? '#ffe300' : '#e1ad0f',
+    'ok': colorMode === 'light' ? '#51d18f' : 'primary',
   };
 
   return <Fragment>
@@ -432,7 +437,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpan
         },
         '&:checked+label': {
           bg: 'gray.0',
-          color: state ? stateColorMap[state] : 'white',
+          color: state ? stateColorMap[state] : 'background',
           fontWeight: 'bold',
         },
       }}
