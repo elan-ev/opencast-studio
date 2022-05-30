@@ -11,7 +11,6 @@ const Tooltip = ({ content, ...props }) => (
     <Tippy 
         content = { <span> {content} </span> }
         interactive={true}
-        delay={300}
         theme='studio'
 
         sx={{

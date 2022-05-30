@@ -444,7 +444,6 @@ const UploadForm = ({ uploadState, handleUpload }) => {
         /> }
 
         <Button
-          title={t('save-creation-button-upload')}
           disabled={recordings.length === 0}
           onClick={handleSubmit(handleUpload)}
         >
