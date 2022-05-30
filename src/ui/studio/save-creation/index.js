@@ -356,14 +356,12 @@ const ConnectionUnconfiguredWarning = () => {
   const [colorMode] = useColorMode();
 
   return (
-    <Notification key="opencast-connection" isDanger
-      sx={{ color: colorMode === 'light' ? '#fff' : 'rgba(255, 255, 255, 0.9)' }}
-    >
+    <Notification key="opencast-connection" isDanger>
       <Trans i18nKey="warning-missing-connection-settings">
         Warning.
         <Link
           to={{ pathname: "/settings", search: location.search }}
-          sx={{ variant: 'styles.a', color: colorMode === 'light' ? '#ff2' : 'rgba(255, 255, 34, 0.8)' }}
+          sx={{ variant: 'styles.a', color: colorMode === 'dark' ? 'rgba(255, 255, 34, 0.8)' : '#ff2' }}
         >
           settings
         </Link>

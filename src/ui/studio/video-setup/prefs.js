@@ -168,7 +168,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       transition: 'top 0.2s',
     }}>
       <span sx={{
-        color: colorMode === 'light' ? 'gray.1' : 'gray.3',
+        color: colorMode === 'dark' ? 'gray.3' : 'gray.1',
         backgroundColor: 'white',
         borderRadius: '10px',
         p: 1,
@@ -418,8 +418,8 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpan
 
   const stateColorMap = {
     // slight darker colors for darkmode
-    'warn': colorMode === 'light' ? '#ffe300' : '#e1ad0f',
-    'ok': colorMode === 'light' ? '#51d18f' : 'primary',
+    'warn': colorMode === 'dark' ? '#e1ad0f' : '#ffe300',
+    'ok': colorMode === 'dark' ? 'primary' : '#51d18f',
   };
 
   return <Fragment>

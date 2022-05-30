@@ -148,7 +148,7 @@ const Scrubber = ({ previewController, currentTime }) => {
 
   const cutStyle = {
     position: 'absolute',
-    backgroundColor: colorMode === 'light' ? 'gray.3' : 'gray.2',
+    backgroundColor: colorMode === 'dark' ? 'gray.2' : 'gray.3',
     height: '100%',
     boxSizing: 'content-box',
   };
@@ -176,7 +176,7 @@ const Scrubber = ({ previewController, currentTime }) => {
             zIndex: 10,
           }}
         />
-        <div sx={{ 
+        <div sx={{
           position: 'relative',
           backgroundColor: '#6bc295',
           height: '12px',
@@ -224,7 +224,7 @@ const VideoControls = ({ currentTime, previewController }) => {
 
   return <div sx={{ textAlign: 'center' }}>
     <Flex
-      sx={{ 
+      sx={{
         backgroundColor: 'gray.4',
         p: 2,
         justifyContent: 'center',

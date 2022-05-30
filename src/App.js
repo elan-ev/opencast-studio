@@ -22,12 +22,11 @@ import Warnings from './ui/warnings';
 
 function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();
-  // This comma must remain set, otherwise you get the error "setColorMode is not a function"
   const [, setColorMode] = useColorMode();
 
   useMediaQuery({
     query: '(prefers-color-scheme: dark)',
-  }, undefined, (isdarkPrefered) => setColorMode(isdarkPrefered ? 'dark' : 'light'))
+  }, undefined, (isDarkPrefered) => setColorMode(isDarkPrefered ? 'dark' : 'light'))
 
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>

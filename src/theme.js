@@ -44,6 +44,7 @@ const base = {
   heights: {
     headerHeight: '3em'
   },
+  useColorSchemeMediaQuery: true,
   colors: {
     text: '#000',
     background: '#fff',
@@ -55,7 +56,8 @@ const base = {
     error: '#f14668',
     gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
     videoOverlay: 'rgba(255, 255, 255, 0.2)',
-    input_bg: '#fff',
+    element_bg: '#fff',
+    notification_text: '#fff',
     modes: {
       dark: {
         text: 'rgba(255, 255, 255, 0.87)',
@@ -68,7 +70,8 @@ const base = {
         error: 'rgba(241, 70, 104, 0.8)',
         gray: ['#f5f5f5', '#dddddd', '#aaaaaa', '#666666', '#363636'],
         videoOverlay: 'rgba(255, 255, 255, 0.2)',
-        input_bg: '#363636',
+        element_bg: '#363636',
+        notification_text: 'rgba(255, 255, 255, 0.9)'
       }
     }
   },
@@ -193,7 +196,7 @@ const base = {
       maxWidth: '100%'
     },
     input: {
-      backgroundColor: 'input_bg',
+      backgroundColor: 'element_bg',
       color: 'text',
       borderWidth: 1,
       borderStyle: 'solid',
@@ -216,7 +219,7 @@ const base = {
       }
     },
     select: {
-      backgroundColor: 'input_bg',
+      backgroundColor: 'element_bg',
       color: 'text',
       height: '2rem',
       fontSize: '14pt',

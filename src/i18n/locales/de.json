@@ -136,7 +136,6 @@
   "warning-missing-connection-settings": "Die Verbindung zum Opencast Server wurde noch nicht vollständig hergestellt. Bitte konfigurieren Sie die Verbindung in <1>den Einstellungen</1> (die Aufnahme geht nicht verloren).",
 
   "settings-back-to-recording": "Zurück zur Aufnahme",
-
   "settings-theme-appearance": "Aussehen",
   "settings-theme-dark": "Zum dunklen Design wechseln",
   "settings-theme-light": "Zum hellen Design wechseln",
