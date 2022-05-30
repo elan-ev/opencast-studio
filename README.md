@@ -26,7 +26,7 @@ The following table depicts the current state of browser support (as of May 2022
 | Windows 10 | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | -
 | Linux      | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | -
 | macOS      | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | 🔶<sup>1,2</sup>
-| iOS        | ❌<sup>3</sup> | ❌<sup>3</sup>   | ❌<sup>3</sup>   | 🔶<sup>1,4</sup>
+| iOS        | - <sup>3</sup> | - <sup>3</sup>   | - <sup>3</sup>   | 🔶<sup>1,4,5</sup>
 | Android    | 🔶<sup>4</sup> | 🔶<sup>1,4</sup> | 🔶<sup>1,4</sup> | -
 
 <sup>1</sup> The videos created in Chrome, Edge and Safari are missing explicit duration information and you cannot seek through them.
@@ -34,9 +34,11 @@ See [#517](https://github.com/elan-ev/opencast-studio/issues/517) for more infor
 
 <sup>2</sup> Recording webcam and screen at the same time fails (Studio bug: [#934](https://github.com/elan-ev/opencast-studio/issues/934)). Also: Safari only lets you capture the whole screen, not individual windows.
 
-<sup>3</sup> Non-Safari browser on iOS are severely limited.
+<sup>3</sup> Non-Safari browser on iOS use the Safari browser engine, so behave essentially the same as Safari.
 
 <sup>4</sup> Screen share on mobile devices not supported; only webcam recording.
+
+<sup>5</sup> Several bugs, see [#423](https://github.com/elan-ev/opencast-studio/issues/423).
 
 
 ## Usage
