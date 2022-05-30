@@ -17,28 +17,26 @@ Opencast instance.
 
 ## Supported Browsers
 
-The following table depicts the current state of browser support.
-Please note that Opencast Studio uses fairly new web technologies that are not yet (fully) supported by all browsers.
-That's usually the reason for why this app does not work on a particular browser/system.
-In the table, "(✔)" means partial support and/or major bugs are still present.
+Opencast Studio uses somewhat new web technologies that are not yet (fully) supported by all browsers.
+The following table depicts the current state of browser support (as of May 2022).
 
-| OS      | Browser    | Capture Camera | Capture Screen | Record | Notes |
-| --------| ---------- | -------------- | -------------- | ------ | ----- |
-| Win10   | Chrome 77  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
-| Win10   | Firefox 68 | ✔   | ✔ | ✔   |
-| Win10   | Edge 79    | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
-| Linux   | Chrome 77  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
-| Linux   | Firefox 68 | ✔   | ✔ | ✔   |
-| macOS   | Chrome 78  | ✔   | ✔ | ✔   | Video file does not allow seeking ([#517](https://github.com/elan-ev/opencast-studio/issues/517))
-| macOS   | Firefox 70 | ✔   | ✔ | ✔   |
-| macOS   | Safari 13  | ✔   | ✘ | ✘   | Recording seems to fail due to unsupported MIME type
-| Android | Chrome 78  | ✔   | ✘ | ✔   |
-| Android | Firefox 68 | ✔   | ✘ | ✔   |
-| iOS     | Safari     | (✘) | ✘ | (✘) | Many issues. For details see [issue #84](https://github.com/elan-ev/opencast-studio/issues/84)
-| iOS     | Firefox    | ✘   | ✘ | ✘   | Non-Safari browsers on iOS are severely limited
-| iOS     | Chrome     | ✘   | ✘ | ✘   | Non-Safari browsers on iOS are severely limited
+|            | Firefox ≥ 68   | Chrome ≥ 77      | Edge ≥ 79        | Safari ≥ 14 |
+| ---------- | -------------- | ---------------- | ---------------- | ----------- |
+| Windows 11 | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | -
+| Windows 10 | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | -
+| Linux      | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | -
+| macOS      | ✔              | ✔<sup>1</sup>    | ✔<sup>1</sup>    | 🔶<sup>1,2</sup>
+| iOS        | ❌<sup>3</sup> | ❌<sup>3</sup>   | ❌<sup>3</sup>   | 🔶<sup>1,4</sup>
+| Android    | 🔶<sup>4</sup> | 🔶<sup>1,4</sup> | 🔶<sup>1,4</sup> | -
 
-Browsers/systems not listed in this table are not currently tested by us, so they might or might not work.
+<sup>1</sup> The videos created in Chrome, Edge and Safari are missing explicit duration information and you cannot seek through them.
+See [#517](https://github.com/elan-ev/opencast-studio/issues/517) for more information.
+
+<sup>2</sup> Recording webcam and screen at the same time fails (Studio bug: [#934](https://github.com/elan-ev/opencast-studio/issues/934)). Also: Safari only lets you capture the whole screen, not individual windows.
+
+<sup>3</sup> Non-Safari browser on iOS are severely limited.
+
+<sup>4</sup> Screen share on mobile devices not supported; only webcam recording.
 
 
 ## Usage
