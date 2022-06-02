@@ -46,7 +46,7 @@ const base = {
   },
   config: {
     useColorSchemeMediaQuery: true,
-    useLocalStorage: false,
+    useLocalStorage: true,
     initialColorModeName: 'light',
   },
   colors: {
