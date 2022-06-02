@@ -15,8 +15,8 @@
     "@sentry/browser": "^6.6.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^9.5.0",
-    "@theme-ui/color": "^0.3.5",
-    "@theme-ui/components": "^0.3.5",
+    "@theme-ui/color": "^0.14.5",
+    "@theme-ui/components": "^0.14.5",
     "@tippyjs/react": "^4.2.6",
     "deepmerge": "^4.2.2",
     "eslint": "^7.32.0",
@@ -39,7 +39,7 @@
     "react-responsive": "^8.2.0",
     "react-router-dom": "^5.3.3",
     "react-scripts": "^4.0.3",
-    "theme-ui": "^0.3.5",
+    "theme-ui": "^0.14.5",
     "use-resize-observer": "^7.0.0"
   },
   "repository": {

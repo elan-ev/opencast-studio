@@ -1,10 +1,9 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, Themed } from 'theme-ui';
 
 import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Flex, Heading, Text } from '@theme-ui/components';
-import { Styled } from 'theme-ui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -142,7 +141,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
 
   return (
     <StepContainer>
-      <Styled.h1>{ title }</Styled.h1>
+      <Themed.h1>{ title }</Themed.h1>
 
       { body }
 

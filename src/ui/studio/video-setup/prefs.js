@@ -412,15 +412,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
 };
 
 // A styled radio input which looks like a button.
-const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpanded }) => {
-
-  const [colorMode] = useColorMode();
-
-  const stateColorMap = {
-    // slight darker colors for darkmode
-    'warn': colorMode === 'dark' ? '#e1ad0f' : '#ffe300',
-    'ok': colorMode === 'dark' ? 'primary' : '#51d18f',
-  };
+const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) => {
 
   return <Fragment>
     <input
@@ -437,7 +429,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpan
         },
         '&:checked+label': {
           bg: 'gray.0',
-          color: state ? stateColorMap[state] : 'background',
+          color: 'background',
           fontWeight: 'bold',
         },
       }}

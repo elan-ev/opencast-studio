@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx, Themed } from 'theme-ui';
 
 import { Flex, Heading, Spinner, Text } from '@theme-ui/components';
 import { useEffect, Fragment } from 'react';
@@ -72,7 +72,7 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
 
   return (
     <Fragment>
-      <Styled.h1>{t('sources-audio-question')}</Styled.h1>
+      <Themed.h1>{t('sources-audio-question')}</Themed.h1>
 
       <Flex
         sx={{
@@ -192,7 +192,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
 
   return (
     <Fragment>
-      <Styled.h1>{ t('sources-audio-microphone-selected') }</Styled.h1>
+      <Themed.h1>{ t('sources-audio-microphone-selected') }</Themed.h1>
 
       <div sx={{
         maxWidth: 850,

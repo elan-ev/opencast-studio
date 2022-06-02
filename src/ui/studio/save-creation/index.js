@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled, Progress, useColorMode } from 'theme-ui';
+import { jsx, Themed, Progress, useColorMode } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -197,9 +197,9 @@ export default function SaveCreation(props) {
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
-      <Styled.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
+      <Themed.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
         { possiblyDone ? t('save-creation-title-done') : t('save-creation-title') }
-      </Styled.h1>
+      </Themed.h1>
 
       <div sx={{
         display: 'flex',
@@ -213,9 +213,9 @@ export default function SaveCreation(props) {
         },
       }}>
         <div>
-          <Styled.h2
+          <Themed.h2
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
-          >{t('save-creation-subsection-title-upload')}</Styled.h2>
+          >{t('save-creation-subsection-title-upload')}</Themed.h2>
 
           <div sx={{ margin: 'auto' }}>
             { uploadBox }
@@ -223,9 +223,9 @@ export default function SaveCreation(props) {
         </div>
 
         <div>
-          <Styled.h2
+          <Themed.h2
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
-          >{t('save-creation-subsection-title-download')}</Styled.h2>
+          >{t('save-creation-subsection-title-download')}</Themed.h2>
 
           <DownloadBox dispatch={dispatch} {...{ title, presenter }} />
         </div>
@@ -504,7 +504,7 @@ const NotConnectedWarning = () => {
             Foo
             {
               (referrer && !referrer.includes(window.origin || ''))
-                ? <Styled.a href={referrer} target='_blank' sx={{ color: '#ff2' }}>bar</Styled.a>
+                ? <Themed.a href={referrer} target='_blank' sx={{ color: '#ff2' }}>bar</Themed.a>
                 : <Fragment>bar</Fragment>
             }
             baz

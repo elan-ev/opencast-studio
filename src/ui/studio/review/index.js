@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled, useColorMode } from 'theme-ui';
+import { jsx, Themed, useColorMode } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
@@ -57,7 +57,7 @@ export default function Review(props) {
 
   return (
     <StepContainer>
-      <Styled.h1>{ t('review-heading') }</Styled.h1>
+      <Themed.h1>{ t('review-heading') }</Themed.h1>
 
       {prematureRecordingEnd && (
         <Notification isDanger>
@@ -243,7 +243,7 @@ const VideoControls = ({ currentTime, previewController }) => {
       />}
       <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
         <button 
-          sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'primary' }}
+          sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
           onClick={() => {
             const controller = previewController.current;
             if (controller) {
@@ -329,7 +329,7 @@ const CutControls = (
           payload: value,
         });
       }}
-        sx={{ 
+      sx={{ 
         backgroundColor: 'transparent', 
         color: 'text',
         border: 'none',

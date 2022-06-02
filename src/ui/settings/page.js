@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx, Themed } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import { Box } from '@theme-ui/components';
@@ -16,7 +16,7 @@ const SettingsPage = ({ settingsManager }) => {
   return (
     <Box sx={{ width: '100%', maxWidth: 960, mx: 'auto', p: 3 }}>
       <header>
-        <Styled.h1 sx={{ mb: '1.5em' }}>{t('settings-header')}</Styled.h1>
+        <Themed.h1 sx={{ mb: '1.5em' }}>{t('settings-header')}</Themed.h1>
       </header>
       <ColorModeSettings />
       <LanguageSettings />

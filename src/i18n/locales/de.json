@@ -137,10 +137,9 @@
 
   "settings-back-to-recording": "Zurück zur Aufnahme",
   "settings-theme-appearance": "Aussehen",
-  "settings-theme-dark": "Zum dunklen Design wechseln",
-  "settings-theme-light": "Zum hellen Design wechseln",
+  "settings-theme-dark": "Dunkles Design",
+  "settings-theme-light": "Helles Design",
   
   "video-settings-open": "Videoeinstellungen öffnen",
   "video-settings-close": "Videoeinstellungen schließen"
-
 }
