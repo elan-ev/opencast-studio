@@ -71,7 +71,7 @@ const Brand = () => {
     <Link to={{ pathname: "/", search: location.search }}
           tabIndex={isRecording ? '-1' : '0'}
           sx={{':focus-visible': {
-            outline: '5px solid #8ec8aa !important',
+            outline: theme => `5px solid ${theme.colors.focus[2]} !important`,
             outlineOffset: '-5px',
           }
     }}>
@@ -122,7 +122,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
           backgroundColor: colorMode === 'dark' ? 'gray.3' : 'gray.1',
         },
         ':focus-visible': {
-          outline: '5px solid #8ec8aa !important',
+          outline: theme => `5px solid ${theme.colors.focus[2]} !important`,
           outlineOffset: '-5px',
         },
       }}

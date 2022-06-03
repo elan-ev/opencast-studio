@@ -205,14 +205,13 @@ export const StreamSettings = ({ isDesktop, stream }) => {
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.7)',
               },
-              '&:hover > svg': {
+              '&:hover > svg, &:focus > svg': {
                 transform: isExpanded ? 'none' : 'rotate(45deg)',
               },
               '&:focus-visible': {
-                outline: '5px solid #8ec8aa !important',
-                outlineOffset: '-3px',
-                backgroundColor: '#286244 !important',
-                color: 'white !important'
+                outline: theme => `5px solid ${theme.colors.focus[2]} !important`,
+                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                color: 'white',
               },
             }}
           >

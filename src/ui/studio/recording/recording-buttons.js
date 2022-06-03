@@ -34,7 +34,15 @@ const Button = ({ large, ...rest }) => (
 );
 
 export const PauseButton = props => (
-  <Button onClick={props.onClick} title={props.title}>
+  <Button onClick={props.onClick} title={props.title}
+    sx={{
+      '&:focus-visible': {
+        outline: theme => `9px solid ${theme.colors.focus[3]} !important`,
+        borderRadius: '28px',
+        top: '2px'
+      },
+  }}
+  >
     <span className="fa-layers">
       <FontAwesomeIcon icon={faPauseCircle} sx={{ color: 'button_bg' }} />
     </span>
@@ -51,10 +59,15 @@ export const RecordButton = props => (
       color: '#bd181c !important',
       'svg + svg': { color: '#e22319' },
       ':disabled': { color: '#aaa' },
-      ':disabled svg + svg': { color: '#bbb' }
+      ':disabled svg + svg': { color: '#bbb' },
+      '&:focus-visible': {
+        outline: theme => `8px solid ${theme.colors.focus[0]} !important`,
+        borderRadius: '45px',
+        top: '2px'
+      },
     }}
   >
-    <span className="fa-layers">
+    <span className="fa-layers record-buttons">
       <FontAwesomeIcon icon={props.countdown ? faCircleNotch : faCircle} spin={props.countdown} />
       <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
     </span>
@@ -62,7 +75,16 @@ export const RecordButton = props => (
 );
 
 export const ResumeButton = props => (
-  <Button onClick={props.onClick} title={props.title}>
+  <Button onClick={props.onClick} title={props.title}
+    sx={{
+      '&:focus-visible': {
+        outline: theme => `9px solid ${theme.colors.focus[3]} !important`,
+        borderRadius: '28px',
+        top: '0.5px',
+        left: '0.5px'
+      },
+    }}
+  >
     <span className="fa-layers">
       <FontAwesomeIcon icon={faPlayCircle} sx={{ color: 'button_bg' }} />
     </span>
@@ -74,7 +96,14 @@ export const StopButton = props => (
     onClick={props.onClick}
     title={props.title}
     large={!!props.large}
-    sx={{ color: '#bd181c' }}
+    sx={{ 
+      color: '#bd181c',
+      '&:focus-visible': {
+        outline: theme => `8px solid ${theme.colors.focus[0]} !important`,
+        borderRadius: '40px',
+        top: '2px'
+      },
+    }}
   >
     <FontAwesomeIcon icon={faStopCircle}
       sx={{color: '#bd181c !important',}}

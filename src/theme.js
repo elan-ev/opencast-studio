@@ -61,7 +61,7 @@ const base = {
     notification_text: '#fff',
     tooltip: '#363636',
     tooltip_text: '#fff',
-    focus: '#2e724f',
+    focus: ['#363636', '#dddddd', '#dddddd', '#aaaaaa'],
     modes: {
       dark: {
         text: 'rgba(255, 255, 255, 0.87)',
@@ -75,7 +75,7 @@ const base = {
         notification_text: 'rgba(255, 255, 255, 0.9)',
         tooltip: '#dddddd',
         tooltip_text: '#000',
-        focus: '#2e724f',
+        focus: ['#dddddd', '#363636', '#dddddd', '#dddddd'],
       }
     }
   },
@@ -142,11 +142,11 @@ const base = {
         boxShadow: '0 0 0 rgb(255, 255, 255) !important',
       },
       '*:focus-visible': {
-        outline: theme => `5px solid ${theme.colors.focus} !important`,
+        outline: theme => `5px solid ${theme.colors.focus[0]} !important`,
         outlineOffset: '-5px',
       },
       'button:focus-visible': {
-        outline: theme => `5px solid ${theme.colors.focus} !important`,
+        outline: theme => `5px solid ${theme.colors.focus[0]} !important`,
         outlineOffset: '-3px',
       },
       '.tippy-box > .tippy-arrow::before': {
@@ -231,7 +231,7 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.focus[0]}`
       },
       '&[aria-invalid="true"]': {
         borderColor: 'error',
@@ -248,7 +248,7 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.focus[0]}}`
       }
     },
     progress: {
