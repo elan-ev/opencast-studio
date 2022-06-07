@@ -142,12 +142,8 @@ const base = {
         boxShadow: '0 0 0 rgb(255, 255, 255) !important',
       },
       '*:focus-visible': {
-        outline: theme => `5px solid ${theme.colors.focus[0]} !important`,
+        outline: theme => `5px solid ${theme.colors.focus[0]}`,
         outlineOffset: '-5px',
-      },
-      'button:focus-visible': {
-        outline: theme => `5px solid ${theme.colors.focus[0]} !important`,
-        outlineOffset: '-3px',
       },
       '.tippy-box > .tippy-arrow::before': {
         color: theme => `${theme.colors.tooltip}`

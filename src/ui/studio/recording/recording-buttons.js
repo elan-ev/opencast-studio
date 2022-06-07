@@ -14,6 +14,7 @@ import {
 const Button = ({ large, ...rest }) => (
   <button
     sx={{
+      display: 'grid',
       backgroundColor: 'transparent',
       border: 'none',
       position: 'relative',
@@ -37,9 +38,9 @@ export const PauseButton = props => (
   <Button onClick={props.onClick} title={props.title}
     sx={{
       '&:focus-visible': {
-        outline: theme => `9px solid ${theme.colors.focus[3]} !important`,
-        borderRadius: '28px',
-        top: '2px'
+        outline: theme => `7px solid ${theme.colors.focus[3]} !important`,
+        outlineOffset: '-1px',
+        borderRadius: '50%',
       },
   }}
   >
@@ -61,9 +62,9 @@ export const RecordButton = props => (
       ':disabled': { color: '#aaa' },
       ':disabled svg + svg': { color: '#bbb' },
       '&:focus-visible': {
-        outline: theme => `8px solid ${theme.colors.focus[0]} !important`,
-        borderRadius: '45px',
-        top: '2px'
+        outline: theme => `7px solid ${theme.colors.focus[0]} !important`,
+        outlineOffset: '-1px',
+        borderRadius: '50%',
       },
     }}
   >
@@ -78,10 +79,9 @@ export const ResumeButton = props => (
   <Button onClick={props.onClick} title={props.title}
     sx={{
       '&:focus-visible': {
-        outline: theme => `9px solid ${theme.colors.focus[3]} !important`,
-        borderRadius: '28px',
-        top: '0.5px',
-        left: '0.5px'
+        outline: theme => `7px solid ${theme.colors.focus[3]} !important`,
+        outlineOffset: '-1px',
+        borderRadius: '50%',
       },
     }}
   >
@@ -99,9 +99,9 @@ export const StopButton = props => (
     sx={{ 
       color: '#bd181c',
       '&:focus-visible': {
-        outline: theme => `8px solid ${theme.colors.focus[0]} !important`,
-        borderRadius: '40px',
-        top: '2px'
+        outline: theme => `7px solid ${theme.colors.focus[0]} !important`,
+        outlineOffset: '-1px',
+        borderRadius: '50%',
       },
     }}
   >

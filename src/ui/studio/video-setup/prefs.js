@@ -209,8 +209,9 @@ export const StreamSettings = ({ isDesktop, stream }) => {
                 transform: isExpanded ? 'none' : 'rotate(45deg)',
               },
               '&:focus-visible': {
-                outline: theme => `5px solid ${theme.colors.focus[2]} !important`,
-                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                outline: theme => `5px solid ${theme.colors.primary}`,
+                outlineOffset: '-2px',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 color: 'white',
               },
             }}
@@ -292,7 +293,16 @@ const PrefKey = ({ children }) => (
   </div>
 );
 const PrefValue = ({ children }) => (
-  <div sx={{ gridColumn: '1 2', overflowX: 'auto', lineHeight: '30px' }}>
+  <div tabIndex={-1} 
+    sx={{ 
+      gridColumn: '1 2', 
+      overflowX: 'auto', 
+      lineHeight: '30px',
+      '*:focus-visible': {
+        outline: theme => `5px solid ${theme.colors.primary}`,
+        outlineOffset: '-3px',
+      }
+    }}>
     { children }
   </div>
 );
@@ -430,7 +440,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) 
           bg: 'gray.0',
           color: 'background',
           fontWeight: 'bold',
-        },
+        }
       }}
     />
     <label
