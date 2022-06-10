@@ -1,15 +1,15 @@
-name: Deploy production
+name: Deploy master
 
 on:
   workflow_run:
     workflows: ["Build & test"]
-    branches: [production]
+    branches: [master]
     types: [completed]
 
 jobs:
   deploy:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.repository_owner == 'elan-ev' }}
     steps:
     - uses: actions/checkout@v2
 

@@ -147,5 +147,4 @@ npm run build
 ## Branches
 
 - `master` is the main development branch and targets the `develop` branch Opencast version (currently Opencast 9). New releases are mainly released from `master`.
-- `production` is updates whenever a new release is published and always points to the latest release. This branch is automatically deployed to `studio.opencast.org`.
-- `opencast-8` is a maintenance branch that targets Opencast 8. Only bug fixes are backported.
+- `master` is updated whenever a new release is published and always points to the latest release. This branch is automatically deployed to `studio.opencast.org`.
