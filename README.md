@@ -53,7 +53,7 @@ information.
 
 ### Standalone Version at [studio.opencast.org](https://studio.opencast.org)
 
-Opencast Studio is alwas deployed from `master` branch.
+Opencast Studio is always deployed from `master` branch.
 
 You are free to use the publicly deployed version. However, there are two
 caveats.
