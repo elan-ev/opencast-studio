@@ -3,7 +3,6 @@ name: Test Deploy
 on:
   workflow_run:
     workflows: ["Build & test"]
-    branches-ignore: [production]
     types: [completed]
 
 jobs:
@@ -41,13 +40,6 @@ jobs:
 
           const fs = require('fs');
           fs.writeFileSync('${{github.workspace}}/artifacts.zip', Buffer.from(download.data));
-
-          // The artifact is not needed anymore
-          github.actions.deleteArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: deployFiles.id,
-          })
 
     - name: extract artifacts
       run: unzip artifacts.zip
