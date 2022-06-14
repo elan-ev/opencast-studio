@@ -43,7 +43,7 @@ jobs:
               run_id: ${{ github.event.workflow_run.id }},
           });
           const deployFiles = artifacts.data.artifacts
-              .filter(a => a.name == "test-deployment-files")[0];
+              .filter(a => a.name == "prod-deployment-files")[0];
           const download = await github.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -54,6 +54,13 @@ jobs:
           const fs = require('fs');
           fs.writeFileSync('${{github.workspace}}/artifacts.zip', Buffer.from(download.data));
 
+          // The artifact is not needed anymore
+          github.actions.deleteArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: deployFiles.id,
+          })
+
     - name: extract artifacts
       run: unzip artifacts.zip
 
@@ -62,7 +69,6 @@ jobs:
         mv .deploy-settings.toml settings.toml
         mv build/* .
         rmdir build
-        rm deploydir.tmp
 
     - name: Commit and push
       run: |
