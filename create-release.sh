@@ -12,6 +12,7 @@ if [ -d build ]; then
   fi
 fi
 
+npm ci
 
 # Build version for root path installation
 export PUBLIC_URL=/
