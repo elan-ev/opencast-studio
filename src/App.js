@@ -1,7 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, useColorMode } from 'theme-ui';
-import { useMediaQuery } from 'react-responsive';
+import { jsx } from 'theme-ui';
 
 import { Flex } from '@theme-ui/components';
 import { useState, Fragment } from 'react';
@@ -9,7 +8,6 @@ import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'r
 import { Beforeunload } from 'react-beforeunload';
 import { Global } from '@emotion/core';
 import { useSettings } from './settings';
-
 
 import { Provider, useStudioState, STATE_UPLOADED, STATE_UPLOADING } from './studio-state';
 
@@ -19,14 +17,8 @@ import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
 
-
 function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();
-  const [, setColorMode] = useColorMode();
-
-  useMediaQuery({
-    query: '(prefers-color-scheme: dark)',
-  }, undefined, (isDarkPrefered) => setColorMode(isDarkPrefered ? 'dark' : 'light'))
 
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
