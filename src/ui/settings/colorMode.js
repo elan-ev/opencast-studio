@@ -44,7 +44,7 @@ const ColorModeSettings = () => {
   }
 
   const themes = [
-    { value: 'systemTheme', label: 'System Design' },
+    { value: 'systemTheme', label: t('settings-theme-system') },
     { value: 'lightTheme', label: t('settings-theme-light') },
     { value: 'darkTheme', label: t('settings-theme-dark') }
   ]

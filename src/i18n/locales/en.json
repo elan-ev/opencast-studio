@@ -139,8 +139,9 @@
 
   "settings-back-to-recording": "Back to recording",
   "settings-theme-appearance": "Appearance",
-  "settings-theme-dark": "Darkmode",
-  "settings-theme-light": "Lightmode",
+  "settings-theme-dark": "Dark mode",
+  "settings-theme-light": "Light mode",
+  "settings-theme-system": "System design",
 
   "video-settings-open": "Open video settings",
   "video-settings-close": "Close video settings"
