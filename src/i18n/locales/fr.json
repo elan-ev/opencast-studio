@@ -63,7 +63,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Qualité",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Notez:</0> ces paramêtres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnez seront réellement prisent en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
+  "sources-video-preferences-note": "<0>*Notez:</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
 
   "sources-audio-question": "Enregistrer l’audio ?",
   "sources-audio-microphone": "Microphone",
@@ -88,7 +88,7 @@
   "sources-user": "Caméra",
 
 
-  "review-heading": "Vous êtes satisfait de votre enregistrement ?",
+  "review-heading": "Êtes-vous satisfait de votre enregistrement ?",
   "review-error-empty-recording": "Erreur : votre enregistrement est complètement vide. Avez-vous arrêté l’enregistrement presque immédiatement après l’avoir démarré ? En outre, veuillez vous assurer que votre système est suffisamment puissant pour enregistrer un flux vidéo (cela pourrait ne pas être le cas si une autre application utilise fortement votre système ou si votre ordinateur est très ancien). Si votre système est assez puissant pour enregistrer, que vous avez enregistré pendant plusieurs secondes et que vous voyez toujours cette erreur : veuillez signaler ce problème comme un bogue sur GitHub.",
   "review-start": "Début: <2>{{start, duration-seconds}}</2>",
   "review-end": "Fin: <2>{{end, duration-seconds}}</2>",
