@@ -147,14 +147,17 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         my: 3,
         fontSize: '18px',
         minWidth: '285px',
+        'align-items': 'center'
       }}>
-        <span sx={{
+        <label htmlFor='sources-audio-device'
+        sx={{
           mr: 3,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-        }}>{ t('sources-audio-device') }:</span>
+        }}>{ t('sources-audio-device') }:</label>
         <select
+          id='sources-audio-device'
           sx={{ variant: 'styles.select', flex: '1 0 0', minWidth: 0 }}
           value={currentDeviceId}
           onChange={e => changeDevice(e.target.value)}

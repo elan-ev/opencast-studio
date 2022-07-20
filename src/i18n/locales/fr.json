@@ -47,6 +47,9 @@
   "state-waiting": "En attente",
   "settings-header": "Paramètres",
 
+  "settings-general-header": "Général",
+  "settings-language-label": "Langue",
+
   "back-button-label": "Retour",
   "next-button-label": "Suivant",
 
@@ -66,7 +69,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Qualité",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Notez:</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
+  "sources-video-preferences-note": "<0>*Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
 
   "sources-audio-question": "Enregistrer l’audio ?",
   "sources-audio-microphone": "Microphone",

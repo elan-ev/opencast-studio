@@ -185,7 +185,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
-    }}>    
+    }}>
       <div sx={{ textAlign: 'right' }}>
         <Tooltip offset={[0, 25]} content={isExpanded ? t('video-settings-close') : t('video-settings-open') }>
           <button
@@ -366,9 +366,13 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
   const changeAspectRatio = ratio => updatePrefs({ aspectRatio: ratio });
 
   return <Fragment>
-    <PrefKey>{t('sources-video-device')}:</PrefKey>
+    <PrefKey>
+      <label htmlFor='sources-video-device'>{t('sources-video-device')}:</label>
+    </PrefKey>
     <PrefValue>
-      <select tabIndex={isExpanded ? '0' : '-1'}
+      <select
+        id='sources-video-device'
+        tabIndex={isExpanded ? '0' : '-1'}
         sx={{ variant: 'styles.select' }}
         value={currentDeviceId}
         onChange={e => changeDevice(e.target.value)}

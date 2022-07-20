@@ -11,8 +11,15 @@ const LanguageSettings = () => {
   const { i18n } = useTranslation();
 
   return (
-    <SettingsSection title="Language">
+    <SettingsSection title={i18n.t('settings-general-header')}>
+      <label
+        htmlFor='studio-lang'
+        sx={{ variant: 'styles.label' }}
+      >
+        {i18n.t('settings-language-label')}
+      </label>
       <select
+        id="studio-lang"
         sx={{ variant: 'styles.select' }}
         defaultValue={i18n.language}
         onChange={e => i18n.changeLanguage(e.target.value)}
@@ -23,6 +30,7 @@ const LanguageSettings = () => {
           </option>
         ))}
       </select>
+
     </SettingsSection>
   );
 };
