@@ -162,7 +162,7 @@ Upload the two `*.tar.gz` files and click "Publish release".
 ### Update Opencast
 
 Checkout a new branch. 
-Go to modules/studio/pom.xml. You have to change two lines:
+Go to `modules/studio/pom.xml`. You have to change two lines:
 - `<opencast.studio.url>`: change the url to the new relase-url from `*-integrated.tar.gz`. (Usually only the date has to be adjusted here.)
 - `<opencast.studio.sha256>`: update the sha256 hash. (Run `sha256sum *-integrated.tar.gz` in Opencast Studio folder)
  Open a new pull request (optional: add a link to the release and changelog in the description)
