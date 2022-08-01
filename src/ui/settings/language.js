@@ -12,8 +12,8 @@ const LanguageSettings = () => {
   // Keep the 2nd "Language" string untranslated
   // (If Studio is set to some weird language, you still want to find the language section)
   var lang_label = t('settings-language-label');
-  if (i18n.language !== 'en') {
-    lang_label = lang_label + ' / Language';
+  if (lang_label !== 'Language') {
+    lang_label += ' / Language';
   }
   return (
     <SettingsSection title={t('settings-general-header')}>
