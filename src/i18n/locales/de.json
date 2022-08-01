@@ -86,6 +86,9 @@
   "state-waiting": "Warten",
   "settings-header": "Einstellungen",
 
+  "settings-general-header": "Allgemein",
+  "settings-language-label": "Sprache",
+
   "back-button-label": "Zurück",
   "next-button-label": "Weiter",
 
@@ -136,7 +139,7 @@
   "warning-missing-connection-settings": "Die Verbindung zum Opencast Server wurde noch nicht vollständig hergestellt. Bitte konfigurieren Sie die Verbindung in <1>den Einstellungen</1> (die Aufnahme geht nicht verloren).",
 
   "settings-back-to-recording": "Zurück zur Aufnahme",
-  
+
   "video-settings-open": "Videoeinstellungen öffnen",
   "video-settings-close": "Videoeinstellungen schließen"
 }
