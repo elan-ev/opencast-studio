@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.js": "/static/js/main.be027f0b.chunk.js",
-    "main.js.map": "/static/js/main.be027f0b.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8002ad7f.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8002ad7f.js.map",
-    "static/js/2.4703d532.chunk.js": "/static/js/2.4703d532.chunk.js",
-    "static/js/2.4703d532.chunk.js.map": "/static/js/2.4703d532.chunk.js.map",
+    "main.js": "/static/js/main.9020750b.chunk.js",
+    "main.js.map": "/static/js/main.9020750b.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.8fe03fb8.js",
+    "runtime-main.js.map": "/static/js/runtime-main.8fe03fb8.js.map",
+    "static/js/2.2b089735.chunk.js": "/static/js/2.2b089735.chunk.js",
+    "static/js/2.2b089735.chunk.js.map": "/static/js/2.2b089735.chunk.js.map",
     "static/css/3.ff602127.chunk.css": "/static/css/3.ff602127.chunk.css",
-    "static/js/3.dea0f014.chunk.js": "/static/js/3.dea0f014.chunk.js",
-    "static/js/3.dea0f014.chunk.js.map": "/static/js/3.dea0f014.chunk.js.map",
-    "static/js/4.3332615b.chunk.js": "/static/js/4.3332615b.chunk.js",
-    "static/js/4.3332615b.chunk.js.map": "/static/js/4.3332615b.chunk.js.map",
+    "static/js/3.85086327.chunk.js": "/static/js/3.85086327.chunk.js",
+    "static/js/3.85086327.chunk.js.map": "/static/js/3.85086327.chunk.js.map",
+    "static/js/4.bd2c6290.chunk.js": "/static/js/4.bd2c6290.chunk.js",
+    "static/js/4.bd2c6290.chunk.js.map": "/static/js/4.bd2c6290.chunk.js.map",
     "index.html": "/index.html",
     "static/css/3.ff602127.chunk.css.map": "/static/css/3.ff602127.chunk.css.map",
-    "static/js/2.4703d532.chunk.js.LICENSE.txt": "/static/js/2.4703d532.chunk.js.LICENSE.txt",
-    "static/js/3.dea0f014.chunk.js.LICENSE.txt": "/static/js/3.dea0f014.chunk.js.LICENSE.txt",
+    "static/js/2.2b089735.chunk.js.LICENSE.txt": "/static/js/2.2b089735.chunk.js.LICENSE.txt",
+    "static/js/3.85086327.chunk.js.LICENSE.txt": "/static/js/3.85086327.chunk.js.LICENSE.txt",
     "static/media/cut-here-icon.0a56383d.svg": "/static/media/cut-here-icon.0a56383d.svg",
     "static/media/cut-out-icon.069c1997.svg": "/static/media/cut-out-icon.069c1997.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.8002ad7f.js",
-    "static/js/2.4703d532.chunk.js",
-    "static/js/main.be027f0b.chunk.js"
+    "static/js/runtime-main.8fe03fb8.js",
+    "static/js/2.2b089735.chunk.js",
+    "static/js/main.9020750b.chunk.js"
   ]
 }
