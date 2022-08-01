@@ -8,16 +8,20 @@ import languages from '../../languages';
 import { SettingsSection } from './elements';
 
 const LanguageSettings = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   // Keep the 2nd "Language" string untranslated
   // (If Studio is set to some weird language, you still want to find the language section)
+  var lang_label = t('settings-language-label');
+  if (i18n.language !== 'en') {
+    lang_label = lang_label + ' / Language';
+  }
   return (
-    <SettingsSection title={i18n.t('settings-general-header')}>
+    <SettingsSection title={t('settings-general-header')}>
       <label
         htmlFor='studio-lang'
         sx={{ variant: 'styles.label' }}
       >
-        {i18n.t('settings-language-label')} / Language
+        {lang_label}
       </label>
       <select
         id="studio-lang"
