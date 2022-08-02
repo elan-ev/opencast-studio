@@ -1,15 +1,15 @@
-name: Deploy production
+name: Deploy master
 
 on:
   workflow_run:
     workflows: ["Build & test"]
-    branches: [production]
+    branches: [master]
     types: [completed]
 
 jobs:
   deploy:
     runs-on: ubuntu-20.04
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.repository_owner == 'elan-ev' }}
     steps:
     - uses: actions/checkout@v2
 
@@ -43,7 +43,7 @@ jobs:
               run_id: ${{ github.event.workflow_run.id }},
           });
           const deployFiles = artifacts.data.artifacts
-              .filter(a => a.name == "test-deployment-files")[0];
+              .filter(a => a.name == "prod-deployment-files")[0];
           const download = await github.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -69,7 +69,6 @@ jobs:
         mv .deploy-settings.toml settings.toml
         mv build/* .
         rmdir build
-        rm deploydir.tmp
 
     - name: Commit and push
       run: |

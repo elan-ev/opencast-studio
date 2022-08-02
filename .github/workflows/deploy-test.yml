@@ -3,7 +3,6 @@ name: Test Deploy
 on:
   workflow_run:
     workflows: ["Build & test"]
-    branches-ignore: [production]
     types: [completed]
 
 jobs:
