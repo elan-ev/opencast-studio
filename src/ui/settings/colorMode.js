@@ -14,8 +14,7 @@ const ColorModeSettings = () => {
     const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
     if(isDarkPrefered.matches) {
       setColorMode('dark');
-    }
-    else {
+    } else {
       setColorMode('light');
     }
   }
@@ -32,12 +31,10 @@ const ColorModeSettings = () => {
     if(value === 'systemTheme') {
       getSystemPreference();
       localStorage.setItem('theme', 'systemTheme')
-    }
-    else if(value === 'darkTheme') {
+    } else if(value === 'darkTheme') {
       setColorMode('dark');
       localStorage.setItem('theme', 'darkTheme')
-    }
-    else {
+    } else {
       setColorMode('light');
       localStorage.setItem('theme', 'lightTheme')
     }
