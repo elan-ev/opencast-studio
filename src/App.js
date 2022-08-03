@@ -9,7 +9,6 @@ import { Beforeunload } from 'react-beforeunload';
 import { Global } from '@emotion/core';
 import { useSettings } from './settings';
 
-
 import { Provider, useStudioState, STATE_UPLOADED, STATE_UPLOADING } from './studio-state';
 
 import About from './ui/about';
@@ -18,9 +17,9 @@ import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
 
-
 function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();
+
   return (
     <Router basename={process.env.PUBLIC_URL || '/'}>
       <Global styles={settings.theme?.customCSS || ''}/>

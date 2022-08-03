@@ -1,6 +1,6 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx, Themed, useColorMode } from 'theme-ui';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
@@ -57,7 +57,7 @@ export default function Review(props) {
 
   return (
     <StepContainer>
-      <Styled.h1>{ t('review-heading') }</Styled.h1>
+      <Themed.h1>{ t('review-heading') }</Themed.h1>
 
       {prematureRecordingEnd && (
         <Notification isDanger>
@@ -115,9 +115,9 @@ export default function Review(props) {
 };
 
 const ControlBox = ({ previewController, currentTime }) => (
-  <div sx={{
+  <div sx={{ 
     backgroundColor: 'gray.4',
-    color: 'var(--theme-ui-colors-controls)',
+    color: 'text',
     borderRadius: '8px',
   }}>
     <VideoControls {...{ previewController, currentTime }} />
@@ -128,6 +128,8 @@ const ControlBox = ({ previewController, currentTime }) => (
 const Scrubber = ({ previewController, currentTime }) => {
   const duration = previewController.current?.duration || Infinity;
   const { start, end } = useStudioState();
+
+  const [colorMode] = useColorMode();
 
   const setTime = mouseEvent => {
     const rect = mouseEvent.target.getBoundingClientRect()
@@ -146,7 +148,7 @@ const Scrubber = ({ previewController, currentTime }) => {
 
   const cutStyle = {
     position: 'absolute',
-    backgroundColor: 'gray.3',
+    backgroundColor: colorMode === 'dark' ? 'gray.2' : 'gray.3',
     height: '100%',
     boxSizing: 'content-box',
   };
@@ -223,6 +225,7 @@ const VideoControls = ({ currentTime, previewController }) => {
   return <div sx={{ textAlign: 'center' }}>
     <Flex
       sx={{
+        backgroundColor: 'gray.4',
         p: 2,
         justifyContent: 'center',
         alignItems: 'flex-end',
@@ -239,8 +242,8 @@ const VideoControls = ({ currentTime, previewController }) => {
         { ...{ recordingDispatch, previewController, currentTime } }
       />}
       <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
-        <button
-          sx={{ backgroundColor: 'transparent', border: 'none', mx: 3 }}
+        <button 
+          sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
           onClick={() => {
             const controller = previewController.current;
             if (controller) {
@@ -276,7 +279,7 @@ const CutControls = (
   const { t } = useTranslation();
 
   const state = (
-    <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left' }}>
+    <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
       { value !== null && <Fragment>
         <Trans { ...{ t } } i18nKey={`review-${marker}`}>
           {{ [marker]: value }} <Link href="" onClick={event => {
@@ -326,17 +329,18 @@ const CutControls = (
           payload: value,
         });
       }}
-      sx={{
-        backgroundColor: 'transparent',
+      sx={{ 
+        backgroundColor: 'transparent', 
+        color: 'text',
         border: 'none',
         pt: '4px',
         px: '8px',
         borderRadius: '4px',
         '&:disabled': {
-          opacity: 0.4,
+          opacity: 0.3,
         },
         '&:not(:disabled):hover': {
-          backgroundColor: '#ddd'
+          backgroundColor: 'gray.3'
         },
       }}
     >

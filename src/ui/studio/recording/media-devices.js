@@ -94,6 +94,7 @@ function MediaDevice({ title, stream, paused }) {
           <FontAwesomeIcon
             icon={faPause}
             sx={{
+              color: '#000',
               fontSize: '140px',
               maxWidth: '40%',
               maxHeight: '40%',

@@ -139,7 +139,11 @@
   "warning-missing-connection-settings": "Die Verbindung zum Opencast Server wurde noch nicht vollständig hergestellt. Bitte konfigurieren Sie die Verbindung in <1>den Einstellungen</1> (die Aufnahme geht nicht verloren).",
 
   "settings-back-to-recording": "Zurück zur Aufnahme",
-
   "video-settings-open": "Videoeinstellungen öffnen",
-  "video-settings-close": "Videoeinstellungen schließen"
+  "video-settings-close": "Videoeinstellungen schließen",
+  
+  "settings-theme-appearance": "Aussehen",
+  "settings-theme-dark": "Dunkles Design",
+  "settings-theme-light": "Helles Design",
+  "settings-theme-system": "System Design"
 }

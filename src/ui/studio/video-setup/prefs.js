@@ -2,7 +2,7 @@
 
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, useColorMode } from 'theme-ui';
 
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -156,6 +156,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
 
   // State about expanding and hiding the settings.
   const [isExpanded, setIsExpanded] = useState(false);
+  const [colorMode] = useColorMode();
 
   return <Fragment>
     <div sx={{
@@ -167,7 +168,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
       transition: 'top 0.2s',
     }}>
       <span sx={{
-        color: 'gray.1',
+        color: colorMode === 'dark' ? 'gray.3' : 'gray.1',
         backgroundColor: 'white',
         borderRadius: '10px',
         p: 1,
@@ -204,14 +205,14 @@ export const StreamSettings = ({ isDesktop, stream }) => {
               '&:hover': {
                 backgroundColor: 'rgba(0, 0, 0, 0.7)',
               },
-              '&:hover > svg': {
+              '&:hover > svg, &:focus > svg': {
                 transform: isExpanded ? 'none' : 'rotate(45deg)',
               },
               '&:focus-visible': {
-                outline: '5px solid #8ec8aa !important',
-                outlineOffset: '-3px',
-                backgroundColor: '#286244 !important',
-                color: 'white !important'
+                outline: theme => `5px solid ${theme.colors.primary}`,
+                outlineOffset: '-2px',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                color: 'white',
               },
             }}
           >
@@ -253,7 +254,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
             </div>
 
             <div sx={{
-              backgroundColor: 'var(--theme-ui-colors-info)',
+              backgroundColor: 'gray.4',
               m: 2,
               py: 1,
               px: 2,
@@ -292,7 +293,16 @@ const PrefKey = ({ children }) => (
   </div>
 );
 const PrefValue = ({ children }) => (
-  <div sx={{ gridColumn: '1 2', overflowX: 'auto', lineHeight: '30px' }}>
+  <div tabIndex={-1} 
+    sx={{ 
+      gridColumn: '1 2', 
+      overflowX: 'auto', 
+      lineHeight: '30px',
+      '*:focus-visible': {
+        outline: theme => `5px solid ${theme.colors.primary}`,
+        outlineOffset: '-3px',
+      }
+    }}>
     { children }
   </div>
 );
@@ -415,11 +425,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
 };
 
 // A styled radio input which looks like a button.
-const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpanded }) => {
-  const stateColorMap = {
-    'warn': '#ffe300',
-    'ok': '#51d18f',
-  };
+const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) => {
 
   return <Fragment>
     <input
@@ -436,9 +442,9 @@ const RadioButton = ({ id, value, checked, name, onChange, label, state, isExpan
         },
         '&:checked+label': {
           bg: 'gray.0',
-          color: state ? stateColorMap[state] : 'white',
+          color: 'background',
           fontWeight: 'bold',
-        },
+        }
       }}
     />
     <label

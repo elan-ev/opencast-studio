@@ -7,7 +7,7 @@ const Notification = ({isDanger, ...rest}) => (
     sx={{
       ':not(:last-child)': { marginBottom: '1.5rem' },
       backgroundColor: isDanger ? 'error' : 'gray.3',
-      color: isDanger ? 'background' : 'currentColor',
+      color: isDanger ? 'notification_text' : 'currentColor',
       borderRadius: 2,
       padding: 3,
       position: 'relative'

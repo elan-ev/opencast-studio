@@ -11,12 +11,11 @@ const Tooltip = ({ content, ...props }) => (
     <Tippy 
         content = { <span> {content} </span> }
         interactive={true}
-        theme='studio'
 
         sx={{
             fontSize: '16px',
-            backgroundColor: '#43a472',
-            color: 'white',
+            backgroundColor: theme => theme.colors.tooltip,
+            color: theme => theme.colors.tooltip_text,
             lineHeight: 'normal',
             fontFamily: 'Open Sans',
         }}

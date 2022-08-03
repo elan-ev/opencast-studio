@@ -44,17 +44,40 @@ const base = {
   heights: {
     headerHeight: '3em'
   },
+  config: {
+    useColorSchemeMediaQuery: true,
+    useLocalStorage: true,
+    initialColorModeName: 'light',
+  },
   colors: {
     text: '#000',
     background: '#fff',
     button_fg: '#fff',
+    button_bg: '#363636',
     primary: '#47af7a',
-    secondary: '#30c',
-    muted: '#888888',
-    highlight: '#3498db',
     error: '#f14668',
     gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
-    videoOverlay: 'rgba(255, 255, 255, 0.2)'
+    element_bg: '#fff',
+    notification_text: '#fff',
+    tooltip: '#363636',
+    tooltip_text: '#fff',
+    focus: ['#363636', '#dddddd', '#dddddd', '#aaaaaa'],
+    modes: {
+      dark: {
+        text: 'rgba(255, 255, 255, 0.87)',
+        background: '#1C1C1E',
+        button_fg: '#fff',
+        button_bg: '#666666',
+        primary: '#388c61',
+        error: 'rgba(241, 70, 104, 0.8)',
+        gray: ['#f5f5f5', '#dddddd', '#aaaaaa', '#666666', '#363636'],
+        element_bg: '#363636',
+        notification_text: 'rgba(255, 255, 255, 0.9)',
+        tooltip: '#dddddd',
+        tooltip_text: '#000',
+        focus: ['#dddddd', '#363636', '#dddddd', '#dddddd'],
+      }
+    }
   },
   text: {
     text: {
@@ -113,6 +136,18 @@ const base = {
       '--theme-ui-colors-btn-hover': darken('primary', 0.03),
       '--theme-ui-colors-controls': '#000',
       '--theme-ui-colors-info': '#f5f5f5',
+      '*:focus:not(:focus-visible)': {
+        /* Remove outline for non-keyboard :focus */
+        outline: 'none !important',
+        boxShadow: '0 0 0 rgb(255, 255, 255) !important',
+      },
+      '*:focus-visible': {
+        outline: theme => `5px solid ${theme.colors.focus[0]}`,
+        outlineOffset: '-5px',
+      },
+      '.tippy-box > .tippy-arrow::before': {
+        color: theme => `${theme.colors.tooltip}`
+      },
     },
     h1: {
       ...heading,
@@ -177,6 +212,8 @@ const base = {
       maxWidth: '100%'
     },
     input: {
+      backgroundColor: 'element_bg',
+      color: 'text',
       borderWidth: 1,
       borderStyle: 'solid',
       borderColor: 'gray.2',
@@ -190,7 +227,7 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.focus[0]}`
       },
       '&[aria-invalid="true"]': {
         borderColor: 'error',
@@ -198,6 +235,8 @@ const base = {
       }
     },
     select: {
+      backgroundColor: 'element_bg',
+      color: 'text',
       height: '2rem',
       fontSize: '14pt',
       outline: 'none',
@@ -205,7 +244,7 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.primary}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors.focus[0]}}`
       }
     },
     progress: {

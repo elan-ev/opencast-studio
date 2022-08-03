@@ -140,6 +140,10 @@
   "warning-missing-connection-settings": "Connection to Opencast is not fully established: uploading is disabled. Please configure the connection in <1>the settings</1> (you won't lose your recording).",
 
   "settings-back-to-recording": "Back to recording",
+  "settings-theme-appearance": "Appearance",
+  "settings-theme-dark": "Dark mode",
+  "settings-theme-light": "Light mode",
+  "settings-theme-system": "System design",
 
   "video-settings-open": "Open video settings",
   "video-settings-close": "Close video settings"
