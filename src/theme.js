@@ -62,6 +62,8 @@ const base = {
     tooltip: '#363636',
     tooltip_text: '#fff',
     focus: ['#363636', '#dddddd', '#dddddd', '#aaaaaa'],
+    singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
+    singleKey_border: 'Gainsboro',
     modes: {
       dark: {
         text: 'rgba(255, 255, 255, 0.87)',
@@ -76,6 +78,8 @@ const base = {
         tooltip: '#dddddd',
         tooltip_text: '#000',
         focus: ['#dddddd', '#363636', '#dddddd', '#dddddd'],
+        singleKey_bg: 'linear-gradient(180deg, rgba(40,40,40,1) 0%, rgba(30,30,30,1) 100%)',
+        singleKey_border: '#404040',
       }
     }
   },

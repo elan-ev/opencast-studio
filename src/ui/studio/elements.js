@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
 
+import { GlobalHotKeys } from 'react-hotkeys';
+import { keyMap } from '../studio/keyboard-shortcuts/globalKeys';
 
 // A full width flex container for some steps of the wizard.
 export const StepContainer = ({ children }) => (
@@ -42,42 +44,49 @@ export const StepContainer = ({ children }) => (
 export function ActionButtons({ prev = null, next = null, children }) {
   const { t } = useTranslation();
 
+  const handlers = {
+    BACK_BUTTON: (keyEvent) => { if(prev) {prev.onClick(keyEvent)}},
+    NEXT_BUTTON: (keyEvent) => { if(next && !next.disabled) {next.onClick(keyEvent)}},
+  }
+
   return (
-    <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
-      <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
-        {prev && (
-          <Button
-            sx={{
-              whiteSpace: 'nowrap',
-              ...prev.danger === true ? { variant: 'buttons.danger' } : { variant: 'buttons.text' }
-            }}
-            onClick={prev.onClick}
-            disabled={prev.disabled}
-            danger={prev.danger || false}
-          >
-            <FontAwesomeIcon icon={faCaretLeft} />
-            {t(prev.label || 'back-button-label')}
-          </Button>
-        )}
-      </Box>
-      <Box>{children}</Box>
-      <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>
-        {next && (
-          <Button
-            sx={{
-              whiteSpace: 'nowrap',
-              '& svg': { mr: 0, ml: 2 },
-              ...next.danger === true ? { variant: 'buttons.danger' } : {}
-            }}
-            onClick={next.onClick}
-            disabled={next.disabled}
-          >
-            {t(next.label || 'next-button-label')}
-            <FontAwesomeIcon icon={faCaretRight} />
-          </Button>
-        )}
-      </Box>
-    </Flex>
+    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+      <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
+        <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
+          {prev && (
+            <Button
+              sx={{
+                whiteSpace: 'nowrap',
+                ...prev.danger === true ? { variant: 'buttons.danger' } : { variant: 'buttons.text' }
+              }}
+              onClick={prev.onClick}
+              disabled={prev.disabled}
+              danger={prev.danger || false}
+            >
+              <FontAwesomeIcon icon={faCaretLeft} />
+              {t(prev.label || 'back-button-label')}
+            </Button>
+          )}
+        </Box>
+        <Box>{children}</Box>
+        <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>
+          {next && (
+            <Button
+              sx={{
+                whiteSpace: 'nowrap',
+                '& svg': { mr: 0, ml: 2 },
+                ...next.danger === true ? { variant: 'buttons.danger' } : {}
+              }}
+              onClick={next.onClick}
+              disabled={next.disabled}
+            >
+              {t(next.label || 'next-button-label')}
+              <FontAwesomeIcon icon={faCaretRight} />
+            </Button>
+          )}
+        </Box>
+      </Flex>
+    </GlobalHotKeys>
   );
 }
 

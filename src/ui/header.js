@@ -12,6 +12,7 @@ import {
   faWrench,
   faInfoCircle,
   faVideo,
+  faKeyboard,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useStudioState } from '../studio-state';
@@ -214,6 +215,13 @@ const Navigation = props => {
           onClick={closeMenu}
         >
           {t('nav-settings')}
+        </NavElement>
+        <NavElement
+          target="/shortcuts"
+          icon={faKeyboard}
+          onClick={closeMenu}
+        >
+          {t('nav-shortcuts')}
         </NavElement>
         <NavElement
           target="/about"

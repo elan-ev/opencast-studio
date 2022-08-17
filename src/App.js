@@ -16,6 +16,7 @@ import Header from './ui/header';
 import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
+import KeyboardShortcuts from './ui/studio/keyboard-shortcuts/shortcuts';
 
 function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();
@@ -47,11 +48,12 @@ const Routes = ({ settingsManager, userHasWebcam }) => {
         <Route path="/settings" exact>
           <SettingsPage settingsManager={settingsManager} />
         </Route>
-
+        <Route path="/shortcuts" exact>
+          <KeyboardShortcuts />
+        </Route>
         <Route path="/about" exact>
           <About />
         </Route>
-
         <Route path="/" exact>
           <Studio
             activeStep={activeStep}

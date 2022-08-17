@@ -31,6 +31,8 @@ import { ActionButtons, StepContainer } from '../elements';
 import { SourcePreview } from './preview';
 import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 
+import { GlobalHotKeys } from 'react-hotkeys';
+import { keyMap } from '../keyboard-shortcuts/globalKeys';
 
 export default function VideoSetup({ nextStep, userHasWebcam }) {
   const { t } = useTranslation();
@@ -167,6 +169,12 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
   const state = useStudioState();
   const { displaySupported, userSupported } = state;
 
+  const handlers = {
+    RECORD_DISPLAY: (keyEvent) => { if(keyEvent) {clickDisplay(keyEvent)}},
+    RECORD_CAMERA: (keyEvent) => { if(keyEvent) {clickUser(keyEvent)}},
+    RECORD_DISPLAY_CAMERA: (keyEvent) => { if(keyEvent) {clickBoth(keyEvent)}},
+  }
+
   const clickUser = async () => {
     setActiveSource(VIDEO_SOURCE_USER);
     await startUserCapture(dispatch, settings, userConstraints);
@@ -191,47 +199,49 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
   }
 
   return <React.Fragment>
-    <Spacer />
-    <Flex
-      sx={{
-        flexDirection: ['column', 'row'],
-        maxWidth: [270, 850],
-        width: '100%',
-        mx: ['auto', 'none'],
-        mb: 3,
-        flex: '4 1 auto',
-        maxHeight: ['none', '270px'],
-        justifyContent: 'center',
-        '& > :not(:last-of-type)': {
-          mb: [3, 0],
-          mr: [0, 3],
-        },
-      }}
-    >
-      { (displaySupported || !onMobileDevice()) && <OptionButton
-        label={t('sources-scenario-display')}
-        icon={faChalkboard}
-        onClick={clickDisplay}
-        disabledText={displaySupported ? false : t('sources-video-display-not-supported')}
-      />}
-      { (displaySupported || !onMobileDevice()) && userSupported && <OptionButton
-        label={t('sources-scenario-display-and-user')}
-        icon={faChalkboardTeacher}
-        onClick={clickBoth}
-        disabledText={
-          displaySupported
-            ? (userHasWebcam ? false : t('sources-video-no-cam-detected'))
-            : t('sources-video-display-not-supported')
-        }
-      />}
-      { userSupported && <OptionButton
-        label={t('sources-scenario-user')}
-        icon={faUser}
-        onClick={clickUser}
-        disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
-      />}
-    </Flex>
-    <Spacer />
+    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+      <Spacer />
+      <Flex
+        sx={{
+          flexDirection: ['column', 'row'],
+          maxWidth: [270, 850],
+          width: '100%',
+          mx: ['auto', 'none'],
+          mb: 3,
+          flex: '4 1 auto',
+          maxHeight: ['none', '270px'],
+          justifyContent: 'center',
+          '& > :not(:last-of-type)': {
+            mb: [3, 0],
+            mr: [0, 3],
+          },
+        }}
+      >
+        { (displaySupported || !onMobileDevice()) && <OptionButton
+          label={t('sources-scenario-display')}
+          icon={faChalkboard}
+          onClick={clickDisplay}
+          disabledText={displaySupported ? false : t('sources-video-display-not-supported')}
+        />}
+        { (displaySupported || !onMobileDevice()) && userSupported && <OptionButton
+          label={t('sources-scenario-display-and-user')}
+          icon={faChalkboardTeacher}
+          onClick={clickBoth}
+          disabledText={
+            displaySupported
+              ? (userHasWebcam ? false : t('sources-video-no-cam-detected'))
+              : t('sources-video-display-not-supported')
+          }
+        />}
+        { userSupported && <OptionButton
+          label={t('sources-scenario-user')}
+          icon={faUser}
+          onClick={clickUser}
+          disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
+        />}
+      </Flex>
+      <Spacer />
+    </GlobalHotKeys>
   </React.Fragment>;
 };
 

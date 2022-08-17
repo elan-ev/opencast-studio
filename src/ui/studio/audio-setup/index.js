@@ -26,6 +26,8 @@ import { queryMediaDevices, getUniqueDevices } from '../../../util';
 
 import PreviewAudio from './preview-audio';
 
+import { GlobalHotKeys } from 'react-hotkeys';
+import { keyMap } from '../keyboard-shortcuts/globalKeys';
 
 const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 
@@ -70,39 +72,46 @@ export default function AudioSetup(props) {
 const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) => {
   const { t } = useTranslation();
 
+  const handlers = {
+    RECORD_AUDIO: (keyEvent) => { if(keyEvent) {selectMicrophone(keyEvent)}},
+    NO_AUDIO: (keyEvent) => { if(keyEvent) {selectNoAudio(keyEvent)}},
+  }
+
   return (
-    <Fragment>
-      <Themed.h1>{t('sources-audio-question')}</Themed.h1>
+    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+      <Fragment>
+        <Themed.h1>{t('sources-audio-question')}</Themed.h1>
 
-      <Flex
-        sx={{
-          flexDirection: ['column', 'row'],
-          maxWidth: 850,
-          width: '100%',
-          mx: 'auto',
-          mb: 3,
-          flex: '1 0 auto',
-          maxHeight: ['none', '350px'],
-          '& > :first-of-type': {
-            mb: [3, 0],
-            mr: [0, 3],
-          },
-        }}
-      >
-        <OptionButton
-          icon={faMicrophone}
-          label={t('sources-audio-microphone')}
-          onClick={selectMicrophone}
-        />
-        <OptionButton
-          icon={faMicrophoneSlash}
-          label={t('sources-audio-without-audio')}
-          onClick={selectNoAudio}
-        />
-      </Flex>
+        <Flex
+          sx={{
+            flexDirection: ['column', 'row'],
+            maxWidth: 850,
+            width: '100%',
+            mx: 'auto',
+            mb: 3,
+            flex: '1 0 auto',
+            maxHeight: ['none', '350px'],
+            '& > :first-of-type': {
+              mb: [3, 0],
+              mr: [0, 3],
+            },
+          }}
+        >
+          <OptionButton
+            icon={faMicrophone}
+            label={t('sources-audio-microphone')}
+            onClick={selectMicrophone}
+          />
+          <OptionButton
+            icon={faMicrophoneSlash}
+            label={t('sources-audio-without-audio')}
+            onClick={selectNoAudio}
+          />
+        </Flex>
 
-      <ActionButtons prev={{ onClick: backToVideoSetup }} />
-    </Fragment>
+        <ActionButtons prev={{ onClick: backToVideoSetup }} />
+      </Fragment>
+    </GlobalHotKeys>
   );
 };
 

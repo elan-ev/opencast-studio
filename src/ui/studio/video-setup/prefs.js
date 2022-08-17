@@ -277,6 +277,7 @@ const StreamInfo = ({ stream }) => {
   const s = stream?.getVideoTracks()?.[0]?.getSettings();
   const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : '';
   const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
+  localStorage.setItem('fps', fpsInfo)
 
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
