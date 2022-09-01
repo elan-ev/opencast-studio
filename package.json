@@ -34,7 +34,7 @@
     "react-beforeunload": "^2.5.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^3.29.4",
-    "react-i18next": "^11.18.3",
+    "react-i18next": "^11.18.5",
     "react-page-visibility": "^7.0.0",
     "react-router-dom": "^5.3.3",
     "react-scripts": "^4.0.3",
