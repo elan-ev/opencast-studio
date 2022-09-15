@@ -1,3 +1,35 @@
+import { configure } from 'react-hotkeys'
+
+
+/**
+ * https://github.com/greena13/react-hotkeys
+ * By default, all key events that originate from <input>, <select> or <textarea>, 
+ * or have a isContentEditable attribute of true are ignored by react-hotkeys.
+ */
+configure({
+  ignoreTags: ['input'],
+  ignoreEventsCondition: function() {}
+});
+
+/**
+ * Helper functions that rewrites keys based on the OS
+*/
+const getOs = () => {
+  const os = ['Windows', 'Linux', 'Mac'];
+  return os.find(v=>navigator.userAgent.indexOf(v) >= 0);
+}
+
+const rewriteKeys = (key) => {
+  let newKey = key
+  const os = getOs();
+
+  if (os === 'Mac') {
+    newKey = newKey.replace("Alt", "Option")
+  }
+
+  return newKey
+}
+
 // Groups for displaying shortcuts in the overview page
 const recordGroup = 'record-shortcuts';
 const editGroup = 'edit-shortcuts';
@@ -160,8 +192,8 @@ export const keyMap = {
     },
     UPLOAD: {
       name: 'upload-video',
-      sequences: ['Control+u'],
-      description: [ctrl+'+u'],
+      sequences: [rewriteKeys('Alt+u')],
+      description: [rewriteKeys('Alt+u')],
       action: 'keydown',
       group: otherGroup,
     },
