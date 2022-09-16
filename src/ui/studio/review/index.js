@@ -226,16 +226,15 @@ const VideoControls = ({ currentTime, previewController }) => {
 
   const switchPlayPause = (keyEvent) => {
     const controller = previewController.current;
-    if(controller.isPlaying) {
+    if (controller.isPlaying) {
       controller.pause(keyEvent);
-    }
-    else if(controller.isReadyToPlay) {
+    } else if (controller.isReadyToPlay) {
       controller.play(keyEvent);
     }
   }
 
   const handlers = {
-    PLAY_PAUSE: (keyEvent) => { if(keyEvent) {switchPlayPause(keyEvent)}},
+    PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent) }},
   }
 
   return <div sx={{ textAlign: 'center' }}>
@@ -297,23 +296,22 @@ const CutControls = (
   const { t } = useTranslation();
 
   const handlers = {
-    CUT_LEFT: (keyEvent) => { if(keyEvent) {document.getElementById("leftmarker").click()}},
-    CUT_RIGHT: (keyEvent) => { if(keyEvent) {document.getElementById("rightmarker").click()}},
-    DELETE_CROP_MARK_LEFT: (keyEvent) => { if(keyEvent) {deleteCropMark(keyEvent)}},
-    DELETE_CROP_MARK_RIGHT: (keyEvent) => { if(keyEvent) {deleteCropMark(keyEvent)}},
+    CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click() }},
+    CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click() }},
+    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { deleteCropMark(keyEvent) }},
+    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { deleteCropMark(keyEvent) }},
   }
 
   const deleteCropMark = (keyEvent) => {
     var deleteLeft = document.getElementById("deleteLeft");
     var deleteRight = document.getElementById("deleteRight");
 
-    if((keyEvent.shiftKey && keyEvent.key === 'D') || (keyEvent.shiftKey && keyEvent.key === 'Delete')) {
-      if(deleteLeft !== null){
+    if ((keyEvent.shiftKey && keyEvent.key === 'D') || (keyEvent.shiftKey && keyEvent.key === 'Delete')) {
+      if (deleteLeft !== null){
         deleteLeft.click();
       }
-    }
-    else if(keyEvent.key === 'd' || keyEvent.key === 'Delete') {
-      if(deleteRight !== null){
+    } else if (keyEvent.key === 'd' || keyEvent.key === 'Delete') {
+      if (deleteRight !== null){
         deleteRight.click();
       }
     }
@@ -508,19 +506,18 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   });
 
   const handlers = {
-    FORWARD_5_SEC: (keyEvent) => { if(keyEvent) {skipFiveSeconds(keyEvent)}},
-    BACKWARDS_5_SEC: (keyEvent) => { if(keyEvent) {skipFiveSeconds(keyEvent)}},
-    FORWARD_1_FRAME: (keyEvent) => { if(keyEvent) {skipFrame(keyEvent)}},
-    BACKWARDS_1_FRAME: (keyEvent) => { if(keyEvent) {skipFrame(keyEvent)}},
+    FORWARD_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent) }},
+    BACKWARDS_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent) }},
+    FORWARD_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent) }},
+    BACKWARDS_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent) }},
   }
 
   const skipFiveSeconds = (keyEvent) => {
     var video = document.getElementById("video");
     
-    if(keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {  
+    if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {  
       video.currentTime = Math.min(video.duration, video.currentTime + 5);
-    } 
-    else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
+    } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
       video.currentTime = Math.max(0, video.currentTime - 5);
     }
   }
@@ -530,10 +527,9 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     const video = document.getElementById("video");
     const frameTime = (1/fps);
 
-    if(keyEvent.key === '.') {
+    if (keyEvent.key === '.') {
       video.currentTime = Math.min(video.duration, video.currentTime + frameTime);
-    } 
-    else if(keyEvent.key === ',') {
+    } else if (keyEvent.key === ',') {
       video.currentTime = Math.max(0, video.currentTime - frameTime);
     }  
   }

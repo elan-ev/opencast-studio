@@ -73,8 +73,8 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
   const { t } = useTranslation();
 
   const handlers = {
-    RECORD_AUDIO: (keyEvent) => { if(keyEvent) {selectMicrophone(keyEvent)}},
-    NO_AUDIO: (keyEvent) => { if(keyEvent) {selectNoAudio(keyEvent)}},
+    RECORD_AUDIO: keyEvent => { if(keyEvent) { selectMicrophone(keyEvent) }},
+    NO_AUDIO: keyEvent => { if(keyEvent) { selectNoAudio(keyEvent) }},
   }
 
   return (

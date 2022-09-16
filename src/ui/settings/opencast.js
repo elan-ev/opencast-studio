@@ -107,7 +107,7 @@ function OpencastSettings({ settingsManager }) {
   const icon = icons[status];
 
   const handlers = {
-    NEXT_BUTTON: (keyEvent) => { if(keyEvent) {handleSubmit(onSubmit(keyEvent))}},
+    NEXT_BUTTON: keyEvent => { if(keyEvent) { handleSubmit(onSubmit(keyEvent)) }},
   } 
 
   return (

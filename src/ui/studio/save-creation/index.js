@@ -288,7 +288,7 @@ const PostAction = ({ goToFirstStep }) => {
   }
 
   const handlers = {
-    NEW_RECORDING: (keyEvent) => { if(keyEvent) {handleNewRecording(keyEvent)}},
+    NEW_RECORDING: keyEvent => { if(keyEvent) { handleNewRecording(keyEvent) }},
   }
 
   return (
@@ -335,7 +335,7 @@ const DownloadBox = ({ presenter, title }) => {
   }
 
   const handlers = {
-    DOWNLOAD: (keyEvent) => { if(keyEvent) {handleDownload(keyEvent)}},
+    DOWNLOAD: keyEvent => { if(keyEvent) { handleDownload(keyEvent) }},
   }
 
   return (
@@ -441,7 +441,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     );
 
   const handlers = {
-    UPLOAD: (keyEvent) => { if(keyEvent) {document.getElementById("upload").click()}},
+    UPLOAD: keyEvent => { if(keyEvent) { document.getElementById("upload").click() }},
   }
 
   return (

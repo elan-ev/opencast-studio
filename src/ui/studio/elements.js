@@ -45,8 +45,8 @@ export function ActionButtons({ prev = null, next = null, children }) {
   const { t } = useTranslation();
 
   const handlers = {
-    BACK_BUTTON: (keyEvent) => { if(prev) {prev.onClick(keyEvent)}},
-    NEXT_BUTTON: (keyEvent) => { if(next && !next.disabled) {next.onClick(keyEvent)}},
+    BACK_BUTTON: keyEvent => { if(prev) { prev.onClick(keyEvent) }},
+    NEXT_BUTTON: keyEvent => { if(next && !next.disabled) { next.onClick(keyEvent) }},
   }
 
   return (
