@@ -6,6 +6,7 @@
     "no-tabs": "error",
     "react/jsx-pascal-case": "off",
     "react/prop-types": 0,
+    "react/no-unknown-property": ["error", { "ignore": ["sx"] }],
     "no-unused-expressions": "off",
     "@babel/no-unused-expressions": "warn"
   },
