@@ -199,7 +199,7 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
   }
 
   return <React.Fragment>
-    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>
       <Spacer />
       <Flex
         sx={{

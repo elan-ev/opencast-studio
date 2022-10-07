@@ -292,7 +292,7 @@ const PostAction = ({ goToFirstStep }) => {
   }
 
   return (
-    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <div sx={{ display: 'flex', flexDirection: 'column' }}>
         { returnAction }
 
@@ -339,7 +339,7 @@ const DownloadBox = ({ presenter, title }) => {
   }
 
   return (
-    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <Fragment>
         { (start !== null || end !== null) && (
           <Notification sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -445,7 +445,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   }
 
   return (
-    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <Fragment>
         <NotConnectedWarning />
 

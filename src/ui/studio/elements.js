@@ -50,7 +50,7 @@ export function ActionButtons({ prev = null, next = null, children }) {
   }
 
   return (
-    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
         <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
           {prev && (

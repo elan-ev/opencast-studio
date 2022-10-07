@@ -162,7 +162,7 @@ export default function RecordingControls({
   }
 
   return (
-    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>
       <div sx={{ m: 0, width: recordingState !== STATE_INACTIVE ? '280px' : 'auto' }}>
         {recordingState !== STATE_INACTIVE && (
           <Beforeunload onBeforeunload={event => event.preventDefault()} />

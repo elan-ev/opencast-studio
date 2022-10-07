@@ -78,7 +78,7 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
   }
 
   return (
-    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>
       <Fragment>
         <Themed.h1>{t('sources-audio-question')}</Themed.h1>
 

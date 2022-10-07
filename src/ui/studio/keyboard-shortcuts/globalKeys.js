@@ -6,8 +6,10 @@ import { configure } from 'react-hotkeys'
  * or have a isContentEditable attribute of true are ignored by react-hotkeys.
  */
 configure({
+  defaultKeyEvent: 'keydown',
   ignoreTags: ['input'],
-  ignoreEventsCondition: function() {}
+  ignoreEventsCondition: function() {},
+  ignoreKeymapAndHandlerChangesByDefault: false,
 });
 
 /**
@@ -203,7 +205,6 @@ export const getShortcuts = () => {
         name: value.name,
         sequences: value.sequences,
         description: value.description,
-        action: 'keydown',
         group: value.group,
       }
 

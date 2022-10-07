@@ -111,7 +111,7 @@ function OpencastSettings({ settingsManager }) {
   } 
 
   return (
-    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <SettingsSection title={t('upload-settings-modal-header')}>
         <Box>
           {error && <Notification isDanger>{error}</Notification>}
