@@ -17,7 +17,7 @@ import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from './index.js';
 
 import Tooltip from '../../../Tooltip';
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../keyboard-shortcuts/globalKeys';
+import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 function addRecordOnStop(dispatch, deviceType) {
   return ({ media, url, mimeType, dimensions }) => {
@@ -162,7 +162,7 @@ export default function RecordingControls({
   }
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers} allowChanges={true}>
       <div sx={{ m: 0, width: recordingState !== STATE_INACTIVE ? '280px' : 'auto' }}>
         {recordingState !== STATE_INACTIVE && (
           <Beforeunload onBeforeunload={event => event.preventDefault()} />

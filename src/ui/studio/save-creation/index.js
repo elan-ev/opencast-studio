@@ -47,7 +47,7 @@ import { Input } from '../../elements';
 import RecordingPreview from './recording-preview';
 
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../keyboard-shortcuts/globalKeys';
+import { otherShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
@@ -292,7 +292,7 @@ const PostAction = ({ goToFirstStep }) => {
   }
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
       <div sx={{ display: 'flex', flexDirection: 'column' }}>
         { returnAction }
 
@@ -339,7 +339,7 @@ const DownloadBox = ({ presenter, title }) => {
   }
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
       <Fragment>
         { (start !== null || end !== null) && (
           <Notification sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -445,7 +445,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   }
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
       <Fragment>
         <NotConnectedWarning />
 

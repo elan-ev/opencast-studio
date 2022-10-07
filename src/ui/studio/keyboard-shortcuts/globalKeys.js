@@ -1,6 +1,5 @@
 import { configure } from 'react-hotkeys'
 
-
 /**
  * https://github.com/greena13/react-hotkeys
  * By default, all key events that originate from <input>, <select> or <textarea>, 
@@ -44,171 +43,172 @@ const space = 'space-key'
 const left = 'left-key'
 const right = 'right-key'
 
-export const keyMap = {
-  // Shortcuts for recording
-    RECORD_DISPLAY: {
-      name: 'record-display',
-      sequences: ['d'],
-      description: ['d'],
-      action: 'keydown',
-      group: recordGroup,
-    },
-    RECORD_CAMERA: {
-      name: 'record-camera',
-      sequences: ['c'],
-      description: ['c'],
-      action: 'keydown',
-      group: recordGroup,
-    },
-    RECORD_DISPLAY_CAMERA: {
-      name: 'record-both',
-      sequences: ['b'],
-      description: ['b'],
-      action: 'keydown',
-      group: recordGroup,
-    },
-    RECORD_AUDIO: {
-      name: 'record-audio',
-      sequences: ['y'],
-      description: ['y'],
-      action: 'keydown',
-      group: recordGroup,
-    },
-    NO_AUDIO: {
-      name: 'record-no-audio',
-      sequences: ['n'],
-      description: ['n'],
-      action: 'keydown',
-      group: recordGroup,
-    },
-    START_RECORDING: {
-      name: 'start-recording',
-      sequences: ['r'],
-      description: ['r'],
-      action: 'keydown',
-      group: recordGroup,
-    }, 
-    STOP_RECORDING: {
-      name: 'stop-recording',
-      sequences: ['s'],
-      description: ['s'],
-      action: 'keydown',
-      group: recordGroup,
-    },
-    PAUSE_RECORDING: {
-      name: 'pause-recording',
-      sequences: ['Space', 'k'],
-      description: [space, 'k'],
-      action: 'keydown',
-      group: recordGroup,
-    },
+// Shortcuts for recording
+export const recordShortcuts = {
+  RECORD_DISPLAY: {
+    name: 'record-display',
+    sequences: ['d'],
+    description: ['d'],
+    group: recordGroup,
+  },
+  RECORD_CAMERA: {
+    name: 'record-camera',
+    sequences: ['c'],
+    description: ['c'],
+    group: recordGroup,
+  },
+  RECORD_DISPLAY_CAMERA: {
+    name: 'record-both',
+    sequences: ['b'],
+    description: ['b'],
+    group: recordGroup,
+  },
+  RECORD_AUDIO: {
+    name: 'record-audio',
+    sequences: ['y'],
+    description: ['y'],
+    group: recordGroup,
+  },
+  NO_AUDIO: {
+    name: 'record-no-audio',
+    sequences: ['n'],
+    description: ['n'],
+    group: recordGroup,
+  },
+  START_RECORDING: {
+    name: 'start-recording',
+    sequences: ['r'],
+    description: ['r'],
+    group: recordGroup,
+  }, 
+  STOP_RECORDING: {
+    name: 'stop-recording',
+    sequences: ['s'],
+    description: ['s'],
+    group: recordGroup,
+  },
+  PAUSE_RECORDING: {
+    name: 'pause-recording',
+    sequences: ['Space', 'k'],
+    description: [space, 'k'],
+    group: recordGroup,
+  }
+}
 
-  // Shortcuts for editing
-    PLAY_PAUSE: {
-      name: 'play-pause',
-      sequences: ['Space', 'k'],
-      description: [space, 'k'],
-      action: 'keydown',
-      group: editGroup,
-    },
-    FORWARD_5_SEC: {
-      name: 'skip-five',
-      sequences: ['l', 'ArrowRight'],
-      description: ['l', right],
-      action: 'keydown',
-      group: editGroup,
-    },
-    BACKWARDS_5_SEC: {
-      name: 'back-five',
-      sequences: ['j', 'ArrowLeft'],
-      description: ['j', left],
-      action: 'keydown',
-      group: editGroup,
-    },
-    FORWARD_1_FRAME: {
-      name: 'frame-forward',
-      sequences: ['.'],
-      description: ['.'],
-      action: 'keydown',
-      group: editGroup,
-    },
-    BACKWARDS_1_FRAME: {
-      name: 'frame-back',
-      sequences: [','],
-      description: [','],
-      action: 'keydown',
-      group: editGroup,
-    },
-    CUT_LEFT: {
-      name: 'cut-left',
-      sequences: ['Shift+l'],
-      description: [shift+'+l'],
-      action: 'keydown',
-      group: editGroup,
-    },
-    CUT_RIGHT: {
-      name: 'cut-right',
-      sequences: ['Shift+r'],
-      description: [shift+'+r'],
-      action: 'keydown',
-      group: editGroup,
-    },
-    DELETE_CROP_MARK_LEFT: {
-      name: 'delete-left',
-      sequences: ['Shift+d', 'Shift+Delete'],
-      description: [shift+'+d', shift+'+'+del],
-      action: 'keydown',
-      group: editGroup,
-    },
-    DELETE_CROP_MARK_RIGHT: {
-      name: 'delete-right',
-      sequences: ['d', 'Delete'],
-      description: ['d', del],
-      action: 'keydown',
-      group: editGroup,
-    },
+// Shortcuts for editing
+export const editShortcuts = {
+  PLAY_PAUSE: {
+    name: 'play-pause',
+    sequences: ['Space', 'k'],
+    description: [space, 'k'],
+    group: editGroup,
+  },
+  FORWARD_5_SEC: {
+    name: 'skip-five',
+    sequences: ['l', 'ArrowRight'],
+    description: ['l', right],
+    group: editGroup,
+  },
+  BACKWARDS_5_SEC: {
+    name: 'back-five',
+    sequences: ['j', 'ArrowLeft'],
+    description: ['j', left],
+    group: editGroup,
+  },
+  FORWARD_1_FRAME: {
+    name: 'frame-forward',
+    sequences: ['.'],
+    description: ['.'],
+    group: editGroup,
+  },
+  BACKWARDS_1_FRAME: {
+    name: 'frame-back',
+    sequences: [','],
+    description: [','],
+    group: editGroup,
+  },
+  CUT_LEFT: {
+    name: 'cut-left',
+    sequences: ['Shift+l'],
+    description: [shift+'+l'],
+    group: editGroup,
+  },
+  CUT_RIGHT: {
+    name: 'cut-right',
+    sequences: ['Shift+r'],
+    description: [shift+'+r'],
+    group: editGroup,
+  },
+  DELETE_CROP_MARK_LEFT: {
+    name: 'delete-left',
+    sequences: ['Shift+d', 'Shift+Delete'],
+    description: [shift+'+d', shift+'+'+del],
+    group: editGroup,
+  },
+  DELETE_CROP_MARK_RIGHT: {
+    name: 'delete-right',
+    sequences: ['d', 'Delete'],
+    description: ['d', del],
+    group: editGroup,
+  }
+}
 
-  // Other Shortcuts
-    TAB: {
-      name: 'tab-elements',
-      sequences: [],
-      description: ['Tab'],
-      action: 'keydown',
-      group: otherGroup,
-    },
-    NEXT_BUTTON: {
-      name: 'next-button',
-      sequences: ['Control+Enter'],
-      description: [ctrl+'+'+enter],
-      action: 'keydown',
-      group: otherGroup,
-    },
-    BACK_BUTTON: {
-      name: 'back-button',
-      sequences: ['Control+Backspace'],
-      description: [ctrl+'+'+back],
-      action: 'keydown',
-      group: otherGroup,
-    },
-    UPLOAD: {
-      name: 'upload-video',
-      sequences: [rewriteKeys('Alt+u')],
-      description: [rewriteKeys('Alt+u')],
-      action: 'keydown',
-      group: otherGroup,
-    },
-    DOWNLOAD: {
-      name: 'download-video',
-      sequences: ['d'],
-      description: ['d'],
-      action: 'keydown',
-      group: otherGroup,
-    },
-    NEW_RECORDING: {
-      name: 'new-recording',
-      sequences: ['Shift+n'],
-      description: [shift+'+n'],
-      action: 'keydown',
-      group: otherGroup,
+export const otherShortcuts = {
+  TAB: {
+    name: 'tab-elements',
+    sequences: [],
+    description: ['Tab'],
+    group: otherGroup,
+  },
+  NEXT_BUTTON: {
+    name: 'next-button',
+    sequences: ['Control+Enter'],
+    description: [ctrl+'+'+enter],
+    group: otherGroup,
+  },
+  BACK_BUTTON: {
+    name: 'back-button',
+    sequences: ['Control+Backspace'],
+    description: [ctrl+'+'+back],
+    group: otherGroup,
+  },
+  UPLOAD: {
+    name: 'upload-video',
+    sequences: [rewriteKeys('Alt+u')],
+    description: [rewriteKeys('Alt+u')],
+    group: otherGroup,
+  },
+  DOWNLOAD: {
+    name: 'download-video',
+    sequences: ['d'],
+    description: ['d'],
+    group: otherGroup,
+  },
+  NEW_RECORDING: {
+    name: 'new-recording',
+    sequences: ['Shift+n'],
+    description: [shift+'+n'],
+    group: otherGroup,
+  }
+}
+
+export const getShortcuts = () => {
+  const shortcutroups = [recordShortcuts, editShortcuts, otherShortcuts]
+  const shortcuts = []
+
+  for(const groups of shortcutroups) {
+    for(const [key, value] of Object.entries(groups)) {
+
+      shortcuts[key] = {
+        name: value.name,
+        sequences: value.sequences,
+        description: value.description,
+        action: 'keydown',
+        group: value.group,
+      }
+
     }
+  }
+
+  return shortcuts
 }

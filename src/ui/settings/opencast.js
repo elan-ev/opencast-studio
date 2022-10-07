@@ -28,7 +28,7 @@ import { Input } from '../elements';
 import { useStudioState } from '../../studio-state';
 
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../studio/keyboard-shortcuts/globalKeys';
+import { otherShortcuts } from '../studio/keyboard-shortcuts/globalKeys';
 
 
 function OpencastSettings({ settingsManager }) {
@@ -111,7 +111,7 @@ function OpencastSettings({ settingsManager }) {
   } 
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
       <SettingsSection title={t('upload-settings-modal-header')}>
         <Box>
           {error && <Notification isDanger>{error}</Notification>}

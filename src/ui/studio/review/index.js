@@ -18,7 +18,7 @@ import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
 import Tooltip from '../../../Tooltip';
 
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../keyboard-shortcuts/globalKeys';
+import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number
@@ -238,7 +238,7 @@ const VideoControls = ({ currentTime, previewController }) => {
   }
 
   return <div sx={{ textAlign: 'center' }}>
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={editShortcuts} handlers={handlers} allowChanges={true}>
       <Flex
         sx={{
           backgroundColor: 'gray.4',
@@ -318,7 +318,7 @@ const CutControls = (
   }
 
   const state = (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={editShortcuts} handlers={handlers} allowChanges={true}>
       <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
         { value !== null && <Fragment>
           <Trans { ...{ t } } i18nKey={`review-${marker}`}>
@@ -355,7 +355,7 @@ const CutControls = (
   })();
 
   const button = (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={editShortcuts} handlers={handlers} allowChanges={true}>
       <Tooltip content={t(`review-set-${marker}`)}>
         <button
           id={marker === 'start' ? 'leftmarker' : 'rightmarker'}
@@ -536,7 +536,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
 
   const children = recordings.map((recording, index) => ({
     body: (
-      <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+      <GlobalHotKeys keyMap={editShortcuts} handlers={handlers} allowChanges={true}>
         <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
           { overlayVisible && <div sx={{
               position: 'absolute',

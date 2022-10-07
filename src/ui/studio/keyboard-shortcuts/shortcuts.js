@@ -2,101 +2,96 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
-import { keyMap } from './globalKeys';
-
+import { getShortcuts } from './globalKeys';
 
 const Group = ({name, entries}) => {
-
   const { t } = useTranslation();
 
   return (
-    <table sx={{
+    <div sx={{
+      margin: '10px',
       display: 'flex',
       flexDirection: 'column',
-      width: '100%',
-      maxWidth: '480px',
-      margin: '10px',
+      width: '420px',
     }}>
-      <th sx={{
+      <h3 sx={{
         borderBottom: theme => `1px solid ${theme.colors.gray[1]}`,
-        fontSize: '1.17em', // h3-size
+        textAlign: 'center',
       }}>
         {t(name)}
-      </th>
-        {entries.map((entry, index) => (
-          <Entry params={entry} key={index}></Entry>
-        ))}
-    </table>
+      </h3>
+      {entries.map((entry, index) => (
+        <Entry params={entry} key={index}></Entry>
+      ))}
+    </div>
   )
 }
 
 const Entry = ({params}) => {
-
   const { t } = useTranslation();
 
   return (
-    <tr sx={{
+    <div sx={{
       display: 'flex',
       flexDirection: 'row',
-      padding: '5px 0',
+      padding: '6px 0',
     }}>
-    <td sx={{
-      alignSelf: 'center',
-      width: '33%',
-      minWidth: '33%',
-      height: '5em',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      wordWrap: 'break-word',
-      paddingLeft: '10px',
-      marginRight: '5px',
-      // Center text vertically
-      display: 'flex',
-      justifyContent: 'center',
-      alignContent: 'center',
-      flexDirection: 'column',
-    }}>
-      {t(params.name)}
-    </td>
-    {Array.from(params.description).map((description, index, arr) => (
-      <td key={index}
-        sx={{ alignSelf: 'center', display: 'flex', flexDirection: 'row' }}
-      >
-        {description.toString().split('+').map((singleKey, index) => (
+
+      <div sx={{
+        width: '40%',
+        minWidth: '40%',
+        wordWrap: 'break-word',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}>
+        {t(params.name)}
+      </div>
+        {params.description.map((description, index, arr) => (
           <div key={index}
             sx={{
-              borderRadius: '5px',
-              border: theme => `2px solid ${theme.colors.singleKey_border}`,
-              background: theme => theme.colors.singleKey_bg,
-              padding: '10px',
-              margin: '0 5px',
-              textAlign: 'center',
-              minWidth: '45px',
-            }}
-          >
-            {t(singleKey)}
+              padding: '2px 0',
+              alignSelf: 'center', 
+              display: 'flex', 
+              flexDirection: 'row',
+          }}>
+            {description.toString().split('+').map((singleKey, index) => (
+              <div key={index}
+                sx={{
+                  borderRadius: '5px',
+                  border: theme => `2px solid ${theme.colors.singleKey_border}`,
+                  background: theme => theme.colors.singleKey_bg,
+                  padding: '8px',
+                  margin: '0 3px',
+                  textAlign: 'center',
+                  minWidth: '40px',
+              }}>
+                {t(singleKey)}
+              </div>
+            ))}
+            <div sx={{ alignSelf: 'center', lineHeight: '32px', margin: '0 5px' }}>
+              {arr.length - 1 !== index && t("sequence-seperator")}
+            </div>
           </div>
         ))}
-        <div sx={{ alignSelf: 'center', lineHeight: '32px', margin: '0 5px' }}>
-          {arr.length - 1 !== index && t("sequence-seperator")}
-        </div>
-      </td>
-    ))}  
-    </tr>
+
+    </div>
   )
 }
 
 const KeyboardShortcuts = () => {
-
   const { t } = useTranslation();
-  
+  const shortcuts = getShortcuts()
+
   const render = () => {
-    if (keyMap && Object.keys(keyMap).length > 0) {
+    if (shortcuts && Object.keys(shortcuts).length > 0) {
+
       var obj = {}
       obj[t("other-shortcuts")] = []    // For keys without a group
 
       // Sort by group
-      for (const [, value] of Object.entries(keyMap)) {
+      for (const [, value] of Object.entries(shortcuts)) {
         if (value.group) {
           if (obj[value.group]) {
             obj[value.group].push(value)
@@ -139,12 +134,16 @@ const KeyboardShortcuts = () => {
       alignSelf: 'center',
       width: '100%',
     }}>
-      <h2>
+      <h2 sx={{
+        display: 'block', 
+        position: 'relative',
+        textAlign: 'center',
+      }}>
         {t('nav-shortcuts')}
       </h2>
       {render()}
     </div>
-  );
+  )
 }
 
 export default KeyboardShortcuts;

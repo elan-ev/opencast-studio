@@ -32,7 +32,7 @@ import { SourcePreview } from './preview';
 import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../keyboard-shortcuts/globalKeys';
+import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 export default function VideoSetup({ nextStep, userHasWebcam }) {
   const { t } = useTranslation();
@@ -199,7 +199,7 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
   }
 
   return <React.Fragment>
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers} allowChanges={true}>
       <Spacer />
       <Flex
         sx={{

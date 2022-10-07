@@ -27,7 +27,7 @@ import { queryMediaDevices, getUniqueDevices } from '../../../util';
 import PreviewAudio from './preview-audio';
 
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../keyboard-shortcuts/globalKeys';
+import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 
@@ -78,7 +78,7 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
   }
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers} allowChanges={true}>
       <Fragment>
         <Themed.h1>{t('sources-audio-question')}</Themed.h1>
 

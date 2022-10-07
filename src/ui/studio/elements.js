@@ -11,7 +11,7 @@ import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
 
 import { GlobalHotKeys } from 'react-hotkeys';
-import { keyMap } from '../studio/keyboard-shortcuts/globalKeys';
+import { otherShortcuts } from '../studio/keyboard-shortcuts/globalKeys';
 
 // A full width flex container for some steps of the wizard.
 export const StepContainer = ({ children }) => (
@@ -50,7 +50,7 @@ export function ActionButtons({ prev = null, next = null, children }) {
   }
 
   return (
-    <GlobalHotKeys keyMap={keyMap} handlers={handlers} allowChanges={true}>
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers} allowChanges={true}>
       <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
         <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
           {prev && (
