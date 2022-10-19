@@ -97,7 +97,6 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
           margin: 'auto',
           mt: '10px',
         }}
-        className="videoToDownload"
         target="_blank"
         download={downloadName}
         href={url}
