@@ -328,9 +328,9 @@ const DownloadBox = ({ presenter, title }) => {
   const { recordings, start, end } = useStudioState();
 
   const handleDownload = () => {
-    var elements = document.getElementsByClassName("videoToDownload");
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].click()
+    var elements = document.querySelectorAll("a[href^='blob']")
+    for (const element of elements) {
+      element.click();
     }
   }
 

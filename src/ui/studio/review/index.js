@@ -20,6 +20,8 @@ import Tooltip from '../../../Tooltip';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
 
+import { fpsInfo } from '../video-setup/prefs'
+
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number
 // slightly higher works thought. So we use this 1ms time for now. Sigh.
@@ -523,14 +525,13 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   }
 
   const skipFrame = (keyEvent) => {
-    const fps = localStorage.getItem('fps').replace(/\D/g, '');
+    const fps = fpsInfo.replace(/\D/g, '');
     const video = document.getElementById("video");
-    const frameTime = (1/fps);
 
     if (keyEvent.key === '.') {
-      video.currentTime = Math.min(video.duration, video.currentTime + frameTime);
+      video.currentTime = Math.min(video.duration, video.currentTime + (1/fps));
     } else if (keyEvent.key === ',') {
-      video.currentTime = Math.max(0, video.currentTime - frameTime);
+      video.currentTime = Math.max(0, video.currentTime - (1/fps));
     }  
   }
 

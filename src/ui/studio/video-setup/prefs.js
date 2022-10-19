@@ -273,11 +273,12 @@ export const StreamSettings = ({ isDesktop, stream }) => {
   </Fragment>;
 };
 
+export let fpsInfo = '';
+
 const StreamInfo = ({ stream }) => {
   const s = stream?.getVideoTracks()?.[0]?.getSettings();
   const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : '';
-  const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
-  localStorage.setItem('fps', fpsInfo)
+  fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
 
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
