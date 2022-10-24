@@ -3,7 +3,7 @@
 import { jsx, useColorMode } from 'theme-ui';
 
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -97,6 +97,16 @@ const NavElement = ({ target, children, icon, ...rest }) => {
   const { isRecording } = useStudioState();
   const [ colorMode ] = useColorMode();
 
+  const [matches, setMatches] = useState(
+    window.matchMedia("(min-width: 700px)").matches
+  )
+
+  React.useEffect(() => {
+    window
+    .matchMedia("(min-width: 700px)")
+    .addEventListener('change', e => setMatches( e.matches ));
+  }, []);
+
   return (
     <NavLink
       to={{
@@ -129,15 +139,29 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       {...rest}
     >
-      <div sx={{
-        width: '20px',
-        display: 'inline-block',
-        textAlign: 'right',
-        mr: [3, 3, 2],
-      }}>
-        <FontAwesomeIcon icon={icon} />
-      </div>
-      {children}
+      {matches && ( <>
+        <div sx={{
+          width: '20px',
+          display: 'inline-block',
+          textAlign: 'right',
+          mr: [3, 3, 2],
+        }}>
+          <FontAwesomeIcon icon={icon} />
+        </div>
+        {children}
+      </> )}
+
+      {!matches && ( <>
+        <div sx={{
+          width: '20px',
+          display: 'contents',
+          textAlign: 'right',
+          mr: [3, 3, 2],
+        }}>
+          <FontAwesomeIcon icon={icon} />
+        </div>
+      </> )}
+
     </NavLink>
   );
 }
