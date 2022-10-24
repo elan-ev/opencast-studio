@@ -308,11 +308,11 @@ const CutControls = (
     var deleteLeft = document.getElementById("deleteLeft");
     var deleteRight = document.getElementById("deleteRight");
 
-    if ((keyEvent.shiftKey && keyEvent.key === 'D') || (keyEvent.shiftKey && keyEvent.key === 'Delete')) {
+    if ((keyEvent.shiftKey && keyEvent.key === 'N')) {
       if (deleteLeft !== null){
         deleteLeft.click();
       }
-    } else if (keyEvent.key === 'd' || keyEvent.key === 'Delete') {
+    } else if (keyEvent.shiftKey && keyEvent.key === 'M') {
       if (deleteRight !== null){
         deleteRight.click();
       }

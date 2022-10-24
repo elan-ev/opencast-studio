@@ -36,9 +36,6 @@ const recordGroup = 'record-shortcuts';
 const editGroup = 'edit-shortcuts';
 const otherGroup = 'other-shortcuts';
 
-const back = 'backspace-key'
-const enter = 'enter-key'
-const del = 'delete-key'
 const ctrl = 'control-key'
 const shift = 'shift-key'
 const space = 'space-key'
@@ -49,32 +46,32 @@ const right = 'right-key'
 export const recordShortcuts = {
   RECORD_DISPLAY: {
     name: 'record-display',
-    sequences: ['d'],
-    description: ['d'],
-    group: recordGroup,
-  },
-  RECORD_CAMERA: {
-    name: 'record-camera',
-    sequences: ['c'],
-    description: ['c'],
+    sequences: ['1'],
+    description: ['1'],
     group: recordGroup,
   },
   RECORD_DISPLAY_CAMERA: {
     name: 'record-both',
-    sequences: ['b'],
-    description: ['b'],
+    sequences: ['2'],
+    description: ['2'],
+    group: recordGroup,
+  },
+  RECORD_CAMERA: {
+    name: 'record-camera',
+    sequences: ['3'],
+    description: ['3'],
     group: recordGroup,
   },
   RECORD_AUDIO: {
     name: 'record-audio',
-    sequences: ['y'],
-    description: ['y'],
+    sequences: ['1'],
+    description: ['1'],
     group: recordGroup,
   },
   NO_AUDIO: {
     name: 'record-no-audio',
-    sequences: ['n'],
-    description: ['n'],
+    sequences: ['2'],
+    description: ['2'],
     group: recordGroup,
   },
   START_RECORDING: {
@@ -131,26 +128,26 @@ export const editShortcuts = {
   },
   CUT_LEFT: {
     name: 'cut-left',
-    sequences: ['Shift+l'],
-    description: [shift+'+l'],
+    sequences: ['n'],
+    description: ['n'],
     group: editGroup,
   },
   CUT_RIGHT: {
     name: 'cut-right',
-    sequences: ['Shift+r'],
-    description: [shift+'+r'],
+    sequences: ['m'],
+    description: ['m'],
     group: editGroup,
   },
   DELETE_CROP_MARK_LEFT: {
     name: 'delete-left',
-    sequences: ['Shift+d', 'Shift+Delete'],
-    description: [shift+'+d', shift+'+'+del],
+    sequences: ['Shift+n'],
+    description: [shift+'+n'],
     group: editGroup,
   },
   DELETE_CROP_MARK_RIGHT: {
     name: 'delete-right',
-    sequences: ['d', 'Delete'],
-    description: ['d', del],
+    sequences: ['Shift+m'],
+    description: [shift+'+m'],
     group: editGroup,
   }
 }
@@ -164,14 +161,14 @@ export const otherShortcuts = {
   },
   NEXT_BUTTON: {
     name: 'next-button',
-    sequences: ['Control+Enter'],
-    description: [ctrl+'+'+enter],
+    sequences: ['Control+ArrowRight'],
+    description: [ctrl+'+'+right],
     group: otherGroup,
   },
   BACK_BUTTON: {
     name: 'back-button',
-    sequences: ['Control+Backspace'],
-    description: [ctrl+'+'+back],
+    sequences: ['Control+ArrowLeft'],
+    description: [ctrl+'+'+left],
     group: otherGroup,
   },
   UPLOAD: {
