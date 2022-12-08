@@ -3,7 +3,7 @@
 import { jsx, useColorMode } from 'theme-ui';
 
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import React, { Fragment, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -97,16 +97,6 @@ const NavElement = ({ target, children, icon, ...rest }) => {
   const { isRecording } = useStudioState();
   const [ colorMode ] = useColorMode();
 
-  const [matches, setMatches] = useState(
-    window.matchMedia("(min-width: 700px)").matches
-  )
-
-  React.useEffect(() => {
-    window
-    .matchMedia("(min-width: 700px)")
-    .addEventListener('change', e => setMatches( e.matches ));
-  }, []);
-
   return (
     <NavLink
       to={{
@@ -120,8 +110,8 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       sx={{
         color: 'white',
-        pl: [3, '10px'],
-        pr: [3, '14px'],
+        pl: [3, '12px'],
+        pr: [3, '12px'],
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
@@ -139,29 +129,25 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       {...rest}
     >
-      {matches && ( <>
         <div sx={{
           width: '20px',
           display: 'inline-block',
           textAlign: 'right',
           mr: [3, 3, 2],
+          '@media screen and (max-width: 742px)': {
+            mr: [0, 0, 0],
+          }
         }}>
           <FontAwesomeIcon icon={icon} />
         </div>
-        {children}
-      </> )}
-
-      {!matches && ( <>
         <div sx={{
-          width: '20px',
-          display: 'contents',
-          textAlign: 'right',
-          mr: [3, 3, 2],
+          display: 'inline-block',
+          '@media screen and (max-width: 742px)': {
+            display: 'none'
+          }
         }}>
-          <FontAwesomeIcon icon={icon} />
+          {children}
         </div>
-      </> )}
-
     </NavLink>
   );
 }

@@ -12,7 +12,9 @@ const Group = ({name, entries}) => {
       margin: '10px',
       display: 'flex',
       flexDirection: 'column',
-      width: '420px',
+      '@media screen and (max-width: 350px)': {
+        width: '300px',
+      }
     }}>
       <h3 sx={{
         borderBottom: theme => `1px solid ${theme.colors.gray[1]}`,
@@ -35,26 +37,20 @@ const Entry = ({params}) => {
       display: 'flex',
       flexDirection: 'row',
       padding: '6px 0',
+      alignItems: 'center'
     }}>
 
       <div sx={{
         width: '40%',
-        minWidth: '40%',
         wordWrap: 'break-word',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignContent: 'center',
       }}>
         {t(params.name)}
       </div>
         {params.description.map((description, index, arr) => (
           <div key={index}
             sx={{
-              padding: '2px 0',
-              alignSelf: 'center', 
-              display: 'flex', 
-              flexDirection: 'row',
+              padding: '2px 0', 
+              display: 'flex',
           }}>
             {description.toString().split('+').map((singleKey, index) => (
               <div key={index}
