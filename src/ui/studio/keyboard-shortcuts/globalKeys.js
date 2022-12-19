@@ -1,4 +1,4 @@
-import { configure } from 'react-hotkeys'
+import { configure } from 'react-hotkeys';
 
 /**
  * https://github.com/greena13/react-hotkeys
@@ -27,11 +27,11 @@ const recordGroup = 'record-shortcuts';
 const editGroup = 'edit-shortcuts';
 const otherGroup = 'other-shortcuts';
 
-const ctrl = 'control-key'
-const shift = 'shift-key'
-const space = 'space-key'
-const left = 'left-key'
-const right = 'right-key'
+const ctrl = 'control-key';
+const shift = 'shift-key';
+const space = 'space-key';
+const left = 'left-key';
+const right = 'right-key';
 
 // Shortcuts for recording
 export const recordShortcuts = {
@@ -83,7 +83,7 @@ export const recordShortcuts = {
     description: [space, 'k'],
     group: recordGroup,
   }
-}
+};
 
 // Shortcuts for editing
 export const editShortcuts = {
@@ -132,16 +132,16 @@ export const editShortcuts = {
   DELETE_CROP_MARK_LEFT: {
     name: 'delete-left',
     sequences: ['Shift+n'],
-    description: [shift+'+n'],
+    description: [shift + '+n'],
     group: editGroup,
   },
   DELETE_CROP_MARK_RIGHT: {
     name: 'delete-right',
     sequences: ['Shift+m'],
-    description: [shift+'+m'],
+    description: [shift + '+m'],
     group: editGroup,
   }
-}
+};
 
 export const otherShortcuts = {
   TAB: {
@@ -153,13 +153,13 @@ export const otherShortcuts = {
   NEXT_BUTTON: {
     name: 'next-button',
     sequences: ['Control+ArrowRight'],
-    description: [ctrl+'+'+right],
+    description: [ctrl + '+' + right],
     group: otherGroup,
   },
   BACK_BUTTON: {
     name: 'back-button',
     sequences: ['Control+ArrowLeft'],
-    description: [ctrl+'+'+left],
+    description: [ctrl + '+' + left],
     group: otherGroup,
   },
   UPLOAD: {
@@ -177,10 +177,10 @@ export const otherShortcuts = {
   NEW_RECORDING: {
     name: 'new-recording',
     sequences: ['Shift+n'],
-    description: [shift+'+n'],
+    description: [shift + '+n'],
     group: otherGroup,
   }
-}
+};
 
 export const getShortcuts = () => (
   Object.fromEntries([recordShortcuts, editShortcuts, otherShortcuts].flatMap(Object.entries))

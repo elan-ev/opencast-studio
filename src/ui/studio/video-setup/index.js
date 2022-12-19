@@ -173,7 +173,7 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
     RECORD_DISPLAY: keyEvent => { if(keyEvent) { clickDisplay(keyEvent) }},
     RECORD_CAMERA: keyEvent => { if(keyEvent) { clickUser(keyEvent) }},
     RECORD_DISPLAY_CAMERA: keyEvent => { if(keyEvent) { clickBoth(keyEvent) }},
-  }
+  };
 
   const clickUser = async () => {
     setActiveSource(VIDEO_SOURCE_USER);
@@ -222,7 +222,7 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
           icon={faChalkboard}
           onClick={clickDisplay}
           disabledText={displaySupported ? false : t('sources-video-display-not-supported')}
-        />}
+        /> }
         { (displaySupported || !onMobileDevice()) && userSupported && <OptionButton
           label={t('sources-scenario-display-and-user')}
           icon={faChalkboardTeacher}
@@ -232,13 +232,13 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
               ? (userHasWebcam ? false : t('sources-video-no-cam-detected'))
               : t('sources-video-display-not-supported')
           }
-        />}
+        /> }
         { userSupported && <OptionButton
           label={t('sources-scenario-user')}
           icon={faUser}
           onClick={clickUser}
           disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
-        />}
+        /> }
       </Flex>
       <Spacer />
     </GlobalHotKeys>

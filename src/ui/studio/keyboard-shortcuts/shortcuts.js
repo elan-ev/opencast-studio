@@ -22,7 +22,7 @@ const Group = ({name, entries}) => {
       }}>
         {t(name)}
       </h3>
-      {entries.map((entry, index) => (
+      { entries.map((entry, index) => (
         <Entry params={entry} key={index}></Entry>
       ))}
     </div>
@@ -46,13 +46,13 @@ const Entry = ({params}) => {
       }}>
         {t(params.name)}
       </div>
-        {params.description.map((description, index, arr) => (
+        { params.description.map((description, index, arr) => (
           <div key={index}
             sx={{
               padding: '2px 0', 
               display: 'flex',
           }}>
-            {description.toString().split('+').map((singleKey, index) => (
+            { description.toString().split('+').map((singleKey, index) => (
               <div key={index}
                 sx={{
                   borderRadius: '5px',
@@ -67,7 +67,7 @@ const Entry = ({params}) => {
               </div>
             ))}
             <div sx={{ alignSelf: 'center', lineHeight: '32px', margin: '0 5px' }}>
-              {arr.length - 1 !== index && t("sequence-seperator")}
+              { arr.length - 1 !== index && t("sequence-seperator") }
             </div>
           </div>
         ))}
@@ -78,13 +78,11 @@ const Entry = ({params}) => {
 
 const KeyboardShortcuts = () => {
   const { t } = useTranslation();
-  const shortcuts = getShortcuts()
+  const shortcuts = getShortcuts();
+
+  let obj = {};
 
   if (shortcuts && Object.keys(shortcuts).length > 0) {
-
-    var obj = {}
-    obj[t("other-shortcuts")] = []    // For keys without a group
-
     // Sort by group
     for (const value of Object.values(shortcuts)) {
       const key = value.group ?? t("other-shortcuts");
@@ -94,6 +92,10 @@ const KeyboardShortcuts = () => {
       obj[key].push(value);
     }
   }
+
+  const groups = Object.entries(obj)
+    .filter(([_, value]) => value.length > 0)
+    .map(([key, value]) => <Group name={key} key={key} entries={value} />);
 
   return (
     <div sx={{
@@ -117,9 +119,7 @@ const KeyboardShortcuts = () => {
           flexWrap: 'wrap',
           justifyContent: 'center',
         }}>
-          {Object.entries(obj)
-            .filter(([_, value]) => value.length > 0)
-            .map(([key, value]) => <Group name={key} key={key} entries={value} />)}
+          { groups }
         </div>
 
     </div>

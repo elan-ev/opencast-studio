@@ -289,7 +289,7 @@ const PostAction = ({ goToFirstStep }) => {
 
   const handlers = {
     NEW_RECORDING: keyEvent => { if(keyEvent) { handleNewRecording(keyEvent) }},
-  }
+  };
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
@@ -328,7 +328,7 @@ const DownloadBox = ({ presenter, title }) => {
   const { recordings, start, end } = useStudioState();
 
   const handleDownload = () => {
-    var elements = document.querySelectorAll("a[href^='blob']")
+    var elements = document.querySelectorAll("a[href^='blob']");
     for (const element of elements) {
       element.click();
     }
@@ -336,7 +336,7 @@ const DownloadBox = ({ presenter, title }) => {
 
   const handlers = {
     DOWNLOAD: keyEvent => { if(keyEvent) { handleDownload(keyEvent) }},
-  }
+  };
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
@@ -353,7 +353,7 @@ const DownloadBox = ({ presenter, title }) => {
           justifyContent: ['center', 'center', 'start'],
           flexWrap: 'wrap',
         }}>
-          {recordings.length === 0 ? <Spinner /> : (
+          { recordings.length === 0 ? <Spinner /> : (
             recordings.map((recording, index) => (
               <RecordingPreview
                 key={index}
@@ -368,7 +368,7 @@ const DownloadBox = ({ presenter, title }) => {
       </Fragment>
     </GlobalHotKeys>
   );
-}
+};
 
 // Shown if there is no working Opencast connection. Shows a warning and a link
 // to settings.
@@ -444,7 +444,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
   const handlers = {
     UPLOAD: keyEvent => { if(keyEvent) { uploadRef.current?.click() }},
-  }
+  };
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>

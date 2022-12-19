@@ -75,7 +75,7 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
   const handlers = {
     RECORD_AUDIO: keyEvent => { if(keyEvent) { selectMicrophone(keyEvent) }},
     NO_AUDIO: keyEvent => { if(keyEvent) { selectNoAudio(keyEvent) }},
-  }
+  };
 
   return (
     <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>

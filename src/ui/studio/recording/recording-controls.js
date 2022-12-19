@@ -159,18 +159,18 @@ export default function RecordingControls({
     START_RECORDING: keyEvent => { if(keyEvent) { handleRecord(keyEvent) }},
     STOP_RECORDING: keyEvent => { if(keyEvent) { handleStop(keyEvent) }},
     PAUSE_RECORDING: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent) }},
-  }
+  };
 
   return (
     <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>
       <div sx={{ m: 0, width: recordingState !== STATE_INACTIVE ? '280px' : 'auto' }}>
-        {recordingState !== STATE_INACTIVE && (
+        { recordingState !== STATE_INACTIVE && (
           <Beforeunload onBeforeunload={event => event.preventDefault()} />
         )}
 
         <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
-          {recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: 'right' }}>
-            {recordingState === STATE_RECORDING && (
+          { recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: 'right' }}>
+            { recordingState === STATE_RECORDING && (
               <Tooltip content={t('pause-button-title')} offset={[0,50]}>
                 <PauseButton
                   recordingState={recordingState}
@@ -179,7 +179,7 @@ export default function RecordingControls({
               </Tooltip>
             )}
 
-            {recordingState === STATE_PAUSED && (
+            { recordingState === STATE_PAUSED && (
               <Tooltip content={t('resume-button-title')} offset={[0,50]}>
                 <ResumeButton
                   recordingState={recordingState}
@@ -187,10 +187,10 @@ export default function RecordingControls({
                 />
               </Tooltip>
             )}
-          </div>}
+          </div> }
 
           <div className="center">
-            {recordingState === STATE_INACTIVE ? (
+            { recordingState === STATE_INACTIVE ? (
               <Tooltip content={t('record-button-title')} offset={[0,50]}>
                 <RecordButton
                   large
@@ -210,9 +210,9 @@ export default function RecordingControls({
             )}
           </div>
 
-          {recordingState !== STATE_INACTIVE && <div sx={{ flex: 1 }}>
+          { recordingState !== STATE_INACTIVE && <div sx={{ flex: 1 }}>
             <Clock isPaused={recordingState === STATE_PAUSED} />
-          </div>}
+          </div> }
         </div>
       </div>
     </GlobalHotKeys>

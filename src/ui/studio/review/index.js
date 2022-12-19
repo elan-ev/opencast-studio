@@ -240,7 +240,7 @@ const VideoControls = ({ currentTime, previewController }) => {
     PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent) }},
     DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { leftMarker.current?.click() }},
     DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { rightMarker.current?.click() }},
-  }
+  };
 
   return <div sx={{ textAlign: 'center' }}>
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
@@ -255,14 +255,14 @@ const VideoControls = ({ currentTime, previewController }) => {
           }
         }}
       >
-        {settings.review?.disableCutting || <CutControls
+        { settings.review?.disableCutting || <CutControls
           marker="start"
           innerRef={leftMarker}
           value={start}
           control={end}
           invariant={(start, end) => start < end}
           { ...{ recordingDispatch, previewController, currentTime } }
-        />}
+        /> }
         <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
           <button 
             sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
@@ -283,14 +283,14 @@ const VideoControls = ({ currentTime, previewController }) => {
             />
           </button>
         </Tooltip>
-        {settings.review?.disableCutting || <CutControls
+        { settings.review?.disableCutting || <CutControls
           marker="end"
           innerRef={rightMarker}
           value={end}
           control={start}
           invariant={(end, start) => start < end}
           { ...{ recordingDispatch, previewController, currentTime } }
-        />}
+        /> }
       </Flex>
       {t('review-player-progress', { currentTime, duration })}
     </GlobalHotKeys>
@@ -305,9 +305,7 @@ const CutControls = (
   const handlers = {
     CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click() }},
     CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click() }},
-  }
-
-
+  };
 
   const state = (
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
@@ -502,7 +500,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     BACKWARDS_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent) }},
     FORWARD_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent) }},
     BACKWARDS_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent) }},
-  }
+  };
 
   const skipFiveSeconds = (keyEvent) => {
     videoRefs.forEach( video => {

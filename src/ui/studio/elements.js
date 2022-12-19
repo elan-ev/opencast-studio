@@ -47,13 +47,13 @@ export function ActionButtons({ prev = null, next = null, children }) {
   const handlers = {
     BACK_BUTTON: keyEvent => { if(prev) { prev.onClick(keyEvent) }},
     NEXT_BUTTON: keyEvent => { if(next && !next.disabled) { next.onClick(keyEvent) }},
-  }
+  };
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
         <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
-          {prev && (
+          { prev && (
             <Button
               sx={{
                 whiteSpace: 'nowrap',
@@ -70,7 +70,7 @@ export function ActionButtons({ prev = null, next = null, children }) {
         </Box>
         <Box>{children}</Box>
         <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>
-          {next && (
+          { next && (
             <Button
               sx={{
                 whiteSpace: 'nowrap',

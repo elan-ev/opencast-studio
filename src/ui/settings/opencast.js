@@ -107,14 +107,14 @@ function OpencastSettings({ settingsManager }) {
   const icon = icons[status];
 
   const handlers = {
-    NEXT_BUTTON: keyEvent => { if(keyEvent) { handleSubmit(onSubmit(keyEvent)) }},
-  } 
+    NEXT_BUTTON: keyEvent => { if(keyEvent) { handleSubmit(onSubmit(keyEvent)) }}
+  };
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <SettingsSection title={t('upload-settings-modal-header')}>
         <Box>
-          {error && <Notification isDanger>{error}</Notification>}
+          { error && <Notification isDanger>{error}</Notification> }
 
           <form onSubmit={handleSubmit(onSubmit)}>
             { showServerUrl && <Input
