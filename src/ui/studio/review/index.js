@@ -20,8 +20,6 @@ import Tooltip from '../../../Tooltip';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
 
-import { fpsInfo } from '../video-setup/prefs'
-
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number
 // slightly higher works thought. So we use this 1ms time for now. Sigh.
@@ -235,8 +233,13 @@ const VideoControls = ({ currentTime, previewController }) => {
     }
   }
 
+  const leftMarker = useRef(null);
+  const rightMarker = useRef(null);
+
   const handlers = {
     PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent) }},
+    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { leftMarker.current?.click() }},
+    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { rightMarker.current?.click() }},
   }
 
   return <div sx={{ textAlign: 'center' }}>
@@ -254,6 +257,7 @@ const VideoControls = ({ currentTime, previewController }) => {
       >
         {settings.review?.disableCutting || <CutControls
           marker="start"
+          innerRef={leftMarker}
           value={start}
           control={end}
           invariant={(start, end) => start < end}
@@ -281,6 +285,7 @@ const VideoControls = ({ currentTime, previewController }) => {
         </Tooltip>
         {settings.review?.disableCutting || <CutControls
           marker="end"
+          innerRef={rightMarker}
           value={end}
           control={start}
           invariant={(end, start) => start < end}
@@ -293,31 +298,16 @@ const VideoControls = ({ currentTime, previewController }) => {
 };
 
 const CutControls = (
-  { marker, value, control, invariant, currentTime, previewController, recordingDispatch }
+  { marker, value, control, invariant, currentTime, previewController, recordingDispatch, innerRef }
 ) => {
   const { t } = useTranslation();
 
   const handlers = {
     CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click() }},
     CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click() }},
-    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { deleteCropMark(keyEvent) }},
-    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { deleteCropMark(keyEvent) }},
   }
 
-  const deleteCropMark = (keyEvent) => {
-    var deleteLeft = document.getElementById("deleteLeft");
-    var deleteRight = document.getElementById("deleteRight");
 
-    if ((keyEvent.shiftKey && keyEvent.key === 'N')) {
-      if (deleteLeft !== null){
-        deleteLeft.click();
-      }
-    } else if (keyEvent.shiftKey && keyEvent.key === 'M') {
-      if (deleteRight !== null){
-        deleteRight.click();
-      }
-    }
-  }
 
   const state = (
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
@@ -331,7 +321,7 @@ const CutControls = (
           </Trans>
           <Tooltip content={t(`review-remove-cut-point`)}>
             <IconButton context={marker} 
-              id={marker === 'start' ? 'deleteLeft' : 'deleteRight'}
+              ref={innerRef} // for DELETE_CROP_MARK
               onClick={
                 () => recordingDispatch({
                   type: `UPDATE_${marker.toUpperCase()}`,
@@ -515,24 +505,25 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   }
 
   const skipFiveSeconds = (keyEvent) => {
-    var video = document.getElementById("video");
-    
-    if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {  
-      video.currentTime = Math.min(video.duration, video.currentTime + 5);
-    } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
-      video.currentTime = Math.max(0, video.currentTime - 5);
-    }
+    videoRefs.forEach( video => {
+      if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {
+        video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
+      } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
+        video.current.currentTime = Math.max(0, video.current.currentTime - 5);
+      }
+    });
   }
 
   const skipFrame = (keyEvent) => {
-    const fps = fpsInfo.replace(/\D/g, '');
-    const video = document.getElementById("video");
+    const fps = 30;
 
-    if (keyEvent.key === '.') {
-      video.currentTime = Math.min(video.duration, video.currentTime + (1/fps));
-    } else if (keyEvent.key === ',') {
-      video.currentTime = Math.max(0, video.currentTime - (1/fps));
-    }  
+    videoRefs.forEach( video => {
+      if (keyEvent.key === '.') {
+        video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1/fps));
+      } else if (keyEvent.key === ',') {
+        video.current.currentTime = Math.max(0, video.current.currentTime - (1/fps));
+      }
+    });
   }
 
   const children = recordings.map((recording, index) => ({
@@ -558,7 +549,6 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
             </div>
           }
           <video
-            id={"video"}
             ref={videoRefs[index]}
             key={index}
             src={recording.url}

@@ -11,7 +11,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import useForm from 'react-hook-form';
@@ -440,8 +440,10 @@ const UploadForm = ({ uploadState, handleUpload }) => {
       </Trans>
     );
 
+  const uploadRef = useRef(null);
+
   const handlers = {
-    UPLOAD: keyEvent => { if(keyEvent) { document.getElementById("upload").click() }},
+    UPLOAD: keyEvent => { if(keyEvent) { uploadRef.current?.click() }},
   }
 
   return (
@@ -473,7 +475,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
           <Button
             disabled={recordings.length === 0}
             onClick={handleSubmit(handleUpload)}
-            id="upload"
+            ref={uploadRef}
           >
             <FontAwesomeIcon icon={faUpload} />
             { buttonLabel }

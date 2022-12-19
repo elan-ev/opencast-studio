@@ -17,19 +17,10 @@ configure({
 */
 const getOs = () => {
   const os = ['Windows', 'Linux', 'Mac'];
-  return os.find(v=>navigator.userAgent.indexOf(v) >= 0);
+  return os.find(v => navigator.userAgent.includes(v));
 }
 
-const rewriteKeys = (key) => {
-  let newKey = key
-  const os = getOs();
-
-  if (os === 'Mac') {
-    newKey = newKey.replace("Alt", "Option")
-  }
-
-  return newKey
-}
+const rewriteKeys = key => getOs() === 'Mac' ? key.replace('Alt', 'Option') : key;
 
 // Groups for displaying shortcuts in the overview page
 const recordGroup = 'record-shortcuts';
@@ -191,22 +182,6 @@ export const otherShortcuts = {
   }
 }
 
-export const getShortcuts = () => {
-  const shortcutroups = [recordShortcuts, editShortcuts, otherShortcuts]
-  const shortcuts = []
-
-  for(const groups of shortcutroups) {
-    for(const [key, value] of Object.entries(groups)) {
-
-      shortcuts[key] = {
-        name: value.name,
-        sequences: value.sequences,
-        description: value.description,
-        group: value.group,
-      }
-
-    }
-  }
-
-  return shortcuts
-}
+export const getShortcuts = () => (
+  Object.fromEntries([recordShortcuts, editShortcuts, otherShortcuts].flatMap(Object.entries))
+);

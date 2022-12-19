@@ -80,46 +80,19 @@ const KeyboardShortcuts = () => {
   const { t } = useTranslation();
   const shortcuts = getShortcuts()
 
-  const render = () => {
-    if (shortcuts && Object.keys(shortcuts).length > 0) {
+  if (shortcuts && Object.keys(shortcuts).length > 0) {
 
-      var obj = {}
-      obj[t("other-shortcuts")] = []    // For keys without a group
+    var obj = {}
+    obj[t("other-shortcuts")] = []    // For keys without a group
 
-      // Sort by group
-      for (const [, value] of Object.entries(shortcuts)) {
-        if (value.group) {
-          if (obj[value.group]) {
-            obj[value.group].push(value)
-          } else {
-            obj[value.group] = [value]
-          }
-        } else {
-          obj[t("other-shortcuts")].push(value)
-        }
+    // Sort by group
+    for (const value of Object.values(shortcuts)) {
+      const key = value.group ?? t("other-shortcuts");
+      if (!(key in obj)) {
+        obj[key] = [];
       }
-
-      const groups = [];
-      for (const key in obj) {
-        if (obj[key].length > 0) {
-          groups.push(<Group name={key} entries={obj[key]} key={key}/>);
-        }
-      }
-
-      return (
-        <div sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}>
-          {groups}
-        </div>
-      )
+      obj[key].push(value);
     }
-
-    // No groups fallback
-    return <div>{t('no-groups')}</div>
   }
 
   return (
@@ -137,7 +110,18 @@ const KeyboardShortcuts = () => {
       }}>
         {t('nav-shortcuts')}
       </h2>
-      {render()}
+
+      <div sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}>
+          {Object.entries(obj)
+            .filter(([_, value]) => value.length > 0)
+            .map(([key, value]) => <Group name={key} key={key} entries={value} />)}
+        </div>
+
     </div>
   )
 }
