@@ -504,10 +504,12 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
 
   const skipFiveSeconds = (keyEvent) => {
     videoRefs.forEach( video => {
-      if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {
-        video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
-      } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
-        video.current.currentTime = Math.max(0, video.current.currentTime - 5);
+      if (video.current !== undefined) {
+        if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {
+          video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
+        } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
+          video.current.currentTime = Math.max(0, video.current.currentTime - 5);
+        }
       }
     });
   }
@@ -516,10 +518,12 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     const fps = 30;
 
     videoRefs.forEach( video => {
-      if (keyEvent.key === '.') {
-        video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1/fps));
-      } else if (keyEvent.key === ',') {
-        video.current.currentTime = Math.max(0, video.current.currentTime - (1/fps));
+      if (video.current !== undefined) {
+        if (keyEvent.key === '.') {
+          video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1/fps));
+        } else if (keyEvent.key === ',') {
+          video.current.currentTime = Math.max(0, video.current.currentTime - (1/fps));
+        }
       }
     });
   }
