@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faCircleNotch, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import useForm from 'react-hook-form';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Button } from '@theme-ui/components';
@@ -81,7 +81,7 @@ function OpencastSettings({ settingsManager }) {
       case STATE_CONNECTED:    // <- login data is provided in some way -> state impossible
       case STATE_UNCONFIGURED: // <- server URL is required -> state impossible
       default:
-        console.error("bug: invalid state reached...");
+        console.error('bug: invalid state reached...');
         setStatus('error');
         setError('internal error :(');
     }
@@ -113,7 +113,7 @@ function OpencastSettings({ settingsManager }) {
           { showServerUrl && <Input
             errors={errors}
             label={t('upload-settings-label-server-url')}
-            name="serverUrl"
+            name='serverUrl'
             register={register}
             validate={value => {
               try {
@@ -123,7 +123,7 @@ function OpencastSettings({ settingsManager }) {
               } catch (e) {
                 let err = t('upload-settings-invalid-url');
                 if (!value.startsWith('https://') && !value.startsWith('http://')) {
-                  err += " " + t('upload-settings-invalid-url-http-start');
+                  err += ' ' + t('upload-settings-invalid-url-http-start');
                 }
                 return err;
               }
@@ -134,7 +134,7 @@ function OpencastSettings({ settingsManager }) {
           { showUsername && <Input
             errors={errors}
             label={t('upload-settings-label-username')}
-            name="loginName"
+            name='loginName'
             register={register}
             required
           /> }
@@ -142,10 +142,10 @@ function OpencastSettings({ settingsManager }) {
           { showPassword && <Input
             errors={errors}
             label={t('upload-settings-label-password')}
-            name="loginPassword"
+            name='loginPassword'
             register={register}
             required
-            type="password"
+            type='password'
           /> }
 
           <footer sx={{ mt: 4 }}>
@@ -159,7 +159,7 @@ function OpencastSettings({ settingsManager }) {
             /> }
             { hasRecording && status === 'saved' && (
               <Link
-                to={{ pathname: "/", search: location.search }}
+                to={{ pathname: '/', search: location.search }}
                 sx={{ ml: 3, variant: 'styles.a' }}
               >
                 {t('settings-back-to-recording')}

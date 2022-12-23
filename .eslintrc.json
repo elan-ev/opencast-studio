@@ -8,7 +8,25 @@
     "react/prop-types": 0,
     "react/no-unknown-property": ["error", { "ignore": ["sx"] }],
     "no-unused-expressions": "off",
-    "@babel/no-unused-expressions": "warn"
+    "@babel/no-unused-expressions": "warn",
+
+    "arrow-parens": ["error", "as-needed"],
+    "arrow-spacing": "error",
+    "block-spacing": ["error", "always"],
+    "brace-style": "error",
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "eol-last": ["error", "always"],
+    "func-call-spacing": ["error", "never"],
+    "indent": ["error", 2, { "SwitchCase": 1, "MemberExpression": "off" }],
+    "jsx-quotes": ["error", "prefer-single"],
+    "linebreak-style": ["error", "unix"],
+    "max-len": ["error", { "code": 120, "ignoreUrls": true }],
+    "no-multi-spaces": ["warn", { "ignoreEOLComments": true }],
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always", { "arraysInObjects": false, "objectsInObjects": false }],
+    "semi": ["error", "always"],
+    "space-before-function-paren": ["error", "never"],
+    "space-infix-ops": "error"
   },
   "settings": {
     "react": {

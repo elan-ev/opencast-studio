@@ -17,46 +17,46 @@ const ColorModeSettings = () => {
     } else {
       setColorMode('light');
     }
-  }
+  };
 
   useEffect(() => {
-    const theme = localStorage.getItem('theme')
+    const theme = localStorage.getItem('theme');
     if(theme === 'systemTheme') {
       getSystemPreference();
     }
-  })
+  });
 
-  const switchTheme = (value) => {
-    localStorage.removeItem('prefers-color-scheme')
+  const switchTheme = value => {
+    localStorage.removeItem('prefers-color-scheme');
     if(value === 'systemTheme') {
       getSystemPreference();
-      localStorage.setItem('theme', 'systemTheme')
+      localStorage.setItem('theme', 'systemTheme');
     } else if(value === 'darkTheme') {
       setColorMode('dark');
-      localStorage.setItem('theme', 'darkTheme')
+      localStorage.setItem('theme', 'darkTheme');
     } else {
       setColorMode('light');
-      localStorage.setItem('theme', 'lightTheme')
+      localStorage.setItem('theme', 'lightTheme');
     }
-  }
+  };
 
   const themes = [
     { value: 'systemTheme', label: t('settings-theme-system') },
     { value: 'lightTheme', label: t('settings-theme-light') },
     { value: 'darkTheme', label: t('settings-theme-dark') }
-  ]
+  ];
 
   return (
     <SettingsSection title={t('settings-theme-appearance')}>
       <select
         sx={{ variant: 'styles.select' }}
         defaultValue={localStorage.getItem('theme')}
-        onChange={themes => switchTheme(themes.target.value)} 
+        onChange={themes => switchTheme(themes.target.value)}
       >
         {themes.map((option, index) => (
           <option key={index} value={option.value}>{option.label}</option>
         ))}
-      </select> 
+      </select>
     </SettingsSection>
   );
 };

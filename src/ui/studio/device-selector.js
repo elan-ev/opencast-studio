@@ -20,7 +20,8 @@ export default function DeviceSelector({ devices, handleChange, ...rest }) {
   }
 
   return (
-      <select sx={{variant: 'styles.select'}} onChange={selectDevice} disabled={!(devices && devices.length > 1)} {...rest}>
+    <select sx={{ variant: 'styles.select' }} onChange={selectDevice}
+      disabled={!(devices && devices.length > 1)} {...rest}>
       {devices &&
         devices.map(device => (
           <option key={device.deviceId} value={device.deviceId}>
