@@ -126,7 +126,7 @@ export default function SaveCreation(props) {
         const lastProgress = progressHistory[progressHistory.length - 1];
         const timeSinceLastUpdate = Date.now() - lastProgress.timestamp;
         if (timeSinceLastUpdate > 3000) {
-            onProgress(lastProgress.progress);
+          onProgress(lastProgress.progress);
         }
       }
     }, 1000);
@@ -191,13 +191,13 @@ export default function SaveCreation(props) {
       case STATE_UPLOADED:
         return <UploadSuccess />;
       default: // STATE_NOT_UPLOADED or STATE_ERROR
-        return <UploadForm {...{ uploadState, handleUpload }} />
+        return <UploadForm {...{ uploadState, handleUpload }} />;
     }
   })();
 
   return (
     <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
-      <Themed.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px'] }}>
+      <Themed.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px']}}>
         { possiblyDone ? t('save-creation-title-done') : t('save-creation-title') }
       </Themed.h1>
 
@@ -347,7 +347,7 @@ const DownloadBox = ({ presenter, title }) => {
       </div>
     </Fragment>
   );
-}
+};
 
 // Shown if there is no working Opencast connection. Shows a warning and a link
 // to settings.
@@ -356,11 +356,11 @@ const ConnectionUnconfiguredWarning = () => {
   const [colorMode] = useColorMode();
 
   return (
-    <Notification key="opencast-connection" isDanger>
-      <Trans i18nKey="warning-missing-connection-settings">
+    <Notification key='opencast-connection' isDanger>
+      <Trans i18nKey='warning-missing-connection-settings'>
         Warning.
         <Link
-          to={{ pathname: "/settings", search: location.search }}
+          to={{ pathname: '/settings', search: location.search }}
           sx={{ variant: 'styles.a', color: colorMode === 'dark' ? 'rgba(255, 255, 34, 0.8)' : '#ff2' }}
         >
           settings
@@ -410,12 +410,12 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
     : (
-      <Trans i18nKey="save-creation-upload-to">
+      <Trans i18nKey='save-creation-upload-to'>
         Upload to <code sx={{
           backgroundColor: 'rgba(0, 0, 0, 0.1)',
           borderRadius: '5px',
           padding: '1px 3px',
-        }}>{{server: opencast.prettyServerUrl()}}</code>
+        }}>{{ server: opencast.prettyServerUrl() }}</code>
       </Trans>
     );
 
@@ -425,21 +425,21 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
       <form>
         { titleField !== FORM_FIELD_HIDDEN && <Input
-          name="title"
+          name='title'
           label={t('save-creation-label-title')}
           required={titleField === FORM_FIELD_REQUIRED}
           onChange={handleInputChange}
-          autoComplete="off"
+          autoComplete='off'
           defaultValue={title}
           {...{ errors, register }}
         /> }
 
         { presenterField !== FORM_FIELD_HIDDEN && <Input
-          name="presenter"
+          name='presenter'
           label={t('save-creation-label-presenter')}
           required={presenterField === FORM_FIELD_REQUIRED}
           onChange={handleInputChange}
-          autoComplete="off"
+          autoComplete='off'
           defaultValue={presenterValue}
           {...{ errors, register }}
         /> }
@@ -473,7 +473,7 @@ const NotConnectedWarning = () => {
   const [retrying, setRetrying] = useState(false);
   useEffect(() => {
     if (!opencast.isReadyToUpload() && !retrying && isVisible) {
-      const id = setTimeout(async () => {
+      const id = setTimeout(async() => {
         setRetrying(true);
         await opencast.refreshConnection();
         setRetrying(false);
@@ -481,7 +481,7 @@ const NotConnectedWarning = () => {
 
       return () => clearTimeout(id);
     }
-  })
+  });
 
   // If the connection is established, we don't show the warning.
   if (opencast.isReadyToUpload()) {
@@ -517,7 +517,7 @@ const NotConnectedWarning = () => {
           <Trans i18nKey='save-creation-warn-login-failed'>
             Failed.
             <Link
-              to={{ pathname: "/settings", search: location.search }}
+              to={{ pathname: '/settings', search: location.search }}
               sx={{ variant: 'styles.a', color: '#ff2' }}
             >
               settings
@@ -593,7 +593,7 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
         <Text variant='text'>{roundedPercent}%</Text>
         <div sx={{ flex: 1 }} />
         <Text variant='text'>
-          {prettyTime && <Trans i18nKey="upload-time-left">
+          {prettyTime && <Trans i18nKey='upload-time-left'>
             {{ time: prettyTime }} left
           </Trans>}
         </Text>
@@ -619,7 +619,7 @@ const UploadSuccess = () => {
         height: '130px',
         color: 'primary',
       }}>
-        <FontAwesomeIcon icon={faCheckCircle} size="4x" />
+        <FontAwesomeIcon icon={faCheckCircle} size='4x' />
       </div>
       <Text variant='text' sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
       <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>

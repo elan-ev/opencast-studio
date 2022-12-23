@@ -30,13 +30,13 @@ function LegalNotices() {
 
       <Themed.p>
         <FontAwesomeIcon icon={faGlobeEurope} />{' '}
-        <Themed.a href="https://elan-ev.de">elan-ev.de</Themed.a>
+        <Themed.a href='https://elan-ev.de'>elan-ev.de</Themed.a>
         <br />
         <FontAwesomeIcon icon={faEnvelope} />{' '}
-        <Themed.a href="mailto:kontakt@elan-ev.de">kontakt@elan-ev.de</Themed.a>
+        <Themed.a href='mailto:kontakt@elan-ev.de'>kontakt@elan-ev.de</Themed.a>
         <br />
         <FontAwesomeIcon icon={faPhone} />{' '}
-        <Themed.a href="tel:+4944199866610">+49&thinsp;441 998&thinsp;666&thinsp;10</Themed.a>
+        <Themed.a href='tel:+4944199866610'>+49&thinsp;441 998&thinsp;666&thinsp;10</Themed.a>
       </Themed.p>
 
       <Themed.p>
@@ -58,7 +58,7 @@ function About(props) {
           <Themed.h1>Opencast Studio</Themed.h1>
         </header>
         <Themed.p>
-          A web-based recording studio for <Themed.a href="https://opencast.org">Opencast</Themed.a>.
+          A web-based recording studio for <Themed.a href='https://opencast.org'>Opencast</Themed.a>.
         </Themed.p>
         <Themed.p>
           Opencast Studio allows you to record your camera, your display and your microphoneʼs audio.
@@ -67,11 +67,11 @@ function About(props) {
         </Themed.p>
         <Themed.p>
           This is free software under the terms of the{' '}
-          <Themed.a href="https://github.com/elan-ev/opencast-studio/blob/master/LICENSE">
+          <Themed.a href='https://github.com/elan-ev/opencast-studio/blob/master/LICENSE'>
             MIT License
           </Themed.a>{' '}
-          developed by the <Themed.a href="https://elan-ev.de">ELAN e.V.</Themed.a> in cooperation
-          with the <Themed.a href="https://ethz.ch">ETH Zürich</Themed.a>.
+          developed by the <Themed.a href='https://elan-ev.de'>ELAN e.V.</Themed.a> in cooperation
+          with the <Themed.a href='https://ethz.ch'>ETH Zürich</Themed.a>.
         </Themed.p>
 
         <Themed.h2>How it works</Themed.h2>
@@ -87,7 +87,7 @@ function About(props) {
             <Themed.p>
               If you are experiencing any difficulties or found any bugs,
               please take a look at the{' '}
-              <Themed.a href="https://github.com/elan-ev/opencast-studio/issues">
+              <Themed.a href='https://github.com/elan-ev/opencast-studio/issues'>
                 issue tracker on GitHub
               </Themed.a>.
               Before filing a new issue, please check if one about your topic already exists.
@@ -96,7 +96,7 @@ function About(props) {
             <Themed.p>
               If you are interested in additional development
               or want to support the development of Opencast Studio, please contact{' '}
-              <Themed.a href="mailto:opencast-support@elan-ev.de">
+              <Themed.a href='mailto:opencast-support@elan-ev.de'>
                 opencast-support@elan-ev.de
               </Themed.a>.
             </Themed.p>
@@ -109,19 +109,19 @@ function About(props) {
         </Themed.p>
         <ul>
           <li>
-            <Themed.a href="https://github.com/slampunk">Duncan Smith</Themed.a> for starting this
+            <Themed.a href='https://github.com/slampunk'>Duncan Smith</Themed.a> for starting this
             project
           </li>
           <li>
-            <Themed.a href="https://github.com/cilt-uct">University of Cape Town (CILT)</Themed.a>
+            <Themed.a href='https://github.com/cilt-uct'>University of Cape Town (CILT)</Themed.a>
             {' '}for letting Duncan start the project
           </li>
           <li>
-            <Themed.a href="https://ethz.ch">ETH Zürich</Themed.a> for financial support and
+            <Themed.a href='https://ethz.ch'>ETH Zürich</Themed.a> for financial support and
             testing
           </li>
           <li>
-            <Themed.a href="https://github.com/elan-ev">ELAN e.V.</Themed.a> for the re-implementation
+            <Themed.a href='https://github.com/elan-ev'>ELAN e.V.</Themed.a> for the re-implementation
             and the ongoing development
           </li>
           <li>
@@ -136,10 +136,10 @@ function About(props) {
           Build date {process.env.REACT_APP_BUILD_DATE || '?'},
           commit{' '}
           <Themed.a
-            aria-label="Git commit on GitHub"
-            href={"https://github.com/elan-ev/opencast-studio/commit/"
+            aria-label='Git commit on GitHub'
+            href={'https://github.com/elan-ev/opencast-studio/commit/'
                   + process.env.REACT_APP_GIT_SHA }
-            >
+          >
             {process.env.REACT_APP_GIT_SHA || '?'}
           </Themed.a>.
         </Themed.p>

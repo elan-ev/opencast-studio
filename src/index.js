@@ -69,7 +69,7 @@ initialize.then(
           </OpencastProvider>
         </ThemeProvider>
       </React.StrictMode>
-     );
+    );
   },
 
   // This error case is vey unlikely to occur.

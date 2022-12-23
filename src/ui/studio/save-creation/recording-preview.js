@@ -24,7 +24,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
   // Get file size in human readable format. We use base-1000 XB instead of
   // base-1024 XiB, as the latter would probably confuse some users and many
   // file managers use base-1000 anyway. Notably, the windows file manager
-  // calculates with base-1024 but shows "XB". So it is lying.
+  // calculates with base-1024 but shows 'XB'. So it is lying.
   const numBytes = blob.size;
   const round = n => {
     const digits = n < 10 ? 1 : 0;
@@ -41,7 +41,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
     } else if (numBytes < 999_500_000) {
       return `${round(numBytes / (1_000_000))} MB`;
     } else {
-      return `${round(numBytes / (1_000_000_000))} GB`
+      return `${round(numBytes / (1_000_000_000))} GB`;
     }
   })();
 
@@ -65,7 +65,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
           src={url}
           // Without this, some browsers show a black video element instead of the first frame.
           onLoadedData={e => e.target.currentTime = 0}
-          preload="auto"
+          preload='auto'
           sx={{
             maxWidth: '100%',
             height: '100%',
@@ -84,23 +84,23 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
             color: 'primary',
             backgroundColor: 'rgba(0, 0, 0, 0.4)',
           }}>
-            <FontAwesomeIcon icon={faCheckCircle} size="4x" />
+            <FontAwesomeIcon icon={faCheckCircle} size='4x' />
           </div>
         )}
       </div>
       <Button
-        as="a"
-        role="button"
+        as='a'
+        role='button'
         sx={{
           width: '100%',
           maxWidth: '215px',
           margin: 'auto',
           mt: '10px',
         }}
-        target="_blank"
+        target='_blank'
         download={downloadName}
         href={url}
-        rel="noopener noreferrer"
+        rel='noopener noreferrer'
         onClick={onDownload}
       >
         <FontAwesomeIcon icon={faDownload} />

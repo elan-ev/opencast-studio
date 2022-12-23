@@ -136,7 +136,7 @@ export class SettingsManager {
         // the value at the end.
         let obj = rawUrlSettings;
         const segments = key.split('.');
-        segments.slice(0, -1).forEach((segment) => {
+        segments.slice(0, -1).forEach( segment => {
           if (!(segment in obj)) {
             obj[segment] = {};
           }
@@ -404,7 +404,7 @@ const metaDataField = v => {
         + `'${FORM_FIELD_REQUIRED}', but is '${v}'`
     );
   }
-}
+};
 
 // A validator wrapper that errors of the source of the value is NOT
 // `settings.toml`.
@@ -415,7 +415,7 @@ const onlyFromServer = inner => (v, allowParse, src) => {
   }
 
   return inner(v, allowParse, src);
-}
+};
 
 // Sources that values can come from.
 const SRC_SERVER = 'src-server';
@@ -508,7 +508,7 @@ const SCHEMA = {
 let merge = (a, b) => {
   return deepmerge(a, b, { arrayMerge });
 };
-merge.all = array => deepmerge.all(array, { arrayMerge })
+merge.all = array => deepmerge.all(array, { arrayMerge });
 const arrayMerge = (destinationArray, sourceArray, options) => sourceArray;
 
 
