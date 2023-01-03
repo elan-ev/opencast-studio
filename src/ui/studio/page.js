@@ -10,7 +10,7 @@ import VideoSetup from './video-setup';
 import Recording from './recording';
 import Review from './review';
 
-import {isRecordingSupported} from '../../util';
+import { isRecordingSupported } from '../../util';
 
 
 export default function Wizard({ activeStep, updateActiveStep, userHasWebcam }) {

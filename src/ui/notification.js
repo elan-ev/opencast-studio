@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-const Notification = ({isDanger, ...rest}) => (
+const Notification = ({ isDanger, ...rest }) => (
   <div
     sx={{
       ':not(:last-child)': { marginBottom: '1.5rem' },

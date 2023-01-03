@@ -3,7 +3,7 @@ const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
   const ideal = videoConstraints?.height?.ideal || fallbackIdeal;
   const idealField = ideal && (maxHeight ? { ideal: Math.min(ideal, maxHeight) } : { ideal });
 
-  return { height: { ...maxField, ...idealField } };
+  return { height: { ...maxField, ...idealField }};
 };
 
 export async function startAudioCapture(dispatch, deviceId = null) {
@@ -29,7 +29,7 @@ export async function startAudioCapture(dispatch, deviceId = null) {
 
 export async function startDisplayCapture(dispatch, settings, videoConstraints = {}) {
   const maxFps = settings.display?.maxFps
-    ? { frameRate: { max: settings.display.maxFps } }
+    ? { frameRate: { max: settings.display.maxFps }}
     : {};
   const height = mergeHeightConstraint(settings.display?.maxHeight, videoConstraints);
 
@@ -62,7 +62,7 @@ export async function startDisplayCapture(dispatch, settings, videoConstraints =
 
 export async function startUserCapture(dispatch, settings, videoConstraints) {
   const maxFps = settings.camera?.maxFps
-    ? { frameRate: { max: settings.camera.maxFps } }
+    ? { frameRate: { max: settings.camera.maxFps }}
     : {};
   const height = mergeHeightConstraint(settings.camera?.maxHeight, videoConstraints, 1080);
 

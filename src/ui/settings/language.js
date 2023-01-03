@@ -24,7 +24,7 @@ const LanguageSettings = () => {
         {lang_label}
       </label>
       <select
-        id="studio-lang"
+        id='studio-lang'
         sx={{ variant: 'styles.select' }}
         defaultValue={i18n.language}
         onChange={e => i18n.changeLanguage(e.target.value)}

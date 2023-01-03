@@ -8,7 +8,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
-import useResizeObserver from "use-resize-observer/polyfilled";
+import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import { useSettings } from '../../../settings';
 import { dimensionsOf, getUniqueDevices } from '../../../util';
@@ -62,7 +62,7 @@ const qualityOptions = maxHeight => {
   }
 
   return out.map(n => `${n}p`);
-}
+};
 
 // Converts the given aspect ratio label (one of the elements in
 // `ASPECT_RATIOS`) into the numerical ratio, e.g. 4/3 = 1.333. If the argument
@@ -74,7 +74,7 @@ const parseAspectRatio = label => {
   };
 
   return mapping[label] || null;
-}
+};
 
 // Converts the given quality label to the actual height as number. If the
 // argument is not a valid quality label (e.g. '720p'), `null` is returned.
@@ -111,8 +111,8 @@ export const StreamSettings = ({ isDesktop, stream }) => {
   const [expandedHeight, setExpandedHeight] = useState(0);
   const { ref } = useResizeObserver({
     // We don't use the height passed to the callback as we want the outer
-    // height. We also add a magic "4" here. 2 pixels are for the border of the
-    // outer div. The other two are "wiggle room". If we always set the height
+    // height. We also add a magic '4' here. 2 pixels are for the border of the
+    // outer div. The other two are 'wiggle room'. If we always set the height
     // to fit exactly, this easily leads to unnessecary scrollbars appearing.
     // This in turn might lead to rewrapping and then a change in height, in
     // the worst case ending up in an infinite loop.
@@ -262,7 +262,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
               lineHeight: '20px',
               border: theme => `1px solid ${theme.colors.gray[2]}`,
             }}>
-              <Trans i18nKey="sources-video-preferences-note">
+              <Trans i18nKey='sources-video-preferences-note'>
                 <strong>Note:</strong> Explanation.
               </Trans>
             </div>
@@ -293,10 +293,10 @@ const PrefKey = ({ children }) => (
   </div>
 );
 const PrefValue = ({ children }) => (
-  <div tabIndex={-1} 
-    sx={{ 
-      gridColumn: '1 2', 
-      overflowX: 'auto', 
+  <div tabIndex={-1}
+    sx={{
+      gridColumn: '1 2',
+      overflowX: 'auto',
       lineHeight: '30px',
       '*:focus-visible': {
         outline: theme => `5px solid ${theme.colors.primary}`,
@@ -319,7 +319,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isE
   let fitState;
   if (currentHeight && qualities.includes(prefs.quality)) {
     const expectedHeight = parseInt(prefs.quality);
-    fitState = expectedHeight === currentHeight ? 'ok': 'warn';
+    fitState = expectedHeight === currentHeight ? 'ok' : 'warn';
   }
 
   return <Fragment>
@@ -328,7 +328,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isE
       <RadioButton
         isExpanded={isExpanded}
         id={`quality-auto-${kind}`}
-        value="auto"
+        value='auto'
         name={`quality-${kind}`}
         label={t('sources-video-quality-auto')}
         onChange={changeQuality}
@@ -357,7 +357,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
   const state = useStudioState();
 
   const currentDeviceId = deviceIdOf(state.userStream);
-  const devices =getUniqueDevices(state.mediaDevices, 'videoinput');
+  const devices = getUniqueDevices(state.mediaDevices, 'videoinput');
 
   const [width, height] = dimensionsOf(state.userStream);
   let arState;
@@ -365,7 +365,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
     const currentAr = width / height;
     const expectedAr = parseAspectRatio(prefs.aspectRatio);
 
-    // We have some range we accept as "good". You never know with these
+    // We have some range we accept as 'good'. You never know with these
     // floats...
     arState = (expectedAr * 0.97 < currentAr && currentAr < expectedAr / 0.97)
       ? 'ok'
@@ -399,9 +399,9 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
     <PrefValue>
       <RadioButton
         isExpanded={isExpanded}
-        id="ar-auto"
-        value="auto"
-        name="aspectRatio"
+        id='ar-auto'
+        value='auto'
+        name='aspectRatio'
         label={t('sources-video-aspect-ratio-auto')}
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
@@ -413,7 +413,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
             isExpanded={isExpanded}
             id={`ar-${ar}`}
             value={ar}
-            name="aspectRatio"
+            name='aspectRatio'
             onChange={changeAspectRatio}
             checked={prefs.aspectRatio === ar}
             state={arState}
@@ -429,7 +429,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) 
 
   return <Fragment>
     <input
-      type="radio"
+      type='radio'
       onChange={e => onChange(e.target.value)}
       {...{ id, value, checked, name }}
       sx={{

@@ -25,7 +25,7 @@ export const StepContainer = ({ children }) => (
       pt: [2, 2, 3],
       '& > h1': {
         textAlign: 'center',
-        fontSize: ['24px', '27px', '32px'] ,
+        fontSize: ['24px', '27px', '32px'],
       },
     }}
   >

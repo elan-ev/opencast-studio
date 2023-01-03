@@ -48,12 +48,12 @@ export default function Review(props) {
 
   const expectedRecordings = (() => {
     switch (videoChoice) {
-    case 'none':
-      return 0;
-    case 'both':
-      return 2;
-    default:
-      return 1;
+      case 'none':
+        return 0;
+      case 'both':
+        return 2;
+      default:
+        return 1;
     }
   })();
 
@@ -74,13 +74,13 @@ export default function Review(props) {
       {(
         !previewReady || recordings.length !== expectedRecordings
       ) && <div sx={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <Spinner title={t('save-creation-waiting-for-recordings')} />
-          </div>
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Spinner title={t('save-creation-waiting-for-recordings')} />
+      </div>
       }
       {recordings.length === expectedRecordings && <div sx={previewReady ? {
         display: 'flex',
@@ -117,7 +117,7 @@ export default function Review(props) {
 };
 
 const ControlBox = ({ previewController, currentTime }) => (
-  <div sx={{ 
+  <div sx={{
     backgroundColor: 'gray.4',
     color: 'text',
     borderRadius: '8px',
@@ -134,7 +134,7 @@ const Scrubber = ({ previewController, currentTime }) => {
   const [colorMode] = useColorMode();
 
   const setTime = mouseEvent => {
-    const rect = mouseEvent.target.getBoundingClientRect()
+    const rect = mouseEvent.target.getBoundingClientRect();
     const x = mouseEvent.clientX - rect.x;
     let progress = x / rect.width;
     if (progress < 0) {
@@ -256,7 +256,7 @@ const VideoControls = ({ currentTime, previewController }) => {
         }}
       >
         { settings.review?.disableCutting || <CutControls
-          marker="start"
+          marker='start'
           innerRef={leftMarker}
           value={start}
           control={end}
@@ -264,7 +264,7 @@ const VideoControls = ({ currentTime, previewController }) => {
           { ...{ recordingDispatch, previewController, currentTime } }
         /> }
         <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
-          <button 
+          <button
             sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
             onClick={() => {
               const controller = previewController.current;
@@ -279,12 +279,12 @@ const VideoControls = ({ currentTime, previewController }) => {
           >
             <FontAwesomeIcon
               icon={previewController.current?.isPlaying ? faPause : faPlay}
-              sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 } }}
+              sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 }}}
             />
           </button>
         </Tooltip>
         { settings.review?.disableCutting || <CutControls
-          marker="end"
+          marker='end'
           innerRef={rightMarker}
           value={end}
           control={start}
@@ -312,13 +312,13 @@ const CutControls = (
       <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
         { value !== null && <Fragment>
           <Trans { ...{ t } } i18nKey={`review-${marker}`}>
-            {{ [marker]: value }} <Link href="" onClick={event => {
+            {{ [marker]: value }} <Link href='' onClick={event => {
               event.preventDefault();
               previewController.current.currentTime = value;
             }} />
           </Trans>
           <Tooltip content={t(`review-remove-cut-point`)}>
-            <IconButton context={marker} 
+            <IconButton context={marker}
               ref={innerRef} // for DELETE_CROP_MARK
               onClick={
                 () => recordingDispatch({
@@ -419,7 +419,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
       return v && v.currentTime > 0 && !v.paused && !v.ended;
     },
     get isReadyToPlay() {
-      // State 2 means "at least enough data to play one frame"
+      // State 2 means 'at least enough data to play one frame'
       return allVideos.every(r => r.current.readyState >= 2);
     },
     play() {
@@ -532,7 +532,8 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     body: (
       <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
         <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
-          { overlayVisible && <div sx={{
+          { overlayVisible && <div
+          sx={{
               position: 'absolute',
               left: 0,
               right: 0,
@@ -546,9 +547,9 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
               justifyContent: 'center',
               pointerEvents: 'none',
             }}>
-              <CutOutIcon sx={{ height: '4em' }}/>
-              <p sx={{ my: 3 }}>{ t('review-part-will-be-removed') }</p>
-            </div>
+            <CutOutIcon sx={{ height: '4em' }}/>
+            <p sx={{ my: 3 }}>{ t('review-part-will-be-removed') }</p>
+          </div>
           }
           <video
             ref={videoRefs[index]}
@@ -571,24 +572,24 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
             } : event => {
               if (!durationsCalculated) {
                 switch (durationCalculationProgress[index].current) {
-                case 'started':
-                  event.target.currentTime = ALMOST_ZERO;
-                  durationCalculationProgress[index].current = 'done';
-                  break;
-                case 'done':
-                  if (durationCalculationProgress.filter(
-                    p => p.current === 'done'
-                  ).length === recordings.length) {
-                    setDurationsCalculated(true);
-                  }
-                  break;
-                default:
-                  // Appease the linter
-                  break;
+                  case 'started':
+                    event.target.currentTime = ALMOST_ZERO;
+                    durationCalculationProgress[index].current = 'done';
+                    break;
+                  case 'done':
+                    if (durationCalculationProgress.filter(
+                      p => p.current === 'done'
+                    ).length === recordings.length) {
+                      setDurationsCalculated(true);
+                    }
+                    break;
+                  default:
+                    // Appease the linter
+                    break;
                 }
-              }}
+              }} // eslint-disable-line
             }
-            preload="auto" tabIndex={'-1'}
+            preload='auto' tabIndex={'-1'}
             sx={{
               width: '100%',
               height: '100%',

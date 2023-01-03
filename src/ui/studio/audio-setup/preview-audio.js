@@ -37,7 +37,7 @@ export default function PreviewAudio({ stream }) {
         flex: '1 0 70px',
         bg: 'rgba(0,0,0,0.8)',
         borderRadius: '7px',
-       }}
+      }}
     />
   );
 }

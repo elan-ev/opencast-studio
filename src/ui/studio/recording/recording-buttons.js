@@ -42,9 +42,9 @@ export const PauseButton = props => (
         outlineOffset: '-1px',
         borderRadius: '50%',
       },
-  }}
+    }}
   >
-    <span className="fa-layers">
+    <span className='fa-layers'>
       <FontAwesomeIcon icon={faPauseCircle} sx={{ color: 'button_bg' }} />
     </span>
   </Button>
@@ -68,9 +68,9 @@ export const RecordButton = props => (
       },
     }}
   >
-    <span className="fa-layers record-buttons">
+    <span className='fa-layers record-buttons'>
       <FontAwesomeIcon icon={props.countdown ? faCircleNotch : faCircle} spin={props.countdown} />
-      <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
+      <FontAwesomeIcon icon={faCircle} transform='shrink-6' />
     </span>
   </Button>
 );
@@ -85,7 +85,7 @@ export const ResumeButton = props => (
       },
     }}
   >
-    <span className="fa-layers">
+    <span className='fa-layers'>
       <FontAwesomeIcon icon={faPlayCircle} sx={{ color: 'button_bg' }} />
     </span>
   </Button>
@@ -96,7 +96,7 @@ export const StopButton = props => (
     onClick={props.onClick}
     title={props.title}
     large={!!props.large}
-    sx={{ 
+    sx={{
       color: '#bd181c',
       '&:focus-visible': {
         outline: theme => `7px solid ${theme.colors.focus[0]} !important`,
@@ -106,7 +106,7 @@ export const StopButton = props => (
     }}
   >
     <FontAwesomeIcon icon={faStopCircle}
-      sx={{color: '#bd181c !important',}}
+      sx={{ color: '#bd181c !important' }}
     />
   </Button>
 );

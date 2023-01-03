@@ -48,7 +48,7 @@ export const SourcePreview = ({ warnings, inputs }) => {
       <VideoBox minWidth={minWidth} gap={20}>{ children }</VideoBox>
     </Fragment>
   );
-}
+};
 
 const StreamPreview = ({ input, text }) => (
   <Card sx={{ height: '100%', overflow: 'hidden', backgroundColor: 'element_bg' }}>
@@ -81,21 +81,22 @@ const PreviewVideo = ({ input }) => {
   if (!stream) {
     let inner;
     if (allowed === false || unexpectedEnd) {
-      inner = <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />;
+      inner = <FontAwesomeIcon icon={faExclamationTriangle} size='3x' />;
     } else {
-      inner = <Spinner size="75"/>;
+      inner = <Spinner size='75'/>;
     }
 
     return (
       <div tabIndex={'-1'}
-      sx={{
-        width: '100%',
-        height: '100%',
-        minHeight: '120px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+        sx={{
+          width: '100%',
+          height: '100%',
+          minHeight: '120px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         { inner }
       </div>
     );

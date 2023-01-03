@@ -621,7 +621,7 @@ export const useOpencast = () => React.useContext(Context);
 export const Provider = ({ initial, children }) => {
   const [, updateDummy] = useState(0);
   const [opencast, updateOpencast] = useState(initial);
-  opencast.updateGlobalOc = (newInstance) => {
+  opencast.updateGlobalOc = newInstance => {
     updateOpencast(newInstance);
 
     // If the object reference didn't change, we use this dummy state to force a
@@ -662,7 +662,7 @@ const renderTemplate = (template, view) => {
   const out = Mustache.render(template, view);
   Mustache.escape = originalEscape;
   return out;
-}
+};
 
 const DEFAULT_DCC_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
 <dublincore xmlns="http://www.opencastproject.org/xsd/1.0/dublincore/"

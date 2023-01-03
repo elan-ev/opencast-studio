@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { useEffect, useRef } from 'react';
 import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from "react-router";
+import { useHistory } from 'react-router';
 
 import Recorder from '../../../recorder';
 import { useSettings } from '../../../settings';
@@ -21,7 +21,7 @@ import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 function addRecordOnStop(dispatch, deviceType) {
   return ({ media, url, mimeType, dimensions }) => {
-    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType, dimensions } });
+    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType, dimensions }});
   };
 }
 
@@ -112,7 +112,7 @@ export default function RecordingControls({
     }
 
     history.listen(() => {
-      // This only happens when the user uses "back" or "forward" in their
+      // This only happens when the user uses 'back' or 'forward' in their
       // browser and they confirm they want to discard the recording.
       if (recordingState !== 'STATE_INACTIVE') {
         dispatch({ type: 'STOP_RECORDING' });
@@ -168,10 +168,10 @@ export default function RecordingControls({
           <Beforeunload onBeforeunload={event => event.preventDefault()} />
         )}
 
-        <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
+        <div className='buttons' sx={{ display: 'flex', alignItems: 'center' }}>
           { recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: 'right' }}>
             { recordingState === STATE_RECORDING && (
-              <Tooltip content={t('pause-button-title')} offset={[0,50]}>
+              <Tooltip content={t('pause-button-title')} offset={[0, 50]}>
                 <PauseButton
                   recordingState={recordingState}
                   onClick={handlePause}
@@ -180,7 +180,7 @@ export default function RecordingControls({
             )}
 
             { recordingState === STATE_PAUSED && (
-              <Tooltip content={t('resume-button-title')} offset={[0,50]}>
+              <Tooltip content={t('resume-button-title')} offset={[0, 50]}>
                 <ResumeButton
                   recordingState={recordingState}
                   onClick={handleResume}
@@ -189,9 +189,9 @@ export default function RecordingControls({
             )}
           </div> }
 
-          <div className="center">
+          <div className='center'>
             { recordingState === STATE_INACTIVE ? (
-              <Tooltip content={t('record-button-title')} offset={[0,50]}>
+              <Tooltip content={t('record-button-title')} offset={[0, 50]}>
                 <RecordButton
                   large
                   recordingState={recordingState}
@@ -200,7 +200,7 @@ export default function RecordingControls({
                 />
               </Tooltip>
             ) : (
-              <Tooltip content={t('stop-button-title')} offset={[0,50]}>
+              <Tooltip content={t('stop-button-title')} offset={[0, 50]}>
                 <StopButton
                   large
                   recordingState={recordingState}
