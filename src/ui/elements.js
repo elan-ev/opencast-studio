@@ -56,7 +56,7 @@ export const Input = ({
           <input
             aria-invalid={errors[name] ? 'true' : 'false'}
             aria-describedby={`${name}Error`}
-            autoComplete='off'
+            autoComplete="off"
             name={name}
             ref={register({
               validate,

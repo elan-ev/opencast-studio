@@ -52,23 +52,23 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
 
   // The warnings if we are not allowed to capture a stream.
   const userWarning = (state.userAllowed === false) && (
-    <Notification key='user-stream-warning' isDanger>
-      <Heading as='h3' mb={2}>
+    <Notification key="user-stream-warning" isDanger>
+      <Heading as="h3" mb={2}>
         {t('source-user-not-allowed-title')}
       </Heading>
       <Text>{t('source-user-not-allowed-text')}</Text>
     </Notification>
   );
   const displayWarning = (state.displayAllowed === false) && (
-    <Notification key='display-stream-warning' isDanger>
-      <Heading as='h3' mb={2}>
+    <Notification key="display-stream-warning" isDanger>
+      <Heading as="h3" mb={2}>
         {t('source-display-not-allowed-title')}
       </Heading>
       <Text>{t('source-display-not-allowed-text')}</Text>
     </Notification>
   );
   const unexpectedEndWarning = (state.userUnexpectedEnd || state.displayUnexpectedEnd) && (
-    <Notification key='unexpexted-stream-end-warning' isDanger>
+    <Notification key="unexpexted-stream-end-warning" isDanger>
       <Text>{t('error-lost-video-stream')}</Text>
     </Notification>
   );
@@ -261,7 +261,7 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
       }}
     >
       <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
-        <FontAwesomeIcon icon={icon} size='3x'/>
+        <FontAwesomeIcon icon={icon} size="3x"/>
       </div>
       <div sx={{ fontSize: 4 }}>{label}</div>
       <div sx={{ fontSize: 2, mt: 1 }}>{disabledText}</div>

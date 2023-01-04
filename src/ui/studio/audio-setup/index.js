@@ -66,7 +66,7 @@ export default function AudioSetup(props) {
   return <StepContainer>{ body }</StepContainer>;
 }
 
-// The two large option buttons for 'no audio' and 'Microphone'.
+// The two large option buttons for "no audio" and "Microphone".
 const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) => {
   const { t } = useTranslation();
 
@@ -149,7 +149,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         minWidth: '285px',
         'align-items': 'center'
       }}>
-        <label htmlFor='sources-audio-device'
+        <label htmlFor="sources-audio-device"
           sx={{
             mr: 3,
             display: 'flex',
@@ -157,14 +157,14 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
             alignItems: 'center',
           }}>{ t('sources-audio-device') }:</label>
         <select
-          id='sources-audio-device'
+          id="sources-audio-device"
           sx={{ variant: 'styles.select', flex: '1 0 0', minWidth: 0 }}
           value={currentDeviceId}
           onChange={e => changeDevice(e.target.value)}
         >
           {
             devices.map((d, i) => (
-              <option key={i} value={d.deviceId}>{ d.label || 'unlabeled microphone' }</option>
+              <option key={i} value={d.deviceId}>{ d.label || "unlabeled microphone" }</option>
             ))
           }
         </select>
@@ -172,25 +172,25 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
     </Fragment>;
   } else if (audioAllowed === false) {
     body = <Fragment>
-      <FontAwesomeIcon icon={faExclamationTriangle} size='3x' />
-      <Spacer min='16px' max='48px' />
+      <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />
+      <Spacer min="16px" max="48px" />
       <Notification isDanger>
-        <Heading as='h3' mb={2}>
+        <Heading as="h3" mb={2}>
           {t('source-audio-not-allowed-title')}
         </Heading>
-        <Text variant='text'>{t('source-audio-not-allowed-text')}</Text>
+        <Text variant="text">{t('source-audio-not-allowed-text')}</Text>
       </Notification>
     </Fragment>;
   } else if (audioUnexpectedEnd === true) {
     body = <Fragment>
-      <FontAwesomeIcon icon={faExclamationTriangle} size='3x' />
-      <Spacer min='16px' max='48px' />
+      <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />
+      <Spacer min="16px" max="48px" />
       <Notification isDanger>
-        <Text variant='text'>{t('error-lost-audio-stream')}</Text>
+        <Text variant="text">{t('error-lost-audio-stream')}</Text>
       </Notification>
     </Fragment>;
   } else {
-    body = <Spinner size='75'/>;
+    body = <Spinner size="75"/>;
   }
 
   return (
@@ -236,7 +236,7 @@ const OptionButton = ({ children, icon, label, onClick }) => {
       }}
     >
       <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
-        <FontAwesomeIcon icon={icon} size='3x'/>
+        <FontAwesomeIcon icon={icon} size="3x"/>
       </div>
       <div sx={{ fontSize: 4 }}>{label}</div>
       {children}
