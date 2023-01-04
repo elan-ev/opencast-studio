@@ -170,9 +170,9 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
   const { displaySupported, userSupported } = state;
 
   const handlers = {
-    RECORD_DISPLAY: keyEvent => { if(keyEvent) { clickDisplay(keyEvent) }},
-    RECORD_CAMERA: keyEvent => { if(keyEvent) { clickUser(keyEvent) }},
-    RECORD_DISPLAY_CAMERA: keyEvent => { if(keyEvent) { clickBoth(keyEvent) }},
+    RECORD_DISPLAY: keyEvent => { if(keyEvent) { clickDisplay(keyEvent); } },
+    RECORD_CAMERA: keyEvent => { if(keyEvent) { clickUser(keyEvent); } },
+    RECORD_DISPLAY_CAMERA: keyEvent => { if(keyEvent) { clickBoth(keyEvent); } },
   };
 
   const clickUser = async() => {

@@ -2,7 +2,7 @@ import { configure } from 'react-hotkeys';
 
 /**
  * https://github.com/greena13/react-hotkeys
- * By default, all key events that originate from <input>, <select> or <textarea>, 
+ * By default, all key events that originate from <input>, <select> or <textarea>,
  * or have a isContentEditable attribute of true are ignored by react-hotkeys.
  */
 configure({
@@ -18,7 +18,7 @@ configure({
 const getOs = () => {
   const os = ['Windows', 'Linux', 'Mac'];
   return os.find(v => navigator.userAgent.includes(v));
-}
+};
 
 const rewriteKeys = key => getOs() === 'Mac' ? key.replace('Alt', 'Option') : key;
 
@@ -70,7 +70,7 @@ export const recordShortcuts = {
     sequences: ['r'],
     description: ['r'],
     group: recordGroup,
-  }, 
+  },
   STOP_RECORDING: {
     name: 'stop-recording',
     sequences: ['s'],

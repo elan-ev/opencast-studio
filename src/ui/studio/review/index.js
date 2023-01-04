@@ -224,22 +224,22 @@ const VideoControls = ({ currentTime, previewController }) => {
 
   const duration = previewController.current?.duration;
 
-  const switchPlayPause = (keyEvent) => {
+  const switchPlayPause = keyEvent => {
     const controller = previewController.current;
     if (controller.isPlaying) {
       controller.pause(keyEvent);
     } else if (controller.isReadyToPlay) {
       controller.play(keyEvent);
     }
-  }
+  };
 
   const leftMarker = useRef(null);
   const rightMarker = useRef(null);
 
   const handlers = {
-    PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent) }},
-    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { leftMarker.current?.click() }},
-    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { rightMarker.current?.click() }},
+    PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent); } },
+    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { leftMarker.current?.click(); } },
+    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { rightMarker.current?.click(); } },
   };
 
   return <div sx={{ textAlign: 'center' }}>
@@ -303,8 +303,8 @@ const CutControls = (
   const { t } = useTranslation();
 
   const handlers = {
-    CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click() }},
-    CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click() }},
+    CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click(); } },
+    CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click(); } },
   };
 
   const state = (
@@ -357,7 +357,7 @@ const CutControls = (
             // to be timely, so we still have to check the invariant when actually
             // updating the state. Here we decided to just clamp the value appropriately.
             if (control != null && !invariant(value, control)) {
-                value = control;
+              value = control;
             }
             recordingDispatch({
               type: `UPDATE_${marker.toUpperCase()}`,
@@ -496,13 +496,13 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   });
 
   const handlers = {
-    FORWARD_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent) }},
-    BACKWARDS_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent) }},
-    FORWARD_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent) }},
-    BACKWARDS_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent) }},
+    FORWARD_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent); } },
+    BACKWARDS_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent); } },
+    FORWARD_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent); } },
+    BACKWARDS_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent); } },
   };
 
-  const skipFiveSeconds = (keyEvent) => {
+  const skipFiveSeconds = keyEvent => {
     videoRefs.forEach( video => {
       if (video.current !== undefined) {
         if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {
@@ -512,28 +512,28 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
         }
       }
     });
-  }
+  };
 
-  const skipFrame = (keyEvent) => {
+  const skipFrame = keyEvent => {
     const fps = 30;
 
     videoRefs.forEach( video => {
       if (video.current !== undefined) {
         if (keyEvent.key === '.') {
-          video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1/fps));
+          video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1 / fps));
         } else if (keyEvent.key === ',') {
-          video.current.currentTime = Math.max(0, video.current.currentTime - (1/fps));
+          video.current.currentTime = Math.max(0, video.current.currentTime - (1 / fps));
         }
       }
     });
-  }
+  };
 
   const children = recordings.map((recording, index) => ({
     body: (
       <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
         <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
           { overlayVisible && <div
-          sx={{
+            sx={{
               position: 'absolute',
               left: 0,
               right: 0,

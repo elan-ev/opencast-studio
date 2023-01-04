@@ -129,25 +129,25 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       {...rest}
     >
-        <div sx={{
-          width: '20px',
-          display: 'inline-block',
-          textAlign: 'right',
-          mr: [3, 3, 2],
-          '@media screen and (max-width: 742px)': {
-            mr: [0, 0, 0],
-          }
-        }}>
-          <FontAwesomeIcon icon={icon} />
-        </div>
-        <div sx={{
-          display: 'inline-block',
-          '@media screen and (max-width: 742px)': {
-            display: 'none'
-          }
-        }}>
-          {children}
-        </div>
+      <div sx={{
+        width: '20px',
+        display: 'inline-block',
+        textAlign: 'right',
+        mr: [3, 3, 2],
+        '@media screen and (max-width: 742px)': {
+          mr: [0, 0, 0],
+        }
+      }}>
+        <FontAwesomeIcon icon={icon} />
+      </div>
+      <div sx={{
+        display: 'inline-block',
+        '@media screen and (max-width: 742px)': {
+          display: 'none'
+        }
+      }}>
+        {children}
+      </div>
     </NavLink>
   );
 };

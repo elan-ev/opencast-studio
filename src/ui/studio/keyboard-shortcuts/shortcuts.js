@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 import { getShortcuts } from './globalKeys';
 
-const Group = ({name, entries}) => {
+const Group = ({ name, entries }) => {
   const { t } = useTranslation();
 
   return (
@@ -26,10 +26,10 @@ const Group = ({name, entries}) => {
         <Entry params={entry} key={index}></Entry>
       ))}
     </div>
-  )
-}
+  );
+};
 
-const Entry = ({params}) => {
+const Entry = ({ params }) => {
   const { t } = useTranslation();
 
   return (
@@ -46,35 +46,35 @@ const Entry = ({params}) => {
       }}>
         {t(params.name)}
       </div>
-        { params.description.map((description, index, arr) => (
-          <div key={index}
-            sx={{
-              padding: '2px 0', 
-              display: 'flex',
+      { params.description.map((description, index, arr) => (
+        <div key={index}
+          sx={{
+            padding: '2px 0',
+            display: 'flex',
           }}>
-            { description.toString().split('+').map((singleKey, index) => (
-              <div key={index}
-                sx={{
-                  borderRadius: '5px',
-                  border: theme => `2px solid ${theme.colors.singleKey_border}`,
-                  background: theme => theme.colors.singleKey_bg,
-                  padding: '8px',
-                  margin: '0 3px',
-                  textAlign: 'center',
-                  minWidth: '40px',
+          { description.toString().split('+').map((singleKey, index) => (
+            <div key={index}
+              sx={{
+                borderRadius: '5px',
+                border: theme => `2px solid ${theme.colors.singleKey_border}`,
+                background: theme => theme.colors.singleKey_bg,
+                padding: '8px',
+                margin: '0 3px',
+                textAlign: 'center',
+                minWidth: '40px',
               }}>
-                {t(singleKey)}
-              </div>
-            ))}
-            <div sx={{ alignSelf: 'center', lineHeight: '32px', margin: '0 5px' }}>
-              { arr.length - 1 !== index && t("sequence-seperator") }
+              {t(singleKey)}
             </div>
+          ))}
+          <div sx={{ alignSelf: 'center', lineHeight: '32px', margin: '0 5px' }}>
+            { arr.length - 1 !== index && t("sequence-seperator") }
           </div>
-        ))}
+        </div>
+      ))}
 
     </div>
-  )
-}
+  );
+};
 
 const KeyboardShortcuts = () => {
   const { t } = useTranslation();
@@ -106,7 +106,7 @@ const KeyboardShortcuts = () => {
       width: '100%',
     }}>
       <h2 sx={{
-        display: 'block', 
+        display: 'block',
         position: 'relative',
         textAlign: 'center',
       }}>
@@ -114,16 +114,16 @@ const KeyboardShortcuts = () => {
       </h2>
 
       <div sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}>
-          { groups }
-        </div>
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+      }}>
+        { groups }
+      </div>
 
     </div>
-  )
-}
+  );
+};
 
 export default KeyboardShortcuts;

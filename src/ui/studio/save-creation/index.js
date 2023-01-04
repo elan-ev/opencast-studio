@@ -288,7 +288,7 @@ const PostAction = ({ goToFirstStep }) => {
   }
 
   const handlers = {
-    NEW_RECORDING: keyEvent => { if(keyEvent) { handleNewRecording(keyEvent) }},
+    NEW_RECORDING: keyEvent => { if(keyEvent) { handleNewRecording(keyEvent); } },
   };
 
   return (
@@ -332,10 +332,10 @@ const DownloadBox = ({ presenter, title }) => {
     for (const element of elements) {
       element.click();
     }
-  }
+  };
 
   const handlers = {
-    DOWNLOAD: keyEvent => { if(keyEvent) { handleDownload(keyEvent) }},
+    DOWNLOAD: keyEvent => { if(keyEvent) { handleDownload(keyEvent); } },
   };
 
   return (
@@ -443,7 +443,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const uploadRef = useRef(null);
 
   const handlers = {
-    UPLOAD: keyEvent => { if(keyEvent) { uploadRef.current?.click() }},
+    UPLOAD: keyEvent => { if(keyEvent) { uploadRef.current?.click(); } },
   };
 
   return (
@@ -451,26 +451,26 @@ const UploadForm = ({ uploadState, handleUpload }) => {
       <Fragment>
         <NotConnectedWarning />
 
-      <form>
-        { titleField !== FORM_FIELD_HIDDEN && <Input
-          name="title"
-          label={t('save-creation-label-title')}
-          required={titleField === FORM_FIELD_REQUIRED}
-          onChange={handleInputChange}
-          autoComplete="off"
-          defaultValue={title}
-          {...{ errors, register }}
-        /> }
+        <form>
+          { titleField !== FORM_FIELD_HIDDEN && <Input
+            name="title"
+            label={t('save-creation-label-title')}
+            required={titleField === FORM_FIELD_REQUIRED}
+            onChange={handleInputChange}
+            autoComplete="off"
+            defaultValue={title}
+            {...{ errors, register }}
+          /> }
 
-        { presenterField !== FORM_FIELD_HIDDEN && <Input
-          name="presenter"
-          label={t('save-creation-label-presenter')}
-          required={presenterField === FORM_FIELD_REQUIRED}
-          onChange={handleInputChange}
-          autoComplete="off"
-          defaultValue={presenterValue}
-          {...{ errors, register }}
-        /> }
+          { presenterField !== FORM_FIELD_HIDDEN && <Input
+            name="presenter"
+            label={t('save-creation-label-presenter')}
+            required={presenterField === FORM_FIELD_REQUIRED}
+            onChange={handleInputChange}
+            autoComplete="off"
+            defaultValue={presenterValue}
+            {...{ errors, register }}
+          /> }
 
           <Button
             disabled={recordings.length === 0}
