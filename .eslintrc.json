@@ -18,7 +18,7 @@
     "eol-last": ["error", "always"],
     "func-call-spacing": ["error", "never"],
     "indent": ["error", 2, { "SwitchCase": 1, "MemberExpression": "off" }],
-    "jsx-quotes": ["error", "prefer-single"],
+    "jsx-quotes": ["error", "prefer-double"],
     "linebreak-style": ["error", "unix"],
     "max-len": ["error", { "code": 120, "ignoreUrls": true }],
     "no-multi-spaces": ["warn", { "ignoreEOLComments": true }],

@@ -22,14 +22,14 @@ const Warnings = () => {
     window.location.hostname !== '127.0.0.1';
   if (usingUnsecureConnection) {
     warnings.push(
-      <Notification key='unsecure-connection' isDanger>{t('warning-https')}</Notification>
+      <Notification key="unsecure-connection" isDanger>{t('warning-https')}</Notification>
     );
   }
 
   // Warning about missing `MediaRecorder` support
   if (!isRecordingSupported()) {
     warnings.push(
-      <Notification key='media-recorder' isDanger>
+      <Notification key="media-recorder" isDanger>
         {t('warning-recorder-not-supported')}
         {onSafari() && ' ' + t('warning-recorder-safari-hint')}
       </Notification>

@@ -111,8 +111,8 @@ export const StreamSettings = ({ isDesktop, stream }) => {
   const [expandedHeight, setExpandedHeight] = useState(0);
   const { ref } = useResizeObserver({
     // We don't use the height passed to the callback as we want the outer
-    // height. We also add a magic '4' here. 2 pixels are for the border of the
-    // outer div. The other two are 'wiggle room'. If we always set the height
+    // height. We also add a magic "4" here. 2 pixels are for the border of the
+    // outer div. The other two are "wiggle room". If we always set the height
     // to fit exactly, this easily leads to unnessecary scrollbars appearing.
     // This in turn might lead to rewrapping and then a change in height, in
     // the worst case ending up in an infinite loop.
@@ -262,7 +262,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
               lineHeight: '20px',
               border: theme => `1px solid ${theme.colors.gray[2]}`,
             }}>
-              <Trans i18nKey='sources-video-preferences-note'>
+              <Trans i18nKey="sources-video-preferences-note">
                 <strong>Note:</strong> Explanation.
               </Trans>
             </div>
@@ -328,7 +328,7 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isE
       <RadioButton
         isExpanded={isExpanded}
         id={`quality-auto-${kind}`}
-        value='auto'
+        value="auto"
         name={`quality-${kind}`}
         label={t('sources-video-quality-auto')}
         onChange={changeQuality}
@@ -365,7 +365,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
     const currentAr = width / height;
     const expectedAr = parseAspectRatio(prefs.aspectRatio);
 
-    // We have some range we accept as 'good'. You never know with these
+    // We have some range we accept as "good". You never know with these
     // floats...
     arState = (expectedAr * 0.97 < currentAr && currentAr < expectedAr / 0.97)
       ? 'ok'
@@ -377,11 +377,11 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
 
   return <Fragment>
     <PrefKey>
-      <label htmlFor='sources-video-device'>{t('sources-video-device')}:</label>
+      <label htmlFor="sources-video-device">{t('sources-video-device')}:</label>
     </PrefKey>
     <PrefValue>
       <select
-        id='sources-video-device'
+        id="sources-video-device"
         tabIndex={isExpanded ? '0' : '-1'}
         sx={{ variant: 'styles.select' }}
         value={currentDeviceId}
@@ -399,9 +399,9 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
     <PrefValue>
       <RadioButton
         isExpanded={isExpanded}
-        id='ar-auto'
-        value='auto'
-        name='aspectRatio'
+        id="ar-auto"
+        value="auto"
+        name="aspectRatio"
         label={t('sources-video-aspect-ratio-auto')}
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
@@ -413,7 +413,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
             isExpanded={isExpanded}
             id={`ar-${ar}`}
             value={ar}
-            name='aspectRatio'
+            name="aspectRatio"
             onChange={changeAspectRatio}
             checked={prefs.aspectRatio === ar}
             state={arState}
@@ -429,7 +429,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) 
 
   return <Fragment>
     <input
-      type='radio'
+      type="radio"
       onChange={e => onChange(e.target.value)}
       {...{ id, value, checked, name }}
       sx={{

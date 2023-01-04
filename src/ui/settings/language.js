@@ -18,13 +18,13 @@ const LanguageSettings = () => {
   return (
     <SettingsSection title={t('settings-general-header')}>
       <label
-        htmlFor='studio-lang'
+        htmlFor="studio-lang"
         sx={{ variant: 'styles.label' }}
       >
         {lang_label}
       </label>
       <select
-        id='studio-lang'
+        id="studio-lang"
         sx={{ variant: 'styles.select' }}
         defaultValue={i18n.language}
         onChange={e => i18n.changeLanguage(e.target.value)}

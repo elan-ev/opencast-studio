@@ -272,7 +272,7 @@ const PostAction = ({ goToFirstStep }) => {
 
       returnAction = (
         <Button
-          as='a'
+          as="a"
           title={label}
           href={settings.return.target}
           sx={{ whiteSpace: 'nowrap', fontWeight: 400, mb: 2 }}
@@ -377,11 +377,11 @@ const ConnectionUnconfiguredWarning = () => {
   const [colorMode] = useColorMode();
 
   return (
-    <Notification key='opencast-connection' isDanger>
-      <Trans i18nKey='warning-missing-connection-settings'>
+    <Notification key="opencast-connection" isDanger>
+      <Trans i18nKey="warning-missing-connection-settings">
         Warning.
         <Link
-          to={{ pathname: '/settings', search: location.search }}
+          to={{ pathname: "/settings", search: location.search }}
           sx={{ variant: 'styles.a', color: colorMode === 'dark' ? 'rgba(255, 255, 34, 0.8)' : '#ff2' }}
         >
           settings
@@ -431,7 +431,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
     : (
-      <Trans i18nKey='save-creation-upload-to'>
+      <Trans i18nKey="save-creation-upload-to">
         Upload to <code sx={{
           backgroundColor: 'rgba(0, 0, 0, 0.1)',
           borderRadius: '5px',
@@ -453,21 +453,21 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
       <form>
         { titleField !== FORM_FIELD_HIDDEN && <Input
-          name='title'
+          name="title"
           label={t('save-creation-label-title')}
           required={titleField === FORM_FIELD_REQUIRED}
           onChange={handleInputChange}
-          autoComplete='off'
+          autoComplete="off"
           defaultValue={title}
           {...{ errors, register }}
         /> }
 
         { presenterField !== FORM_FIELD_HIDDEN && <Input
-          name='presenter'
+          name="presenter"
           label={t('save-creation-label-presenter')}
           required={presenterField === FORM_FIELD_REQUIRED}
           onChange={handleInputChange}
-          autoComplete='off'
+          autoComplete="off"
           defaultValue={presenterValue}
           {...{ errors, register }}
         /> }
@@ -530,11 +530,11 @@ const NotConnectedWarning = () => {
       if (opencast.isLoginProvided()) {
         const referrer = document.referrer;
         problem = (
-          <Trans i18nKey='save-creation-warn-session-expired'>
+          <Trans i18nKey="save-creation-warn-session-expired">
             Foo
             {
               (referrer && !referrer.includes(window.origin || ''))
-                ? <Themed.a href={referrer} target='_blank' sx={{ color: '#ff2' }}>bar</Themed.a>
+                ? <Themed.a href={referrer} target="_blank" sx={{ color: '#ff2' }}>bar</Themed.a>
                 : <Fragment>bar</Fragment>
             }
             baz
@@ -544,10 +544,10 @@ const NotConnectedWarning = () => {
         onceResolved = t('save-creation-warn-once-refreshed');
       } else {
         problem = (
-          <Trans i18nKey='save-creation-warn-login-failed'>
+          <Trans i18nKey="save-creation-warn-login-failed">
             Failed.
             <Link
-              to={{ pathname: '/settings', search: location.search }}
+              to={{ pathname: "/settings", search: location.search }}
               sx={{ variant: 'styles.a', color: '#ff2' }}
             >
               settings
@@ -570,7 +570,7 @@ const NotConnectedWarning = () => {
     <Notification isDanger>
       <div sx={{ textAlign: 'center', fontSize: '40px', lineHeight: 1.3 }}>
         { retrying
-          ? <Spinner size='40' />
+          ? <Spinner size="40" />
           : <FontAwesomeIcon icon={faExclamationTriangle} />
         }
       </div>
@@ -620,18 +620,18 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
   return (
     <Fragment>
       <div sx={{ display: 'flex', mb: 2 }}>
-        <Text variant='text'>{roundedPercent}%</Text>
+        <Text variant="text">{roundedPercent}%</Text>
         <div sx={{ flex: 1 }} />
-        <Text variant='text'>
-          {prettyTime && <Trans i18nKey='upload-time-left'>
+        <Text variant="text">
+          {prettyTime && <Trans i18nKey="upload-time-left">
             {{ time: prettyTime }} left
           </Trans>}
         </Text>
       </div>
-      <Progress max={1} value={currentProgress} variant='styles.progress'>
+      <Progress max={1} value={currentProgress} variant="styles.progress">
         { roundedPercent }
       </Progress>
-      <Text variant='text' sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>
+      <Text variant="text" sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>
     </Fragment>
   );
 };
@@ -649,9 +649,9 @@ const UploadSuccess = () => {
         height: '130px',
         color: 'primary',
       }}>
-        <FontAwesomeIcon icon={faCheckCircle} size='4x' />
+        <FontAwesomeIcon icon={faCheckCircle} size="4x" />
       </div>
-      <Text variant='text' sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
+      <Text variant="text" sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
       <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
     </Fragment>
   );

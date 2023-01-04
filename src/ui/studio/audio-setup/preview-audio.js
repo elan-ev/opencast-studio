@@ -28,8 +28,8 @@ export default function PreviewAudio({ stream }) {
   return (
     <canvas
       ref={canvasRef}
-      width='800px'
-      height='200px'
+      width="800px"
+      height="200px"
       sx={{
         width: '100%',
         maxHeight: '200px',

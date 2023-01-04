@@ -256,7 +256,7 @@ const VideoControls = ({ currentTime, previewController }) => {
         }}
       >
         { settings.review?.disableCutting || <CutControls
-          marker='start'
+          marker="start"
           innerRef={leftMarker}
           value={start}
           control={end}
@@ -284,7 +284,7 @@ const VideoControls = ({ currentTime, previewController }) => {
           </button>
         </Tooltip>
         { settings.review?.disableCutting || <CutControls
-          marker='end'
+          marker="end"
           innerRef={rightMarker}
           value={end}
           control={start}
@@ -312,7 +312,7 @@ const CutControls = (
       <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
         { value !== null && <Fragment>
           <Trans { ...{ t } } i18nKey={`review-${marker}`}>
-            {{ [marker]: value }} <Link href='' onClick={event => {
+            {{ [marker]: value }} <Link href="" onClick={event => {
               event.preventDefault();
               previewController.current.currentTime = value;
             }} />
@@ -419,7 +419,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
       return v && v.currentTime > 0 && !v.paused && !v.ended;
     },
     get isReadyToPlay() {
-      // State 2 means 'at least enough data to play one frame'
+      // State 2 means "at least enough data to play one frame"
       return allVideos.every(r => r.current.readyState >= 2);
     },
     play() {
@@ -589,7 +589,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
                 }
               }} // eslint-disable-line
             }
-            preload='auto' tabIndex={'-1'}
+            preload="auto" tabIndex={'-1'}
             sx={{
               width: '100%',
               height: '100%',
