@@ -12,7 +12,7 @@ import {
   faWrench,
   faInfoCircle,
   faVideo,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 
 import { useStudioState } from '../studio-state';
 
@@ -77,12 +77,12 @@ const Brand = () => {
       }}>
       <picture sx={{ display: 'block', height: theme => theme.heights.headerHeight }}>
         <source
-          media='(min-width: 920px)'
+          media="(min-width: 920px)"
           srcSet={`${process.env.PUBLIC_URL}/opencast-studio.svg`}
         />
         <img
           src={`${process.env.PUBLIC_URL}/opencast-studio-small.svg`}
-          alt='Opencast Studio'
+          alt="Opencast Studio"
           sx={{ height: theme => theme.heights.headerHeight }}
         />
       </picture>
@@ -182,13 +182,13 @@ const Navigation = props => {
       <nav
         ref={n => {
           if (n) {
-            n.style.height = isOpened ? n.scrollHeight + 'px' : '';
+            n.style.height = isOpened ? n.scrollHeight + 'px' : "";
           }
         }}
         sx={{
           overflow: 'hidden',
           zIndex: 10,
-          // This '!important' is necessary unfortunately to override the inline
+          // This "!important" is necessary unfortunately to override the inline
           // style set in the `ref` attribute above. Otherwise opening the menu
           // in mobile view and switching to desktop view (e.g. by rotating
           // phone) would result in a very strange artifact.
@@ -202,21 +202,21 @@ const Navigation = props => {
         }}
       >
         <NavElement
-          target='/'
+          target="/"
           icon={faVideo}
           onClick={closeMenu}
         >
           {t('nav-recording')}
         </NavElement>
         <NavElement
-          target='/settings'
+          target="/settings"
           icon={faWrench}
           onClick={closeMenu}
         >
           {t('nav-settings')}
         </NavElement>
         <NavElement
-          target='/about'
+          target="/about"
           icon={faInfoCircle}
           onClick={closeMenu}
         >

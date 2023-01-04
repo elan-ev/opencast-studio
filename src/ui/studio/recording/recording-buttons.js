@@ -44,7 +44,7 @@ export const PauseButton = props => (
       },
     }}
   >
-    <span className='fa-layers'>
+    <span className="fa-layers">
       <FontAwesomeIcon icon={faPauseCircle} sx={{ color: 'button_bg' }} />
     </span>
   </Button>
@@ -68,9 +68,9 @@ export const RecordButton = props => (
       },
     }}
   >
-    <span className='fa-layers record-buttons'>
+    <span className="fa-layers record-buttons">
       <FontAwesomeIcon icon={props.countdown ? faCircleNotch : faCircle} spin={props.countdown} />
-      <FontAwesomeIcon icon={faCircle} transform='shrink-6' />
+      <FontAwesomeIcon icon={faCircle} transform="shrink-6" />
     </span>
   </Button>
 );
@@ -85,7 +85,7 @@ export const ResumeButton = props => (
       },
     }}
   >
-    <span className='fa-layers'>
+    <span className="fa-layers">
       <FontAwesomeIcon icon={faPlayCircle} sx={{ color: 'button_bg' }} />
     </span>
   </Button>

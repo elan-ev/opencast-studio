@@ -66,7 +66,7 @@ function MediaDevice({ title, stream, paused }) {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-        <FontAwesomeIcon icon={faExclamationTriangle} size='3x' />
+        <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />
       </div>
     );
   }

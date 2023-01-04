@@ -44,15 +44,15 @@ const Routes = ({ settingsManager, userHasWebcam }) => {
     <Fragment>
       <PreventClose />
       <Switch>
-        <Route path='/settings' exact>
+        <Route path="/settings" exact>
           <SettingsPage settingsManager={settingsManager} />
         </Route>
 
-        <Route path='/about' exact>
+        <Route path="/about" exact>
           <About />
         </Route>
 
-        <Route path='/' exact>
+        <Route path="/" exact>
           <Studio
             activeStep={activeStep}
             updateActiveStep={updateActiveStep}
@@ -60,8 +60,8 @@ const Routes = ({ settingsManager, userHasWebcam }) => {
           />
         </Route>
 
-        <Route path='/*'>
-          <Redirect to={{ pathname: '/', search: location.search }} />
+        <Route path="/*">
+          <Redirect to={{ pathname: "/", search: location.search }} />
         </Route>
       </Switch>
     </Fragment>

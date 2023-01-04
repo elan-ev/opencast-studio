@@ -81,9 +81,9 @@ const PreviewVideo = ({ input }) => {
   if (!stream) {
     let inner;
     if (allowed === false || unexpectedEnd) {
-      inner = <FontAwesomeIcon icon={faExclamationTriangle} size='3x' />;
+      inner = <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />;
     } else {
-      inner = <Spinner size='75'/>;
+      inner = <Spinner size="75"/>;
     }
 
     return (
