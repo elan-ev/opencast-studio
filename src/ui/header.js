@@ -136,6 +136,9 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         mr: [3, 3, 2],
         '@media screen and (max-width: 742px)': {
           mr: [0, 0, 0],
+        },
+        '@media screen and (max-width: 575px)': {
+          mr: [3, 3, 2],
         }
       }}>
         <FontAwesomeIcon icon={icon} />
@@ -144,6 +147,9 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         display: 'inline-block',
         '@media screen and (max-width: 742px)': {
           display: 'none'
+        },
+        '@media screen and (max-width: 575px)': {
+          display: 'inline-block',
         }
       }}>
         {children}
