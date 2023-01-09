@@ -15,7 +15,7 @@
     "@sentry/browser": "^6.6.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^9.5.0",
-    "@theme-ui/color": "^0.14.5",
+    "@theme-ui/color": "^0.14.7",
     "@theme-ui/components": "^0.14.5",
     "@tippyjs/react": "^4.2.6",
     "deepmerge": "^4.2.2",
@@ -34,13 +34,13 @@
     "react-beforeunload": "^2.5.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^3.29.4",
-    "react-i18next": "^12.1.1",
     "react-hotkeys": "^2.0.0",
+    "react-i18next": "^12.1.4",
     "react-page-visibility": "^7.0.0",
     "react-router-dom": "^5.3.4",
-    "react-scripts": "^4.0.3",
-    "theme-ui": "^0.14.5",
-    "use-resize-observer": "^7.0.0"
+    "react-scripts": "^5.0.1",
+    "theme-ui": "^0.14.7",
+    "use-resize-observer": "^7.0.1"
   },
   "repository": {
     "type": "git",

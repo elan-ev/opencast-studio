@@ -19,16 +19,16 @@ export const FORM_FIELD_REQUIRED = 'required';
 export class SettingsManager {
   // The settings set by the server. These cannot be edited by the user. If the
   // server did not specify any settings, this is `{}`.
-  contextSettings = {};
+  contextSettings = Object.create(null);
 
   // These settings are given in the query part of the URL (e.g.
   // `?opencast.loginName=peter`). If there are no settings in the URL, this
   // is `{}`.
-  urlSettings = {};
+  urlSettings = Object.create(null);
 
   // The settings set by the user and stored in local storage. This is `{}` if
   // there were no settings in local storage.
-  #userSettings = {};
+  #userSettings = Object.create(null);
 
   // This function is called whenever the user saved their settings. The new
   // settings object is passed as parameter.
@@ -72,7 +72,7 @@ export class SettingsManager {
       );
     }
 
-    const rawContextSettings = await SettingsManager.loadContextSettings() || {};
+    const rawContextSettings = await SettingsManager.loadContextSettings() || Object.create(null);
     self.contextSettings = self.validate(
       rawContextSettings,
       false,
@@ -101,7 +101,7 @@ export class SettingsManager {
         );
       }
 
-      let rawUrlSettings = {};
+      let rawUrlSettings = Object.create(null);
       try {
         rawUrlSettings = parseToml(decoded);
       } catch (e) {
@@ -130,7 +130,7 @@ export class SettingsManager {
       );
     } else {
       // Interpret each get parameter as single configuration value.
-      let rawUrlSettings = {};
+      let rawUrlSettings = Object.create(null);
       for (let [key, value] of urlParams) {
         // Create empty objects for full path (if the key contains '.') and set
         // the value at the end.
@@ -138,7 +138,7 @@ export class SettingsManager {
         const segments = key.split('.');
         segments.slice(0, -1).forEach( segment => {
           if (!(segment in obj)) {
-            obj[segment] = {};
+            obj[segment] = Object.create(null);
           }
           obj = obj[segment];
         });
@@ -287,7 +287,7 @@ export class SettingsManager {
     const validateObj = (schema, obj, path) => {
       // We iterate through all keys of the given settings object, checking if
       // each key is valid and recursively validating the value of that key.
-      let out = {};
+      let out = Object.create(null);
       for (const key of Object.keys(obj)) {
         const newPath = path ? `${path}.${key}` : key;
         if (key in schema) {
