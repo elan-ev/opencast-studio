@@ -11,7 +11,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import useForm from 'react-hook-form';
@@ -46,6 +46,8 @@ import { Input } from '../../elements';
 
 import RecordingPreview from './recording-preview';
 
+import { GlobalHotKeys } from 'react-hotkeys';
+import { otherShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
@@ -285,19 +287,25 @@ const PostAction = ({ goToFirstStep }) => {
     }
   }
 
-  return (
-    <div sx={{ display: 'flex', flexDirection: 'column' }}>
-      { returnAction }
+  const handlers = {
+    NEW_RECORDING: keyEvent => { if(keyEvent) { handleNewRecording(keyEvent); } },
+  };
 
-      <Button
-        sx={{ whiteSpace: 'nowrap' }}
-        title={t('save-creation-new-recording')}
-        onClick={handleNewRecording}
-      >
-        <FontAwesomeIcon icon={faRedoAlt} />
-        {t('save-creation-new-recording')}
-      </Button>
-    </div>
+  return (
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
+      <div sx={{ display: 'flex', flexDirection: 'column' }}>
+        { returnAction }
+
+        <Button
+          sx={{ whiteSpace: 'nowrap' }}
+          title={t('save-creation-new-recording')}
+          onClick={handleNewRecording}
+        >
+          <FontAwesomeIcon icon={faRedoAlt} />
+          {t('save-creation-new-recording')}
+        </Button>
+      </div>
+    </GlobalHotKeys>
   );
 };
 
@@ -319,33 +327,46 @@ const DownloadBox = ({ presenter, title }) => {
   const dispatch = useDispatch();
   const { recordings, start, end } = useStudioState();
 
+  const handleDownload = () => {
+    var elements = document.querySelectorAll("a[href^='blob']");
+    for (const element of elements) {
+      element.click();
+    }
+  };
+
+  const handlers = {
+    DOWNLOAD: keyEvent => { if(keyEvent) { handleDownload(keyEvent); } },
+  };
+
   return (
-    <Fragment>
-      { (start !== null || end !== null) && (
-        <Notification sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <FontAwesomeIcon icon={faExclamationTriangle} sx={{ fontSize: '26px', mb: 3 }} />
-          <p sx={{ m: 0 }}>{ t('save-creation-download-cut-warning') }</p>
-        </Notification>
-      )}
-      <div sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: ['center', 'center', 'start'],
-        flexWrap: 'wrap',
-      }}>
-        {recordings.length === 0 ? <Spinner /> : (
-          recordings.map((recording, index) => (
-            <RecordingPreview
-              key={index}
-              recording={recording}
-              presenter={presenter}
-              title={title}
-              onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
-            />
-          ))
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
+      <Fragment>
+        { (start !== null || end !== null) && (
+          <Notification sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <FontAwesomeIcon icon={faExclamationTriangle} sx={{ fontSize: '26px', mb: 3 }} />
+            <p sx={{ m: 0 }}>{ t('save-creation-download-cut-warning') }</p>
+          </Notification>
         )}
-      </div>
-    </Fragment>
+        <div sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: ['center', 'center', 'start'],
+          flexWrap: 'wrap',
+        }}>
+          { recordings.length === 0 ? <Spinner /> : (
+            recordings.map((recording, index) => (
+              <RecordingPreview
+                key={index}
+                recording={recording}
+                presenter={presenter}
+                title={title}
+                onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
+              />
+            ))
+          )}
+        </div>
+      </Fragment>
+    </GlobalHotKeys>
   );
 };
 
@@ -419,46 +440,55 @@ const UploadForm = ({ uploadState, handleUpload }) => {
       </Trans>
     );
 
+  const uploadRef = useRef(null);
+
+  const handlers = {
+    UPLOAD: keyEvent => { if(keyEvent) { uploadRef.current?.click(); } },
+  };
+
   return (
-    <Fragment>
-      <NotConnectedWarning />
+    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
+      <Fragment>
+        <NotConnectedWarning />
 
-      <form>
-        { titleField !== FORM_FIELD_HIDDEN && <Input
-          name="title"
-          label={t('save-creation-label-title')}
-          required={titleField === FORM_FIELD_REQUIRED}
-          onChange={handleInputChange}
-          autoComplete="off"
-          defaultValue={title}
-          {...{ errors, register }}
-        /> }
+        <form>
+          { titleField !== FORM_FIELD_HIDDEN && <Input
+            name="title"
+            label={t('save-creation-label-title')}
+            required={titleField === FORM_FIELD_REQUIRED}
+            onChange={handleInputChange}
+            autoComplete="off"
+            defaultValue={title}
+            {...{ errors, register }}
+          /> }
 
-        { presenterField !== FORM_FIELD_HIDDEN && <Input
-          name="presenter"
-          label={t('save-creation-label-presenter')}
-          required={presenterField === FORM_FIELD_REQUIRED}
-          onChange={handleInputChange}
-          autoComplete="off"
-          defaultValue={presenterValue}
-          {...{ errors, register }}
-        /> }
+          { presenterField !== FORM_FIELD_HIDDEN && <Input
+            name="presenter"
+            label={t('save-creation-label-presenter')}
+            required={presenterField === FORM_FIELD_REQUIRED}
+            onChange={handleInputChange}
+            autoComplete="off"
+            defaultValue={presenterValue}
+            {...{ errors, register }}
+          /> }
 
-        <Button
-          disabled={recordings.length === 0}
-          onClick={handleSubmit(handleUpload)}
-        >
-          <FontAwesomeIcon icon={faUpload} />
-          { buttonLabel }
-        </Button>
-      </form>
+          <Button
+            disabled={recordings.length === 0}
+            onClick={handleSubmit(handleUpload)}
+            ref={uploadRef}
+          >
+            <FontAwesomeIcon icon={faUpload} />
+            { buttonLabel }
+          </Button>
+        </form>
 
-      <Box sx={{ mt: 2 }}>
-        { uploadState.state === STATE_ERROR && (
-          <Notification isDanger>{uploadState.error}</Notification>
-        )}
-      </Box>
-    </Fragment>
+        <Box sx={{ mt: 2 }}>
+          { uploadState.state === STATE_ERROR && (
+            <Notification isDanger>{uploadState.error}</Notification>
+          )}
+        </Box>
+      </Fragment>
+    </GlobalHotKeys>
   );
 };
 

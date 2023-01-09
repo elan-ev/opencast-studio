@@ -13,7 +13,7 @@
     "arrow-parens": ["error", "as-needed"],
     "arrow-spacing": "error",
     "block-spacing": ["error", "always"],
-    "brace-style": "error",
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
     "comma-spacing": ["error", { "before": false, "after": true }],
     "eol-last": ["error", "always"],
     "func-call-spacing": ["error", "never"],

@@ -145,5 +145,45 @@
   "settings-theme-appearance": "Aussehen",
   "settings-theme-dark": "Dunkles Design",
   "settings-theme-light": "Helles Design",
-  "settings-theme-system": "System Design"
+  "settings-theme-system": "System Design",
+
+  "nav-shortcuts": "Tastenkürzel",
+  "record-shortcuts": "Aufnahme",
+  "edit-shortcuts": "Editieren",
+  "other-shortcuts": "Weitere Shortcuts",
+  "no-groups": "Keine Gruppen",
+  "sequence-seperator": "oder",
+  
+  "control-key": "Strg",
+  "space-key": "Leertaste",
+  "shift-key": "Shift",
+  "left-key": "Links",
+  "right-key": "Rechts",
+
+  "record-display": "Nur Bildschirm aufnehmen",
+  "record-camera": "Nur Kamera aufnehmen",
+  "record-both": "Kamera und Display aufnehmen",
+  "record-audio": "Mit Audio aufnehmen",
+  "record-no-audio": "Ohne Audio aufnehmen",
+  "start-recording": "Aufnahme starten",
+  "stop-recording": "Aufnahme beenden",
+  "pause-recording": "Aufnahme pausieren/fortsetzen",
+
+  "play-pause": "Video abspielen/anhalten",
+  "skip-five": "5 Sekunden weiter",
+  "back-five": "5 Sekunden zurück",
+  "frame-forward": "Ein Frame weiter",
+  "frame-back": "Ein Frame zurück",
+  "cut-left": "Links schneiden",
+  "cut-right": "Rechts schneiden",
+  "delete-left": "Linke Schnittmarkierung entfernen",
+  "delete-right": "Rechte Schnittmarkierung entfernen",
+
+  "tab-elements": "Durch Seitenelemente navigieren",
+  "next-button": "Weiter/Bestätigen",
+  "back-button": "Zurück/Verwerfen",
+  "upload-video": "Video auf Opencast hochladen",
+  "download-video": "Video herunterladen",
+  "new-recording": "Neue Aufnahme starten"
+
 }

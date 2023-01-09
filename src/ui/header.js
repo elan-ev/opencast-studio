@@ -12,6 +12,7 @@ import {
   faWrench,
   faInfoCircle,
   faVideo,
+  faKeyboard,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useStudioState } from '../studio-state';
@@ -109,8 +110,8 @@ const NavElement = ({ target, children, icon, ...rest }) => {
       }}
       sx={{
         color: 'white',
-        pl: [3, '10px'],
-        pr: [3, '14px'],
+        pl: [3, '12px'],
+        pr: [3, '12px'],
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
@@ -133,10 +134,26 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         display: 'inline-block',
         textAlign: 'right',
         mr: [3, 3, 2],
+        '@media screen and (max-width: 742px)': {
+          mr: [0, 0, 0],
+        },
+        '@media screen and (max-width: 575px)': {
+          mr: [3, 3, 2],
+        }
       }}>
         <FontAwesomeIcon icon={icon} />
       </div>
-      {children}
+      <div sx={{
+        display: 'inline-block',
+        '@media screen and (max-width: 742px)': {
+          display: 'none'
+        },
+        '@media screen and (max-width: 575px)': {
+          display: 'inline-block',
+        }
+      }}>
+        {children}
+      </div>
     </NavLink>
   );
 };
@@ -214,6 +231,13 @@ const Navigation = props => {
           onClick={closeMenu}
         >
           {t('nav-settings')}
+        </NavElement>
+        <NavElement
+          target="/shortcuts"
+          icon={faKeyboard}
+          onClick={closeMenu}
+        >
+          {t('nav-shortcuts')}
         </NavElement>
         <NavElement
           target="/about"

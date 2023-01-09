@@ -17,6 +17,8 @@ import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
 import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
 import Tooltip from '../../../Tooltip';
 
+import { GlobalHotKeys } from 'react-hotkeys';
+import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number
@@ -222,83 +224,114 @@ const VideoControls = ({ currentTime, previewController }) => {
 
   const duration = previewController.current?.duration;
 
+  const switchPlayPause = keyEvent => {
+    const controller = previewController.current;
+    if (controller.isPlaying) {
+      controller.pause(keyEvent);
+    } else if (controller.isReadyToPlay) {
+      controller.play(keyEvent);
+    }
+  };
+
+  const leftMarker = useRef(null);
+  const rightMarker = useRef(null);
+
+  const handlers = {
+    PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent); } },
+    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { leftMarker.current?.click(); } },
+    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { rightMarker.current?.click(); } },
+  };
+
   return <div sx={{ textAlign: 'center' }}>
-    <Flex
-      sx={{
-        backgroundColor: 'gray.4',
-        p: 2,
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        '& > *': {
-          mx: 2,
-        }
-      }}
-    >
-      {settings.review?.disableCutting || <CutControls
-        marker="start"
-        value={start}
-        control={end}
-        invariant={(start, end) => start < end}
-        { ...{ recordingDispatch, previewController, currentTime } }
-      />}
-      <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
-        <button
-          sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
-          onClick={() => {
-            const controller = previewController.current;
-            if (controller) {
-              if (controller.isPlaying) {
-                controller.pause();
-              } else if (controller.isReadyToPlay) {
-                controller.play();
+    <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
+      <Flex
+        sx={{
+          backgroundColor: 'gray.4',
+          p: 2,
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          '& > *': {
+            mx: 2,
+          }
+        }}
+      >
+        { settings.review?.disableCutting || <CutControls
+          marker="start"
+          innerRef={leftMarker}
+          value={start}
+          control={end}
+          invariant={(start, end) => start < end}
+          { ...{ recordingDispatch, previewController, currentTime } }
+        /> }
+        <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
+          <button
+            sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
+            onClick={() => {
+              const controller = previewController.current;
+              if (controller) {
+                if (controller.isPlaying) {
+                  controller.pause();
+                } else if (controller.isReadyToPlay) {
+                  controller.play();
+                }
               }
-            }
-          }}
-        >
-          <FontAwesomeIcon
-            icon={previewController.current?.isPlaying ? faPause : faPlay}
-            sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 }}}
-          />
-        </button>
-      </Tooltip>
-      {settings.review?.disableCutting || <CutControls
-        marker="end"
-        value={end}
-        control={start}
-        invariant={(end, start) => start < end}
-        { ...{ recordingDispatch, previewController, currentTime } }
-      />}
-    </Flex>
-    {t('review-player-progress', { currentTime, duration })}
+            }}
+          >
+            <FontAwesomeIcon
+              icon={previewController.current?.isPlaying ? faPause : faPlay}
+              sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 }}}
+            />
+          </button>
+        </Tooltip>
+        { settings.review?.disableCutting || <CutControls
+          marker="end"
+          innerRef={rightMarker}
+          value={end}
+          control={start}
+          invariant={(end, start) => start < end}
+          { ...{ recordingDispatch, previewController, currentTime } }
+        /> }
+      </Flex>
+      {t('review-player-progress', { currentTime, duration })}
+    </GlobalHotKeys>
   </div>;
 };
 
 const CutControls = (
-  { marker, value, control, invariant, currentTime, previewController, recordingDispatch }
+  { marker, value, control, invariant, currentTime, previewController, recordingDispatch, innerRef }
 ) => {
   const { t } = useTranslation();
 
+  const handlers = {
+    CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click(); } },
+    CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click(); } },
+  };
+
   const state = (
-    <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
-      { value !== null && <Fragment>
-        <Trans { ...{ t } } i18nKey={`review-${marker}`}>
-          {{ [marker]: value }} <Link href="" onClick={event => {
-            event.preventDefault();
-            previewController.current.currentTime = value;
-          }} />
-        </Trans>
-        <Tooltip content={t(`review-remove-cut-point`)}>
-          <IconButton context={marker} onClick={
-            () => recordingDispatch({
-              type: `UPDATE_${marker.toUpperCase()}`,
-              payload: null,
-            })
-          }>
-            <FontAwesomeIcon icon={faTrash} />
-          </IconButton>
-        </Tooltip>
-      </Fragment> }
-    </div>
+    <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
+      <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
+        { value !== null && <Fragment>
+          <Trans { ...{ t } } i18nKey={`review-${marker}`}>
+            {{ [marker]: value }} <Link href="" onClick={event => {
+              event.preventDefault();
+              previewController.current.currentTime = value;
+            }} />
+          </Trans>
+          <Tooltip content={t(`review-remove-cut-point`)}>
+            <IconButton context={marker}
+              ref={innerRef} // for DELETE_CROP_MARK
+              onClick={
+                () => recordingDispatch({
+                  type: `UPDATE_${marker.toUpperCase()}`,
+                  payload: null,
+                })}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </IconButton>
+          </Tooltip>
+        </Fragment> }
+      </div>
+    </GlobalHotKeys>
   );
 
   const disabled = (() => {
@@ -312,40 +345,44 @@ const CutControls = (
   })();
 
   const button = (
-    <Tooltip content={t(`review-set-${marker}`)}>
-      <button
-        {...{ disabled }}
-        onClick={() => {
-          let value = previewController.current.currentTime;
-          // We disable the buttons when the generated values would be invalid,
-          // but we rely on `timeupdate` events for that, which are not guaranteed
-          // to be timely, so we still have to check the invariant when actually
-          // updating the state. Here we decided to just clamp the value appropriately.
-          if (control != null && !invariant(value, control)) {
-            value = control;
-          }
-          recordingDispatch({
-            type: `UPDATE_${marker.toUpperCase()}`,
-            payload: value,
-          });
-        }}
-        sx={{
-          backgroundColor: 'transparent',
-          color: 'text',
-          border: 'none',
-          pt: '4px',
-          px: '8px',
-          borderRadius: '4px',
-          '&:disabled': {
-            opacity: 0.3,
-          },
-          '&:not(:disabled):hover': {
-            backgroundColor: 'gray.3'
-          },
-        }}
-      >
-        <CutHereIcon sx={{ height: '32px', transform: marker === 'end' ? 'scaleX(-1)' : '' }} />
-      </button></Tooltip>
+    <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
+      <Tooltip content={t(`review-set-${marker}`)}>
+        <button
+          id={marker === 'start' ? 'leftmarker' : 'rightmarker'}
+          {...{ disabled }}
+          onClick={() => {
+            let value = previewController.current.currentTime;
+            // We disable the buttons when the generated values would be invalid,
+            // but we rely on `timeupdate` events for that, which are not guaranteed
+            // to be timely, so we still have to check the invariant when actually
+            // updating the state. Here we decided to just clamp the value appropriately.
+            if (control != null && !invariant(value, control)) {
+              value = control;
+            }
+            recordingDispatch({
+              type: `UPDATE_${marker.toUpperCase()}`,
+              payload: value,
+            });
+          }}
+          sx={{
+            backgroundColor: 'transparent',
+            color: 'text',
+            border: 'none',
+            pt: '4px',
+            px: '8px',
+            borderRadius: '4px',
+            '&:disabled': {
+              opacity: 0.3,
+            },
+            '&:not(:disabled):hover': {
+              backgroundColor: 'gray.3'
+            },
+          }}
+        >
+          <CutHereIcon sx={{ height: '32px', transform: marker === 'end' ? 'scaleX(-1)' : '' }} />
+        </button>
+      </Tooltip>
+    </GlobalHotKeys>
   );
 
   return marker === 'start'
@@ -458,75 +495,110 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     }
   });
 
+  const handlers = {
+    FORWARD_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent); } },
+    BACKWARDS_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent); } },
+    FORWARD_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent); } },
+    BACKWARDS_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent); } },
+  };
+
+  const skipFiveSeconds = keyEvent => {
+    videoRefs.forEach( video => {
+      if (video.current !== undefined) {
+        if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {
+          video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
+        } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
+          video.current.currentTime = Math.max(0, video.current.currentTime - 5);
+        }
+      }
+    });
+  };
+
+  const skipFrame = keyEvent => {
+    const fps = 30;
+
+    videoRefs.forEach( video => {
+      if (video.current !== undefined) {
+        if (keyEvent.key === '.') {
+          video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1 / fps));
+        } else if (keyEvent.key === ',') {
+          video.current.currentTime = Math.max(0, video.current.currentTime - (1 / fps));
+        }
+      }
+    });
+  };
+
   const children = recordings.map((recording, index) => ({
     body: (
-      <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
-        { overlayVisible && <div
-          sx={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.65)',
-            color: 'white',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            pointerEvents: 'none',
-          }}>
-          <CutOutIcon sx={{ height: '4em' }}/>
-          <p sx={{ my: 3 }}>{ t('review-part-will-be-removed') }</p>
-        </div>
-        }
-        <video
-          ref={videoRefs[index]}
-          key={index}
-          src={recording.url}
-          onLoadedData={event => {
-            // Force the browser to calculate the duration of the stream
-            // by seeking way past its end. *fingers crossed*
-            // We reset this later in an effect. (See above.)
-            // Also without setting the current time once initially,
-            // some browsers show a black video element instead of the first frame.
-            event.target.currentTime = Number.MAX_VALUE;
-            durationCalculationProgress[index].current = 'started';
-          }}
-          onTimeUpdate={durationsCalculated ? event => {
-            const currentTime = event.target.currentTime;
-            setOverlayVisible(isInCutRegion(currentTime));
-
-            onTimeUpdate(event);
-          } : event => {
-            if (!durationsCalculated) {
-              switch (durationCalculationProgress[index].current) {
-                case 'started':
-                  event.target.currentTime = ALMOST_ZERO;
-                  durationCalculationProgress[index].current = 'done';
-                  break;
-                case 'done':
-                  if (durationCalculationProgress.filter(
-                    p => p.current === 'done'
-                  ).length === recordings.length) {
-                    setDurationsCalculated(true);
-                  }
-                  break;
-                default:
-                  // Appease the linter
-                  break;
-              }
-            }} // eslint-disable-line
+      <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
+        <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
+          { overlayVisible && <div
+            sx={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.65)',
+              color: 'white',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              pointerEvents: 'none',
+            }}>
+            <CutOutIcon sx={{ height: '4em' }}/>
+            <p sx={{ my: 3 }}>{ t('review-part-will-be-removed') }</p>
+          </div>
           }
-          preload="auto" tabIndex={'-1'}
-          sx={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#ccc',
-            outline: 'none'
-          }}
-        />
-      </div>
+          <video
+            ref={videoRefs[index]}
+            key={index}
+            src={recording.url}
+            onLoadedData={event => {
+              // Force the browser to calculate the duration of the stream
+              // by seeking way past its end. *fingers crossed*
+              // We reset this later in an effect. (See above.)
+              // Also without setting the current time once initially,
+              // some browsers show a black video element instead of the first frame.
+              event.target.currentTime = Number.MAX_VALUE;
+              durationCalculationProgress[index].current = 'started';
+            }}
+            onTimeUpdate={durationsCalculated ? event => {
+              const currentTime = event.target.currentTime;
+              setOverlayVisible(isInCutRegion(currentTime));
+
+              onTimeUpdate(event);
+            } : event => {
+              if (!durationsCalculated) {
+                switch (durationCalculationProgress[index].current) {
+                  case 'started':
+                    event.target.currentTime = ALMOST_ZERO;
+                    durationCalculationProgress[index].current = 'done';
+                    break;
+                  case 'done':
+                    if (durationCalculationProgress.filter(
+                      p => p.current === 'done'
+                    ).length === recordings.length) {
+                      setDurationsCalculated(true);
+                    }
+                    break;
+                  default:
+                    // Appease the linter
+                    break;
+                }
+              }} // eslint-disable-line
+            }
+            preload="auto" tabIndex={'-1'}
+            sx={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#ccc',
+              outline: 'none'
+            }}
+          />
+        </div>
+      </GlobalHotKeys>
     ),
     dimensions: () => recording.dimensions,
   }));
