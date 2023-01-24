@@ -4,6 +4,7 @@ import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
 import parseToml from '@iarna/toml/parse-string';
+
 import { decodeHexString } from './util';
 
 
@@ -13,45 +14,112 @@ const CONTEXT_SETTINGS_FILE = 'settings.toml';
 export const FORM_FIELD_HIDDEN = 'hidden';
 export const FORM_FIELD_OPTIONAL = 'optional';
 export const FORM_FIELD_REQUIRED = 'required';
+export type FormFieldState =
+  | typeof FORM_FIELD_HIDDEN
+  | typeof FORM_FIELD_OPTIONAL
+  | typeof FORM_FIELD_REQUIRED;
 
-// Responsible for obtaining settings from different places (context settings,
-// local storage, query parameter) and merging them appropriately.
+/** Sources that setting values can come from. */
+type SettingsSource = 'src-server'| 'src-url' | 'src-local-storage';
+
+/** Opencast Studio runtime settings. */
+type Settings = {
+  opencast?: {
+    serverUrl?: string; // TODO: make this URL
+    loginName?: string;
+    loginPassword?: string;
+    loginProvided?: boolean;
+  };
+  upload?: {
+    seriesId?: string;
+    workflowId?: string;
+    acl?: boolean | string;
+    dcc?: string;
+    titleField?: FormFieldState;
+    presenterField?: FormFieldState;
+  };
+  recording?: {
+    videoBitrate?: number;
+    mimes?: string[];
+  };
+  review?: {
+    disableCutting?: boolean;
+  };
+  display?: {
+    maxFps?: number;
+    maxHeight?: number;
+  };
+  camera?: {
+    maxFps?: number;
+    maxHeight?: number;
+  };
+  return?: {
+    allowedDomains?: string[];
+    label?: string;
+    target?: string;
+  };
+  theme?: {
+    customCSS: string;
+  };
+};
+
+/**
+ * The values prefilled on the settings page. These settings are *not* used
+ * automatically, they are just the defaults for the UI.
+ */
+const defaultSettings: Settings = {
+  opencast: {
+    serverUrl: 'https://develop.opencast.org/',
+    loginName: 'admin',
+    loginPassword: 'opencast',
+  },
+};
+
+
+// ==============================================================================================
+// ===== SettingsManager
+// ==============================================================================================
+
+/**
+ * Responsible for obtaining settings from different places (context settings,
+ * local storage, query parameter) and merging them appropriately.
+ */
 export class SettingsManager {
-  // The settings set by the server. These cannot be edited by the user. If the
-  // server did not specify any settings, this is `{}`.
-  contextSettings = Object.create(null);
+  /**
+   * The settings set by the server. These cannot be edited by the user. If the
+   * server did not specify any settings, this is `{}`.
+   */
+  contextSettings: Settings = Object.create(null);
 
-  // These settings are given in the query part of the URL (e.g.
-  // `?opencast.loginName=peter`). If there are no settings in the URL, this
-  // is `{}`.
-  urlSettings = Object.create(null);
+  /**
+   * These settings are given in the query part of the URL (e.g.
+   * `?opencast.loginName=peter`). If there are no settings in the URL, this
+   * is `{}`.
+   */
+  urlSettings: Settings = Object.create(null);
 
-  // The settings set by the user and stored in local storage. This is `{}` if
-  // there were no settings in local storage.
-  #userSettings = Object.create(null);
+  /**
+   * The settings set by the user and stored in local storage. This is `{}` if
+   * there were no settings in local storage.
+   */
+  #userSettings: Settings = Object.create(null);
 
-  // This function is called whenever the user saved their settings. The new
-  // settings object is passed as parameter.
+  /**
+   * This function is called whenever the user saved their settings. The new
+   * settings object is passed as parameter.
+   */
   onChange = null;
 
-  // This constructor is mainly used for tests. Use `init()` to get an instance
-  // for the real application.
-  constructor(values) {
-    if (values) {
-      if (values.contextSettings) {
-        this.contextSettings = values.contextSettings;
-      }
-      if (values.urlSettings) {
-        this.urlSettings = values.urlSettings;
-      }
-      if (values.userSettings) {
-        this.#userSettings = values.userSettings;
-      }
-    }
-  }
+  /**
+   * This constructor is mainly used for tests. Use `init()` to get an instance
+   * for the real application.
+   */
+  constructor() {}
 
-  // Creates a new `Settings` instance by loading user settings from local
-  // storage and attempting to load context settings from the server..
+  /**
+   * Creates a new `Settings` instance by loading user settings from local
+   * storage and attempting to load context settings from the server..
+   */
   static async init() {
     let self = new SettingsManager();
 
@@ -64,19 +132,19 @@ export class SettingsManager {
       } catch {
         console.warn("Could not parse settings stored in local storage. Ignoring.");
       }
-      self.#userSettings = self.validate(
+      self.#userSettings = validate(
         rawUserSettings,
         false,
-        SRC_LOCAL_STORAGE,
+        'src-local-storage',
         'from local storage user settings',
       );
     }
 
     const rawContextSettings = await SettingsManager.loadContextSettings() || Object.create(null);
-    self.contextSettings = self.validate(
+    self.contextSettings = validate(
       rawContextSettings,
       false,
-      SRC_SERVER,
+      'src-server',
       'from server settings file',
     );
 
@@ -122,10 +190,10 @@ export class SettingsManager {
         }
       }
 
-      self.urlSettings = self.validate(
+      self.urlSettings = validate(
         rawUrlSettings,
         false,
-        SRC_URL,
+        'src-url',
         'given as URL `config` GET parameter',
       );
     } else {
@@ -145,15 +213,17 @@ export class SettingsManager {
         obj[segments[segments.length - 1]] = value;
       }
 
-      self.urlSettings = self.validate(rawUrlSettings, true, SRC_URL, 'given as URL GET parameter');
+      self.urlSettings = validate(rawUrlSettings, true, 'src-url', 'given as URL GET parameter');
     }
 
     return self;
   }
 
-  // Attempts to load `settings.toml` (or REACT_APP_SETTINGS_PATH is that's
-  // specified) from the server. If it fails for some reason, returns `null` and
-  // prints an appropriate message on console.
+  /**
+   * Attempts to load `settings.toml` (or REACT_APP_SETTINGS_PATH is that's
+   * specified) from the server. If it fails for some reason, returns `null` and
+   * prints an appropriate message on console.
+   */
   static async loadContextSettings() {
     // Try to retrieve the context settings.
     let basepath = process.env.PUBLIC_URL || '/';
@@ -200,9 +270,11 @@ export class SettingsManager {
     }
   }
 
-  // Stores the given `newSettings` as user settings. The given object might be
-  // partial, i.e. only the new values can be specified. Values in `newSettings`
-  // override values in the old user settings.
+  /**
+   * Stores the given `newSettings` as user settings. The given object might be
+   * partial, i.e. only the new values can be specified. Values in `newSettings`
+   * override values in the old user settings.
+   */
   saveSettings(newSettings) {
     this.#userSettings = merge(this.#userSettings, newSettings);
     window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.#userSettings));
@@ -211,25 +283,29 @@ export class SettingsManager {
     }
   }
 
-  // The merged settings that the whole application should use.
-  settings() {
-    return merge.all([this.#userSettings, this.contextSettings, this.urlSettings]);
+  /** The merged settings that the whole application should use. */
+  settings(): Settings {
+    return mergeAll([this.#userSettings, this.contextSettings, this.urlSettings]);
   }
 
-  // The values for the settings forms. These are simply the user settings with
-  // missing settings filled by `defaultSettings`.
+  /**
+   * The values for the settings forms. These are simply the user settings with
+   * missing settings filled by `defaultSettings`.
+   */
   formValues() {
     return merge(defaultSettings, this.#userSettings);
   }
 
-  fixedSettings() {
+  fixedSettings(): Settings {
     return merge(this.contextSettings, this.urlSettings);
   }
 
-  // Returns whether a specific setting is configurable by the user. It is not
-  // if the setting is fixed by the context setting or an URL setting. The path
-  // is given as string. Example: `manager.isConfigurable('opencast.loginName')`
-  isConfigurable(path) {
+  /**
+   * Returns whether a specific setting is configurable by the user. It is not
+   * if the setting is fixed by the context setting or an URL setting. The path
+   * is given as string. Example: `manager.isConfigurable('opencast.loginName')`
+   */
+  isConfigurable(path: string) {
     let obj = this.fixedSettings();
     const segments = path.split('.');
     for (const segment of segments) {
@@ -250,87 +326,102 @@ export class SettingsManager {
     return this.isConfigurable('opencast.loginPassword')
       && this.fixedSettings().opencast?.loginProvided !== true;
   }
-
-  // Validate the given `obj` with the global settings `SCHEMA`. If `allowParse`
-  // is true, string values are attempted to parse into the expected type. `src`
-  // must be one of `SRC_SERVER`, `SRC_URL` or `SRC_LOCAL_STORAGE`.
-  // `srcDescription` is just a string for error messages specifying where `obj`
-  // comes from.
-  validate(obj, allowParse, src, sourceDescription) {
-    // Validates `obj` with `schema`. `path` is the current path used for error
-    // messages.
-    const validate = (schema, obj, path) => {
-      if (typeof schema === 'function') {
-        return validateValue(schema, obj, path);
-      } else {
-        return validateObj(schema, obj, path);
-      }
-    };
-
-    // Validate a settings value with a validation function. Returns the final
-    // value of the setting or `null` if it should be ignored.
-    const validateValue = (validation, value, path) => {
-      try {
-        const newValue = validation(value, allowParse, src);
-        return newValue === undefined ? value : newValue;
-      } catch (e) {
-        console.warn(
-          `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
-            + `${e}. Ignoring.`
-        );
-        return null;
-      }
-    };
-
-    // Validate a settings object/namespace. `schema` and `obj` need to be
-    // objects.
-    const validateObj = (schema, obj, path) => {
-      // We iterate through all keys of the given settings object, checking if
-      // each key is valid and recursively validating the value of that key.
-      let out = Object.create(null);
-      for (const key of Object.keys(obj)) {
-        const newPath = path ? `${path}.${key}` : key;
-        if (key in schema) {
-          const value = validate(schema[key], obj[key], newPath);
-
-          // If `null` is returned, the validation failed and we ignore this
-          // value.
-          if (value !== null) {
-            out[key] = value;
-          }
-        } else {
-          console.warn(
-            `'${newPath}' (${sourceDescription}) is not a valid settings key. Ignoring.`
-          );
-        }
-      }
-
-      return out;
-    };
-
-    return validate(SCHEMA, obj, "");
-  }
 }
 
 
-// The values prefilled on the settings page. These settings are *not* used
-// automatically, they are just the defaults for the UI.
-const defaultSettings = {
-  opencast: {
-    serverUrl: 'https://develop.opencast.org/',
-    loginName: 'admin',
-    loginPassword: 'opencast',
-  },
+
+// ==============================================================================================
+// ===== Setting runtime validation
+// ==============================================================================================
+
+/**
+ * Validate the given `obj` with the global settings `SCHEMA`. If `allowParse`
+ * is true, string values are attempted to parse into the expected type. `src`
+ * must be one of `SRC_SERVER`, `SRC_URL` or `SRC_LOCAL_STORAGE`.
+ * `srcDescription` is just a string for error messages specifying where `obj`
+ * comes from.
+ */
+const validate = (
+  obj: any,
+  allowParse: boolean,
+  src: SettingsSource,
+  sourceDescription: string,
+) => {
+  // Validates `obj` with `schema`. `path` is the current path used for error
+  // messages.
+  const validate = (schema, obj: any, path: string) => {
+    if (typeof schema === 'function') {
+      return validateValue(schema, obj, path);
+    } else {
+      return validateObj(schema, obj, path);
+    }
+  };
+
+  // Validate a settings value with a validation function. Returns the final
+  // value of the setting or `null` if it should be ignored.
+  const validateValue = (validation, value: any, path: string) => {
+    try {
+      const newValue = validation(value, allowParse, src);
+      return newValue === undefined ? value : newValue;
+    } catch (e) {
+      console.warn(
+        `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
+          + `${e}. Ignoring.`
+      );
+      return null;
+    }
+  };
+
+  // Validate a settings object/namespace. `schema` and `obj` need to be
+  // objects.
+  const validateObj = (schema, obj: any, path: string) => {
+    // We iterate through all keys of the given settings object, checking if
+    // each key is valid and recursively validating the value of that key.
+    let out = Object.create(null);
+    for (const key of Object.keys(obj)) {
+      const newPath = path ? `${path}.${key}` : key;
+      if (key in schema) {
+        const value = validate(schema[key], obj[key], newPath);
+
+        // If `null` is returned, the validation failed and we ignore this
+        // value.
+        if (value !== null) {
+          out[key] = value;
+        }
+      } else {
+        console.warn(
+          `'${newPath}' (${sourceDescription}) is not a valid settings key. Ignoring.`
+        );
+      }
+    }
+
+    return out;
+  };
+
+  return validate(SCHEMA, obj, "");
 };
 
-// Validation functions for different types.
+/**
+ * Validation function for a setting value.
+ *
+ * `v` is the input value and could be anything. `allowParse` specifies whether
+ * the input might be parsed into the correct type (this is only `true` for GET
+ * parameters). The validation should throw an error if the input value is not
+ * valid for the setting. Otherwise the function must return a value which is
+ * then used in the validated settings object. The returned value might be `v`
+ * or something else.
+ */
+type Validator<T> = (v: any, allowParse: boolean, src: SettingsSource) => T;
+
+/** Validation functions for basic types. */
 const types = {
-  'string': (v, allowParse) => {
+  'string': v => {
     if (typeof v !== 'string') {
       throw new Error("is not a string, but should be");
     }
+    return v;
   },
-  'int': (v, allowParse) => {
+  'int': (v, allowParse): number => {
     if (Number.isInteger(v)) {
       return v;
     }
@@ -345,9 +436,9 @@ const types = {
       throw new Error("is not an integer");
     }
   },
-  'boolean': (v, allowParse) => {
+  'boolean': (v, allowParse): boolean => {
     if (typeof v === 'boolean') {
-      return;
+      return v;
     }
 
     if (allowParse) {
@@ -362,7 +453,7 @@ const types = {
       throw new Error("is not a boolean");
     }
   },
-  positiveInteger: (v, allowParse) => {
+  positiveInteger: (v, allowParse): number => {
     let i = types.int(v, allowParse);
     if (i <= 0) {
       throw new Error("has to be positive, but isn't");
@@ -386,52 +477,49 @@ const types = {
 
       return v.map(element => {
         try {
-          const newValue = elementType(element, allowParse, src);
-          return newValue === undefined ? element : newValue;
+          return elementType(element, allowParse, src);
         } catch (err) {
           throw new Error(`failed to validate element '${element}' of array: ${err}`);
         }
       });
     };
   },
+} satisfies {
+  string: Validator<string>,
+  int: Validator<number>,
+  boolean: Validator<boolean>,
+  positiveInteger: Validator<number>,
+  array: <T, >(validator: Validator<T>) => Validator<T[]>,
 };
 
-// Specifies what to do with a metadata field.
-const metaDataField = v => {
+/** Validator for `FormFieldState`. */
+const metaDataField: Validator<FormFieldState> = v => {
   if (![FORM_FIELD_HIDDEN, FORM_FIELD_OPTIONAL, FORM_FIELD_REQUIRED].includes(v)) {
     throw new Error(
       `has to be either '${FORM_FIELD_HIDDEN}', '${FORM_FIELD_OPTIONAL}' or `
         + `'${FORM_FIELD_REQUIRED}', but is '${v}'`
     );
   }
+
+  return v;
 };
 
-// A validator wrapper that errors of the source of the value is NOT
-// `settings.toml`.
-const onlyFromServer = inner => (v, allowParse, src) => {
-  if (src !== SRC_SERVER) {
-    throw new Error(`this configuration cannot be specified via the URL or local storage, `
-      + `but must be specified in 'settings.toml'`);
+/**
+ * A validator wrapper that errors of the source of the value is NOT
+ * `settings.toml`.
+ */
+const onlyFromServer = <Out, >(inner: Validator<Out>): Validator<Out> => (
+  (v, allowParse, src) => {
+    if (src !== 'src-server') {
+      throw new Error(`this configuration cannot be specified via the URL or local storage, `
+        + `but must be specified in 'settings.toml'`);
+    }
+
+    return inner(v, allowParse, src);
   }
+);
 
-  return inner(v, allowParse, src);
-};
-
-// Sources that values can come from.
-const SRC_SERVER = 'src-server';
-const SRC_URL = 'src-url';
-const SRC_LOCAL_STORAGE = 'src-local-storage';
-
-// Defines all potential settings and their types.
-//
-// Each setting value has to be a validation function. Such a function takes two
-// arguments: the input value `v` and the boolean `allowParse` which specifies
-// whether the input might be parsed into the correct type (this is only `true`
-// for GET parameters). The validation should throw an error if the input value
-// is not valid for the setting. If the function returns `undefined`, the input
-// value is valid and used. If the validator returns a different value, the
-// input is valid, but is replaced by that new value. See the `types` object
-// above for some examples.
+/** Defines all potential settings and their validation functions. */
 const SCHEMA = {
   opencast: {
     serverUrl: v => {
@@ -447,6 +535,7 @@ const SCHEMA = {
       }
 
       // TODO: we could return the `URL` here or do other adjustments
+      return v;
     },
     loginName: types.string,
     loginPassword: types.string,
@@ -464,7 +553,7 @@ const SCHEMA = {
       }
 
       if (typeof v === 'string') {
-        return;
+        return v;
       }
 
       throw new Error("needs to be 'true', 'false' or a string");
@@ -491,26 +580,34 @@ const SCHEMA = {
   return: {
     allowedDomains: onlyFromServer(types.array(types.string)),
     label: types.string,
-    target: (v, allowParse) => {
-      types.string(v, allowParse);
+    target: v => {
+      types.string(v);
       if (!(v.startsWith('/') || v.startsWith('http'))) {
         throw new Error(`has to start with '/' or 'http'`);
       }
+      return v;
     },
   },
   theme: {
     customCSS: types.string,
   },
-};
+} satisfies Record<string, Record<string, Validator<any>>>;
 
+
+// ==============================================================================================
+// ===== Utilities
+// ==============================================================================================
 
 // Customize array merge behavior
-let merge = (a, b) => {
-  return deepmerge(a, b, { arrayMerge });
-};
-merge.all = array => deepmerge.all(array, { arrayMerge });
-const arrayMerge = (destinationArray, sourceArray, options) => sourceArray;
+const merge = (a: Settings, b: Settings): Settings => deepmerge(a, b, { arrayMerge });
+const mergeAll = (array: Settings[]) => deepmerge.all(array, { arrayMerge });
+const arrayMerge: deepmerge.Options['arrayMerge']
+  = (_destinationArray, sourceArray, _options) => sourceArray;
 
+
+// ==============================================================================================
+// ===== React context for settings
+// ==============================================================================================
 
 const Context = React.createContext(null);
 
