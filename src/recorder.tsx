@@ -1,4 +1,4 @@
-import { dimensionsOf } from './util.js';
+import { dimensionsOf } from './util';
 
 export default class Recorder {
 

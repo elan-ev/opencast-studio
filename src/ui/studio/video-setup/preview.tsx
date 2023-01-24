@@ -7,8 +7,8 @@ import { Card, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
-import { VideoBox, useVideoBoxResize } from '../elements.js';
-import { dimensionsOf } from '../../../util.js';
+import { VideoBox, useVideoBoxResize } from '../elements';
+import { dimensionsOf } from '../../../util';
 import { StreamSettings } from './prefs';
 
 

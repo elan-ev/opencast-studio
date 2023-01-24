@@ -13,7 +13,7 @@ import { useDispatch, useStudioState } from '../../../studio-state';
 
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
 import Clock from './clock';
-import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from './index.js';
+import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from '.';
 
 import Tooltip from '../../../Tooltip';
 import { GlobalHotKeys } from 'react-hotkeys';

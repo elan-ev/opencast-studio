@@ -7,10 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faPause } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react';
 
-import { STATE_PAUSED } from './index.js';
+import { STATE_PAUSED } from '.';
 import { useStudioState } from '../../../studio-state';
-import { VideoBox, useVideoBoxResize } from '../elements.js';
-import { dimensionsOf } from '../../../util.js';
+import { VideoBox, useVideoBoxResize } from '../elements';
+import { dimensionsOf } from '../../../util';
 
 export default function MediaDevices({ recordingState }) {
   const { t } = useTranslation();

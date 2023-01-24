@@ -7,7 +7,7 @@ import { faDownload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 
-import { recordingFileName } from '../../../util.js';
+import { recordingFileName } from '../../../util';
 
 
 const RecordingPreview = ({ onDownload, recording, title, presenter }) => {

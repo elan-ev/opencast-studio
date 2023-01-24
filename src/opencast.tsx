@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import Mustache from 'mustache';
 
-import { recordingFileName } from './util.js';
+import { recordingFileName } from './util';
 
 
 // The server URL was not specified.
