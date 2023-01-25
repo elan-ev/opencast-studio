@@ -47,7 +47,7 @@ const initialize = Promise.all([
       sleep(300),
     ]);
 
-    return [settingsManager, oc];
+    return [settingsManager, oc] as [SettingsManager, Opencast];
   }),
 ]);
 

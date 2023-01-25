@@ -28,6 +28,7 @@ export type Recording = {
   url: string,
   mimeType: string,
   dimensions: [number, number],
+  downloaded?: boolean,
 };
 
 export type StudioState = {
@@ -133,7 +134,7 @@ type ReducerAction =
   | { type: 'UPLOAD_ERROR', msg: string }
   | { type: 'UPLOAD_REQUEST' }
   | { type: 'UPLOAD_SUCCESS' }
-  | { type: 'UPLOAD_PROGRESS_UPDATE', secondsLeft: number, currentProgress: number }
+  | { type: 'UPLOAD_PROGRESS_UPDATE', secondsLeft: number | null, currentProgress: number }
   | { type: 'MARK_DOWNLOADED', index: number }
   | { type: 'UPDATE_TITLE', value: string }
   | { type: 'UPDATE_PRESENTER', value: string }
@@ -231,8 +232,8 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
 
 export type Dispatcher = (action: ReducerAction) => void;
 
-const stateContext = createContext<StudioState>(null);
-const dispatchContext = createContext<Dispatcher>(null);
+const stateContext = createContext<StudioState | null>(null);
+const dispatchContext = createContext<Dispatcher | null>(null);
 
 export const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState());
@@ -244,5 +245,13 @@ export const Provider = ({ children }) => {
   );
 };
 
-export const useDispatch = () => useContext(dispatchContext);
-export const useStudioState = () => useContext(stateContext);
+const nullIsBug = <T, >(x: T | null, hook: string): T => {
+  if (x == null) {
+    throw new Error(`bug: ${hook} needs parent context`);
+  }
+  return x;
+}
+export const useDispatch = (): Dispatcher =>
+  nullIsBug(useContext(dispatchContext), "useDispatch");
+export const useStudioState = (): StudioState =>
+  nullIsBug(useContext(stateContext), "useStudioState");

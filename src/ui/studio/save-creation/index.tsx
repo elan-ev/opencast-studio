@@ -51,7 +51,7 @@ import { otherShortcuts } from '../keyboard-shortcuts/globalKeys';
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
-let progressHistory = [];
+let progressHistory: { timestamp: number, progress: number }[] = [];
 
 export default function SaveCreation(props) {
   const settings = useSettings();
@@ -64,7 +64,7 @@ export default function SaveCreation(props) {
     props.previousStep();
   }
 
-  function onProgress(progress) {
+  function onProgress(progress: number) {
     // ----- Time estimation -----
     // We use a simple sliding average over the last few data points and assume
     // that speed for the rest of the upload.
@@ -94,7 +94,7 @@ export default function SaveCreation(props) {
     // Remove all elements outside the window.
     progressHistory.splice(0, windowStart);
 
-    let secondsLeft = null;
+    let secondsLeft: null | number = null;
     if (progressHistory.length >= MINIMUM_DATA_POINT_COUNT) {
       // Calculate the remaining time based on the average speed within the window.
       const windowLength = now - progressHistory[0].timestamp;

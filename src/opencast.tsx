@@ -6,6 +6,8 @@ import equal from 'fast-deep-equal';
 import Mustache from 'mustache';
 
 import { recordingFileName } from './util';
+import { Settings } from './settings';
+import { Recording } from './studio-state';
 
 
 // The server URL was not specified.
@@ -32,6 +34,15 @@ export const STATE_INVALID_RESPONSE = 'invalid_response';
 // succeed.
 export const STATE_INCORRECT_LOGIN = 'incorrect_login';
 
+type OpencastState =
+  | typeof STATE_UNCONFIGURED
+  | typeof STATE_CONNECTED
+  | typeof STATE_LOGGED_IN
+  | typeof STATE_NETWORK_ERROR
+  | typeof STATE_RESPONSE_NOT_OK
+  | typeof STATE_INVALID_RESPONSE
+  | typeof STATE_INCORRECT_LOGIN;
+
 export const UPLOAD_SUCCESS = 'upload_success';
 export const UPLOAD_NETWORK_ERROR = 'upload_network_error';
 export const UPLOAD_NOT_AUTHORIZED = 'upload_not_authorized';
@@ -40,28 +51,28 @@ export const UPLOAD_UNKNOWN_ERROR = 'upload_unknown_error';
 
 
 export class Opencast {
-  #state = STATE_UNCONFIGURED;
-  #serverUrl = null;
+  #state: OpencastState = STATE_UNCONFIGURED;
+  #serverUrl: string | null = null;
 
   // This can one of either:
   // - `null`: no login is provided and login data is not specified
   // - `true`: a login is already automatically provided from the OC context
   // - `{ username, password }`: username and password are given
-  #login = null;
+  #login: null | true | { username: string, password: string } = null;
 
   // The response of `/info/me.json` or `null` if requesting that API did not
   // succeed.
-  #currentUser = null;
+  #currentUser: any = null;
 
   // The response from `/lti` or `null` if the request failed for some reason or
   // if `this.#login !== true`. Note though, that this can also be the empty
   // object, indicating that there is no LTI session.
   #ltiSession = null;
 
-  updateGlobalOc = null;
+  updateGlobalOc: null | ((oc: Opencast) => void) = null;
 
 
-  constructor(settings) {
+  constructor(settings: Settings["opencast"]) {
     // If the server URL is not given, we stay in unconfigured state and
     // immediately return.
     if (settings?.serverUrl == null) {
@@ -91,19 +102,19 @@ export class Opencast {
   }
 
   // Creates a new instance from the settings and calls `updateUser` on it.
-  static async init(settings) {
+  static async init(settings: Settings["opencast"]) {
     let self = new Opencast(settings);
     await self.updateUser();
     return self;
   }
 
   // Updates the global OC instance from `this` to `newInstance`.
-  setGlobalInstance(newInstance) {
+  setGlobalInstance(newInstance: Opencast) {
     if (!this.updateGlobalOc) {
       console.error("bug: 'updateGlobalOc' not set");
     }
 
-    this.updateGlobalOc(newInstance);
+    this.updateGlobalOc?.(newInstance);
   }
 
   // Refreshes the connection by requesting `info/me` unless the state is
@@ -130,9 +141,9 @@ export class Opencast {
   // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED` (or any error state on request
   // error). This method returns whether the state, user object or lti object
   // has changed in any way.
-  async updateUser() {
+  async updateUser(): Promise<boolean> {
     // Try to request `info/me.json` and handle potential errors.
-    let newUser;
+    let newUser: any;
     try {
       newUser = await this.getInfoMe();
     } catch (e) {
@@ -164,7 +175,7 @@ export class Opencast {
       }
 
       const hasChanged = this.#currentUser !== null
-        || this.ltiSession !== null
+        || this.#ltiSession !== null
         || oldState !== this.#state;
       this.#currentUser = null;
       this.#ltiSession = null;
@@ -244,9 +255,9 @@ export class Opencast {
   //
   // On success, the parsed JSON is returned as object. If anything goes wrong,
   // a `RequestError` is thrown and the corresponding `this.#state` is set.
-  async jsonRequest(path, options = {}) {
+  async jsonRequest(path: string) {
     const url = `${this.#serverUrl}/${path}`;
-    const response = await this.request(path, options);
+    const response = await this.request(path);
 
     try {
       return await response.json();
@@ -259,19 +270,19 @@ export class Opencast {
   //
   // If anything goes wrong, a `RequestError` is thrown and the corresponding
   // `this.#state` is set.
-  async request(path, options = {}) {
+  async request(path: string, options?: RequestInit) {
     const url = `${this.#serverUrl}/${path}`;
 
     // Add HTTP Basic Auth headers if username and password are provided.
     let headers = {};
-    if (this.#login?.username && this.#login?.password) {
+    if (this.#login !== true && this.#login?.username && this.#login?.password) {
       const encoded = btoa(unescape(encodeURIComponent(
         this.#login.username + ':' + this.#login.password
       )));
       headers = { 'Authorization': `Basic ${encoded}` };
     }
 
-    let response;
+    let response: Response;
     try {
       response = await fetch(url, {
         ...options,
@@ -292,7 +303,7 @@ export class Opencast {
       throw new UnexpectedRedirect(url);
     }
 
-    if (!response.ok && response.type !== 'opaqueredirect') {
+    if (!response.ok) {
       throw new NotOkResponse(response.status, response.statusText, url);
     }
 
@@ -311,7 +322,15 @@ export class Opencast {
   //
   // At the start of this method, `refreshConnection` is called. That
   // potentially changed the `state`.
-  async upload({ recordings, title, presenter, start, end, uploadSettings, onProgress }) {
+  async upload({ recordings, title, presenter, start, end, uploadSettings, onProgress }: {
+    recordings: Recording[],
+    title: string,
+    presenter: string,
+    start: number | null,
+    end: number | null,
+    uploadSettings: Settings["upload"],
+    onProgress: (p: number) => void,
+  }) {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     switch (this.#state) {
@@ -388,7 +407,12 @@ export class Opencast {
 
   // Adds the DC Catalog with the given metadata to the current ingest process
   // via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
-  async addDcCatalog({ mediaPackage, title, presenter, uploadSettings }) {
+  async addDcCatalog({ mediaPackage, title, presenter, uploadSettings }: {
+    mediaPackage: string,
+    title: string,
+    presenter: string,
+    uploadSettings: Settings["upload"],
+  }) {
     const seriesId = uploadSettings?.seriesId;
     const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
     const dcc = this.constructDcc(template, { presenter, title, seriesId });
@@ -404,7 +428,10 @@ export class Opencast {
 
   // Adds the ACL to the current ingest process via `ingest/addAttachment`. Do
   // not call this method outside of `upload`!
-  async attachAcl({ mediaPackage, uploadSettings }) {
+  async attachAcl({ mediaPackage, uploadSettings }: {
+    mediaPackage: string,
+    uploadSettings: Settings["upload"],
+  }) {
     const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
       ? DEFAULT_ACL_TEMPLATE
       : uploadSettings?.acl;
@@ -420,18 +447,28 @@ export class Opencast {
   }
 
   // Adds a SMIL catalog for Opencast to cut the video during processing
-  addCuttingInformation({ mediaPackage, start, end }) {
+  async addCuttingInformation({ mediaPackage, start, end }: {
+    mediaPackage: string,
+    start: number,
+    end: number,
+  }) {
     const body = new FormData();
     body.append('flavor', 'smil/cutting');
     body.append('mediaPackage', mediaPackage);
     body.append('BODY', new Blob([smil({ start, end })]), 'cutting.smil');
-    return this.request("ingest/addCatalog", { method: 'post', body })
-      .then(response => response.text());
+    const response = await this.request("ingest/addCatalog", { method: 'post', body });
+    return await response.text();
   }
 
   // Uploads the given recordings to the current ingest process via
   // `ingest/addTrack`. Do not call this method outside of `upload`!
-  async uploadTracks({ mediaPackage, recordings, onProgress, title, presenter }) {
+  async uploadTracks({ mediaPackage, recordings, onProgress, title, presenter }: {
+    mediaPackage: string,
+    recordings: Recording[],
+    onProgress: (p: number) => void,
+    title: string,
+    presenter: string,
+  }) {
     const totalBytes = recordings.map(r => r.media.size).reduce((a, b) => a + b, 0);
     let finishedTracksBytes = 0;
 
@@ -445,7 +482,7 @@ export class Opencast {
       }
 
       const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
-      const downloadName = recordingFileName({ mimeType, flavor, title, presenter });
+      const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
 
       const body = new FormData();
       body.append('mediaPackage', mediaPackage);
@@ -461,14 +498,14 @@ export class Opencast {
         xhr.open('POST', url);
 
         // Add HTTP Basic Auth headers if username and password are provided.
-        if (this.#login?.username && this.#login?.password) {
+        if (this.#login !== true && this.#login?.username && this.#login?.password) {
           const encoded = btoa(unescape(encodeURIComponent(
             this.#login.username + ':' + this.#login.password
           )));
           xhr.setRequestHeader('Authorization', `Basic ${encoded}`);
         }
 
-        xhr.onload = e => resolve(e.target.responseText);
+        xhr.onload = e => resolve(xhr.responseText);
         xhr.onerror = () => {
           // Handle 401 Bad credentials for HTTP Basic Auth
           if (xhr.status === 401 || xhr.status === 403) {
@@ -499,7 +536,10 @@ export class Opencast {
 
   // Finishes the current ingest process via `ingest/ingest`. Do not call this
   // method outside of `upload`!
-  async finishIngest({ mediaPackage, uploadSettings }) {
+  async finishIngest({ mediaPackage, uploadSettings }: {
+    mediaPackage: string,
+    uploadSettings: Settings["upload"],
+  }) {
     const workflowId = uploadSettings?.workflowId;
 
     const body = new FormData();
@@ -538,8 +578,8 @@ export class Opencast {
   }
 
   // Constructs the ACL XML structure from the given template string.
-  constructAcl(template) {
-    if (!this.#currentUser) {
+  constructAcl(template: string) {
+    if (!this.#currentUser || !Array.isArray(this.#currentUser.roles)) {
       // Internal error: this should not happen.
       throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
     }
@@ -554,7 +594,11 @@ export class Opencast {
     return renderTemplate(template, view);
   }
 
-  constructDcc(template, { title, presenter, seriesId }) {
+  constructDcc(template: string, { title, presenter, seriesId }: {
+    title: string,
+    presenter: string,
+    seriesId?: string,
+  }) {
     // Prepare template "view": the values that can be used within the template.
     const view = {
       user: this.#currentUser,
@@ -578,34 +622,34 @@ class RequestError extends Error {}
 // The fetch itself failed. This unfortunately can have many causes, including
 // blocked by browser, CORS, server not available, device offline, ...
 class NetworkError extends RequestError {
-  constructor(url, cause) {
+  constructor(url: string, cause: any) {
     super(`network error when accessing '${url}': ${cause}`);
   }
 }
 
 // When requesting a JSON API but the response body is not valid JSON.
 class InvalidJson extends RequestError {
-  constructor(url, cause) {
+  constructor(url: string, cause: any) {
     super(`invalid JSON when accessing ${url}: ${cause}`);
   }
 }
 
 // When the request returns 401.
 class Unauthorized extends RequestError {
-  constructor(status, statusText, url) {
+  constructor(status: number, statusText: string, url: string) {
     super(`got ${status} ${statusText} when accessing ${url}`);
   }
 }
 
 // When the request returns a non-2xx status code.
 class NotOkResponse extends RequestError {
-  constructor(status, statusText, url) {
+  constructor(status: number, statusText: string, url: string) {
     super(`unexpected ${status} ${statusText} response when accessing ${url}`);
   }
 }
 
 class UnexpectedRedirect extends RequestError {
-  constructor(url) {
+  constructor(url: string) {
     super(`unexpected redirect when accessing ${url}`);
   }
 }
@@ -613,21 +657,31 @@ class UnexpectedRedirect extends RequestError {
 
 // ===== The Opencast context and `useOpencast` =====
 
-const Context = React.createContext(null);
+const Context = React.createContext<Opencast | null>(null);
 
 // Returns the current provided Opencast instance.
-export const useOpencast = () => React.useContext(Context);
+export const useOpencast = (): Opencast => {
+  const out = React.useContext(Context);
+  if (out == null) {
+    throw new Error("bug: useOpencast requires a parent opencast provider");
+  }
+  return out;
+};
 
-export const Provider = ({ initial, children }) => {
-  const [, updateDummy] = useState(0);
-  const [opencast, updateOpencast] = useState(initial);
+type ProviderProps = React.PropsWithChildren<{
+  initial: Opencast;
+}>;
+
+export const Provider: React.FC<ProviderProps> = ({ initial, children }) => {
+  const [, setDummy] = useState(0);
+  const [opencast, setOpencast] = useState(initial);
   opencast.updateGlobalOc = newInstance => {
-    updateOpencast(newInstance);
+    setOpencast(newInstance);
 
     // If the object reference didn't change, we use this dummy state to force a
     // rerender.
     if (opencast === newInstance) {
-      updateDummy(old => old + 1);
+      setDummy(old => old + 1);
     }
   };
 
@@ -654,9 +708,9 @@ export const Provider = ({ initial, children }) => {
 
 // ===== Stuff related to upload metadata =====
 
-const escapeString = s => new XMLSerializer().serializeToString(new Text(s));
+const escapeString = (s: string) => new XMLSerializer().serializeToString(new Text(s));
 
-const renderTemplate = (template, view) => {
+const renderTemplate = (template: string, view: object): string => {
   const originalEscape = Mustache.escape;
   Mustache.escape = escapeString;
   const out = Mustache.render(template, view);

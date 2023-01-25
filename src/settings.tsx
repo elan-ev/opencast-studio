@@ -23,7 +23,7 @@ export type FormFieldState =
 type SettingsSource = 'src-server'| 'src-url' | 'src-local-storage';
 
 /** Opencast Studio runtime settings. */
-type Settings = {
+export type Settings = {
   opencast?: {
     serverUrl?: string; // TODO: make this URL
     loginName?: string;
