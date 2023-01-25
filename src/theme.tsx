@@ -1,4 +1,5 @@
 import { darken } from '@theme-ui/color';
+import { Theme } from 'theme-ui';
 
 const heading = {
   color: 'text',
@@ -262,6 +263,20 @@ const base = {
     p: 3,
     maxWidth: ['none', 'none', 960, 1152, 1344]
   }
-};
+} satisfies Theme;
+
+// Extend the `Theme` interface to accomodate our own properties.
+declare module 'theme-ui' {
+  interface Theme {
+    heights: {
+      headerHeight: string,
+    },
+    container: {
+      mx: 'auto',
+      p: number,
+      maxWidth: ['none', 'none', 960, 1152, 1344],
+    },
+  }
+}
 
 export default base;
