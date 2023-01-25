@@ -58,8 +58,8 @@ i18n
               (minutes < 10 ? '0' : '') + minutes,
               (seconds < 10 ? '0' : '') + secondsString,
             ];
-            if (hours) {
-              result.unshift(hours);
+            if (hours > 0) {
+              result.unshift(hours.toString());
             }
 
             return result.join(':');

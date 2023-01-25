@@ -73,14 +73,14 @@ export default function RecordingControls({
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, 'desktop');
       const stream = mixAudioIntoVideo(audioStream, displayStream);
-      desktopRecorder.current = new Recorder(stream, settings.recording, { onStop });
+      desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
       desktopRecorder.current.start();
     }
 
     if (userStream) {
       const onStop = addRecordOnStop(dispatch, 'video');
       const stream = mixAudioIntoVideo(audioStream, userStream);
-      videoRecorder.current = new Recorder(stream, settings.recording, { onStop });
+      videoRecorder.current = new Recorder(stream, settings.recording, onStop);
       videoRecorder.current.start();
     }
 

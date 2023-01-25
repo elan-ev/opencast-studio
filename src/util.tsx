@@ -46,7 +46,7 @@ export const dimensionsOf = (stream: MediaStream): [number, number] => {
 };
 
 // Converts the MIME type into a file extension.
-export const mimeToExt = mime => {
+export const mimeToExt = (mime: string) => {
   if (mime) {
     const lowerMime = mime.toLowerCase();
     if (lowerMime.startsWith("video/webm")) {
@@ -82,7 +82,7 @@ export const recordingFileName = ({ mime, flavor, title, presenter }) => {
 };
 
 const nowAsString = () => {
-  const pad2 = n => (n >= 10 ? '' : '0') + n;
+  const pad2 = (n: number) => (n >= 10 ? '' : '0') + n;
 
   const now = new Date();
   return ''
@@ -105,7 +105,7 @@ export const userHasWebcam = async() => {
 // Decodes the given hex string into a new string. If the given string contains
 // characters that are not hexadecimal digits or if the string's length is odd,
 // this function will throw an exception.
-export const decodeHexString = hex => {
+export const decodeHexString = (hex: string): string => {
   if (hex.length % 2 !== 0) {
     throw new SyntaxError('hex string does not have an even length');
   }
@@ -132,7 +132,7 @@ export const decodeHexString = hex => {
 };
 
 // Returns a promise that resolves after `ms` milliseconds.
-export const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
+export const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 // Obtains all media devices and stores them into the global state.
 export const queryMediaDevices = async (dispatch: Dispatcher) => {
@@ -142,7 +142,10 @@ export const queryMediaDevices = async (dispatch: Dispatcher) => {
 
 // Filters the `allDevices` array such that only devices with the given `kind`
 // are included and no two devices have the same `deviceId`.
-export const getUniqueDevices = (allDevices, kind) => {
+export const getUniqueDevices = (
+  allDevices: MediaDeviceInfo[],
+  kind: MediaDeviceKind,
+): MediaDeviceInfo[] => {
   let out = [];
   for (const d of allDevices) {
     // Only interested in one kind of device.

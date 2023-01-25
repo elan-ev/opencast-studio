@@ -50,7 +50,7 @@ export const SourcePreview = ({ warnings, inputs }) => {
   );
 };
 
-const StreamPreview = ({ input, text }) => (
+const StreamPreview = ({ input }) => (
   <Card sx={{ height: '100%', overflow: 'hidden', backgroundColor: 'element_bg' }}>
     <PreviewVideo input={input} />
     <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
@@ -61,7 +61,7 @@ const PreviewVideo = ({ input }) => {
   const { allowed, stream, unexpectedEnd } = input;
   const resizeVideoBox = useVideoBoxResize();
 
-  const videoRef = useRef();
+  const videoRef = useRef<HTMLVideoElement>();
   useEffect(() => {
     const v = videoRef.current;
     if (v) {

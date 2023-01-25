@@ -1,7 +1,7 @@
 import languages from './languages';
 
 it('includes English as a language', () => {
-  expect.anything(languages.find(({ long }) => long === 'English'));
+  expect(languages.find(({ long }) => long === 'English')).not.toBeUndefined();
 });
 
 it('contains `short` for every language', () => {

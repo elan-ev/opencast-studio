@@ -6,10 +6,10 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import './style/global-style';
 
-const Tooltip = ({ content, ...props }) => (
 
+const Tooltip = ({ content, ...props }) => (
   <Tippy
-    content = { <span> {content} </span> }
+    content={<span>{content}</span>}
     interactive={true}
 
     sx={{
@@ -22,7 +22,7 @@ const Tooltip = ({ content, ...props }) => (
 
     {...props}
   >
-    <span> {props.children} </span>
+    <span>{props.children}</span>
   </Tippy>
 );
 

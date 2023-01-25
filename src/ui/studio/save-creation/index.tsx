@@ -230,7 +230,7 @@ export default function SaveCreation(props) {
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
           >{t('save-creation-subsection-title-download')}</Themed.h2>
 
-          <DownloadBox dispatch={dispatch} {...{ title, presenter }} />
+          <DownloadBox {...{ title, presenter }} />
         </div>
       </div>
 

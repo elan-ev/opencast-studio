@@ -609,14 +609,20 @@ const arrayMerge: deepmerge.Options['arrayMerge']
 // ===== React context for settings
 // ==============================================================================================
 
-const Context = React.createContext(null);
+const Context = React.createContext<Settings | null>(null);
 
 // Returns the current provided Opencast instance.
-export const useSettings = () => React.useContext(Context);
+export const useSettings = (): Settings => {
+  const out = React.useContext(Context);
+  if (out == null) {
+    throw new Error("bug: useSettings needs settings provider");
+  }
+  return out;
+};
 
 export const Provider = ({ settingsManager, children }) => {
-  const [settings, updateSettings] = useState(settingsManager.settings());
-  settingsManager.onChange = newSettings => updateSettings(newSettings);
+  const [settings, updateSettings] = useState<Settings>(settingsManager.settings());
+  settingsManager.onChange = (newSettings: Settings) => updateSettings(newSettings);
 
   // This debug output will be useful for future debugging sessions.
   useEffect(() => {
