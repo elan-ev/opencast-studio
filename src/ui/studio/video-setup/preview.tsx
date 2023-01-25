@@ -87,7 +87,7 @@ const PreviewVideo = ({ input }) => {
     }
 
     return (
-      <div tabIndex={'-1'}
+      <div tabIndex={-1}
         sx={{
           width: '100%',
           height: '100%',
@@ -103,7 +103,7 @@ const PreviewVideo = ({ input }) => {
   }
 
   return (
-    <video tabIndex={'-1'}
+    <video tabIndex={-1}
       ref={videoRef}
       autoPlay
       muted

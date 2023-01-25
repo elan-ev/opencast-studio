@@ -589,7 +589,8 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
                 }
               }} // eslint-disable-line
             }
-            preload="auto" tabIndex={'-1'}
+            preload="auto"
+            tabIndex={-1}
             sx={{
               width: '100%',
               height: '100%',

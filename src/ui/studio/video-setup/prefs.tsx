@@ -236,7 +236,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
         fontSize: '18px',
         boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
       }}>
-        <div tabIndex={'-1'} sx={{
+        <div tabIndex={-1} sx={{
           border: theme => `1px solid ${theme.colors.gray[0]}`,
           height: '100%',
           overflow: 'auto',
@@ -382,7 +382,7 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
     <PrefValue>
       <select
         id="sources-video-device"
-        tabIndex={isExpanded ? '0' : '-1'}
+        tabIndex={isExpanded ? 0 : -1}
         sx={{ variant: 'styles.select' }}
         value={currentDeviceId}
         onChange={e => changeDevice(e.target.value)}
@@ -448,7 +448,7 @@ const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) 
       }}
     />
     <label
-      tabIndex={isExpanded ? '0' : '-1'}
+      tabIndex={isExpanded ? 0 : -1}
       onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ) && onChange(value)}
       htmlFor={id}
     >{ label || value }</label>
