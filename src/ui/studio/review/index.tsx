@@ -323,7 +323,7 @@ const CutControls = (
               onClick={
                 () => recordingDispatch({
                   type: `UPDATE_${marker.toUpperCase()}`,
-                  payload: null,
+                  time: null,
                 })}
             >
               <FontAwesomeIcon icon={faTrash} />
@@ -361,7 +361,7 @@ const CutControls = (
             }
             recordingDispatch({
               type: `UPDATE_${marker.toUpperCase()}`,
-              payload: value,
+              time: value,
             });
           }}
           sx={{

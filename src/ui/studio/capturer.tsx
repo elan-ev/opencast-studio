@@ -1,3 +1,5 @@
+import { Dispatcher } from "../../studio-state";
+
 const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
   const maxField = maxHeight && { max: maxHeight };
   const ideal = videoConstraints?.height?.ideal || fallbackIdeal;
@@ -6,7 +8,7 @@ const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
   return { height: { ...maxField, ...idealField }};
 };
 
-export async function startAudioCapture(dispatch, deviceId = null) {
+export async function startAudioCapture(dispatch: Dispatcher, deviceId = null) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: deviceId ? { deviceId } : true,
@@ -18,7 +20,7 @@ export async function startAudioCapture(dispatch, deviceId = null) {
       };
     });
 
-    dispatch({ type: 'SHARE_AUDIO', payload: stream });
+    dispatch({ type: 'SHARE_AUDIO', stream });
   } catch (err) {
     // TODO: there several types of exceptions; certainly we should differentiate here one day
     console.error('Error: ' + err);
@@ -27,7 +29,7 @@ export async function startAudioCapture(dispatch, deviceId = null) {
   }
 }
 
-export async function startDisplayCapture(dispatch, settings, videoConstraints = {}) {
+export async function startDisplayCapture(dispatch: Dispatcher, settings, videoConstraints = {}) {
   const maxFps = settings.display?.maxFps
     ? { frameRate: { max: settings.display.maxFps }}
     : {};
@@ -51,7 +53,7 @@ export async function startDisplayCapture(dispatch, settings, videoConstraints =
       };
     });
 
-    dispatch({ type: 'SHARE_DISPLAY', payload: stream });
+    dispatch({ type: 'SHARE_DISPLAY', stream });
   } catch (err) {
     // TODO: there 7 types of exceptions; certainly we should differentiate here one day
     console.error('Error: ' + err);
@@ -60,7 +62,7 @@ export async function startDisplayCapture(dispatch, settings, videoConstraints =
   }
 }
 
-export async function startUserCapture(dispatch, settings, videoConstraints) {
+export async function startUserCapture(dispatch: Dispatcher, settings, videoConstraints) {
   const maxFps = settings.camera?.maxFps
     ? { frameRate: { max: settings.camera.maxFps }}
     : {};
@@ -83,7 +85,7 @@ export async function startUserCapture(dispatch, settings, videoConstraints) {
         dispatch({ type: 'USER_UNEXPETED_END' });
       };
     });
-    dispatch({ type: 'SHARE_USER', payload: stream });
+    dispatch({ type: 'SHARE_USER', stream });
   } catch (err) {
     // TODO: there 7 types of exceptions; certainly we should differentiate here one day
     console.error('Error: ' + err);
@@ -94,23 +96,23 @@ export async function startUserCapture(dispatch, settings, videoConstraints) {
 
 // ----------------------------------------------------------------------------
 
-export function stopCapture({ audioStream, displayStream, userStream }, dispatch) {
+export function stopCapture({ audioStream, displayStream, userStream }, dispatch: Dispatcher) {
   stopAudioCapture(audioStream, dispatch);
   stopDisplayCapture(displayStream, dispatch);
   stopUserCapture(userStream, dispatch);
 }
 
-export function stopAudioCapture(stream, dispatch) {
+export function stopAudioCapture(stream, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_AUDIO' });
 }
 
-export function stopDisplayCapture(stream, dispatch) {
+export function stopDisplayCapture(stream, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_DISPLAY' });
 }
 
-export function stopUserCapture(stream, dispatch) {
+export function stopUserCapture(stream, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
 }

@@ -42,7 +42,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
   const { displayStream, userStream, videoChoice: activeSource } = state;
   const hasStreams = displayStream || userStream;
 
-  const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', payload: s });
+  const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', choice: s });
   const reselectSource = () => {
     setActiveSource(VIDEO_SOURCE_NONE);
     stopUserCapture(userStream, dispatch);

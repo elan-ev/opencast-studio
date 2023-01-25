@@ -1,12 +1,19 @@
 import { dimensionsOf } from './util';
 
+export type OnStopCallback = (args: {
+  url: string,
+  media: Blob,
+  mimeType: string,
+  dimensions: [number, number],
+}) => void;
+
 export default class Recorder {
 
-  #recorder
+  #recorder: MediaRecorder;
   #data
-  #dimensions
+  #dimensions: [number, number];
 
-  onStop
+  onStop: OnStopCallback;
 
   constructor(stream, settings, options = {}) {
     // Figure out MIME type.

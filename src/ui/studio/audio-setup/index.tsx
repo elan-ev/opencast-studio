@@ -42,7 +42,7 @@ export default function AudioSetup(props) {
 
   const selectNoAudio = () => enterStudio();
   const selectMicrophone = async() => {
-    dispatch({ type: 'CHOOSE_AUDIO', payload: AUDIO_SOURCE_MICROPHONE });
+    dispatch({ type: 'CHOOSE_AUDIO', choice: 'microphone' });
     const deviceId = window.localStorage.getItem(LAST_AUDIO_DEVICE_KEY);
     await startAudioCapture(dispatch, deviceId ? { ideal: deviceId } : null);
     await queryMediaDevices(dispatch);
@@ -51,7 +51,7 @@ export default function AudioSetup(props) {
     if (audioStream) {
       stopAudioCapture(audioStream, dispatch);
     }
-    dispatch({ type: 'CHOOSE_AUDIO', payload: AUDIO_SOURCE_NONE });
+    dispatch({ type: 'CHOOSE_AUDIO', choice: 'none' });
   };
 
   const body = (() => {

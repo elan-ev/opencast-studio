@@ -1,6 +1,9 @@
 // Checks if we app is running on a mobile device.
 //
 // This check could be more exhaustive, but this includes all browser we
+
+import { Dispatcher } from "./studio-state";
+
 // officially support.
 export const onMobileDevice = () =>
   /Android|iPhone|iPad|iPod/i.test(navigator.platform) ||
@@ -37,7 +40,7 @@ export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 export const onSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 // Returns the dimensions as [w, h] array or `null` if there is no video track.
-export const dimensionsOf = stream => {
+export const dimensionsOf = (stream: MediaStream): [number, number] => {
   const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
   return [width, height];
 };
@@ -132,9 +135,9 @@ export const decodeHexString = hex => {
 export const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
 // Obtains all media devices and stores them into the global state.
-export const queryMediaDevices = async dispatch => {
+export const queryMediaDevices = async (dispatch: Dispatcher) => {
   const devices = await navigator.mediaDevices.enumerateDevices();
-  dispatch({ type: 'UPDATE_MEDIA_DEVICES', payload: devices });
+  dispatch({ type: 'UPDATE_MEDIA_DEVICES', devices });
 };
 
 // Filters the `allDevices` array such that only devices with the given `kind`

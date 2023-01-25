@@ -109,7 +109,8 @@ export default function SaveCreation(props) {
     if (uploadState.secondsLeft !== secondsLeft || uploadState.currentProgress !== progress) {
       dispatch({
         type: 'UPLOAD_PROGRESS_UPDATE',
-        payload: { secondsLeft, currentProgress: progress },
+        secondsLeft,
+        currentProgress: progress,
       });
     }
   }
@@ -158,16 +159,16 @@ export default function SaveCreation(props) {
         dispatch({ type: 'UPLOAD_SUCCESS' });
         break;
       case UPLOAD_NETWORK_ERROR:
-        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-network-error') });
+        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-network-error') });
         break;
       case UPLOAD_NOT_AUTHORIZED:
-        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-not-authorized') });
+        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-not-authorized') });
         break;
       case UPLOAD_UNEXPECTED_RESPONSE:
-        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-invalid-response') });
+        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-invalid-response') });
         break;
       default: // including UPLOAD_UNKNOWN_ERROR
-        dispatch({ type: 'UPLOAD_ERROR', payload: t('save-creation-upload-unknown-error') });
+        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-unknown-error') });
     }
   }
 
@@ -360,7 +361,7 @@ const DownloadBox = ({ presenter, title }) => {
                 recording={recording}
                 presenter={presenter}
                 title={title}
-                onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', payload: index })}
+                onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', index })}
               />
             ))
           )}
@@ -412,7 +413,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     const target = event.target;
     dispatch({
       type: { title: 'UPDATE_TITLE', presenter: 'UPDATE_PRESENTER' }[target.name],
-      payload: target.value,
+      value: target.value,
     });
 
     if (target.name === 'presenter') {
@@ -424,7 +425,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   // presenter name is used in local storage, use that.
   useEffect(() => {
     if (presenterValue !== presenter) {
-      dispatch({ type: 'UPDATE_PRESENTER', payload: presenterValue });
+      dispatch({ type: 'UPDATE_PRESENTER', value: presenterValue });
     }
   });
 

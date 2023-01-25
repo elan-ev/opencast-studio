@@ -7,9 +7,9 @@ import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from "react-router";
 
-import Recorder from '../../../recorder';
+import Recorder, { OnStopCallback } from '../../../recorder';
 import { useSettings } from '../../../settings';
-import { useDispatch, useStudioState } from '../../../studio-state';
+import { Dispatcher, Recording, useDispatch, useStudioState } from '../../../studio-state';
 
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
 import Clock from './clock';
@@ -19,13 +19,17 @@ import Tooltip from '../../../Tooltip';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 
-function addRecordOnStop(dispatch, deviceType) {
-  return ({ media, url, mimeType, dimensions }) => {
-    dispatch({ type: 'ADD_RECORDING', payload: { deviceType, media, url, mimeType, dimensions }});
-  };
-}
 
-function mixAudioIntoVideo(audioStream, videoStream) {
+const addRecordOnStop = (
+  dispatch: Dispatcher,
+  deviceType: Recording['deviceType'],
+): OnStopCallback => {
+  return ({ media, url, mimeType, dimensions }) => {
+    dispatch({ type: 'ADD_RECORDING', recording: { deviceType, media, url, mimeType, dimensions }});
+  };
+};
+
+function mixAudioIntoVideo(audioStream: MediaStream, videoStream: MediaStream) {
   if (!(audioStream?.getAudioTracks().length)) {
     return videoStream;
   }
