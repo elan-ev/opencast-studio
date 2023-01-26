@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import Mustache from 'mustache';
 
-import { recordingFileName } from './util';
+import { recordingFileName, usePresentContext } from './util';
 import { Settings } from './settings';
 import { Recording } from './studio-state';
 
@@ -660,13 +660,7 @@ class UnexpectedRedirect extends RequestError {
 const Context = React.createContext<Opencast | null>(null);
 
 // Returns the current provided Opencast instance.
-export const useOpencast = (): Opencast => {
-  const out = React.useContext(Context);
-  if (out == null) {
-    throw new Error("bug: useOpencast requires a parent opencast provider");
-  }
-  return out;
-};
+export const useOpencast = (): Opencast => usePresentContext(Context, 'useOpencast');
 
 type ProviderProps = React.PropsWithChildren<{
   initial: Opencast;

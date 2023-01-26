@@ -2,6 +2,7 @@
 //
 // This check could be more exhaustive, but this includes all browser we
 
+import { useContext } from "react";
 import { Dispatcher } from "./studio-state";
 
 // officially support.
@@ -135,7 +136,7 @@ export const decodeHexString = (hex: string): string => {
 export const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 // Obtains all media devices and stores them into the global state.
-export const queryMediaDevices = async (dispatch: Dispatcher) => {
+export const queryMediaDevices = async(dispatch: Dispatcher) => {
   const devices = await navigator.mediaDevices.enumerateDevices();
   dispatch({ type: 'UPDATE_MEDIA_DEVICES', devices });
 };
@@ -161,5 +162,14 @@ export const getUniqueDevices = (
     out.push(d);
   }
 
+  return out;
+};
+
+/** Like `useContext` but throws an error if the context is `null`. */
+export const usePresentContext = <T, >(context: React.Context<T | null>, hookName: string): T => {
+  const out = useContext(context);
+  if (out == null) {
+    throw new Error(`bug: hook '${hookName}' called without parent context provider`);
+  }
   return out;
 };

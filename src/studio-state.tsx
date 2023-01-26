@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import { createContext, useContext, useReducer } from 'react';
-import { isDisplayCaptureSupported, isUserCaptureSupported } from './util';
+import { isDisplayCaptureSupported, isUserCaptureSupported, usePresentContext } from './util';
 
 
 export const AUDIO_SOURCE_MICROPHONE = 'microphone';
@@ -245,13 +245,5 @@ export const Provider = ({ children }) => {
   );
 };
 
-const nullIsBug = <T, >(x: T | null, hook: string): T => {
-  if (x == null) {
-    throw new Error(`bug: ${hook} needs parent context`);
-  }
-  return x;
-}
-export const useDispatch = (): Dispatcher =>
-  nullIsBug(useContext(dispatchContext), "useDispatch");
-export const useStudioState = (): StudioState =>
-  nullIsBug(useContext(stateContext), "useStudioState");
+export const useDispatch = (): Dispatcher => usePresentContext(dispatchContext, 'useDispatch');
+export const useStudioState = (): StudioState => usePresentContext(stateContext, 'useStudioState');

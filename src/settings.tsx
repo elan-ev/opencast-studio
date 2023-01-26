@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
 import parseToml from '@iarna/toml/parse-string';
 
-import { decodeHexString } from './util';
+import { decodeHexString, usePresentContext } from './util';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
@@ -612,13 +612,7 @@ const arrayMerge: deepmerge.Options['arrayMerge']
 const Context = React.createContext<Settings | null>(null);
 
 // Returns the current provided Opencast instance.
-export const useSettings = (): Settings => {
-  const out = React.useContext(Context);
-  if (out == null) {
-    throw new Error("bug: useSettings needs settings provider");
-  }
-  return out;
-};
+export const useSettings = (): Settings => usePresentContext(Context, 'useSettings');
 
 export const Provider = ({ settingsManager, children }) => {
   const [settings, updateSettings] = useState<Settings>(settingsManager.settings());
