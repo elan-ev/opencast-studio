@@ -211,7 +211,7 @@ export default function SaveCreation(props) {
           flex: ['0', '0', '1 0 50%'],
           p: [2, 2, '0 32px'],
           '&:last-child': {
-            borderLeft: ['none', 'none', theme => `1px solid ${theme.colors.gray[3]}`],
+            borderLeft: theme => ['none', 'none',`1px solid ${theme.colors.gray[3]}`],
           },
         },
       }}>
@@ -237,8 +237,7 @@ export default function SaveCreation(props) {
       <div sx={{ flex: '1 0 32px' }}></div>
 
       <ActionButtons
-        next={null}
-        prev={hideBack ? null : {
+        prev={hideBack ? undefined : {
           onClick: handleBack,
           disabled: false,
         }}
@@ -264,7 +263,7 @@ const PostAction = ({ goToFirstStep }) => {
     }
   };
 
-  let returnAction;
+  let returnAction: JSX.Element | undefined;
   if (settings.return?.target) {
     if (isAllowedReturnTarget(settings)) {
       const label = settings.return?.label
@@ -311,7 +310,7 @@ const PostAction = ({ goToFirstStep }) => {
 };
 
 const isAllowedReturnTarget = settings => {
-  let targetUrl;
+  let targetUrl: URL;
   try {
     targetUrl = new URL(settings.return.target, window.location.href);
   } catch (e) {

@@ -10,6 +10,7 @@ import {
   faMicrophone,
   faMicrophoneSlash,
   faExclamationTriangle,
+  IconName,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -28,6 +29,7 @@ import PreviewAudio from './preview-audio';
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 
@@ -44,7 +46,7 @@ export default function AudioSetup(props) {
   const selectMicrophone = async() => {
     dispatch({ type: 'CHOOSE_AUDIO', choice: 'microphone' });
     const deviceId = window.localStorage.getItem(LAST_AUDIO_DEVICE_KEY);
-    await startAudioCapture(dispatch, deviceId ? { ideal: deviceId } : null);
+    await startAudioCapture(dispatch, deviceId ? { ideal: deviceId } : undefined);
     await queryMediaDevices(dispatch);
   };
   const reselectSource = () => {
@@ -135,7 +137,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
     }
   });
 
-  const changeDevice = async deviceId => {
+  const changeDevice = async (deviceId: string) => {
     // The stream is only falsy if it unexpectedly ended.
     if (audioStream) {
       stopAudioCapture(audioStream, dispatch);
@@ -146,7 +148,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
 
   const Spacer = ({ min, max }) => <div sx={{ flex: 1, maxHeight: max, minHeight: min }} />;
 
-  let body;
+  let body: JSX.Element;
   if (audioStream) {
     body = <Fragment>
       <PreviewAudio stream={audioStream} />
@@ -226,7 +228,13 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
   );
 };
 
-const OptionButton = ({ children, icon, label, onClick }) => {
+type OptionButtonProps = React.PropsWithChildren<{
+  icon: IconProp;
+  label: string;
+  onClick: () => void;
+}>;
+
+const OptionButton: React.FC<OptionButtonProps> = ({ children, icon, label, onClick }) => {
   return (
     <button
       onClick={onClick}

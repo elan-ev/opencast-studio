@@ -6,12 +6,15 @@ import Oscilloscope from 'oscilloscope';
 import { useEffect, useRef } from 'react';
 
 export default function PreviewAudio({ stream }) {
-  const canvasRef = useRef();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
+      if (ctx == null) {
+        throw new Error("Could not get 2D context for canvas");
+      }
       ctx.lineWidth = 2;
       ctx.strokeStyle = '#f1c40f';
 

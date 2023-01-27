@@ -3,12 +3,20 @@
 import { jsx } from 'theme-ui';
 import { Component } from 'react';
 
-class Clock extends Component {
-  #last = null;
-  #timerID = null;
+type Props = {
+  isPaused: boolean;
+};
+
+type State = {
+  milliseconds: number;
+};
+
+class Clock extends Component<Props, State> {
+  #last: Date;
+  #timerID: ReturnType<typeof setInterval> | null = null;
   #isMounted = false;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = { milliseconds: 0 };
     this.#last = new Date();
@@ -25,18 +33,20 @@ class Clock extends Component {
   }
 
   resumeTimer() {
-    if (!this.timerId) {
+    if (!this.#timerID) {
       this.#timerID = setInterval(() => this.tick(), 100);
       this.#last = new Date();
     }
   }
 
   stopTimer() {
-    clearInterval(this.#timerID);
-    this.#timerID = null;
+    if (this.#timerID != null) {
+      clearInterval(this.#timerID);
+      this.#timerID = null;
+    }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     // recording state did not change
     if (this.props.isPaused === prevProps.isPaused) {
       return;
@@ -52,7 +62,7 @@ class Clock extends Component {
   tick() {
     if (this.#isMounted) {
       const now = new Date();
-      const passed = now - this.#last;
+      const passed = now.valueOf() - this.#last.valueOf();
       this.#last = now;
       this.setState(state => ({
         milliseconds: state.milliseconds + passed,

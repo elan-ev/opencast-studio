@@ -21,13 +21,13 @@ export default function MediaDevices({ recordingState }) {
   let children: VideoBoxProps["children"] = [];
   if (displayStream || displayUnexpectedEnd) {
     children.push({
-      body: <MediaDevice title={t('share-desktop')} stream={displayStream} paused={paused} />,
+      body: <MediaDevice stream={displayStream} paused={paused} />,
       dimensions: () => dimensionsOf(displayStream),
     });
   }
   if (userStream || userUnexpectedEnd) {
     children.push({
-      body: <MediaDevice title={t('share-camera')} stream={userStream} paused={paused} />,
+      body: <MediaDevice stream={userStream} paused={paused} />,
       dimensions: () => dimensionsOf(userStream),
     });
   }

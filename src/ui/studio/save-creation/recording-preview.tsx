@@ -15,7 +15,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
   const { deviceType, mimeType, url, downloaded, media: blob } = recording;
 
   const flavor = deviceType === 'desktop' ? t('sources-display') : t('sources-user');
-  const downloadName = recordingFileName({ mimeType, flavor, title, presenter });
+  const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
 
   if (!url) {
     return null;
@@ -65,7 +65,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
           muted
           src={url}
           // Without this, some browsers show a black video element instead of the first frame.
-          onLoadedData={e => e.target.currentTime = 0}
+          onLoadedData={e => e.currentTarget.currentTime = 0}
           preload="auto"
           sx={{
             maxWidth: '100%',

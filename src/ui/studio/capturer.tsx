@@ -17,7 +17,7 @@ const mergeHeightConstraint = (
   return { height: { ...maxField, ...idealField }};
 };
 
-export async function startAudioCapture(dispatch: Dispatcher, deviceId = null) {
+export async function startAudioCapture(dispatch: Dispatcher, deviceId?: ConstrainDOMString) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: deviceId ? { deviceId } : true,

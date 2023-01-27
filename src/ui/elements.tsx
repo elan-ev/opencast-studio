@@ -2,19 +2,26 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
+import { HTMLInputTypeAttribute } from 'react';
+import useForm from 'react-hook-form/dist/useForm';
+import { Validate } from 'react-hook-form/dist/types';
 
 
-// A styled `<input>`` element with a label. Displays errors and integrated with
+type InputProps = Pick<JSX.IntrinsicElements["input"], "onChange"> & {
+  /** Human readable string describing the field. */
+  label: string,
+  name: string,
+  /** Whether this field is required or may be empty. */
+  required: boolean,
+  /** Function validating the value and returning a string in the case of error. */
+  validate?: Validate,
+  /** Passed to the `<input>`. */
+  type?: HTMLInputTypeAttribute,
+} & Pick<ReturnType<typeof useForm>, "errors" | "register">;
+
+// A styled `<input>` element with a label. Displays errors and integrated with
 // `react-hook-form`.
-//
-// Props:
-// - `errors` and `register`: the two values returned by `useForm`
-// - `label`: the human readable string describing the field
-// - `name`, `type` and `rest`: passed as HTML attributes
-// - `required`: boolean, whether this field is required or may be empty
-// - `validate`: optional, a function validating the value and returning a
-//   string in the case of error.
-export const Input = ({
+export const Input: React.FC<InputProps> = ({
   errors,
   register,
   label,
@@ -60,7 +67,7 @@ export const Input = ({
             name={name}
             ref={register({
               validate,
-              ...required ? { required: t('forms-validation-error-required') } : {},
+              ...required && { required: t('forms-validation-error-required') },
             })}
             sx={{ variant: 'styles.input' }}
             type={type}

@@ -29,14 +29,14 @@ const addRecordOnStop = (
   };
 };
 
-function mixAudioIntoVideo(audioStream: MediaStream, videoStream: MediaStream) {
+function mixAudioIntoVideo(audioStream: MediaStream | null, videoStream: MediaStream) {
   if (!(audioStream?.getAudioTracks().length)) {
     return videoStream;
   }
   return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
 }
 
-let unblockers = [];
+let unblockers: (() => void)[] = [];
 
 export default function RecordingControls({
   handleRecorded,
@@ -57,8 +57,8 @@ export default function RecordingControls({
   } = useStudioState();
 
 
-  const desktopRecorder = useRef(null);
-  const videoRecorder = useRef(null);
+  const desktopRecorder = useRef<Recorder>();
+  const videoRecorder = useRef<Recorder>();
 
   const canRecord = (displayStream || userStream)
     && !userUnexpectedEnd && !displayUnexpectedEnd && !audioUnexpectedEnd;

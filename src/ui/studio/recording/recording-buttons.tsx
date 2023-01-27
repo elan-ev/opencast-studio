@@ -11,7 +11,12 @@ import {
   faStopCircle
 } from '@fortawesome/free-solid-svg-icons';
 
-const Button = ({ large, ...rest }) => (
+
+type ButtonProps = Omit<JSX.IntrinsicElements["button"], "css"> & {
+  large?: boolean;
+};
+
+const Button: React.FC<ButtonProps> = ({ large = false, ...rest }) => (
   <button
     sx={{
       display: 'grid',
@@ -54,7 +59,7 @@ export const RecordButton = props => (
   <Button
     onClick={props.onClick}
     title={props.title}
-    large={props.large ? 1 : 0}
+    large={props.large}
     disabled={props.disabled || props.countdown}
     sx={{
       color: '#bd181c !important',

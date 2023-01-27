@@ -210,7 +210,7 @@ const Navigation = props => {
           // in mobile view and switching to desktop view (e.g. by rotating
           // phone) would result in a very strange artifact.
           height: ['0px', '100% !important'],
-          top: [theme => theme.heights.headerHeight, theme => theme.heights.headerHeight, 0],
+          top: theme => [theme.heights.headerHeight, theme.heights.headerHeight, 0],
           position: ['absolute', 'static'],
           width: ['100%', 'auto'],
           backgroundColor: [colorMode === 'dark' ? 'gray.4' : 'gray.0', 'none'],
@@ -251,7 +251,7 @@ const Navigation = props => {
       {/* A black, half-transparent overlay over the body */}
       {isOpened && <div
         onClick={closeMenu}
-        ref={n => n && (n.style.opacity = 1)}
+        ref={n => n && (n.style.opacity = '1')}
         sx={{
           display: [isOpened ? 'block' : 'none', 'none'],
           backgroundColor: 'rgba(0, 0, 0, 0.7)',

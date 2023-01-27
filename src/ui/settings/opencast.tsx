@@ -27,15 +27,12 @@ import { SettingsSection } from './elements';
 import { Input } from '../elements';
 import { useStudioState } from '../../studio-state';
 
-import { GlobalHotKeys } from 'react-hotkeys';
-import { otherShortcuts } from '../studio/keyboard-shortcuts/globalKeys';
-
 
 function OpencastSettings({ settingsManager }) {
   const location = useLocation();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string | null>(null);
   const { errors, handleSubmit, register } = useForm({
     defaultValues: settingsManager.formValues().opencast
   });
