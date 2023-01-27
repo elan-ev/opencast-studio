@@ -70,11 +70,10 @@ export function ActionButtons({ prev, next, children }: ActionButtonsProps) {
             <Button
               sx={{
                 whiteSpace: 'nowrap',
-                ...prev.danger === true ? { variant: 'buttons.danger' } : { variant: 'buttons.text' }
+                variant: prev.danger ? 'buttons.danger' : 'buttons.text',
               }}
               onClick={prev.onClick}
               disabled={prev.disabled}
-              danger={prev.danger ?? false}
             >
               <FontAwesomeIcon icon={faCaretLeft} />
               {t(prev.label ?? 'back-button-label')}

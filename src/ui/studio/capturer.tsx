@@ -8,7 +8,6 @@ const mergeHeightConstraint = (
   fallbackIdeal?: number,
 ) => {
   const maxField = maxHeight && { max: maxHeight };
-  console.log(videoConstraints);
   const constraintIdeal = typeof videoConstraints?.height === "number"
     ? videoConstraints.height
     : videoConstraints.height?.ideal;
