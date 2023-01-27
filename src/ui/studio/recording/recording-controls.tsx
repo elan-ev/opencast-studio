@@ -151,18 +151,18 @@ export default function RecordingControls({
     stop();
   };
 
-  const switchPlayPause = keyEvent => {
+  const switchPlayPause = () => {
     if (recordingState === STATE_RECORDING) {
-      handlePause(keyEvent);
+      handlePause();
     } else if (recordingState === STATE_PAUSED) {
-      handleResume(keyEvent);
+      handleResume();
     }
   };
 
   const handlers = {
-    START_RECORDING: keyEvent => { if(keyEvent) { handleRecord(keyEvent); } },
-    STOP_RECORDING: keyEvent => { if(keyEvent) { handleStop(keyEvent); } },
-    PAUSE_RECORDING: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent); } },
+    START_RECORDING: handleRecord,
+    STOP_RECORDING: handleStop,
+    PAUSE_RECORDING: switchPlayPause,
   };
 
   return (

@@ -11,7 +11,7 @@ import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import { Settings, useSettings } from '../../../settings';
-import { dimensionsOf, getUniqueDevices } from '../../../util';
+import { getUniqueDevices } from '../../../util';
 import { useDispatch, useStudioState } from '../../../studio-state';
 import {
   startDisplayCapture,

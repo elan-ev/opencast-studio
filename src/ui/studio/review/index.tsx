@@ -10,7 +10,7 @@ import { Link, IconButton, Flex, Spinner, Text } from '@theme-ui/components';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { ActionButtons, StepContainer, VideoBox } from '../elements';
-import { useStudioState, useDispatch } from '../../../studio-state';
+import { useStudioState, useDispatch, Dispatcher } from '../../../studio-state';
 import { useSettings } from '../../../settings';
 import Notification from '../../notification';
 import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
@@ -19,6 +19,7 @@ import Tooltip from '../../../Tooltip';
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
+import React from 'react';
 
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number
@@ -30,9 +31,9 @@ export default function Review(props) {
   const recordingDispatch = useDispatch();
   const { recordings, prematureRecordingEnd, videoChoice } = useStudioState();
   const emptyRecording = recordings.some(rec => rec.media.size === 0);
-  const previewController = useRef();
+  const previewController = useRef<PreviewHandle>(null);
   const [currentTime, setCurrentTime] = useState(0);
-  const [previewReady, setPreviewReady] = useState();
+  const [previewReady, setPreviewReady] = useState(false);
 
   const handleBack = () => {
     const doIt = window.confirm(t('confirm-discard-recordings'));
@@ -92,7 +93,7 @@ export default function Review(props) {
         <Preview
           ref={previewController}
           onTimeUpdate={event => {
-            setCurrentTime(event.target.currentTime);
+            setCurrentTime(event.currentTarget.currentTime);
           }}
           onReady={() => setPreviewReady(true)}
         />
@@ -116,7 +117,12 @@ export default function Review(props) {
   );
 };
 
-const ControlBox = ({ previewController, currentTime }) => (
+type SharedProps = {
+  previewController: React.RefObject<PreviewHandle>;
+  currentTime: number;
+};
+
+const ControlBox: React.FC<SharedProps> = ({ previewController, currentTime }) => (
   <div sx={{
     backgroundColor: 'gray.4',
     color: 'text',
@@ -127,7 +133,7 @@ const ControlBox = ({ previewController, currentTime }) => (
   </div>
 );
 
-const Scrubber = ({ previewController, currentTime }) => {
+const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => {
   const duration = previewController.current?.duration || Infinity;
   const { start, end } = useStudioState();
 
@@ -153,7 +159,7 @@ const Scrubber = ({ previewController, currentTime }) => {
     backgroundColor: colorMode === 'dark' ? 'gray.2' : 'gray.3',
     height: '100%',
     boxSizing: 'content-box',
-  };
+  } as const;
 
   return (
     <div sx={{ p: 2 }}>
@@ -216,7 +222,7 @@ const Scrubber = ({ previewController, currentTime }) => {
   );
 };
 
-const VideoControls = ({ currentTime, previewController }) => {
+const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }) => {
   const { start, end } = useStudioState();
   const recordingDispatch = useDispatch();
   const settings = useSettings();
@@ -224,22 +230,25 @@ const VideoControls = ({ currentTime, previewController }) => {
 
   const duration = previewController.current?.duration;
 
-  const switchPlayPause = keyEvent => {
+  const switchPlayPause = () => {
     const controller = previewController.current;
+    if (controller == null) {
+      return;
+    }
     if (controller.isPlaying) {
-      controller.pause(keyEvent);
+      controller.pause();
     } else if (controller.isReadyToPlay) {
-      controller.play(keyEvent);
+      controller.play();
     }
   };
 
-  const leftMarker = useRef(null);
-  const rightMarker = useRef(null);
+  const leftMarker = useRef<HTMLButtonElement>(null);
+  const rightMarker = useRef<HTMLButtonElement>(null);
 
   const handlers = {
-    PLAY_PAUSE: keyEvent => { if(keyEvent) { switchPlayPause(keyEvent); } },
-    DELETE_CROP_MARK_LEFT: keyEvent => { if(keyEvent) { leftMarker.current?.click(); } },
-    DELETE_CROP_MARK_RIGHT: keyEvent => { if(keyEvent) { rightMarker.current?.click(); } },
+    PLAY_PAUSE: switchPlayPause,
+    DELETE_CROP_MARK_LEFT: () => leftMarker.current?.click(),
+    DELETE_CROP_MARK_RIGHT: () => rightMarker.current?.click(),
   };
 
   return <div sx={{ textAlign: 'center' }}>
@@ -257,7 +266,7 @@ const VideoControls = ({ currentTime, previewController }) => {
       >
         { settings.review?.disableCutting || <CutControls
           marker="start"
-          innerRef={leftMarker}
+          ref={leftMarker}
           value={start}
           control={end}
           invariant={(start, end) => start < end}
@@ -285,7 +294,7 @@ const VideoControls = ({ currentTime, previewController }) => {
         </Tooltip>
         { settings.review?.disableCutting || <CutControls
           marker="end"
-          innerRef={rightMarker}
+          ref={rightMarker}
           value={end}
           control={start}
           invariant={(end, start) => start < end}
@@ -297,14 +306,23 @@ const VideoControls = ({ currentTime, previewController }) => {
   </div>;
 };
 
-const CutControls = (
-  { marker, value, control, invariant, currentTime, previewController, recordingDispatch, innerRef }
+type CutControlsProps = SharedProps & {
+  marker: "start" | "end",
+  value: number | null,
+  control: number | null,
+  invariant: (self: number, control: number) => boolean;
+  recordingDispatch: Dispatcher,
+};
+
+const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
+  { marker, value, control, invariant, currentTime, previewController, recordingDispatch },
+  ref,
 ) => {
   const { t } = useTranslation();
 
   const handlers = {
-    CUT_LEFT: keyEvent => { if(keyEvent) { document.getElementById("leftmarker").click(); } },
-    CUT_RIGHT: keyEvent => { if(keyEvent) { document.getElementById("rightmarker").click(); } },
+    CUT_LEFT: () => document.getElementById("leftmarker")?.click(),
+    CUT_RIGHT: () => document.getElementById("rightmarker")?.click(),
   };
 
   const state = (
@@ -314,15 +332,17 @@ const CutControls = (
           <Trans { ...{ t } } i18nKey={`review-${marker}`}>
             {{ [marker]: value }} <Link href="" onClick={event => {
               event.preventDefault();
-              previewController.current.currentTime = value;
+              if (previewController.current) {
+                previewController.current.currentTime = value;
+              }
             }} />
           </Trans>
           <Tooltip content={t(`review-remove-cut-point`)}>
             <IconButton context={marker}
-              ref={innerRef} // for DELETE_CROP_MARK
+              ref={ref} // for DELETE_CROP_MARK
               onClick={
                 () => recordingDispatch({
-                  type: `UPDATE_${marker.toUpperCase()}`,
+                  type: marker === "start" ? "UPDATE_START" : "UPDATE_END",
                   time: null,
                 })}
             >
@@ -334,15 +354,9 @@ const CutControls = (
     </GlobalHotKeys>
   );
 
-  const disabled = (() => {
-    if (currentTime <= ALMOST_ZERO || currentTime >= previewController.current?.duration) {
-      return true;
-    }
-    if (control != null && !invariant(currentTime, control)) {
-      return true;
-    }
-    return false;
-  })();
+  const disabled = currentTime <= ALMOST_ZERO
+    || (previewController.current && currentTime >= previewController.current.duration)
+    || (control != null && !invariant(currentTime, control));
 
   const button = (
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
@@ -388,7 +402,7 @@ const CutControls = (
   return marker === 'start'
     ? <Fragment>{ state }{ button }</Fragment>
     : <Fragment>{ button }{ state }</Fragment>;
-};
+});
 
 type PreviewProps = {
   onTimeUpdate: (event: SyntheticEvent<HTMLVideoElement, Event>) => void,
@@ -418,29 +432,40 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   // The index of the last video ref that received an event (0 or 1).
   const lastOrigin = useRef<0 | 1>();
 
+  const unwrap = <T, >(v: T | undefined): T => {
+    if (v == null) {
+      throw new Error('bug in Preview controller');
+    }
+    return v;
+  };
+
   useImperativeHandle(ref, () => ({
     get currentTime() {
-      return videoRefs[lastOrigin.current ?? 0].current.currentTime;
+      return unwrap(videoRefs[lastOrigin.current ?? 0].current?.currentTime);
     },
     set currentTime(currentTime) {
-      allVideos.forEach(r => r.current.currentTime = currentTime);
+      allVideos.forEach(r => {
+        if (r.current && currentTime) {
+          r.current.currentTime = currentTime;
+        }
+      });
     },
     get duration() {
-      return videoRefs[lastOrigin.current ?? 0].current?.duration;
+      return unwrap(videoRefs[lastOrigin.current ?? 0].current?.duration);
     },
     get isPlaying() {
       const v = videoRefs[lastOrigin.current ?? 0].current;
-      return v && v.currentTime > 0 && !v.paused && !v.ended;
+      return v != null && v.currentTime > 0 && !v.paused && !v.ended;
     },
     get isReadyToPlay() {
       // State 2 means "at least enough data to play one frame"
-      return allVideos.every(r => r.current.readyState >= 2);
+      return allVideos.every(r => (r.current?.readyState ?? 0) >= 2);
     },
     play() {
-      allVideos.forEach(r => r.current.play());
+      allVideos.forEach(r => r.current?.play());
     },
     pause() {
-      allVideos.forEach(r => r.current.pause());
+      allVideos.forEach(r => r.current?.pause());
     },
   }));
 
@@ -449,8 +474,11 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   // in the event handlers of the video elements, but we want to hold off
   // on some effects until that calculation is done.
   type DurationCalcState = 'done' | 'started';
-  const durationCalculationProgress = [useRef<DurationCalcState>(), useRef<DurationCalcState>()];
-  const [durationsCalculated, setDurationsCalculated] = useState();
+  const durationCalculationProgress = [
+    useRef<DurationCalcState>(null),
+    useRef<DurationCalcState>(null),
+  ];
+  const [durationsCalculated, setDurationsCalculated] = useState<boolean>();
 
   // Some logic to decide whether we currently are in a part of the video that
   // will be removed. The state will be updated in `onTimeUpdate` below and is
@@ -474,15 +502,15 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
       return;
     }
 
-    if (recordings.length === 2) {
+    if (desktopIndex != null) {
       // If we have two recordings, both will have audio. But the user doesn't
       // want to hear audio twice, so we mute one video element. Particularly,
       // we mute the desktop video, as there the audio/video synchronization is
       // not as critical.
-      videoRefs[desktopIndex].current.volume = 0;
+      unwrap(videoRefs[desktopIndex].current).volume = 0;
 
-      const va = videoRefs[0].current;
-      const vb = videoRefs[1].current;
+      const va = unwrap(videoRefs[0].current);
+      const vb = unwrap(videoRefs[1].current);
 
       // We regularly check if both video elements diverge too much from one
       // another.
@@ -498,7 +526,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
           if (diff > 0.15 && lastOrigin.current != null) {
             const origin = videoRefs[lastOrigin.current].current;
             const target = videoRefs[lastOrigin.current === 0 ? 1 : 0].current;
-            target.currentTime = origin.currentTime;
+            unwrap(target).currentTime = unwrap(origin).currentTime;
           }
         }
 
@@ -511,38 +539,39 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
     }
   });
 
-  const handlers = {
-    FORWARD_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent); } },
-    BACKWARDS_5_SEC: keyEvent => { if(keyEvent) { skipFiveSeconds(keyEvent); } },
-    FORWARD_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent); } },
-    BACKWARDS_1_FRAME: keyEvent => { if(keyEvent) { skipFrame(keyEvent); } },
-  };
-
-  const skipFiveSeconds = keyEvent => {
+  const skipFiveSeconds = (keyEvent?: KeyboardEvent) => {
     videoRefs.forEach( video => {
       if (video.current !== undefined) {
-        if (keyEvent.key === 'l' || keyEvent.key === 'ArrowRight') {
+        if (keyEvent?.key === 'l' || keyEvent?.key === 'ArrowRight') {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
-        } else if (keyEvent.key === 'j' || keyEvent.key === 'ArrowLeft') {
+        } else if (keyEvent?.key === 'j' || keyEvent?.key === 'ArrowLeft') {
           video.current.currentTime = Math.max(0, video.current.currentTime - 5);
         }
       }
     });
   };
 
-  const skipFrame = keyEvent => {
+  const skipFrame = (keyEvent?: KeyboardEvent) => {
     const fps = 30;
 
     videoRefs.forEach( video => {
       if (video.current !== undefined) {
-        if (keyEvent.key === '.') {
+        if (keyEvent?.key === '.') {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1 / fps));
-        } else if (keyEvent.key === ',') {
+        } else if (keyEvent?.key === ',') {
           video.current.currentTime = Math.max(0, video.current.currentTime - (1 / fps));
         }
       }
     });
   };
+
+  const handlers = {
+    FORWARD_5_SEC: skipFiveSeconds,
+    BACKWARDS_5_SEC: skipFiveSeconds,
+    FORWARD_1_FRAME: skipFrame,
+    BACKWARDS_1_FRAME: skipFrame,
+  };
+
 
   const children = recordings.map((recording, index) => ({
     body: (
@@ -577,11 +606,11 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
               // We reset this later in an effect. (See above.)
               // Also without setting the current time once initially,
               // some browsers show a black video element instead of the first frame.
-              event.target.currentTime = Number.MAX_VALUE;
+              event.currentTarget.currentTime = Number.MAX_VALUE;
               durationCalculationProgress[index].current = 'started';
             }}
             onTimeUpdate={durationsCalculated ? event => {
-              const currentTime = event.target.currentTime;
+              const currentTime = event.currentTarget.currentTime;
               setOverlayVisible(isInCutRegion(currentTime));
 
               onTimeUpdate(event);
@@ -589,7 +618,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
               if (!durationsCalculated) {
                 switch (durationCalculationProgress[index].current) {
                   case 'started':
-                    event.target.currentTime = ALMOST_ZERO;
+                    event.currentTarget.currentTime = ALMOST_ZERO;
                     durationCalculationProgress[index].current = 'done';
                     break;
                   case 'done':

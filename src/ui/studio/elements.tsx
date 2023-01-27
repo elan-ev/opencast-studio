@@ -36,7 +36,7 @@ export const StepContainer: React.FC<React.PropsWithChildren> = ({ children }) =
 
 type ActionButton = {
   onClick: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   label?: string;
   danger?: boolean;
 };
@@ -58,8 +58,8 @@ export function ActionButtons({ prev, next, children }: ActionButtonsProps) {
   const { t } = useTranslation();
 
   const handlers = {
-    BACK_BUTTON: keyEvent => { if(prev) { prev.onClick(keyEvent); } },
-    NEXT_BUTTON: keyEvent => { if(next && !next.disabled) { next.onClick(keyEvent); } },
+    ...prev?.onClick && { BACK_BUTTON: prev.onClick },
+    ...next?.onClick && { NEXT_BUTTON: next.onClick },
   };
 
   return (

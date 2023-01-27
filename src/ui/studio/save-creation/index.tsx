@@ -11,7 +11,7 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import useForm from 'react-hook-form';
@@ -289,7 +289,7 @@ const PostAction = ({ goToFirstStep }) => {
   }
 
   const handlers = {
-    NEW_RECORDING: keyEvent => { if(keyEvent) { handleNewRecording(keyEvent); } },
+    NEW_RECORDING: handleNewRecording,
   };
 
   return (
@@ -313,7 +313,7 @@ const PostAction = ({ goToFirstStep }) => {
 const isAllowedReturnTarget = settings => {
   let targetUrl;
   try {
-    targetUrl = new URL(settings.return.target, window.location);
+    targetUrl = new URL(settings.return.target, window.location.href);
   } catch (e) {
     return false;
   }
@@ -336,7 +336,7 @@ const DownloadBox = ({ presenter, title }) => {
   };
 
   const handlers = {
-    DOWNLOAD: keyEvent => { if(keyEvent) { handleDownload(keyEvent); } },
+    DOWNLOAD: handleDownload,
   };
 
   return (
@@ -441,10 +441,10 @@ const UploadForm = ({ uploadState, handleUpload }) => {
       </Trans>
     );
 
-  const uploadRef = useRef(null);
+  const uploadRef = useRef<HTMLButtonElement>(null);
 
   const handlers = {
-    UPLOAD: keyEvent => { if(keyEvent) { uploadRef.current?.click(); } },
+    UPLOAD: () => uploadRef.current?.click(),
   };
 
   return (
@@ -520,8 +520,8 @@ const NotConnectedWarning = () => {
   }
 
   // Piece together the warning message depending on the situation.
-  let problem;
-  let onceResolved;
+  let problem: ReactNode;
+  let onceResolved: string | undefined;
   switch (opencast.getState()) {
     case STATE_NETWORK_ERROR:
       problem = t('save-creation-warn-unreachable');
@@ -599,7 +599,7 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
   });
 
   // Nicely format the remaining time.
-  let prettyTime;
+  let prettyTime: string | null;
   if (secondsLeft === null) {
     prettyTime = null;
   } else if (secondsLeft < 4) {

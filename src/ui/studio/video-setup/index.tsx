@@ -196,12 +196,6 @@ const SourceSelection: React.FC<SourceSelectionProps> = ({
   const state = useStudioState();
   const { displaySupported, userSupported } = state;
 
-  const handlers = {
-    RECORD_DISPLAY: keyEvent => { if(keyEvent) { clickDisplay(keyEvent); } },
-    RECORD_CAMERA: keyEvent => { if(keyEvent) { clickUser(keyEvent); } },
-    RECORD_DISPLAY_CAMERA: keyEvent => { if(keyEvent) { clickBoth(keyEvent); } },
-  };
-
   const clickUser = async() => {
     setActiveSource(VIDEO_SOURCE_USER);
     await startUserCapture(dispatch, settings, userConstraints);
@@ -222,6 +216,11 @@ const SourceSelection: React.FC<SourceSelectionProps> = ({
     ]);
   };
 
+  const handlers = {
+    RECORD_DISPLAY: clickDisplay,
+    RECORD_CAMERA: clickUser,
+    RECORD_DISPLAY_CAMERA: clickBoth,
+  };
 
   if (!displaySupported && !userSupported) {
     return <Notification isDanger>{t('sources-video-none-available')}</Notification>;

@@ -138,8 +138,8 @@ type ReducerAction =
   | { type: 'MARK_DOWNLOADED', index: number }
   | { type: 'UPDATE_TITLE', value: string }
   | { type: 'UPDATE_PRESENTER', value: string }
-  | { type: 'UPDATE_START', time: number }
-  | { type: 'UPDATE_END', time: number }
+  | { type: 'UPDATE_START', time: number | null }
+  | { type: 'UPDATE_END', time: number | null }
   | { type: 'RESET' };
 
 
