@@ -12,9 +12,10 @@ import equal from 'fast-deep-equal';
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { otherShortcuts } from '../studio/keyboard-shortcuts/globalKeys';
+import { usePresentContext } from '../../util';
 
 // A full width flex container for some steps of the wizard.
-export const StepContainer = ({ children }) => (
+export const StepContainer: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div
     sx={{
       display: 'flex',
@@ -33,6 +34,18 @@ export const StepContainer = ({ children }) => (
   </div>
 );
 
+type ActionButton = {
+  onClick: () => void;
+  disabled: boolean;
+  label?: string;
+  danger?: boolean;
+};
+
+type ActionButtonsProps = React.PropsWithChildren<{
+  prev?: ActionButton;
+  next?: ActionButton;
+}>;
+
 // A div containing optional "back" and "next" buttons as well as the centered
 // children. The props `prev` and `next` are objects with the follwing fields:
 //
@@ -41,7 +54,7 @@ export const StepContainer = ({ children }) => (
 // - `label` (optional): the button label translation string. If not specified,
 //   the label is 'back-button-label' or 'next-button-label'.
 // - `danger` (optional): forwarded to the `<Button>`, default: `false`.
-export function ActionButtons({ prev = null, next = null, children }) {
+export function ActionButtons({ prev, next, children }: ActionButtonsProps) {
   const { t } = useTranslation();
 
   const handlers = {
@@ -61,10 +74,10 @@ export function ActionButtons({ prev = null, next = null, children }) {
               }}
               onClick={prev.onClick}
               disabled={prev.disabled}
-              danger={prev.danger || false}
+              danger={prev.danger ?? false}
             >
               <FontAwesomeIcon icon={faCaretLeft} />
-              {t(prev.label || 'back-button-label')}
+              {t(prev.label ?? 'back-button-label')}
             </Button>
           )}
         </Box>
@@ -90,9 +103,22 @@ export function ActionButtons({ prev = null, next = null, children }) {
   );
 }
 
-const VideoBoxResizeContext = React.createContext(null);
+const VideoBoxResizeContext = React.createContext<(() => void) | null>(null);
 
-export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
+export const useVideoBoxResize = () =>
+  usePresentContext(VideoBoxResizeContext, "useVideoBoxResize");
+
+export type VideoBoxProps = {
+  gap?: number;
+  minWidth?: number;
+  minHeight?: number;
+  children: VideoBoxChild[];
+};
+
+export type VideoBoxChild = {
+  body: JSX.Element;
+  dimensions: () => [number, number] | null;
+};
 
 // Manages one or two children with given aspect ratio.
 //
@@ -112,7 +138,7 @@ export const useVideoBoxResize = () => React.useContext(VideoBoxResizeContext);
 // - `dimensions`: a function returning `[width, height]` of the child (also
 //   defining the aspect ratio). We require the dimensions instead of only the
 //   aspect ratio to better detect changes in the video stream.
-export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }) {
+export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }: VideoBoxProps) {
   const { ref, width = 1, height = 1 } = useResizeObserver();
 
   // This is a dummy state to force a rerender.
@@ -122,11 +148,11 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children })
   // We try to remember the last valid dimension. Otherwise, changing video
   // preferences for a non-16:9 strean leads to visual noise: the box always
   // changes between its aspect ratio and the fallback 16:9 ratio.
-  const lastDimensions = useRef(children.map(() => [undefined, undefined]));
-  const updateLastDimensions = newDimensions => {
-    newDimensions.forEach(([w, h], i) => {
-      if (w && h) {
-        lastDimensions.current[i] = [w, h];
+  const lastDimensions = useRef<([number, number] | null)[]>(children.map(() => null));
+  const updateLastDimensions = (newDimensions: ([number, number] | null)[]) => {
+    newDimensions.forEach((dimension, i) => {
+      if (dimension) {
+        lastDimensions.current[i] = dimension;
       }
     });
   };
@@ -143,7 +169,9 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children })
     }
   };
 
-  const ar = ([width, height]) => width && height ? width / height : 16 / 9;
+  const ar = (dimensions: [number, number] | null): number =>
+    dimensions == null ? 16 / 9 : dimensions[0] / dimensions[1];
+
 
   switch (children.length) {
     case 1: {
@@ -151,8 +179,8 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children })
       const aspectRatio = ar(lastDimensions.current[0]);
 
       // Calculate size of child
-      let childWidth;
-      let childHeight;
+      let childWidth: number;
+      let childHeight: number;
 
       if (width > height * aspectRatio) {
         // Child height perfectly matches container, extra space left and right
@@ -251,9 +279,9 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children })
       // the larger area utilized wins.
       const rowArea = rowWidths[0] * rowHeights[0] + rowWidths[1] * rowHeights[1];
       const colArea = colWidths[0] * colHeights[0] + colWidths[1] * colHeights[1];
-      let widths;
-      let heights;
-      let flexDirection;
+      let widths: number[];
+      let heights: number[];
+      let flexDirection: "row" | "column";
       if (rowArea > colArea) {
         flexDirection = 'row';
         widths = rowWidths;

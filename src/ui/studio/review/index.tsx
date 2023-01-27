@@ -5,7 +5,7 @@ import { jsx, Themed, useColorMode } from 'theme-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
-import { Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle } from 'react';
+import { Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent } from 'react';
 import { Link, IconButton, Flex, Spinner, Text } from '@theme-ui/components';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -390,11 +390,25 @@ const CutControls = (
     : <Fragment>{ button }{ state }</Fragment>;
 };
 
-const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
+type PreviewProps = {
+  onTimeUpdate: (event: SyntheticEvent<HTMLVideoElement, Event>) => void,
+  onReady: () => void,
+};
+
+type PreviewHandle = {
+  currentTime: number,
+  readonly duration: number,
+  readonly isPlaying: boolean,
+  readonly isReadyToPlay: boolean,
+  play(): void;
+  pause(): void;
+};
+
+const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady }, ref) => {
   const { recordings, start, end } = useStudioState();
   const { t } = useTranslation();
 
-  const videoRefs = [useRef(), useRef()];
+  const videoRefs = [useRef<HTMLVideoElement>(), useRef<HTMLVideoElement>()];
   const allVideos = videoRefs.slice(0, recordings.length);
 
   const desktopIndex = recordings.length === 2
@@ -402,20 +416,20 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
     : null;
 
   // The index of the last video ref that received an event (0 or 1).
-  const lastOrigin = useRef();
+  const lastOrigin = useRef<0 | 1>();
 
   useImperativeHandle(ref, () => ({
     get currentTime() {
-      return videoRefs[lastOrigin.current || 0].current.currentTime;
+      return videoRefs[lastOrigin.current ?? 0].current.currentTime;
     },
     set currentTime(currentTime) {
       allVideos.forEach(r => r.current.currentTime = currentTime);
     },
     get duration() {
-      return videoRefs[lastOrigin.current || 0].current?.duration;
+      return videoRefs[lastOrigin.current ?? 0].current?.duration;
     },
     get isPlaying() {
-      const v = videoRefs[lastOrigin.current || 0].current;
+      const v = videoRefs[lastOrigin.current ?? 0].current;
       return v && v.currentTime > 0 && !v.paused && !v.ended;
     },
     get isReadyToPlay() {
@@ -434,15 +448,17 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
   // preventing us from seeking in the video. We force it below
   // in the event handlers of the video elements, but we want to hold off
   // on some effects until that calculation is done.
-  const durationCalculationProgress = [useRef(), useRef()];
+  type DurationCalcState = 'done' | 'started';
+  const durationCalculationProgress = [useRef<DurationCalcState>(), useRef<DurationCalcState>()];
   const [durationsCalculated, setDurationsCalculated] = useState();
 
   // Some logic to decide whether we currently are in a part of the video that
   // will be removed. The state will be updated in `onTimeUpdate` below and is
   // only here to trigger a rerender: the condition for rendering the overlay is
   // below.
-  const isInCutRegion = time => (start !== null && time < start) || (end !== null && time > end);
-  const currentTime = videoRefs[lastOrigin.current || 0].current?.currentTime || 0;
+  const isInCutRegion = (time: number) =>
+    (start !== null && time < start) || (end !== null && time > end);
+  const currentTime = videoRefs[lastOrigin.current ?? 0].current?.currentTime || 0;
   const overlayVisible = isInCutRegion(currentTime);
   const [, setOverlayVisible] = useState(overlayVisible);
 
@@ -471,7 +487,7 @@ const Preview = forwardRef(function _Preview({ onTimeUpdate, onReady }, ref) {
       // We regularly check if both video elements diverge too much from one
       // another.
       let frameCounter = 0;
-      let fixRequest;
+      let fixRequest: number;
       const fixTime = () => {
         // Only run every 60 frames.
         if (frameCounter % 60 === 0) {

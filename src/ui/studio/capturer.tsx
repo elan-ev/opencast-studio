@@ -1,8 +1,18 @@
+import { Settings } from "../../settings";
 import { Dispatcher } from "../../studio-state";
 
-const mergeHeightConstraint = (maxHeight, videoConstraints, fallbackIdeal) => {
+
+const mergeHeightConstraint = (
+  maxHeight: number | undefined,
+  videoConstraints: MediaTrackConstraints,
+  fallbackIdeal?: number,
+) => {
   const maxField = maxHeight && { max: maxHeight };
-  const ideal = videoConstraints?.height?.ideal || fallbackIdeal;
+  console.log(videoConstraints);
+  const constraintIdeal = typeof videoConstraints?.height === "number"
+    ? videoConstraints.height
+    : videoConstraints.height?.ideal;
+  const ideal = constraintIdeal ?? fallbackIdeal;
   const idealField = ideal && (maxHeight ? { ideal: Math.min(ideal, maxHeight) } : { ideal });
 
   return { height: { ...maxField, ...idealField }};
@@ -29,7 +39,11 @@ export async function startAudioCapture(dispatch: Dispatcher, deviceId = null) {
   }
 }
 
-export async function startDisplayCapture(dispatch: Dispatcher, settings, videoConstraints = {}) {
+export async function startDisplayCapture(
+  dispatch: Dispatcher,
+  settings: Settings,
+  videoConstraints: MediaTrackConstraints = {},
+) {
   const maxFps = settings.display?.maxFps
     ? { frameRate: { max: settings.display.maxFps }}
     : {};
@@ -62,7 +76,11 @@ export async function startDisplayCapture(dispatch: Dispatcher, settings, videoC
   }
 }
 
-export async function startUserCapture(dispatch: Dispatcher, settings, videoConstraints) {
+export async function startUserCapture(
+  dispatch: Dispatcher,
+  settings: Settings,
+  videoConstraints: MediaTrackConstraints,
+) {
   const maxFps = settings.camera?.maxFps
     ? { frameRate: { max: settings.camera.maxFps }}
     : {};
@@ -96,23 +114,30 @@ export async function startUserCapture(dispatch: Dispatcher, settings, videoCons
 
 // ----------------------------------------------------------------------------
 
-export function stopCapture({ audioStream, displayStream, userStream }, dispatch: Dispatcher) {
+export function stopCapture(
+  { audioStream, displayStream, userStream }: {
+    audioStream: MediaStream,
+    displayStream: MediaStream,
+    userStream: MediaStream,
+  },
+  dispatch: Dispatcher,
+) {
   stopAudioCapture(audioStream, dispatch);
   stopDisplayCapture(displayStream, dispatch);
   stopUserCapture(userStream, dispatch);
 }
 
-export function stopAudioCapture(stream, dispatch: Dispatcher) {
+export function stopAudioCapture(stream: MediaStream, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_AUDIO' });
 }
 
-export function stopDisplayCapture(stream, dispatch: Dispatcher) {
+export function stopDisplayCapture(stream: MediaStream, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_DISPLAY' });
 }
 
-export function stopUserCapture(stream, dispatch: Dispatcher) {
+export function stopUserCapture(stream: MediaStream, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
 }

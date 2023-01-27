@@ -27,7 +27,7 @@ export type Recording = {
   media: Blob,
   url: string,
   mimeType: string,
-  dimensions: [number, number],
+  dimensions: [number, number] | null,
   downloaded?: boolean,
 };
 

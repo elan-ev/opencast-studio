@@ -13,7 +13,7 @@ import {
 const Warnings = () => {
   const { t } = useTranslation();
 
-  let warnings = [];
+  let warnings: JSX.Element[] = [];
 
   // We allow HTTP connections to localhost, as most browsers also seem to allow
   // video capture in those cases.

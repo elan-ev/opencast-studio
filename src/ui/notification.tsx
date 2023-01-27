@@ -2,7 +2,11 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-const Notification = ({ isDanger, ...rest }) => (
+type Props = React.PropsWithChildren<{
+  isDanger: boolean;
+}>;
+
+const Notification: React.FC<Props> = ({ isDanger, children, ...rest }) => (
   <div
     sx={{
       ':not(:last-child)': { marginBottom: '1.5rem' },
@@ -13,7 +17,7 @@ const Notification = ({ isDanger, ...rest }) => (
       position: 'relative'
     }}
     {...rest}
-  />
+  >{children}</div>
 );
 
 export default Notification;

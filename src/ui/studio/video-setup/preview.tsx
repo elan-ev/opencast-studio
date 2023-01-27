@@ -7,15 +7,22 @@ import { Card, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
-import { VideoBox, useVideoBoxResize } from '../elements';
+import { VideoBox, useVideoBoxResize, VideoBoxChild } from '../elements';
 import { dimensionsOf } from '../../../util';
 import { StreamSettings } from './prefs';
+import { Input } from '.';
 
+
+
+type SourcePreviewProps = {
+  inputs: Input[];
+  warnings: JSX.Element[];
+}
 
 // Shows the preview for one or two input streams. The previews also show
 // preferences allowing the user to change the webcam and the like.
-export const SourcePreview = ({ warnings, inputs }) => {
-  let children;
+export const SourcePreview: React.FC<SourcePreviewProps> = ({ warnings, inputs }) => {
+  let children: VideoBoxChild[];
   switch (inputs.length) {
     case 1:
       children = [{
@@ -50,18 +57,18 @@ export const SourcePreview = ({ warnings, inputs }) => {
   );
 };
 
-const StreamPreview = ({ input }) => (
+const StreamPreview: React.FC<{ input: Input }> = ({ input }) => (
   <Card sx={{ height: '100%', overflow: 'hidden', backgroundColor: 'element_bg' }}>
     <PreviewVideo input={input} />
     <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
   </Card>
 );
 
-const PreviewVideo = ({ input }) => {
+const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
   const { allowed, stream, unexpectedEnd } = input;
   const resizeVideoBox = useVideoBoxResize();
 
-  const videoRef = useRef<HTMLVideoElement>();
+  const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const v = videoRef.current;
     if (v) {
@@ -79,7 +86,7 @@ const PreviewVideo = ({ input }) => {
   }, [stream, resizeVideoBox]);
 
   if (!stream) {
-    let inner;
+    let inner: JSX.Element;
     if (allowed === false || unexpectedEnd) {
       inner = <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />;
     } else {

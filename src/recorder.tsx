@@ -5,13 +5,13 @@ export type OnStopCallback = (args: {
   url: string,
   media: Blob,
   mimeType: string,
-  dimensions: [number, number],
+  dimensions: [number, number] | null,
 }) => void;
 
 export default class Recorder {
   #recorder: MediaRecorder;
   #data: Blob[];
-  #dimensions: [number, number];
+  #dimensions: [number, number] | null;
 
   onStop: OnStopCallback;
 
@@ -21,7 +21,7 @@ export default class Recorder {
     onStop: OnStopCallback,
   ) {
     // Figure out MIME type.
-    let mimeType: string;
+    let mimeType: string | undefined;
     if ('isTypeSupported' in MediaRecorder) {
       mimeType = (settings?.mimes || [])
         .find(mime => MediaRecorder.isTypeSupported(mime));

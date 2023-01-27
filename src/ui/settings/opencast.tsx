@@ -35,7 +35,7 @@ function OpencastSettings({ settingsManager }) {
   const location = useLocation();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const [error, setError] = useState();
+  const [error, setError] = useState<string>();
   const { errors, handleSubmit, register } = useForm({
     defaultValues: settingsManager.formValues().opencast
   });

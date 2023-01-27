@@ -15,6 +15,7 @@ import {
   VIDEO_SOURCE_DISPLAY,
   VIDEO_SOURCE_USER,
   VIDEO_SOURCE_NONE,
+  VideoSource,
 } from '../../../studio-state';
 import { useSettings } from '../../../settings';
 
@@ -33,16 +34,30 @@ import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-export default function VideoSetup({ nextStep, userHasWebcam }) {
+
+export type Input = {
+  isDesktop: boolean;
+  stream: MediaStream;
+  allowed: boolean;
+  unexpectedEnd: boolean;
+};
+
+type VideoSetupProps = {
+  nextStep: () => void;
+  userHasWebcam: boolean;
+};
+
+export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps) {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const state = useStudioState();
   const { displayStream, userStream, videoChoice: activeSource } = state;
-  const hasStreams = displayStream || userStream;
+  const hasStreams = !!displayStream || !!userStream;
 
-  const setActiveSource = s => dispatch({ type: 'CHOOSE_VIDEO', choice: s });
+  const setActiveSource = (s: VideoSource) => dispatch({ type: 'CHOOSE_VIDEO', choice: s });
   const reselectSource = () => {
     setActiveSource(VIDEO_SOURCE_NONE);
     stopUserCapture(userStream, dispatch);
@@ -89,9 +104,9 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
   };
 
   // The body depends on which source is currently selected.
-  let hideActionButtons;
-  let title;
-  let body;
+  let hideActionButtons: boolean;
+  let title: string;
+  let body: JSX.Element;
   switch (activeSource) {
     case VIDEO_SOURCE_NONE:
       const userConstraints = prefsToConstraints(loadCameraPrefs());
@@ -138,9 +153,6 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
       return <p>Something went very wrong (internal error) :-(</p>;
   };
 
-  const hideReselectSource = hideActionButtons
-    && !state.userUnexpectedEnd && !state.displayUnexpectedEnd;
-
   return (
     <StepContainer>
       <Themed.h1>{ title }</Themed.h1>
@@ -149,19 +161,34 @@ export default function VideoSetup({ nextStep, userHasWebcam }) {
 
       { activeSource !== VIDEO_SOURCE_NONE && <div sx={{ mb: 3 }} /> }
 
-      { activeSource !== VIDEO_SOURCE_NONE && <ActionButtons
-        next={hideActionButtons ? null : { onClick: () => nextStep(), disabled: nextDisabled }}
-        prev={hideReselectSource ? null : {
+      { activeSource !== VIDEO_SOURCE_NONE && <ActionButtons {... !hideActionButtons && {
+        next: {
+          onClick: () => nextStep(),
+          disabled: nextDisabled,
+        },
+        prev: {
           onClick: reselectSource,
           disabled: false,
           label: 'sources-video-reselect-source',
-        }}
-      /> }
+        },
+      }}/> }
     </StepContainer>
   );
 }
 
-const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints, userHasWebcam }) => {
+type SourceSelectionProps = {
+  setActiveSource: (s: VideoSource) => void,
+  userConstraints: MediaTrackConstraints,
+  displayConstraints: MediaTrackConstraints,
+  userHasWebcam: boolean,
+};
+
+const SourceSelection: React.FC<SourceSelectionProps> = ({
+  setActiveSource,
+  userConstraints,
+  displayConstraints,
+  userHasWebcam,
+}) => {
   const { t } = useTranslation();
 
   const settings = useSettings();
@@ -247,7 +274,16 @@ const SourceSelection = ({ setActiveSource, userConstraints, displayConstraints,
   </React.Fragment>;
 };
 
-const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
+type OptionButtonProps = {
+  icon: IconProp;
+  label: string;
+  onClick: () => void;
+  disabledText: false | string;
+};
+
+const OptionButton: React.FC<OptionButtonProps> = (
+  { icon, label, onClick, disabledText = false }
+) => {
   const disabled = disabledText !== false;
 
   return (
@@ -281,4 +317,4 @@ const OptionButton = ({ icon, label, onClick, disabledText = false }) => {
   );
 };
 
-const Spacer = rest => <div sx={{ flex: '1 0 0' }} {...rest}></div>;
+const Spacer: React.FC = () => <div sx={{ flex: '1 0 0' }} />;

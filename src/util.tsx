@@ -41,9 +41,9 @@ export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 export const onSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 // Returns the dimensions as [w, h] array or `null` if there is no video track.
-export const dimensionsOf = (stream: MediaStream): [number, number] => {
+export const dimensionsOf = (stream: MediaStream | null): [number, number] | null => {
   const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
-  return [width, height];
+  return width == null || height == null ? null : [width, height];
 };
 
 // Converts the MIME type into a file extension.
@@ -147,7 +147,7 @@ export const getUniqueDevices = (
   allDevices: MediaDeviceInfo[],
   kind: MediaDeviceKind,
 ): MediaDeviceInfo[] => {
-  let out = [];
+  let out: MediaDeviceInfo[] = [];
   for (const d of allDevices) {
     // Only interested in one kind of device.
     if (d.kind !== kind) {

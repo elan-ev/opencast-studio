@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
 
 import { STATE_PAUSED } from '.';
 import { useStudioState } from '../../../studio-state';
-import { VideoBox, useVideoBoxResize } from '../elements';
+import { VideoBox, useVideoBoxResize, VideoBoxProps } from '../elements';
 import { dimensionsOf } from '../../../util';
 
 export default function MediaDevices({ recordingState }) {
@@ -18,7 +18,7 @@ export default function MediaDevices({ recordingState }) {
 
   const paused = recordingState === STATE_PAUSED;
 
-  let children = [];
+  let children: VideoBoxProps["children"] = [];
   if (displayStream || displayUnexpectedEnd) {
     children.push({
       body: <MediaDevice title={t('share-desktop')} stream={displayStream} paused={paused} />,
@@ -35,9 +35,9 @@ export default function MediaDevices({ recordingState }) {
   return <VideoBox gap={20}>{ children }</VideoBox>;
 }
 
-function MediaDevice({ title, stream, paused }) {
+function MediaDevice({ stream, paused }) {
   const resizeVideoBox = useVideoBoxResize();
-  const videoRef = useRef();
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const v = videoRef.current;

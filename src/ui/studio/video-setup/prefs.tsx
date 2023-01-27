@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 import useResizeObserver from 'use-resize-observer/polyfilled';
 
-import { useSettings } from '../../../settings';
+import { Settings, useSettings } from '../../../settings';
 import { dimensionsOf, getUniqueDevices } from '../../../util';
 import { useDispatch, useStudioState } from '../../../studio-state';
 import {
@@ -92,24 +92,38 @@ const CAMERA_ASPECT_RATIO_KEY = 'ocStudioCameraAspectRatio';
 const CAMERA_QUALITY_KEY = 'ocStudioCameraQuality';
 const DISPLAY_QUALITY_KEY = 'ocStudioDisplayQuality';
 
+type CameraPrefs = {
+  deviceId?: string;
+  aspectRatio?: string;
+  quality?: string;
+};
+
+type DisplayPrefs = {
+  quality?: string;
+};
+
 // Loads the initial camera preferences from local storage.
-export const loadCameraPrefs = () => ({
-  deviceId: window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY),
+export const loadCameraPrefs = (): CameraPrefs => ({
+  deviceId: window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY) ?? undefined,
   aspectRatio: window.localStorage.getItem(CAMERA_ASPECT_RATIO_KEY) || 'auto',
   quality: window.localStorage.getItem(CAMERA_QUALITY_KEY) || 'auto',
 });
 
 // Loads the initial display preferences from local storage.
-export const loadDisplayPrefs = () => ({
+export const loadDisplayPrefs = (): DisplayPrefs => ({
   quality: window.localStorage.getItem(DISPLAY_QUALITY_KEY) || 'auto',
 });
 
+type StreamSettingsProps = {
+  isDesktop: boolean;
+  stream: MediaStream;
+}
 
-export const StreamSettings = ({ isDesktop, stream }) => {
+export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
   const dispatch = useDispatch();
   const settings = useSettings();
   const [expandedHeight, setExpandedHeight] = useState(0);
-  const { ref } = useResizeObserver({
+  const { ref } = useResizeObserver<HTMLDivElement>({
     // We don't use the height passed to the callback as we want the outer
     // height. We also add a magic "4" here. 2 pixels are for the border of the
     // outer div. The other two are "wiggle room". If we always set the height
@@ -122,22 +136,28 @@ export const StreamSettings = ({ isDesktop, stream }) => {
 
   // The current preferences and the callback to update them.
   const prefs = isDesktop ? loadDisplayPrefs() : loadCameraPrefs();
-  const updatePrefs = newPrefs => {
+  const updatePrefs = (newPrefs: CameraPrefs | DisplayPrefs) => {
     // Merge and update preferences.
     const merged = { ...prefs, ...newPrefs };
     const constraints = prefsToConstraints(merged, true);
 
+    const setOpt = (key: string, v: string | undefined) => {
+      if (v != null) {
+        window.localStorage.setItem(key, v);
+      }
+    };
+
     // Update preferences in local storage and re-request stream. The latter
     // will cause the rerender.
     if (isDesktop) {
-      window.localStorage.setItem(DISPLAY_QUALITY_KEY, merged.quality);
+      setOpt(DISPLAY_QUALITY_KEY, merged.quality);
 
       stopDisplayCapture(stream, dispatch);
       startDisplayCapture(dispatch, settings, constraints);
     } else {
-      window.localStorage.setItem(LAST_VIDEO_DEVICE_KEY, merged.deviceId);
-      window.localStorage.setItem(CAMERA_ASPECT_RATIO_KEY, merged.aspectRatio);
-      window.localStorage.setItem(CAMERA_QUALITY_KEY, merged.quality);
+      setOpt(LAST_VIDEO_DEVICE_KEY, merged["deviceId"]);
+      setOpt(CAMERA_ASPECT_RATIO_KEY, merged["aspectRatio"]);
+      setOpt(CAMERA_QUALITY_KEY, merged.quality);
 
       stopUserCapture(stream, dispatch);
       startUserCapture(dispatch, settings, constraints);
@@ -174,7 +194,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
         p: 1,
         fontSize: '18px',
       }}>
-        <StreamInfo stream={stream} />
+        {streamInfo(stream)}
       </span>
     </div>
     <div sx={{
@@ -273,7 +293,7 @@ export const StreamSettings = ({ isDesktop, stream }) => {
   </Fragment>;
 };
 
-const StreamInfo = ({ stream }) => {
+const streamInfo = (stream: MediaStream) => {
   const s = stream?.getVideoTracks()?.[0]?.getSettings();
   const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : '';
   const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
@@ -307,20 +327,23 @@ const PrefValue = ({ children }) => (
   </div>
 );
 
-const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isExpanded }) => {
+type UniveralSettingsProps = {
+  isDesktop: boolean;
+  updatePrefs: (p: CameraPrefs | DisplayPrefs) => void;
+  prefs: CameraPrefs | DisplayPrefs;
+  settings: Settings;
+  isExpanded: boolean;
+};
+
+const UniveralSettings: React.FC<UniveralSettingsProps> = (
+  { isDesktop, updatePrefs, prefs, settings, isExpanded }
+) => {
   const { t } = useTranslation();
 
-  const changeQuality = quality => updatePrefs({ quality });
+  const changeQuality = (quality: string) => updatePrefs({ quality });
   const maxHeight = isDesktop ? settings.display?.maxHeight : settings.camera?.maxHeight;
   const qualities = qualityOptions(maxHeight);
   const kind = isDesktop ? 'desktop' : 'user';
-
-  const [, currentHeight] = dimensionsOf(stream);
-  let fitState;
-  if (currentHeight && qualities.includes(prefs.quality)) {
-    const expectedHeight = parseInt(prefs.quality);
-    fitState = expectedHeight === currentHeight ? 'ok' : 'warn';
-  }
 
   return <Fragment>
     <PrefKey>{t('sources-video-quality')}*:</PrefKey>
@@ -344,7 +367,6 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isE
             name={`quality-${kind}`}
             onChange={changeQuality}
             checked={prefs.quality === q}
-            state={fitState}
           />
         </Fragment>)
       }
@@ -352,28 +374,22 @@ const UniveralSettings = ({ isDesktop, updatePrefs, prefs, stream, settings, isE
   </Fragment>;
 };
 
-const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
+type UserSettingsProps = {
+  updatePrefs: (p: CameraPrefs | DisplayPrefs) => void;
+  prefs: CameraPrefs;
+  isExpanded: boolean;
+};
+
+
+const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs, isExpanded }) => {
   const { t } = useTranslation();
   const state = useStudioState();
 
   const currentDeviceId = deviceIdOf(state.userStream);
   const devices = getUniqueDevices(state.mediaDevices, 'videoinput');
 
-  const [width, height] = dimensionsOf(state.userStream);
-  let arState;
-  if (width && height && ASPECT_RATIOS.includes(prefs.aspectRatio)) {
-    const currentAr = width / height;
-    const expectedAr = parseAspectRatio(prefs.aspectRatio);
-
-    // We have some range we accept as "good". You never know with these
-    // floats...
-    arState = (expectedAr * 0.97 < currentAr && currentAr < expectedAr / 0.97)
-      ? 'ok'
-      : 'warn';
-  }
-
-  const changeDevice = id => updatePrefs({ deviceId: id });
-  const changeAspectRatio = ratio => updatePrefs({ aspectRatio: ratio });
+  const changeDevice = (id: string) => updatePrefs({ deviceId: id });
+  const changeAspectRatio = (ratio: string) => updatePrefs({ aspectRatio: ratio });
 
   return <Fragment>
     <PrefKey>
@@ -416,7 +432,6 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
             name="aspectRatio"
             onChange={changeAspectRatio}
             checked={prefs.aspectRatio === ar}
-            state={arState}
           />
         </Fragment>)
       }
@@ -424,9 +439,20 @@ const UserSettings = ({ updatePrefs, prefs, isExpanded }) => {
   </Fragment>;
 };
 
-// A styled radio input which looks like a button.
-const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) => {
+type RadioButtonProps = {
+  id: string;
+  name: string;
+  value: string;
+  isExpanded: boolean;
+  checked: boolean;
+  label?: string;
+  onChange: (v: string) => void;
+};
 
+// A styled radio input which looks like a button.
+const RadioButton: React.FC<RadioButtonProps> = ({
+  id, value, checked, name, onChange, label, isExpanded
+}) => {
   return <Fragment>
     <input
       type="radio"
@@ -456,4 +482,5 @@ const RadioButton = ({ id, value, checked, name, onChange, label, isExpanded }) 
 };
 
 // Returns the devide ID of the video track of the given stream.
-export const deviceIdOf = stream => stream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;
+export const deviceIdOf = (stream: MediaStream | null) =>
+  stream?.getVideoTracks()?.[0]?.getSettings()?.deviceId;
