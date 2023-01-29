@@ -48,7 +48,14 @@ const ColorModeSettings = () => {
 
   return (
     <SettingsSection title={t('settings-theme-appearance')}>
+      <label
+        htmlFor="studio-color"
+        sx={{ variant: 'styles.label' }}
+      >
+        {t('settings-theme-color')}
+      </label>
       <select
+        id="studio-color"
         sx={{ variant: 'styles.select' }}
         defaultValue={localStorage.getItem('theme') ?? undefined}
         onChange={themes => switchTheme(themes.target.value)}

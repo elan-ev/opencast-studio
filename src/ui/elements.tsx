@@ -49,7 +49,6 @@ export const Input = <I extends FieldValues, F>({
           color: 'text',
           display: 'block',
           fontSize: 2,
-          fontWeight: 'bold'
         }}
       >
         {label}

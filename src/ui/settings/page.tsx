@@ -18,9 +18,13 @@ const SettingsPage = ({ settingsManager }) => {
       <header>
         <Themed.h1 sx={{ mb: '1.5em' }}>{t('settings-header')}</Themed.h1>
       </header>
-      <ColorModeSettings />
-      <LanguageSettings />
-      <OpencastSettings settingsManager={settingsManager} />
+      <div sx={{ display: 'flex', flexWrap: 'wrap', gap: '50px' }}>
+        <OpencastSettings settingsManager={settingsManager} />
+        <div sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}>
+          <ColorModeSettings />
+          <LanguageSettings />
+        </div>
+      </div>
     </Box>
   );
 };

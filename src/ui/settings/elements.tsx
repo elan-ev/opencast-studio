@@ -8,7 +8,7 @@ export const SettingsSection = ({ title, children }) => (
   <Box
     sx={{
       '&:not(:last-child)': {
-        mb: 5
+        mb: 4
       }
     }}
   >

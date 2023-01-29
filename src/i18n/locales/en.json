@@ -144,10 +144,11 @@
   "video-settings-close": "Close video settings",
 
   "settings-theme-appearance": "Appearance",
+  "settings-theme-color": "Color mode",
   "settings-theme-dark": "Dark mode",
   "settings-theme-light": "Light mode",
   "settings-theme-system": "System design",
-  
+
   "nav-shortcuts": "Shortcuts",
   "record-shortcuts": "Recording",
   "edit-shortcuts": "Editing",
