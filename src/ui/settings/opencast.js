@@ -111,7 +111,7 @@ function OpencastSettings({ settingsManager }) {
   };
 
   return (
-    <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
+    <div sx={{ flex: '1 1 auto' }}><GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <SettingsSection title={t('upload-settings-modal-header')}>
         <Box>
           { error && <Notification isDanger>{error}</Notification> }
@@ -176,7 +176,7 @@ function OpencastSettings({ settingsManager }) {
           </form>
         </Box>
       </SettingsSection>
-    </GlobalHotKeys>
+    </GlobalHotKeys></div>
   );
 }
 

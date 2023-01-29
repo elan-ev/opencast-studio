@@ -240,6 +240,8 @@ const base = {
     },
     select: {
       backgroundColor: 'element_bg',
+      border: 'solid 1px var(--theme-ui-colors-gray-2)',
+      borderRadius: '2px',
       color: 'text',
       height: '2rem',
       fontSize: '14pt',

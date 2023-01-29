@@ -38,8 +38,7 @@ export const Input = ({
         sx={{
           color: 'text',
           display: 'block',
-          fontSize: 2,
-          fontWeight: 'bold'
+          fontSize: 2
         }}
       >
         {label}
