@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, useColorMode } from 'theme-ui';
 
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
@@ -123,7 +123,10 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
   const dispatch = useDispatch();
   const settings = useSettings();
   const [expandedHeight, setExpandedHeight] = useState(0);
-  const { ref } = useResizeObserver<HTMLDivElement>({
+  const ref = useRef<HTMLDivElement>();
+  useResizeObserver<HTMLDivElement>({
+    ref,
+
     // We don't use the height passed to the callback as we want the outer
     // height. We also add a magic "4" here. 2 pixels are for the border of the
     // outer div. The other two are "wiggle room". If we always set the height
@@ -261,7 +264,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
           height: '100%',
           overflow: 'auto',
         }}>
-          <div ref={ref} sx={{ p: 1, pb: '2px', }}>
+          <div ref={ref} sx={{ p: 1, pb: '2px' }}>
             <div sx={{
               display: 'grid',
               width: '100%',

@@ -98,10 +98,13 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
           margin: 'auto',
           mt: '10px',
         }}
-        target="_blank"
-        download={downloadName}
-        href={url}
-        rel="noopener noreferrer"
+        // Otherwise Typescript errors as `Button` does not have these props.
+        {...{
+          target: "_blank",
+          download: downloadName,
+          href: url,
+          rel: "noopener noreferrer",
+        }}
         onClick={onDownload}
       >
         <FontAwesomeIcon icon={faDownload} />

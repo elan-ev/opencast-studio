@@ -271,8 +271,9 @@ const PostAction = ({ goToFirstStep }) => {
         <Button
           as="a"
           title={label}
-          href={settings.return.target}
           sx={{ whiteSpace: 'nowrap', fontWeight: 400, mb: 2 }}
+          // Otherwise Typescript errors as `Button` does not have this prop.
+          {...{ href: settings.return.target }}
         >
           <FontAwesomeIcon icon={faTimesCircle} />
           { label }
