@@ -211,7 +211,7 @@ export default function SaveCreation(props) {
           flex: ['0', '0', '1 0 50%'],
           p: [2, 2, '0 32px'],
           '&:last-child': {
-            borderLeft: theme => ['none', 'none',`1px solid ${theme.colors.gray[3]}`],
+            borderLeft: theme => ['none', 'none', `1px solid ${theme.colors.gray[3]}`],
           },
         },
       }}>
@@ -431,13 +431,18 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const buttonLabel = !opencast.prettyServerUrl()
     ? t('save-creation-button-upload')
     : (
-      <Trans i18nKey="save-creation-upload-to">
-        Upload to <code sx={{
-          backgroundColor: 'rgba(0, 0, 0, 0.1)',
-          borderRadius: '5px',
-          padding: '1px 3px',
-        }}>{{ server: opencast.prettyServerUrl() }}</code>
-      </Trans>
+      <Trans
+        i18nKey="save-creation-upload-to"
+        components={{ 1: <code /> }}
+        values={{ server: opencast.prettyServerUrl() }}
+        sx={{
+          "& > code": {
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            borderRadius: '5px',
+            padding: '1px 3px',
+          },
+        }}
+      />
     );
 
   const uploadRef = useRef<HTMLButtonElement>(null);

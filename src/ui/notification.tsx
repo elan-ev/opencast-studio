@@ -2,11 +2,11 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-type Props = React.PropsWithChildren<{
-  isDanger: boolean;
+type Props = Omit<JSX.IntrinsicElements['div'], 'css'> & React.PropsWithChildren<{
+  isDanger?: boolean;
 }>;
 
-const Notification: React.FC<Props> = ({ isDanger, children, ...rest }) => (
+const Notification: React.FC<Props> = ({ isDanger = false, children, ...rest }) => (
   <div
     sx={{
       ':not(:last-child)': { marginBottom: '1.5rem' },

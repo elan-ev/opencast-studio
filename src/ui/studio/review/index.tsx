@@ -338,7 +338,7 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
             }} />
           </Trans>
           <Tooltip content={t(`review-remove-cut-point`)}>
-            <IconButton context={marker}
+            <IconButton
               ref={ref} // for DELETE_CROP_MARK
               onClick={
                 () => recordingDispatch({
@@ -374,7 +374,7 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
               value = control;
             }
             recordingDispatch({
-              type: `UPDATE_${marker.toUpperCase()}`,
+              type: marker == 'start' ? 'UPDATE_START' : 'UPDATE_END',
               time: value,
             });
           }}

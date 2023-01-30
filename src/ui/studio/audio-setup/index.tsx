@@ -137,7 +137,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
     }
   });
 
-  const changeDevice = async (deviceId: string) => {
+  const changeDevice = async(deviceId: string) => {
     // The stream is only falsy if it unexpectedly ended.
     if (audioStream) {
       stopAudioCapture(audioStream, dispatch);

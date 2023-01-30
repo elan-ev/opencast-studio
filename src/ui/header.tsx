@@ -70,7 +70,7 @@ const Brand = () => {
 
   return (
     <Link to={{ pathname: '/', search: location.search }}
-      tabIndex={isRecording ? '-1' : '0'}
+      tabIndex={isRecording ? -1 : 0}
       sx={{ ':focus-visible': {
         outline: theme => `5px solid ${theme.colors.focus[2]} !important`,
         outlineOffset: '-5px',
@@ -103,7 +103,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         pathname: target,
         search: location.search,
       }}
-      tabIndex={isRecording ? '-1' : '0'}
+      tabIndex={isRecording ? -1 : 0}
       exact
       activeStyle={{
         backgroundColor: 'black',
@@ -115,7 +115,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
-        borderLeft: ['none', theme => `1px solid ${theme.colors.gray[colorMode === 'dark' ? 1 : 3]}`],
+        borderLeft: theme => ['none', `1px solid ${theme.colors.gray[colorMode === 'dark' ? 1 : 3]}`],
         display: ['block', 'inline-block'],
         width: ['100%', 'auto'],
 

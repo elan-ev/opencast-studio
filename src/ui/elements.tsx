@@ -7,7 +7,9 @@ import useForm from 'react-hook-form/dist/useForm';
 import { Validate } from 'react-hook-form/dist/types';
 
 
-type InputProps = Pick<JSX.IntrinsicElements["input"], "onChange"> & {
+type InputProps =
+  Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue"> &
+  Pick<ReturnType<typeof useForm>, "errors" | "register"> & {
   /** Human readable string describing the field. */
   label: string,
   name: string,
@@ -17,7 +19,7 @@ type InputProps = Pick<JSX.IntrinsicElements["input"], "onChange"> & {
   validate?: Validate,
   /** Passed to the `<input>`. */
   type?: HTMLInputTypeAttribute,
-} & Pick<ReturnType<typeof useForm>, "errors" | "register">;
+};
 
 // A styled `<input>` element with a label. Displays errors and integrated with
 // `react-hook-form`.
