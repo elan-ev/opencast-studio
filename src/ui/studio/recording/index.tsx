@@ -15,6 +15,7 @@ import MediaDevices from './media-devices';
 import RecordingControls from './recording-controls';
 import { stopCapture } from '../capturer';
 import Notification from '../../notification';
+import { StepProps } from '../steps';
 
 
 export const STATE_INACTIVE = 'inactive';
@@ -22,7 +23,7 @@ export const STATE_PAUSED = 'paused';
 export const STATE_RECORDING = 'recording';
 
 
-export default function Recording(props) {
+export default function Recording(props: StepProps) {
   const { t } = useTranslation();
   const state = useStudioState();
   const recordingDispatch = useDispatch();
@@ -35,10 +36,6 @@ export default function Recording(props) {
     stopCapture(state, recordingDispatch);
     props.nextStep();
   };
-
-  const backToAudio = useCallback(() => {
-    props.previousStep();
-  }, [props]);
 
   return (
     <Flex sx={{
@@ -61,7 +58,7 @@ export default function Recording(props) {
       <MediaDevices recordingState={recordingState} />
 
       <div sx={{ m: 3 }}>
-        <ActionButtons prev={recordingState === STATE_INACTIVE && { onClick: backToAudio }}>
+        <ActionButtons prev={recordingState === STATE_INACTIVE && { onClick: props.previousStep }}>
           <RecordingControls
             handleRecorded={handleRecorded}
             recordingState={recordingState}

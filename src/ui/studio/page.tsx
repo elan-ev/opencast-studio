@@ -12,8 +12,13 @@ import Review from './review';
 
 import { isRecordingSupported } from '../../util';
 
+type Props = {
+  activeStep: number;
+  updateActiveStep: (v: number) => void;
+  userHasWebcam: boolean;
+};
 
-export default function Wizard({ activeStep, updateActiveStep, userHasWebcam }) {
+export default function Wizard({ activeStep, updateActiveStep, userHasWebcam }: Props) {
   // If recording is not supported we don't even let the user start the wizard.
   // A warning is shown already (in `warnings.js`).
   if (!isRecordingSupported()) {
@@ -21,12 +26,12 @@ export default function Wizard({ activeStep, updateActiveStep, userHasWebcam }) 
   }
 
   return (
-    <Steps activeStep={activeStep} updateActiveStep={updateActiveStep}>
-      <VideoSetup userHasWebcam={userHasWebcam} />
-      <AudioSetup />
-      <Recording />
-      <Review />
-      <SaveCreation />
-    </Steps>
+    <Steps activeStep={activeStep} setActiveStep={updateActiveStep} steps={[
+      props => <VideoSetup {...props} userHasWebcam={userHasWebcam} />,
+      props => <AudioSetup {...props} />,
+      props => <Recording {...props} />,
+      props => <Review {...props} />,
+      props => <SaveCreation {...props} />,
+    ]} />
   );
 }

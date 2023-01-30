@@ -20,13 +20,14 @@ import Tooltip from '../../../Tooltip';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
 import React from 'react';
+import { StepProps } from '../steps';
 
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number
 // slightly higher works thought. So we use this 1ms time for now. Sigh.
 const ALMOST_ZERO = 0.001;
 
-export default function Review(props) {
+export default function Review(props: StepProps) {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
   const { recordings, prematureRecordingEnd, videoChoice } = useStudioState();

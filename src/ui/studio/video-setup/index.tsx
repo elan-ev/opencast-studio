@@ -35,6 +35,7 @@ import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { StepProps } from '../steps';
 
 
 export type Input = {
@@ -44,8 +45,7 @@ export type Input = {
   unexpectedEnd: boolean;
 };
 
-type VideoSetupProps = {
-  nextStep: () => void;
+type VideoSetupProps = StepProps & {
   userHasWebcam: boolean;
 };
 

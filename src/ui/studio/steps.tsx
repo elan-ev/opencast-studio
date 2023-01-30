@@ -1,69 +1,26 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
 
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
-export default function Steps({ activeStep, updateActiveStep, ...props }) {
-  const childProps = {
-    currentStep: activeStep + 1,
-    totalSteps: props.children?.length || 0,
-    nextStep,
-    previousStep,
-    goToStep,
-    firstStep,
-    lastStep
-  };
+type Props = {
+  activeStep: number;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+  steps: ((props: StepProps) => JSX.Element)[];
+};
 
-  const childrenWithProps = React.Children.map(props.children, (child, i) => {
-    childProps.isActive = i === activeStep;
+export type StepProps = {
+  nextStep: () => void;
+  previousStep: () => void;
+  firstStep: () => void;
+};
 
-    return childProps.isActive
-      ? isReactComponent(child)
-        ? React.cloneElement(child, childProps)
-        : child
-      : null;
+const Steps: React.FC<Props> = ({ activeStep, setActiveStep, steps }) => {
+  return steps[activeStep]({
+    nextStep: () => setActiveStep(old => old + 1),
+    previousStep: () => setActiveStep(old => old - 1),
+    firstStep: () => setActiveStep(0),
   });
+};
 
-  return <React.Fragment>{childrenWithProps}</React.Fragment>;
-
-  function firstStep() {
-    goToStep(1);
-  }
-
-  function lastStep() {
-    goToStep(props.children.length);
-  }
-
-  function nextStep() {
-    setActiveStep(activeStep + 1);
-  }
-
-  function previousStep() {
-    setActiveStep(activeStep - 1);
-  }
-
-  function goToStep(step) {
-    setActiveStep(step - 1);
-  }
-
-  function setActiveStep(next) {
-    if (activeStep === next) {
-      return;
-    }
-    if (isInvalidStep(next, props.children)) {
-      console.error(`${next + 1} is an invalid step`);
-      return;
-    }
-
-    updateActiveStep(next);
-  }
-}
-
-function isInvalidStep(next, children) {
-  return next < 0 || next >= children.length;
-}
-
-function isReactComponent({ type }) {
-  return typeof type === 'function' || typeof type === 'object';
-}
+export default Steps;

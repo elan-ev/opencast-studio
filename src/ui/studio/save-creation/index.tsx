@@ -48,21 +48,18 @@ import RecordingPreview from './recording-preview';
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { otherShortcuts } from '../keyboard-shortcuts/globalKeys';
+import { StepProps } from '../steps';
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
 let progressHistory: { timestamp: number, progress: number }[] = [];
 
-export default function SaveCreation(props) {
+export default function SaveCreation(props: StepProps) {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
   const { recordings, upload: uploadState, title, presenter, start, end } = useStudioState();
   const dispatch = useDispatch();
-
-  function handleBack() {
-    props.previousStep();
-  }
 
   function onProgress(progress: number) {
     // ----- Time estimation -----
@@ -238,7 +235,7 @@ export default function SaveCreation(props) {
 
       <ActionButtons
         prev={hideBack ? undefined : {
-          onClick: handleBack,
+          onClick: props.previousStep,
           disabled: false,
         }}
       >

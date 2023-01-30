@@ -30,12 +30,14 @@ import PreviewAudio from './preview-audio';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { StepProps } from '../steps';
 
 const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 
+
 // The audio setup page. This component manages the state (either 'none
 // selected' or 'microphone selected') and renders the correct component.
-export default function AudioSetup(props) {
+export default function AudioSetup(props: StepProps) {
   const dispatch = useDispatch();
   const { audioStream, audioChoice } = useStudioState();
 
