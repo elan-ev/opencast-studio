@@ -44,7 +44,7 @@ import Notification from '../../notification';
 import { ActionButtons } from '../elements';
 import { Input } from '../../elements';
 
-import RecordingPreview from './recording-preview';
+import RecordingPreview, { RecordingPreviewHandle } from './recording-preview';
 
 import { GlobalHotKeys } from 'react-hotkeys';
 import { otherShortcuts } from '../keyboard-shortcuts/globalKeys';
@@ -325,15 +325,9 @@ const DownloadBox = ({ presenter, title }) => {
   const dispatch = useDispatch();
   const { recordings, start, end } = useStudioState();
 
-  const handleDownload = () => {
-    var elements = document.querySelectorAll("a[href^='blob']");
-    for (const element of elements) {
-      element.click();
-    }
-  };
-
+  const refs = useRef<RecordingPreviewHandle[]>([]);
   const handlers = {
-    DOWNLOAD: handleDownload,
+    DOWNLOAD: () => refs.current.forEach(r => r.download()),
   };
 
   return (
@@ -354,6 +348,7 @@ const DownloadBox = ({ presenter, title }) => {
           { recordings.length === 0 ? <Spinner /> : (
             recordings.map((recording, index) => (
               <RecordingPreview
+                ref={r => refs.current[index] = r}
                 key={index}
                 recording={recording}
                 presenter={presenter}

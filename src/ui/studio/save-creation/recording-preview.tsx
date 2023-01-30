@@ -6,16 +6,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import { recordingFileName } from '../../../util';
+import { Recording } from '../../../studio-state';
 
+type Props = {
+  onDownload: () => void,
+  recording: Recording,
+  title: string,
+  presenter: string,
+};
 
-const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
+export type RecordingPreviewHandle = {
+  download: () => void;
+};
+
+const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
+  { onDownload, recording, title, presenter },
+  ref,
+) => {
   const { t, i18n } = useTranslation();
   const { deviceType, mimeType, url, downloaded, media: blob } = recording;
 
   const flavor = deviceType === 'desktop' ? t('sources-display') : t('sources-user');
   const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
+  const buttonRef = useRef<HTMLButtonElement>();
+  useImperativeHandle(ref, () => ({
+    download: () => buttonRef.current?.click(),
+  }));
 
   if (!url) {
     return null;
@@ -90,6 +109,7 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
         )}
       </div>
       <Button
+        ref={buttonRef}
         as="a"
         role="button"
         sx={{
@@ -113,6 +133,6 @@ const RecordingPreview = ({ onDownload, recording, title, presenter }) => {
       </Button>
     </div>
   );
-};
+});
 
 export default RecordingPreview;
