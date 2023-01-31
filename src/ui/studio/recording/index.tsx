@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import { Flex, Text } from '@theme-ui/components';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { useStudioState, useDispatch } from '../../../studio-state';
 import { useOpencast } from '../../../opencast';

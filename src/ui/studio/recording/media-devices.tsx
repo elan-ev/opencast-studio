@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faPause } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useRef } from 'react';
@@ -13,7 +12,6 @@ import { VideoBox, useVideoBoxResize, VideoBoxProps } from '../elements';
 import { dimensionsOf } from '../../../util';
 
 export default function MediaDevices({ recordingState }) {
-  const { t } = useTranslation();
   const { displayStream, userStream, displayUnexpectedEnd, userUnexpectedEnd } = useStudioState();
 
   const paused = recordingState === STATE_PAUSED;

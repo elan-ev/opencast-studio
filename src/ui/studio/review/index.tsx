@@ -375,7 +375,7 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
               value = control;
             }
             recordingDispatch({
-              type: marker == 'start' ? 'UPDATE_START' : 'UPDATE_END',
+              type: marker === 'start' ? 'UPDATE_START' : 'UPDATE_END',
               time: value,
             });
           }}

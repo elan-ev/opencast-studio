@@ -111,12 +111,6 @@ export class SettingsManager {
   onChange = null;
 
   /**
-   * This constructor is mainly used for tests. Use `init()` to get an instance
-   * for the real application.
-   */
-  constructor() {}
-
-  /**
    * Creates a new `Settings` instance by loading user settings from local
    * storage and attempting to load context settings from the server..
    */

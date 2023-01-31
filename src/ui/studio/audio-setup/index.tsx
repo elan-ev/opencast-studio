@@ -10,7 +10,6 @@ import {
   faMicrophone,
   faMicrophoneSlash,
   faExclamationTriangle,
-  IconName,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
