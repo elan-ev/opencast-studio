@@ -16,7 +16,7 @@ import Header from './ui/header';
 import Studio from './ui/studio/page';
 import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
-import KeyboardShortcuts from './ui/studio/keyboard-shortcuts/shortcuts';
+import KeyboardShortcuts from './shortcuts/page';
 
 function App({ settingsManager, userHasWebcam }) {
   const settings = useSettings();

@@ -4,8 +4,10 @@ import { jsx, Themed } from 'theme-ui';
 
 import { Flex, Heading, Spinner, Text } from '@theme-ui/components';
 import { useEffect, Fragment } from 'react';
+import { GlobalHotKeys } from 'react-hotkeys';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import {
   faMicrophone,
   faMicrophoneSlash,
@@ -18,18 +20,14 @@ import {
   AUDIO_SOURCE_MICROPHONE,
   AUDIO_SOURCE_NONE,
 } from '../../../studio-state';
-
 import { startAudioCapture, stopAudioCapture } from '../capturer';
 import { ActionButtons, StepContainer } from '../elements';
 import Notification from '../../notification';
 import { queryMediaDevices, getUniqueDevices } from '../../../util';
-
 import PreviewAudio from './preview-audio';
-
-import { GlobalHotKeys } from 'react-hotkeys';
-import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { recordShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
+
 
 const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
 

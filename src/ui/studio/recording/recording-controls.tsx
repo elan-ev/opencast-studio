@@ -6,18 +6,16 @@ import { useEffect, useRef } from 'react';
 import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from "react-router";
+import { GlobalHotKeys } from 'react-hotkeys';
 
-import Recorder, { OnStopCallback } from '../../../recorder';
+import Recorder, { OnStopCallback } from './recorder';
 import { useSettings } from '../../../settings';
 import { Dispatcher, Recording, useDispatch, useStudioState } from '../../../studio-state';
-
 import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
 import Clock from './clock';
 import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from '.';
-
-import Tooltip from '../../../Tooltip';
-import { GlobalHotKeys } from 'react-hotkeys';
-import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
+import Tooltip from '../../Tooltip';
+import { recordShortcuts } from '../../../shortcuts';
 
 
 const addRecordOnStop = (

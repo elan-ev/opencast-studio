@@ -19,7 +19,7 @@ import {
   stopDisplayCapture,
   stopUserCapture
 } from '../capturer';
-import Tooltip from '../../../Tooltip';
+import Tooltip from '../../Tooltip';
 
 
 // Creates a valid constraints object from the given preferences. The mapping

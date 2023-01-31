@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import GlobalStyle from './style/global-style';
-import theme from './theme';
+import theme from './style/theme';
 
 import './i18n';
 import * as serviceWorker from './serviceWorker';

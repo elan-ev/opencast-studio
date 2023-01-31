@@ -4,7 +4,8 @@ import { jsx } from 'theme-ui';
 
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import './style/global-style';
+
+import '../style/global-style';
 
 
 const Tooltip = ({ content, ...props }) => (

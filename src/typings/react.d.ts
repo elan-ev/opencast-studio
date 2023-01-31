@@ -3,7 +3,7 @@
 // before it was deleted. So this is completely safe to define. More info:
 //
 // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/30364
-import "react";
+import * as React from "react";
 declare module 'react' {
   export type SFC<P> = React.FunctionComponent<P>;
 }

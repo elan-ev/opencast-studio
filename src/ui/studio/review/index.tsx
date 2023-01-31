@@ -1,11 +1,12 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx, Themed, useColorMode } from 'theme-ui';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
-
-import { Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent } from 'react';
+import React, {
+  Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent,
+} from 'react';
+import { GlobalHotKeys } from 'react-hotkeys';
 import { Link, IconButton, Flex, Spinner, Text } from '@theme-ui/components';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -15,12 +16,10 @@ import { useSettings } from '../../../settings';
 import Notification from '../../notification';
 import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
 import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
-import Tooltip from '../../../Tooltip';
-
-import { GlobalHotKeys } from 'react-hotkeys';
-import { editShortcuts } from '../keyboard-shortcuts/globalKeys';
-import React from 'react';
+import Tooltip from '../../Tooltip';
+import { editShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
+
 
 // In some situation we would like to set the current time to 0 or check for it.
 // Thanks to a browser bug, setting the current time to 0 fails. Using a number

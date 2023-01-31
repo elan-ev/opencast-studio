@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
-import { editShortcuts, otherShortcuts, recordShortcuts } from './globalKeys';
+import { editShortcuts, otherShortcuts, recordShortcuts } from '.';
 
 
 /**

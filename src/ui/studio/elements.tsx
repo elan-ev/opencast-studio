@@ -2,17 +2,17 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import useResizeObserver from "use-resize-observer/polyfilled";
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Flex } from '@theme-ui/components';
 import { useTranslation } from 'react-i18next';
 import React, { useRef, useState } from 'react';
 import equal from 'fast-deep-equal';
-
 import { GlobalHotKeys } from 'react-hotkeys';
-import { otherShortcuts } from '../studio/keyboard-shortcuts/globalKeys';
+
+import { otherShortcuts } from '../../shortcuts';
 import { usePresentContext } from '../../util';
+
 
 // A full width flex container for some steps of the wizard.
 export const StepContainer: React.FC<React.PropsWithChildren> = ({ children }) => (

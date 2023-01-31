@@ -7,6 +7,8 @@ import { Flex, Heading, Text } from '@theme-ui/components';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { GlobalHotKeys } from 'react-hotkeys';
 
 import {
   useDispatch,
@@ -18,10 +20,8 @@ import {
   VideoSource,
 } from '../../../studio-state';
 import { useSettings } from '../../../settings';
-
 import { queryMediaDevices, onMobileDevice } from '../../../util';
 import Notification from '../../notification';
-
 import {
   startDisplayCapture,
   startUserCapture,
@@ -31,10 +31,7 @@ import {
 import { ActionButtons, StepContainer } from '../elements';
 import { SourcePreview } from './preview';
 import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
-
-import { GlobalHotKeys } from 'react-hotkeys';
-import { recordShortcuts } from '../keyboard-shortcuts/globalKeys';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { recordShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
 
 

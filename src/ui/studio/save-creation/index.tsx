@@ -16,6 +16,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import useForm from 'react-hook-form';
 import { usePageVisibility } from 'react-page-visibility';
+import { GlobalHotKeys } from 'react-hotkeys';
 
 import {
   useOpencast,
@@ -46,9 +47,9 @@ import { Input } from '../../elements';
 
 import RecordingPreview, { RecordingPreviewHandle } from './recording-preview';
 
-import { GlobalHotKeys } from 'react-hotkeys';
-import { otherShortcuts } from '../keyboard-shortcuts/globalKeys';
+import { otherShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
+
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
