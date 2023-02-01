@@ -236,7 +236,7 @@ export type Dispatcher = (action: ReducerAction) => void;
 const stateContext = createContext<StudioState | null>(null);
 const dispatchContext = createContext<Dispatcher | null>(null);
 
-export const Provider = ({ children }) => {
+export const Provider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState());
 
   return (

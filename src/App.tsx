@@ -7,7 +7,7 @@ import { useState, Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route, useLocation } from 'react-router-dom';
 import { Beforeunload } from 'react-beforeunload';
 import { Global } from '@emotion/core';
-import { useSettings } from './settings';
+import { SettingsManager, useSettings } from './settings';
 
 import { Provider, useStudioState, STATE_UPLOADED, STATE_UPLOADING } from './studio-state';
 
@@ -18,7 +18,13 @@ import SettingsPage from './ui/settings/page';
 import Warnings from './ui/warnings';
 import KeyboardShortcuts from './shortcuts/page';
 
-function App({ settingsManager, userHasWebcam }) {
+
+type Props = {
+  settingsManager: SettingsManager;
+  userHasWebcam: boolean;
+};
+
+const App: React.FC<Props> = ({ settingsManager, userHasWebcam }) => {
   const settings = useSettings();
 
   return (
@@ -35,9 +41,9 @@ function App({ settingsManager, userHasWebcam }) {
       </Provider>
     </Router>
   );
-}
+};
 
-const Routes = ({ settingsManager, userHasWebcam }) => {
+const Routes: React.FC<Props> = ({ settingsManager, userHasWebcam }) => {
   const [activeStep, updateActiveStep] = useState(0);
   const location = useLocation();
 
@@ -77,7 +83,7 @@ const PreventClose = () => {
   const uploaded = upload.state === STATE_UPLOADED;
   const uploading = upload.state === STATE_UPLOADING;
 
-  const handler = event => {
+  const handler = (event: Event) => {
     if ((recordings?.length > 0 && !uploaded && !downloaded) || uploading) {
       event.preventDefault();
     }

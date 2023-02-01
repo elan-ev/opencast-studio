@@ -108,7 +108,7 @@ export class SettingsManager {
    * This function is called whenever the user saved their settings. The new
    * settings object is passed as parameter.
    */
-  onChange = null;
+  onChange: (newSettings: Settings) => void = () => {};
 
   /**
    * Creates a new `Settings` instance by loading user settings from local
@@ -269,12 +269,10 @@ export class SettingsManager {
    * partial, i.e. only the new values can be specified. Values in `newSettings`
    * override values in the old user settings.
    */
-  saveSettings(newSettings) {
+  saveSettings(newSettings: Settings) {
     this.#userSettings = merge(this.#userSettings, newSettings);
     window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.#userSettings));
-    if (this.onChange) {
-      this.onChange(this.settings());
-    }
+    this.onChange(this.settings());
   }
 
   /** The merged settings that the whole application should use. */
@@ -306,7 +304,7 @@ export class SettingsManager {
       if (!(segment in obj)) {
         return true;
       }
-      obj = obj[segment];
+      obj = (obj as any)[segment];
     }
 
     return false;
@@ -336,24 +334,28 @@ export class SettingsManager {
  * comes from.
  */
 const validate = (
-  obj: any,
+  obj: object,
   allowParse: boolean,
   src: SettingsSource,
   sourceDescription: string,
-) => {
+): Settings => {
+  type SchemaOrValidator = Validator<unknown> | { [key: string]: SchemaOrValidator };
+
   // Validates `obj` with `schema`. `path` is the current path used for error
   // messages.
-  const validate = (schema, obj: any, path: string) => {
+  const validate = (schema: SchemaOrValidator, obj: unknown, path: string) => {
     if (typeof schema === 'function') {
       return validateValue(schema, obj, path);
-    } else {
+    } else if (typeof obj === "object") {
       return validateObj(schema, obj, path);
+    } else {
+      throw new Error("bug: unreachable");
     }
   };
 
   // Validate a settings value with a validation function. Returns the final
   // value of the setting or `null` if it should be ignored.
-  const validateValue = (validation, value: any, path: string) => {
+  const validateValue = (validation: Validator<unknown>, value: unknown, path: string) => {
     try {
       const newValue = validation(value, allowParse, src);
       return newValue === undefined ? value : newValue;
@@ -368,19 +370,19 @@ const validate = (
 
   // Validate a settings object/namespace. `schema` and `obj` need to be
   // objects.
-  const validateObj = (schema, obj: any, path: string) => {
+  const validateObj = (schema: Record<string, SchemaOrValidator>, obj: object, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
     let out = Object.create(null);
-    for (const key of Object.keys(obj)) {
+    for (const [key, value] of Object.entries(obj)) {
       const newPath = path ? `${path}.${key}` : key;
-      if (key in schema) {
-        const value = validate(schema[key], obj[key], newPath);
+      if (key in schema && key in obj) {
+        const validatedValue = validate(schema[key], value, newPath);
 
         // If `null` is returned, the validation failed and we ignore this
         // value.
-        if (value !== null) {
-          out[key] = value;
+        if (validatedValue !== null) {
+          out[key] = validatedValue;
         }
       } else {
         console.warn(
@@ -608,7 +610,11 @@ const Context = React.createContext<Settings | null>(null);
 // Returns the current provided Opencast instance.
 export const useSettings = (): Settings => usePresentContext(Context, 'useSettings');
 
-export const Provider = ({ settingsManager, children }) => {
+type ProviderProps = React.PropsWithChildren<{
+  settingsManager: SettingsManager;
+}>;
+
+export const Provider: React.FC<ProviderProps> = ({ settingsManager, children }) => {
   const [settings, updateSettings] = useState<Settings>(settingsManager.settings());
   settingsManager.onChange = (newSettings: Settings) => updateSettings(newSettings);
 

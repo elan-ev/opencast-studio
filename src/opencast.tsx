@@ -73,14 +73,14 @@ export class Opencast {
    * The response of `/info/me.json` or `null` if requesting that API did not
    * succeed.
    */
-  #currentUser: any = null;
+  #currentUser: unknown = null;
 
   /**
    * The response from `/lti` or `null` if the request failed for some reason or
    * if `this.#login !== true`. Note though, that this can also be the empty
    * object, indicating that there is no LTI session.
    */
-  #ltiSession = null;
+  #ltiSession: unknown = null;
 
   updateGlobalOc: null | ((oc: Opencast) => void) = null;
 
@@ -613,7 +613,10 @@ export class Opencast {
 
   /** Constructs the ACL XML structure from the given template string. */
   constructAcl(template: string) {
-    if (!this.#currentUser || !Array.isArray(this.#currentUser.roles)) {
+    const hasRoles = (user: unknown): user is { roles: unknown[] } =>
+      typeof user === 'object' && 'roles' in user && Array.isArray(user.roles);
+
+    if (!hasRoles(this.#currentUser)) {
       // Internal error: this should not happen.
       throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
     }
@@ -809,7 +812,7 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
 </Policy>
 `;
 
-const smil = ({ start, end }) => `
+const smil = ({ start, end }: { start: number, end: number }) => `
   <smil xmlns="http://www.w3.org/ns/SMIL">
     <body>
       <par>

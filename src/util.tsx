@@ -90,7 +90,12 @@ export const mimeToExt = (mime: string) => {
  * `mime` can be null or a string and is converted to a file extension on a best
  * effort basis.
  */
-export const recordingFileName = ({ mime, flavor, title, presenter }) => {
+export const recordingFileName = ({ mime, flavor, title, presenter }: {
+  mime: string,
+  flavor: string,
+  title: string,
+  presenter: string,
+}) => {
   const titlePart = (title ? ` - ${title}` : '').substring(0, 50);
   const presenterPart = (presenter ? ` - ${presenter}` : '').substring(0, 50);
   return `${nowAsString()}${titlePart}${presenterPart} (${flavor}, OC Studio).${mimeToExt(mime)}`;
@@ -127,7 +132,7 @@ export const decodeHexString = (hex: string): string => {
     throw new SyntaxError('hex string does not have an even length');
   }
 
-  const digitToNum = digit => {
+  const digitToNum = (digit: string) => {
     if (digit >= '0' && digit <= '9') {
       return digit.charCodeAt(0) - '0'.charCodeAt(0);
     } else if (digit >= 'a' && digit <= 'f') {

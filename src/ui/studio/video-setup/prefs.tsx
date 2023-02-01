@@ -32,15 +32,15 @@ import Tooltip from '../../Tooltip';
 //   else is ignored.
 // - quality: valid quality labels are passed on as `ideal` height, invalid ones
 //   are ignored.
-export const prefsToConstraints = (prefs, exactDevice = false) => {
-  const deviceConstraint = prefs.deviceId
+export const prefsToConstraints = (prefs: CameraPrefs | DisplayPrefs, exactDevice = false) => {
+  const deviceConstraint = 'deviceId' in prefs
     && { deviceId: { [exactDevice ? 'exact' : 'ideal']: prefs.deviceId }};
 
-  const aspectRatio = parseAspectRatio(prefs.aspectRatio);
-  const aspectRatioConstraint = aspectRatio && { aspectRatio: { ideal: aspectRatio }};
+  const aspectRatioConstraint = 'aspectRatio' in prefs
+    && { aspectRatio: { ideal: parseAspectRatio(prefs.aspectRatio) }};
 
-  const height = parseQuality(prefs.quality);
-  const heightConstraint = height && { height: { ideal: height }};
+  const heightConstraint = 'quality' in prefs
+    && { height: { ideal: parseQuality(prefs.quality) }};
 
   return {
     ...deviceConstraint,
@@ -54,7 +54,7 @@ const ASPECT_RATIOS = ['4:3', '16:9'];
 
 // All quality options given to the user respecting the `maxHeight` from the
 // settings.
-const qualityOptions = maxHeight => {
+const qualityOptions = (maxHeight: number) => {
   const defaults = [360, 480, 720, 1080, 1440, 2160];
   let out = defaults.filter(q => !maxHeight || q <= maxHeight);
   if (maxHeight && (out.length === 0 || out[out.length - 1] !== maxHeight)) {
@@ -67,18 +67,18 @@ const qualityOptions = maxHeight => {
 // Converts the given aspect ratio label (one of the elements in
 // `ASPECT_RATIOS`) into the numerical ratio, e.g. 4/3 = 1.333. If the argument
 // is not a valid label, `null` is returned.
-const parseAspectRatio = label => {
+const parseAspectRatio = (label: string) => {
   const mapping = {
     '4:3': 4 / 3,
     '16:9': 16 / 9,
   };
 
-  return mapping[label] || null;
+  return (mapping as Record<string, number>)[label] ?? null;
 };
 
 // Converts the given quality label to the actual height as number. If the
 // argument is not a valid quality label (e.g. '720p'), `null` is returned.
-const parseQuality = label => {
+const parseQuality = (label: string) => {
   if (!/^[0-9]+p$/.test(label)) {
     return null;
   }
@@ -158,8 +158,8 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       stopDisplayCapture(stream, dispatch);
       startDisplayCapture(dispatch, settings, constraints);
     } else {
-      setOpt(LAST_VIDEO_DEVICE_KEY, merged["deviceId"]);
-      setOpt(CAMERA_ASPECT_RATIO_KEY, merged["aspectRatio"]);
+      setOpt(LAST_VIDEO_DEVICE_KEY, (merged as Record<string, string>)["deviceId"]);
+      setOpt(CAMERA_ASPECT_RATIO_KEY, (merged as Record<string, string>)["aspectRatio"]);
       setOpt(CAMERA_QUALITY_KEY, merged.quality);
 
       stopUserCapture(stream, dispatch);
@@ -304,7 +304,7 @@ const streamInfo = (stream: MediaStream) => {
   return s ? [sizeInfo, fpsInfo].join(', ') : '...';
 };
 
-const PrefKey = ({ children }) => (
+const PrefKey: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div sx={{
     gridColumn: '0 1',
     display: 'flex',
@@ -315,7 +315,7 @@ const PrefKey = ({ children }) => (
     { children }
   </div>
 );
-const PrefValue = ({ children }) => (
+const PrefValue: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div tabIndex={-1}
     sx={{
       gridColumn: '1 2',
