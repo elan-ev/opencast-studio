@@ -321,9 +321,27 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
 ) => {
   const { t } = useTranslation();
 
+  const cut = () => {
+    if (!previewController.current) {
+      return;
+    }
+
+    let value = previewController.current.currentTime;
+    // We disable the buttons when the generated values would be invalid,
+    // but we rely on `timeupdate` events for that, which are not guaranteed
+    // to be timely, so we still have to check the invariant when actually
+    // updating the state. Here we decided to just clamp the value appropriately.
+    if (control != null && !invariant(value, control)) {
+      value = control;
+    }
+    recordingDispatch({
+      type: marker === 'start' ? 'UPDATE_START' : 'UPDATE_END',
+      time: value,
+    });
+  };
+
   const handlers = {
-    CUT_LEFT: () => document.getElementById('leftmarker')?.click(),
-    CUT_RIGHT: () => document.getElementById('rightmarker')?.click(),
+    [marker === 'start' ? 'CUT_LEFT' : 'CUT_RIGHT']: cut,
   };
 
   const state = (
@@ -363,26 +381,8 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
       <Tooltip content={t(`review-set-${marker}`)}>
         <button
-          id={marker === 'start' ? 'leftmarker' : 'rightmarker'}
           {...{ disabled }}
-          onClick={() => {
-            if (!previewController.current) {
-              return;
-            }
-
-            let value = previewController.current.currentTime;
-            // We disable the buttons when the generated values would be invalid,
-            // but we rely on `timeupdate` events for that, which are not guaranteed
-            // to be timely, so we still have to check the invariant when actually
-            // updating the state. Here we decided to just clamp the value appropriately.
-            if (control != null && !invariant(value, control)) {
-              value = control;
-            }
-            recordingDispatch({
-              type: marker === 'start' ? 'UPDATE_START' : 'UPDATE_END',
-              time: value,
-            });
-          }}
+          onClick={cut}
           sx={{
             backgroundColor: 'transparent',
             color: 'text',
