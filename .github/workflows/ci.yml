@@ -40,7 +40,7 @@ jobs:
         name: test-deployment-files
         path: |
           build
-          .deploy-settings.toml
+          .github/.deploy-settings.toml
           deploydir.tmp
 
     # Prepare production deployment
@@ -59,4 +59,4 @@ jobs:
         name: prod-deployment-files
         path: |
           build
-          .deploy-settings.toml
+          .github/.deploy-settings.toml

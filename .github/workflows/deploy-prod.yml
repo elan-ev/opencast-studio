@@ -66,7 +66,7 @@ jobs:
 
     - name: Prepare deployment files
       run: |
-        mv .deploy-settings.toml settings.toml
+        mv .github/.deploy-settings.toml settings.toml
         mv build/* .
         rmdir build
 
