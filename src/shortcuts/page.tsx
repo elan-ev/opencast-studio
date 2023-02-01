@@ -3,6 +3,7 @@
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 import { editShortcuts, otherShortcuts, recordShortcuts } from '.';
+import { TranslationKey } from '../i18n';
 
 
 /**
@@ -20,7 +21,7 @@ const keyTranslations = {
 type AllShortcuts = typeof editShortcuts & typeof otherShortcuts & typeof recordShortcuts;
 
 /** The translation keys for the labels of individual short cuts. */
-const shortcutLabels: Record<keyof AllShortcuts, string> = {
+const shortcutLabels: Record<keyof AllShortcuts, TranslationKey> = {
   RECORD_DISPLAY: 'record-display',
   RECORD_DISPLAY_CAMERA: 'record-both',
   RECORD_CAMERA: 'record-camera',
@@ -49,7 +50,7 @@ const shortcutLabels: Record<keyof AllShortcuts, string> = {
 };
 
 type GroupProps = {
-  name: string;
+  name: TranslationKey;
   keymap: Record<string, string[]>;
 };
 
@@ -81,7 +82,7 @@ const Group: React.FC<GroupProps> = ({ name, keymap }) => {
 
 
 type EntryProps = {
-  name: string;
+  name: TranslationKey;
   sequences: string[],
 };
 

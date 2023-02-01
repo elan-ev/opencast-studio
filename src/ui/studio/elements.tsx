@@ -12,6 +12,7 @@ import { GlobalHotKeys } from 'react-hotkeys';
 
 import { otherShortcuts } from '../../shortcuts';
 import { usePresentContext } from '../../util';
+import { TranslationKey } from '../../i18n';
 
 
 // A full width flex container for some steps of the wizard.
@@ -37,7 +38,7 @@ export const StepContainer: React.FC<React.PropsWithChildren> = ({ children }) =
 type ActionButton = {
   onClick: () => void;
   disabled?: boolean;
-  label?: string;
+  label?: TranslationKey;
   danger?: boolean;
 };
 

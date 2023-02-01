@@ -80,7 +80,7 @@ export default function Review(props: StepProps) {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-        <Spinner title={t('save-creation-waiting-for-recordings')} />
+        <Spinner />
       </div>
       }
       {recordings.length === expectedRecordings && <div sx={previewReady ? {
