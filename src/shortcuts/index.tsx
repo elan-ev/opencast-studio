@@ -5,17 +5,15 @@ configure({
   ignoreKeymapAndHandlerChangesByDefault: false,
 });
 
-/**
- * Helper functions that rewrites keys based on the OS
-*/
 const getOs = () => {
   const os = ['Windows', 'Linux', 'Mac'];
   return os.find(v => navigator.userAgent.includes(v));
 };
 
+/** Helper functions that rewrites keys based on the OS. */
 const rewriteKeys = (key: string) => getOs() === 'Mac' ? key.replace('Alt', 'Option') : key;
 
-// Shortcuts for recording
+/** Shortcuts for recording */
 export const recordShortcuts = {
   RECORD_DISPLAY: ['1'],
   RECORD_DISPLAY_CAMERA: ['2'],
@@ -27,7 +25,7 @@ export const recordShortcuts = {
   PAUSE_RECORDING: ['Space', 'k'],
 } satisfies KeyMap;
 
-// Shortcuts for editing
+/** Shortcuts for editing */
 export const editShortcuts = {
   PLAY_PAUSE: ['Space', 'k'],
   FORWARD_5_SEC: ['l', 'ArrowRight'],

@@ -10,28 +10,34 @@ import { Settings } from './settings';
 import { Recording } from './studio-state';
 
 
-// The server URL was not specified.
+/** The server URL was not specified. */
 export const STATE_UNCONFIGURED = 'unconfigured';
 
-// The OC server is reachable but a login was not attempted and the current user
-// is anonymous.
+/**
+ * The OC server is reachable but a login was not attempted and the current user
+ * is anonymous.
+ */
 export const STATE_CONNECTED = 'connected';
 
-// The OC server is reachable and the user is authenticated.
+/** The OC server is reachable and the user is authenticated. */
 export const STATE_LOGGED_IN = 'logged_in';
 
-// Some network error occured when accessing the server.
+/** Some network error occured when accessing the server. */
 export const STATE_NETWORK_ERROR = 'network_error';
 
-// When accessing the OC API, the request returned as non-2xx code unexpectedly.
-// This likely indicates that the server is not actually a valid OC server.
+/**
+ * When accessing the OC API, the request returned as non-2xx code unexpectedly.
+ * This likely indicates that the server is not actually a valid OC server.
+ */
 export const STATE_RESPONSE_NOT_OK = 'response_not_ok';
 
-// The API requested returned invalid JSON or unexpected data.
+/** The API requested returned invalid JSON or unexpected data. */
 export const STATE_INVALID_RESPONSE = 'invalid_response';
 
-// The server is reachable and a login was provided, but the login did not
-// succeed.
+/**
+ * The server is reachable and a login was provided, but the login did not
+ * succeed.
+ */
 export const STATE_INCORRECT_LOGIN = 'incorrect_login';
 
 type OpencastState =
@@ -55,19 +61,25 @@ export class Opencast {
   #state: OpencastState = STATE_UNCONFIGURED;
   #serverUrl: string | null = null;
 
-  // This can one of either:
-  // - `null`: no login is provided and login data is not specified
-  // - `true`: a login is already automatically provided from the OC context
-  // - `{ username, password }`: username and password are given
+  /**
+   * This can one of either:
+   * - `null`: no login is provided and login data is not specified
+   * - `true`: a login is already automatically provided from the OC context
+   * - `{ username, password }`: username and password are given
+   */
   #login: null | true | { username: string, password: string } = null;
 
-  // The response of `/info/me.json` or `null` if requesting that API did not
-  // succeed.
+  /**
+   * The response of `/info/me.json` or `null` if requesting that API did not
+   * succeed.
+   */
   #currentUser: any = null;
 
-  // The response from `/lti` or `null` if the request failed for some reason or
-  // if `this.#login !== true`. Note though, that this can also be the empty
-  // object, indicating that there is no LTI session.
+  /**
+   * The response from `/lti` or `null` if the request failed for some reason or
+   * if `this.#login !== true`. Note though, that this can also be the empty
+   * object, indicating that there is no LTI session.
+   */
   #ltiSession = null;
 
   updateGlobalOc: null | ((oc: Opencast) => void) = null;
@@ -102,14 +114,14 @@ export class Opencast {
     }
   }
 
-  // Creates a new instance from the settings and calls `updateUser` on it.
+  /** Creates a new instance from the settings and calls `updateUser` on it. */
   static async init(settings: Settings["opencast"]) {
     let self = new Opencast(settings);
     await self.updateUser();
     return self;
   }
 
-  // Updates the global OC instance from `this` to `newInstance`.
+  /** Updates the global OC instance from `this` to `newInstance`. */
   setGlobalInstance(newInstance: Opencast) {
     if (!this.updateGlobalOc) {
       console.error("bug: 'updateGlobalOc' not set");
@@ -118,11 +130,13 @@ export class Opencast {
     this.updateGlobalOc?.(newInstance);
   }
 
-  // Refreshes the connection by requesting `info/me` unless the state is
-  // 'unconfigured'.
-  //
-  // If the request errors or returns a different user, the global Opencast
-  // instance is updated.
+  /**
+   * Refreshes the connection by requesting `info/me` unless the state is
+   * 'unconfigured'.
+   *
+   * If the request errors or returns a different user, the global Opencast
+   * instance is updated.
+   */
   async refreshConnection() {
     if (this.#serverUrl === null) {
       return;
@@ -135,13 +149,15 @@ export class Opencast {
     }
   }
 
-  // Updates `#currentUser` and `#ltiSession` by checking 'info/me.json' and
-  // `/lti` respectively.
-  //
-  // The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
-  // `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED` (or any error state on request
-  // error). This method returns whether the state, user object or lti object
-  // has changed in any way.
+  /**
+   * Updates `#currentUser` and `#ltiSession` by checking 'info/me.json' and
+   * `/lti` respectively.
+   *
+   * The `#state` is also updated accordingly to `STATE_LOGGED_IN`,
+   * `STATE_INCORRECT_LOGIN` or `STATE_CONNECTED` (or any error state on request
+   * error). This method returns whether the state, user object or lti object
+   * has changed in any way.
+   */
   async updateUser(): Promise<boolean> {
     // Try to request `info/me.json` and handle potential errors.
     let newUser: any;
@@ -242,20 +258,22 @@ export class Opencast {
     return userChanged || ltiChanged;
   }
 
-  // Returns the response from the `/info/me.json` endpoint.
+  /** Returns the response from the `/info/me.json` endpoint. */
   async getInfoMe() {
     return await this.jsonRequest('info/me.json');
   }
 
-  // Returns the response from the `/lti` endpoint.
+  /** Returns the response from the `/lti` endpoint. */
   async getLti() {
     return await this.jsonRequest('lti');
   }
 
-  // Sends a request to the Opencast API expecting a JSON response.
-  //
-  // On success, the parsed JSON is returned as object. If anything goes wrong,
-  // a `RequestError` is thrown and the corresponding `this.#state` is set.
+  /**
+   * Sends a request to the Opencast API expecting a JSON response.
+   *
+   * On success, the parsed JSON is returned as object. If anything goes wrong,
+   * a `RequestError` is thrown and the corresponding `this.#state` is set.
+   */
   async jsonRequest(path: string) {
     const url = `${this.#serverUrl}/${path}`;
     const response = await this.request(path);
@@ -267,10 +285,12 @@ export class Opencast {
     }
   }
 
-  // Sends a request to the Opencast API, returning the response object.
-  //
-  // If anything goes wrong, a `RequestError` is thrown and the corresponding
-  // `this.#state` is set.
+  /**
+   * Sends a request to the Opencast API, returning the response object.
+   *
+   * If anything goes wrong, a `RequestError` is thrown and the corresponding
+   * `this.#state` is set.
+   */
   async request(path: string, options?: RequestInit) {
     const url = `${this.#serverUrl}/${path}`;
 
@@ -311,17 +331,19 @@ export class Opencast {
     return response;
   }
 
-  // Uploads the given recordings with the given title and presenter metadata.
-  //
-  // If the upload was successful, 'success' is returned. Otherwise:
-  // - 'network_error' if some kind of network error occurs.
-  // - 'not_authorized' if some error occurs that indicates the user is not
-  //    logged in or lacking rights.
-  // - 'unexpected_response' if the API returned data that we didn't expect.
-  // - 'unknown_error' if any other error occurs.
-  //
-  // At the start of this method, `refreshConnection` is called. That
-  // potentially changed the `state`.
+  /**
+   * Uploads the given recordings with the given title and presenter metadata.
+   *
+   * If the upload was successful, 'success' is returned. Otherwise:
+   * - 'network_error' if some kind of network error occurs.
+   * - 'not_authorized' if some error occurs that indicates the user is not
+   *    logged in or lacking rights.
+   * - 'unexpected_response' if the API returned data that we didn't expect.
+   * - 'unknown_error' if any other error occurs.
+   *
+   * At the start of this method, `refreshConnection` is called. That
+   * potentially changed the `state`.
+   */
   async upload({ recordings, title, presenter, start, end, uploadSettings, onProgress }: {
     recordings: Recording[],
     title: string,
@@ -405,8 +427,10 @@ export class Opencast {
     }
   }
 
-  // Adds the DC Catalog with the given metadata to the current ingest process
-  // via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
+  /**
+   * Adds the DC Catalog with the given metadata to the current ingest process
+   * via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
+   */
   async addDcCatalog({ mediaPackage, title, presenter, uploadSettings }: {
     mediaPackage: string,
     title: string,
@@ -426,8 +450,10 @@ export class Opencast {
       .then(response => response.text());
   }
 
-  // Adds the ACL to the current ingest process via `ingest/addAttachment`. Do
-  // not call this method outside of `upload`!
+  /**
+   * Adds the ACL to the current ingest process via `ingest/addAttachment`. Do
+   * not call this method outside of `upload`!
+   */
   async attachAcl({ mediaPackage, uploadSettings }: {
     mediaPackage: string,
     uploadSettings: Settings["upload"],
@@ -446,7 +472,7 @@ export class Opencast {
       .then(response => response.text());
   }
 
-  // Adds a SMIL catalog for Opencast to cut the video during processing
+  /** Adds a SMIL catalog for Opencast to cut the video during processing */
   async addCuttingInformation({ mediaPackage, start, end }: {
     mediaPackage: string,
     start: number,
@@ -460,8 +486,10 @@ export class Opencast {
     return await response.text();
   }
 
-  // Uploads the given recordings to the current ingest process via
-  // `ingest/addTrack`. Do not call this method outside of `upload`!
+  /**
+   * Uploads the given recordings to the current ingest process via
+   * `ingest/addTrack`. Do not call this method outside of `upload`!
+   */
   async uploadTracks({ mediaPackage, recordings, onProgress, title, presenter }: {
     mediaPackage: string,
     recordings: Recording[],
@@ -534,8 +562,10 @@ export class Opencast {
     return mediaPackage;
   }
 
-  // Finishes the current ingest process via `ingest/ingest`. Do not call this
-  // method outside of `upload`!
+  /**
+   * Finishes the current ingest process via `ingest/ingest`. Do not call this
+   * method outside of `upload`!
+   */
   async finishIngest({ mediaPackage, uploadSettings }: {
     mediaPackage: string,
     uploadSettings: Settings["upload"],
@@ -550,25 +580,29 @@ export class Opencast {
     await this.request("ingest/ingest", { method: 'post', body: body });
   }
 
-  // Returns the current state of the connection to the OC server.
+  /** Returns the current state of the connection to the OC server. */
   getState() {
     return this.#state;
   }
 
-  // Returns whether or not a login is already provided (i.e. we don't need to
-  // login manually).
+  /**
+   * Returns whether or not a login is already provided (i.e. we don't need to
+   * login manually).
+   */
   isLoginProvided() {
     return this.#login === true;
   }
 
-  // Returns whether or not the connection is ready to upload a video.
+  /** Returns whether or not the connection is ready to upload a video. */
   isReadyToUpload() {
     return this.#state === STATE_LOGGED_IN;
   }
 
-  // Returns the server URL in a form suitable to present to the user. Returns
-  // `null` if the server URL is not configured yet or if it is the same
-  // hostname as the one studio is running on.
+  /**
+   * Returns the server URL in a form suitable to present to the user. Returns
+   * `null` if the server URL is not configured yet or if it is the same
+   * hostname as the one studio is running on.
+   */
   prettyServerUrl() {
     const url = this.#serverUrl;
 
@@ -577,7 +611,7 @@ export class Opencast {
       : null;
   }
 
-  // Constructs the ACL XML structure from the given template string.
+  /** Constructs the ACL XML structure from the given template string. */
   constructAcl(template: string) {
     if (!this.#currentUser || !Array.isArray(this.#currentUser.roles)) {
       // Internal error: this should not happen.
@@ -616,32 +650,34 @@ export class Opencast {
 
 // ===== Errors that can occur when accessing the Opencast API =====
 
-// Base error
+/** Base error */
 class RequestError extends Error {}
 
-// The fetch itself failed. This unfortunately can have many causes, including
-// blocked by browser, CORS, server not available, device offline, ...
+/**
+ * The fetch itself failed. This unfortunately can have many causes, including
+ * blocked by browser, CORS, server not available, device offline, ...
+ */
 class NetworkError extends RequestError {
   constructor(url: string, cause: any) {
     super(`network error when accessing '${url}': ${cause}`);
   }
 }
 
-// When requesting a JSON API but the response body is not valid JSON.
+/** When requesting a JSON API but the response body is not valid JSON. */
 class InvalidJson extends RequestError {
   constructor(url: string, cause: any) {
     super(`invalid JSON when accessing ${url}: ${cause}`);
   }
 }
 
-// When the request returns 401.
+/** When the request returns 401. */
 class Unauthorized extends RequestError {
   constructor(status: number, statusText: string, url: string) {
     super(`got ${status} ${statusText} when accessing ${url}`);
   }
 }
 
-// When the request returns a non-2xx status code.
+/** When the request returns a non-2xx status code. */
 class NotOkResponse extends RequestError {
   constructor(status: number, statusText: string, url: string) {
     super(`unexpected ${status} ${statusText} response when accessing ${url}`);
@@ -659,7 +695,7 @@ class UnexpectedRedirect extends RequestError {
 
 const Context = React.createContext<Opencast | null>(null);
 
-// Returns the current provided Opencast instance.
+/** Returns the current provided Opencast instance. */
 export const useOpencast = (): Opencast => usePresentContext(Context, 'useOpencast');
 
 type ProviderProps = React.PropsWithChildren<{

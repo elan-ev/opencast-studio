@@ -1,52 +1,64 @@
-// Checks if we app is running on a mobile device.
-//
-// This check could be more exhaustive, but this includes all browser we
-
 import { useContext } from "react";
 import { Dispatcher } from "./studio-state";
 
-// officially support.
+
+/**
+ * Checks if we app is running on a mobile device.
+ *
+ * This check could be more exhaustive, but this includes all browser we
+ * officially support.
+ */
 export const onMobileDevice = () =>
   /Android|iPhone|iPad|iPod/i.test(navigator.platform) ||
   /Android/i.test(navigator.userAgent);
 
-// Checks if the client supports capturing the device's display (or individual
-// windows).
-//
-// Detecting whether display capture is supported is hard. There is currently
-// no proper solution. See these two links for more information:
-// - https://stackoverflow.com/q/58842831/2408867
-// - https://github.com/w3c/mediacapture-screen-share/issues/127
-//
-// To work around this problem, we simply check if the browser runs on a
-// mobile device. Currently, no mobile device/browser supports display
-// capture. However, this will probably change in the future, so we have to
-// revisit this issue again. This is tracked in this issue:
-// https://github.com/elan-ev/opencast-studio/issues/204
+/**
+ * Checks if the client supports capturing the device's display (or individual
+ * windows).
+ *
+ * Detecting whether display capture is supported is hard. There is currently
+ * no proper solution. See these two links for more information:
+ * - https://stackoverflow.com/q/58842831/2408867
+ * - https://github.com/w3c/mediacapture-screen-share/issues/127
+ *
+ * To work around this problem, we simply check if the browser runs on a
+ * mobile device. Currently, no mobile device/browser supports display
+ * capture. However, this will probably change in the future, so we have to
+ * revisit this issue again. This is tracked in this issue:
+ * https://github.com/elan-ev/opencast-studio/issues/204
+ */
 export const isDisplayCaptureSupported = () =>
   "mediaDevices" in navigator &&
   "getDisplayMedia" in navigator.mediaDevices &&
   !onMobileDevice();
 
-// Checks if the client supports capturing "user devices" (usually webcams or
-// phone cameras).
+/**
+ * Checks if the client supports capturing "user devices" (usually webcams or
+ * phone cameras).
+ */
 export const isUserCaptureSupported = () =>
   'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 
-// Checks if the browsers supports the `MediaRecorder` API required to actually
-// record the media streams.
+/**
+ * Checks if the browsers supports the `MediaRecorder` API required to actually
+ * record the media streams.
+ */
 export const isRecordingSupported = () => typeof MediaRecorder !== 'undefined';
 
-// Checks if this runs in Safari. Check from https://stackoverflow.com/a/23522755/
+/**
+ * Checks if this runs in Safari. Check from https://stackoverflow.com/a/23522755/
+ */
 export const onSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-// Returns the dimensions as [w, h] array or `null` if there is no video track.
+/**
+ * Returns the dimensions as [w, h] array or `null` if there is no video track.
+ */
 export const dimensionsOf = (stream: MediaStream | null): [number, number] | null => {
   const { width, height } = stream?.getVideoTracks()?.[0]?.getSettings() ?? {};
   return width == null || height == null ? null : [width, height];
 };
 
-// Converts the MIME type into a file extension.
+/** Converts the MIME type into a file extension. */
 export const mimeToExt = (mime: string) => {
   if (mime) {
     const lowerMime = mime.toLowerCase();
@@ -72,10 +84,12 @@ export const mimeToExt = (mime: string) => {
   return onSafari() ? "mp4" : "webm";
 };
 
-// Returns a suitable filename for a recording with the MIME type `mime` and the
-// given `flavor`. The latter should be either `presenter` or `presentation`.
-// `mime` can be null or a string and is converted to a file extension on a best
-// effort basis.
+/**
+ * Returns a suitable filename for a recording with the MIME type `mime` and the
+ * given `flavor`. The latter should be either `presenter` or `presentation`.
+ * `mime` can be null or a string and is converted to a file extension on a best
+ * effort basis.
+ */
 export const recordingFileName = ({ mime, flavor, title, presenter }) => {
   const titlePart = (title ? ` - ${title}` : '').substring(0, 50);
   const presenterPart = (presenter ? ` - ${presenter}` : '').substring(0, 50);
@@ -103,9 +117,11 @@ export const userHasWebcam = async() => {
   return devices.some(d => d.kind === 'videoinput');
 };
 
-// Decodes the given hex string into a new string. If the given string contains
-// characters that are not hexadecimal digits or if the string's length is odd,
-// this function will throw an exception.
+/**
+ * Decodes the given hex string into a new string. If the given string contains
+ * characters that are not hexadecimal digits or if the string's length is odd,
+ * this function will throw an exception.
+ */
 export const decodeHexString = (hex: string): string => {
   if (hex.length % 2 !== 0) {
     throw new SyntaxError('hex string does not have an even length');
@@ -132,17 +148,19 @@ export const decodeHexString = (hex: string): string => {
   return new TextDecoder().decode(bytes);
 };
 
-// Returns a promise that resolves after `ms` milliseconds.
+/** Returns a promise that resolves after `ms` milliseconds. */
 export const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
-// Obtains all media devices and stores them into the global state.
+/** Obtains all media devices and stores them into the global state. */
 export const queryMediaDevices = async(dispatch: Dispatcher) => {
   const devices = await navigator.mediaDevices.enumerateDevices();
   dispatch({ type: 'UPDATE_MEDIA_DEVICES', devices });
 };
 
-// Filters the `allDevices` array such that only devices with the given `kind`
-// are included and no two devices have the same `deviceId`.
+/**
+ * Filters the `allDevices` array such that only devices with the given `kind`
+ * are included and no two devices have the same `deviceId`.
+ */
 export const getUniqueDevices = (
   allDevices: MediaDeviceInfo[],
   kind: MediaDeviceKind,

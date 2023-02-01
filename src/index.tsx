@@ -42,7 +42,7 @@ const initialize = Promise.all([
   }),
 ]);
 
-const render = body => {
+const render = (body: JSX.Element) => {
   ReactDOM.render(body, document.getElementById('root'));
 };
 

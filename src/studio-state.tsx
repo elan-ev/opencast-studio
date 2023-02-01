@@ -31,6 +31,7 @@ export type Recording = {
   downloaded?: boolean,
 };
 
+/** Our global state */
 export type StudioState = {
   mediaDevices: MediaDeviceInfo[],
 
@@ -245,5 +246,8 @@ export const Provider = ({ children }) => {
   );
 };
 
+/** Hook to get the `dispatch` function in order to change the global studio state. */
 export const useDispatch = (): Dispatcher => usePresentContext(dispatchContext, 'useDispatch');
+
+/** Hook to get access to the global Studio state. */
 export const useStudioState = (): StudioState => usePresentContext(stateContext, 'useStudioState');
