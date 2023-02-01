@@ -11,7 +11,6 @@ import GlobalStyle from './style/global-style';
 import theme from './style/theme';
 
 import './i18n';
-import * as serviceWorker from './serviceWorker';
 import { SettingsManager, Provider as SettingsProvider } from './settings';
 import { Opencast, Provider as OpencastProvider } from './opencast';
 import { userHasWebcam, sleep } from './util';
@@ -79,8 +78,3 @@ initialize.then(
     This might be caused by a incorrect configuration by the system administrator.
   </p>),
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
