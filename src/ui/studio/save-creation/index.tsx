@@ -322,9 +322,9 @@ const DownloadBox = ({ presenter, title }) => {
   const dispatch = useDispatch();
   const { recordings, start, end } = useStudioState();
 
-  const refs = useRef<RecordingPreviewHandle[]>([]);
+  const refs = useRef<(RecordingPreviewHandle | null)[]>([]);
   const handlers = {
-    DOWNLOAD: () => refs.current.forEach(r => r.download()),
+    DOWNLOAD: () => refs.current.forEach(r => r?.download()),
   };
 
   return (

@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, ReactNode, useEffect, useRef } from 'react';
 import { Card, Spinner } from '@theme-ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +16,7 @@ import { Input } from '.';
 
 type SourcePreviewProps = {
   inputs: Input[];
-  warnings: JSX.Element[];
+  warnings: ReactNode[];
 }
 
 // Shows the preview for one or two input streams. The previews also show

@@ -31,7 +31,7 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
 
   const flavor = deviceType === 'desktop' ? t('sources-display') : t('sources-user');
   const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
-  const buttonRef = useRef<HTMLButtonElement>();
+  const buttonRef = useRef<HTMLButtonElement>(null);
   useImperativeHandle(ref, () => ({
     download: () => buttonRef.current?.click(),
   }));
@@ -45,7 +45,7 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
   // file managers use base-1000 anyway. Notably, the windows file manager
   // calculates with base-1024 but shows "XB". So it is lying.
   const numBytes = blob.size;
-  const round = n => {
+  const round = (n: number) => {
     const digits = n < 10 ? 1 : 0;
     return n.toLocaleString(i18n.language, {
       minimumFractionDigits: digits,

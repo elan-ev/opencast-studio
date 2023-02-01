@@ -34,6 +34,7 @@ export const Input: React.FC<InputProps> = ({
   ...rest
 }) => {
   const { t } = useTranslation();
+  const error = errors[name];
 
   return (
     <div
@@ -63,7 +64,7 @@ export const Input: React.FC<InputProps> = ({
           }}
         >
           <input
-            aria-invalid={errors[name] ? 'true' : 'false'}
+            aria-invalid={error ? 'true' : 'false'}
             aria-describedby={`${name}Error`}
             autoComplete="off"
             name={name}
@@ -75,7 +76,7 @@ export const Input: React.FC<InputProps> = ({
             type={type}
             {...rest}
           />
-          {errors[name] && (
+          {error && (
             <p
               id={`${name}Error`}
               sx={{
@@ -85,7 +86,7 @@ export const Input: React.FC<InputProps> = ({
                 mt: 1
               }}
             >
-              {errors[name].message}
+              {error.toString()}
             </p>
           )}
         </div>

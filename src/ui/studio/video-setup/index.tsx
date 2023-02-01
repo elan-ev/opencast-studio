@@ -33,13 +33,14 @@ import { SourcePreview } from './preview';
 import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
 import { recordShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
+import { unreachable } from '../../../util/err';
 
 
 export type Input = {
   isDesktop: boolean;
-  stream: MediaStream;
-  allowed: boolean;
-  unexpectedEnd: boolean;
+  stream: MediaStream | null;
+  allowed: boolean | null;
+  unexpectedEnd: boolean | null;
 };
 
 type VideoSetupProps = StepProps & {
@@ -87,6 +88,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
     </Notification>
   );
 
+  console.log({ userStream, activeSource });
   const userInput = {
     isDesktop: false,
     stream: userStream,

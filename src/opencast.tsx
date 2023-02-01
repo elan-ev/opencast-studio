@@ -614,7 +614,7 @@ export class Opencast {
   /** Constructs the ACL XML structure from the given template string. */
   constructAcl(template: string) {
     const hasRoles = (user: unknown): user is { roles: unknown[] } =>
-      typeof user === 'object' && 'roles' in user && Array.isArray(user.roles);
+      user != null && typeof user === 'object' && 'roles' in user && Array.isArray(user.roles);
 
     if (!hasRoles(this.#currentUser)) {
       // Internal error: this should not happen.

@@ -26,7 +26,7 @@ const ColorModeSettings = () => {
     }
   });
 
-  const switchTheme = value => {
+  const switchTheme = (value: string) => {
     localStorage.removeItem('prefers-color-scheme');
     if(value === 'systemTheme') {
       getSystemPreference();
@@ -50,7 +50,7 @@ const ColorModeSettings = () => {
     <SettingsSection title={t('settings-theme-appearance')}>
       <select
         sx={{ variant: 'styles.select' }}
-        defaultValue={localStorage.getItem('theme')}
+        defaultValue={localStorage.getItem('theme') ?? undefined}
         onChange={themes => switchTheme(themes.target.value)}
       >
         {themes.map((option, index) => (

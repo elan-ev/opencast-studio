@@ -19,6 +19,7 @@ import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
 import Tooltip from '../../Tooltip';
 import { editShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
+import { notNullable } from '../../../util/err';
 
 
 // In some situation we would like to set the current time to 0 or check for it.
@@ -365,6 +366,10 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
           id={marker === 'start' ? 'leftmarker' : 'rightmarker'}
           {...{ disabled }}
           onClick={() => {
+            if (!previewController.current) {
+              return;
+            }
+
             let value = previewController.current.currentTime;
             // We disable the buttons when the generated values would be invalid,
             // but we rely on `timeupdate` events for that, which are not guaranteed
@@ -422,7 +427,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   const { recordings, start, end } = useStudioState();
   const { t } = useTranslation();
 
-  const videoRefs = [useRef<HTMLVideoElement>(), useRef<HTMLVideoElement>()];
+  const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
   const allVideos = videoRefs.slice(0, recordings.length);
 
   const desktopIndex = recordings.length === 2
@@ -432,16 +437,9 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   // The index of the last video ref that received an event (0 or 1).
   const lastOrigin = useRef<0 | 1>();
 
-  const unwrap = <T, >(v: T | undefined): T => {
-    if (v == null) {
-      throw new Error('bug in Preview controller');
-    }
-    return v;
-  };
-
   useImperativeHandle(ref, () => ({
     get currentTime() {
-      return unwrap(videoRefs[lastOrigin.current ?? 0].current?.currentTime);
+      return notNullable(videoRefs[lastOrigin.current ?? 0].current?.currentTime);
     },
     set currentTime(currentTime) {
       allVideos.forEach(r => {
@@ -451,7 +449,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
       });
     },
     get duration() {
-      return unwrap(videoRefs[lastOrigin.current ?? 0].current?.duration);
+      return notNullable(videoRefs[lastOrigin.current ?? 0].current?.duration);
     },
     get isPlaying() {
       const v = videoRefs[lastOrigin.current ?? 0].current;
@@ -475,8 +473,8 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   // on some effects until that calculation is done.
   type DurationCalcState = 'done' | 'started';
   const durationCalculationProgress = [
-    useRef<DurationCalcState>(null),
-    useRef<DurationCalcState>(null),
+    useRef<DurationCalcState>(),
+    useRef<DurationCalcState>(),
   ];
   const [durationsCalculated, setDurationsCalculated] = useState<boolean>();
 
@@ -507,10 +505,10 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
       // want to hear audio twice, so we mute one video element. Particularly,
       // we mute the desktop video, as there the audio/video synchronization is
       // not as critical.
-      unwrap(videoRefs[desktopIndex].current).volume = 0;
+      notNullable(videoRefs[desktopIndex].current).volume = 0;
 
-      const va = unwrap(videoRefs[0].current);
-      const vb = unwrap(videoRefs[1].current);
+      const va = notNullable(videoRefs[0].current);
+      const vb = notNullable(videoRefs[1].current);
 
       // We regularly check if both video elements diverge too much from one
       // another.
@@ -526,7 +524,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
           if (diff > 0.15 && lastOrigin.current != null) {
             const origin = videoRefs[lastOrigin.current].current;
             const target = videoRefs[lastOrigin.current === 0 ? 1 : 0].current;
-            unwrap(target).currentTime = unwrap(origin).currentTime;
+            notNullable(target).currentTime = notNullable(origin).currentTime;
           }
         }
 
@@ -541,7 +539,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
 
   const skipFiveSeconds = (keyEvent?: KeyboardEvent) => {
     videoRefs.forEach( video => {
-      if (video.current !== undefined) {
+      if (video.current !== null) {
         if (keyEvent?.key === 'l' || keyEvent?.key === 'ArrowRight') {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
         } else if (keyEvent?.key === 'j' || keyEvent?.key === 'ArrowLeft') {
@@ -555,7 +553,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
     const fps = 30;
 
     videoRefs.forEach( video => {
-      if (video.current !== undefined) {
+      if (video.current !== null) {
         if (keyEvent?.key === '.') {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1 / fps));
         } else if (keyEvent?.key === ',') {

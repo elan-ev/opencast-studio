@@ -144,35 +144,37 @@ export class SettingsManager {
 
     // Get settings from URL query.
     const urlParams = new URLSearchParams(window.location.search);
-
-    if (urlParams.get('config')) {
+    const encodedConfig = urlParams.get('config');
+    if (encodedConfig) {
       // In this case, the GET parameter `config` is specified. We now expect a
       // hex encoded TOML file describing the configuration. This is possible in
       // cases where special characters in GET parameters might get modified
       // somehow (e.g. by an LMS). A config=hexstring only uses the most basic
       // characters, so it should always work.
 
-      const encoded = urlParams.get('config');
-      let decoded;
-      try {
-        decoded = decodeHexString(encoded);
-      } catch (e) {
-        console.warn(
-          `Could not decode hex-encoded string given to GET parameter 'config'. Ignoring. Error:`,
-          e,
-        );
-      }
+      const decodeAndParse = (input: string): Record<string, unknown> | null => {
+        let decoded: string;
+        try {
+          decoded = decodeHexString(input);
+        } catch (e) {
+          console.warn(
+            `Could not decode hex-encoded string given to GET parameter 'config'. Ignoring. Error:`,
+            e,
+          );
+          return null;
+        }
 
-      let rawUrlSettings = Object.create(null);
-      try {
-        rawUrlSettings = parseToml(decoded);
-      } catch (e) {
-        console.warn(
-          `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
-            + `Ignoring. Error:`,
-          e,
-        );
-      }
+        try {
+          return parseToml(decoded);
+        } catch (e) {
+          console.warn(
+            `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
+              + `Ignoring. Error:`,
+            e,
+          );
+        }
+        return null;
+      };
 
       for (const key of urlParams.keys()) {
         if (key !== 'config') {
@@ -184,8 +186,9 @@ export class SettingsManager {
         }
       }
 
+      const rawUrlSettings = decodeAndParse(encodedConfig);
       self.urlSettings = validate(
-        rawUrlSettings,
+        rawUrlSettings ?? {},
         false,
         'src-url',
         'given as URL `config` GET parameter',
@@ -346,7 +349,7 @@ const validate = (
   const validate = (schema: SchemaOrValidator, obj: unknown, path: string) => {
     if (typeof schema === 'function') {
       return validateValue(schema, obj, path);
-    } else if (typeof obj === "object") {
+    } else if (obj && typeof obj === "object") {
       return validateObj(schema, obj, path);
     } else {
       throw new Error("bug: unreachable");

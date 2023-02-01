@@ -58,7 +58,9 @@ export default function Recording(props: StepProps) {
       <MediaDevices recordingState={recordingState} />
 
       <div sx={{ m: 3 }}>
-        <ActionButtons prev={recordingState === STATE_INACTIVE && { onClick: props.previousStep }}>
+        <ActionButtons
+          prev={recordingState === STATE_INACTIVE ? { onClick: props.previousStep } : undefined}
+        >
           <RecordingControls
             handleRecorded={handleRecorded}
             recordingState={recordingState}

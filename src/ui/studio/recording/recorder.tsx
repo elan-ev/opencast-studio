@@ -11,7 +11,7 @@ export type OnStopCallback = (args: {
 
 export default class Recorder {
   #recorder: MediaRecorder;
-  #data: Blob[];
+  #data: Blob[] = [];
   #dimensions: [number, number] | null;
 
   onStop: OnStopCallback;

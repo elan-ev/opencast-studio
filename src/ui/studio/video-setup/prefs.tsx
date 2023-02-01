@@ -32,15 +32,20 @@ import Tooltip from '../../Tooltip';
 //   else is ignored.
 // - quality: valid quality labels are passed on as `ideal` height, invalid ones
 //   are ignored.
-export const prefsToConstraints = (prefs: CameraPrefs | DisplayPrefs, exactDevice = false) => {
+export const prefsToConstraints = (
+  prefs: CameraPrefs | DisplayPrefs,
+  exactDevice = false,
+): MediaTrackConstraints => {
   const deviceConstraint = 'deviceId' in prefs
     && { deviceId: { [exactDevice ? 'exact' : 'ideal']: prefs.deviceId }};
 
-  const aspectRatioConstraint = 'aspectRatio' in prefs
-    && { aspectRatio: { ideal: parseAspectRatio(prefs.aspectRatio) }};
+  const aspectRatioConstraint = 'aspectRatio' in prefs && {
+    aspectRatio: { ideal: prefs.aspectRatio ? parseAspectRatio(prefs.aspectRatio) : undefined },
+  };
 
-  const heightConstraint = 'quality' in prefs
-    && { height: { ideal: parseQuality(prefs.quality) }};
+  const heightConstraint = 'quality' in prefs && {
+    height: { ideal: prefs.quality ? parseQuality(prefs.quality) : undefined },
+  };
 
   return {
     ...deviceConstraint,
@@ -54,7 +59,7 @@ const ASPECT_RATIOS = ['4:3', '16:9'];
 
 // All quality options given to the user respecting the `maxHeight` from the
 // settings.
-const qualityOptions = (maxHeight: number) => {
+const qualityOptions = (maxHeight: number | undefined) => {
   const defaults = [360, 480, 720, 1080, 1440, 2160];
   let out = defaults.filter(q => !maxHeight || q <= maxHeight);
   if (maxHeight && (out.length === 0 || out[out.length - 1] !== maxHeight)) {
@@ -73,14 +78,14 @@ const parseAspectRatio = (label: string) => {
     '16:9': 16 / 9,
   };
 
-  return (mapping as Record<string, number>)[label] ?? null;
+  return (mapping as Record<string, number>)[label] ?? undefined;
 };
 
 // Converts the given quality label to the actual height as number. If the
 // argument is not a valid quality label (e.g. '720p'), `null` is returned.
 const parseQuality = (label: string) => {
   if (!/^[0-9]+p$/.test(label)) {
-    return null;
+    return undefined;
   }
 
   return parseInt(label);
@@ -116,14 +121,14 @@ export const loadDisplayPrefs = (): DisplayPrefs => ({
 
 type StreamSettingsProps = {
   isDesktop: boolean;
-  stream: MediaStream;
+  stream: MediaStream | null;
 }
 
 export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
   const dispatch = useDispatch();
   const settings = useSettings();
   const [expandedHeight, setExpandedHeight] = useState(0);
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   useResizeObserver<HTMLDivElement>({
     ref,
 
@@ -133,7 +138,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
     // to fit exactly, this easily leads to unnessecary scrollbars appearing.
     // This in turn might lead to rewrapping and then a change in height, in
     // the worst case ending up in an infinite loop.
-    onResize: () => setExpandedHeight(ref.current?.offsetHeight + 4),
+    onResize: () => setExpandedHeight(ref.current?.offsetHeight ?? 0 + 4),
   });
   const { t } = useTranslation();
 
@@ -296,7 +301,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
   </Fragment>;
 };
 
-const streamInfo = (stream: MediaStream) => {
+const streamInfo = (stream: MediaStream | null) => {
   const s = stream?.getVideoTracks()?.[0]?.getSettings();
   const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : '';
   const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';

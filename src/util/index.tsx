@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Dispatcher } from "./studio-state";
+import { Dispatcher } from "../studio-state";
 
 
 /**

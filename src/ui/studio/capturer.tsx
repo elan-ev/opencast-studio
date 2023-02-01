@@ -115,9 +115,9 @@ export async function startUserCapture(
 
 export function stopCapture(
   { audioStream, displayStream, userStream }: {
-    audioStream: MediaStream,
-    displayStream: MediaStream,
-    userStream: MediaStream,
+    audioStream: MediaStream | null,
+    displayStream: MediaStream | null,
+    userStream: MediaStream | null,
   },
   dispatch: Dispatcher,
 ) {
@@ -126,17 +126,17 @@ export function stopCapture(
   stopUserCapture(userStream, dispatch);
 }
 
-export function stopAudioCapture(stream: MediaStream, dispatch: Dispatcher) {
+export function stopAudioCapture(stream: MediaStream | null, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_AUDIO' });
 }
 
-export function stopDisplayCapture(stream: MediaStream, dispatch: Dispatcher) {
+export function stopDisplayCapture(stream: MediaStream | null, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_DISPLAY' });
 }
 
-export function stopUserCapture(stream: MediaStream, dispatch: Dispatcher) {
+export function stopUserCapture(stream: MediaStream | null, dispatch: Dispatcher) {
   stream?.getTracks().forEach(track => track.stop());
   dispatch({ type: 'UNSHARE_USER' });
 }
