@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
-import useForm from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Button } from '@theme-ui/components';
 
@@ -27,22 +27,35 @@ import { SettingsSection } from './elements';
 import { Input } from '../elements';
 import { useStudioState } from '../../studio-state';
 import { bug } from '../../util/err';
+import { SettingsManager } from '../../settings';
 
 
-function OpencastSettings({ settingsManager }) {
+const icons = {
+  testing: faCircleNotch,
+  error: faExclamationCircle,
+  saved: faCheckCircle,
+};
+
+type Inputs = {
+  serverUrl: string;
+  loginName: string;
+  loginPassword: string;
+};
+
+function OpencastSettings({ settingsManager }: { settingsManager: SettingsManager }) {
   const location = useLocation();
   const { t } = useTranslation();
   const opencast = useOpencast();
   const [error, setError] = useState<string | null>(null);
-  const { errors, handleSubmit, register } = useForm({
+  const { formState: { errors }, handleSubmit, register } = useForm<Inputs>({
     defaultValues: settingsManager.formValues().opencast
   });
-  const [status, setStatus] = useState('initial');
+  const [status, setStatus] = useState<keyof typeof icons | 'initial'>('initial');
 
   const { recordings } = useStudioState();
   const hasRecording = recordings.length > 0;
 
-  async function onSubmit(data) {
+  async function onSubmit(data: Inputs) {
     setStatus('testing');
     const oc = await Opencast.init({
       ...settingsManager.settings().opencast,
@@ -97,11 +110,6 @@ function OpencastSettings({ settingsManager }) {
     return null;
   }
 
-  const icons = {
-    testing: faCircleNotch,
-    error: faExclamationCircle,
-    saved: faCheckCircle,
-  };
   const icon = icons[status];
 
   return (
@@ -115,7 +123,7 @@ function OpencastSettings({ settingsManager }) {
             label={t('upload-settings-label-server-url')}
             name="serverUrl"
             register={register}
-            validate={value => {
+            validate={(value: string) => {
               try {
                 const url = new URL(value);
                 return (url.protocol === 'https:' || url.protocol === 'http:')

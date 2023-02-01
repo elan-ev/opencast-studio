@@ -3,27 +3,27 @@
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 import { HTMLInputTypeAttribute } from 'react';
-import useForm from 'react-hook-form/dist/useForm';
-import { Validate } from 'react-hook-form/dist/types';
+import { FieldError, FieldValues, Path, useForm, Validate } from 'react-hook-form';
 
 
-type InputProps =
+type InputProps<I extends FieldValues, F> =
   Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue"> &
-  Pick<ReturnType<typeof useForm>, "errors" | "register"> & {
+  Pick<ReturnType<typeof useForm<I>>, "register"> & {
   /** Human readable string describing the field. */
   label: string,
-  name: string,
+  name: Path<I>,
   /** Whether this field is required or may be empty. */
   required: boolean,
   /** Function validating the value and returning a string in the case of error. */
-  validate?: Validate,
+  validate?: Validate<F, I>,
+  errors: Partial<Record<keyof I, FieldError>>,
   /** Passed to the `<input>`. */
   type?: HTMLInputTypeAttribute,
 };
 
 // A styled `<input>` element with a label. Displays errors and integrated with
 // `react-hook-form`.
-export const Input: React.FC<InputProps> = ({
+export const Input = <I extends FieldValues, F>({
   errors,
   register,
   label,
@@ -32,7 +32,7 @@ export const Input: React.FC<InputProps> = ({
   validate,
   type = 'text',
   ...rest
-}) => {
+}: InputProps<I, F>) => {
   const { t } = useTranslation();
   const error = errors[name];
 
@@ -67,14 +67,13 @@ export const Input: React.FC<InputProps> = ({
             aria-invalid={error ? 'true' : 'false'}
             aria-describedby={`${name}Error`}
             autoComplete="off"
-            name={name}
-            ref={register({
-              validate,
-              ...required && { required: t('forms-validation-error-required') },
-            })}
             sx={{ variant: 'styles.input' }}
             type={type}
             {...rest}
+            {...register(name, {
+              validate,
+              ...required && { required: t('forms-validation-error-required') },
+            })}
           />
           {error && (
             <p
@@ -86,7 +85,7 @@ export const Input: React.FC<InputProps> = ({
                 mt: 1
               }}
             >
-              {error.toString()}
+              {error.message}
             </p>
           )}
         </div>

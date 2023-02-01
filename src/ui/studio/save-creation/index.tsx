@@ -14,7 +14,7 @@ import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import useForm from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { usePageVisibility } from 'react-page-visibility';
 import { GlobalHotKeys } from 'react-hotkeys';
 
@@ -381,6 +381,11 @@ const ConnectionUnconfiguredWarning = () => {
   );
 };
 
+type Inputs = {
+  title: string;
+  presenter: string;
+};
+
 const UploadForm = ({ uploadState, handleUpload }) => {
   const {
     titleField = FORM_FIELD_REQUIRED,
@@ -393,7 +398,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const { recordings, title, presenter } = useStudioState();
   const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
 
-  const { errors, handleSubmit, register } = useForm();
+  const { formState: { errors }, handleSubmit, register } = useForm<Inputs>();
 
   // This is a bit ugly, but works. We want to make sure that the `title` and
   // `presenter` values in the studio state always equal the current value in
