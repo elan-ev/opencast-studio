@@ -6,7 +6,7 @@
 export class Bug extends Error {
   public constructor(msg: string) {
     super(`${msg} (this is a bug in Opencast Studio)`);
-    this.name = "Bug";
+    this.name = 'Bug';
   }
 }
 
@@ -17,7 +17,7 @@ export const bug = (msg: string): never => {
 
 /** Like `bug`, but specifically for code paths that should be unreachable. */
 export const unreachable = (msg?: string): never => {
-  const prefix = "reached unreachable code";
+  const prefix = 'reached unreachable code';
   throw new Bug(msg === undefined ? prefix : `${prefix}: ${msg}`);
 };
 
@@ -27,7 +27,7 @@ export const unreachable = (msg?: string): never => {
  */
 export const notNullable = <T, >(v: T | null | undefined): T => {
   if (v == null) {
-    return bug("value was unexpectedly null");
+    return bug('value was unexpectedly null');
   }
 
   return v;

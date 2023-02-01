@@ -125,7 +125,7 @@ export class SettingsManager {
       try {
         rawUserSettings = JSON.parse(stored);
       } catch {
-        console.warn("Could not parse settings stored in local storage. Ignoring.");
+        console.warn('Could not parse settings stored in local storage. Ignoring.');
       }
       self.#userSettings = validate(
         rawUserSettings,
@@ -159,7 +159,7 @@ export class SettingsManager {
           decoded = decodeHexString(input);
         } catch (e) {
           console.warn(
-            `Could not decode hex-encoded string given to GET parameter 'config'. Ignoring. Error:`,
+            'Could not decode hex-encoded string given to GET parameter \'config\'. Ignoring. Error:',
             e,
           );
           return null;
@@ -169,8 +169,8 @@ export class SettingsManager {
           return parseToml(decoded);
         } catch (e) {
           console.warn(
-            `Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. `
-              + `Ignoring. Error:`,
+            'Could not parse (as TOML) decoded hex-string given to GET parameter \'config\'. '
+              + 'Ignoring. Error:',
             e,
           );
         }
@@ -181,8 +181,8 @@ export class SettingsManager {
         if (key !== 'config') {
           console.warn(
             `URL GET parameter '${key}' is ignored as 'config' is specified. Either specify `
-            + ` all configuration via the 'config' GET parameter hex string or via direct GET `
-            + `parameters. Mixing is not allowed.`
+            + ' all configuration via the \'config\' GET parameter hex string or via direct GET '
+            + 'parameters. Mixing is not allowed.'
           );
         }
       }
@@ -239,7 +239,7 @@ export class SettingsManager {
     try {
       response = await fetch(url);
     } catch (e) {
-      console.warn(`Could not access '${settingsPath}' due to network error!`, e || "");
+      console.warn(`Could not access '${settingsPath}' due to network error!`, e || '');
       return null;
     }
 
@@ -350,7 +350,7 @@ const validate = (
   const validate = (schema: SchemaOrValidator, obj: unknown, path: string) => {
     if (typeof schema === 'function') {
       return validateValue(schema, obj, path);
-    } else if (obj && typeof obj === "object") {
+    } else if (obj && typeof obj === 'object') {
       return validateObj(schema, obj, path);
     } else {
       return unreachable();
@@ -398,7 +398,7 @@ const validate = (
     return out;
   };
 
-  return validate(SCHEMA, obj, "");
+  return validate(SCHEMA, obj, '');
 };
 
 /**
@@ -417,7 +417,7 @@ type Validator<T> = (v: any, allowParse: boolean, src: SettingsSource) => T;
 const types = {
   'string': v => {
     if (typeof v !== 'string') {
-      throw new Error("is not a string, but should be");
+      throw new Error('is not a string, but should be');
     }
     return v;
   },
@@ -433,7 +433,7 @@ const types = {
 
       throw new Error("can't be parsed as integer");
     } else {
-      throw new Error("is not an integer");
+      throw new Error('is not an integer');
     }
   },
   'boolean': (v, allowParse): boolean => {
@@ -450,7 +450,7 @@ const types = {
       }
       throw new Error("can't be parsed as boolean");
     } else {
-      throw new Error("is not a boolean");
+      throw new Error('is not a boolean');
     }
   },
   positiveInteger: (v, allowParse): number => {
@@ -461,7 +461,7 @@ const types = {
 
     return i;
   },
-  "array": elementType => {
+  'array': elementType => {
     return (v, allowParse, src) => {
       if (typeof v === 'string' && allowParse) {
         try {
@@ -472,7 +472,7 @@ const types = {
       }
 
       if (!Array.isArray(v)) {
-        throw new Error("is not an array");
+        throw new Error('is not an array');
       }
 
       return v.map(element => {
@@ -511,8 +511,8 @@ const metaDataField: Validator<FormFieldState> = v => {
 const onlyFromServer = <Out, >(inner: Validator<Out>): Validator<Out> => (
   (v, allowParse, src) => {
     if (src !== 'src-server') {
-      throw new Error(`this configuration cannot be specified via the URL or local storage, `
-        + `but must be specified in 'settings.toml'`);
+      throw new Error('this configuration cannot be specified via the URL or local storage, '
+        + 'but must be specified in \'settings.toml\'');
     }
 
     return inner(v, allowParse, src);
@@ -583,7 +583,7 @@ const SCHEMA = {
     target: v => {
       types.string(v);
       if (!(v.startsWith('/') || v.startsWith('http'))) {
-        throw new Error(`has to start with '/' or 'http'`);
+        throw new Error('has to start with \'/\' or \'http\'');
       }
       return v;
     },
@@ -624,7 +624,7 @@ export const Provider: React.FC<ProviderProps> = ({ settingsManager, children })
 
   // This debug output will be useful for future debugging sessions.
   useEffect(() => {
-    console.debug("Current settings: ", settings);
+    console.debug('Current settings: ', settings);
   });
 
   return (

@@ -120,10 +120,10 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
         }}
         // Otherwise Typescript errors as `Button` does not have these props.
         {...{
-          target: "_blank",
+          target: '_blank',
           download: downloadName,
           href: url,
-          rel: "noopener noreferrer",
+          rel: 'noopener noreferrer',
         }}
         onClick={onDownload}
       >

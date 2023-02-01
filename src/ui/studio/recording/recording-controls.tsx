@@ -5,7 +5,7 @@ import { jsx } from 'theme-ui';
 import { useEffect, useRef } from 'react';
 import { Beforeunload } from 'react-beforeunload';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from "react-router";
+import { useHistory } from 'react-router';
 import { GlobalHotKeys } from 'react-hotkeys';
 
 import Recorder, { OnStopCallback } from './recorder';

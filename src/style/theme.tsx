@@ -57,7 +57,7 @@ const colors = {
       singleKey_border: '#404040',
     }
   }
-} satisfies Theme["colors"];
+} satisfies Theme['colors'];
 
 const base = {
   breakpoints: ['576px', '768px', '992px', '1200px'],
@@ -266,7 +266,7 @@ const base = {
     p: 3,
     maxWidth: ['none', 'none', 960, 1152, 1344]
   }
-} satisfies Omit<Theme, "colorz"> & { colorz: any };
+} satisfies Omit<Theme, 'colorz'> & { colorz: any };
 
 // Extend the `Theme` interface to accomodate our own properties.
 declare module 'theme-ui' {

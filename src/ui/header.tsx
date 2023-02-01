@@ -13,7 +13,7 @@ import {
   faInfoCircle,
   faVideo,
   faKeyboard,
-} from "@fortawesome/free-solid-svg-icons";
+} from '@fortawesome/free-solid-svg-icons';
 
 import { useStudioState } from '../studio-state';
 
@@ -199,7 +199,7 @@ const Navigation = props => {
       <nav
         ref={n => {
           if (n) {
-            n.style.height = isOpened ? n.scrollHeight + 'px' : "";
+            n.style.height = isOpened ? n.scrollHeight + 'px' : '';
           }
         }}
         sx={{

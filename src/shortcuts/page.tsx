@@ -119,7 +119,7 @@ const Entry: React.FC<EntryProps> = ({ name, sequences }) => {
             </div>
           ))}
           <div sx={{ alignSelf: 'center', lineHeight: '32px', margin: '0 5px' }}>
-            { sequences.length - 1 !== index && t("sequence-seperator") }
+            { sequences.length - 1 !== index && t('sequence-seperator') }
           </div>
         </div>
       ))}

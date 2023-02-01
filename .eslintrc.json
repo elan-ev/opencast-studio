@@ -9,6 +9,7 @@
     "react/no-unknown-property": ["error", { "ignore": ["sx"] }],
     "no-unused-expressions": "off",
     "@babel/no-unused-expressions": "warn",
+    "quotes": ["warn", "single", { "avoidEscape": true }],
 
     "arrow-parens": ["error", "as-needed"],
     "arrow-spacing": "error",

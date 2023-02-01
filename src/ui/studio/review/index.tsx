@@ -308,7 +308,7 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
 };
 
 type CutControlsProps = SharedProps & {
-  marker: "start" | "end",
+  marker: 'start' | 'end',
   value: number | null,
   control: number | null,
   invariant: (self: number, control: number) => boolean;
@@ -322,8 +322,8 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
   const { t } = useTranslation();
 
   const handlers = {
-    CUT_LEFT: () => document.getElementById("leftmarker")?.click(),
-    CUT_RIGHT: () => document.getElementById("rightmarker")?.click(),
+    CUT_LEFT: () => document.getElementById('leftmarker')?.click(),
+    CUT_RIGHT: () => document.getElementById('rightmarker')?.click(),
   };
 
   const state = (
@@ -338,12 +338,12 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
               }
             }} />
           </Trans>
-          <Tooltip content={t(`review-remove-cut-point`)}>
+          <Tooltip content={t('review-remove-cut-point')}>
             <IconButton
               ref={ref} // for DELETE_CROP_MARK
               onClick={
                 () => recordingDispatch({
-                  type: marker === "start" ? "UPDATE_START" : "UPDATE_END",
+                  type: marker === 'start' ? 'UPDATE_START' : 'UPDATE_END',
                   time: null,
                 })}
             >

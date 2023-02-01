@@ -86,7 +86,7 @@ export class Opencast {
   updateGlobalOc: null | ((oc: Opencast) => void) = null;
 
 
-  constructor(settings: Settings["opencast"]) {
+  constructor(settings: Settings['opencast']) {
     // If the server URL is not given, we stay in unconfigured state and
     // immediately return.
     if (settings?.serverUrl == null) {
@@ -116,7 +116,7 @@ export class Opencast {
   }
 
   /** Creates a new instance from the settings and calls `updateUser` on it. */
-  static async init(settings: Settings["opencast"]) {
+  static async init(settings: Settings['opencast']) {
     let self = new Opencast(settings);
     await self.updateUser();
     return self;
@@ -351,7 +351,7 @@ export class Opencast {
     presenter: string,
     start: number | null,
     end: number | null,
-    uploadSettings: Settings["upload"],
+    uploadSettings: Settings['upload'],
     onProgress: (p: number) => void,
   }): Promise<UploadState> {
     // Refresh connection and check if we are ready to upload.
@@ -373,7 +373,7 @@ export class Opencast {
     // Actually upload
     try {
       // Create new media package
-      let mediaPackage = await this.request("ingest/createMediaPackage")
+      let mediaPackage = await this.request('ingest/createMediaPackage')
         .then(response => response.text());
 
       // Add metadata to media package
@@ -410,7 +410,7 @@ export class Opencast {
         throw e;
       }
 
-      console.error("Error occured during upload: ", e);
+      console.error('Error occured during upload: ', e);
 
       if (e instanceof NetworkError) {
         return 'network_error';
@@ -436,7 +436,7 @@ export class Opencast {
     mediaPackage: string,
     title: string,
     presenter: string,
-    uploadSettings: Settings["upload"],
+    uploadSettings: Settings['upload'],
   }) {
     const seriesId = uploadSettings?.seriesId;
     const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
@@ -447,7 +447,7 @@ export class Opencast {
     body.append('dublinCore', encodeURIComponent(dcc));
     body.append('flavor', 'dublincore/episode');
 
-    return await this.request("ingest/addDCCatalog", { method: 'post', body })
+    return await this.request('ingest/addDCCatalog', { method: 'post', body })
       .then(response => response.text());
   }
 
@@ -457,7 +457,7 @@ export class Opencast {
    */
   async attachAcl({ mediaPackage, uploadSettings }: {
     mediaPackage: string,
-    uploadSettings: Settings["upload"],
+    uploadSettings: Settings['upload'],
   }) {
     const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
       ? DEFAULT_ACL_TEMPLATE
@@ -469,7 +469,7 @@ export class Opencast {
     body.append('mediaPackage', mediaPackage);
     body.append('BODY', new Blob([acl]), 'acl.xml');
 
-    return await this.request("ingest/addAttachment", { method: 'post', body: body })
+    return await this.request('ingest/addAttachment', { method: 'post', body: body })
       .then(response => response.text());
   }
 
@@ -483,7 +483,7 @@ export class Opencast {
     body.append('flavor', 'smil/cutting');
     body.append('mediaPackage', mediaPackage);
     body.append('BODY', new Blob([smil({ start, end })]), 'cutting.smil');
-    const response = await this.request("ingest/addCatalog", { method: 'post', body });
+    const response = await this.request('ingest/addCatalog', { method: 'post', body });
     return await response.text();
   }
 
@@ -569,7 +569,7 @@ export class Opencast {
    */
   async finishIngest({ mediaPackage, uploadSettings }: {
     mediaPackage: string,
-    uploadSettings: Settings["upload"],
+    uploadSettings: Settings['upload'],
   }) {
     const workflowId = uploadSettings?.workflowId;
 
@@ -578,7 +578,7 @@ export class Opencast {
     if (workflowId) {
       body.append('workflowDefinitionId', workflowId);
     }
-    await this.request("ingest/ingest", { method: 'post', body: body });
+    await this.request('ingest/ingest', { method: 'post', body: body });
   }
 
   /** Returns the current state of the connection to the OC server. */
@@ -607,7 +607,7 @@ export class Opencast {
   prettyServerUrl() {
     const url = this.#serverUrl;
 
-    return url && url.startsWith("https")
+    return url && url.startsWith('https')
       ? new URL(url).hostname
       : null;
   }
@@ -721,7 +721,7 @@ export const Provider: React.FC<ProviderProps> = ({ initial, children }) => {
 
   // This debug output will be useful for future debugging sessions.
   useEffect(() => {
-    console.debug("Current Opencast connection: ", opencast);
+    console.debug('Current Opencast connection: ', opencast);
 
     // To avoid problems of session timeouts, we request `info/me` every 5
     // minutes. The additional server load should be negligible, it won't

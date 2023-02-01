@@ -18,7 +18,7 @@ export default class Recorder {
 
   constructor(
     stream: MediaStream,
-    settings: Settings["recording"],
+    settings: Settings['recording'],
     onStop: OnStopCallback,
   ) {
     // Figure out MIME type.
@@ -27,14 +27,14 @@ export default class Recorder {
       mimeType = (settings?.mimes || [])
         .find(mime => MediaRecorder.isTypeSupported(mime));
       if (mimeType) {
-        console.debug("using first supported MIME type from settings: ", mimeType);
+        console.debug('using first supported MIME type from settings: ', mimeType);
       } else if (settings?.mimes) {
-        console.debug("None of the MIME types specified in settings are supported by "
-          + "this `MediaRecorder`");
+        console.debug('None of the MIME types specified in settings are supported by '
+          + 'this `MediaRecorder`');
       }
     } else if (settings?.mimes) {
-      console.debug("MIME types were specified, but `MediaRecorder.isTypeSupported` is not "
-        + "supported by your browser");
+      console.debug('MIME types were specified, but `MediaRecorder.isTypeSupported` is not '
+        + 'supported by your browser');
     }
 
 
@@ -57,7 +57,7 @@ export default class Recorder {
     if (event.data.size > 0) {
       this.#data.push(event.data);
     } else {
-      console.log("Recording data has size 0!", event);
+      console.log('Recording data has size 0!', event);
     }
   }
 

@@ -7,8 +7,8 @@ import { FieldError, FieldValues, Path, useForm, Validate } from 'react-hook-for
 
 
 type InputProps<I extends FieldValues, F> =
-  Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue"> &
-  Pick<ReturnType<typeof useForm<I>>, "register"> & {
+  Pick<JSX.IntrinsicElements['input'], 'onChange' | 'autoComplete' | 'defaultValue'> &
+  Pick<ReturnType<typeof useForm<I>>, 'register'> & {
   /** Human readable string describing the field. */
   label: string,
   name: Path<I>,

@@ -163,8 +163,8 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       stopDisplayCapture(stream, dispatch);
       startDisplayCapture(dispatch, settings, constraints);
     } else {
-      setOpt(LAST_VIDEO_DEVICE_KEY, (merged as Record<string, string>)["deviceId"]);
-      setOpt(CAMERA_ASPECT_RATIO_KEY, (merged as Record<string, string>)["aspectRatio"]);
+      setOpt(LAST_VIDEO_DEVICE_KEY, (merged as Record<string, string>)['deviceId']);
+      setOpt(CAMERA_ASPECT_RATIO_KEY, (merged as Record<string, string>)['aspectRatio']);
       setOpt(CAMERA_QUALITY_KEY, merged.quality);
 
       stopUserCapture(stream, dispatch);

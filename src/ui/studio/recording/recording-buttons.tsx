@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 
-type ButtonProps = Omit<JSX.IntrinsicElements["button"], "css"> & {
+type ButtonProps = Omit<JSX.IntrinsicElements['button'], 'css'> & {
   large?: boolean;
 };
 

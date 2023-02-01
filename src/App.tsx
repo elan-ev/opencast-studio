@@ -70,7 +70,7 @@ const Routes: React.FC<Props> = ({ settingsManager, userHasWebcam }) => {
         </Route>
 
         <Route path="/*">
-          <Redirect to={{ pathname: "/", search: location.search }} />
+          <Redirect to={{ pathname: '/', search: location.search }} />
         </Route>
       </Switch>
     </Fragment>

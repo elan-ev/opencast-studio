@@ -135,7 +135,7 @@ const About: React.FC = () => (
         commit{' '}
         <Themed.a
           aria-label="Git commit on GitHub"
-          href={"https://github.com/elan-ev/opencast-studio/commit/"
+          href={'https://github.com/elan-ev/opencast-studio/commit/'
                 + process.env.REACT_APP_GIT_SHA }
         >
           {process.env.REACT_APP_GIT_SHA || '?'}

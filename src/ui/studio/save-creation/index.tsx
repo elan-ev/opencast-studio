@@ -371,7 +371,7 @@ const ConnectionUnconfiguredWarning = () => {
       <Trans i18nKey="warning-missing-connection-settings">
         Warning.
         <Link
-          to={{ pathname: "/settings", search: location.search }}
+          to={{ pathname: '/settings', search: location.search }}
           sx={{ variant: 'styles.a', color: colorMode === 'dark' ? 'rgba(255, 255, 34, 0.8)' : '#ff2' }}
         >
           settings
@@ -431,7 +431,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
         components={{ 1: <code /> }}
         values={{ server: opencast.prettyServerUrl() }}
         sx={{
-          "& > code": {
+          '& > code': {
             backgroundColor: 'rgba(0, 0, 0, 0.1)',
             borderRadius: '5px',
             padding: '1px 3px',
@@ -547,7 +547,7 @@ const NotConnectedWarning = () => {
           <Trans i18nKey="save-creation-warn-login-failed">
             Failed.
             <Link
-              to={{ pathname: "/settings", search: location.search }}
+              to={{ pathname: '/settings', search: location.search }}
               sx={{ variant: 'styles.a', color: '#ff2' }}
             >
               settings

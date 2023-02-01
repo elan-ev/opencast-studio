@@ -13,7 +13,7 @@ export default function PreviewAudio({ stream }) {
     if (canvas) {
       const ctx = canvas.getContext('2d');
       if (ctx == null) {
-        throw new Error("Could not get 2D context for canvas");
+        throw new Error('Could not get 2D context for canvas');
       }
       ctx.lineWidth = 2;
       ctx.strokeStyle = '#f1c40f';

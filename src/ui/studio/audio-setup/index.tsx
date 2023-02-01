@@ -174,7 +174,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
         >
           {
             devices.map((d, i) => (
-              <option key={i} value={d.deviceId}>{ d.label || "unlabeled microphone" }</option>
+              <option key={i} value={d.deviceId}>{ d.label || 'unlabeled microphone' }</option>
             ))
           }
         </select>

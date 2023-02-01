@@ -26,7 +26,7 @@ const resources = {
   zh: { translation: zhTranslations },
 };
 
-export type TranslationKey = keyof CustomTypeOptions["resources"]["translation"];
+export type TranslationKey = keyof CustomTypeOptions['resources']['translation'];
 
 i18n
   .use(initReactI18next)

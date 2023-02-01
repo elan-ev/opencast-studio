@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui';
 
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faCircleNotch, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Button } from '@theme-ui/components';
@@ -96,7 +96,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
       default:
         setStatus('error');
         setError('internal error :(');
-        bug("invalid state reached...");
+        bug('invalid state reached...');
     }
   }
 
@@ -131,7 +131,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
               } catch (e) {
                 let err = t('upload-settings-invalid-url');
                 if (!value.startsWith('https://') && !value.startsWith('http://')) {
-                  err += " " + t('upload-settings-invalid-url-http-start');
+                  err += ' ' + t('upload-settings-invalid-url-http-start');
                 }
                 return err;
               }
@@ -167,7 +167,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
             /> }
             { hasRecording && status === 'saved' && (
               <Link
-                to={{ pathname: "/", search: location.search }}
+                to={{ pathname: '/', search: location.search }}
                 sx={{ ml: 3, variant: 'styles.a' }}
               >
                 {t('settings-back-to-recording')}

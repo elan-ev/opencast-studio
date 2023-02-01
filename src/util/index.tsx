@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { Dispatcher } from "../studio-state";
-import { bug } from "./err";
+import { useContext } from 'react';
+import { Dispatcher } from '../studio-state';
+import { bug } from './err';
 
 
 /**
@@ -29,8 +29,8 @@ export const onMobileDevice = () =>
  * https://github.com/elan-ev/opencast-studio/issues/204
  */
 export const isDisplayCaptureSupported = () =>
-  "mediaDevices" in navigator &&
-  "getDisplayMedia" in navigator.mediaDevices &&
+  'mediaDevices' in navigator &&
+  'getDisplayMedia' in navigator.mediaDevices &&
   !onMobileDevice();
 
 /**
@@ -63,26 +63,26 @@ export const dimensionsOf = (stream: MediaStream | null): [number, number] | nul
 export const mimeToExt = (mime: string) => {
   if (mime) {
     const lowerMime = mime.toLowerCase();
-    if (lowerMime.startsWith("video/webm")) {
-      return "webm";
+    if (lowerMime.startsWith('video/webm')) {
+      return 'webm';
     }
-    if (lowerMime.startsWith("video/mp4")) {
-      return "mp4";
+    if (lowerMime.startsWith('video/mp4')) {
+      return 'mp4';
     }
-    if (lowerMime.startsWith("video/x-matroska")) {
-      return "mkv";
+    if (lowerMime.startsWith('video/x-matroska')) {
+      return 'mkv';
     }
-    if (lowerMime.startsWith("video/avi")) {
-      return "avi";
+    if (lowerMime.startsWith('video/avi')) {
+      return 'avi';
     }
-    if (lowerMime.startsWith("video/quicktime")) {
-      return "mov";
+    if (lowerMime.startsWith('video/quicktime')) {
+      return 'mov';
     }
   }
 
   // If we know nothing, our best guess is webm; except for Safari which does
   // not understand webm: there it's mp4.
-  return onSafari() ? "mp4" : "webm";
+  return onSafari() ? 'mp4' : 'webm';
 };
 
 /**

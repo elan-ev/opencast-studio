@@ -1,5 +1,5 @@
-import { Settings } from "../../settings";
-import { Dispatcher } from "../../studio-state";
+import { Settings } from '../../settings';
+import { Dispatcher } from '../../studio-state';
 
 
 const mergeHeightConstraint = (
@@ -8,7 +8,7 @@ const mergeHeightConstraint = (
   fallbackIdeal?: number,
 ) => {
   const maxField = maxHeight && { max: maxHeight };
-  const constraintIdeal = typeof videoConstraints?.height === "number"
+  const constraintIdeal = typeof videoConstraints?.height === 'number'
     ? videoConstraints.height
     : videoConstraints.height?.ideal;
   const ideal = constraintIdeal ?? fallbackIdeal;

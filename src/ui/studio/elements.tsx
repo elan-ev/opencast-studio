@@ -1,7 +1,7 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
-import useResizeObserver from "use-resize-observer/polyfilled";
+import useResizeObserver from 'use-resize-observer/polyfilled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Flex } from '@theme-ui/components';
@@ -106,7 +106,7 @@ export function ActionButtons({ prev, next, children }: ActionButtonsProps) {
 const VideoBoxResizeContext = React.createContext<(() => void) | null>(null);
 
 export const useVideoBoxResize = () =>
-  usePresentContext(VideoBoxResizeContext, "useVideoBoxResize");
+  usePresentContext(VideoBoxResizeContext, 'useVideoBoxResize');
 
 export type VideoBoxProps = {
   gap?: number;
@@ -281,7 +281,7 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }:
       const colArea = colWidths[0] * colHeights[0] + colWidths[1] * colHeights[1];
       let widths: number[];
       let heights: number[];
-      let flexDirection: "row" | "column";
+      let flexDirection: 'row' | 'column';
       if (rowArea > colArea) {
         flexDirection = 'row';
         widths = rowWidths;

@@ -16,7 +16,7 @@ export default function MediaDevices({ recordingState }) {
 
   const paused = recordingState === STATE_PAUSED;
 
-  let children: VideoBoxProps["children"] = [];
+  let children: VideoBoxProps['children'] = [];
   if (displayStream || displayUnexpectedEnd) {
     children.push({
       body: <MediaDevice stream={displayStream} paused={paused} />,
