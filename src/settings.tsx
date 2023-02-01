@@ -6,6 +6,7 @@ import deepmerge from 'deepmerge';
 import parseToml from '@iarna/toml/parse-string';
 
 import { decodeHexString, usePresentContext } from './util';
+import { unreachable } from './util/err';
 
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
@@ -234,7 +235,7 @@ export class SettingsManager {
     const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
     const base = settingsPath.startsWith('/') ? '' : basepath;
     const url = `${window.location.origin}${base}${settingsPath}`;
-    let response;
+    let response: Response;
     try {
       response = await fetch(url);
     } catch (e) {
@@ -352,7 +353,7 @@ const validate = (
     } else if (obj && typeof obj === "object") {
       return validateObj(schema, obj, path);
     } else {
-      throw new Error("bug: unreachable");
+      return unreachable();
     }
   };
 

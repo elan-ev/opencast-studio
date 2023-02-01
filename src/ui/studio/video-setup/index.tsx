@@ -148,8 +148,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
       />;
       break;
     default:
-      console.error('bug: active source has an unexpected value');
-      return <p>Something went very wrong (internal error) :-(</p>;
+      return unreachable('bug: active source has an unexpected value');
   };
 
   return (

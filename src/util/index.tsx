@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { Dispatcher } from "../studio-state";
+import { bug } from "./err";
 
 
 /**
@@ -190,9 +191,6 @@ export const getUniqueDevices = (
 
 /** Like `useContext` but throws an error if the context is `null`. */
 export const usePresentContext = <T, >(context: React.Context<T | null>, hookName: string): T => {
-  const out = useContext(context);
-  if (out == null) {
-    throw new Error(`bug: hook '${hookName}' called without parent context provider`);
-  }
-  return out;
+  return useContext(context)
+    ?? bug(`hook '${hookName}' called without parent context provider`);
 };

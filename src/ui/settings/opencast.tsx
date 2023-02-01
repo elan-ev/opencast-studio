@@ -26,6 +26,7 @@ import Notification from '../notification';
 import { SettingsSection } from './elements';
 import { Input } from '../elements';
 import { useStudioState } from '../../studio-state';
+import { bug } from '../../util/err';
 
 
 function OpencastSettings({ settingsManager }) {
@@ -80,9 +81,9 @@ function OpencastSettings({ settingsManager }) {
       case STATE_CONNECTED:    // <- login data is provided in some way -> state impossible
       case STATE_UNCONFIGURED: // <- server URL is required -> state impossible
       default:
-        console.error("bug: invalid state reached...");
         setStatus('error');
         setError('internal error :(');
+        bug("invalid state reached...");
     }
   }
 

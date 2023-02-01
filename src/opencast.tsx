@@ -8,6 +8,7 @@ import Mustache from 'mustache';
 import { recordingFileName, usePresentContext } from './util';
 import { Settings } from './settings';
 import { Recording } from './studio-state';
+import { bug } from './util/err';
 
 
 /** The server URL was not specified. */
@@ -124,7 +125,7 @@ export class Opencast {
   /** Updates the global OC instance from `this` to `newInstance`. */
   setGlobalInstance(newInstance: Opencast) {
     if (!this.updateGlobalOc) {
-      console.error("bug: 'updateGlobalOc' not set");
+      bug("'updateGlobalOc' not set");
     }
 
     this.updateGlobalOc?.(newInstance);
