@@ -232,7 +232,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
                 transform: isExpanded ? 'none' : 'rotate(45deg)',
               },
               '&:focus-visible': {
-                outline: theme => `5px solid ${theme.colors.primary}`,
+                outline: theme => `5px solid ${theme.colorz.primary}`,
                 outlineOffset: '-2px',
                 backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 color: 'white',
@@ -260,7 +260,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
         boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
       }}>
         <div tabIndex={-1} sx={{
-          border: theme => `1px solid ${theme.colors.gray[0]}`,
+          border: theme => `1px solid ${theme.colorz.gray[0]}`,
           height: '100%',
           overflow: 'auto',
         }}>
@@ -283,7 +283,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
               px: 2,
               fontSize: '16px',
               lineHeight: '20px',
-              border: theme => `1px solid ${theme.colors.gray[2]}`,
+              border: theme => `1px solid ${theme.colorz.gray[2]}`,
             }}>
               <Trans i18nKey="sources-video-preferences-note">
                 <strong>Note:</strong> Explanation.
@@ -322,7 +322,7 @@ const PrefValue: React.FC<React.PropsWithChildren> = ({ children }) => (
       overflowX: 'auto',
       lineHeight: '30px',
       '*:focus-visible': {
-        outline: theme => `5px solid ${theme.colors.primary}`,
+        outline: theme => `5px solid ${theme.colorz.primary}`,
         outlineOffset: '-3px',
       }
     }}>
@@ -464,7 +464,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       sx={{
         display: 'none',
         '&+label': {
-          border: theme => `2px solid ${theme.colors.gray[0]}`,
+          border: theme => `2px solid ${theme.colorz.gray[0]}`,
           p: '1px 4px',
           borderRadius: '6px',
           mx: 1,

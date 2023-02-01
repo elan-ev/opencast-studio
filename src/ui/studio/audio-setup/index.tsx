@@ -246,7 +246,7 @@ const OptionButton: React.FC<OptionButtonProps> = ({ children, icon, label, onCl
         flex: '0 1 50%',
         p: 2,
         '&:hover': {
-          boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
+          boxShadow: theme => `0 0 10px ${theme.colorz.gray[2]}`,
           filter: 'brightness(1.2)',
         },
       }}

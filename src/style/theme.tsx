@@ -24,6 +24,41 @@ const baseButton = {
   }
 };
 
+const colors = {
+  text: '#000',
+  background: '#fff',
+  button_fg: '#fff',
+  button_bg: '#363636',
+  primary: '#47af7a',
+  error: '#f14668',
+  gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
+  element_bg: '#fff',
+  notification_text: '#fff',
+  tooltip: '#363636',
+  tooltip_text: '#fff',
+  focus: ['#363636', '#dddddd', '#dddddd', '#aaaaaa'],
+  singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
+  singleKey_border: 'Gainsboro',
+  modes: {
+    dark: {
+      text: 'rgba(255, 255, 255, 0.87)',
+      background: '#1C1C1E',
+      button_fg: '#fff',
+      button_bg: '#666666',
+      primary: '#388c61',
+      error: 'rgba(241, 70, 104, 0.8)',
+      gray: ['#f5f5f5', '#dddddd', '#aaaaaa', '#666666', '#363636'],
+      element_bg: '#363636',
+      notification_text: 'rgba(255, 255, 255, 0.9)',
+      tooltip: '#dddddd',
+      tooltip_text: '#000',
+      focus: ['#dddddd', '#363636', '#dddddd', '#dddddd'],
+      singleKey_bg: 'linear-gradient(180deg, rgba(40,40,40,1) 0%, rgba(30,30,30,1) 100%)',
+      singleKey_border: '#404040',
+    }
+  }
+} satisfies Theme["colors"];
+
 const base = {
   breakpoints: ['576px', '768px', '992px', '1200px'],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
@@ -50,40 +85,8 @@ const base = {
     useLocalStorage: true,
     initialColorModeName: 'light',
   },
-  colors: {
-    text: '#000',
-    background: '#fff',
-    button_fg: '#fff',
-    button_bg: '#363636',
-    primary: '#47af7a',
-    error: '#f14668',
-    gray: ['#363636', '#666666', '#aaaaaa', '#dddddd', '#f5f5f5'],
-    element_bg: '#fff',
-    notification_text: '#fff',
-    tooltip: '#363636',
-    tooltip_text: '#fff',
-    focus: ['#363636', '#dddddd', '#dddddd', '#aaaaaa'],
-    singleKey_bg: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,245,1) 100%)',
-    singleKey_border: 'Gainsboro',
-    modes: {
-      dark: {
-        text: 'rgba(255, 255, 255, 0.87)',
-        background: '#1C1C1E',
-        button_fg: '#fff',
-        button_bg: '#666666',
-        primary: '#388c61',
-        error: 'rgba(241, 70, 104, 0.8)',
-        gray: ['#f5f5f5', '#dddddd', '#aaaaaa', '#666666', '#363636'],
-        element_bg: '#363636',
-        notification_text: 'rgba(255, 255, 255, 0.9)',
-        tooltip: '#dddddd',
-        tooltip_text: '#000',
-        focus: ['#dddddd', '#363636', '#dddddd', '#dddddd'],
-        singleKey_bg: 'linear-gradient(180deg, rgba(40,40,40,1) 0%, rgba(30,30,30,1) 100%)',
-        singleKey_border: '#404040',
-      }
-    }
-  },
+  colors: colors,
+  colorz: colors,
   text: {
     text: {
       fontWeight: 'body',
@@ -118,7 +121,7 @@ const base = {
       ...baseButton,
       bg: 'background',
       color: 'text',
-      border: theme => `1px solid ${theme.colors.gray[1]}`,
+      border: theme => `1px solid ${theme.colorz.gray[1]}`,
       '&:not(:disabled):hover, &:not(:disabled):focus': {
         bg: 'gray.3'
       }
@@ -147,11 +150,11 @@ const base = {
         boxShadow: '0 0 0 rgb(255, 255, 255) !important',
       },
       '*:focus-visible': {
-        outline: theme => `5px solid ${theme.colors.focus[0]}`,
+        outline: theme => `5px solid ${theme.colorz.focus[0]}`,
         outlineOffset: '-5px',
       },
       '.tippy-box > .tippy-arrow::before': {
-        color: theme => `${theme.colors.tooltip}`
+        color: theme => `${theme.colorz.tooltip}`
       },
     },
     h1: {
@@ -232,11 +235,11 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.focus[0]}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colorz.focus[0]}`
       },
       '&[aria-invalid="true"]': {
         borderColor: 'error',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.error}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colorz.error}`
       }
     },
     select: {
@@ -249,7 +252,7 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colors.focus[0]}}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colorz.focus[0]}}`
       }
     },
     progress: {
@@ -263,7 +266,7 @@ const base = {
     p: 3,
     maxWidth: ['none', 'none', 960, 1152, 1344]
   }
-} satisfies Theme;
+} satisfies Omit<Theme, "colorz"> & { colorz: any };
 
 // Extend the `Theme` interface to accomodate our own properties.
 declare module 'theme-ui' {
@@ -276,6 +279,15 @@ declare module 'theme-ui' {
       p: number,
       maxWidth: ['none', 'none', 960, 1152, 1344],
     },
+
+    // Huff, this is extra... sketchy. In this project we often use
+    // `theme.colorz.something` where `theme` is just `Theme` from `theme-ui`.
+    // But there, `colors` is an optional property. And typescript obviously
+    // does not know about which colors we defined. The intuitive idea would be
+    // to change the definition of `Theme` to have the specific type of our
+    // theme. That's unfortunately not possible though. One can only add fields
+    // to interfaces. So to get type safety, we use this stupid `colorz`.
+    colorz: typeof colors,
   }
 }
 

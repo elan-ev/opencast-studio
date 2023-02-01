@@ -15,8 +15,8 @@ const Tooltip = ({ content, ...props }) => (
 
     sx={{
       fontSize: '16px',
-      backgroundColor: theme => theme.colors.tooltip,
-      color: theme => theme.colors.tooltip_text,
+      backgroundColor: theme => theme.colorz.tooltip,
+      color: theme => theme.colorz.tooltip_text,
       lineHeight: 'normal',
       fontFamily: 'Open Sans',
     }}

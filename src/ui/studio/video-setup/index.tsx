@@ -289,7 +289,7 @@ const OptionButton: React.FC<OptionButtonProps> = (
       sx={{
         fontFamily: 'inherit',
         color: disabled ? 'gray.2' : 'gray.0',
-        border: theme => `2px solid ${disabled ? theme.colors.gray[2] : 'black'}`,
+        border: theme => `2px solid ${disabled ? theme.colorz.gray[2] : 'black'}`,
         backgroundColor: 'gray.4',
         borderRadius: '8px',
         flex: ['1 1 auto', '0 1 100%'],
@@ -299,7 +299,7 @@ const OptionButton: React.FC<OptionButtonProps> = (
         maxHeight: '250px',
         p: 2,
         '&:hover': disabled ? {} : {
-          boxShadow: theme => `0 0 10px ${theme.colors.gray[2]}`,
+          boxShadow: theme => `0 0 10px ${theme.colorz.gray[2]}`,
           filter: 'brightness(1.2)',
         },
       }}

@@ -14,7 +14,7 @@ export const SettingsSection = ({ title, children }) => (
   >
     <Themed.h2
       sx={{
-        borderBottom: theme => `1px solid ${theme.colors.gray[2]}`,
+        borderBottom: theme => `1px solid ${theme.colorz.gray[2]}`,
         pb: 1,
         my: 3,
         mx: 0

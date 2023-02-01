@@ -205,13 +205,13 @@ export default function SaveCreation(props: StepProps) {
           flex: ['0', '0', '1 0 50%'],
           p: [2, 2, '0 32px'],
           '&:last-child': {
-            borderLeft: theme => ['none', 'none', `1px solid ${theme.colors.gray[3]}`],
+            borderLeft: theme => ['none', 'none', `1px solid ${theme.colorz.gray[3]}`],
           },
         },
       }}>
         <div>
           <Themed.h2
-            sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
+            sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colorz.gray[2]}` }}
           >{t('save-creation-subsection-title-upload')}</Themed.h2>
 
           <div sx={{ margin: 'auto' }}>
@@ -221,7 +221,7 @@ export default function SaveCreation(props: StepProps) {
 
         <div>
           <Themed.h2
-            sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors.gray[2]}` }}
+            sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colorz.gray[2]}` }}
           >{t('save-creation-subsection-title-download')}</Themed.h2>
 
           <DownloadBox {...{ title, presenter }} />
