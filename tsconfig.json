@@ -3,6 +3,14 @@
     "target": "es2020",
     "module": "CommonJS",
     "noEmit": true,
+
+    // We want to use strict mode eventually, but currently there are still too
+    // many errors caused by these specific rules. So we disabled them for
+    // now.
+    "strict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+
     "esModuleInterop": true,
     "jsx": "react",
     "resolveJsonModule": true,

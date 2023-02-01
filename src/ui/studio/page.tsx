@@ -1,6 +1,7 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
+import { Dispatch, SetStateAction } from 'react';
 
 import Steps from './steps';
 
@@ -14,7 +15,7 @@ import { isRecordingSupported } from '../../util';
 
 type Props = {
   activeStep: number;
-  updateActiveStep: (v: number) => void;
+  updateActiveStep: Dispatch<SetStateAction<number>>;
   userHasWebcam: boolean;
 };
 
