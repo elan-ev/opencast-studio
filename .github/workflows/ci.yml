@@ -18,7 +18,6 @@ jobs:
     # Prepare test deployment
     - name: Build for test deployment
       env:
-        REACT_APP_ENABLE_SENTRY: 1
         REACT_APP_INCLUDE_LEGAL_NOTICES: 1
       run: |
         builddate="$(date --utc '+%Y-%m-%d_%H-%M-%S')"
@@ -48,7 +47,6 @@ jobs:
     - name: Build for prod deployment
       if: github.repository_owner == 'elan-ev' && github.ref == 'refs/heads/master'
       env:
-        REACT_APP_ENABLE_SENTRY: 1
         REACT_APP_INCLUDE_LEGAL_NOTICES: 1
       run: |
         rm -rf build
