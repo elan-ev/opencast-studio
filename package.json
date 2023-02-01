@@ -38,7 +38,7 @@
     "react-router-dom": "^5.3.4",
     "react-scripts": "^5.0.1",
     "theme-ui": "^0.14.7",
-    "use-resize-observer": "^7.0.1"
+    "use-resize-observer": "^9.1.0"
   },
   "repository": {
     "type": "git",
