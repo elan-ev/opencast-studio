@@ -26,10 +26,6 @@ import {
   STATE_INCORRECT_LOGIN,
   STATE_RESPONSE_NOT_OK,
   STATE_INVALID_RESPONSE,
-  UPLOAD_SUCCESS,
-  UPLOAD_NETWORK_ERROR,
-  UPLOAD_NOT_AUTHORIZED,
-  UPLOAD_UNEXPECTED_RESPONSE,
 } from '../../../opencast';
 import { useSettings, FORM_FIELD_HIDDEN, FORM_FIELD_REQUIRED } from '../../../settings';
 import {
@@ -153,19 +149,19 @@ export default function SaveCreation(props: StepProps) {
     progressHistory = [];
 
     switch (result) {
-      case UPLOAD_SUCCESS:
+      case 'success':
         dispatch({ type: 'UPLOAD_SUCCESS' });
         break;
-      case UPLOAD_NETWORK_ERROR:
+      case 'network_error':
         dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-network-error') });
         break;
-      case UPLOAD_NOT_AUTHORIZED:
+      case 'not_authorized':
         dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-not-authorized') });
         break;
-      case UPLOAD_UNEXPECTED_RESPONSE:
+      case 'unexpected_response':
         dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-invalid-response') });
         break;
-      default: // including UPLOAD_UNKNOWN_ERROR
+      default:
         dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-unknown-error') });
     }
   }

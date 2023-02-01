@@ -43,11 +43,12 @@ type OpencastState =
   | typeof STATE_INVALID_RESPONSE
   | typeof STATE_INCORRECT_LOGIN;
 
-export const UPLOAD_SUCCESS = 'upload_success';
-export const UPLOAD_NETWORK_ERROR = 'upload_network_error';
-export const UPLOAD_NOT_AUTHORIZED = 'upload_not_authorized';
-export const UPLOAD_UNEXPECTED_RESPONSE = 'upload_unexpected_response';
-export const UPLOAD_UNKNOWN_ERROR = 'upload_unknown_error';
+type UploadState =
+  | 'success'
+  | 'network_error'
+  | 'not_authorized'
+  | 'unexpected_response'
+  | 'unknown_error';
 
 
 export class Opencast {
@@ -312,13 +313,12 @@ export class Opencast {
 
   // Uploads the given recordings with the given title and presenter metadata.
   //
-  // If the upload was successful, `UPLOAD_SUCCESS` is returned. Otherwise:
-  // - `UPLOAD_NETWORK_ERROR` if some kind of network error occurs.
-  // - `UPLOAD_NOT_AUTHORIZED` if some error occurs that indicates the user is
-  //   not logged in or lacking rights.
-  // - `UPLOAD_UNEXPECTED_RESPONSE` if the API returned data that we didn't
-  //   expect.
-  // - `UPLOAD_UNKNOWN_ERROR` if any other error occurs.
+  // If the upload was successful, 'success' is returned. Otherwise:
+  // - 'network_error' if some kind of network error occurs.
+  // - 'not_authorized' if some error occurs that indicates the user is not
+  //    logged in or lacking rights.
+  // - 'unexpected_response' if the API returned data that we didn't expect.
+  // - 'unknown_error' if any other error occurs.
   //
   // At the start of this method, `refreshConnection` is called. That
   // potentially changed the `state`.
@@ -330,21 +330,21 @@ export class Opencast {
     end: number | null,
     uploadSettings: Settings["upload"],
     onProgress: (p: number) => void,
-  }) {
+  }): Promise<UploadState> {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
     switch (this.#state) {
       case STATE_LOGGED_IN:
         break;
       case STATE_NETWORK_ERROR:
-        return UPLOAD_NETWORK_ERROR;
+        return 'network_error';
       case STATE_INCORRECT_LOGIN:
       case STATE_CONNECTED:
-        return UPLOAD_NOT_AUTHORIZED;
+        return 'not_authorized';
       case STATE_INVALID_RESPONSE:
-        return UPLOAD_UNEXPECTED_RESPONSE;
+        return 'unexpected_response';
       default:
-        return UPLOAD_UNKNOWN_ERROR;
+        return 'unknown_error';
     }
 
     // Actually upload
@@ -380,7 +380,7 @@ export class Opencast {
       // Finalize/ingest media package
       await this.finishIngest({ mediaPackage, uploadSettings });
 
-      return UPLOAD_SUCCESS;
+      return 'success';
     } catch(e) {
       // Any error not thrown by us is rethrown.
       if (!(e instanceof RequestError)) {
@@ -390,17 +390,17 @@ export class Opencast {
       console.error("Error occured during upload: ", e);
 
       if (e instanceof NetworkError) {
-        return UPLOAD_NETWORK_ERROR;
+        return 'network_error';
       } else if (e instanceof UnexpectedRedirect || e instanceof Unauthorized) {
         // Again, we boldly assume that any redirect is a redirect to the login
         // page. This might be wrong, but until someone has a problem, this is
         // the sanest option IMO. A well-designed API shouldn't redirect in
         // those cases, of course. But we are not dealing with such an API here.
-        return UPLOAD_NOT_AUTHORIZED;
+        return 'not_authorized';
       } else if (e instanceof NotOkResponse) {
-        return UPLOAD_UNEXPECTED_RESPONSE;
+        return 'unexpected_response';
       } else {
-        return UPLOAD_UNKNOWN_ERROR;
+        return 'unknown_error';
       }
     }
   }
