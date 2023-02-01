@@ -8,7 +8,6 @@
     // many errors caused by these specific rules. So we disabled them for
     // now.
     "strict": true,
-    "strictNullChecks": false,
     "noImplicitAny": false,
 
     "esModuleInterop": true,
