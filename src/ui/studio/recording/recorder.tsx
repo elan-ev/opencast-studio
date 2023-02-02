@@ -51,7 +51,7 @@ export default class Recorder {
 
   #reset = () => {
     this.#data = [];
-  }
+  };
 
   #onDataAvailable = (event: BlobEvent) => {
     if (event.data.size > 0) {
@@ -59,7 +59,7 @@ export default class Recorder {
     } else {
       console.log('Recording data has size 0!', event);
     }
-  }
+  };
 
   #onStop = (_event: Event) => {
     const mimeType = this.#data[0]?.type || this.#recorder.mimeType;
@@ -69,7 +69,7 @@ export default class Recorder {
     this.#reset();
 
     this.onStop?.({ url, media, mimeType, dimensions: this.#dimensions });
-  }
+  };
 
   start() {
     this.#recorder.start();
