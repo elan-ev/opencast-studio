@@ -34,17 +34,17 @@ jobs:
     # Unfortunately we cannot use `actions/download-artifact` here since that
     # only allows to download artifacts from the same run.
     - name: Download artifacts from build workflow
-      uses: actions/github-script@v3.1.0
+      uses: actions/github-script@v6
       with:
         script: |
-          const artifacts = await github.actions.listWorkflowRunArtifacts({
+          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
           });
           const deployFiles = artifacts.data.artifacts
               .filter(a => a.name == "prod-deployment-files")[0];
-          const download = await github.actions.downloadArtifact({
+          const download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: deployFiles.id,
@@ -55,7 +55,7 @@ jobs:
           fs.writeFileSync('${{github.workspace}}/artifacts.zip', Buffer.from(download.data));
 
           // The artifact is not needed anymore
-          github.actions.deleteArtifact({
+          github.rest.actions.deleteArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: deployFiles.id,
@@ -66,7 +66,7 @@ jobs:
 
     - name: Prepare deployment files
       run: |
-        mv .deploy-settings.toml settings.toml
+        mv .github/.deploy-settings.toml settings.toml
         mv build/* .
         rmdir build
 

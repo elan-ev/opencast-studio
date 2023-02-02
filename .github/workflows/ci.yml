@@ -4,6 +4,8 @@ on: [pull_request, push]
 
 jobs:
   main:
+    # We don't build PRs from dependabot, as we run everything for its branch push anyway
+    if: github.actor != 'dependabot[bot]' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -11,6 +13,7 @@ jobs:
       with:
         node-version: 16
     - run: npm ci
+    - run: npx eslint src --max-warnings=0
     - run: npm run build
     - run: npm test
 
@@ -18,7 +21,6 @@ jobs:
     # Prepare test deployment
     - name: Build for test deployment
       env:
-        REACT_APP_ENABLE_SENTRY: 1
         REACT_APP_INCLUDE_LEGAL_NOTICES: 1
       run: |
         builddate="$(date --utc '+%Y-%m-%d_%H-%M-%S')"
@@ -36,19 +38,18 @@ jobs:
         PUBLIC_URL=${deploydir} npm run build
 
     - name: Archive test deployment files as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: test-deployment-files
         path: |
           build
-          .deploy-settings.toml
+          .github/.deploy-settings.toml
           deploydir.tmp
 
     # Prepare production deployment
     - name: Build for prod deployment
       if: github.repository_owner == 'elan-ev' && github.ref == 'refs/heads/master'
       env:
-        REACT_APP_ENABLE_SENTRY: 1
         REACT_APP_INCLUDE_LEGAL_NOTICES: 1
       run: |
         rm -rf build
@@ -56,9 +57,9 @@ jobs:
 
     - name: Archive prod deployment files as artifact
       if: github.repository_owner == 'elan-ev' && github.ref == 'refs/heads/master'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: prod-deployment-files
         path: |
           build
-          .deploy-settings.toml
+          .github/.deploy-settings.toml
