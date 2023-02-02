@@ -4,6 +4,8 @@ on: [pull_request, push]
 
 jobs:
   main:
+    # We don't build PRs from dependabot, as we run everything for its branch push anyway
+    if: github.actor != 'dependabot[bot]' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
