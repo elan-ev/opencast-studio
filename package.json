@@ -17,7 +17,7 @@
     "@theme-ui/color": "^0.14.7",
     "@theme-ui/components": "^0.14.5",
     "@tippyjs/react": "^4.2.6",
-    "deepmerge": "^4.2.2",
+    "deepmerge": "^4.3.0",
     "eslint": "^8.33.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react": "^7.32.2",
