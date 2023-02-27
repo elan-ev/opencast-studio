@@ -63,6 +63,8 @@ export type StudioState = {
   start: null | number,
   end: null | number,
 
+  series: null | string,
+
   upload: {
     error: null | string,
     state: UploadState,
@@ -101,6 +103,8 @@ const initialState = (): StudioState => ({
 
   start: null,
   end: null,
+
+  series: null,
 
   upload: {
     error: null,
@@ -141,6 +145,7 @@ type ReducerAction =
   | { type: 'UPDATE_PRESENTER', value: string }
   | { type: 'UPDATE_START', time: number | null }
   | { type: 'UPDATE_END', time: number | null }
+  | { type: 'UPDATE_SERIES', value: string | null }
   | { type: 'RESET' };
 
 
@@ -224,6 +229,7 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case 'UPDATE_PRESENTER': return { ...state, presenter: action.value };
     case 'UPDATE_START': return { ...state, start: action.time };
     case 'UPDATE_END': return { ...state, end: action.time };
+    case 'UPDATE_SERIES': return { ...state, series: action.value };
 
     case 'RESET': return initialState();
 

@@ -99,6 +99,11 @@ parameter as well. See further below for information on that.
 # Default: 'required'.
 #presenterField = 'required'
 
+# Specifies if the series field should be 'hidden', 'optional' or 'required'.
+# Default: 'required'.
+#seriesField = 'required'
+
+
 [recording]
 # A list of preferred MIME types used by the media recorder. Studio uses the
 # first MIME type in that list for which `MediaRecorder.isTypeSupported` returns

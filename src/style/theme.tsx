@@ -257,6 +257,17 @@ const base = {
         boxShadow: theme => `0 0 3px 0 ${theme.colorz.focus[0]}}`
       }
     },
+    dropdown: {
+      backgroundColor: 'element_bg',
+      color: 'text',
+      fontSize: '14pt',
+      outline: 'none',
+      transition: 'border-color 0.3s, box-shadow 0.3s',
+      width: '100%',
+      boxShadow: 'none',
+      borderRadius: '2px',
+      fontWeight: 'normal',
+    },
     progress: {
       bg: '#ebebeb',
       color: '#4ab57f',

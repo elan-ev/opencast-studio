@@ -38,6 +38,7 @@ export type Settings = {
     dcc?: string;
     titleField?: FormFieldState;
     presenterField?: FormFieldState;
+    seriesField?: FormFieldState;
   };
   recording?: {
     videoBitrate?: number;

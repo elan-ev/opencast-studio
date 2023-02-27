@@ -14,7 +14,7 @@ import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
 import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { usePageVisibility } from 'react-page-visibility';
 import { GlobalHotKeys } from 'react-hotkeys';
 
@@ -27,7 +27,7 @@ import {
   STATE_RESPONSE_NOT_OK,
   STATE_INVALID_RESPONSE,
 } from '../../../opencast';
-import { useSettings, FORM_FIELD_HIDDEN, FORM_FIELD_REQUIRED } from '../../../settings';
+import { useSettings, FORM_FIELD_HIDDEN, FORM_FIELD_REQUIRED, FORM_FIELD_OPTIONAL } from '../../../settings';
 import {
   useDispatch,
   useStudioState,
@@ -39,13 +39,13 @@ import {
 
 import Notification from '../../notification';
 import { ActionButtons } from '../elements';
-import { Input } from '../../elements';
+import { Input, SeriesDropdown, SeriesOption } from '../../elements';
 
 import RecordingPreview, { RecordingPreviewHandle } from './recording-preview';
 
 import { otherShortcuts } from '../../../shortcuts';
 import { StepProps } from '../steps';
-
+import { SingleValue } from 'react-select';
 
 const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
 
@@ -55,7 +55,7 @@ export default function SaveCreation(props: StepProps) {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState, title, presenter, start, end } = useStudioState();
+  const { recordings, upload: uploadState, title, presenter, start, end, series } = useStudioState();
   const dispatch = useDispatch();
 
   function onProgress(progress: number) {
@@ -143,6 +143,7 @@ export default function SaveCreation(props: StepProps) {
       presenter,
       start,
       end,
+      series,
       uploadSettings: settings.upload,
       onProgress,
     });
@@ -384,26 +385,40 @@ const ConnectionUnconfiguredWarning = () => {
 type Inputs = {
   title: string;
   presenter: string;
+  series: string;
 };
 
 const UploadForm = ({ uploadState, handleUpload }) => {
   const {
     titleField = FORM_FIELD_REQUIRED,
     presenterField = FORM_FIELD_REQUIRED,
+    seriesField = FORM_FIELD_REQUIRED,
+    seriesId = null,
   } = useSettings().upload || {};
 
   const { t } = useTranslation();
   const opencast = useOpencast();
   const dispatch = useDispatch();
-  const { recordings, title, presenter } = useStudioState();
+  const { recordings, title, presenter, series } = useStudioState();
   const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
 
-  const { formState: { errors }, handleSubmit, register } = useForm<Inputs>();
+  const { formState: { errors }, control, handleSubmit, register, setValue } = useForm<Inputs>();
+
+  let seriesDefault: SeriesOption;
+
+  if (seriesId) {
+    seriesDefault = { label: t('save-creation-series-unkown'), value: seriesId };
+  } else if (series) {
+    seriesDefault = { label: t('save-creation-series-unkown'), value: series };
+  }
+
 
   // This is a bit ugly, but works. We want to make sure that the `title` and
   // `presenter` values in the studio state always equal the current value in
   // the input.
   function handleInputChange(event) {
+    console.log('Äasdf');
+
     const target = event.target;
     dispatch({
       type: { title: 'UPDATE_TITLE', presenter: 'UPDATE_PRESENTER' }[target.name],
@@ -415,11 +430,38 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     }
   }
 
+  async function handleSelectChange(newValue: SingleValue<SeriesOption>) {
+    let newSeriesValue = newValue ? newValue.value : null;
+    dispatch({ type: 'UPDATE_SERIES', value: newSeriesValue });
+  }
+
+  const filterSeries = async(inputValue: string) => {
+    const seriesList: SeriesOption[] = [];
+    const ocSeries = await opencast.getSeries();
+    for (const [key, value] of ocSeries ) {
+      seriesList.push({ value: key, label: value });
+      if (seriesId && seriesId === key) {
+        seriesDefault = { value: key, label: value };
+      }
+    }
+    return seriesList;
+  };
+
+  const loadSeriesOptions = (inputValue: string) =>
+    new Promise<SeriesOption[]>(resolve => {
+      setTimeout(() => {
+        resolve(filterSeries(inputValue));
+      }, 1000);
+    });
+
   // If the user has not yet changed the value of the field and the last used
   // presenter name is used in local storage, use that.
   useEffect(() => {
     if (presenterValue !== presenter) {
       dispatch({ type: 'UPDATE_PRESENTER', value: presenterValue });
+    }
+    if (seriesId != null) {
+      setValue('series', seriesId);
     }
   });
 
@@ -470,6 +512,29 @@ const UploadForm = ({ uploadState, handleUpload }) => {
             autoComplete="off"
             defaultValue={presenterValue}
             {...{ errors, register }}
+          /> }
+
+          { seriesField !== FORM_FIELD_HIDDEN && <Controller
+            name="series"
+            control={control}
+            render={({ field }) => (
+              <SeriesDropdown
+                name="series"
+                label={t('save-creation-label-series')}
+                required={seriesField === FORM_FIELD_REQUIRED}
+                disabled={seriesId !== null }
+                clearable={seriesField === FORM_FIELD_OPTIONAL}
+                placeholder={ t('save-creation-series-placeholder') }
+                loadOptions={loadSeriesOptions}
+                defaultOptions={seriesId != null}
+                onChange={v => {
+                  field.onChange(v);
+                  handleSelectChange(v);
+                }}
+                value={seriesDefault}
+                control={control}
+                {...{ errors, register }}
+              /> )}
           /> }
 
           <Button
