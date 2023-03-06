@@ -112,7 +112,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
 
   const icon = icons[status];
 
-  return (
+  return <div sx={{ flex: '1 1 auto' }}>
     <SettingsSection title={t('upload-settings-modal-header')}>
       <Box>
         { error && <Notification isDanger>{error}</Notification> }
@@ -177,7 +177,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
         </form>
       </Box>
     </SettingsSection>
-  );
+  </div>;
 }
 
 export default OpencastSettings;
