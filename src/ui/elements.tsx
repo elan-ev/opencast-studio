@@ -72,6 +72,7 @@ export const Input = <I extends FieldValues, F>({
             {...rest}
             {...register(name, {
               validate,
+              onChange: rest.onChange,
               ...required && { required: t('forms-validation-error-required') },
             })}
           />
