@@ -223,6 +223,7 @@ export const Dropdown = <I extends FieldValues, F> ({
             options={options}
             styles={selectStyles}
             defaultValue={defaultValue}
+            value={value}
             defaultOptions
             sx={{
               variant: 'styles.dropdown',

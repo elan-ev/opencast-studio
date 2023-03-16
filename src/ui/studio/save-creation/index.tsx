@@ -405,6 +405,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const { formState: { errors }, control, handleSubmit, register, setValue } = useForm<Inputs>();
 
   let seriesDefault: SeriesOption;
+  const [seriesValue, setSeriesValue] = useState<SeriesOption>();
 
   if (seriesId) {
     seriesDefault = { label: t('save-creation-series-unkown'), value: seriesId };
@@ -447,12 +448,17 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     return seriesList;
   };
 
-  const loadSeriesOptions = (inputValue: string) =>
-    new Promise<SeriesOption[]>(resolve => {
+  const loadSeriesOptions = (inputValue: string) => {
+    const seriesOptions = new Promise<SeriesOption[]>(resolve => {
       setTimeout(() => {
         resolve(filterSeries(inputValue));
       }, 1000);
     });
+    seriesOptions.then(options => {
+      if(seriesId) setSeriesValue(options.find(option => option.value === seriesId));
+    });
+    return seriesOptions;
+  };
 
   // If the user has not yet changed the value of the field and the last used
   // presenter name is used in local storage, use that.
@@ -531,7 +537,8 @@ const UploadForm = ({ uploadState, handleUpload }) => {
                   field.onChange(v);
                   handleSelectChange(v);
                 }}
-                value={seriesDefault}
+                defaultValue={seriesDefault}
+                value={seriesValue}
                 control={control}
                 {...{ errors, register }}
               /> )}
