@@ -153,14 +153,16 @@ export const Dropdown = <I extends FieldValues, F> ({
   const selectStyles = {
     control: (styles, state) => ({
       ...styles,
-      backgroundColor: 'white',
-      borderColor: state.isFocused ? 'var(--theme-ui-colors-primary)' : 'var(--theme-ui-colors-gray-2)',
+      backgroundColor: 'var(--theme-ui-colors-element_bg)',
+      borderColor: errors[name] ? 'var(--theme-ui-colors-error)' :
+        state.isFocused ? 'var(--theme-ui-colors-primary)' : 'var(--theme-ui-colors-gray-2)',
       borderRadius: '2px',
       minHeight: '2rem',
       height: '2rem',
       outline: state.isFocused ? '5px solid var(--theme-ui-colors-focus-0)' : 'none',
       outlineOffset: '-5px',
-      boxShadow: state.isFocused ? '0 0 3px 0 var(--theme-ui-colors-focus-0)' : 'none',
+      boxShadow: errors[name] ? '0 0 3px 0 var(--theme-ui-colors-error)' :
+        state.isFocused ? '0 0 3px 0 var(--theme-ui-colors-focus-0)' : 'none',
       fontWeight: 'normal',
     }),
 
@@ -211,6 +213,8 @@ export const Dropdown = <I extends FieldValues, F> ({
         >
           <AsyncSelect
             cacheOptions
+            className="dropdown-container"
+            classNamePrefix="dropdown"
             isDisabled={disabled}
             isSearchable={true}
             isClearable={clearable}
