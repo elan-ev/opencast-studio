@@ -3,6 +3,7 @@
 import { jsx } from 'theme-ui';
 import { useTranslation } from 'react-i18next';
 import { HTMLInputTypeAttribute } from 'react';
+import { SingleValue, ActionMeta } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { FieldError, FieldValues, Path, useForm, Validate } from 'react-hook-form';
 
@@ -114,7 +115,7 @@ type SelectProps<I extends FieldValues, F> =
   defaultOptions: boolean,
   loadOptions: (input: string, callback: (options: readonly F[]) => void) => void;
   defaultValue?: F,
-  onChange?: any,
+  onChange: (newValue: SingleValue<F>, actionMeta: ActionMeta<F> ) => void | undefined,
   value?: F,
   control?: any,
 };
@@ -165,13 +166,23 @@ export const Dropdown = <I extends FieldValues, F> ({
         state.isFocused ? '0 0 3px 0 var(--theme-ui-colors-focus-0)' : 'none',
       fontWeight: 'normal',
     }),
-
+    singleValue: (styles, state) => ({
+      ...styles,
+      color: 'var(--theme-ui-colors-text)',
+    }),
+    option: (styles, state) => ({
+      ...styles,
+      backgroundColor: state.isFocused ? 'var(--theme-ui-colors-primary)' : 'var(--theme-ui-colors-element_bg)',
+      color: 'var(--theme-ui-colors-text)',
+    }),
+    menu: (provided, state) => ({
+      backgroundColor: 'var(--theme-ui-colors-element_bg)',
+    }),
     valueContainer: (provided, state) => ({
       ...provided,
       height: '2rem',
       padding: '0 6px'
     }),
-
     input: (provided, state) => ({
       ...provided,
       margin: '0px',
@@ -213,8 +224,6 @@ export const Dropdown = <I extends FieldValues, F> ({
         >
           <AsyncSelect
             cacheOptions
-            className="dropdown-container"
-            classNamePrefix="dropdown"
             isDisabled={disabled}
             isSearchable={true}
             isClearable={clearable}
