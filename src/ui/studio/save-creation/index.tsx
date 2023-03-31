@@ -392,7 +392,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const {
     titleField = FORM_FIELD_REQUIRED,
     presenterField = FORM_FIELD_REQUIRED,
-    seriesField = FORM_FIELD_REQUIRED,
+    seriesField = FORM_FIELD_OPTIONAL,
     seriesId = null,
   } = useSettings().upload || {};
 
