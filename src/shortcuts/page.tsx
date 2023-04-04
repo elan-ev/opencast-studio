@@ -138,7 +138,6 @@ const KeyboardShortcuts = () => {
       alignSelf: 'center',
       width: '100%',
     }}>
-    adsfad
       <h2 sx={{
         display: 'block',
         position: 'relative',
