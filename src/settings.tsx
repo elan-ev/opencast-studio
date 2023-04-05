@@ -562,6 +562,7 @@ const SCHEMA = {
     dcc: types.string,
     titleField: metaDataField,
     presenterField: metaDataField,
+    seriesField: metaDataField,
   },
   recording: {
     videoBitrate: types.positiveInteger,
