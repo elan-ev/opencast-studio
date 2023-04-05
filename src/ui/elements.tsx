@@ -177,18 +177,17 @@ export const Dropdown = <I extends FieldValues, F> ({
     }),
     menu: (provided, state) => ({
       backgroundColor: 'var(--theme-ui-colors-element_bg)',
+      borderRadius: '2px',
+      border: '1px solid var(--theme-ui-colors-gray-2)',
     }),
     valueContainer: (provided, state) => ({
       ...provided,
       height: '2rem',
-      padding: '0 6px'
     }),
     input: (provided, state) => ({
       ...provided,
       margin: '0px',
-    }),
-    indicatorSeparator: state => ({
-      display: 'none',
+      color: 'var(--theme-ui-colors-text)',
     }),
     indicatorsContainer: (provided, state) => ({
       ...provided,

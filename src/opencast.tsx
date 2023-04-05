@@ -121,12 +121,16 @@ export class Opencast {
     return self;
   }
 
-  async getSeries() {
+  async getSeries(textFilter?: String) {
     let series;
     let seriesList = new Map();
 
     try {
-      series = await this.jsonRequest('studio/series.json');
+      let requestPath = 'studio/series.json';
+      if (textFilter) {
+        requestPath += '?' + new URLSearchParams({ filter: 'textFilter:' + textFilter, });
+      }
+      series = await this.jsonRequest(requestPath);
       for(const s of series) {
         seriesList.set(s.id, s.title);
       }

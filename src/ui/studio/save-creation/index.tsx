@@ -438,7 +438,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
   const filterSeries = async(inputValue: string) => {
     const seriesList: SeriesOption[] = [];
-    const ocSeries = await opencast.getSeries();
+    const ocSeries = await opencast.getSeries(inputValue);
     for (const [key, value] of ocSeries ) {
       seriesList.push({ value: key, label: value });
       if (seriesId && seriesId === key) {
@@ -448,11 +448,16 @@ const UploadForm = ({ uploadState, handleUpload }) => {
     return seriesList;
   };
 
+  const lastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const loadSeriesOptions = (inputValue: string) => {
     const seriesOptions = new Promise<SeriesOption[]>(resolve => {
-      setTimeout(() => {
+      if (lastTimeout.current !== null) {
+        clearTimeout(lastTimeout.current);
+      }
+      lastTimeout.current = setTimeout(() => {
         resolve(filterSeries(inputValue));
-      }, 1000);
+      }, 30);
     });
     seriesOptions.then(options => {
       if(seriesId) setSeriesValue(options.find(option => option.value === seriesId));
