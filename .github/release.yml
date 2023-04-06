@@ -1,0 +1,35 @@
+changelog:
+
+  exclude:
+    authors:
+      - dependabot
+      - dependabot[bot]
+
+  categories:
+    - title: Security Fixes
+      labels:
+        - C-security
+
+    - title: New Features
+      labels:
+        - C-new-feature
+
+    - title: Feature Enhancements
+      labels:
+        - C-enhancement
+
+    - title: Usability and Accessibility
+      labels:
+        - "A-*"
+
+    - title: Bug Fixes
+      labels:
+        - bug
+
+    - title: Documentation
+      labels:
+        - documentation
+
+    - title: Other Changes
+      labels:
+        - "*"
