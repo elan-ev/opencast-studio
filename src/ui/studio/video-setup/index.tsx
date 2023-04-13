@@ -88,7 +88,6 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
     </Notification>
   );
 
-  console.log({ userStream, activeSource });
   const userInput = {
     isDesktop: false,
     stream: userStream,
