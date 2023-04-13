@@ -67,7 +67,7 @@ const Group: React.FC<GroupProps> = ({ name, keymap }) => {
       }
     }}>
       <h3 sx={{
-        borderBottom: theme => `1px solid ${theme.colorz.gray[1]}`,
+        borderBottom: theme => `1px solid ${theme.colors?.gray?.[1]}`,
         textAlign: 'center',
       }}>
         {t(name)}
@@ -108,8 +108,8 @@ const Entry: React.FC<EntryProps> = ({ name, sequences }) => {
             <div key={index}
               sx={{
                 borderRadius: '5px',
-                border: theme => `2px solid ${theme.colorz.singleKey_border}`,
-                background: theme => theme.colorz.singleKey_bg,
+                border: theme => `2px solid ${theme.colors?.singleKey_border}`,
+                background: theme => theme.colors?.singleKey_bg,
                 padding: '8px',
                 margin: '0 3px',
                 textAlign: 'center',

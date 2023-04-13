@@ -72,7 +72,7 @@ const Brand = () => {
     <Link to={{ pathname: '/', search: location.search }}
       tabIndex={isRecording ? -1 : 0}
       sx={{ ':focus-visible': {
-        outline: theme => `5px solid ${theme.colorz.focus[2]} !important`,
+        outline: theme => `5px solid ${theme.colors?.focus?.[2]} !important`,
         outlineOffset: '-5px',
       }
       }}>
@@ -115,7 +115,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
         textDecoration: 'none',
         fontSize: '18px',
         height: ['auto', '100%'],
-        borderLeft: theme => ['none', `1px solid ${theme.colorz.gray[colorMode === 'dark' ? 1 : 3]}`],
+        borderLeft: theme => ['none', `1px solid ${theme.colors?.gray?.[colorMode === 'dark' ? 1 : 3]}`],
         display: ['block', 'inline-block'],
         width: ['100%', 'auto'],
 
@@ -123,7 +123,7 @@ const NavElement = ({ target, children, icon, ...rest }) => {
           backgroundColor: colorMode === 'dark' ? 'gray.3' : 'gray.1',
         },
         ':focus-visible': {
-          outline: theme => `5px solid ${theme.colorz.focus[2]} !important`,
+          outline: theme => `5px solid ${theme.colors?.focus?.[2]} !important`,
           outlineOffset: '-5px',
         },
       }}
@@ -173,7 +173,7 @@ const Navigation = props => {
         title={t('nav-open-menu-button')}
         sx={{
           display: ['inline-block', 'none'],
-          border: theme => `2px solid ${theme.colorz.gray[3]}`,
+          border: theme => `2px solid ${theme.colors?.gray?.[3]}`,
           borderRadius: '10px',
           color: 'white',
           my: 1,

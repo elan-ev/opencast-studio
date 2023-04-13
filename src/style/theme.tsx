@@ -86,7 +86,6 @@ const base = {
     initialColorModeName: 'light',
   },
   colors: colors,
-  colorz: colors,
   text: {
     text: {
       fontWeight: 'body',
@@ -121,7 +120,7 @@ const base = {
       ...baseButton,
       bg: 'background',
       color: 'text',
-      border: theme => `1px solid ${theme.colorz.gray[1]}`,
+      border: theme => `1px solid ${theme.colors?.gray?.[1]}`,
       '&:not(:disabled):hover, &:not(:disabled):focus': {
         bg: 'gray.3'
       }
@@ -150,11 +149,11 @@ const base = {
         boxShadow: '0 0 0 rgb(255, 255, 255) !important',
       },
       '*:focus-visible': {
-        outline: theme => `5px solid ${theme.colorz.focus[0]}`,
+        outline: theme => `5px solid ${theme.colors?.focus?.[0]}`,
         outlineOffset: '-5px',
       },
       '.tippy-box > .tippy-arrow::before': {
-        color: theme => `${theme.colorz.tooltip}`
+        color: theme => `${theme.colors?.tooltip}`
       },
     },
     h1: {
@@ -235,11 +234,11 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colorz.focus[0]}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors?.focus?.[0]}`
       },
       '&[aria-invalid="true"]': {
         borderColor: 'error',
-        boxShadow: theme => `0 0 3px 0 ${theme.colorz.error}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors?.error}`
       }
     },
     select: {
@@ -254,7 +253,7 @@ const base = {
       width: '100%',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: theme => `0 0 3px 0 ${theme.colorz.focus[0]}}`
+        boxShadow: theme => `0 0 3px 0 ${theme.colors?.focus?.[0]}}`
       }
     },
     progress: {
@@ -268,7 +267,7 @@ const base = {
     p: 3,
     maxWidth: ['none', 'none', 960, 1152, 1344]
   }
-} satisfies Omit<Theme, 'colorz'> & { colorz: any };
+} satisfies Theme;
 
 // Extend the `Theme` interface to accomodate our own properties.
 declare module 'theme-ui' {
@@ -281,15 +280,6 @@ declare module 'theme-ui' {
       p: number,
       maxWidth: ['none', 'none', 960, 1152, 1344],
     },
-
-    // Huff, this is extra... sketchy. In this project we often use
-    // `theme.colorz.something` where `theme` is just `Theme` from `theme-ui`.
-    // But there, `colors` is an optional property. And typescript obviously
-    // does not know about which colors we defined. The intuitive idea would be
-    // to change the definition of `Theme` to have the specific type of our
-    // theme. That's unfortunately not possible though. One can only add fields
-    // to interfaces. So to get type safety, we use this stupid `colorz`.
-    colorz: typeof colors,
   }
 }
 
