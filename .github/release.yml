@@ -8,28 +8,26 @@ changelog:
   categories:
     - title: Security Fixes
       labels:
-        - C-security
+        - type:security
 
     - title: New Features
       labels:
-        - C-new-feature
-
-    - title: Feature Enhancements
-      labels:
-        - C-enhancement
+        - type:new-feature
 
     - title: Usability and Accessibility
       labels:
-        - "A-*"
+        - type:accessibility
+        - type:usability
+        - type:visual-clarity
 
     - title: Bug Fixes
       labels:
-        - bug
+        - type:bug
 
     - title: Documentation
       labels:
-        - documentation
+        - type:documentation
 
     - title: Other Changes
       labels:
-        - "*"
+        - "type:*"
