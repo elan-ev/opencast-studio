@@ -2,6 +2,14 @@
 
 # Remove old 'build' folder
 if [ -d build ]; then
+  read -p "Will delete 'build/' folder. Is that OK? [y/N] " -r
+
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+    exit 1
+  else
+    rm -rf build
+  fi
   rm -rf build
 fi
 

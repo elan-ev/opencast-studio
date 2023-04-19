@@ -20,7 +20,7 @@ jobs:
           node-version: 16
 
       - name: create release tarball
-        run: ./.github/create-release.sh
+        run: echo 'y' | ./.github/create-release.sh
 
       - name: create new release
         uses: softprops/action-gh-release@v1
