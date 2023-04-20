@@ -10,6 +10,7 @@ if [ -d build ]; then
   else
     rm -rf build
   fi
+  rm -rf build
 fi
 
 npm ci
