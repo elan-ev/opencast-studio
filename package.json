@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@types/iarna__toml": "^2.0.2",
-    "@types/jest": "^29.5.0",
+    "@types/jest": "^29.5.1",
     "@types/mustache": "^4.2.2",
     "@types/node": "^18.15.11",
     "@types/react": "^18.0.31",
