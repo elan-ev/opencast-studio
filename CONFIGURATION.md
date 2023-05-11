@@ -106,6 +106,20 @@ further below for information on that.
 # Default: 'optional'.
 #seriesField = 'optional'
 
+# Whether and if so how to fill the presenter name in the upload step.
+# This is a list of sources for potential presenter names to suggest,
+# in order of descending preference.
+# If it is empty, nothing is suggested.
+# Note that right now there is only one such source,
+# and that manual changes to the presenter form field
+# will be persisted in the users' `localStorage`,
+# and that stored value will always be preferred
+# over the generated suggestion.
+#
+# Possible sources are:
+# - `"opencast"`: Get the name from Opencast's `/info/me.json` API
+#autofillPresenter = []
+
 
 [recording]
 # A list of preferred MIME types used by the media recorder. Studio uses the
