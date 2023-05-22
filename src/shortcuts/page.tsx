@@ -89,6 +89,12 @@ type EntryProps = {
 const Entry: React.FC<EntryProps> = ({ name, sequences }) => {
   const { t } = useTranslation();
 
+  // Special case the Tab key: it is the only one where `sequences` is empty
+  // (because we don't need to register that shortcut).
+  if (sequences.length === 0 && name === 'tab-elements') {
+    sequences = ['Tab'];
+  }
+
   return (
     <div sx={{
       display: 'flex',
