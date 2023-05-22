@@ -77,7 +77,7 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
       <div sx={{
         position: 'relative',
         height: '150px',
-        border: theme => `2px solid ${theme.colorz.gray[1]}`,
+        border: theme => `2px solid ${theme.colors?.gray?.[1]}`,
       }}>
         <video
           tabIndex={-1}
