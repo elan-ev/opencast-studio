@@ -281,7 +281,7 @@ export class Opencast {
 
     try {
       return await response.json();
-    } catch(e) {
+    } catch (e) {
       throw new InvalidJson(url, e);
     }
   }
@@ -404,7 +404,7 @@ export class Opencast {
       await this.finishIngest({ mediaPackage, uploadSettings });
 
       return 'success';
-    } catch(e) {
+    } catch (e) {
       // Any error not thrown by us is rethrown.
       if (!(e instanceof RequestError)) {
         throw e;

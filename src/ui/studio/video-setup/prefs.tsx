@@ -216,7 +216,10 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       justifyContent: 'flex-end',
     }}>
       <div sx={{ textAlign: 'right' }}>
-        <Tooltip offset={[0, 25]} content={isExpanded ? t('video-settings-close') : t('video-settings-open') }>
+        <Tooltip
+          offset={[0, 25]}
+          content={isExpanded ? t('video-settings-close') : t('video-settings-open')}
+        >
           <button
             onClick={() => setIsExpanded(old => !old)}
             sx={{
@@ -483,7 +486,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
     />
     <label
       tabIndex={isExpanded ? 0 : -1}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ) && onChange(value)}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onChange(value)}
       htmlFor={id}
     >{ label || value }</label>
   </Fragment>;
