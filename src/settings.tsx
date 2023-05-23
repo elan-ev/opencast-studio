@@ -202,7 +202,7 @@ export class SettingsManager {
         // the value at the end.
         let obj = rawUrlSettings;
         const segments = key.split('.');
-        segments.slice(0, -1).forEach( segment => {
+        segments.slice(0, -1).forEach(segment => {
           if (!(segment in obj)) {
             obj[segment] = Object.create(null);
           }

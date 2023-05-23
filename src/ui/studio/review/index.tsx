@@ -271,7 +271,7 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
           value={start}
           control={end}
           invariant={(start, end) => start < end}
-          { ...{ recordingDispatch, previewController, currentTime } }
+          {...{ recordingDispatch, previewController, currentTime }}
         /> }
         <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
           <button
@@ -299,7 +299,7 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
           value={end}
           control={start}
           invariant={(end, start) => start < end}
-          { ...{ recordingDispatch, previewController, currentTime } }
+          {...{ recordingDispatch, previewController, currentTime }}
         /> }
       </Flex>
       {t('review-player-progress', { currentTime, duration })}
@@ -348,7 +348,7 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
       <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
         { value !== null && <Fragment>
-          <Trans { ...{ t } } i18nKey={`review-${marker}`}>
+          <Trans {...{ t }} i18nKey={`review-${marker}`}>
             {{ [marker]: value }} <Link href="" onClick={event => {
               event.preventDefault();
               if (previewController.current) {
@@ -538,7 +538,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   });
 
   const skipFiveSeconds = (keyEvent?: KeyboardEvent) => {
-    videoRefs.forEach( video => {
+    videoRefs.forEach(video => {
       if (video.current !== null) {
         if (keyEvent?.key === 'l' || keyEvent?.key === 'ArrowRight') {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
@@ -552,7 +552,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   const skipFrame = (keyEvent?: KeyboardEvent) => {
     const fps = 30;
 
-    videoRefs.forEach( video => {
+    videoRefs.forEach(video => {
       if (video.current !== null) {
         if (keyEvent?.key === '.') {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1 / fps));

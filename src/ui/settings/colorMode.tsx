@@ -12,7 +12,7 @@ const ColorModeSettings = () => {
 
   const getSystemPreference = () => {
     const isDarkPrefered = window.matchMedia('(prefers-color-scheme: dark)');
-    if(isDarkPrefered.matches) {
+    if (isDarkPrefered.matches) {
       setColorMode('dark');
     } else {
       setColorMode('light');
@@ -21,17 +21,17 @@ const ColorModeSettings = () => {
 
   useEffect(() => {
     const theme = localStorage.getItem('theme');
-    if(theme === 'systemTheme') {
+    if (theme === 'systemTheme') {
       getSystemPreference();
     }
   });
 
   const switchTheme = (value: string) => {
     localStorage.removeItem('prefers-color-scheme');
-    if(value === 'systemTheme') {
+    if (value === 'systemTheme') {
       getSystemPreference();
       localStorage.setItem('theme', 'systemTheme');
-    } else if(value === 'darkTheme') {
+    } else if (value === 'darkTheme') {
       setColorMode('dark');
       localStorage.setItem('theme', 'darkTheme');
     } else {
