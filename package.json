@@ -83,7 +83,7 @@
     "@types/jest": "^29.5.0",
     "@types/mustache": "^4.2.2",
     "@types/node": "^18.15.11",
-    "@types/react": "^18.0.31",
+    "@types/react": "^18.2.7",
     "@types/react-beforeunload": "^2.1.1",
     "@types/react-dom": "^18.0.11",
     "@types/react-page-visibility": "^6.4.1",
