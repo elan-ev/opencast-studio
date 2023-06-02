@@ -62,6 +62,7 @@ export type StudioState = {
 
   start: null | number,
   end: null | number,
+  duration: number,
 
   upload: {
     error: null | string,
@@ -101,6 +102,7 @@ const initialState = (): StudioState => ({
 
   start: null,
   end: null,
+  duration: 0,
 
   upload: {
     error: null,
@@ -141,7 +143,8 @@ type ReducerAction =
   | { type: 'UPDATE_PRESENTER', value: string }
   | { type: 'UPDATE_START', time: number | null }
   | { type: 'UPDATE_END', time: number | null }
-  | { type: 'RESET' };
+  | { type: 'RESET' }
+  | { type: 'SET_DURATION', value: number};
 
 
 const reducer = (state: StudioState, action: ReducerAction): StudioState => {
@@ -226,6 +229,8 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case 'UPDATE_END': return { ...state, end: action.time };
 
     case 'RESET': return initialState();
+
+    case 'SET_DURATION': return { ...state, duration: action.value };
 
     default: throw new Error();
   }

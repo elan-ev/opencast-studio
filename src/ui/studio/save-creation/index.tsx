@@ -55,7 +55,7 @@ export default function SaveCreation(props: StepProps) {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState, title, presenter, start, end } = useStudioState();
+  const { recordings, upload: uploadState, title, presenter, start, end, duration } = useStudioState();
   const dispatch = useDispatch();
 
   function onProgress(progress: number) {
@@ -143,6 +143,7 @@ export default function SaveCreation(props: StepProps) {
       presenter,
       start,
       end,
+      duration,
       uploadSettings: settings.upload,
       onProgress,
     });

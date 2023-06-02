@@ -425,6 +425,7 @@ type PreviewHandle = {
 
 const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady }, ref) => {
   const { recordings, start, end } = useStudioState();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
@@ -487,6 +488,24 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   const currentTime = videoRefs[lastOrigin.current ?? 0].current?.currentTime || 0;
   const overlayVisible = isInCutRegion(currentTime);
   const [, setOverlayVisible] = useState(overlayVisible);
+
+  let fullDuration = videoRefs[0].current?.duration;
+
+  const calcDuration = (fullDuration, start, end) => {
+    if (start !== null && end !== null) {
+      return end - start;
+    } else if (start === null && end !== null) {
+      return end;
+    } else if (start !== null && end === null) {
+      return fullDuration - start;
+    } else { return fullDuration; }
+  };
+
+  useEffect(() => {
+    if (fullDuration !== undefined) {
+      dispatch({ type: 'SET_DURATION', value: calcDuration(fullDuration, start, end) });
+    }
+  }, [dispatch, fullDuration, end, start]);
 
   useEffect(() => {
     if (durationsCalculated) {
