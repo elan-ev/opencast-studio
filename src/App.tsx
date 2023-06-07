@@ -1,45 +1,20 @@
-import { useState, Fragment } from 'react';
-import { Beforeunload } from 'react-beforeunload';
-import { SettingsManager, useSettings } from './settings';
+import { Root } from './layout';
 
-import { Provider, useStudioState, STATE_UPLOADED, STATE_UPLOADING } from './studio-state';
+import { Provider as StudioStateProvier } from './studio-state';
+import { ColorSchemeProvider } from './color';
 
 
 
 type Props = {
-  settingsManager: SettingsManager;
   userHasWebcam: boolean;
 };
 
-export const App: React.FC<Props> = ({ settingsManager, userHasWebcam }) => {
-  const settings = useSettings();
-
+export const App: React.FC<Props> = ({ userHasWebcam }) => {
   return (
-    <div>Hello</div>
+    <StudioStateProvier>
+      <ColorSchemeProvider>
+        <Root />
+      </ColorSchemeProvider>
+    </StudioStateProvier>
   );
-  // <Provider>
-  //   <Flex sx={{ flexDirection: 'column', height: '100%' }}>
-  //     <Header />
-  //     <main sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '285px' }}>
-  //       <Warnings />
-  //       <Routes settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
-  //     </main>
-  //   </Flex>
-  // </Provider>
 };
-
-// const PreventClose = () => {
-//   const { recordings, upload } = useStudioState();
-//   const downloaded = recordings.every(rec => rec.downloaded);
-//   const uploaded = upload.state === STATE_UPLOADED;
-//   const uploading = upload.state === STATE_UPLOADING;
-
-//   const handler = (event: Event) => {
-//     if ((recordings?.length > 0 && !uploaded && !downloaded) || uploading) {
-//       event.preventDefault();
-//     }
-//   };
-
-//   return <Beforeunload onBeforeunload={handler} />;
-// };
-

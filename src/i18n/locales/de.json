@@ -9,7 +9,6 @@
   "nav-open-menu-button": "Menü",
   "nav-recording": "Aufnahme",
   "nav-settings": "Einstellungen",
-  "nav-about": "Info",
 
   "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
 
@@ -142,11 +141,6 @@
   "video-settings-open": "Videoeinstellungen öffnen",
   "video-settings-close": "Videoeinstellungen schließen",
   
-  "settings-theme-appearance": "Aussehen",
-  "settings-theme-color": "Farbmodus",
-  "settings-theme-dark": "Dunkles Design",
-  "settings-theme-light": "Helles Design",
-  "settings-theme-system": "System Design",
 
   "nav-shortcuts": "Tastenkürzel",
   "record-shortcuts": "Aufnahme",
@@ -185,6 +179,17 @@
   "back-button": "Zurück/Verwerfen",
   "upload-video": "Video auf Opencast hochladen",
   "download-video": "Video herunterladen",
-  "new-recording": "Neue Aufnahme starten"
+  "new-recording": "Neue Aufnahme starten",
 
+  "header": {
+    "info": {
+      "label": "Info"
+    },
+    "theme": {
+      "label": "Aussehen",
+      "dark": "Dunkles Design",
+      "light": "Helles Design",
+      "auto": "Systemdesign"
+    }
+  }
 }

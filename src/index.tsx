@@ -39,8 +39,6 @@ const render = (body: JSX.Element) => {
   reactRoot.render(body);
 };
 
-render(<React.StrictMode><div css={{ color: 'red' }}>Hello</div></React.StrictMode>);
-
 // After the initialization is done, render to the root element.
 initialize.then(
   ([App, userHasWebcam, [settingsManager, opencast]]) => {
@@ -48,8 +46,7 @@ initialize.then(
       <React.StrictMode>
         <OpencastProvider initial={opencast}>
           <SettingsProvider settingsManager={settingsManager}>
-            {/*<App settingsManager={settingsManager} userHasWebcam={userHasWebcam} />*/}
-            Hello
+            <App userHasWebcam={userHasWebcam} />
           </SettingsProvider>
         </OpencastProvider>
       </React.StrictMode>

@@ -35,8 +35,6 @@ i18n
     resources,
     fallbackLng: 'en',
 
-    keySeparator: false,
-
     interpolation: {
       escapeValue: false,
       format: (value, format, lng) => {
