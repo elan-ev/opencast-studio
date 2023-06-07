@@ -1,6 +1,3 @@
-//; -*- mode: rjsx;-*-
-/** @jsx jsx */
-import { jsx } from 'theme-ui';
 import { createContext, useReducer } from 'react';
 import { isDisplayCaptureSupported, isUserCaptureSupported, usePresentContext } from './util';
 

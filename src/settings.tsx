@@ -1,6 +1,3 @@
-//; -*- mode: rjsx;-*-
-/** @jsx jsx */
-import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import deepmerge from 'deepmerge';
 import parseToml from '@iarna/toml/parse-string';

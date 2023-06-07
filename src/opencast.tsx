@@ -1,6 +1,3 @@
-//; -*- mode: rjsx;-*-
-/** @jsx jsx */
-import { jsx } from 'theme-ui';
 import React, { useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import Mustache from 'mustache';

@@ -2,25 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Web-based recording studio for Opencast" />
-    <link rel="apple-touch-icon" href="opencast-studio-icon-192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Opencast Studio</title>
-
-    <!--
-    This is used to determine the color mode as soon as possible to avoid a
-    flash of white (the loading indicator) for a user using dark mode.
-    -->
     <script>
+      // This is used to determine the color mode as soon as possible to avoid a
+      // flash of white (the loading indicator) for a user using dark mode.
       const scheme = window.localStorage.getItem("ocStudioColorScheme");
       document.documentElement.dataset.colorScheme = (scheme === "dark" || scheme === "light")
         ? scheme
         : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
-
     <style>
       /* ----- Define colors and other color-scheme dependent things ----- */
       /* Light mode */

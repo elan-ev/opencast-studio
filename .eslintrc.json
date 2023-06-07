@@ -5,8 +5,9 @@
   "rules": {
     "no-tabs": "error",
     "react/jsx-pascal-case": "off",
+    "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
-    "react/no-unknown-property": ["error", { "ignore": ["sx"] }],
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
     "react/jsx-curly-spacing": "warn",
     "no-unused-expressions": "off",
     "@babel/no-unused-expressions": "warn",

@@ -3,6 +3,7 @@
     "target": "es2020",
     "module": "CommonJS",
     "noEmit": true,
+    "incremental": true,
 
     // We want to use strict mode eventually, but currently there are still too
     // many errors caused by these specific rules. So we disabled them for
@@ -14,5 +15,10 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
     "resolveJsonModule": true,
-  }
+    "typeRoots": [
+        "src/typings",
+        "node_modules/@types",
+    ],
+  },
+  "include": ["src"],
 }

@@ -11,7 +11,7 @@ import { userHasWebcam, sleep } from './util';
 // server.
 const initialize = Promise.all([
   // Load rest of the application code
-  import('./App').then(mod => mod.default),
+  import('./App').then(mod => mod.App),
 
   // Check for camera devices
   userHasWebcam(),
@@ -38,6 +38,8 @@ const render = (body: JSX.Element) => {
   const reactRoot = ReactDOM.createRoot(document.getElementById('root')!);
   reactRoot.render(body);
 };
+
+render(<React.StrictMode><div css={{ color: 'red' }}>Hello</div></React.StrictMode>);
 
 // After the initialization is done, render to the root element.
 initialize.then(
