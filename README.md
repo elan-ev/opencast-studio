@@ -7,6 +7,10 @@ Opencast Studio
 
 A web-based recording studio for [Opencast](https://opencast.org).
 
+> **Important note for developers**: currently, we are redesigning Studio completely. 
+> This will change a lot of code. So please do not start writing a patch for Studio now.
+> At least talk to us first.
+
 Opencast Studio uses the recording capabilities built into modern browsers to
 record audio and video streams. The recording happens completely in the user's
 browser: no server is involved in that part. Network access is only needed to
