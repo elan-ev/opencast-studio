@@ -3,7 +3,7 @@
 import { jsx } from 'theme-ui';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 import './i18n';
 import { SettingsManager, Provider as SettingsProvider } from './settings';
@@ -39,7 +39,8 @@ const initialize = Promise.all([
 ]);
 
 const render = (body: JSX.Element) => {
-  ReactDOM.render(body, document.getElementById('root'));
+  const reactRoot = ReactDOM.createRoot(document.getElementById('root')!);
+  reactRoot.render(body);
 };
 
 // After the initialization is done, render to the root element.
