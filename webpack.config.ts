@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { CallableOption } from 'webpack-cli';
+import { DefinePlugin } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
@@ -45,6 +46,12 @@ const config: CallableOption = (_env, argv) => ({
     ],
   },
   plugins: [
+    // Passing compile time values into the code
+    new DefinePlugin({
+      DEFINE_SETTINGS_PATH: JSON.stringify(process.env.SETTINGS_PATH),
+      DEFINE_PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH),
+    }),
+
     // To get TS type checking and eslint warnings during the normal webpack build.
     new ForkTsCheckerWebpackPlugin(),
     new ESLintPlugin({

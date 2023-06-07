@@ -4,7 +4,7 @@ import parseToml from '@iarna/toml/parse-string';
 
 import { decodeHexString, usePresentContext } from './util';
 import { unreachable } from './util/err';
-
+import { DEFINES } from './defines';
 
 const LOCAL_STORAGE_KEY = 'ocStudioSettings';
 const CONTEXT_SETTINGS_FILE = 'settings.toml';
@@ -221,7 +221,7 @@ export class SettingsManager {
    */
   static async loadContextSettings() {
     // Try to retrieve the context settings.
-    let basepath = process.env.PUBLIC_URL || '/';
+    let basepath = DEFINES.publicPath;
     if (!basepath.endsWith('/')) {
       basepath += '/';
     }
@@ -229,7 +229,7 @@ export class SettingsManager {
     // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
     // given and starts with '/', it is interpreted as absolute path from the
     // server root.
-    const settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
+    const settingsPath = DEFINES.settingsPath || CONTEXT_SETTINGS_FILE;
     const base = settingsPath.startsWith('/') ? '' : basepath;
     const url = `${window.location.origin}${base}${settingsPath}`;
     let response: Response;
