@@ -1,13 +1,9 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, ThemeProvider } from 'theme-ui';
+import { jsx } from 'theme-ui';
 
-import { Global } from '@emotion/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import GlobalStyle from './style/global-style';
-import theme from './style/theme';
 
 import './i18n';
 import { SettingsManager, Provider as SettingsProvider } from './settings';
@@ -51,19 +47,17 @@ initialize.then(
   ([App, userHasWebcam, [settingsManager, opencast]]) => {
     render(
       <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <Global styles={GlobalStyle} />
-          <OpencastProvider initial={opencast}>
-            <SettingsProvider settingsManager={settingsManager}>
-              <App settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
-            </SettingsProvider>
-          </OpencastProvider>
-        </ThemeProvider>
+        <OpencastProvider initial={opencast}>
+          <SettingsProvider settingsManager={settingsManager}>
+            {/*<App settingsManager={settingsManager} userHasWebcam={userHasWebcam} />*/}
+            Hello
+          </SettingsProvider>
+        </OpencastProvider>
       </React.StrictMode>
     );
   },
 
-  // This error case is vey unlikely to occur.
+  // This error case is very unlikely to occur.
   e => render(<p>
     {`Fatal error while loading app: ${e.message}`}
     <br />

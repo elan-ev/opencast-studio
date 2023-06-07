@@ -9,17 +9,66 @@
     <link rel="apple-touch-icon" href="opencast-studio-icon-192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Opencast Studio</title>
+
+    <!--
+    This is used to determine the color mode as soon as possible to avoid a
+    flash of white (the loading indicator) for a user using dark mode.
+    -->
+    <script>
+      const scheme = window.localStorage.getItem("ocStudioColorScheme");
+      document.documentElement.dataset.colorScheme = (scheme === "dark" || scheme === "light")
+        ? scheme
+        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+
     <style>
-      /* These styles are only used for the initial loading indicator */
-      @keyframes loading-rotation {
-        0% { transform: rotate(0); }
-        100% { transform: rotate(360deg); }
+      /* ----- Define colors and other color-scheme dependent things ----- */
+      /* Light mode */
+      html[data-color-scheme="light"], html:not([data-color-scheme]) {
+        --color-neutral0: #FEFEFF;
+        --color-neutral1: #F3F4F6;
+        --color-neutral2: #E5E7EB;
+        --color-neutral3: #D1D5DB;
+        --color-neutral4: #9CA3AF;
+        --color-neutral5: #6B7280;
+        --color-neutral6: #4B5563;
+        --color-neutral7: #374151;
+        --color-neutral8: #1F2937;
+        --color-neutral9: #111827;
+        color-scheme: light;
       }
+
+      /* Dark mode */
+      html[data-color-scheme="dark"] {
+        --color-neutral0: #111827;
+        --color-neutral1: #1F2937;
+        --color-neutral2: #374151;
+        --color-neutral3: #4B5563;
+        --color-neutral4: #6B7280;
+        --color-neutral5: #9CA3AF;
+        --color-neutral6: #D1D5DB;
+        --color-neutral7: #E5E7EB;
+        --color-neutral8: #F3F4F6;
+        --color-neutral9: #FEFEFF;
+        color-scheme: dark;
+      }
+
+
+      /* ----- Some global styles ----- */
       html, body {
           margin: 0;
           padding: 0;
           height: 100%;
           min-height: 100%;
+          background-color: var(--color-neutral1);
+          color: var(--color-neutral9);
+      }
+
+
+      /* ----- Styles for the initial loading indicator ----- */
+      @keyframes loading-rotation {
+        0% { transform: rotate(0); }
+        100% { transform: rotate(360deg); }
       }
       .loading-indicator {
         width: 100vw;
@@ -29,15 +78,15 @@
         display: flex;
       }
       .loading-indicator > svg {
-        max-width: 120px;
-        max-height: 120px;
+        max-width: 90px;
+        max-height: 90px;
         width: 30vw;
         height: 30vh;
         animation: 2s linear infinite none loading-rotation;
       }
       .loading-indicator > svg > circle {
         fill: none;
-        stroke: black;
+        stroke: var(--color-neutral5);
         stroke-width: 10;
         stroke-dasharray: 167; /* 2/3 of circumference */
         stroke-linecap: round;
