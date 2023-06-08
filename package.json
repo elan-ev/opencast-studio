@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@types/iarna__toml": "^2.0.2",
-    "@types/jest": "^29.5.2",
     "@types/mustache": "^4.2.2",
     "@types/node": "^20.2.5",
     "@types/react": "^18.2.8",
@@ -58,7 +57,6 @@
     "@types/react-dom": "^18.2.4",
     "@types/react-page-visibility": "^6.4.1",
     "eslint": "^8.42.0",
-    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-webpack-plugin": "^4.0.1",

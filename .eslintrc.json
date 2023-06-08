@@ -1,5 +1,5 @@
 {
-  "extends": ["react-app", "plugin:react/recommended"],
+  "extends": ["plugin:react/recommended"],
   "plugins": ["@babel"],
 
   "rules": {
