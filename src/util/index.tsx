@@ -145,7 +145,7 @@ export const decodeHexString = (hex: string): string => {
     }
   };
 
-  let bytes = new Uint8Array(hex.length / 2);
+  const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
     bytes[i / 2] = 16 * digitToNum(hex.substring(i, i + 1))
       + digitToNum(hex.substring(i + 1, i + 2));
@@ -171,7 +171,7 @@ export const getUniqueDevices = (
   allDevices: MediaDeviceInfo[],
   kind: MediaDeviceKind,
 ): MediaDeviceInfo[] => {
-  let out: MediaDeviceInfo[] = [];
+  const out: MediaDeviceInfo[] = [];
   for (const d of allDevices) {
     // Only interested in one kind of device.
     if (d.kind !== kind) {

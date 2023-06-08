@@ -9,7 +9,7 @@ type Props = {
   userHasWebcam: boolean;
 };
 
-export const App: React.FC<Props> = ({ userHasWebcam }) => {
+export const App: React.FC<Props> = () => {
   return (
     <StudioStateProvier>
       <ColorSchemeProvider>

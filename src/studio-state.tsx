@@ -192,11 +192,13 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
       // new ones can be added. However, in rare case, this might not be true
       // and the user ends up with strange recordings. Just to be sure, we
       // remove old recordings here.
-      const recordings = [
-        ...state.recordings.filter(r => r.deviceType !== action.recording.deviceType),
-        action.recording,
-      ];
-      return { ...state, recordings };
+      return {
+        ...state,
+        recordings: [
+          ...state.recordings.filter(r => r.deviceType !== action.recording.deviceType),
+          action.recording,
+        ],
+      };
 
     case 'UPLOAD_ERROR':
       return { ...state, upload: { ...state.upload, error: action.msg, state: STATE_ERROR }};

@@ -5,6 +5,7 @@ import './i18n';
 import { SettingsManager, Provider as SettingsProvider } from './settings';
 import { Opencast, Provider as OpencastProvider } from './opencast';
 import { userHasWebcam, sleep } from './util';
+import { notNullable } from './util/err';
 
 
 // Load the rest of the application and try to fetch the settings file from the
@@ -35,7 +36,7 @@ const initialize = Promise.all([
 ]);
 
 const render = (body: JSX.Element) => {
-  const reactRoot = ReactDOM.createRoot(document.getElementById('root')!);
+  const reactRoot = ReactDOM.createRoot(notNullable(document.getElementById('root')));
   reactRoot.render(body);
 };
 

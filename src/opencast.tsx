@@ -114,7 +114,7 @@ export class Opencast {
 
   /** Creates a new instance from the settings and calls `updateUser` on it. */
   static async init(settings: Settings['opencast']) {
-    let self = new Opencast(settings);
+    const self = new Opencast(settings);
     await self.updateUser();
     return self;
   }
@@ -158,7 +158,7 @@ export class Opencast {
    */
   async updateUser(): Promise<boolean> {
     // Try to request `info/me.json` and handle potential errors.
-    let newUser: any;
+    let newUser: unknown;
     try {
       newUser = await this.getInfoMe();
     } catch (e) {
@@ -257,12 +257,12 @@ export class Opencast {
   }
 
   /** Returns the response from the `/info/me.json` endpoint. */
-  async getInfoMe() {
+  async getInfoMe(): Promise<unknown> {
     return await this.jsonRequest('info/me.json');
   }
 
   /** Returns the response from the `/lti` endpoint. */
-  async getLti() {
+  async getLti(): Promise<unknown> {
     return await this.jsonRequest('lti');
   }
 
@@ -272,7 +272,7 @@ export class Opencast {
    * On success, the parsed JSON is returned as object. If anything goes wrong,
    * a `RequestError` is thrown and the corresponding `this.#state` is set.
    */
-  async jsonRequest(path: string) {
+  async jsonRequest(path: string): Promise<unknown> {
     const url = `${this.#serverUrl}/${path}`;
     const response = await this.request(path);
 
@@ -531,7 +531,7 @@ export class Opencast {
           xhr.setRequestHeader('Authorization', `Basic ${encoded}`);
         }
 
-        xhr.onload = e => resolve(xhr.responseText);
+        xhr.onload = () => resolve(xhr.responseText);
         xhr.onerror = () => {
           // Handle 401 Bad credentials for HTTP Basic Auth
           if (xhr.status === 401 || xhr.status === 403) {
@@ -659,14 +659,14 @@ class RequestError extends Error {}
  * blocked by browser, CORS, server not available, device offline, ...
  */
 class NetworkError extends RequestError {
-  constructor(url: string, cause: any) {
+  constructor(url: string, cause: unknown) {
     super(`network error when accessing '${url}': ${cause}`);
   }
 }
 
 /** When requesting a JSON API but the response body is not valid JSON. */
 class InvalidJson extends RequestError {
-  constructor(url: string, cause: any) {
+  constructor(url: string, cause: unknown) {
     super(`invalid JSON when accessing ${url}: ${cause}`);
   }
 }

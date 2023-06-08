@@ -106,14 +106,16 @@ export class SettingsManager {
    * This function is called whenever the user saved their settings. The new
    * settings object is passed as parameter.
    */
-  onChange: (newSettings: Settings) => void = () => {};
+  onChange: (newSettings: Settings) => void = () => {
+    // By default, this does nothing. It is overwritten below.
+  };
 
   /**
    * Creates a new `Settings` instance by loading user settings from local
    * storage and attempting to load context settings from the server..
    */
   static async init() {
-    let self = new SettingsManager();
+    const self = new SettingsManager();
 
     // Load the user settings from local storage
     const stored = window.localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -193,8 +195,8 @@ export class SettingsManager {
       );
     } else {
       // Interpret each get parameter as single configuration value.
-      let rawUrlSettings = Object.create(null);
-      for (let [key, value] of urlParams) {
+      const rawUrlSettings = Object.create(null);
+      for (const [key, value] of urlParams) {
         // Create empty objects for full path (if the key contains '.') and set
         // the value at the end.
         let obj = rawUrlSettings;
@@ -305,7 +307,7 @@ export class SettingsManager {
       if (!(segment in obj)) {
         return true;
       }
-      obj = (obj as any)[segment];
+      obj = (obj as object)[segment];
     }
 
     return false;
@@ -374,7 +376,7 @@ const validate = (
   const validateObj = (schema: Record<string, SchemaOrValidator>, obj: object, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
-    let out = Object.create(null);
+    const out = Object.create(null);
     for (const [key, value] of Object.entries(obj)) {
       const newPath = path ? `${path}.${key}` : key;
       if (key in schema && key in obj) {
@@ -408,7 +410,7 @@ const validate = (
  * then used in the validated settings object. The returned value might be `v`
  * or something else.
  */
-type Validator<T> = (v: any, allowParse: boolean, src: SettingsSource) => T;
+type Validator<T> = (v: unknown, allowParse: boolean, src: SettingsSource) => T;
 
 /** Validation functions for basic types. */
 const types = {
@@ -420,10 +422,10 @@ const types = {
   },
   'int': (v, allowParse): number => {
     if (Number.isInteger(v)) {
-      return v;
+      return v as number;
     }
 
-    if (allowParse) {
+    if (allowParse && typeof v === 'string') {
       if (/^[-+]?(\d+)$/.test(v)) {
         return Number(v);
       }
@@ -451,7 +453,7 @@ const types = {
     }
   },
   positiveInteger: (v, allowParse): number => {
-    let i = types.int(v, allowParse);
+    const i = types.int(v, allowParse);
     if (i <= 0) {
       throw new Error("has to be positive, but isn't");
     }
@@ -491,6 +493,10 @@ const types = {
 
 /** Validator for `FormFieldState`. */
 const metaDataField: Validator<FormFieldState> = v => {
+  if (typeof v !== 'string') {
+    throw new Error('has to be a string');
+  }
+
   if (![FORM_FIELD_HIDDEN, FORM_FIELD_OPTIONAL, FORM_FIELD_REQUIRED].includes(v)) {
     throw new Error(
       `has to be either '${FORM_FIELD_HIDDEN}', '${FORM_FIELD_OPTIONAL}' or `
@@ -498,7 +504,7 @@ const metaDataField: Validator<FormFieldState> = v => {
     );
   }
 
-  return v;
+  return v as FormFieldState;
 };
 
 /**
@@ -578,7 +584,9 @@ const SCHEMA = {
     allowedDomains: onlyFromServer(types.array(types.string)),
     label: types.string,
     target: v => {
-      types.string(v);
+      if (typeof v !== 'string') {
+        throw new Error('has to be a string');
+      }
       if (!(v.startsWith('/') || v.startsWith('http'))) {
         throw new Error('has to start with \'/\' or \'http\'');
       }
@@ -588,7 +596,7 @@ const SCHEMA = {
   theme: {
     customCSS: types.string,
   },
-} satisfies Record<string, Record<string, Validator<any>>>;
+} satisfies Record<string, Record<string, Validator<unknown>>>;
 
 
 // ==============================================================================================
