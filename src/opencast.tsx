@@ -1,42 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import equal from 'fast-deep-equal';
-import Mustache from 'mustache';
+import React, { useEffect, useState } from "react";
+import equal from "fast-deep-equal";
+import Mustache from "mustache";
 
-import { recordingFileName, usePresentContext } from './util';
-import { Settings } from './settings';
-import { Recording } from './studio-state';
-import { bug } from './util/err';
+import { recordingFileName, usePresentContext } from "./util";
+import { Settings } from "./settings";
+import { Recording } from "./studio-state";
+import { bug } from "./util/err";
 
 
 /** The server URL was not specified. */
-export const STATE_UNCONFIGURED = 'unconfigured';
+export const STATE_UNCONFIGURED = "unconfigured";
 
 /**
  * The OC server is reachable but a login was not attempted and the current user
  * is anonymous.
  */
-export const STATE_CONNECTED = 'connected';
+export const STATE_CONNECTED = "connected";
 
 /** The OC server is reachable and the user is authenticated. */
-export const STATE_LOGGED_IN = 'logged_in';
+export const STATE_LOGGED_IN = "logged_in";
 
 /** Some network error occured when accessing the server. */
-export const STATE_NETWORK_ERROR = 'network_error';
+export const STATE_NETWORK_ERROR = "network_error";
 
 /**
  * When accessing the OC API, the request returned as non-2xx code unexpectedly.
  * This likely indicates that the server is not actually a valid OC server.
  */
-export const STATE_RESPONSE_NOT_OK = 'response_not_ok';
+export const STATE_RESPONSE_NOT_OK = "response_not_ok";
 
 /** The API requested returned invalid JSON or unexpected data. */
-export const STATE_INVALID_RESPONSE = 'invalid_response';
+export const STATE_INVALID_RESPONSE = "invalid_response";
 
 /**
  * The server is reachable and a login was provided, but the login did not
  * succeed.
  */
-export const STATE_INCORRECT_LOGIN = 'incorrect_login';
+export const STATE_INCORRECT_LOGIN = "incorrect_login";
 
 type OpencastState =
   | typeof STATE_UNCONFIGURED
@@ -48,11 +48,11 @@ type OpencastState =
   | typeof STATE_INCORRECT_LOGIN;
 
 type UploadState =
-  | 'success'
-  | 'network_error'
-  | 'not_authorized'
-  | 'unexpected_response'
-  | 'unknown_error';
+  | "success"
+  | "network_error"
+  | "not_authorized"
+  | "unexpected_response"
+  | "unknown_error";
 
 
 export class Opencast {
@@ -83,14 +83,14 @@ export class Opencast {
   updateGlobalOc: null | ((oc: Opencast) => void) = null;
 
 
-  constructor(settings: Settings['opencast']) {
+  constructor(settings: Settings["opencast"]) {
     // If the server URL is not given, we stay in unconfigured state and
     // immediately return.
     if (settings?.serverUrl == null) {
       return;
     }
 
-    this.#serverUrl = settings.serverUrl.endsWith('/')
+    this.#serverUrl = settings.serverUrl.endsWith("/")
       ? settings.serverUrl.slice(0, -1)
       : settings.serverUrl;
 
@@ -113,7 +113,7 @@ export class Opencast {
   }
 
   /** Creates a new instance from the settings and calls `updateUser` on it. */
-  static async init(settings: Settings['opencast']) {
+  static async init(settings: Settings["opencast"]) {
     const self = new Opencast(settings);
     await self.updateUser();
     return self;
@@ -167,7 +167,7 @@ export class Opencast {
         throw e;
       }
 
-      console.error('error when getting info/me', e);
+      console.error("error when getting info/me", e);
 
       const oldState = this.#state;
 
@@ -200,7 +200,7 @@ export class Opencast {
     const userChanged = !equal(newUser, this.#currentUser);
     if (userChanged) {
       this.#currentUser = newUser;
-      if (newUser?.user?.username === 'anonymous') {
+      if (newUser?.user?.username === "anonymous") {
         this.#state = this.#login ? STATE_INCORRECT_LOGIN : STATE_CONNECTED;
       } else if (newUser?.user?.username) {
         this.#state = STATE_LOGGED_IN;
@@ -229,7 +229,7 @@ export class Opencast {
         throw e;
       }
 
-      console.error('Error when getting LTI info: ', e);
+      console.error("Error when getting LTI info: ", e);
 
       const oldState = this.#state;
 
@@ -258,12 +258,12 @@ export class Opencast {
 
   /** Returns the response from the `/info/me.json` endpoint. */
   async getInfoMe(): Promise<unknown> {
-    return await this.jsonRequest('info/me.json');
+    return await this.jsonRequest("info/me.json");
   }
 
   /** Returns the response from the `/lti` endpoint. */
   async getLti(): Promise<unknown> {
-    return await this.jsonRequest('lti');
+    return await this.jsonRequest("lti");
   }
 
   /**
@@ -296,17 +296,17 @@ export class Opencast {
     let headers = {};
     if (this.#login !== true && this.#login?.username && this.#login?.password) {
       const encoded = btoa(unescape(encodeURIComponent(
-        this.#login.username + ':' + this.#login.password
+        this.#login.username + ":" + this.#login.password
       )));
-      headers = { 'Authorization': `Basic ${encoded}` };
+      headers = { "Authorization": `Basic ${encoded}` };
     }
 
     let response: Response;
     try {
       response = await fetch(url, {
         ...options,
-        credentials: 'same-origin',
-        redirect: 'manual',
+        credentials: "same-origin",
+        redirect: "manual",
         headers,
       });
     } catch (e) {
@@ -318,7 +318,7 @@ export class Opencast {
       throw new Unauthorized(response.status, response.statusText, url);
     }
 
-    if (response.type === 'opaqueredirect') {
+    if (response.type === "opaqueredirect") {
       throw new UnexpectedRedirect(url);
     }
 
@@ -348,7 +348,7 @@ export class Opencast {
     presenter: string,
     start: number | null,
     end: number | null,
-    uploadSettings: Settings['upload'],
+    uploadSettings: Settings["upload"],
     onProgress: (p: number) => void,
   }): Promise<UploadState> {
     // Refresh connection and check if we are ready to upload.
@@ -357,20 +357,20 @@ export class Opencast {
       case STATE_LOGGED_IN:
         break;
       case STATE_NETWORK_ERROR:
-        return 'network_error';
+        return "network_error";
       case STATE_INCORRECT_LOGIN:
       case STATE_CONNECTED:
-        return 'not_authorized';
+        return "not_authorized";
       case STATE_INVALID_RESPONSE:
-        return 'unexpected_response';
+        return "unexpected_response";
       default:
-        return 'unknown_error';
+        return "unknown_error";
     }
 
     // Actually upload
     try {
       // Create new media package
-      let mediaPackage = await this.request('ingest/createMediaPackage')
+      let mediaPackage = await this.request("ingest/createMediaPackage")
         .then(response => response.text());
 
       // Add metadata to media package
@@ -400,27 +400,27 @@ export class Opencast {
       // Finalize/ingest media package
       await this.finishIngest({ mediaPackage, uploadSettings });
 
-      return 'success';
+      return "success";
     } catch (e) {
       // Any error not thrown by us is rethrown.
       if (!(e instanceof RequestError)) {
         throw e;
       }
 
-      console.error('Error occured during upload: ', e);
+      console.error("Error occured during upload: ", e);
 
       if (e instanceof NetworkError) {
-        return 'network_error';
+        return "network_error";
       } else if (e instanceof UnexpectedRedirect || e instanceof Unauthorized) {
         // Again, we boldly assume that any redirect is a redirect to the login
         // page. This might be wrong, but until someone has a problem, this is
         // the sanest option IMO. A well-designed API shouldn't redirect in
         // those cases, of course. But we are not dealing with such an API here.
-        return 'not_authorized';
+        return "not_authorized";
       } else if (e instanceof NotOkResponse) {
-        return 'unexpected_response';
+        return "unexpected_response";
       } else {
-        return 'unknown_error';
+        return "unknown_error";
       }
     }
   }
@@ -433,18 +433,18 @@ export class Opencast {
     mediaPackage: string,
     title: string,
     presenter: string,
-    uploadSettings: Settings['upload'],
+    uploadSettings: Settings["upload"],
   }) {
     const seriesId = uploadSettings?.seriesId;
     const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
     const dcc = this.constructDcc(template, { presenter, title, seriesId });
 
     const body = new FormData();
-    body.append('mediaPackage', mediaPackage);
-    body.append('dublinCore', encodeURIComponent(dcc));
-    body.append('flavor', 'dublincore/episode');
+    body.append("mediaPackage", mediaPackage);
+    body.append("dublinCore", encodeURIComponent(dcc));
+    body.append("flavor", "dublincore/episode");
 
-    return await this.request('ingest/addDCCatalog', { method: 'post', body })
+    return await this.request("ingest/addDCCatalog", { method: "post", body })
       .then(response => response.text());
   }
 
@@ -454,7 +454,7 @@ export class Opencast {
    */
   async attachAcl({ mediaPackage, uploadSettings }: {
     mediaPackage: string,
-    uploadSettings: Settings['upload'],
+    uploadSettings: Settings["upload"],
   }) {
     const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
       ? DEFAULT_ACL_TEMPLATE
@@ -462,11 +462,11 @@ export class Opencast {
     const acl = this.constructAcl(template);
 
     const body = new FormData();
-    body.append('flavor', 'security/xacml+episode');
-    body.append('mediaPackage', mediaPackage);
-    body.append('BODY', new Blob([acl]), 'acl.xml');
+    body.append("flavor", "security/xacml+episode");
+    body.append("mediaPackage", mediaPackage);
+    body.append("BODY", new Blob([acl]), "acl.xml");
 
-    return await this.request('ingest/addAttachment', { method: 'post', body: body })
+    return await this.request("ingest/addAttachment", { method: "post", body: body })
       .then(response => response.text());
   }
 
@@ -477,10 +477,10 @@ export class Opencast {
     end: number,
   }) {
     const body = new FormData();
-    body.append('flavor', 'smil/cutting');
-    body.append('mediaPackage', mediaPackage);
-    body.append('BODY', new Blob([smil({ start, end })]), 'cutting.smil');
-    const response = await this.request('ingest/addCatalog', { method: 'post', body });
+    body.append("flavor", "smil/cutting");
+    body.append("mediaPackage", mediaPackage);
+    body.append("BODY", new Blob([smil({ start, end })]), "cutting.smil");
+    const response = await this.request("ingest/addCatalog", { method: "post", body });
     return await response.text();
   }
 
@@ -500,35 +500,35 @@ export class Opencast {
 
     for (const { deviceType, media, mimeType } of recordings) {
       const finishedBytes = finishedTracksBytes;
-      let trackFlavor = 'presentation/source';
-      if (deviceType === 'desktop') {
-        trackFlavor = 'presentation/source';
-      } else if (deviceType === 'video') {
-        trackFlavor = 'presenter/source';
+      let trackFlavor = "presentation/source";
+      if (deviceType === "desktop") {
+        trackFlavor = "presentation/source";
+      } else if (deviceType === "video") {
+        trackFlavor = "presenter/source";
       }
 
-      const flavor = deviceType === 'desktop' ? 'presentation' : 'presenter';
+      const flavor = deviceType === "desktop" ? "presentation" : "presenter";
       const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
 
       const body = new FormData();
-      body.append('mediaPackage', mediaPackage);
-      body.append('flavor', trackFlavor);
-      body.append('tags', '');
-      body.append('BODY', media, downloadName);
+      body.append("mediaPackage", mediaPackage);
+      body.append("flavor", trackFlavor);
+      body.append("tags", "");
+      body.append("BODY", media, downloadName);
 
       // We have to upload with XHR here, as `fetch` does not currently offer a
       // way to get the upload progress. Meh.
       const url = `${this.#serverUrl}/ingest/addTrack`;
       mediaPackage = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', url);
+        xhr.open("POST", url);
 
         // Add HTTP Basic Auth headers if username and password are provided.
         if (this.#login !== true && this.#login?.username && this.#login?.password) {
           const encoded = btoa(unescape(encodeURIComponent(
-            this.#login.username + ':' + this.#login.password
+            this.#login.username + ":" + this.#login.password
           )));
-          xhr.setRequestHeader('Authorization', `Basic ${encoded}`);
+          xhr.setRequestHeader("Authorization", `Basic ${encoded}`);
         }
 
         xhr.onload = () => resolve(xhr.responseText);
@@ -566,16 +566,16 @@ export class Opencast {
    */
   async finishIngest({ mediaPackage, uploadSettings }: {
     mediaPackage: string,
-    uploadSettings: Settings['upload'],
+    uploadSettings: Settings["upload"],
   }) {
     const workflowId = uploadSettings?.workflowId;
 
     const body = new FormData();
-    body.append('mediaPackage', mediaPackage);
+    body.append("mediaPackage", mediaPackage);
     if (workflowId) {
-      body.append('workflowDefinitionId', workflowId);
+      body.append("workflowDefinitionId", workflowId);
     }
-    await this.request('ingest/ingest', { method: 'post', body: body });
+    await this.request("ingest/ingest", { method: "post", body: body });
   }
 
   /** Returns the current state of the connection to the OC server. */
@@ -604,7 +604,7 @@ export class Opencast {
   prettyServerUrl() {
     const url = this.#serverUrl;
 
-    return url && url.startsWith('https')
+    return url && url.startsWith("https")
       ? new URL(url).hostname
       : null;
   }
@@ -612,7 +612,7 @@ export class Opencast {
   /** Constructs the ACL XML structure from the given template string. */
   constructAcl(template: string) {
     const hasRoles = (user: unknown): user is { roles: unknown[] } =>
-      user != null && typeof user === 'object' && 'roles' in user && Array.isArray(user.roles);
+      user != null && typeof user === "object" && "roles" in user && Array.isArray(user.roles);
 
     if (!hasRoles(this.#currentUser)) {
       // Internal error: this should not happen.
@@ -623,7 +623,7 @@ export class Opencast {
     const view = {
       user: this.#currentUser,
       lti: this.#ltiSession,
-      roleOAuthUser: this.#currentUser.roles.find(r => r === 'ROLE_OAUTH_USER'),
+      roleOAuthUser: this.#currentUser.roles.find(r => r === "ROLE_OAUTH_USER"),
     };
 
     return renderTemplate(template, view);
@@ -697,7 +697,7 @@ class UnexpectedRedirect extends RequestError {
 const Context = React.createContext<Opencast | null>(null);
 
 /** Returns the current provided Opencast instance. */
-export const useOpencast = (): Opencast => usePresentContext(Context, 'useOpencast');
+export const useOpencast = (): Opencast => usePresentContext(Context, "useOpencast");
 
 type ProviderProps = React.PropsWithChildren<{
   initial: Opencast;
@@ -718,7 +718,7 @@ export const Provider: React.FC<ProviderProps> = ({ initial, children }) => {
 
   // This debug output will be useful for future debugging sessions.
   useEffect(() => {
-    console.debug('Current Opencast connection: ', opencast);
+    console.debug("Current Opencast connection: ", opencast);
 
     // To avoid problems of session timeouts, we request `info/me` every 5
     // minutes. The additional server load should be negligible, it won't

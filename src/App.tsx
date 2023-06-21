@@ -1,7 +1,7 @@
-import { Root } from './layout';
+import { Root } from "./layout";
 
-import { Provider as StudioStateProvier } from './studio-state';
-import { ColorSchemeProvider } from './color';
+import { Provider as StudioStateProvier } from "./studio-state";
+import { ColorSchemeProvider } from "./color";
 
 
 

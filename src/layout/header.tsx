@@ -1,17 +1,17 @@
-import { HiOutlineTranslate } from 'react-icons/hi';
-import { FiInfo, FiMoon } from 'react-icons/fi';
+import { HiOutlineTranslate } from "react-icons/hi";
+import { FiInfo, FiMoon } from "react-icons/fi";
 
-import { COLORS } from '../color';
-import { DEFINES } from '../defines';
-import { useTranslation } from 'react-i18next';
+import { COLORS } from "../color";
+import { DEFINES } from "../defines";
+import { useTranslation } from "react-i18next";
 
 
 export const Header: React.FC = () => (
   <div css={{
     backgroundColor: COLORS.neutral6,
     height: 64,
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: "flex",
+    justifyContent: "space-between",
   }}>
     <Logo />
     <Buttons />
@@ -20,21 +20,21 @@ export const Header: React.FC = () => (
 
 const Logo: React.FC = () => {
   const path = (filename: string) => DEFINES.publicPath
-    + (DEFINES.publicPath.endsWith('/') ? '' : '/')
+    + (DEFINES.publicPath.endsWith("/") ? "" : "/")
     + filename;
 
   return (
     <picture css={{
-      height: '100%',
-      display: 'flex',
+      height: "100%",
+      display: "flex",
       paddingLeft: 8,
-      alignItems: 'center',
-      '> *': {
-        height: 'calc(100% - 12px)',
+      alignItems: "center",
+      "> *": {
+        height: "calc(100% - 12px)",
       },
     }}>
-      <source media="(min-width: 920px)" srcSet={path('logo-wide.svg')} />
-      <img src={path('logo-narrow.svg')} alt="Opencast Studio Logo" />
+      <source media="(min-width: 920px)" srcSet={path("logo-wide.svg")} />
+      <img src={path("logo-narrow.svg")} alt="Opencast Studio Logo" />
     </picture>
   );
 };
@@ -43,10 +43,10 @@ const Buttons: React.FC = () => {
 
   return (
     <div css={{
-      display: 'flex',
+      display: "flex",
       gap: 16,
-      height: '100%',
-      alignItems: 'center',
+      height: "100%",
+      alignItems: "center",
       paddingRight: 24,
     }}>
       <LanguageButton />
@@ -65,14 +65,14 @@ const LanguageButton: React.FC = () => {
 const ThemeButton: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <HeaderButton icon={<FiMoon />} label={t('header.theme.label')} />
+    <HeaderButton icon={<FiMoon />} label={t("header.theme.label")} />
   );
 };
 
 const InfoButton: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <HeaderButton icon={<FiInfo />} label={t('header.info.label')} />
+    <HeaderButton icon={<FiInfo />} label={t("header.info.label")} />
   );
 };
 
@@ -85,24 +85,24 @@ const BUTTON_LABEL_BREAKPOINT = 640;
 
 const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label }) => (
   <button css={{
-    display: 'flex',
+    display: "flex",
     gap: 8,
-    alignItems: 'center',
+    alignItems: "center",
 
-    background: 'none',
-    border: 'none',
+    background: "none",
+    border: "none",
     fontSize: 16,
     color: COLORS.neutral0,
     borderRadius: 6,
-    cursor: 'pointer',
+    cursor: "pointer",
     padding: 5,
 
-    ':hover, :active': {
+    ":hover, :active": {
       outline: `2px solid ${COLORS.neutral4}`,
       backgroundColor: COLORS.neutral7,
     },
 
-    '> svg': {
+    "> svg": {
       fontSize: 22,
       [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
         fontSize: 26,
@@ -112,7 +112,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label }) => (
     {icon}
     <span css={{
       [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
-        display: 'none',
+        display: "none",
       },
     }}>{label}</span>
   </button>

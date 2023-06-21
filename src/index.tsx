@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import './i18n';
-import { SettingsManager, Provider as SettingsProvider } from './settings';
-import { Opencast, Provider as OpencastProvider } from './opencast';
-import { userHasWebcam, sleep } from './util';
-import { notNullable } from './util/err';
+import "./i18n";
+import { SettingsManager, Provider as SettingsProvider } from "./settings";
+import { Opencast, Provider as OpencastProvider } from "./opencast";
+import { userHasWebcam, sleep } from "./util";
+import { notNullable } from "./util/err";
 
 
 // Load the rest of the application and try to fetch the settings file from the
 // server.
 const initialize = Promise.all([
   // Load rest of the application code
-  import('./App').then(mod => mod.App),
+  import("./App").then(mod => mod.App),
 
   // Check for camera devices
   userHasWebcam(),
@@ -36,7 +36,7 @@ const initialize = Promise.all([
 ]);
 
 const render = (body: JSX.Element) => {
-  const reactRoot = ReactDOM.createRoot(notNullable(document.getElementById('root')));
+  const reactRoot = ReactDOM.createRoot(notNullable(document.getElementById("root")));
   reactRoot.render(body);
 };
 

@@ -1,8 +1,5 @@
 {
   "extends": ["@opencast/eslint-config-ts-react"],
-  "rules": {
-    "quotes": ["warn", "single", { "avoidEscape": true }]
-  },
   "overrides": [
       {
           "files": ["./webpack.config.ts"],
