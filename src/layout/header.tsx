@@ -107,7 +107,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label }) => (
       [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
         fontSize: 26,
       },
-    }
+    },
   }}>
     {icon}
     <span css={{

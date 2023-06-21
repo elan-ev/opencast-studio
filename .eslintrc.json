@@ -1,47 +1,19 @@
 {
-  "extends": ["plugin:react/recommended"],
-  "plugins": ["@babel"],
-
+  "extends": ["@opencast/eslint-config-ts-react"],
   "rules": {
-    "no-tabs": "error",
-    "react/jsx-pascal-case": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": 0,
-    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
-    "react/jsx-curly-spacing": "warn",
-    "no-unused-expressions": "off",
-    "@babel/no-unused-expressions": "warn",
-    "quotes": ["warn", "single", { "avoidEscape": true }],
-
-    "arrow-parens": ["warn", "as-needed"],
-    "arrow-spacing": "warn",
-    "block-spacing": ["warn", "always"],
-    "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
-    "comma-dangle": ["warn", "only-multiline"],
-    "comma-spacing": "warn",
-    "comma-style": "warn",
-    "curly": "warn",
-    "eol-last": ["warn", "always"],
-    "func-call-spacing": ["warn", "never"],
-    "indent": ["warn", 2, { "SwitchCase": 1, "MemberExpression": "off" }],
-    "jsx-quotes": ["warn", "prefer-double"],
-    "keyword-spacing": "warn",
-    "linebreak-style": ["warn", "unix"],
-    "max-len": ["warn", { "code": 120, "ignoreUrls": true }],
-    "no-multi-spaces": ["warn", { "ignoreEOLComments": true }],
-    "no-trailing-spaces": "warn",
-    "object-curly-spacing": ["warn", "always", { "arraysInObjects": false, "objectsInObjects": false }],
-    "semi": ["warn", "always"],
-    "semi-spacing": "warn",
-    "space-before-function-paren": ["warn", "never"],
-    "space-before-blocks": "warn",
-    "space-infix-ops": "warn",
-    "space-in-parens": "warn"
+    "quotes": ["warn", "single", { "avoidEscape": true }]
   },
-  "settings": {
-    "react": {
-      "pragma": "jsx",
-      "version": "detect"
-    }
-  }
+  "overrides": [
+      {
+          "files": ["./webpack.config.ts"],
+          "parserOptions": {
+              "project": false
+          }
+      }
+  ],
+  "ignorePatterns": [
+    "node_modules",
+    "old-src",
+    "build"
+  ]
 }

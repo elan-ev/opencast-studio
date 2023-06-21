@@ -114,7 +114,7 @@ const nowAsString = () => {
     + pad2(now.getMinutes());
 };
 
-export const userHasWebcam = async() => {
+export const userHasWebcam = async () => {
   if (!('mediaDevices' in navigator)) {
     return false;
   }
@@ -158,7 +158,7 @@ export const decodeHexString = (hex: string): string => {
 export const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
 /** Obtains all media devices and stores them into the global state. */
-export const queryMediaDevices = async(dispatch: Dispatcher) => {
+export const queryMediaDevices = async (dispatch: Dispatcher) => {
   const devices = await navigator.mediaDevices.enumerateDevices();
   dispatch({ type: 'UPDATE_MEDIA_DEVICES', devices });
 };

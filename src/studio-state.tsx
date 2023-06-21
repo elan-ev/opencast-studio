@@ -201,17 +201,17 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
       };
 
     case 'UPLOAD_ERROR':
-      return { ...state, upload: { ...state.upload, error: action.msg, state: STATE_ERROR }};
+      return { ...state, upload: { ...state.upload, error: action.msg, state: STATE_ERROR } };
     case 'UPLOAD_REQUEST':
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING }};
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING } };
     case 'UPLOAD_SUCCESS':
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED }};
+      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED } };
     case 'UPLOAD_PROGRESS_UPDATE':
       return { ...state, upload: {
         ...state.upload,
         secondsLeft: action.secondsLeft,
         currentProgress: action.currentProgress,
-      }};
+      } };
 
     case 'MARK_DOWNLOADED': return {
       ...state,

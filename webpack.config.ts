@@ -42,7 +42,7 @@ const config: CallableOption = (_env, argv) => ({
             icon: true,
           },
         }],
-      }
+      },
     ],
   },
   plugins: [
