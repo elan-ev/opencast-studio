@@ -526,13 +526,13 @@ const onlyFromServer = <Out, >(inner: Validator<Out>): Validator<Out> => (
 const SCHEMA = {
   opencast: {
     serverUrl: v => {
-      types.string(v);
+      const s = types.string(v);
 
-      if (v === "/" || v === "") {
+      if (s === "/" || s === "") {
         return;
       }
 
-      const url = new URL(v);
+      const url = new URL(s);
       if (url.protocol !== "https:" && url.protocol !== "http:") {
         throw new Error('the URL does not start with "http:" or "https:"');
       }
