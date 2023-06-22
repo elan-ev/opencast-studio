@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { bug } from "./util/err";
+import { bug } from "@opencast/appkit";
 
 
 /** All colors used throughout Opencast Studio. */

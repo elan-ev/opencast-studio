@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import deepmerge from "deepmerge";
 import parseToml from "@iarna/toml/parse-string";
+import { unreachable } from "@opencast/appkit";
 
 import { decodeHexString, usePresentContext } from "./util";
-import { unreachable } from "./util/err";
 import { DEFINES } from "./defines";
 
 const LOCAL_STORAGE_KEY = "ocStudioSettings";

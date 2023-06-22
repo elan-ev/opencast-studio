@@ -24,6 +24,7 @@
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@iarna/toml": "^2.2.5",
+    "@opencast/appkit": "file:../appkit",
     "@svgr/webpack": "^8.0.1",
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^10.2.4",

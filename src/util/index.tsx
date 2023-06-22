@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Dispatcher } from "../studio-state";
-import { bug } from "./err";
+import { bug } from "@opencast/appkit";
 
 
 /**

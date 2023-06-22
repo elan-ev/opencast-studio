@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import equal from "fast-deep-equal";
 import Mustache from "mustache";
+import { bug } from "@opencast/appkit";
 
 import { recordingFileName, usePresentContext } from "./util";
 import { Settings } from "./settings";
 import { Recording } from "./studio-state";
-import { bug } from "./util/err";
 
 
 /** The server URL was not specified. */
