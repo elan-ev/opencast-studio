@@ -9,7 +9,7 @@
     <script>
       // This is used to determine the color mode as soon as possible to avoid a
       // flash of white (the loading indicator) for a user using dark mode.
-      const scheme = window.localStorage.getItem("ocStudioColorScheme");
+      const scheme = window.localStorage.getItem("colorScheme");
       document.documentElement.dataset.colorScheme = (scheme === "dark" || scheme === "light")
         ? scheme
         : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
