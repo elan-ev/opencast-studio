@@ -23,6 +23,7 @@
     "@babel/preset-typescript": "^7.21.5",
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.1",
+    "@fontsource-variable/roboto-flex": "^5.0.3",
     "@iarna/toml": "^2.2.5",
     "@opencast/appkit": "file:../appkit",
     "@svgr/webpack": "^8.0.1",

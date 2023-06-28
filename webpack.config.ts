@@ -71,6 +71,28 @@ const config: CallableOption = (_env, argv) => ({
       patterns: [
         { from: path.join(__dirname, "assets/logo-wide.svg"), to: OUT_PATH },
         { from: path.join(__dirname, "assets/logo-narrow.svg"), to: OUT_PATH },
+
+        // Copy the font related files to output directory
+        {
+          from: path.join(__dirname, "node_modules/@fontsource-variable/roboto-flex/index.css"),
+          to: path.join(OUT_PATH, "font.css"),
+          transform: (input: Buffer) => {
+            return input.toString().replace(/url\(.\/files\//g, "url(./fonts/");
+          }
+        },
+        ...(
+          [
+            "roboto-flex-cyrillic-ext-wght-normal.woff2",
+            "roboto-flex-cyrillic-wght-normal.woff2",
+            "roboto-flex-greek-wght-normal.woff2",
+            "roboto-flex-vietnamese-wght-normal.woff2",
+            "roboto-flex-latin-ext-wght-normal.woff2",
+            "roboto-flex-latin-wght-normal.woff2",
+          ].map(font => ({
+            from: path.join(__dirname, "node_modules/@fontsource-variable/roboto-flex/files/", font),
+            to: path.join(OUT_PATH, "fonts", font),
+          }))
+        ),
       ],
     }),
   ],
