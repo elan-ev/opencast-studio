@@ -86,7 +86,6 @@
   "settings-header": "Einstellungen",
 
   "settings-general-header": "Allgemein",
-  "settings-language-label": "Sprache",
 
   "back-button-label": "Zurück",
   "next-button-label": "Weiter",
@@ -187,9 +186,12 @@
     },
     "theme": {
       "label": "Aussehen",
-      "dark": "Dunkles Design",
-      "light": "Helles Design",
-      "auto": "Systemdesign"
+      "dark": "Dunkel",
+      "light": "Hell",
+      "auto": "Auto"
+    },
+    "language": {
+      "label": "Sprache"
     }
   }
 }

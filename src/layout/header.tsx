@@ -1,15 +1,21 @@
 import { HiOutlineTranslate } from "react-icons/hi";
 import { FiInfo, FiMoon } from "react-icons/fi";
+import {
+  HeaderMenuItemProps, useColorScheme, useConfig, WithHeaderMenu, checkboxMenuItem,
+} from "@opencast/appkit";
+import { useTranslation } from "react-i18next";
+import React, { forwardRef } from "react";
 
 import { COLORS } from "../color";
 import { DEFINES } from "../defines";
-import { useTranslation } from "react-i18next";
+import languages from "../i18n/languages";
 
 
 export const Header: React.FC = () => (
   <div css={{
+    "--header-height": "64px",
     backgroundColor: COLORS.neutral6,
-    height: 64,
+    height: "var(--header-height)",
     display: "flex",
     justifyContent: "space-between",
   }}>
@@ -57,15 +63,57 @@ const Buttons: React.FC = () => {
 };
 
 const LanguageButton: React.FC = () => {
+  const config = useConfig();
+  const { t, i18n } = useTranslation();
+  const isCurrentLanguage = (language: string) => language === i18n.resolvedLanguage;
+
+  const menuItems = Object.values(languages).map(lng => checkboxMenuItem({
+    checked: isCurrentLanguage(lng.short),
+    children: <>{lng.long}</>,
+    onClick: () => {
+      if (!isCurrentLanguage(lng.short)) {
+        i18n.changeLanguage(lng.short);
+      }
+    },
+  }));
+
+  const label = t("header.language.label");
   return (
-    <HeaderButton icon={<HiOutlineTranslate />} label="Language" />
+    <WithHeaderMenu
+      menu={{
+        label,
+        items: menuItems,
+        breakpoint: config.breakpoints.small,
+      }}
+    >
+      <HeaderButton icon={<HiOutlineTranslate />} label={label} />
+    </WithHeaderMenu>
   );
 };
 
 const ThemeButton: React.FC = () => {
   const { t } = useTranslation();
+  const { scheme, isAuto, update } = useColorScheme();
+  const config = useConfig();
+
+  const currentPref = isAuto ? "auto" : scheme;
+  const choices = ["auto", "light", "dark"] as const;
+  const menuItems: HeaderMenuItemProps[] = choices.map(choice => checkboxMenuItem({
+    checked: currentPref === choice,
+    children: <>{t(`header.theme.${choice}`)}</>,
+    onClick: () => update(choice),
+  }));
+
   return (
-    <HeaderButton icon={<FiMoon />} label={t("header.theme.label")} />
+    <WithHeaderMenu
+      menu={{
+        label: t("header.theme.label"),
+        items: menuItems,
+        breakpoint: config.breakpoints.small,
+      }}
+    >
+      <HeaderButton icon={<FiMoon />} label={t("header.theme.label")} />
+    </WithHeaderMenu>
   );
 };
 
@@ -76,44 +124,48 @@ const InfoButton: React.FC = () => {
   );
 };
 
-type HeaderButtonProps = {
+type HeaderButtonProps = JSX.IntrinsicElements["button"] & {
   icon: JSX.Element;
   label: string;
 };
 
 const BUTTON_LABEL_BREAKPOINT = 640;
 
-const HeaderButton: React.FC<HeaderButtonProps> = ({ icon, label }) => (
-  <button css={{
-    display: "flex",
-    gap: 8,
-    alignItems: "center",
+const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
+  ({ icon, label, ...rest }, ref) => (
+    <button type="button" ref={ref} {...rest} css={{
+      display: "flex",
+      gap: 8,
+      alignItems: "center",
 
-    background: "none",
-    border: "none",
-    fontSize: 16,
-    color: COLORS.neutral0,
-    borderRadius: 6,
-    cursor: "pointer",
-    padding: 5,
+      background: "none",
+      border: "none",
+      fontSize: 16,
+      fontFamily: "inherit",
+      fontWeight: 500,
+      color: COLORS.neutral0,
+      borderRadius: 6,
+      cursor: "pointer",
+      padding: "6px 8px",
 
-    ":hover, :active": {
-      outline: `2px solid ${COLORS.neutral4}`,
-      backgroundColor: COLORS.neutral7,
-    },
-
-    "> svg": {
-      fontSize: 22,
-      [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
-        fontSize: 26,
+      ":hover, :active": {
+        outline: `2px solid ${COLORS.neutral5}`,
+        backgroundColor: COLORS.neutral7,
       },
-    },
-  }}>
-    {icon}
-    <span css={{
-      [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
-        display: "none",
+
+      "> svg": {
+        fontSize: 22,
+        [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
+          fontSize: 26,
+        },
       },
-    }}>{label}</span>
-  </button>
+    }}>
+      {icon}
+      <span css={{
+        [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
+          display: "none",
+        },
+      }}>{label}</span>
+    </button>
+  )
 );

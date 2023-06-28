@@ -47,7 +47,6 @@
   "settings-header": "Paramètres",
 
   "settings-general-header": "Général",
-  "settings-language-label": "Langue",
 
   "back-button-label": "Retour",
   "next-button-label": "Suivant",
@@ -141,5 +140,11 @@
   "settings-back-to-recording": "Retour à l’enregistrement",
 
   "video-settings-open": "Ouvrir les paramètres vidéo",
-  "video-settings-close": "Fermer les paramètres vidéo"
+  "video-settings-close": "Fermer les paramètres vidéo",
+
+  "header": {
+    "language": {
+      "label": "Langue"
+    }
+  }
 }

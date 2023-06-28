@@ -47,7 +47,6 @@
   "settings-header": "Settings",
 
   "settings-general-header": "General",
-  "settings-language-label": "Language",
 
   "back-button-label": "Back",
   "next-button-label": "Next",
@@ -189,9 +188,12 @@
     },
     "theme": {
       "label": "Appearance",
-      "dark": "Dark theme",
-      "light": "Light theme",
-      "auto": "Device theme"
+      "dark": "Dark",
+      "light": "Light",
+      "auto": "Auto"
+    },
+    "language": {
+      "label": "Language"
     }
   }
 }
