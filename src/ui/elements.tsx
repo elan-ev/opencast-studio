@@ -121,17 +121,18 @@ type SelectProps<I extends FieldValues, F> =
 };
 
 
-// A styled `<Dropdown>`` element with a label. Displays errors and integrated with
-// `react-hook-form`.
-//
-// Props:
-// - `errors` and `register`: the two values returned by `useForm`
-// - `label`: the human readable string describing the field
-// - `name`, `type` and `rest`: passed as HTML attributes
-// - `required`: boolean, whether this field is required or may be empty
-// - `validate`: optional, a function validating the value and returning a
-//   string in the case of error.
-
+/**
+ * A styled `<Dropdown>`` element with a label. Displays errors and integrated with
+ * `react-hook-form`.
+ *
+ * Props:
+ * - `errors` and `register`: the two values returned by `useForm`
+ * - `label`: the human readable string describing the field
+ * - `name`, `type` and `rest`: passed as HTML attributes
+ * - `required`: boolean, whether this field is required or may be empty
+ * - `validate`: optional, a function validating the value and returning a
+ *   string in the case of error.
+ */
 export const Dropdown = <I extends FieldValues, F> ({
   errors,
   register,
@@ -236,7 +237,7 @@ export const Dropdown = <I extends FieldValues, F> ({
             sx={{
               variant: 'styles.dropdown',
             }}
-            {...register(name, { validate, ...required ? { required: t('forms-validation-error-required') } : {}, })}
+            {...register(name, { validate, ...required ? { required: t('forms-validation-error-required') } : {}})}
             {...rest}/>
 
           {errors[name] && (
@@ -264,8 +265,6 @@ export interface SeriesOption {
 }
 
 
-export const SeriesDropdown = <I extends FieldValues, SeriesOption> ({ ...rest }: SelectProps<I, SeriesOption>) => {
-  return <Dropdown
-    { ...rest }
-  />;
-};
+export const SeriesDropdown = <I extends FieldValues, SeriesOption>(props: SelectProps<I, SeriesOption>,) => (
+  <Dropdown { ...props } />
+);

@@ -533,9 +533,9 @@ const UploadForm = ({ uploadState, handleUpload }) => {
                 name="series"
                 label={t('save-creation-label-series')}
                 required={seriesField === FORM_FIELD_REQUIRED}
-                disabled={seriesId !== null }
+                disabled={seriesId !== null}
                 clearable={seriesField === FORM_FIELD_OPTIONAL}
-                placeholder={ t('save-creation-series-placeholder') }
+                placeholder={t('save-creation-series-placeholder')}
                 loadOptions={loadSeriesOptions}
                 defaultOptions={seriesId != null}
                 onChange={v => {

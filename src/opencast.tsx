@@ -121,20 +121,14 @@ export class Opencast {
     return self;
   }
 
-  async getSeries(textFilter?: String) {
-    let series;
-    let seriesList = new Map();
-
+  async getSeries(textFilter?: String): Promise<Map<string, string>> {
     try {
       let requestPath = 'studio/series.json';
       if (textFilter) {
-        requestPath += '?' + new URLSearchParams({ filter: 'textFilter:' + textFilter, });
+        requestPath += '?' + new URLSearchParams({ filter: 'textFilter:' + textFilter });
       }
-      series = await this.jsonRequest(requestPath);
-      for(const s of series) {
-        seriesList.set(s.id, s.title);
-      }
-      return seriesList;
+      const series = await this.jsonRequest(requestPath);
+      return new Map(series.map(s => [s.id,  s.title]));
     } catch (e) {
       // If it's not our own error, rethrow it.
       if (!(e instanceof RequestError)) {
