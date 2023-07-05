@@ -6,15 +6,15 @@ import {
 import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
 
-import { COLORS } from "../color";
 import { DEFINES } from "../defines";
 import languages from "../i18n/languages";
+import { COLORS } from "../util";
 
 
 export const Header: React.FC = () => (
   <div css={{
     "--header-height": "64px",
-    backgroundColor: COLORS.neutral6,
+    backgroundColor: COLORS.neutral60,
     height: "var(--header-height)",
     display: "flex",
     justifyContent: "space-between",
@@ -143,14 +143,14 @@ const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
       fontSize: 16,
       fontFamily: "inherit",
       fontWeight: 500,
-      color: COLORS.neutral0,
+      color: COLORS.neutral05,
       borderRadius: 6,
       cursor: "pointer",
       padding: "6px 8px",
 
       ":hover, :active": {
-        outline: `2px solid ${COLORS.neutral5}`,
-        backgroundColor: COLORS.neutral7,
+        outline: `2px solid ${COLORS.neutral50}`,
+        backgroundColor: COLORS.neutral70,
       },
 
       "> svg": {

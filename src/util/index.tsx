@@ -1,7 +1,10 @@
 import { useContext } from "react";
 import { Dispatcher } from "../studio-state";
-import { bug } from "@opencast/appkit";
+import { bug, DEFAULT_CONFIG as APPKIT_CONFIG } from "@opencast/appkit";
 
+
+/** Shortcuts for colors, avoids accidental typos in typing CSS variable names. */
+export const COLORS = APPKIT_CONFIG.colors;
 
 /**
  * Checks if we app is running on a mobile device.
