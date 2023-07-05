@@ -2,6 +2,7 @@ import { Root } from "./layout";
 
 import { Provider as StudioStateProvier } from "./studio-state";
 import { ColorSchemeProvider } from "@opencast/appkit";
+import { GlobalStyle } from "./ui/global-style";
 
 
 
@@ -10,11 +11,12 @@ type Props = {
 };
 
 export const App: React.FC<Props> = () => {
-  return (
+  return <>
+    <GlobalStyle />
     <StudioStateProvier>
       <ColorSchemeProvider>
         <Root />
       </ColorSchemeProvider>
     </StudioStateProvier>
-  );
+  </>;
 };
