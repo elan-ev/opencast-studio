@@ -6,6 +6,9 @@ import { bug, DEFAULT_CONFIG as APPKIT_CONFIG } from "@opencast/appkit";
 /** Shortcuts for colors, avoids accidental typos in typing CSS variable names. */
 export const COLORS = APPKIT_CONFIG.colors;
 
+/** Breakpoint values */
+export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
+
 /**
  * Checks if we app is running on a mobile device.
  *

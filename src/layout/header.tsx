@@ -1,14 +1,14 @@
 import { HiOutlineTranslate } from "react-icons/hi";
 import { FiInfo, FiMoon } from "react-icons/fi";
 import {
-  HeaderMenuItemProps, useColorScheme, useConfig, WithHeaderMenu, checkboxMenuItem,
+  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem,
 } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
 
 import { DEFINES } from "../defines";
 import languages from "../i18n/languages";
-import { COLORS } from "../util";
+import { BREAKPOINTS, COLORS } from "../util";
 
 
 export const Header: React.FC = () => (
@@ -63,7 +63,6 @@ const Buttons: React.FC = () => {
 };
 
 const LanguageButton: React.FC = () => {
-  const config = useConfig();
   const { t, i18n } = useTranslation();
   const isCurrentLanguage = (language: string) => language === i18n.resolvedLanguage;
 
@@ -83,7 +82,7 @@ const LanguageButton: React.FC = () => {
       menu={{
         label,
         items: menuItems,
-        breakpoint: config.breakpoints.small,
+        breakpoint: BREAKPOINTS.small,
       }}
     >
       <HeaderButton icon={<HiOutlineTranslate />} label={label} />
@@ -94,7 +93,6 @@ const LanguageButton: React.FC = () => {
 const ThemeButton: React.FC = () => {
   const { t } = useTranslation();
   const { scheme, isAuto, update } = useColorScheme();
-  const config = useConfig();
 
   const currentPref = isAuto ? "auto" : scheme;
   const choices = ["auto", "light", "dark"] as const;
@@ -109,7 +107,7 @@ const ThemeButton: React.FC = () => {
       menu={{
         label: t("header.theme.label"),
         items: menuItems,
-        breakpoint: config.breakpoints.small,
+        breakpoint: BREAKPOINTS.small,
       }}
     >
       <HeaderButton icon={<FiMoon />} label={t("header.theme.label")} />
