@@ -1,14 +1,14 @@
 import { HiOutlineTranslate } from "react-icons/hi";
 import { FiInfo, FiMoon } from "react-icons/fi";
 import {
-  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem,
+  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem, ProtoButton,
 } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
 
 import { DEFINES } from "../defines";
 import languages from "../i18n/languages";
-import { BREAKPOINTS, COLORS } from "../util";
+import { BREAKPOINTS, COLORS, focusStyle } from "../util";
 
 
 export const Header: React.FC = () => (
@@ -131,25 +131,24 @@ const BUTTON_LABEL_BREAKPOINT = 640;
 
 const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
   ({ icon, label, ...rest }, ref) => (
-    <button type="button" ref={ref} {...rest} css={{
+    <ProtoButton {...rest} ref={ref} css={{
       display: "flex",
       gap: 8,
       alignItems: "center",
 
-      background: "none",
-      border: "none",
       fontSize: 16,
       fontFamily: "inherit",
       fontWeight: 500,
       color: COLORS.neutral05,
       borderRadius: 6,
-      cursor: "pointer",
       padding: "6px 8px",
 
       ":hover, :active": {
         outline: `2px solid ${COLORS.neutral50}`,
         backgroundColor: COLORS.neutral70,
       },
+      "--color-focus": COLORS.neutral10,
+      ...focusStyle(),
 
       "> svg": {
         fontSize: 22,
@@ -164,6 +163,6 @@ const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
           display: "none",
         },
       }}>{label}</span>
-    </button>
+    </ProtoButton>
   )
 );

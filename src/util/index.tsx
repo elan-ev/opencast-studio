@@ -1,6 +1,10 @@
 import { useContext } from "react";
 import { Dispatcher } from "../studio-state";
-import { bug, DEFAULT_CONFIG as APPKIT_CONFIG } from "@opencast/appkit";
+import {
+  bug,
+  DEFAULT_CONFIG as APPKIT_CONFIG,
+  focusStyle as appkitFocusStyle,
+} from "@opencast/appkit";
 
 
 /** Shortcuts for colors, avoids accidental typos in typing CSS variable names. */
@@ -8,6 +12,9 @@ export const COLORS = APPKIT_CONFIG.colors;
 
 /** Breakpoint values */
 export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
+
+export const focusStyle = (options?: Parameters<typeof appkitFocusStyle>[1]) =>
+  appkitFocusStyle(APPKIT_CONFIG, options);
 
 /**
  * Checks if we app is running on a mobile device.
