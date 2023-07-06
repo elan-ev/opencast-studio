@@ -1,3 +1,4 @@
+import { Main } from "../steps";
 import { Header } from "./header";
 
 
@@ -8,6 +9,6 @@ export const Root: React.FC = () => (
     height: "100%",
   }}>
     <Header />
-    <main>Main</main>
+    <Main />
   </div>
 );

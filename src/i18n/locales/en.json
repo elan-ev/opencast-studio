@@ -195,5 +195,22 @@
     "language": {
       "label": "Language"
     }
+  },
+  "steps": {
+    "video": {
+      "label": "Select video source"
+    },
+    "audio": {
+      "label": "Select audio source"
+    },
+    "record": {
+      "label": "Record"
+    },
+    "review": {
+      "label": "Trim video"
+    },
+    "finish": {
+      "label": "Save video"
+    }
   }
 }

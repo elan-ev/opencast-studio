@@ -193,5 +193,22 @@
     "language": {
       "label": "Sprache"
     }
+  },
+  "steps": {
+    "video": {
+      "label": "Videoquelle auswählen"
+    },
+    "audio": {
+      "label": "Audioquelle auswählen"
+    },
+    "record": {
+      "label": "Aufnehmen"
+    },
+    "review": {
+      "label": "Aufnahme kürzen"
+    },
+    "finish": {
+      "label": "Aufnahme speichern"
+    }
   }
 }
