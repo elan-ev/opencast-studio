@@ -6,6 +6,7 @@ import "./i18n";
 import { SettingsManager, Provider as SettingsProvider } from "./settings";
 import { Opencast, Provider as OpencastProvider } from "./opencast";
 import { userHasWebcam, sleep } from "./util";
+import { Provider as StudioStateProvier } from "./studio-state";
 
 
 // Load the rest of the application and try to fetch the settings file from the
@@ -42,12 +43,14 @@ const render = (body: JSX.Element) => {
 
 // After the initialization is done, render to the root element.
 initialize.then(
-  ([App, userHasWebcam, [settingsManager, opencast]]) => {
+  ([App, hasWebcam, [settingsManager, opencast]]) => {
     render(
       <React.StrictMode>
         <OpencastProvider initial={opencast}>
           <SettingsProvider settingsManager={settingsManager}>
-            <App userHasWebcam={userHasWebcam} />
+            <StudioStateProvier hasWebcam={hasWebcam}>
+              <App />
+            </StudioStateProvier>
           </SettingsProvider>
         </OpencastProvider>
       </React.StrictMode>

@@ -1,5 +1,6 @@
 import { createContext, useReducer } from "react";
 import { isDisplayCaptureSupported, isUserCaptureSupported, usePresentContext } from "./util";
+import { assertNever } from "@opencast/appkit";
 
 
 export const AUDIO_SOURCE_MICROPHONE = "microphone";
@@ -30,6 +31,7 @@ export type Recording = {
 
 /** Our global state */
 export type StudioState = {
+  hasWebcam: boolean;
   mediaDevices: MediaDeviceInfo[],
 
   audioAllowed: null | boolean,
@@ -68,7 +70,8 @@ export type StudioState = {
   },
 };
 
-const initialState = (): StudioState => ({
+const initialState = (hasWebcam: boolean): StudioState => ({
+  hasWebcam,
   mediaDevices: [],
 
   audioAllowed: null,
@@ -224,9 +227,9 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case "UPDATE_START": return { ...state, start: action.time };
     case "UPDATE_END": return { ...state, end: action.time };
 
-    case "RESET": return initialState();
+    case "RESET": return initialState(state.hasWebcam);
 
-    default: throw new Error();
+    default: assertNever(action);
   }
 };
 
@@ -235,8 +238,12 @@ export type Dispatcher = (action: ReducerAction) => void;
 const stateContext = createContext<StudioState | null>(null);
 const dispatchContext = createContext<Dispatcher | null>(null);
 
-export const Provider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState());
+type ProviderProps = React.PropsWithChildren<{
+  hasWebcam: boolean;
+}>;
+
+export const Provider: React.FC<ProviderProps> = ({ hasWebcam, children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState(hasWebcam));
 
   return (
     <dispatchContext.Provider value={dispatch}>
