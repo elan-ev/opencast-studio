@@ -79,7 +79,7 @@ const config: CallableOption = (_env, argv) => ({
           to: path.join(OUT_PATH, "font.css"),
           transform: (input: Buffer) => {
             return input.toString().replace(/url\(.\/files\//g, "url(./fonts/");
-          }
+          },
         },
         ...(
           [

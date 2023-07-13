@@ -1,25 +1,25 @@
 // Everything related to video stream preferences that the user can modify.
 
-//; -*- mode: rjsx;-*-
+// ; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, useColorMode } from 'theme-ui';
+import { jsx, useColorMode } from "theme-ui";
 
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
-import useResizeObserver from 'use-resize-observer/polyfilled';
+import { Fragment, useEffect, useRef, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
+import useResizeObserver from "use-resize-observer/polyfilled";
 
-import { Settings, useSettings } from '../../../settings';
-import { getUniqueDevices } from '../../../util';
-import { useDispatch, useStudioState } from '../../../studio-state';
+import { Settings, useSettings } from "../../../settings";
+import { getUniqueDevices } from "../../../util";
+import { useDispatch, useStudioState } from "../../../studio-state";
 import {
   startDisplayCapture,
   startUserCapture,
   stopDisplayCapture,
-  stopUserCapture
-} from '../capturer';
-import Tooltip from '../../Tooltip';
+  stopUserCapture,
+} from "../capturer";
+import Tooltip from "../../Tooltip";
 
 
 // Creates a valid constraints object from the given preferences. The mapping
@@ -36,14 +36,14 @@ export const prefsToConstraints = (
   prefs: CameraPrefs | DisplayPrefs,
   exactDevice = false,
 ): MediaTrackConstraints => {
-  const deviceConstraint = 'deviceId' in prefs
-    && { deviceId: { [exactDevice ? 'exact' : 'ideal']: prefs.deviceId }};
+  const deviceConstraint = "deviceId" in prefs
+    && { deviceId: { [exactDevice ? "exact" : "ideal"]: prefs.deviceId } };
 
-  const aspectRatioConstraint = 'aspectRatio' in prefs && {
+  const aspectRatioConstraint = "aspectRatio" in prefs && {
     aspectRatio: { ideal: prefs.aspectRatio ? parseAspectRatio(prefs.aspectRatio) : undefined },
   };
 
-  const heightConstraint = 'quality' in prefs && {
+  const heightConstraint = "quality" in prefs && {
     height: { ideal: prefs.quality ? parseQuality(prefs.quality) : undefined },
   };
 
@@ -55,13 +55,13 @@ export const prefsToConstraints = (
 };
 
 // All aspect ratios the user can choose from.
-const ASPECT_RATIOS = ['4:3', '16:9'];
+const ASPECT_RATIOS = ["4:3", "16:9"];
 
 // All quality options given to the user respecting the `maxHeight` from the
 // settings.
 const qualityOptions = (maxHeight: number | undefined) => {
   const defaults = [360, 480, 720, 1080, 1440, 2160];
-  let out = defaults.filter(q => !maxHeight || q <= maxHeight);
+  const out = defaults.filter(q => !maxHeight || q <= maxHeight);
   if (maxHeight && (out.length === 0 || out[out.length - 1] !== maxHeight)) {
     out.push(maxHeight);
   }
@@ -74,8 +74,8 @@ const qualityOptions = (maxHeight: number | undefined) => {
 // is not a valid label, `null` is returned.
 const parseAspectRatio = (label: string) => {
   const mapping = {
-    '4:3': 4 / 3,
-    '16:9': 16 / 9,
+    "4:3": 4 / 3,
+    "16:9": 16 / 9,
   };
 
   return (mapping as Record<string, number>)[label] ?? undefined;
@@ -92,10 +92,10 @@ const parseQuality = (label: string) => {
 };
 
 // Local storage keys
-const LAST_VIDEO_DEVICE_KEY = 'ocStudioLastVideoDevice';
-const CAMERA_ASPECT_RATIO_KEY = 'ocStudioCameraAspectRatio';
-const CAMERA_QUALITY_KEY = 'ocStudioCameraQuality';
-const DISPLAY_QUALITY_KEY = 'ocStudioDisplayQuality';
+const LAST_VIDEO_DEVICE_KEY = "ocStudioLastVideoDevice";
+const CAMERA_ASPECT_RATIO_KEY = "ocStudioCameraAspectRatio";
+const CAMERA_QUALITY_KEY = "ocStudioCameraQuality";
+const DISPLAY_QUALITY_KEY = "ocStudioDisplayQuality";
 
 type CameraPrefs = {
   deviceId?: string;
@@ -110,13 +110,13 @@ type DisplayPrefs = {
 // Loads the initial camera preferences from local storage.
 export const loadCameraPrefs = (): CameraPrefs => ({
   deviceId: window.localStorage.getItem(LAST_VIDEO_DEVICE_KEY) ?? undefined,
-  aspectRatio: window.localStorage.getItem(CAMERA_ASPECT_RATIO_KEY) || 'auto',
-  quality: window.localStorage.getItem(CAMERA_QUALITY_KEY) || 'auto',
+  aspectRatio: window.localStorage.getItem(CAMERA_ASPECT_RATIO_KEY) || "auto",
+  quality: window.localStorage.getItem(CAMERA_QUALITY_KEY) || "auto",
 });
 
 // Loads the initial display preferences from local storage.
 export const loadDisplayPrefs = (): DisplayPrefs => ({
-  quality: window.localStorage.getItem(DISPLAY_QUALITY_KEY) || 'auto',
+  quality: window.localStorage.getItem(DISPLAY_QUALITY_KEY) || "auto",
 });
 
 type StreamSettingsProps = {
@@ -163,8 +163,8 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       stopDisplayCapture(stream, dispatch);
       startDisplayCapture(dispatch, settings, constraints);
     } else {
-      setOpt(LAST_VIDEO_DEVICE_KEY, (merged as Record<string, string>)['deviceId']);
-      setOpt(CAMERA_ASPECT_RATIO_KEY, (merged as Record<string, string>)['aspectRatio']);
+      setOpt(LAST_VIDEO_DEVICE_KEY, (merged as Record<string, string>)["deviceId"]);
+      setOpt(CAMERA_ASPECT_RATIO_KEY, (merged as Record<string, string>)["aspectRatio"]);
       setOpt(CAMERA_QUALITY_KEY, merged.quality);
 
       stopUserCapture(stream, dispatch);
@@ -188,62 +188,62 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
 
   return <Fragment>
     <div sx={{
-      position: 'absolute',
-      top: isExpanded ? '8px' : '-30px',
+      position: "absolute",
+      top: isExpanded ? "8px" : "-30px",
       left: 0,
       right: 0,
-      textAlign: 'center',
-      transition: 'top 0.2s',
+      textAlign: "center",
+      transition: "top 0.2s",
     }}>
       <span sx={{
-        color: colorMode === 'dark' ? 'gray.3' : 'gray.1',
-        backgroundColor: 'white',
-        borderRadius: '10px',
+        color: colorMode === "dark" ? "gray.3" : "gray.1",
+        backgroundColor: "white",
+        borderRadius: "10px",
         p: 1,
-        fontSize: '18px',
+        fontSize: "18px",
       }}>
         {streamInfo(stream)}
       </span>
     </div>
     <div sx={{
-      position: 'absolute',
+      position: "absolute",
       left: 0,
       right: 0,
       bottom: 0,
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-end',
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-end",
     }}>
-      <div sx={{ textAlign: 'right' }}>
+      <div sx={{ textAlign: "right" }}>
         <Tooltip
           offset={[0, 25]}
-          content={isExpanded ? t('video-settings-close') : t('video-settings-open')}
+          content={isExpanded ? t("video-settings-close") : t("video-settings-open")}
         >
           <button
             onClick={() => setIsExpanded(old => !old)}
             sx={{
-              border: 'none',
-              display: 'inline-block',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              color: 'white',
-              p: '6px',
+              border: "none",
+              display: "inline-block",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              color: "white",
+              p: "6px",
               m: 2,
-              fontSize: '30px',
-              lineHeight: '1em',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              fontSize: "30px",
+              lineHeight: "1em",
+              borderRadius: "10px",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
               },
-              '&:hover > svg, &:focus > svg': {
-                transform: isExpanded ? 'none' : 'rotate(45deg)',
+              "&:hover > svg, &:focus > svg": {
+                transform: isExpanded ? "none" : "rotate(45deg)",
               },
-              '&:focus-visible': {
+              "&:focus-visible": {
                 outline: theme => `5px solid ${theme.colors?.primary}`,
-                outlineOffset: '-2px',
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                color: 'white',
+                outlineOffset: "-2px",
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                color: "white",
               },
             }}
           >
@@ -251,33 +251,33 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
               icon={isExpanded ? faTimes : faCog}
               fixedWidth
               sx={{
-                transition: isExpanded ? 'none' : 'transform 0.2s',
-                width: '1em !important',
+                transition: isExpanded ? "none" : "transform 0.2s",
+                width: "1em !important",
               }}
             />
           </button>
         </Tooltip>
       </div>
       <div sx={{
-        height: isExpanded ? (expandedHeight || 'auto') : 0,
-        flex: '0 1 auto',
-        transition: 'height 0.2s',
-        overflow: 'hidden',
-        backgroundColor: 'background',
-        fontSize: '18px',
-        boxShadow: isExpanded ? '0 0 15px rgba(0, 0, 0, 0.3)' : 'none',
+        height: isExpanded ? (expandedHeight || "auto") : 0,
+        flex: "0 1 auto",
+        transition: "height 0.2s",
+        overflow: "hidden",
+        backgroundColor: "background",
+        fontSize: "18px",
+        boxShadow: isExpanded ? "0 0 15px rgba(0, 0, 0, 0.3)" : "none",
       }}>
         <div tabIndex={-1} sx={{
           border: theme => `1px solid ${theme.colors?.gray?.[0]}`,
-          height: '100%',
-          overflow: 'auto',
+          height: "100%",
+          overflow: "auto",
         }}>
-          <div ref={ref} sx={{ p: 1, pb: '2px' }}>
+          <div ref={ref} sx={{ p: 1, pb: "2px" }}>
             <div sx={{
-              display: 'grid',
-              width: '100%',
-              gridTemplateColumns: 'auto 1fr',
-              gridGap: '6px 12px',
+              display: "grid",
+              width: "100%",
+              gridTemplateColumns: "auto 1fr",
+              gridGap: "6px 12px",
               p: 1,
             }} >
               { !isDesktop && <UserSettings {...{ updatePrefs, prefs, isExpanded }} /> }
@@ -285,12 +285,12 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
             </div>
 
             <div sx={{
-              backgroundColor: 'gray.4',
+              backgroundColor: "gray.4",
               m: 2,
               py: 1,
               px: 2,
-              fontSize: '16px',
-              lineHeight: '20px',
+              fontSize: "16px",
+              lineHeight: "20px",
               border: theme => `1px solid ${theme.colors?.gray?.[2]}`,
             }}>
               <Trans i18nKey="sources-video-preferences-note">
@@ -306,19 +306,19 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
 
 const streamInfo = (stream: MediaStream | null) => {
   const s = stream?.getVideoTracks()?.[0]?.getSettings();
-  const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : '';
-  const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : '';
+  const sizeInfo = (s && s.width && s.height) ? `${s.width}×${s.height}` : "";
+  const fpsInfo = (s && s.frameRate) ? `${s.frameRate} fps` : "";
 
-  return s ? [sizeInfo, fpsInfo].join(', ') : '...';
+  return s ? [sizeInfo, fpsInfo].join(", ") : "...";
 };
 
 const PrefKey: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div sx={{
-    gridColumn: '0 1',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    hyphens: 'auto',
+    gridColumn: "0 1",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    hyphens: "auto",
   }}>
     { children }
   </div>
@@ -326,13 +326,13 @@ const PrefKey: React.FC<React.PropsWithChildren> = ({ children }) => (
 const PrefValue: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div tabIndex={-1}
     sx={{
-      gridColumn: '1 2',
-      overflowX: 'auto',
-      lineHeight: '30px',
-      '*:focus-visible': {
+      gridColumn: "1 2",
+      overflowX: "auto",
+      lineHeight: "30px",
+      "*:focus-visible": {
         outline: theme => `5px solid ${theme.colors?.primary}`,
-        outlineOffset: '-3px',
-      }
+        outlineOffset: "-3px",
+      },
     }}>
     { children }
   </div>
@@ -354,17 +354,17 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
   const changeQuality = (quality: string) => updatePrefs({ quality });
   const maxHeight = isDesktop ? settings.display?.maxHeight : settings.camera?.maxHeight;
   const qualities = qualityOptions(maxHeight);
-  const kind = isDesktop ? 'desktop' : 'user';
+  const kind = isDesktop ? "desktop" : "user";
 
   return <Fragment>
-    <PrefKey>{t('sources-video-quality')}*:</PrefKey>
+    <PrefKey>{t("sources-video-quality")}*:</PrefKey>
     <PrefValue>
       <RadioButton
         isExpanded={isExpanded}
         id={`quality-auto-${kind}`}
         value="auto"
         name={`quality-${kind}`}
-        label={t('sources-video-quality-auto')}
+        label={t("sources-video-quality-auto")}
         onChange={changeQuality}
         checked={qualities.every(q => prefs.quality !== q)}
       />
@@ -397,20 +397,20 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs, isExpan
   const state = useStudioState();
 
   const currentDeviceId = deviceIdOf(state.userStream);
-  const devices = getUniqueDevices(state.mediaDevices, 'videoinput');
+  const devices = getUniqueDevices(state.mediaDevices, "videoinput");
 
   const changeDevice = (id: string) => updatePrefs({ deviceId: id });
   const changeAspectRatio = (ratio: string) => updatePrefs({ aspectRatio: ratio });
 
   return <Fragment>
     <PrefKey>
-      <label htmlFor="sources-video-device">{t('sources-video-device')}:</label>
+      <label htmlFor="sources-video-device">{t("sources-video-device")}:</label>
     </PrefKey>
     <PrefValue>
       <select
         id="sources-video-device"
         tabIndex={isExpanded ? 0 : -1}
-        sx={{ variant: 'styles.select' }}
+        sx={{ variant: "styles.select" }}
         value={currentDeviceId}
         onChange={e => changeDevice(e.target.value)}
       >
@@ -422,14 +422,14 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs, isExpan
       </select>
     </PrefValue>
 
-    <PrefKey>{t('sources-video-aspect-ratio')}*:</PrefKey>
+    <PrefKey>{t("sources-video-aspect-ratio")}*:</PrefKey>
     <PrefValue>
       <RadioButton
         isExpanded={isExpanded}
         id="ar-auto"
         value="auto"
         name="aspectRatio"
-        label={t('sources-video-aspect-ratio-auto')}
+        label={t("sources-video-aspect-ratio-auto")}
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
       />
@@ -462,7 +462,7 @@ type RadioButtonProps = {
 
 // A styled radio input which looks like a button.
 const RadioButton: React.FC<RadioButtonProps> = ({
-  id, value, checked, name, onChange, label, isExpanded
+  id, value, checked, name, onChange, label, isExpanded,
 }) => {
   return <Fragment>
     <input
@@ -470,23 +470,23 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       onChange={e => onChange(e.target.value)}
       {...{ id, value, checked, name }}
       sx={{
-        display: 'none',
-        '&+label': {
+        display: "none",
+        "&+label": {
           border: theme => `2px solid ${theme.colors?.gray?.[0]}`,
-          p: '1px 4px',
-          borderRadius: '6px',
+          p: "1px 4px",
+          borderRadius: "6px",
           mx: 1,
         },
-        '&:checked+label': {
-          bg: 'gray.0',
-          color: 'background',
-          fontWeight: 'bold',
-        }
+        "&:checked+label": {
+          bg: "gray.0",
+          color: "background",
+          fontWeight: "bold",
+        },
       }}
     />
     <label
       tabIndex={isExpanded ? 0 : -1}
-      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onChange(value)}
+      onKeyDown={e => (e.key === "Enter" || e.key === " ") && onChange(value)}
       htmlFor={id}
     >{ label || value }</label>
   </Fragment>;

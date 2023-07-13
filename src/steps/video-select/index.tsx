@@ -1,14 +1,14 @@
-//; -*- mode: rjsx;-*-
+// ; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Themed } from 'theme-ui';
+import { jsx, Themed } from "theme-ui";
 
-import { faChalkboard, faChalkboardTeacher, faUser } from '@fortawesome/free-solid-svg-icons';
-import { Flex, Heading, Text } from '@theme-ui/components';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { GlobalHotKeys } from 'react-hotkeys';
+import { faChalkboard, faChalkboardTeacher, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Flex, Heading, Text } from "@theme-ui/components";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { GlobalHotKeys } from "react-hotkeys";
 
 import {
   useDispatch,
@@ -18,22 +18,22 @@ import {
   VIDEO_SOURCE_USER,
   VIDEO_SOURCE_NONE,
   VideoSource,
-} from '../../../studio-state';
-import { useSettings } from '../../../settings';
-import { queryMediaDevices, onMobileDevice } from '../../../util';
-import Notification from '../../notification';
+} from "../../../studio-state";
+import { useSettings } from "../../../settings";
+import { queryMediaDevices, onMobileDevice } from "../../../util";
+import Notification from "../../notification";
 import {
   startDisplayCapture,
   startUserCapture,
   stopDisplayCapture,
-  stopUserCapture
-} from '../capturer';
-import { ActionButtons, StepContainer } from '../elements';
-import { SourcePreview } from './preview';
-import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from './prefs';
-import { recordShortcuts } from '../../../shortcuts';
-import { StepProps } from '../steps';
-import { unreachable } from '../../../util/err';
+  stopUserCapture,
+} from "../capturer";
+import { ActionButtons, StepContainer } from "../elements";
+import { SourcePreview } from "./preview";
+import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from "./prefs";
+import { recordShortcuts } from "../../../shortcuts";
+import { StepProps } from "../steps";
+import { unreachable } from "../../../util/err";
 
 
 export type Input = {
@@ -55,7 +55,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
   const { displayStream, userStream, videoChoice: activeSource } = state;
   const hasStreams = !!displayStream || !!userStream;
 
-  const setActiveSource = (s: VideoSource) => dispatch({ type: 'CHOOSE_VIDEO', choice: s });
+  const setActiveSource = (s: VideoSource) => dispatch({ type: "CHOOSE_VIDEO", choice: s });
   const reselectSource = () => {
     setActiveSource(VIDEO_SOURCE_NONE);
     stopUserCapture(userStream, dispatch);
@@ -69,22 +69,22 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
   const userWarning = (state.userAllowed === false) && (
     <Notification key="user-stream-warning" isDanger>
       <Heading as="h3" mb={2}>
-        {t('source-user-not-allowed-title')}
+        {t("source-user-not-allowed-title")}
       </Heading>
-      <Text>{t('source-user-not-allowed-text')}</Text>
+      <Text>{t("source-user-not-allowed-text")}</Text>
     </Notification>
   );
   const displayWarning = (state.displayAllowed === false) && (
     <Notification key="display-stream-warning" isDanger>
       <Heading as="h3" mb={2}>
-        {t('source-display-not-allowed-title')}
+        {t("source-display-not-allowed-title")}
       </Heading>
-      <Text>{t('source-display-not-allowed-text')}</Text>
+      <Text>{t("source-display-not-allowed-text")}</Text>
     </Notification>
   );
   const unexpectedEndWarning = (state.userUnexpectedEnd || state.displayUnexpectedEnd) && (
     <Notification key="unexpexted-stream-end-warning" isDanger>
-      <Text>{t('error-lost-video-stream')}</Text>
+      <Text>{t("error-lost-video-stream")}</Text>
     </Notification>
   );
 
@@ -109,7 +109,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
     case VIDEO_SOURCE_NONE:
       const userConstraints = prefsToConstraints(loadCameraPrefs());
       const displayConstraints = prefsToConstraints(loadDisplayPrefs());
-      title = t('sources-video-question');
+      title = t("sources-video-question");
       hideActionButtons = true;
       body = <SourceSelection {...{
         setActiveSource,
@@ -120,7 +120,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
       break;
 
     case VIDEO_SOURCE_USER:
-      title = t('sources-video-user-selected');
+      title = t("sources-video-user-selected");
       hideActionButtons = !userStream && state.userAllowed !== false;
       body = <SourcePreview
         warnings={[userWarning, unexpectedEndWarning]}
@@ -129,7 +129,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
       break;
 
     case VIDEO_SOURCE_DISPLAY:
-      title = t('sources-video-display-selected');
+      title = t("sources-video-display-selected");
       hideActionButtons = !displayStream && state.displayAllowed !== false;
       body = <SourcePreview
         warnings={[displayWarning, unexpectedEndWarning]}
@@ -138,7 +138,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
       break;
 
     case VIDEO_SOURCE_BOTH:
-      title = t('sources-video-display-and-user-selected');
+      title = t("sources-video-display-and-user-selected");
       hideActionButtons = (!userStream && state.userAllowed !== false)
         || (!displayStream && state.displayAllowed !== false);
       body = <SourcePreview
@@ -147,8 +147,8 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
       />;
       break;
     default:
-      return unreachable('bug: active source has an unexpected value');
-  };
+      return unreachable("bug: active source has an unexpected value");
+  }
 
   return (
     <StepContainer>
@@ -166,7 +166,7 @@ export default function VideoSetup({ nextStep, userHasWebcam }: VideoSetupProps)
         prev: {
           onClick: reselectSource,
           disabled: false,
-          label: 'sources-video-reselect-source',
+          label: "sources-video-reselect-source",
         },
       }}/> }
     </StepContainer>
@@ -193,18 +193,18 @@ const SourceSelection: React.FC<SourceSelectionProps> = ({
   const state = useStudioState();
   const { displaySupported, userSupported } = state;
 
-  const clickUser = async() => {
+  const clickUser = async () => {
     setActiveSource(VIDEO_SOURCE_USER);
     await startUserCapture(dispatch, settings, userConstraints);
     await queryMediaDevices(dispatch);
   };
 
-  const clickDisplay = async() => {
+  const clickDisplay = async () => {
     setActiveSource(VIDEO_SOURCE_DISPLAY);
     await startDisplayCapture(dispatch, settings, displayConstraints);
   };
 
-  const clickBoth = async() => {
+  const clickBoth = async () => {
     setActiveSource(VIDEO_SOURCE_BOTH);
     await startUserCapture(dispatch, settings, userConstraints);
     await Promise.all([
@@ -220,7 +220,7 @@ const SourceSelection: React.FC<SourceSelectionProps> = ({
   };
 
   if (!displaySupported && !userSupported) {
-    return <Notification isDanger>{t('sources-video-none-available')}</Notification>;
+    return <Notification isDanger>{t("sources-video-none-available")}</Notification>;
   }
 
   return <React.Fragment>
@@ -228,41 +228,41 @@ const SourceSelection: React.FC<SourceSelectionProps> = ({
       <Spacer />
       <Flex
         sx={{
-          flexDirection: ['column', 'row'],
+          flexDirection: ["column", "row"],
           maxWidth: [270, 850],
-          width: '100%',
-          mx: ['auto', 'none'],
+          width: "100%",
+          mx: ["auto", "none"],
           mb: 3,
-          flex: '4 1 auto',
-          maxHeight: ['none', '270px'],
-          justifyContent: 'center',
-          '& > :not(:last-of-type)': {
+          flex: "4 1 auto",
+          maxHeight: ["none", "270px"],
+          justifyContent: "center",
+          "& > :not(:last-of-type)": {
             mb: [3, 0],
             mr: [0, 3],
           },
         }}
       >
         { (displaySupported || !onMobileDevice()) && <OptionButton
-          label={t('sources-scenario-display')}
+          label={t("sources-scenario-display")}
           icon={faChalkboard}
           onClick={clickDisplay}
-          disabledText={displaySupported ? false : t('sources-video-display-not-supported')}
+          disabledText={displaySupported ? false : t("sources-video-display-not-supported")}
         /> }
         { (displaySupported || !onMobileDevice()) && userSupported && <OptionButton
-          label={t('sources-scenario-display-and-user')}
+          label={t("sources-scenario-display-and-user")}
           icon={faChalkboardTeacher}
           onClick={clickBoth}
           disabledText={
             displaySupported
-              ? (userHasWebcam ? false : t('sources-video-no-cam-detected'))
-              : t('sources-video-display-not-supported')
+              ? (userHasWebcam ? false : t("sources-video-no-cam-detected"))
+              : t("sources-video-display-not-supported")
           }
         /> }
         { userSupported && <OptionButton
-          label={t('sources-scenario-user')}
+          label={t("sources-scenario-user")}
           icon={faUser}
           onClick={clickUser}
-          disabledText={userHasWebcam ? false : t('sources-video-no-cam-detected')}
+          disabledText={userHasWebcam ? false : t("sources-video-no-cam-detected")}
         /> }
       </Flex>
       <Spacer />
@@ -287,24 +287,24 @@ const OptionButton: React.FC<OptionButtonProps> = (
       onClick={onClick}
       disabled={disabled}
       sx={{
-        fontFamily: 'inherit',
-        color: disabled ? 'gray.2' : 'gray.0',
-        border: theme => `2px solid ${disabled ? theme.colors?.gray?.[2] : 'black'}`,
-        backgroundColor: 'gray.4',
-        borderRadius: '8px',
-        flex: ['1 1 auto', '0 1 100%'],
-        minWidth: '180px',
-        maxWidth: '300px',
-        minHeight: '120px',
-        maxHeight: '250px',
+        fontFamily: "inherit",
+        color: disabled ? "gray.2" : "gray.0",
+        border: theme => `2px solid ${disabled ? theme.colors?.gray?.[2] : "black"}`,
+        backgroundColor: "gray.4",
+        borderRadius: "8px",
+        flex: ["1 1 auto", "0 1 100%"],
+        minWidth: "180px",
+        maxWidth: "300px",
+        minHeight: "120px",
+        maxHeight: "250px",
         p: 2,
-        '&:hover': disabled ? {} : {
+        "&:hover": disabled ? {} : {
           boxShadow: theme => `0 0 10px ${theme.colors?.gray?.[2]}`,
-          filter: 'brightness(1.2)',
+          filter: "brightness(1.2)",
         },
       }}
     >
-      <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
+      <div sx={{ display: "block", textAlign: "center", mb: 3 }}>
         <FontAwesomeIcon icon={icon} size="3x"/>
       </div>
       <div sx={{ fontSize: 4 }}>{label}</div>
@@ -313,4 +313,4 @@ const OptionButton: React.FC<OptionButtonProps> = (
   );
 };
 
-const Spacer: React.FC = () => <div sx={{ flex: '1 0 0' }} />;
+const Spacer: React.FC = () => <div sx={{ flex: "1 0 0" }} />;
