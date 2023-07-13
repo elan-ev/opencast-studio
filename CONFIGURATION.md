@@ -10,7 +10,7 @@ Opencast Studio can be configured in three different ways:
 
 Settings configured by the user have the lowest priority and are overwritten by
 both, the server config (e.g. `settings.toml`) and query parameters. Query
-parameters also override settings given in server config(e.g. `settings.toml`).
+parameters also override settings given in the server config (e.g. `settings.toml`).
 Additionally, on the settings page, values that are already preconfigured via
 `settings.toml` or a query parameter are hidden from the user.
 
@@ -201,7 +201,7 @@ Please also note that all settings related to video capture or recording should 
 
 ## Specifying settings via query parameters
 
-Query parameters can simply be attached to the studio URL. Values specified this way overwrite values set by the user or by `settings.toml`. Example URL:
+Query parameters can simply be attached to the Studio URL. Values specified this way overwrite values set by the user or by `settings.toml`. Example URL:
 
 ```
 https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=studio-upload&upload.seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
@@ -209,7 +209,7 @@ https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upl
 
 Note that each key is a "path" like `opencast.serverUrl`. The first part of that path is the "section" in the TOML file shown above (e.g. `[opencast]`).
 
-You can also put the settings in TOML file, then encode that as a hex string and pass it with the `config=` query parameter. This might help to avoid problems if URLs (and thus the query parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
+You can also put the settings in a TOML file, then encode that as a hex string and pass it with the `config=` query parameter. This might help to avoid problems if URLs (and thus the query parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
 
 - TOML string:
   ```
@@ -236,7 +236,7 @@ https://your-opencast.com/studio?settingsFile=foo.toml
 ```
 
 This file needs to live in the same directory as the `settings.toml` that would
-have been loaded anyway.
+have been loaded otherwise.
 
 
 ## Debugging/Help
