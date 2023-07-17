@@ -94,7 +94,6 @@ export const StepContainer: React.FC<StepContainerProps> = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        // alignItems: "center",
       }}>
         {children}
       </div>
@@ -102,7 +101,7 @@ export const StepContainer: React.FC<StepContainerProps> = ({
         display: "flex",
         justifyContent: "end",
         gap: 8,
-        // TODO: add fixed height
+        height: 42,
       }}>
         {prevButton && <StepButton kind="prev" {...prevButton} />}
         {nextButton && <StepButton kind="next" {...nextButton} />}
