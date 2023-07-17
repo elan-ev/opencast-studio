@@ -57,7 +57,6 @@ export const Main: React.FC = () => {
       <ProgressSidebar currentStep={currentStep} />
       {match<Step, ReactNode>(currentStep, {
         "video-select": () => <VideoSetup {...stepProps} />,
-        // "video-select": () => <Dummy />,
         "audio-select": () => "second step",
         "recording": () => null,
         "review": () => null,
@@ -144,9 +143,9 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
               gap: 12,
               alignItems: "center",
               zIndex: 100,
-              backgroundColor: "white",
+              backgroundColor: COLORS.neutral05,
               svg: {
-                color: i === currentIndex ? "#4DA1F7" : "#9CA3AF", // TODO
+                color: i === currentIndex ? "#4DA1F7" : COLORS.neutral40, // TODO
                 fontSize: 2 * CIRCLE_RADIUS,
                 flexShrink: 0,
                 // We want an effective stroke width of 2. If we scale the icon
@@ -166,7 +165,7 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
               <div css={{
                 fontSize: 14,
                 lineHeight: 1.2,
-                color: i == currentIndex ? "#3E8AD8" : "#4B5563", // TODO
+                color: i == currentIndex ? "#3E8AD8" : COLORS.neutral60, // TODO
                 [screenWidthAtMost(BREAKPOINTS.large)]: {
                   display: "none",
                 },
@@ -178,7 +177,7 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
         {/* Line connecting all steps */}
         <div css={{
           position: "absolute",
-          border: "1px solid #9CA3AF", // TODO
+          border: `1px solid ${COLORS.neutral40}`,
           [screenWidthAbove(BREAKPOINTS.large)]: {
             top: CIRCLE_RADIUS,
             bottom: CIRCLE_RADIUS,
