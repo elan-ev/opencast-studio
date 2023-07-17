@@ -1,37 +1,36 @@
 // Everything related to video stream preferences that the user can modify.
 
-// ; -*- mode: rjsx;-*-
-/** @jsx jsx */
-import { jsx, useColorMode } from "theme-ui";
-
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faCog } from "@fortawesome/free-solid-svg-icons";
-import useResizeObserver from "use-resize-observer/polyfilled";
 
-import { Settings, useSettings } from "../../../settings";
-import { getUniqueDevices } from "../../../util";
-import { useDispatch, useStudioState } from "../../../studio-state";
+import { Settings, useSettings } from "../../settings";
+import { COLORS, getUniqueDevices } from "../../util";
+import { useDispatch, useStudioState } from "../../studio-state";
 import {
   startDisplayCapture,
   startUserCapture,
   stopDisplayCapture,
   stopUserCapture,
-} from "../capturer";
-import Tooltip from "../../Tooltip";
+} from "../../capturer";
+import {
+  Floating, FloatingContainer, FloatingHandle, FloatingTrigger, ProtoButton,
+  WithTooltip, screenWidthAtMost,
+} from "@opencast/appkit";
+import { FiSettings, FiX } from "react-icons/fi";
 
 
-// Creates a valid constraints object from the given preferences. The mapping
-// is as follows:
-//
-// - deviceId: falsy values are ignored, any other value is passed on, either as
-//   `ideal` (if `exactDevice` is `false`) or `exact` (if `exactDevice` is
-//   `true`).
-// - aspectRatio: values in `ASPECT_RATIOS` are passed as `ideal`, everything
-//   else is ignored.
-// - quality: valid quality labels are passed on as `ideal` height, invalid ones
-//   are ignored.
+/**
+ * Creates a valid constraints object from the given preferences. The mapping
+ * is as follows:
+ *
+ * - deviceId: falsy values are ignored, any other value is passed on, either as
+ *   `ideal` (if `exactDevice` is `false`) or `exact` (if `exactDevice` is
+ *   `true`).
+ * - aspectRatio: values in `ASPECT_RATIOS` are passed as `ideal`, everything
+ *   else is ignored.
+ * - quality: valid quality labels are passed on as `ideal` height, invalid ones
+ *   are ignored.
+ */
 export const prefsToConstraints = (
   prefs: CameraPrefs | DisplayPrefs,
   exactDevice = false,
@@ -127,19 +126,7 @@ type StreamSettingsProps = {
 export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
   const dispatch = useDispatch();
   const settings = useSettings();
-  const [expandedHeight, setExpandedHeight] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  useResizeObserver<HTMLDivElement>({
-    ref,
-
-    // We don't use the height passed to the callback as we want the outer
-    // height. We also add a magic "4" here. 2 pixels are for the border of the
-    // outer div. The other two are "wiggle room". If we always set the height
-    // to fit exactly, this easily leads to unnessecary scrollbars appearing.
-    // This in turn might lead to rewrapping and then a change in height, in
-    // the worst case ending up in an infinite loop.
-    onResize: () => setExpandedHeight(ref.current?.offsetHeight ?? 0 + 4),
-  });
+  const floatRef = useRef<FloatingHandle>(null);
   const { t } = useTranslation();
 
   // The current preferences and the callback to update them.
@@ -184,124 +171,119 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
 
   // State about expanding and hiding the settings.
   const [isExpanded, setIsExpanded] = useState(false);
-  const [colorMode] = useColorMode();
 
-  return <Fragment>
-    <div sx={{
+  return <>
+    {/* Stream info at the top */}
+    <div css={{
+      display: isExpanded ? "initial" : "none",
       position: "absolute",
-      top: isExpanded ? "8px" : "-30px",
+      top: 12,
       left: 0,
       right: 0,
       textAlign: "center",
-      transition: "top 0.2s",
     }}>
-      <span sx={{
-        color: colorMode === "dark" ? "gray.3" : "gray.1",
-        backgroundColor: "white",
+      <span css={{
+        color: COLORS.neutral70,
+        backgroundColor: COLORS.neutral05,
         borderRadius: "10px",
-        p: 1,
-        fontSize: "18px",
+        padding: "4px 8px",
+        boxShadow: "0 0 12px rgba(0, 0, 0, 30%)",
       }}>
         {streamInfo(stream)}
       </span>
     </div>
-    <div sx={{
-      position: "absolute",
-      left: 0,
-      right: 0,
-      bottom: 0,
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "flex-end",
-    }}>
-      <div sx={{ textAlign: "right" }}>
-        <Tooltip
-          offset={[0, 25]}
-          content={isExpanded ? t("video-settings-close") : t("video-settings-open")}
+
+    {/* The settings button and the popover dialog */}
+    <FloatingContainer
+      ref={floatRef}
+      placement="top-start"
+      ariaRole="dialog"
+      open={isExpanded}
+      onClose={() => setIsExpanded(false)}
+      borderRadius={8}
+      viewPortMargin={8}
+      css={{
+        position: "absolute",
+        right: 8,
+        bottom: 8,
+      }}
+    >
+      <FloatingTrigger>
+        <WithTooltip
+          placement="bottom"
+          tooltip={isExpanded ? t("video-settings-close") : t("video-settings-open")}
         >
-          <button
+          <ProtoButton
             onClick={() => setIsExpanded(old => !old)}
-            sx={{
+            css={{
               border: "none",
               display: "inline-block",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              color: "white",
-              p: "6px",
-              m: 2,
-              fontSize: "30px",
-              lineHeight: "1em",
+              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              color: COLORS.neutral05,
+              padding: 8,
+              fontSize: 32,
+              boxShadow: "0 0 16px rgba(255, 255, 255, 0.4)",
+              lineHeight: 0,
               borderRadius: "10px",
               cursor: "pointer",
-              "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.7)",
+              "&:hover, &:focus-visible": {
+                backgroundColor: "rgba(0, 0, 0, 0.9)",
+              },
+              "> svg": {
+                transition: "transform 0.2s",
               },
               "&:hover > svg, &:focus > svg": {
                 transform: isExpanded ? "none" : "rotate(45deg)",
               },
               "&:focus-visible": {
-                outline: theme => `5px solid ${theme.colors?.primary}`,
-                outlineOffset: "-2px",
-                backgroundColor: "rgba(0, 0, 0, 0.7)",
-                color: "white",
+                outline: "5px dashed white",
+                outlineOffset: -2.5,
               },
             }}
           >
-            <FontAwesomeIcon
-              icon={isExpanded ? faTimes : faCog}
-              fixedWidth
-              sx={{
-                transition: isExpanded ? "none" : "transform 0.2s",
-                width: "1em !important",
-              }}
-            />
-          </button>
-        </Tooltip>
-      </div>
-      <div sx={{
-        height: isExpanded ? (expandedHeight || "auto") : 0,
-        flex: "0 1 auto",
-        transition: "height 0.2s",
-        overflow: "hidden",
-        backgroundColor: "background",
-        fontSize: "18px",
-        boxShadow: isExpanded ? "0 0 15px rgba(0, 0, 0, 0.3)" : "none",
-      }}>
-        <div tabIndex={-1} sx={{
-          border: theme => `1px solid ${theme.colors?.gray?.[0]}`,
-          height: "100%",
-          overflow: "auto",
+            {isExpanded ? <FiX /> : <FiSettings />}
+          </ProtoButton>
+        </WithTooltip>
+      </FloatingTrigger>
+      <Floating
+        css={{ maxWidth: "min(670px, 100vw - 16px)" }}
+        borderWidth={0}
+        shadowBlur={16}
+        padding={18}
+      >
+        <div css={{
+          display: "grid",
+          width: "100%",
+          gridTemplateColumns: "auto 1fr",
+          gridGap: "14px 32px",
+          paddingLeft: 4,
+          [screenWidthAtMost(450)]: {
+            columnGap: 8,
+          },
+          [screenWidthAtMost(360)]: {
+            gridTemplateColumns: "1fr",
+            rowGap: 0,
+          },
         }}>
-          <div ref={ref} sx={{ p: 1, pb: "2px" }}>
-            <div sx={{
-              display: "grid",
-              width: "100%",
-              gridTemplateColumns: "auto 1fr",
-              gridGap: "6px 12px",
-              p: 1,
-            }} >
-              { !isDesktop && <UserSettings {...{ updatePrefs, prefs, isExpanded }} /> }
-              <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings, isExpanded }} />
-            </div>
-
-            <div sx={{
-              backgroundColor: "gray.4",
-              m: 2,
-              py: 1,
-              px: 2,
-              fontSize: "16px",
-              lineHeight: "20px",
-              border: theme => `1px solid ${theme.colors?.gray?.[2]}`,
-            }}>
-              <Trans i18nKey="sources-video-preferences-note">
-                <strong>Note:</strong> Explanation.
-              </Trans>
-            </div>
-          </div>
+          {!isDesktop && <UserSettings {...{ updatePrefs, prefs, isExpanded }} />}
+          <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings, isExpanded }} />
         </div>
-      </div>
-    </div>
-  </Fragment>;
+
+        <div css={{
+          backgroundColor: COLORS.neutral15,
+          marginTop: 8,
+          padding: 12,
+          fontSize: 14,
+          lineHeight: 1.25,
+          borderRadius: 6,
+        }}>
+          <Trans i18nKey="sources-video-preferences-note">
+            <strong>Note:</strong> Explanation.
+          </Trans>
+        </div>
+      </Floating>
+    </FloatingContainer>
+  </>;
 };
 
 const streamInfo = (stream: MediaStream | null) => {
@@ -312,28 +294,27 @@ const streamInfo = (stream: MediaStream | null) => {
   return s ? [sizeInfo, fpsInfo].join(", ") : "...";
 };
 
+/** Div for the name of a value, e.g. quality, aspect ratio, .. */
 const PrefKey: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <div sx={{
-    gridColumn: "0 1",
+  <div css={{
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    hyphens: "auto",
+    [screenWidthAtMost(360)]: {
+      marginTop: 4,
+    },
   }}>
     { children }
   </div>
 );
+
+/** Container for the value selection of an option, e.g. all available qualities. */
 const PrefValue: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <div tabIndex={-1}
-    sx={{
-      gridColumn: "1 2",
-      overflowX: "auto",
-      lineHeight: "30px",
-      "*:focus-visible": {
-        outline: theme => `5px solid ${theme.colors?.primary}`,
-        outlineOffset: "-3px",
-      },
-    }}>
+  <div css={{
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 6,
+  }}>
     { children }
   </div>
 );
@@ -343,11 +324,10 @@ type UniveralSettingsProps = {
   updatePrefs: (p: CameraPrefs | DisplayPrefs) => void;
   prefs: CameraPrefs | DisplayPrefs;
   settings: Settings;
-  isExpanded: boolean;
 };
 
 const UniveralSettings: React.FC<UniveralSettingsProps> = (
-  { isDesktop, updatePrefs, prefs, settings, isExpanded }
+  { isDesktop, updatePrefs, prefs, settings }
 ) => {
   const { t } = useTranslation();
 
@@ -356,11 +336,10 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
   const qualities = qualityOptions(maxHeight);
   const kind = isDesktop ? "desktop" : "user";
 
-  return <Fragment>
-    <PrefKey>{t("sources-video-quality")}*:</PrefKey>
+  return <>
+    <PrefKey>{t("sources-video-quality")}</PrefKey>
     <PrefValue>
       <RadioButton
-        isExpanded={isExpanded}
         id={`quality-auto-${kind}`}
         value="auto"
         name={`quality-${kind}`}
@@ -369,30 +348,28 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
         checked={qualities.every(q => prefs.quality !== q)}
       />
       {
-        qualities.map(q => <Fragment key={`${q}-${kind}`}>
-          <wbr />
+        qualities.map(q => (
           <RadioButton
-            isExpanded={isExpanded}
+            key={`${q}-${kind}`}
             id={`quality-${q}-${kind}`}
             value={q}
             name={`quality-${kind}`}
             onChange={changeQuality}
             checked={prefs.quality === q}
           />
-        </Fragment>)
+        ))
       }
     </PrefValue>
-  </Fragment>;
+  </>;
 };
 
 type UserSettingsProps = {
   updatePrefs: (p: CameraPrefs | DisplayPrefs) => void;
   prefs: CameraPrefs;
-  isExpanded: boolean;
 };
 
 
-const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs, isExpanded }) => {
+const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
   const { t } = useTranslation();
   const state = useStudioState();
 
@@ -402,30 +379,30 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs, isExpan
   const changeDevice = (id: string) => updatePrefs({ deviceId: id });
   const changeAspectRatio = (ratio: string) => updatePrefs({ aspectRatio: ratio });
 
-  return <Fragment>
+  return <>
     <PrefKey>
-      <label htmlFor="sources-video-device">{t("sources-video-device")}:</label>
+      <label htmlFor="sources-video-device">{t("sources-video-device")}</label>
     </PrefKey>
     <PrefValue>
       <select
         id="sources-video-device"
-        tabIndex={isExpanded ? 0 : -1}
-        sx={{ variant: "styles.select" }}
         value={currentDeviceId}
         onChange={e => changeDevice(e.target.value)}
+        css={{
+          width: "100%",
+          borderRadius: 6,
+          padding: "6px 12px",
+          backgroundColor: "transparent",
+          border: `1px solid ${COLORS.neutral25}`,
+        }}
       >
-        {
-          devices.map((d, i) => (
-            <option key={i} value={d.deviceId}>{ d.label }</option>
-          ))
-        }
+        {devices.map(d => <option key={d.deviceId} value={d.deviceId}>{d.label}</option>)}
       </select>
     </PrefValue>
 
-    <PrefKey>{t("sources-video-aspect-ratio")}*:</PrefKey>
+    <PrefKey>{t("sources-video-aspect-ratio")}</PrefKey>
     <PrefValue>
       <RadioButton
-        isExpanded={isExpanded}
         id="ar-auto"
         value="auto"
         name="aspectRatio"
@@ -433,28 +410,24 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs, isExpan
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
       />
-      {
-        ASPECT_RATIOS.map(ar => <Fragment key={`ar-${ar}`}>
-          <wbr />
-          <RadioButton
-            isExpanded={isExpanded}
-            id={`ar-${ar}`}
-            value={ar}
-            name="aspectRatio"
-            onChange={changeAspectRatio}
-            checked={prefs.aspectRatio === ar}
-          />
-        </Fragment>)
-      }
+      {ASPECT_RATIOS.map(ar => (
+        <RadioButton
+          key={ar}
+          id={`ar-${ar}`}
+          value={ar}
+          name="aspectRatio"
+          onChange={changeAspectRatio}
+          checked={prefs.aspectRatio === ar}
+        />
+      ))}
     </PrefValue>
-  </Fragment>;
+  </>;
 };
 
 type RadioButtonProps = {
   id: string;
   name: string;
   value: string;
-  isExpanded: boolean;
   checked: boolean;
   label?: string;
   onChange: (v: string) => void;
@@ -462,34 +435,38 @@ type RadioButtonProps = {
 
 // A styled radio input which looks like a button.
 const RadioButton: React.FC<RadioButtonProps> = ({
-  id, value, checked, name, onChange, label, isExpanded,
+  id, value, checked, name, onChange, label,
 }) => {
-  return <Fragment>
+  return <div>
     <input
       type="radio"
       onChange={e => onChange(e.target.value)}
       {...{ id, value, checked, name }}
-      sx={{
+      css={{
         display: "none",
         "&+label": {
-          border: theme => `2px solid ${theme.colors?.gray?.[0]}`,
-          p: "1px 4px",
-          borderRadius: "6px",
-          mx: 1,
+          display: "block",
+          border: `1px solid ${COLORS.neutral25}`,
+          lineHeight: 1.2,
+          padding: "4px 10px",
+          borderRadius: 6,
+          fontWeight: 500,
+          cursor: "pointer",
         },
         "&:checked+label": {
-          bg: "gray.0",
-          color: "background",
-          fontWeight: "bold",
+          backgroundColor: "#3E8AD8", // TODO
+          borderColor: "#3E8AD8", // TODO
+          color: COLORS.neutral05,
+          cursor: "default",
         },
       }}
     />
     <label
-      tabIndex={isExpanded ? 0 : -1}
+      tabIndex={0}
       onKeyDown={e => (e.key === "Enter" || e.key === " ") && onChange(value)}
       htmlFor={id}
-    >{ label || value }</label>
-  </Fragment>;
+    >{label ?? value}</label>
+  </div>;
 };
 
 // Returns the devide ID of the video track of the given stream.

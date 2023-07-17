@@ -67,7 +67,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Quality",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
+  "sources-video-preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
 
   "sources-audio-question": "Record audio?",
   "sources-audio-microphone": "Microphone",
@@ -197,6 +197,8 @@
     }
   },
   "steps": {
+    "prev-button-label": "Back",
+    "next-button-label": "Next",
     "video": {
       "label": "Select video source"
     },

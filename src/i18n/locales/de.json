@@ -62,7 +62,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Qualität",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
+  "sources-video-preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
 
   "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
   "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
@@ -195,6 +195,8 @@
     }
   },
   "steps": {
+    "prev-button-label": "Zurück",
+    "next-button-label": "Weiter",
     "video": {
       "label": "Videoquelle auswählen"
     },

@@ -1,36 +1,81 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { match, screenWidthAbove, screenWidthAtMost } from "@opencast/appkit";
+import { bug, match, screenWidthAbove, screenWidthAtMost } from "@opencast/appkit";
 import { FiCircle } from "react-icons/fi";
 
 import StepCurrent from "../icons/step-current.svg";
 import StepDone from "../icons/step-done.svg";
 import { BREAKPOINTS, COLORS } from "../util";
+import { VideoSetup } from "./video-setup";
+
+
+
+export type StepProps = {
+  goToNextStep: () => void;
+  goToPrevStep: () => void;
+  goToFirstStep: () => void;
+};
 
 
 export type Step = "video-select" | "audio-select" | "recording" | "review" | "finish";
 
 export const Main: React.FC = () => {
-  const [currentStep, _setCurrentStep] = useState<Step>("audio-select");
+  const [currentStep, setCurrentStep] = useState<Step>("video-select");
+  const stepProps = {
+    goToNextStep: () => {
+      const step: Step = match(currentStep, {
+        "video-select": () => "audio-select",
+        "audio-select": () => "recording",
+        "recording": () => "review",
+        "review": () => "finish",
+        "finish": () => bug("Finish is the last step"),
+      });
+      setCurrentStep(step);
+    },
+    goToPrevStep: () => {
+      const step: Step = match(currentStep, {
+        "video-select": () => bug("video-select is the first step"),
+        "audio-select": () => "video-select",
+        "recording": () => "audio-select",
+        "review": () => "recording",
+        "finish": () => "review",
+      });
+      setCurrentStep(step);
+    },
+    goToFirstStep: () => setCurrentStep("video-select"),
+  };
 
   return (
     <main css={{
       display: "flex",
       flex: 1,
-      overflow: "hidden",
+      backgroundColor: COLORS.neutral10,
       [screenWidthAtMost(BREAKPOINTS.large)]: {
         flexDirection: "column-reverse",
       },
     }}>
       <ProgressSidebar currentStep={currentStep} />
-      <div css={{
-        backgroundColor: COLORS.neutral10,
-      }}>
-      </div>
+      {match<Step, ReactNode>(currentStep, {
+        "video-select": () => <VideoSetup {...stepProps} />,
+        // "video-select": () => <Dummy />,
+        "audio-select": () => "second step",
+        "recording": () => null,
+        "review": () => null,
+        "finish": () => null,
+      })}
     </main>
   );
 };
 
+const stepIndex = (step: Step): number => {
+  return match(step, {
+    "video-select": () => 0,
+    "audio-select": () => 1,
+    "recording": () => 2,
+    "review": () => 3,
+    "finish": () => 4,
+  });
+};
 
 type ProgressSidebarProps = {
   currentStep: Step;
@@ -43,13 +88,7 @@ type ProgressSidebarProps = {
 const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
   const { t } = useTranslation();
 
-  const currentIndex = match(currentStep, {
-    "video-select": () => 0,
-    "audio-select": () => 1,
-    "recording": () => 2,
-    "review": () => 3,
-    "finish": () => 4,
-  });
+  const currentIndex = stepIndex(currentStep);
   const labels = [
     t("steps.video.label"),
     t("steps.audio.label"),
@@ -66,6 +105,7 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
       backgroundColor: COLORS.neutral05,
       [screenWidthAbove(BREAKPOINTS.large)]: {
         width: 160,
+        minWidth: 160,
       },
       [screenWidthAtMost(BREAKPOINTS.large)]: {
         height: 42,

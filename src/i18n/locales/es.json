@@ -63,7 +63,7 @@
   "sources-video-aspect-ratio-auto": "automático",
   "sources-video-quality": "Calidad",
   "sources-video-quality-auto": "automático",
-  "sources-video-preferences-note": "<0>*Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'.",
+  "sources-video-preferences-note": "<0>Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'.",
 
   "sources-audio-question": "¿Grabar el audio?",
   "sources-audio-microphone": "Micrófono",

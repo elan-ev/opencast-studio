@@ -65,6 +65,10 @@ const CSS_RESETS = css({
     height: "100%",
   },
 
+  body: {
+    overflow: "hidden",
+  },
+
   // This improves the readability of underlines in links.
   a: {
     textDecorationSkipInk: "auto",
