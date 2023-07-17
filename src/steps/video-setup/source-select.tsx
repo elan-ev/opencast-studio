@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ProtoButton, screenWidthAtMost } from "@opencast/appkit";
+import { ProtoButton, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 import { FiMonitor, FiUser } from "react-icons/fi";
 
 import { useDispatch, useStudioState, VideoSource } from "../../studio-state";
@@ -115,6 +115,7 @@ const OptionButton: React.FC<OptionButtonProps> = (
   { icon, label, onClick, disabledText = false }
 ) => {
   const disabled = disabledText !== false;
+  const isLight = useColorScheme().scheme === "light";
 
   return (
     <ProtoButton
@@ -146,7 +147,7 @@ const OptionButton: React.FC<OptionButtonProps> = (
         "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
           color: COLORS.neutral90,
           borderColor: COLORS.neutral25,
-          boxShadow: `0 0 16px ${COLORS.neutral20}`,
+          boxShadow: `0 0 16px ${isLight ? COLORS.neutral20 : COLORS.neutral05}`,
         },
         ...focusStyle({ offset: -1 }),
       }}

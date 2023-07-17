@@ -14,7 +14,7 @@ import {
 } from "../../capturer";
 import {
   Floating, FloatingContainer, FloatingHandle, FloatingTrigger, ProtoButton,
-  WithTooltip, screenWidthAtMost,
+  WithTooltip, screenWidthAtMost, useColorScheme,
 } from "@opencast/appkit";
 import { FiSettings, FiX } from "react-icons/fi";
 
@@ -128,6 +128,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
   const settings = useSettings();
   const floatRef = useRef<FloatingHandle>(null);
   const { t } = useTranslation();
+  const isLight = useColorScheme().scheme === "light";
 
   // The current preferences and the callback to update them.
   const prefs = isDesktop ? loadDisplayPrefs() : loadCameraPrefs();
@@ -183,7 +184,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       textAlign: "center",
     }}>
       <span css={{
-        color: COLORS.neutral70,
+        color: isLight ? COLORS.neutral70 : COLORS.neutral90,
         backgroundColor: COLORS.neutral05,
         borderRadius: "10px",
         padding: "4px 8px",
@@ -219,7 +220,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
               border: "none",
               display: "inline-block",
               backgroundColor: "rgba(0, 0, 0, 0.7)",
-              color: COLORS.neutral05,
+              color: "white",
               padding: 8,
               fontSize: 32,
               boxShadow: "0 0 16px rgba(255, 255, 255, 0.4)",

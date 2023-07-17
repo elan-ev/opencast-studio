@@ -49,7 +49,7 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => (
     height: "100%",
     backgroundColor: COLORS.neutral05,
     borderRadius: 12,
-    boxShadow: `0 6px 16px ${COLORS.neutral30}`,
+    boxShadow: "0 6px 16px rgba(0, 0, 0, 0.2)",
     position: "relative",
   }}>
     <PreviewVideo input={input} />
