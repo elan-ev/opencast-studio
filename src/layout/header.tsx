@@ -11,28 +11,34 @@ import languages from "../i18n/languages";
 import { BREAKPOINTS, COLORS, focusStyle } from "../util";
 
 
-export const Header: React.FC = () => (
-  <div css={{
-    "--header-height": "64px",
-    backgroundColor: COLORS.neutral60,
-    height: "var(--header-height)",
-    display: "flex",
-    justifyContent: "space-between",
-  }}>
-    <Logo />
-    <Buttons />
-  </div>
-);
+export const Header: React.FC = () => {
+  const { scheme } = useColorScheme();
+
+  return (
+    <div css={{
+      "--header-height": "64px",
+      backgroundColor: scheme === "light" ? COLORS.neutral60 : COLORS.neutral20,
+      height: "var(--header-height)",
+      display: "flex",
+      justifyContent: "space-between",
+    }}>
+      <Logo />
+      <Buttons />
+    </div>
+  );
+};
 
 const Logo: React.FC = () => {
   const path = (filename: string) => DEFINES.publicPath
     + (DEFINES.publicPath.endsWith("/") ? "" : "/")
     + filename;
+  const isLight = useColorScheme().scheme === "light";
 
   return (
     <picture css={{
       height: "100%",
       display: "flex",
+      opacity: isLight ? 1.0 : 0.8,
       paddingLeft: 8,
       alignItems: "center",
       "> *": {
@@ -130,39 +136,43 @@ type HeaderButtonProps = JSX.IntrinsicElements["button"] & {
 const BUTTON_LABEL_BREAKPOINT = 640;
 
 const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
-  ({ icon, label, ...rest }, ref) => (
-    <ProtoButton {...rest} ref={ref} css={{
-      display: "flex",
-      gap: 8,
-      alignItems: "center",
+  ({ icon, label, ...rest }, ref) => {
+    const isLight = useColorScheme().scheme === "light";
 
-      fontSize: 16,
-      fontFamily: "inherit",
-      fontWeight: 500,
-      color: COLORS.neutral05,
-      borderRadius: 6,
-      padding: "6px 8px",
+    return (
+      <ProtoButton {...rest} ref={ref} css={{
+        display: "flex",
+        gap: 8,
+        alignItems: "center",
 
-      ":hover, :active": {
-        outline: `2px solid ${COLORS.neutral50}`,
-        backgroundColor: COLORS.neutral70,
-      },
-      "--color-focus": COLORS.neutral10,
-      ...focusStyle(),
+        fontSize: 16,
+        fontFamily: "inherit",
+        fontWeight: 500,
+        color: isLight ? COLORS.neutral05 : COLORS.neutral90,
+        borderRadius: 6,
+        padding: "6px 8px",
 
-      "> svg": {
-        fontSize: 22,
-        [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
-          fontSize: 26,
+        ":hover, :active": {
+          outline: `2px solid ${COLORS.neutral50}`,
+          backgroundColor: isLight ? COLORS.neutral70 : COLORS.neutral10,
         },
-      },
-    }}>
-      {icon}
-      <span css={{
-        [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
-          display: "none",
+        "--color-focus": isLight ? COLORS.neutral10 : COLORS.neutral90,
+        ...focusStyle(),
+
+        "> svg": {
+          fontSize: 22,
+          [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
+            fontSize: 26,
+          },
         },
-      }}>{label}</span>
-    </ProtoButton>
-  )
+      }}>
+        {icon}
+        <span css={{
+          [`@media (max-width: ${BUTTON_LABEL_BREAKPOINT}px)`]: {
+            display: "none",
+          },
+        }}>{label}</span>
+      </ProtoButton>
+    );
+  }
 );
