@@ -9,7 +9,7 @@ import { useSettings } from "../../settings";
 import { queryMediaDevices, onMobileDevice, COLORS, BREAKPOINTS, focusStyle } from "../../util";
 import { startDisplayCapture, startUserCapture } from "../../capturer";
 import { ErrorBox } from "../../ui/ErrorBox";
-import { SHORTCUTS } from "../../shortcuts";
+import { ShortcutKeys, SHORTCUTS, useShowAvailableShortcuts } from "../../shortcuts";
 
 
 
@@ -54,6 +54,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
   useHotkeys(SHORTCUTS.videoSetup.selectScreen, () => clickDisplay());
   useHotkeys(SHORTCUTS.videoSetup.selectBoth, () => clickBoth());
   useHotkeys(SHORTCUTS.videoSetup.selectUser, () => clickUser());
+  const showShortcuts = useShowAvailableShortcuts();
 
   if (!displaySupported && !userSupported) {
     return <ErrorBox body={t("sources-video-none-available")} />;
@@ -78,6 +79,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         icon={<FiMonitor />}
         onClick={clickDisplay}
         disabledText={displaySupported ? false : t("sources-video-display-not-supported")}
+        shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectScreen : undefined}
       />}
       {(displaySupported || !onMobileDevice()) && userSupported && <OptionButton
         label={t("sources-scenario-display-and-user")}
@@ -99,12 +101,14 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
             ? (state.hasWebcam ? false : t("sources-video-no-cam-detected"))
             : t("sources-video-display-not-supported")
         }
+        shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectBoth : undefined}
       />}
-      { userSupported && <OptionButton
+      {userSupported && <OptionButton
         label={t("sources-scenario-user")}
         icon={<FiUser />}
         onClick={clickUser}
         disabledText={state.hasWebcam ? false : t("sources-video-no-cam-detected")}
+        shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectUser : undefined}
       />}
     </div>
   );
@@ -115,10 +119,11 @@ type OptionButtonProps = {
   label: string;
   onClick: () => void;
   disabledText: false | string;
+  shortcut?: string,
 };
 
 const OptionButton: React.FC<OptionButtonProps> = (
-  { icon, label, onClick, disabledText = false }
+  { icon, label, onClick, shortcut, disabledText = false }
 ) => {
   const disabled = disabledText !== false;
   const isLight = useColorScheme().scheme === "light";
@@ -128,6 +133,7 @@ const OptionButton: React.FC<OptionButtonProps> = (
       onClick={onClick}
       disabled={disabled}
       css={{
+        position: "relative",
         display: "inline-flex",
         flexDirection: "column",
         alignItems: "center",
@@ -173,6 +179,11 @@ const OptionButton: React.FC<OptionButtonProps> = (
       </div>
       <div css={{ fontSize: 18, fontWeight: 700 }}>{label}</div>
       <div css={{ height: "1lh", fontSize: 14, marginTop: 4 }}>{disabledText}</div>
+      {shortcut && <div css={{
+        position: "absolute",
+        right: 8,
+        bottom: 8,
+      }}><ShortcutKeys shortcut={shortcut} /></div>}
     </ProtoButton>
   );
 };
