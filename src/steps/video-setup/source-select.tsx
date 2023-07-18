@@ -2,12 +2,14 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { ProtoButton, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 import { FiMonitor, FiUser } from "react-icons/fi";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { useDispatch, useStudioState, VideoSource } from "../../studio-state";
 import { useSettings } from "../../settings";
 import { queryMediaDevices, onMobileDevice, COLORS, BREAKPOINTS, focusStyle } from "../../util";
 import { startDisplayCapture, startUserCapture } from "../../capturer";
 import { ErrorBox } from "../../ui/ErrorBox";
+import { SHORTCUTS } from "../../shortcuts";
 
 
 
@@ -48,6 +50,10 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
       startDisplayCapture(dispatch, settings, displayConstraints),
     ]);
   };
+
+  useHotkeys(SHORTCUTS.videoSetup.selectScreen, () => clickDisplay());
+  useHotkeys(SHORTCUTS.videoSetup.selectBoth, () => clickBoth());
+  useHotkeys(SHORTCUTS.videoSetup.selectUser, () => clickUser());
 
   if (!displaySupported && !userSupported) {
     return <ErrorBox body={t("sources-video-none-available")} />;
