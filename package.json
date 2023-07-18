@@ -10,9 +10,9 @@
   },
   "homepage": "https://studio.opencast.org",
   "scripts": {
-    "start": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') webpack serve --open --mode=development",
-    "build:dev": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') webpack --progress --mode=development",
-    "build:release": "REACT_APP_GIT_SHA=$(git rev-parse --short HEAD) REACT_APP_BUILD_DATE=$(date -u '+%Y-%m-%d') webpack --progress --mode=production",
+    "start": "COMMIT_SHA=$(git rev-parse --short HEAD) BUILD_DATE=$(date -u '+%Y-%m-%d') webpack serve --open --mode=development",
+    "build:dev": "COMMIT_SHA=$(git rev-parse --short HEAD) BUILD_DATE=$(date -u '+%Y-%m-%d') webpack --progress --mode=development",
+    "build:release": "COMMIT_SHA=$(git rev-parse --short HEAD) BUILD_DATE=$(date -u '+%Y-%m-%d') webpack --progress --mode=production",
     "typecheck": "tsc --skipLibCheck",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

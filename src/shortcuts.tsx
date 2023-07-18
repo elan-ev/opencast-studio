@@ -65,7 +65,7 @@ const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => (
     height: large ? 40 : 30,
     minWidth: large ? 40 : 30,
     fontSize: large ? 18 : 16,
-    boxShadow: "0 0 8px rgba(0, 0, 0, 0.5)",
+    boxShadow: "0 0 8px var(--shadow-color)",
     backgroundColor: COLORS.neutral10,
     color: COLORS.neutral80,
   }}>

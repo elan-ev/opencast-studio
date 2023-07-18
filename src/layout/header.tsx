@@ -9,21 +9,25 @@ import React, { forwardRef } from "react";
 import { DEFINES } from "../defines";
 import languages from "../i18n/languages";
 import { BREAKPOINTS, COLORS, focusStyle } from "../util";
+import { OverlayBoxState } from ".";
 
 
-export const Header: React.FC = () => {
+type Props = {
+  setOverlayBoxState: (state: OverlayBoxState) => void;
+};
+
+export const Header: React.FC<Props> = ({ setOverlayBoxState }) => {
   const { scheme } = useColorScheme();
 
   return (
     <div css={{
-      "--header-height": "64px",
       backgroundColor: scheme === "light" ? COLORS.neutral60 : COLORS.neutral20,
       height: "var(--header-height)",
       display: "flex",
       justifyContent: "space-between",
     }}>
       <Logo />
-      <Buttons />
+      <Buttons {...{ setOverlayBoxState }}/>
     </div>
   );
 };
@@ -51,7 +55,7 @@ const Logo: React.FC = () => {
   );
 };
 
-const Buttons: React.FC = () => {
+const Buttons: React.FC<Props> = ({ setOverlayBoxState }) => {
 
   return (
     <div css={{
@@ -63,7 +67,7 @@ const Buttons: React.FC = () => {
     }}>
       <LanguageButton />
       <ThemeButton />
-      <InfoButton />
+      <InfoButton open={() => setOverlayBoxState("info")} />
     </div>
   );
 };
@@ -121,10 +125,14 @@ const ThemeButton: React.FC = () => {
   );
 };
 
-const InfoButton: React.FC = () => {
+type InfoButtonProps = {
+  open: () => void;
+};
+
+const InfoButton: React.FC<InfoButtonProps> = ({ open }) => {
   const { t } = useTranslation();
   return (
-    <HeaderButton icon={<FiInfo />} label={t("header.info.label")} />
+    <HeaderButton onClick={open} icon={<FiInfo />} label={t("header.info.label")} />
   );
 };
 
