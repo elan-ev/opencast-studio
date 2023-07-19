@@ -1,7 +1,7 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
 
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from "react";
 
 type Props = {
   activeStep: number;

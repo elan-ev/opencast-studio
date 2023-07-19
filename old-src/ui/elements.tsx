@@ -1,14 +1,14 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
-import { useTranslation } from 'react-i18next';
-import { HTMLInputTypeAttribute } from 'react';
-import { FieldError, FieldValues, Path, useForm, Validate } from 'react-hook-form';
+import { jsx } from "theme-ui";
+import { useTranslation } from "react-i18next";
+import { HTMLInputTypeAttribute } from "react";
+import { FieldError, FieldValues, Path, useForm, Validate } from "react-hook-form";
 
 
 type InputProps<I extends FieldValues, F> =
-  Pick<JSX.IntrinsicElements['input'], 'onChange' | 'autoComplete' | 'defaultValue'> &
-  Pick<ReturnType<typeof useForm<I>>, 'register'> & {
+  Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue"> &
+  Pick<ReturnType<typeof useForm<I>>, "register"> & {
   /** Human readable string describing the field. */
   label: string,
   name: Path<I>,
@@ -30,7 +30,7 @@ export const Input = <I extends FieldValues, F>({
   name,
   required,
   validate,
-  type = 'text',
+  type = "text",
   ...rest
 }: InputProps<I, F>) => {
   const { t } = useTranslation();
@@ -39,49 +39,49 @@ export const Input = <I extends FieldValues, F>({
   return (
     <div
       sx={{
-        '&:not(:last-child)': {
+        "&:not(:last-child)": {
           mb: 3
         }
       }}
     >
       <label
         sx={{
-          color: 'text',
-          display: 'block',
+          color: "text",
+          display: "block",
           fontSize: 2,
         }}
       >
         {label}
         <div
           sx={{
-            display: 'block',
-            boxSizing: 'border-box',
-            clear: 'both',
+            display: "block",
+            boxSizing: "border-box",
+            clear: "both",
             fontSize: 2,
-            position: 'relative',
-            textAlign: 'left'
+            position: "relative",
+            textAlign: "left"
           }}
         >
           <input
-            aria-invalid={error ? 'true' : 'false'}
+            aria-invalid={error ? "true" : "false"}
             aria-describedby={`${name}Error`}
             autoComplete="off"
-            sx={{ variant: 'styles.input' }}
+            sx={{ variant: "styles.input" }}
             type={type}
             {...rest}
             {...register(name, {
               validate,
               onChange: rest.onChange,
-              ...required && { required: t('forms-validation-error-required') },
+              ...required && { required: t("forms-validation-error-required") },
             })}
           />
           {error && (
             <p
               id={`${name}Error`}
               sx={{
-                color: 'error',
+                color: "error",
                 fontSize: 1,
-                fontWeight: 'body',
+                fontWeight: "body",
                 mt: 1
               }}
             >

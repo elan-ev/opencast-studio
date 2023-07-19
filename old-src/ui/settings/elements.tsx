@@ -1,13 +1,13 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Themed } from 'theme-ui';
-import { Box } from '@theme-ui/components';
+import { jsx, Themed } from "theme-ui";
+import { Box } from "@theme-ui/components";
 
 
 export const SettingsSection = ({ title, children }) => (
   <Box
     sx={{
-      '&:not(:last-child)': {
+      "&:not(:last-child)": {
         mb: 4
       }
     }}

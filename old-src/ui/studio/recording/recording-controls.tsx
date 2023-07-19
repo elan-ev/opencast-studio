@@ -1,29 +1,29 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import { useEffect, useRef } from 'react';
-import { Beforeunload } from 'react-beforeunload';
-import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router';
-import { GlobalHotKeys } from 'react-hotkeys';
+import { useEffect, useRef } from "react";
+import { Beforeunload } from "react-beforeunload";
+import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
+import { GlobalHotKeys } from "react-hotkeys";
 
-import Recorder, { OnStopCallback } from './recorder';
-import { useSettings } from '../../../settings';
-import { Dispatcher, Recording, useDispatch, useStudioState } from '../../../studio-state';
-import { PauseButton, RecordButton, ResumeButton, StopButton } from './recording-buttons';
-import Clock from './clock';
-import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from '.';
-import Tooltip from '../../Tooltip';
-import { recordShortcuts } from '../../../shortcuts';
+import Recorder, { OnStopCallback } from "./recorder";
+import { useSettings } from "../../../settings";
+import { Dispatcher, Recording, useDispatch, useStudioState } from "../../../studio-state";
+import { PauseButton, RecordButton, ResumeButton, StopButton } from "./recording-buttons";
+import Clock from "./clock";
+import { STATE_INACTIVE, STATE_PAUSED, STATE_RECORDING } from ".";
+import Tooltip from "../../Tooltip";
+import { recordShortcuts } from "../../../shortcuts";
 
 
 const addRecordOnStop = (
   dispatch: Dispatcher,
-  deviceType: Recording['deviceType'],
+  deviceType: Recording["deviceType"],
 ): OnStopCallback => {
   return ({ media, url, mimeType, dimensions }) => {
-    dispatch({ type: 'ADD_RECORDING', recording: { deviceType, media, url, mimeType, dimensions }});
+    dispatch({ type: "ADD_RECORDING", recording: { deviceType, media, url, mimeType, dimensions }});
   };
 };
 
@@ -66,24 +66,24 @@ export default function RecordingControls({
   const record = () => {
     // In theory, we should never have recordings at this point. But just to be
     // sure, in case of a bug elsewhere, we clear the recordings here.
-    dispatch({ type: 'CLEAR_RECORDINGS' });
+    dispatch({ type: "CLEAR_RECORDINGS" });
 
     if (displayStream) {
-      const onStop = addRecordOnStop(dispatch, 'desktop');
+      const onStop = addRecordOnStop(dispatch, "desktop");
       const stream = mixAudioIntoVideo(audioStream, displayStream);
       desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
       desktopRecorder.current.start();
     }
 
     if (userStream) {
-      const onStop = addRecordOnStop(dispatch, 'video');
+      const onStop = addRecordOnStop(dispatch, "video");
       const stream = mixAudioIntoVideo(audioStream, userStream);
       videoRecorder.current = new Recorder(stream, settings.recording, onStop);
       videoRecorder.current.start();
     }
 
-    dispatch({ type: 'START_RECORDING' });
-    unblockers.push(history.block(t('confirm-cancel-recording')));
+    dispatch({ type: "START_RECORDING" });
+    unblockers.push(history.block(t("confirm-cancel-recording")));
   };
 
   const resume = () => {
@@ -100,7 +100,7 @@ export default function RecordingControls({
     desktopRecorder.current?.stop();
     videoRecorder.current?.stop();
     handleRecorded();
-    dispatch({ type: premature ? 'STOP_RECORDING_PREMATURELY' : 'STOP_RECORDING' });
+    dispatch({ type: premature ? "STOP_RECORDING_PREMATURELY" : "STOP_RECORDING" });
     unblockers.forEach(b => b());
     unblockers = [];
   };
@@ -116,8 +116,8 @@ export default function RecordingControls({
     history.listen(() => {
       // This only happens when the user uses "back" or "forward" in their
       // browser and they confirm they want to discard the recording.
-      if (recordingState !== 'STATE_INACTIVE') {
-        dispatch({ type: 'STOP_RECORDING' });
+      if (recordingState !== "STATE_INACTIVE") {
+        dispatch({ type: "STOP_RECORDING" });
       }
 
       unblockers.forEach(b => b());
@@ -165,15 +165,15 @@ export default function RecordingControls({
 
   return (
     <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>
-      <div sx={{ m: 0, width: recordingState !== STATE_INACTIVE ? '280px' : 'auto' }}>
+      <div sx={{ m: 0, width: recordingState !== STATE_INACTIVE ? "280px" : "auto" }}>
         { recordingState !== STATE_INACTIVE && (
           <Beforeunload onBeforeunload={event => event.preventDefault()} />
         )}
 
-        <div className="buttons" sx={{ display: 'flex', alignItems: 'center' }}>
-          { recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: 'right' }}>
+        <div className="buttons" sx={{ display: "flex", alignItems: "center" }}>
+          { recordingState !== STATE_INACTIVE && <div sx={{ flex: 1, textAlign: "right" }}>
             { recordingState === STATE_RECORDING && (
-              <Tooltip content={t('pause-button-title')} offset={[0, 50]}>
+              <Tooltip content={t("pause-button-title")} offset={[0, 50]}>
                 <PauseButton
                   recordingState={recordingState}
                   onClick={handlePause}
@@ -182,7 +182,7 @@ export default function RecordingControls({
             )}
 
             { recordingState === STATE_PAUSED && (
-              <Tooltip content={t('resume-button-title')} offset={[0, 50]}>
+              <Tooltip content={t("resume-button-title")} offset={[0, 50]}>
                 <ResumeButton
                   recordingState={recordingState}
                   onClick={handleResume}
@@ -193,7 +193,7 @@ export default function RecordingControls({
 
           <div className="center">
             { recordingState === STATE_INACTIVE ? (
-              <Tooltip content={t('record-button-title')} offset={[0, 50]}>
+              <Tooltip content={t("record-button-title")} offset={[0, 50]}>
                 <RecordButton
                   large
                   recordingState={recordingState}
@@ -202,7 +202,7 @@ export default function RecordingControls({
                 />
               </Tooltip>
             ) : (
-              <Tooltip content={t('stop-button-title')} offset={[0, 50]}>
+              <Tooltip content={t("stop-button-title")} offset={[0, 50]}>
                 <StopButton
                   large
                   recordingState={recordingState}

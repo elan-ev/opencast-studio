@@ -1,22 +1,22 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Themed, Progress, useColorMode } from 'theme-ui';
+import { jsx, Themed, Progress, useColorMode } from "theme-ui";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faUpload,
   faRedoAlt,
   faExclamationTriangle,
   faTimesCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import { Button, Box, Container, Spinner, Text } from '@theme-ui/components';
-import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
-import { usePageVisibility } from 'react-page-visibility';
-import { GlobalHotKeys } from 'react-hotkeys';
+} from "@fortawesome/free-solid-svg-icons";
+import { Button, Box, Container, Spinner, Text } from "@theme-ui/components";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Trans, useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { usePageVisibility } from "react-page-visibility";
+import { GlobalHotKeys } from "react-hotkeys";
 
 import {
   useOpencast,
@@ -26,8 +26,8 @@ import {
   STATE_INCORRECT_LOGIN,
   STATE_RESPONSE_NOT_OK,
   STATE_INVALID_RESPONSE,
-} from '../../../opencast';
-import { useSettings, FORM_FIELD_HIDDEN, FORM_FIELD_REQUIRED } from '../../../settings';
+} from "../../../opencast";
+import { useSettings, FORM_FIELD_HIDDEN, FORM_FIELD_REQUIRED } from "../../../settings";
 import {
   useDispatch,
   useStudioState,
@@ -35,19 +35,19 @@ import {
   STATE_UPLOADING,
   STATE_UPLOADED,
   STATE_NOT_UPLOADED,
-} from '../../../studio-state';
+} from "../../../studio-state";
 
-import Notification from '../../notification';
-import { ActionButtons } from '../elements';
-import { Input } from '../../elements';
+import Notification from "../../notification";
+import { ActionButtons } from "../elements";
+import { Input } from "../../elements";
 
-import RecordingPreview, { RecordingPreviewHandle } from './recording-preview';
+import RecordingPreview, { RecordingPreviewHandle } from "./recording-preview";
 
-import { otherShortcuts } from '../../../shortcuts';
-import { StepProps } from '../steps';
+import { otherShortcuts } from "../../../shortcuts";
+import { StepProps } from "../steps";
 
 
-const LAST_PRESENTER_KEY = 'ocStudioLastPresenter';
+const LAST_PRESENTER_KEY = "ocStudioLastPresenter";
 
 let progressHistory: { timestamp: number, progress: number }[] = [];
 
@@ -102,7 +102,7 @@ export default function SaveCreation(props: StepProps) {
     // avoid useless redraws.
     if (uploadState.secondsLeft !== secondsLeft || uploadState.currentProgress !== progress) {
       dispatch({
-        type: 'UPLOAD_PROGRESS_UPDATE',
+        type: "UPLOAD_PROGRESS_UPDATE",
         secondsLeft,
         currentProgress: progress,
       });
@@ -132,7 +132,7 @@ export default function SaveCreation(props: StepProps) {
   });
 
   async function handleUpload() {
-    dispatch({ type: 'UPLOAD_REQUEST' });
+    dispatch({ type: "UPLOAD_REQUEST" });
     progressHistory.push({
       timestamp: Date.now(),
       progress: 0,
@@ -149,20 +149,20 @@ export default function SaveCreation(props: StepProps) {
     progressHistory = [];
 
     switch (result) {
-      case 'success':
-        dispatch({ type: 'UPLOAD_SUCCESS' });
+      case "success":
+        dispatch({ type: "UPLOAD_SUCCESS" });
         break;
-      case 'network_error':
-        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-network-error') });
+      case "network_error":
+        dispatch({ type: "UPLOAD_ERROR", msg: t("save-creation-upload-network-error") });
         break;
-      case 'not_authorized':
-        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-not-authorized') });
+      case "not_authorized":
+        dispatch({ type: "UPLOAD_ERROR", msg: t("save-creation-upload-not-authorized") });
         break;
-      case 'unexpected_response':
-        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-invalid-response') });
+      case "unexpected_response":
+        dispatch({ type: "UPLOAD_ERROR", msg: t("save-creation-upload-invalid-response") });
         break;
       default:
-        dispatch({ type: 'UPLOAD_ERROR', msg: t('save-creation-upload-unknown-error') });
+        dispatch({ type: "UPLOAD_ERROR", msg: t("save-creation-upload-unknown-error") });
     }
   }
 
@@ -193,28 +193,28 @@ export default function SaveCreation(props: StepProps) {
   })();
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', flex: '1 0 auto' }}>
-      <Themed.h1 sx={{ textAlign: 'center', fontSize: ['26px', '30px', '32px']}}>
-        { possiblyDone ? t('save-creation-title-done') : t('save-creation-title') }
+    <Container sx={{ display: "flex", flexDirection: "column", flex: "1 0 auto" }}>
+      <Themed.h1 sx={{ textAlign: "center", fontSize: ["26px", "30px", "32px"]}}>
+        { possiblyDone ? t("save-creation-title-done") : t("save-creation-title") }
       </Themed.h1>
 
       <div sx={{
-        display: 'flex',
-        flexDirection: ['column', 'column', 'row'],
-        '& > *': {
-          flex: ['0', '0', '1 0 50%'],
-          p: [2, 2, '0 32px'],
-          '&:last-child': {
-            borderLeft: theme => ['none', 'none', `1px solid ${theme.colors?.gray?.[3]}`],
+        display: "flex",
+        flexDirection: ["column", "column", "row"],
+        "& > *": {
+          flex: ["0", "0", "1 0 50%"],
+          p: [2, 2, "0 32px"],
+          "&:last-child": {
+            borderLeft: theme => ["none", "none", `1px solid ${theme.colors?.gray?.[3]}`],
           },
         },
       }}>
         <div>
           <Themed.h2
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors?.gray?.[2]}` }}
-          >{t('save-creation-subsection-title-upload')}</Themed.h2>
+          >{t("save-creation-subsection-title-upload")}</Themed.h2>
 
-          <div sx={{ margin: 'auto' }}>
+          <div sx={{ margin: "auto" }}>
             { uploadBox }
           </div>
         </div>
@@ -222,13 +222,13 @@ export default function SaveCreation(props: StepProps) {
         <div>
           <Themed.h2
             sx={{ pb: 1, borderBottom: theme => `1px solid ${theme.colors?.gray?.[2]}` }}
-          >{t('save-creation-subsection-title-download')}</Themed.h2>
+          >{t("save-creation-subsection-title-download")}</Themed.h2>
 
           <DownloadBox {...{ title, presenter }} />
         </div>
       </div>
 
-      <div sx={{ flex: '1 0 32px' }}></div>
+      <div sx={{ flex: "1 0 32px" }}></div>
 
       <ActionButtons
         prev={hideBack ? undefined : {
@@ -250,9 +250,9 @@ const PostAction = ({ goToFirstStep }) => {
   const settings = useSettings();
 
   const handleNewRecording = () => {
-    const doIt = window.confirm(t('save-creation-new-recording-warning'));
+    const doIt = window.confirm(t("save-creation-new-recording-warning"));
     if (doIt) {
-      dispatch({ type: 'RESET' });
+      dispatch({ type: "RESET" });
       goToFirstStep();
     }
   };
@@ -261,14 +261,14 @@ const PostAction = ({ goToFirstStep }) => {
   if (settings.return?.target) {
     if (isAllowedReturnTarget(settings)) {
       const label = settings.return?.label
-        ? t('save-creation-return-to', { label: settings.return.label })
-        : t('save-creation-return-to-no-label');
+        ? t("save-creation-return-to", { label: settings.return.label })
+        : t("save-creation-return-to-no-label");
 
       returnAction = (
         <Button
           as="a"
           title={label}
-          sx={{ whiteSpace: 'nowrap', fontWeight: 400, mb: 2 }}
+          sx={{ whiteSpace: "nowrap", fontWeight: 400, mb: 2 }}
           // Otherwise Typescript errors as `Button` does not have this prop.
           {...{ href: settings.return.target }}
         >
@@ -288,16 +288,16 @@ const PostAction = ({ goToFirstStep }) => {
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
-      <div sx={{ display: 'flex', flexDirection: 'column' }}>
+      <div sx={{ display: "flex", flexDirection: "column" }}>
         { returnAction }
 
         <Button
-          sx={{ whiteSpace: 'nowrap' }}
-          title={t('save-creation-new-recording')}
+          sx={{ whiteSpace: "nowrap" }}
+          title={t("save-creation-new-recording")}
           onClick={handleNewRecording}
         >
           <FontAwesomeIcon icon={faRedoAlt} />
-          {t('save-creation-new-recording')}
+          {t("save-creation-new-recording")}
         </Button>
       </div>
     </GlobalHotKeys>
@@ -314,7 +314,7 @@ const isAllowedReturnTarget = settings => {
 
   const allowedDomains = [window.location.hostname, ...(settings.return?.allowedDomains || [])];
   return allowedDomains.some(domain => targetUrl.hostname === domain)
-    && (targetUrl.protocol === 'https:' || targetUrl.protocol === 'http:');
+    && (targetUrl.protocol === "https:" || targetUrl.protocol === "http:");
 };
 
 const DownloadBox = ({ presenter, title }) => {
@@ -331,16 +331,16 @@ const DownloadBox = ({ presenter, title }) => {
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
       <Fragment>
         { (start !== null || end !== null) && (
-          <Notification sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <FontAwesomeIcon icon={faExclamationTriangle} sx={{ fontSize: '26px', mb: 3 }} />
-            <p sx={{ m: 0 }}>{ t('save-creation-download-cut-warning') }</p>
+          <Notification sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <FontAwesomeIcon icon={faExclamationTriangle} sx={{ fontSize: "26px", mb: 3 }} />
+            <p sx={{ m: 0 }}>{ t("save-creation-download-cut-warning") }</p>
           </Notification>
         )}
         <div sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: ['center', 'center', 'start'],
-          flexWrap: 'wrap',
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: ["center", "center", "start"],
+          flexWrap: "wrap",
         }}>
           { recordings.length === 0 ? <Spinner /> : (
             recordings.map((recording, index) => (
@@ -350,7 +350,7 @@ const DownloadBox = ({ presenter, title }) => {
                 recording={recording}
                 presenter={presenter}
                 title={title}
-                onDownload={() => dispatch({ type: 'MARK_DOWNLOADED', index })}
+                onDownload={() => dispatch({ type: "MARK_DOWNLOADED", index })}
               />
             ))
           )}
@@ -371,8 +371,8 @@ const ConnectionUnconfiguredWarning = () => {
       <Trans i18nKey="warning-missing-connection-settings">
         Warning.
         <Link
-          to={{ pathname: '/settings', search: location.search }}
-          sx={{ variant: 'styles.a', color: colorMode === 'dark' ? 'rgba(255, 255, 34, 0.8)' : '#ff2' }}
+          to={{ pathname: "/settings", search: location.search }}
+          sx={{ variant: "styles.a", color: colorMode === "dark" ? "rgba(255, 255, 34, 0.8)" : "#ff2" }}
         >
           settings
         </Link>
@@ -396,7 +396,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   const opencast = useOpencast();
   const dispatch = useDispatch();
   const { recordings, title, presenter } = useStudioState();
-  const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || '';
+  const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || "";
 
   const { formState: { errors }, handleSubmit, register } = useForm<Inputs>();
 
@@ -406,11 +406,11 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   function handleInputChange(event) {
     const target = event.target;
     dispatch({
-      type: { title: 'UPDATE_TITLE', presenter: 'UPDATE_PRESENTER' }[target.name],
+      type: { title: "UPDATE_TITLE", presenter: "UPDATE_PRESENTER" }[target.name],
       value: target.value,
     });
 
-    if (target.name === 'presenter') {
+    if (target.name === "presenter") {
       window.localStorage.setItem(LAST_PRESENTER_KEY, target.value);
     }
   }
@@ -419,22 +419,22 @@ const UploadForm = ({ uploadState, handleUpload }) => {
   // presenter name is used in local storage, use that.
   useEffect(() => {
     if (presenterValue !== presenter) {
-      dispatch({ type: 'UPDATE_PRESENTER', value: presenterValue });
+      dispatch({ type: "UPDATE_PRESENTER", value: presenterValue });
     }
   });
 
   const buttonLabel = !opencast.prettyServerUrl()
-    ? t('save-creation-button-upload')
+    ? t("save-creation-button-upload")
     : (
       <Trans
         i18nKey="save-creation-upload-to"
         components={{ 1: <code /> }}
         values={{ server: opencast.prettyServerUrl() }}
         sx={{
-          '& > code': {
-            backgroundColor: 'rgba(0, 0, 0, 0.1)',
-            borderRadius: '5px',
-            padding: '1px 3px',
+          "& > code": {
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            borderRadius: "5px",
+            padding: "1px 3px",
           },
         }}
       />
@@ -454,7 +454,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
         <form>
           { titleField !== FORM_FIELD_HIDDEN && <Input
             name="title"
-            label={t('save-creation-label-title')}
+            label={t("save-creation-label-title")}
             required={titleField === FORM_FIELD_REQUIRED}
             onChange={handleInputChange}
             autoComplete="off"
@@ -464,7 +464,7 @@ const UploadForm = ({ uploadState, handleUpload }) => {
 
           { presenterField !== FORM_FIELD_HIDDEN && <Input
             name="presenter"
-            label={t('save-creation-label-presenter')}
+            label={t("save-creation-label-presenter")}
             required={presenterField === FORM_FIELD_REQUIRED}
             onChange={handleInputChange}
             autoComplete="off"
@@ -523,8 +523,8 @@ const NotConnectedWarning = () => {
   let onceResolved: string | undefined;
   switch (opencast.getState()) {
     case STATE_NETWORK_ERROR:
-      problem = t('save-creation-warn-unreachable');
-      onceResolved = t('save-creation-warn-once-reestablished');
+      problem = t("save-creation-warn-unreachable");
+      onceResolved = t("save-creation-warn-once-reestablished");
       break;
     case STATE_INCORRECT_LOGIN:
       if (opencast.isLoginProvided()) {
@@ -533,42 +533,42 @@ const NotConnectedWarning = () => {
           <Trans i18nKey="save-creation-warn-session-expired">
             Foo
             {
-              (referrer && !referrer.includes(window.origin || ''))
-                ? <Themed.a href={referrer} target="_blank" sx={{ color: '#ff2' }}>bar</Themed.a>
+              (referrer && !referrer.includes(window.origin || ""))
+                ? <Themed.a href={referrer} target="_blank" sx={{ color: "#ff2" }}>bar</Themed.a>
                 : <Fragment>bar</Fragment>
             }
             baz
           </Trans>
         );
-        t('save-creation-warn-session-expired');
-        onceResolved = t('save-creation-warn-once-refreshed');
+        t("save-creation-warn-session-expired");
+        onceResolved = t("save-creation-warn-once-refreshed");
       } else {
         problem = (
           <Trans i18nKey="save-creation-warn-login-failed">
             Failed.
             <Link
-              to={{ pathname: '/settings', search: location.search }}
-              sx={{ variant: 'styles.a', color: '#ff2' }}
+              to={{ pathname: "/settings", search: location.search }}
+              sx={{ variant: "styles.a", color: "#ff2" }}
             >
               settings
             </Link>
           </Trans>
         );
-        onceResolved = t('save-creation-warn-once-logged-in');
+        onceResolved = t("save-creation-warn-once-logged-in");
       }
       break;
     case STATE_RESPONSE_NOT_OK:
     case STATE_INVALID_RESPONSE:
-      problem = t('save-creation-warn-server-problem')
-        + ' ' + t('save-creation-warn-download-hint');
+      problem = t("save-creation-warn-server-problem")
+        + " " + t("save-creation-warn-download-hint");
       break;
     default:
-      problem = 'Internal error :-(';
+      problem = "Internal error :-(";
   }
 
   return (
     <Notification isDanger>
-      <div sx={{ textAlign: 'center', fontSize: '40px', lineHeight: 1.3 }}>
+      <div sx={{ textAlign: "center", fontSize: "40px", lineHeight: 1.3 }}>
         { retrying
           ? <Spinner size="40" />
           : <FontAwesomeIcon icon={faExclamationTriangle} />
@@ -578,8 +578,8 @@ const NotConnectedWarning = () => {
       { onceResolved && (
         <p sx={{ mb: 0 }}>
           { onceResolved }
-          { onceResolved && ' ' }
-          { t('save-creation-warn-download-hint') }
+          { onceResolved && " " }
+          { t("save-creation-warn-download-hint") }
         </p>
       )}
     </Notification>
@@ -602,24 +602,24 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
   if (secondsLeft === null) {
     prettyTime = null;
   } else if (secondsLeft < 4) {
-    prettyTime = t('upload-time-a-few-seconds');
+    prettyTime = t("upload-time-a-few-seconds");
   } else if (secondsLeft < 45) {
-    prettyTime = `${secondsLeft} ${t('upload-time-seconds')}`;
+    prettyTime = `${secondsLeft} ${t("upload-time-seconds")}`;
   } else if (secondsLeft < 90) {
-    prettyTime = t('upload-time-a-minute');
+    prettyTime = t("upload-time-a-minute");
   } else if (secondsLeft < 45 * 60) {
-    prettyTime = `${Math.round(secondsLeft / 60)} ${t('upload-time-minutes')}`;
+    prettyTime = `${Math.round(secondsLeft / 60)} ${t("upload-time-minutes")}`;
   } else if (secondsLeft < 90 * 60) {
-    prettyTime = t('upload-time-an-hour');
+    prettyTime = t("upload-time-an-hour");
   } else if (secondsLeft < 24 * 60 * 60) {
-    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t('upload-time-hours')}`;
+    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t("upload-time-hours")}`;
   } else {
     prettyTime = null;
   }
 
   return (
     <Fragment>
-      <div sx={{ display: 'flex', mb: 2 }}>
+      <div sx={{ display: "flex", mb: 2 }}>
         <Text variant="text">{roundedPercent}%</Text>
         <div sx={{ flex: 1 }} />
         <Text variant="text">
@@ -631,7 +631,7 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
       <Progress max={1} value={currentProgress} variant="styles.progress">
         { roundedPercent }
       </Progress>
-      <Text variant="text" sx={{ textAlign: 'center', mt: 2 }}>{t('upload-notification')}</Text>
+      <Text variant="text" sx={{ textAlign: "center", mt: 2 }}>{t("upload-notification")}</Text>
     </Fragment>
   );
 };
@@ -643,16 +643,16 @@ const UploadSuccess = () => {
   return (
     <Fragment>
       <div sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '130px',
-        color: 'primary',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "130px",
+        color: "primary",
       }}>
         <FontAwesomeIcon icon={faCheckCircle} size="4x" />
       </div>
-      <Text variant="text" sx={{ textAlign: 'center' }}>{t('message-upload-complete')}</Text>
-      <Text sx={{ textAlign: 'center', mt: 2 }}>{t('message-upload-complete-explanation')}</Text>
+      <Text variant="text" sx={{ textAlign: "center" }}>{t("message-upload-complete")}</Text>
+      <Text sx={{ textAlign: "center", mt: 2 }}>{t("message-upload-complete-explanation")}</Text>
     </Fragment>
   );
 };

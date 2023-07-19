@@ -1,10 +1,10 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Box } from '@theme-ui/components';
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Box } from "@theme-ui/components";
 
 export default function DeviceSelector({ devices, handleChange, ...rest }) {
   function selectDevice({ target }) {
@@ -20,7 +20,7 @@ export default function DeviceSelector({ devices, handleChange, ...rest }) {
   }
 
   return (
-    <select sx={{ variant: 'styles.select' }} onChange={selectDevice}
+    <select sx={{ variant: "styles.select" }} onChange={selectDevice}
       disabled={!(devices && devices.length > 1)} {...rest}>
       {devices &&
         devices.map(device => (

@@ -1,15 +1,15 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { Button } from '@theme-ui/components';
-import { useTranslation } from 'react-i18next';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@theme-ui/components";
+import { useTranslation } from "react-i18next";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
-import { recordingFileName } from '../../../util';
-import { Recording } from '../../../studio-state';
+import { recordingFileName } from "../../../util";
+import { Recording } from "../../../studio-state";
 
 type Props = {
   onDownload: () => void,
@@ -29,7 +29,7 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
   const { t, i18n } = useTranslation();
   const { deviceType, mimeType, url, downloaded, media: blob } = recording;
 
-  const flavor = deviceType === 'desktop' ? t('sources-display') : t('sources-user');
+  const flavor = deviceType === "desktop" ? t("sources-display") : t("sources-user");
   const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
   const buttonRef = useRef<HTMLButtonElement>(null);
   useImperativeHandle(ref, () => ({
@@ -67,16 +67,16 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
 
   return (
     <div sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      flex: '0 0 auto',
+      display: "flex",
+      flexDirection: "column",
+      flex: "0 0 auto",
       mx: 2,
-      pb: '12px',
-      alignItems: 'center',
+      pb: "12px",
+      alignItems: "center",
     }}>
       <div sx={{
-        position: 'relative',
-        height: '150px',
+        position: "relative",
+        height: "150px",
         border: theme => `2px solid ${theme.colors?.gray?.[1]}`,
       }}>
         <video
@@ -87,22 +87,22 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
           onLoadedData={e => e.currentTarget.currentTime = 0}
           preload="auto"
           sx={{
-            maxWidth: '100%',
-            height: '100%',
+            maxWidth: "100%",
+            height: "100%",
           }}
         ></video>
         { downloaded && (
           <div sx={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'primary',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "primary",
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
           }}>
             <FontAwesomeIcon icon={faCheckCircle} size="4x" />
           </div>
@@ -113,23 +113,23 @@ const RecordingPreview = forwardRef<RecordingPreviewHandle, Props>((
         as="a"
         role="button"
         sx={{
-          width: '100%',
-          maxWidth: '215px',
-          margin: 'auto',
-          mt: '10px',
+          width: "100%",
+          maxWidth: "215px",
+          margin: "auto",
+          mt: "10px",
         }}
         // Otherwise Typescript errors as `Button` does not have these props.
         {...{
-          target: '_blank',
+          target: "_blank",
           download: downloadName,
           href: url,
-          rel: 'noopener noreferrer',
+          rel: "noopener noreferrer",
         }}
         onClick={onDownload}
       >
         <FontAwesomeIcon icon={faDownload} />
-        {t('save-creation-download-button')}
-        {' '}({ prettyFileSize })
+        {t("save-creation-download-button")}
+        {" "}({ prettyFileSize })
       </Button>
     </div>
   );

@@ -1,38 +1,38 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircle,
   faCircleNotch,
   faPauseCircle,
   faPlayCircle,
   faStopCircle
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 
 
-type ButtonProps = Omit<JSX.IntrinsicElements['button'], 'css'> & {
+type ButtonProps = Omit<JSX.IntrinsicElements["button"], "css"> & {
   large?: boolean;
 };
 
 const Button: React.FC<ButtonProps> = ({ large = false, ...rest }) => (
   <button
     sx={{
-      display: 'grid',
-      backgroundColor: 'transparent',
-      border: 'none',
-      position: 'relative',
-      overflow: 'hidden',
+      display: "grid",
+      backgroundColor: "transparent",
+      border: "none",
+      position: "relative",
+      overflow: "hidden",
       my: 0,
-      mx: large ? '15px' : 0,
+      mx: large ? "15px" : 0,
       padding: 0,
-      fontSize: large ? '5rem' : '3.5rem',
-      lineHeight: large ? '5rem' : '3.5rem',
+      fontSize: large ? "5rem" : "3.5rem",
+      lineHeight: large ? "5rem" : "3.5rem",
       svg: {
         margin: 0,
         padding: 0,
-        outline: 'none'
+        outline: "none"
       }
     }}
     {...rest}
@@ -42,15 +42,15 @@ const Button: React.FC<ButtonProps> = ({ large = false, ...rest }) => (
 export const PauseButton = props => (
   <Button onClick={props.onClick} title={props.title}
     sx={{
-      '&:focus-visible': {
+      "&:focus-visible": {
         outline: theme => `7px solid ${theme.colors?.focus?.[3]} !important`,
-        outlineOffset: '-1px',
-        borderRadius: '50%',
+        outlineOffset: "-1px",
+        borderRadius: "50%",
       },
     }}
   >
     <span className="fa-layers">
-      <FontAwesomeIcon icon={faPauseCircle} sx={{ color: 'button_bg' }} />
+      <FontAwesomeIcon icon={faPauseCircle} sx={{ color: "button_bg" }} />
     </span>
   </Button>
 );
@@ -62,14 +62,14 @@ export const RecordButton = props => (
     large={props.large}
     disabled={props.disabled || props.countdown}
     sx={{
-      color: '#bd181c !important',
-      'svg + svg': { color: '#e22319' },
-      ':disabled': { color: '#aaa' },
-      ':disabled svg + svg': { color: '#bbb' },
-      '&:focus-visible': {
+      color: "#bd181c !important",
+      "svg + svg": { color: "#e22319" },
+      ":disabled": { color: "#aaa" },
+      ":disabled svg + svg": { color: "#bbb" },
+      "&:focus-visible": {
         outline: theme => `7px solid ${theme.colors?.focus?.[0]} !important`,
-        outlineOffset: '-1px',
-        borderRadius: '50%',
+        outlineOffset: "-1px",
+        borderRadius: "50%",
       },
     }}
   >
@@ -83,15 +83,15 @@ export const RecordButton = props => (
 export const ResumeButton = props => (
   <Button onClick={props.onClick} title={props.title}
     sx={{
-      '&:focus-visible': {
+      "&:focus-visible": {
         outline: theme => `7px solid ${theme.colors?.focus?.[3]} !important`,
-        outlineOffset: '-1px',
-        borderRadius: '50%',
+        outlineOffset: "-1px",
+        borderRadius: "50%",
       },
     }}
   >
     <span className="fa-layers">
-      <FontAwesomeIcon icon={faPlayCircle} sx={{ color: 'button_bg' }} />
+      <FontAwesomeIcon icon={faPlayCircle} sx={{ color: "button_bg" }} />
     </span>
   </Button>
 );
@@ -102,16 +102,16 @@ export const StopButton = props => (
     title={props.title}
     large={!!props.large}
     sx={{
-      color: '#bd181c',
-      '&:focus-visible': {
+      color: "#bd181c",
+      "&:focus-visible": {
         outline: theme => `7px solid ${theme.colors?.focus?.[0]} !important`,
-        outlineOffset: '-1px',
-        borderRadius: '50%',
+        outlineOffset: "-1px",
+        borderRadius: "50%",
       },
     }}
   >
     <FontAwesomeIcon icon={faStopCircle}
-      sx={{ color: '#bd181c !important' }}
+      sx={{ color: "#bd181c !important" }}
     />
   </Button>
 );

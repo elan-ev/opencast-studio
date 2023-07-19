@@ -1,15 +1,15 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircleNotch, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
-import { useForm } from 'react-hook-form';
-import { Link, useLocation } from 'react-router-dom';
-import { Box, Button } from '@theme-ui/components';
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle, faCircleNotch, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { useForm } from "react-hook-form";
+import { Link, useLocation } from "react-router-dom";
+import { Box, Button } from "@theme-ui/components";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   Opencast,
@@ -21,13 +21,13 @@ import {
   STATE_INCORRECT_LOGIN,
   STATE_CONNECTED,
   STATE_UNCONFIGURED,
-} from '../../opencast';
-import Notification from '../notification';
-import { SettingsSection } from './elements';
-import { Input } from '../elements';
-import { useStudioState } from '../../studio-state';
-import { bug } from '../../util/err';
-import { SettingsManager } from '../../settings';
+} from "../../opencast";
+import Notification from "../notification";
+import { SettingsSection } from "./elements";
+import { Input } from "../elements";
+import { useStudioState } from "../../studio-state";
+import { bug } from "../../util/err";
+import { SettingsManager } from "../../settings";
 
 
 const icons = {
@@ -50,13 +50,13 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
   const { formState: { errors }, handleSubmit, register } = useForm<Inputs>({
     defaultValues: settingsManager.formValues().opencast
   });
-  const [status, setStatus] = useState<keyof typeof icons | 'initial'>('initial');
+  const [status, setStatus] = useState<keyof typeof icons | "initial">("initial");
 
   const { recordings } = useStudioState();
   const hasRecording = recordings.length > 0;
 
   async function onSubmit(data: Inputs) {
-    setStatus('testing');
+    setStatus("testing");
     const oc = await Opencast.init({
       ...settingsManager.settings().opencast,
       ...data,
@@ -66,41 +66,41 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
       case STATE_LOGGED_IN:
         opencast.setGlobalInstance(oc);
         settingsManager.saveSettings({ opencast: data });
-        setStatus('saved');
+        setStatus("saved");
         setError(null);
         break;
 
       case STATE_NETWORK_ERROR:
-        setStatus('error');
-        setError(t('upload-settings-error-server-unreachable'));
+        setStatus("error");
+        setError(t("upload-settings-error-server-unreachable"));
         break;
       case STATE_RESPONSE_NOT_OK:
-        setStatus('error');
-        setError(t('upload-settings-error-response-not-ok'));
+        setStatus("error");
+        setError(t("upload-settings-error-response-not-ok"));
         break;
       case STATE_INVALID_RESPONSE:
-        setStatus('error');
-        setError(t('upload-settings-error-invalid-response'));
+        setStatus("error");
+        setError(t("upload-settings-error-invalid-response"));
         break;
       case STATE_INCORRECT_LOGIN:
-        setStatus('error');
+        setStatus("error");
         if (opencast.isLoginProvided()) {
-          setError(t('upload-settings-invalid-provided-login'));
+          setError(t("upload-settings-invalid-provided-login"));
         } else {
-          setError(t('upload-settings-invalid-login-data'));
+          setError(t("upload-settings-invalid-login-data"));
         }
         break;
 
       case STATE_CONNECTED:    // <- login data is provided in some way -> state impossible
       case STATE_UNCONFIGURED: // <- server URL is required -> state impossible
       default:
-        setStatus('error');
-        setError('internal error :(');
-        bug('invalid state reached...');
+        setStatus("error");
+        setError("internal error :(");
+        bug("invalid state reached...");
     }
   }
 
-  const showServerUrl = settingsManager.isConfigurable('opencast.serverUrl');
+  const showServerUrl = settingsManager.isConfigurable("opencast.serverUrl");
   const showUsername = settingsManager.isUsernameConfigurable();
   const showPassword = settingsManager.isPasswordConfigurable();
 
@@ -112,26 +112,26 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
 
   const icon = icons[status];
 
-  return <div sx={{ flex: '1 1 auto' }}>
-    <SettingsSection title={t('upload-settings-modal-header')}>
+  return <div sx={{ flex: "1 1 auto" }}>
+    <SettingsSection title={t("upload-settings-modal-header")}>
       <Box>
         { error && <Notification isDanger>{error}</Notification> }
 
         <form onSubmit={handleSubmit(onSubmit)}>
           { showServerUrl && <Input
             errors={errors}
-            label={t('upload-settings-label-server-url')}
+            label={t("upload-settings-label-server-url")}
             name="serverUrl"
             register={register}
             validate={(value: string) => {
               try {
                 const url = new URL(value);
-                return (url.protocol === 'https:' || url.protocol === 'http:')
-                  || t('upload-settings-invalid-url-http-start');
+                return (url.protocol === "https:" || url.protocol === "http:")
+                  || t("upload-settings-invalid-url-http-start");
               } catch (e) {
-                let err = t('upload-settings-invalid-url');
-                if (!value.startsWith('https://') && !value.startsWith('http://')) {
-                  err += ' ' + t('upload-settings-invalid-url-http-start');
+                let err = t("upload-settings-invalid-url");
+                if (!value.startsWith("https://") && !value.startsWith("http://")) {
+                  err += " " + t("upload-settings-invalid-url-http-start");
                 }
                 return err;
               }
@@ -141,7 +141,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
 
           { showUsername && <Input
             errors={errors}
-            label={t('upload-settings-label-username')}
+            label={t("upload-settings-label-username")}
             name="loginName"
             register={register}
             required
@@ -149,7 +149,7 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
 
           { showPassword && <Input
             errors={errors}
-            label={t('upload-settings-label-password')}
+            label={t("upload-settings-label-password")}
             name="loginPassword"
             register={register}
             required
@@ -157,20 +157,20 @@ function OpencastSettings({ settingsManager }: { settingsManager: SettingsManage
           /> }
 
           <footer sx={{ mt: 4 }}>
-            <Button sx={{ verticalAlign: 'middle' }}>
-              {t('upload-settings-button-store')}
+            <Button sx={{ verticalAlign: "middle" }}>
+              {t("upload-settings-button-store")}
             </Button>
             { icon && <FontAwesomeIcon
               icon={icon}
-              sx={{ ml: '10px', fontSize: '30px', verticalAlign: 'middle' }}
-              spin={status === 'testing'}
+              sx={{ ml: "10px", fontSize: "30px", verticalAlign: "middle" }}
+              spin={status === "testing"}
             /> }
-            { hasRecording && status === 'saved' && (
+            { hasRecording && status === "saved" && (
               <Link
-                to={{ pathname: '/', search: location.search }}
-                sx={{ ml: 3, variant: 'styles.a' }}
+                to={{ pathname: "/", search: location.search }}
+                sx={{ ml: 3, variant: "styles.a" }}
               >
-                {t('settings-back-to-recording')}
+                {t("settings-back-to-recording")}
               </Link>
             )}
           </footer>

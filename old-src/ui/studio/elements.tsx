@@ -1,33 +1,33 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
-import useResizeObserver from 'use-resize-observer/polyfilled';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons';
-import { Box, Button, Flex } from '@theme-ui/components';
-import { useTranslation } from 'react-i18next';
-import React, { useRef, useState } from 'react';
-import equal from 'fast-deep-equal';
-import { GlobalHotKeys } from 'react-hotkeys';
+import { jsx } from "theme-ui";
+import useResizeObserver from "use-resize-observer/polyfilled";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { Box, Button, Flex } from "@theme-ui/components";
+import { useTranslation } from "react-i18next";
+import React, { useRef, useState } from "react";
+import equal from "fast-deep-equal";
+import { GlobalHotKeys } from "react-hotkeys";
 
-import { otherShortcuts } from '../../shortcuts';
-import { usePresentContext } from '../../util';
-import { TranslationKey } from '../../i18n';
+import { otherShortcuts } from "../../shortcuts";
+import { usePresentContext } from "../../util";
+import { TranslationKey } from "../../i18n";
 
 
 // A full width flex container for some steps of the wizard.
 export const StepContainer: React.FC<React.PropsWithChildren> = ({ children }) => (
   <div
     sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      flex: '1 1 auto',
-      justifyContent: 'space-between',
+      display: "flex",
+      flexDirection: "column",
+      flex: "1 1 auto",
+      justifyContent: "space-between",
       p: 3,
       pt: [2, 2, 3],
-      '& > h1': {
-        textAlign: 'center',
-        fontSize: ['24px', '27px', '32px'],
+      "& > h1": {
+        textAlign: "center",
+        fontSize: ["24px", "27px", "32px"],
       },
     }}
   >
@@ -65,35 +65,35 @@ export function ActionButtons({ prev, next, children }: ActionButtonsProps) {
 
   return (
     <GlobalHotKeys keyMap={otherShortcuts} handlers={handlers}>
-      <Flex sx={{ alignItems: 'end', minHeight: '40px' }}>
-        <Box sx={{ flex: '1 1 0', textAlign: 'left' }}>
+      <Flex sx={{ alignItems: "end", minHeight: "40px" }}>
+        <Box sx={{ flex: "1 1 0", textAlign: "left" }}>
           { prev && (
             <Button
               sx={{
-                whiteSpace: 'nowrap',
-                variant: prev.danger ? 'buttons.danger' : 'buttons.text',
+                whiteSpace: "nowrap",
+                variant: prev.danger ? "buttons.danger" : "buttons.text",
               }}
               onClick={prev.onClick}
               disabled={prev.disabled}
             >
               <FontAwesomeIcon icon={faCaretLeft} />
-              {t(prev.label ?? 'back-button-label')}
+              {t(prev.label ?? "back-button-label")}
             </Button>
           )}
         </Box>
         <Box>{children}</Box>
-        <Box sx={{ flex: '1 1 0', textAlign: 'right' }}>
+        <Box sx={{ flex: "1 1 0", textAlign: "right" }}>
           { next && (
             <Button
               sx={{
-                whiteSpace: 'nowrap',
-                '& svg': { mr: 0, ml: 2 },
-                ...next.danger === true ? { variant: 'buttons.danger' } : {}
+                whiteSpace: "nowrap",
+                "& svg": { mr: 0, ml: 2 },
+                ...next.danger === true ? { variant: "buttons.danger" } : {}
               }}
               onClick={next.onClick}
               disabled={next.disabled}
             >
-              {t(next.label || 'next-button-label')}
+              {t(next.label || "next-button-label")}
               <FontAwesomeIcon icon={faCaretRight} />
             </Button>
           )}
@@ -106,7 +106,7 @@ export function ActionButtons({ prev, next, children }: ActionButtonsProps) {
 const VideoBoxResizeContext = React.createContext<(() => void) | null>(null);
 
 export const useVideoBoxResize = () =>
-  usePresentContext(VideoBoxResizeContext, 'useVideoBoxResize');
+  usePresentContext(VideoBoxResizeContext, "useVideoBoxResize");
 
 export type VideoBoxProps = {
   gap?: number;
@@ -194,12 +194,12 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }:
 
       return (
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
-          <div ref={ref} sx={{ flex: '1 0 0', minHeight, display: 'flex' }}>
+          <div ref={ref} sx={{ flex: "1 0 0", minHeight, display: "flex" }}>
             <div sx={{
               height: childHeight,
               width: childWidth,
               minWidth: `${minWidth}px`,
-              margin: 'auto',
+              margin: "auto",
             }}>
               { child.body }
             </div>
@@ -281,13 +281,13 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }:
       const colArea = colWidths[0] * colHeights[0] + colWidths[1] * colHeights[1];
       let widths: number[];
       let heights: number[];
-      let flexDirection: 'row' | 'column';
+      let flexDirection: "row" | "column";
       if (rowArea > colArea) {
-        flexDirection = 'row';
+        flexDirection = "row";
         widths = rowWidths;
         heights = rowHeights;
       } else {
-        flexDirection = 'column';
+        flexDirection = "column";
         widths = colWidths;
         heights = colHeights;
       }
@@ -297,10 +297,10 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }:
           <div
             ref={ref}
             sx={{
-              flex: '1 0 0',
-              display: 'flex',
+              flex: "1 0 0",
+              display: "flex",
               flexDirection,
-              justifyContent: 'space-between',
+              justifyContent: "space-between",
               minHeight,
             }}
           >
@@ -308,7 +308,7 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }:
               height: heights[0],
               width: widths[0],
               minWidth: `${minWidth}px`,
-              margin: 'auto',
+              margin: "auto",
             }}>
               { children[0].body }
             </div>
@@ -316,7 +316,7 @@ export function VideoBox({ gap = 0, minWidth = 180, minHeight = 140, children }:
               height: heights[1],
               width: widths[1],
               minWidth: `${minWidth}px`,
-              margin: 'auto',
+              margin: "auto",
             }}>
               { children[1].body }
             </div>

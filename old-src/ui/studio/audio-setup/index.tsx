@@ -1,35 +1,35 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Themed } from 'theme-ui';
+import { jsx, Themed } from "theme-ui";
 
-import { Flex, Heading, Spinner, Text } from '@theme-ui/components';
-import { useEffect, Fragment } from 'react';
-import { GlobalHotKeys } from 'react-hotkeys';
-import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { Flex, Heading, Spinner, Text } from "@theme-ui/components";
+import { useEffect, Fragment } from "react";
+import { GlobalHotKeys } from "react-hotkeys";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   faMicrophone,
   faMicrophoneSlash,
   faExclamationTriangle,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
   useDispatch,
   useStudioState,
   AUDIO_SOURCE_MICROPHONE,
   AUDIO_SOURCE_NONE,
-} from '../../../studio-state';
-import { startAudioCapture, stopAudioCapture } from '../capturer';
-import { ActionButtons, StepContainer } from '../elements';
-import Notification from '../../notification';
-import { queryMediaDevices, getUniqueDevices } from '../../../util';
-import PreviewAudio from './preview-audio';
-import { recordShortcuts } from '../../../shortcuts';
-import { StepProps } from '../steps';
+} from "../../../studio-state";
+import { startAudioCapture, stopAudioCapture } from "../capturer";
+import { ActionButtons, StepContainer } from "../elements";
+import Notification from "../../notification";
+import { queryMediaDevices, getUniqueDevices } from "../../../util";
+import PreviewAudio from "./preview-audio";
+import { recordShortcuts } from "../../../shortcuts";
+import { StepProps } from "../steps";
 
 
-const LAST_AUDIO_DEVICE_KEY = 'ocStudioLastAudioDevice';
+const LAST_AUDIO_DEVICE_KEY = "ocStudioLastAudioDevice";
 
 
 // The audio setup page. This component manages the state (either 'none
@@ -43,7 +43,7 @@ export default function AudioSetup(props: StepProps) {
 
   const selectNoAudio = () => enterStudio();
   const selectMicrophone = async() => {
-    dispatch({ type: 'CHOOSE_AUDIO', choice: 'microphone' });
+    dispatch({ type: "CHOOSE_AUDIO", choice: "microphone" });
     const deviceId = window.localStorage.getItem(LAST_AUDIO_DEVICE_KEY);
     await startAudioCapture(dispatch, deviceId ? { ideal: deviceId } : undefined);
     await queryMediaDevices(dispatch);
@@ -52,7 +52,7 @@ export default function AudioSetup(props: StepProps) {
     if (audioStream) {
       stopAudioCapture(audioStream, dispatch);
     }
-    dispatch({ type: 'CHOOSE_AUDIO', choice: 'none' });
+    dispatch({ type: "CHOOSE_AUDIO", choice: "none" });
   };
 
   const body = (() => {
@@ -62,7 +62,7 @@ export default function AudioSetup(props: StepProps) {
       case AUDIO_SOURCE_MICROPHONE:
         return <MicrophonePreview {...{ reselectSource, enterStudio }} />;
       default:
-        return 'internal error :-(';
+        return "internal error :-(";
     }
   })();
 
@@ -81,18 +81,18 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
   return (
     <GlobalHotKeys keyMap={recordShortcuts} handlers={handlers}>
       <Fragment>
-        <Themed.h1>{t('sources-audio-question')}</Themed.h1>
+        <Themed.h1>{t("sources-audio-question")}</Themed.h1>
 
         <Flex
           sx={{
-            flexDirection: ['column', 'row'],
+            flexDirection: ["column", "row"],
             maxWidth: 850,
-            width: '100%',
-            mx: 'auto',
+            width: "100%",
+            mx: "auto",
             mb: 3,
-            flex: '1 0 auto',
-            maxHeight: ['none', '350px'],
-            '& > :first-of-type': {
+            flex: "1 0 auto",
+            maxHeight: ["none", "350px"],
+            "& > :first-of-type": {
               mb: [3, 0],
               mr: [0, 3],
             },
@@ -100,12 +100,12 @@ const SourceSelection = ({ selectNoAudio, selectMicrophone, backToVideoSetup }) 
         >
           <OptionButton
             icon={faMicrophone}
-            label={t('sources-audio-microphone')}
+            label={t("sources-audio-microphone")}
             onClick={selectMicrophone}
           />
           <OptionButton
             icon={faMicrophoneSlash}
-            label={t('sources-audio-without-audio')}
+            label={t("sources-audio-without-audio")}
             onClick={selectNoAudio}
           />
         </Flex>
@@ -126,7 +126,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
 
   // Get current device ID and all possible audio input devices.
   const currentDeviceId = audioStream?.getAudioTracks()?.[0]?.getSettings()?.deviceId;
-  const devices = getUniqueDevices(state.mediaDevices, 'audioinput');
+  const devices = getUniqueDevices(state.mediaDevices, "audioinput");
 
   // We write the currently used device ID to local storage to remember it
   // between visits of Studio.
@@ -152,29 +152,29 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
     body = <Fragment>
       <PreviewAudio stream={audioStream} />
       <div sx={{
-        display: 'flex',
-        width: '80%',
+        display: "flex",
+        width: "80%",
         my: 3,
-        fontSize: '18px',
-        minWidth: '285px',
-        'align-items': 'center'
+        fontSize: "18px",
+        minWidth: "285px",
+        "align-items": "center"
       }}>
         <label htmlFor="sources-audio-device"
           sx={{
             mr: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}>{ t('sources-audio-device') }:</label>
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}>{ t("sources-audio-device") }:</label>
         <select
           id="sources-audio-device"
-          sx={{ variant: 'styles.select', flex: '1 0 0', minWidth: 0 }}
+          sx={{ variant: "styles.select", flex: "1 0 0", minWidth: 0 }}
           value={currentDeviceId}
           onChange={e => changeDevice(e.target.value)}
         >
           {
             devices.map((d, i) => (
-              <option key={i} value={d.deviceId}>{ d.label || 'unlabeled microphone' }</option>
+              <option key={i} value={d.deviceId}>{ d.label || "unlabeled microphone" }</option>
             ))
           }
         </select>
@@ -186,9 +186,9 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
       <Spacer min="16px" max="48px" />
       <Notification isDanger>
         <Heading as="h3" mb={2}>
-          {t('source-audio-not-allowed-title')}
+          {t("source-audio-not-allowed-title")}
         </Heading>
-        <Text variant="text">{t('source-audio-not-allowed-text')}</Text>
+        <Text variant="text">{t("source-audio-not-allowed-text")}</Text>
       </Notification>
     </Fragment>;
   } else if (audioUnexpectedEnd === true) {
@@ -196,7 +196,7 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
       <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />
       <Spacer min="16px" max="48px" />
       <Notification isDanger>
-        <Text variant="text">{t('error-lost-audio-stream')}</Text>
+        <Text variant="text">{t("error-lost-audio-stream")}</Text>
       </Notification>
     </Fragment>;
   } else {
@@ -205,22 +205,22 @@ const MicrophonePreview = ({ reselectSource, enterStudio }) => {
 
   return (
     <Fragment>
-      <Themed.h1>{ t('sources-audio-microphone-selected') }</Themed.h1>
+      <Themed.h1>{ t("sources-audio-microphone-selected") }</Themed.h1>
 
       <div sx={{
         maxWidth: 850,
-        width: '100%',
-        mx: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: '1 0 auto',
-        maxHeight: '400px',
+        width: "100%",
+        mx: "auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: "1 0 auto",
+        maxHeight: "400px",
       }}>{ body }</div>
 
       <ActionButtons
-        prev={{ label: 'sources-audio-reselect-audio', onClick: reselectSource }}
+        prev={{ label: "sources-audio-reselect-audio", onClick: reselectSource }}
         next={{ onClick: enterStudio }}
       />
     </Fragment>
@@ -238,20 +238,20 @@ const OptionButton: React.FC<OptionButtonProps> = ({ children, icon, label, onCl
     <button
       onClick={onClick}
       sx={{
-        fontFamily: 'inherit',
-        color: 'gray.0',
-        backgroundColor: 'gray.4',
-        border: '2px solid black',
-        borderRadius: '8px',
-        flex: '0 1 50%',
+        fontFamily: "inherit",
+        color: "gray.0",
+        backgroundColor: "gray.4",
+        border: "2px solid black",
+        borderRadius: "8px",
+        flex: "0 1 50%",
         p: 2,
-        '&:hover': {
+        "&:hover": {
           boxShadow: theme => `0 0 10px ${theme.colors?.gray?.[2]}`,
-          filter: 'brightness(1.2)',
+          filter: "brightness(1.2)",
         },
       }}
     >
-      <div sx={{ display: 'block', textAlign: 'center', mb: 3 }}>
+      <div sx={{ display: "block", textAlign: "center", mb: 3 }}>
         <FontAwesomeIcon icon={icon} size="3x"/>
       </div>
       <div sx={{ fontSize: 4 }}>{label}</div>

@@ -1,9 +1,9 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import Oscilloscope from 'oscilloscope';
-import { useEffect, useRef } from 'react';
+import Oscilloscope from "oscilloscope";
+import { useEffect, useRef } from "react";
 
 export default function PreviewAudio({ stream }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,12 +11,12 @@ export default function PreviewAudio({ stream }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       if (ctx == null) {
-        throw new Error('Could not get 2D context for canvas');
+        throw new Error("Could not get 2D context for canvas");
       }
       ctx.lineWidth = 2;
-      ctx.strokeStyle = '#f1c40f';
+      ctx.strokeStyle = "#f1c40f";
 
       const audioContext = new window.AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
@@ -34,12 +34,12 @@ export default function PreviewAudio({ stream }) {
       width="800px"
       height="200px"
       sx={{
-        width: '100%',
-        maxHeight: '200px',
+        width: "100%",
+        maxHeight: "200px",
         minHeight: 0,
-        flex: '1 0 70px',
-        bg: 'rgba(0,0,0,0.8)',
-        borderRadius: '7px',
+        flex: "1 0 70px",
+        bg: "rgba(0,0,0,0.8)",
+        borderRadius: "7px",
       }}
     />
   );

@@ -1,25 +1,25 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx, Themed, useColorMode } from 'theme-ui';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { jsx, Themed, useColorMode } from "theme-ui";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
 import React, {
   Fragment, forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent,
-} from 'react';
-import { GlobalHotKeys } from 'react-hotkeys';
-import { Link, IconButton, Flex, Spinner, Text } from '@theme-ui/components';
-import { Trans, useTranslation } from 'react-i18next';
+} from "react";
+import { GlobalHotKeys } from "react-hotkeys";
+import { Link, IconButton, Flex, Spinner, Text } from "@theme-ui/components";
+import { Trans, useTranslation } from "react-i18next";
 
-import { ActionButtons, StepContainer, VideoBox } from '../elements';
-import { useStudioState, useDispatch, Dispatcher } from '../../../studio-state';
-import { useSettings } from '../../../settings';
-import Notification from '../../notification';
-import { ReactComponent as CutOutIcon } from './cut-out-icon.svg';
-import { ReactComponent as CutHereIcon } from './cut-here-icon.svg';
-import Tooltip from '../../Tooltip';
-import { editShortcuts } from '../../../shortcuts';
-import { StepProps } from '../steps';
-import { notNullable } from '../../../util/err';
+import { ActionButtons, StepContainer, VideoBox } from "../elements";
+import { useStudioState, useDispatch, Dispatcher } from "../../../studio-state";
+import { useSettings } from "../../../settings";
+import Notification from "../../notification";
+import { ReactComponent as CutOutIcon } from "./cut-out-icon.svg";
+import { ReactComponent as CutHereIcon } from "./cut-here-icon.svg";
+import Tooltip from "../../Tooltip";
+import { editShortcuts } from "../../../shortcuts";
+import { StepProps } from "../steps";
+import { notNullable } from "../../../util/err";
 
 
 // In some situation we would like to set the current time to 0 or check for it.
@@ -37,9 +37,9 @@ export default function Review(props: StepProps) {
   const [previewReady, setPreviewReady] = useState(false);
 
   const handleBack = () => {
-    const doIt = window.confirm(t('confirm-discard-recordings'));
+    const doIt = window.confirm(t("confirm-discard-recordings"));
     if (doIt) {
-      recordingDispatch({ type: 'RESET' });
+      recordingDispatch({ type: "RESET" });
       props.firstStep();
     }
   };
@@ -50,9 +50,9 @@ export default function Review(props: StepProps) {
 
   const expectedRecordings = (() => {
     switch (videoChoice) {
-      case 'none':
+      case "none":
         return 0;
-      case 'both':
+      case "both":
         return 2;
       default:
         return 1;
@@ -61,35 +61,35 @@ export default function Review(props: StepProps) {
 
   return (
     <StepContainer>
-      <Themed.h1>{ t('review-heading') }</Themed.h1>
+      <Themed.h1>{ t("review-heading") }</Themed.h1>
 
       {prematureRecordingEnd && (
         <Notification isDanger>
-          <Text>{t('error-lost-stream-end-recording')}</Text>
+          <Text>{t("error-lost-stream-end-recording")}</Text>
         </Notification>
       )}
 
       {emptyRecording && (
-        <Notification isDanger>{t('review-error-empty-recording')}</Notification>
+        <Notification isDanger>{t("review-error-empty-recording")}</Notification>
       )}
 
       {(
         !previewReady || recordings.length !== expectedRecordings
       ) && <div sx={{
         flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}>
         <Spinner />
       </div>
       }
       {recordings.length === expectedRecordings && <div sx={previewReady ? {
-        display: 'flex',
-        flex: '1 1 auto',
-        flexDirection: 'column'
+        display: "flex",
+        flex: "1 1 auto",
+        flexDirection: "column"
       } : {
-        display: 'none'
+        display: "none"
       }}>
         <Preview
           ref={previewController}
@@ -110,7 +110,7 @@ export default function Review(props: StepProps) {
         prev={{
           onClick: handleBack,
           danger: true,
-          label: 'review-button-discard-and-record',
+          label: "review-button-discard-and-record",
         }}
         next={{ onClick: handleNext }}
       />
@@ -125,9 +125,9 @@ type SharedProps = {
 
 const ControlBox: React.FC<SharedProps> = ({ previewController, currentTime }) => (
   <div sx={{
-    backgroundColor: 'gray.4',
-    color: 'text',
-    borderRadius: '8px',
+    backgroundColor: "gray.4",
+    color: "text",
+    borderRadius: "8px",
   }}>
     <VideoControls {...{ previewController, currentTime }} />
     <Scrubber {...{ previewController, currentTime }} />
@@ -156,15 +156,15 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
   };
 
   const cutStyle = {
-    position: 'absolute',
-    backgroundColor: colorMode === 'dark' ? 'gray.2' : 'gray.3',
-    height: '100%',
-    boxSizing: 'content-box',
+    position: "absolute",
+    backgroundColor: colorMode === "dark" ? "gray.2" : "gray.3",
+    height: "100%",
+    boxSizing: "content-box",
   } as const;
 
   return (
     <div sx={{ p: 2 }}>
-      <div sx={{ py: 1, position: 'relative' }}>
+      <div sx={{ py: 1, position: "relative" }}>
         <div
           onClick={e => setTime(e)}
           onMouseMove={e => {
@@ -177,44 +177,44 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
             }
           }}
           sx={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            cursor: 'pointer',
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            cursor: "pointer",
             top: 0,
             zIndex: 10,
           }}
         />
         <div sx={{
-          position: 'relative',
-          backgroundColor: '#6bc295',
-          height: '12px',
-          width: '100%',
-          borderRadius: '6px',
-          overflow: 'hidden',
-          '@media not (any-pointer: fine)': {
-            height: '20px',
-            borderRadius: '10px',
+          position: "relative",
+          backgroundColor: "#6bc295",
+          height: "12px",
+          width: "100%",
+          borderRadius: "6px",
+          overflow: "hidden",
+          "@media not (any-pointer: fine)": {
+            height: "20px",
+            borderRadius: "10px",
           }
         }}>
           { (start != null && start > 0) && <div sx={{
             left: 0,
-            borderRight: '2px solid black',
+            borderRight: "2px solid black",
             width: `${(start / duration) * 100}%`,
             ...cutStyle,
           }} /> }
           { (end != null && end < duration) && <div sx={{
             right: 0,
-            borderLeft: '2px solid black',
+            borderLeft: "2px solid black",
             width: `${((duration - end) / duration) * 100}%`,
             ...cutStyle,
           }} /> }
           <div sx={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             width: `${(currentTime / duration) * 100}%`,
-            backgroundColor: 'black',
-            height: '100%',
+            backgroundColor: "black",
+            height: "100%",
             opacity: 0.3,
           }} />
         </div>
@@ -252,15 +252,15 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
     DELETE_CROP_MARK_RIGHT: () => rightMarker.current?.click(),
   };
 
-  return <div sx={{ textAlign: 'center' }}>
+  return <div sx={{ textAlign: "center" }}>
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
       <Flex
         sx={{
-          backgroundColor: 'gray.4',
+          backgroundColor: "gray.4",
           p: 2,
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-          '& > *': {
+          justifyContent: "center",
+          alignItems: "flex-end",
+          "& > *": {
             mx: 2,
           }
         }}
@@ -273,9 +273,9 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
           invariant={(start, end) => start < end}
           {...{ recordingDispatch, previewController, currentTime }}
         /> }
-        <Tooltip content={previewController.current?.isPlaying ? t('review-pause') : t('review-play')}>
+        <Tooltip content={previewController.current?.isPlaying ? t("review-pause") : t("review-play")}>
           <button
-            sx={{ backgroundColor: 'transparent', border: 'none', mx: 3, color: 'gray.0' }}
+            sx={{ backgroundColor: "transparent", border: "none", mx: 3, color: "gray.0" }}
             onClick={() => {
               const controller = previewController.current;
               if (controller) {
@@ -289,7 +289,7 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
           >
             <FontAwesomeIcon
               icon={previewController.current?.isPlaying ? faPause : faPlay}
-              sx={{ fontSize: '50px', opacity: 0.8, '&:hover': { opacity: 1 }}}
+              sx={{ fontSize: "50px", opacity: 0.8, "&:hover": { opacity: 1 }}}
             />
           </button>
         </Tooltip>
@@ -302,13 +302,13 @@ const VideoControls: React.FC<SharedProps> = ({ currentTime, previewController }
           {...{ recordingDispatch, previewController, currentTime }}
         /> }
       </Flex>
-      {t('review-player-progress', { currentTime, duration })}
+      {t("review-player-progress", { currentTime, duration })}
     </GlobalHotKeys>
   </div>;
 };
 
 type CutControlsProps = SharedProps & {
-  marker: 'start' | 'end',
+  marker: "start" | "end",
   value: number | null,
   control: number | null,
   invariant: (self: number, control: number) => boolean;
@@ -335,18 +335,18 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
       value = control;
     }
     recordingDispatch({
-      type: marker === 'start' ? 'UPDATE_START' : 'UPDATE_END',
+      type: marker === "start" ? "UPDATE_START" : "UPDATE_END",
       time: value,
     });
   };
 
   const handlers = {
-    [marker === 'start' ? 'CUT_LEFT' : 'CUT_RIGHT']: cut,
+    [marker === "start" ? "CUT_LEFT" : "CUT_RIGHT"]: cut,
   };
 
   const state = (
     <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
-      <div sx={{ flex: 1, textAlign: marker === 'start' ? 'right' : 'left', color: 'gray.0' }}>
+      <div sx={{ flex: 1, textAlign: marker === "start" ? "right" : "left", color: "gray.0" }}>
         { value !== null && <Fragment>
           <Trans {...{ t }} i18nKey={`review-${marker}`}>
             {{ [marker]: value }} <Link href="" onClick={event => {
@@ -356,12 +356,12 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
               }
             }} />
           </Trans>
-          <Tooltip content={t('review-remove-cut-point')}>
+          <Tooltip content={t("review-remove-cut-point")}>
             <IconButton
               ref={ref} // for DELETE_CROP_MARK
               onClick={
                 () => recordingDispatch({
-                  type: marker === 'start' ? 'UPDATE_START' : 'UPDATE_END',
+                  type: marker === "start" ? "UPDATE_START" : "UPDATE_END",
                   time: null,
                 })}
             >
@@ -384,27 +384,27 @@ const CutControls = React.forwardRef<HTMLButtonElement, CutControlsProps>((
           {...{ disabled }}
           onClick={cut}
           sx={{
-            backgroundColor: 'transparent',
-            color: 'text',
-            border: 'none',
-            pt: '4px',
-            px: '8px',
-            borderRadius: '4px',
-            '&:disabled': {
+            backgroundColor: "transparent",
+            color: "text",
+            border: "none",
+            pt: "4px",
+            px: "8px",
+            borderRadius: "4px",
+            "&:disabled": {
               opacity: 0.3,
             },
-            '&:not(:disabled):hover': {
-              backgroundColor: 'gray.3'
+            "&:not(:disabled):hover": {
+              backgroundColor: "gray.3"
             },
           }}
         >
-          <CutHereIcon sx={{ height: '32px', transform: marker === 'end' ? 'scaleX(-1)' : '' }} />
+          <CutHereIcon sx={{ height: "32px", transform: marker === "end" ? "scaleX(-1)" : "" }} />
         </button>
       </Tooltip>
     </GlobalHotKeys>
   );
 
-  return marker === 'start'
+  return marker === "start"
     ? <Fragment>{ state }{ button }</Fragment>
     : <Fragment>{ button }{ state }</Fragment>;
 });
@@ -431,7 +431,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   const allVideos = videoRefs.slice(0, recordings.length);
 
   const desktopIndex = recordings.length === 2
-    ? (recordings[0].deviceType === 'desktop' ? 0 : 1)
+    ? (recordings[0].deviceType === "desktop" ? 0 : 1)
     : null;
 
   // The index of the last video ref that received an event (0 or 1).
@@ -471,7 +471,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   // preventing us from seeking in the video. We force it below
   // in the event handlers of the video elements, but we want to hold off
   // on some effects until that calculation is done.
-  type DurationCalcState = 'done' | 'started';
+  type DurationCalcState = "done" | "started";
   const durationCalculationProgress = [
     useRef<DurationCalcState>(),
     useRef<DurationCalcState>(),
@@ -540,9 +540,9 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   const skipFiveSeconds = (keyEvent?: KeyboardEvent) => {
     videoRefs.forEach(video => {
       if (video.current !== null) {
-        if (keyEvent?.key === 'l' || keyEvent?.key === 'ArrowRight') {
+        if (keyEvent?.key === "l" || keyEvent?.key === "ArrowRight") {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + 5);
-        } else if (keyEvent?.key === 'j' || keyEvent?.key === 'ArrowLeft') {
+        } else if (keyEvent?.key === "j" || keyEvent?.key === "ArrowLeft") {
           video.current.currentTime = Math.max(0, video.current.currentTime - 5);
         }
       }
@@ -554,9 +554,9 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
 
     videoRefs.forEach(video => {
       if (video.current !== null) {
-        if (keyEvent?.key === '.') {
+        if (keyEvent?.key === ".") {
           video.current.currentTime = Math.min(video.current.duration, video.current.currentTime + (1 / fps));
-        } else if (keyEvent?.key === ',') {
+        } else if (keyEvent?.key === ",") {
           video.current.currentTime = Math.max(0, video.current.currentTime - (1 / fps));
         }
       }
@@ -574,24 +574,24 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
   const children = recordings.map((recording, index) => ({
     body: (
       <GlobalHotKeys keyMap={editShortcuts} handlers={handlers}>
-        <div sx={{ position: 'relative', width: '100%', height: '100%' }}>
+        <div sx={{ position: "relative", width: "100%", height: "100%" }}>
           { overlayVisible && <div
             sx={{
-              position: 'absolute',
+              position: "absolute",
               left: 0,
               right: 0,
               top: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.65)',
-              color: 'white',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              pointerEvents: 'none',
+              backgroundColor: "rgba(0, 0, 0, 0.65)",
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              pointerEvents: "none",
             }}>
-            <CutOutIcon sx={{ height: '4em' }}/>
-            <p sx={{ my: 3 }}>{ t('review-part-will-be-removed') }</p>
+            <CutOutIcon sx={{ height: "4em" }}/>
+            <p sx={{ my: 3 }}>{ t("review-part-will-be-removed") }</p>
           </div>
           }
           <video
@@ -605,7 +605,7 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
               // Also without setting the current time once initially,
               // some browsers show a black video element instead of the first frame.
               event.currentTarget.currentTime = Number.MAX_VALUE;
-              durationCalculationProgress[index].current = 'started';
+              durationCalculationProgress[index].current = "started";
             }}
             onTimeUpdate={durationsCalculated ? event => {
               const currentTime = event.currentTarget.currentTime;
@@ -615,13 +615,13 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
             } : event => {
               if (!durationsCalculated) {
                 switch (durationCalculationProgress[index].current) {
-                  case 'started':
+                  case "started":
                     event.currentTarget.currentTime = ALMOST_ZERO;
-                    durationCalculationProgress[index].current = 'done';
+                    durationCalculationProgress[index].current = "done";
                     break;
-                  case 'done':
+                  case "done":
                     if (durationCalculationProgress.filter(
-                      p => p.current === 'done'
+                      p => p.current === "done"
                     ).length === recordings.length) {
                       setDurationsCalculated(true);
                     }
@@ -635,10 +635,10 @@ const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady
             preload="auto"
             tabIndex={-1}
             sx={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#ccc',
-              outline: 'none'
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#ccc",
+              outline: "none"
             }}
           />
         </div>

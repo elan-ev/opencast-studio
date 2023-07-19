@@ -1,26 +1,26 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx } from "theme-ui";
 
-import { useTranslation } from 'react-i18next';
-import { Flex, Text } from '@theme-ui/components';
-import { useState } from 'react';
+import { useTranslation } from "react-i18next";
+import { Flex, Text } from "@theme-ui/components";
+import { useState } from "react";
 
-import { useStudioState, useDispatch } from '../../../studio-state';
-import { useOpencast } from '../../../opencast';
+import { useStudioState, useDispatch } from "../../../studio-state";
+import { useOpencast } from "../../../opencast";
 
-import { ActionButtons } from '../elements';
+import { ActionButtons } from "../elements";
 
-import MediaDevices from './media-devices';
-import RecordingControls from './recording-controls';
-import { stopCapture } from '../capturer';
-import Notification from '../../notification';
-import { StepProps } from '../steps';
+import MediaDevices from "./media-devices";
+import RecordingControls from "./recording-controls";
+import { stopCapture } from "../capturer";
+import Notification from "../../notification";
+import { StepProps } from "../steps";
 
 
-export const STATE_INACTIVE = 'inactive';
-export const STATE_PAUSED = 'paused';
-export const STATE_RECORDING = 'recording';
+export const STATE_INACTIVE = "inactive";
+export const STATE_PAUSED = "paused";
+export const STATE_RECORDING = "recording";
 
 
 export default function Recording(props: StepProps) {
@@ -39,19 +39,19 @@ export default function Recording(props: StepProps) {
 
   return (
     <Flex sx={{
-      flexDirection: 'column',
-      height: '100%',
-      position: 'relative',
+      flexDirection: "column",
+      height: "100%",
+      position: "relative",
       flexGrow: 1,
     }}>
       { (state.displayUnexpectedEnd || state.userUnexpectedEnd) && (
         <Notification isDanger>
-          <Text>{t('error-lost-video-stream')}</Text>
+          <Text>{t("error-lost-video-stream")}</Text>
         </Notification>
       )}
       { state.audioUnexpectedEnd && (
         <Notification isDanger>
-          <Text>{t('error-lost-audio-stream')}</Text>
+          <Text>{t("error-lost-audio-stream")}</Text>
         </Notification>
       )}
 

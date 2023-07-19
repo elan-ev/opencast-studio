@@ -1,17 +1,17 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
-import { Dispatch, SetStateAction } from 'react';
+import { jsx } from "theme-ui";
+import { Dispatch, SetStateAction } from "react";
 
-import Steps from './steps';
+import Steps from "./steps";
 
-import AudioSetup from './audio-setup';
-import SaveCreation from './save-creation';
-import VideoSetup from './video-setup';
-import Recording from './recording';
-import Review from './review';
+import AudioSetup from "./audio-setup";
+import SaveCreation from "./save-creation";
+import VideoSetup from "./video-setup";
+import Recording from "./recording";
+import Review from "./review";
 
-import { isRecordingSupported } from '../../util';
+import { isRecordingSupported } from "../../util";
 
 type Props = {
   activeStep: number;

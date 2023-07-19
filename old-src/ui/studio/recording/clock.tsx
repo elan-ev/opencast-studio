@@ -1,7 +1,7 @@
 //; -*- mode: rjsx;-*-
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
-import { Component } from 'react';
+import { jsx } from "theme-ui";
+import { Component } from "react";
 
 type Props = {
   isPaused: boolean;
@@ -80,7 +80,7 @@ class Clock extends Component<Props, State> {
     if (timeArr[0] === 0) {
       timeArr = timeArr.slice(1);
     }
-    const content = timeArr.map(unit => (unit < 10 ? '0' : '') + unit).join(':');
+    const content = timeArr.map(unit => (unit < 10 ? "0" : "") + unit).join(":");
 
     return <span sx={{ fontSize: 3 }}>{content}</span>;
   }
