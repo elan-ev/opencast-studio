@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { COLORS, focusStyle } from "../util";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { CSSObject } from "@emotion/react";
+import { SHORTCUTS, ShortcutKeys, useShowAvailableShortcuts } from "../shortcuts";
+import { useHotkeys } from "react-hotkeys-hook";
 
 type StepButtonProps = {
   kind: "next" | "prev";
@@ -17,12 +19,19 @@ const StepButton: React.FC<StepButtonProps> = ({
   kind, label, icon, disabled, danger, onClick,
 }) => {
   const { t } = useTranslation();
+  const showShortcut = useShowAvailableShortcuts();
+  const shortcut = match(kind, {
+    prev: () => SHORTCUTS.general.prev,
+    next: () => SHORTCUTS.general.next,
+  });
+  useHotkeys(shortcut, () => onClick?.(), { enabled: !disabled });
 
   return (
     <ProtoButton
       disabled={disabled}
       onClick={onClick}
       css={{
+        position: "relative",
         display: "flex",
         gap: 8,
         alignItems: "center",
@@ -57,6 +66,16 @@ const StepButton: React.FC<StepButtonProps> = ({
       {kind === "prev" && (icon ?? <FiChevronLeft />)}
       {label ?? t(`steps.${kind}-button-label`)}
       {kind === "next" && (icon ?? <FiChevronRight />)}
+      {showShortcut && !disabled && (
+        <div css={{
+          position: "absolute",
+          top: -24,
+          left: -6,
+          padding: 2,
+          borderRadius: 4,
+          backgroundColor: COLORS.neutral05,
+        }}><ShortcutKeys shortcut={shortcut} /></div>
+      )}
     </ProtoButton>
   );
 };

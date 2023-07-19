@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { screenWidthAtMost, useColorScheme } from "@opencast/appkit";
+import { match, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 
 import { COLORS } from "./util";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 
 export const SHORTCUTS = {
@@ -11,6 +12,8 @@ export const SHORTCUTS = {
     showOverview: "?",
     closeOverlay: "Escape",
     tab: "Tab",
+    prev: "ctrl+left",
+    next: "ctrl+right",
   },
   videoSetup: {
     selectScreen: "1",
@@ -32,6 +35,8 @@ const SHORTCUT_TRANSLATIONS = {
     showOverview: "shortcuts.show-overview",
     closeOverlay: "shortcuts.close-overlay",
     tab: "shortcuts.tab-elements",
+    prev: "shortcuts.back-button",
+    next: "shortcuts.next-button",
   },
   videoSetup: {
     selectScreen: "shortcuts.select-display",
@@ -92,16 +97,23 @@ type ShortcutKeysProps = {
 
 export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = false }) => {
   const { t } = useTranslation();
-  return <>
+  return <div css={{ display: "flex", alignItems: "center", gap: 4 }}>
     {shortcut.split("+").map((key, i) => {
       let s = key;
       if (key in KEY_TRANSLATIONS) {
         const translationKey = KEY_TRANSLATIONS[key] as typeof KEY_TRANSLATIONS[keyof typeof KEY_TRANSLATIONS];
         s = t(`shortcuts.keys.${translationKey}`);
       }
-      return <SingleKey large={large} key={i}>{s}</SingleKey>;
+      const child = match<string, JSX.Element>(s, {
+        "left": () => <FiArrowLeft />,
+        "right": () => <FiArrowRight />,
+      }, () => <>{s}</>);
+      return <>
+        {i !== 0 && "+"}
+        <SingleKey large={large} key={i}>{child}</SingleKey>
+      </>;
     })}
-  </>;
+  </div>;
 };
 
 type SingleKeyProps = React.PropsWithChildren<{
