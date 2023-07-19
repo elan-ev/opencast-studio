@@ -142,46 +142,6 @@
   "video-settings-close": "Close video settings",
 
 
-
-  "nav-shortcuts": "Shortcuts",
-  "record-shortcuts": "Recording",
-  "edit-shortcuts": "Editing",
-  "other-shortcuts": "Other shortcuts",
-  "no-groups": "No groups",
-  "sequence-seperator": "or",
-  
-  "control-key": "Ctrl",
-  "space-key": "Spacebar",
-  "shift-key": "Shift",
-  "left-key": "Left",
-  "right-key": "Right",
-
-  "record-display": "Record only display",
-  "record-camera": "Record only camera",
-  "record-both": "Record both: display and camera",
-  "record-audio": "Record with audio",
-  "record-no-audio": "Record without audio",
-  "start-recording": "Start recording",
-  "stop-recording": "Stop recording",
-  "pause-recording": "Pause/Resume recording",
-
-  "play-pause": "Play/Pause video",
-  "skip-five": "5 seconds forward",
-  "back-five": "5 seconds back",
-  "frame-forward": "One frame forward",
-  "frame-back": "One frame back",
-  "cut-left": "Cut left",
-  "cut-right": "Cut right",
-  "delete-left": "Delete left crop marker",
-  "delete-right": "Delete right crop marker",
-
-  "tab-elements": "Navigate through elements",
-  "next-button": "Next/Confirm buttons",
-  "back-button": "Back/Discard buttons",
-  "upload-video": "Upload video to Opencast",
-  "download-video": "Download video",
-  "new-recording": "Start new recording button",
-
   "header": {
     "info": {
       "label": "Info"
@@ -214,5 +174,56 @@
     "finish": {
       "label": "Save video"
     }
+  },
+  "shortcuts": {
+    "label": "Shortcuts",
+
+    "general": "General",
+    "show-available-shortcuts": "Show available shortcuts",
+    "show-overview": "Show this overview",
+    "close-overlay": "Close dialog",
+    "tab-elements": "Navigate through elements",
+
+    "select-display": "Select display",
+    "select-camera": "Select camera",
+    "select-both": "Select display & camera",
+
+    "select-microphone": "Select microphone",
+    "select-no-audio": "Select no audio",
+
+    "record-shortcuts": "Recording",
+    "edit-shortcuts": "Editing",
+    "other-shortcuts": "Other shortcuts",
+    "no-groups": "No groups",
+    "sequence-seperator": "or",
+
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "space": "Spacebar",
+      "shift": "Shift",
+      "left": "Left",
+      "right": "Right"
+    },
+
+    "start-recording": "Start recording",
+    "stop-recording": "Stop recording",
+    "pause-recording": "Pause/Resume recording",
+
+    "play-pause": "Play/Pause video",
+    "skip-five": "5 seconds forward",
+    "back-five": "5 seconds back",
+    "frame-forward": "One frame forward",
+    "frame-back": "One frame back",
+    "cut-left": "Cut left",
+    "cut-right": "Cut right",
+    "delete-left": "Delete left crop marker",
+    "delete-right": "Delete right crop marker",
+
+    "next-button": "Next/Confirm buttons",
+    "back-button": "Back/Discard buttons",
+    "upload-video": "Upload video to Opencast",
+    "download-video": "Download video",
+    "new-recording": "Start new recording button"
   }
 }

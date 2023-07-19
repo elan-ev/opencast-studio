@@ -7,9 +7,12 @@ import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
 
 import { DEFINES } from "../defines";
+import KeyboardIcon from "../icons/keyboard.svg";
 import languages from "../i18n/languages";
 import { BREAKPOINTS, COLORS, focusStyle } from "../util";
 import { OverlayBoxState } from ".";
+import { useHotkeys } from "react-hotkeys-hook";
+import { SHORTCUTS } from "../shortcuts";
 
 
 type Props = {
@@ -67,6 +70,7 @@ const Buttons: React.FC<Props> = ({ setOverlayBoxState }) => {
     }}>
       <LanguageButton />
       <ThemeButton />
+      <ShortCutsButton open={() => setOverlayBoxState("shortcuts")} />
       <InfoButton open={() => setOverlayBoxState("info")} />
     </div>
   );
@@ -125,14 +129,22 @@ const ThemeButton: React.FC = () => {
   );
 };
 
-type InfoButtonProps = {
+type BoxOpenButtonProps = {
   open: () => void;
 };
 
-const InfoButton: React.FC<InfoButtonProps> = ({ open }) => {
+const InfoButton: React.FC<BoxOpenButtonProps> = ({ open }) => {
   const { t } = useTranslation();
   return (
     <HeaderButton onClick={open} icon={<FiInfo />} label={t("header.info.label")} />
+  );
+};
+
+const ShortCutsButton: React.FC<BoxOpenButtonProps> = ({ open }) => {
+  const { t } = useTranslation();
+  useHotkeys(SHORTCUTS.general.showOverview, open, { ignoreModifiers: true });
+  return (
+    <HeaderButton onClick={open} icon={<KeyboardIcon />} label={t("shortcuts.label")} />
   );
 };
 
@@ -141,7 +153,7 @@ type HeaderButtonProps = JSX.IntrinsicElements["button"] & {
   label: string;
 };
 
-const BUTTON_LABEL_BREAKPOINT = 640;
+const BUTTON_LABEL_BREAKPOINT = 770;
 
 const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
   ({ icon, label, ...rest }, ref) => {

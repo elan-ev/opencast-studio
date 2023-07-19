@@ -1,17 +1,21 @@
 import React, { useRef, useState } from "react";
 import { match, screenWidthAtMost, useColorScheme, useOnOutsideClick } from "@opencast/appkit";
+import { FiX } from "react-icons/fi";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { Main } from "../steps";
 import { Header } from "./header";
 import { COLORS } from "../util";
 import { About } from "../about";
-import { FiX } from "react-icons/fi";
+import { SHORTCUTS, ShortcutOverview } from "../shortcuts";
 
 
-export type OverlayBoxState = "none" | "info";
+export type OverlayBoxState = "none" | "info" | "shortcuts";
 
 export const Root: React.FC = () => {
-  const [overlayBoxState, setOverlayBoxState] = useState("none");
+  const [overlayBoxState, setOverlayBoxState] = useState<OverlayBoxState>("none");
+  const close = () => setOverlayBoxState("none");
+  useHotkeys(SHORTCUTS.general.closeOverlay, close);
 
   return (
     <div css={{
@@ -23,7 +27,8 @@ export const Root: React.FC = () => {
       <Header {...{ setOverlayBoxState }} />
       {match(overlayBoxState, {
         "none": () => null,
-        "info": () => <OverlayBox close={() => setOverlayBoxState("none")}><About /></OverlayBox>,
+        "info": () => <OverlayBox close={close}><About /></OverlayBox>,
+        "shortcuts": () => <OverlayBox close={close}><ShortcutOverview /></OverlayBox>,
       })}
       <Main />
     </div>
@@ -86,7 +91,14 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children }) => {
             cursor: "pointer",
           }}
         />
-        <div css={{ height: "100%", overflowY: "auto" }}>
+        <div css={{
+          height: "100%",
+          overflowY: "auto",
+          h1: {
+            marginBottom: 8,
+            fontSize: 26,
+          },
+        }}>
           {children}
         </div>
       </div>

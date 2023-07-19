@@ -8,10 +8,6 @@ export const About: React.FC = () => (
     p: {
       margin: "8px 0",
     },
-    h1: {
-      marginBottom: 8,
-      fontSize: 26,
-    },
     h2: {
       marginTop: 24,
       marginBottom: 4,
