@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { screenWidthAtMost } from "@opencast/appkit";
+import { screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 
 import { COLORS } from "./util";
 
@@ -151,6 +151,7 @@ type ShortcutGroupOverviewProps = {
 
 const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, group }) => {
   const { t } = useTranslation();
+  const isLight = useColorScheme().scheme === "light";
 
   return (
     <section css={{ margin: "24px 0" }}>
@@ -172,7 +173,7 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
               [screenWidthAtMost(600)]: {
                 width: "100%",
               },
-              border: `1px dashed ${COLORS.neutral15}`,
+              border: `1px dashed ${isLight ? COLORS.neutral15 : COLORS.neutral25}`,
               borderRadius: 4,
               padding: "6px 8px",
               display: "inline-flex",
