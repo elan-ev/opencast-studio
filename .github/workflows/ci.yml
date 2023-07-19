@@ -14,8 +14,8 @@ jobs:
         node-version: 16
     - run: npm ci
     - run: npx eslint src --max-warnings=0
-    - run: npm run build
-    - run: npm test
+    - run: npm run build:dev
+    - run: npm run typecheck
 
 
     # Prepare test deployment
@@ -35,7 +35,7 @@ jobs:
         fi
         deploydir="/$(echo "${deploydir}" | LC_ALL=C sed -e 's/[^a-zA-Z0-9\-_]/-/g')"
         echo ${deploydir} > deploydir.tmp
-        PUBLIC_URL=${deploydir} npm run build
+        PUBLIC_URL=${deploydir} npm run build:release
 
     - name: Archive test deployment files as artifact
       uses: actions/upload-artifact@v3
@@ -53,7 +53,7 @@ jobs:
         REACT_APP_INCLUDE_LEGAL_NOTICES: 1
       run: |
         rm -rf build
-        PUBLIC_URL="/" npm run build
+        PUBLIC_URL="/" npm run build:release
 
     - name: Archive prod deployment files as artifact
       if: github.repository_owner == 'elan-ev' && github.ref == 'refs/heads/master'
