@@ -1,15 +1,16 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { ProtoButton, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
+import { screenWidthAtMost } from "@opencast/appkit";
 import { FiMonitor, FiUser } from "react-icons/fi";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { useDispatch, useStudioState, VideoSource } from "../../studio-state";
 import { useSettings } from "../../settings";
-import { queryMediaDevices, onMobileDevice, COLORS, BREAKPOINTS, focusStyle } from "../../util";
+import { queryMediaDevices, onMobileDevice, BREAKPOINTS } from "../../util";
 import { startDisplayCapture, startUserCapture } from "../../capturer";
 import { ErrorBox } from "../../ui/ErrorBox";
-import { ShortcutKeys, SHORTCUTS, useShowAvailableShortcuts } from "../../shortcuts";
+import { SHORTCUTS, useShowAvailableShortcuts } from "../../shortcuts";
+import { SourceOptionButton } from "../../ui/SourceOptionButton";
 
 
 
@@ -51,9 +52,9 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
     ]);
   };
 
-  useHotkeys(SHORTCUTS.videoSetup.selectScreen, () => clickDisplay());
-  useHotkeys(SHORTCUTS.videoSetup.selectBoth, () => clickBoth());
-  useHotkeys(SHORTCUTS.videoSetup.selectUser, () => clickUser());
+  useHotkeys(SHORTCUTS.videoSetup.selectScreen, clickDisplay);
+  useHotkeys(SHORTCUTS.videoSetup.selectBoth, clickBoth);
+  useHotkeys(SHORTCUTS.videoSetup.selectUser, clickUser);
   const showShortcuts = useShowAvailableShortcuts();
 
   if (!displaySupported && !userSupported) {
@@ -74,14 +75,14 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         },
       }}
     >
-      {(displaySupported || !onMobileDevice()) && <OptionButton
+      {(displaySupported || !onMobileDevice()) && <SourceOptionButton
         label={t("sources-scenario-display")}
         icon={<FiMonitor />}
         onClick={clickDisplay}
         disabledText={displaySupported ? false : t("sources-video-display-not-supported")}
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectScreen : undefined}
       />}
-      {(displaySupported || !onMobileDevice()) && userSupported && <OptionButton
+      {(displaySupported || !onMobileDevice()) && userSupported && <SourceOptionButton
         label={t("sources-scenario-display-and-user")}
         icon={(
           <div css={{
@@ -103,7 +104,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         }
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectBoth : undefined}
       />}
-      {userSupported && <OptionButton
+      {userSupported && <SourceOptionButton
         label={t("sources-scenario-user")}
         icon={<FiUser />}
         onClick={clickUser}
@@ -111,79 +112,5 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectUser : undefined}
       />}
     </div>
-  );
-};
-
-type OptionButtonProps = {
-  icon: JSX.Element;
-  label: string;
-  onClick: () => void;
-  disabledText: false | string;
-  shortcut?: string,
-};
-
-const OptionButton: React.FC<OptionButtonProps> = (
-  { icon, label, onClick, shortcut, disabledText = false }
-) => {
-  const disabled = disabledText !== false;
-  const isLight = useColorScheme().scheme === "light";
-
-  return (
-    <ProtoButton
-      onClick={onClick}
-      disabled={disabled}
-      css={{
-        position: "relative",
-        display: "inline-flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-        maxHeight: 250,
-        maxWidth: 420,
-        padding: 12,
-        flex: "1",
-
-        backgroundColor: COLORS.neutral05,
-        color: COLORS.neutral60,
-        borderRadius: 8,
-        border: `1px solid ${COLORS.neutral20}`,
-
-        "&[disabled]": {
-          backgroundColor: COLORS.neutral10,
-          color: COLORS.neutral50,
-          borderColor: COLORS.neutral15,
-        },
-
-        "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
-          color: COLORS.neutral90,
-          borderColor: COLORS.neutral25,
-          boxShadow: `0 0 16px ${isLight ? COLORS.neutral20 : COLORS.neutral05}`,
-        },
-        ...focusStyle({ offset: -1 }),
-      }}
-    >
-      <div css={{
-        borderRadius: "50%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: 40,
-        width: 80,
-        height: 80,
-        backgroundColor: COLORS.neutral10,
-        marginBottom: 8,
-      }}>
-        {icon}
-      </div>
-      <div css={{ fontSize: 18, fontWeight: 700 }}>{label}</div>
-      <div css={{ height: "1lh", fontSize: 14, marginTop: 4 }}>{disabledText}</div>
-      {shortcut && <div css={{
-        position: "absolute",
-        right: 8,
-        bottom: 8,
-      }}><ShortcutKeys shortcut={shortcut} /></div>}
-    </ProtoButton>
   );
 };

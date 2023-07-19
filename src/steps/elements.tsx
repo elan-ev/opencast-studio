@@ -88,6 +88,9 @@ export const StepContainer: React.FC<StepContainerProps> = ({
         fontSize: 32,
         fontWeight: 700,
         color: COLORS.neutral70,
+        "@media screen and (max-width: 600px), screen and (max-height: 400px)": {
+          fontSize: 26,
+        },
       }}>{title}</h1>
       <div css={{
         flex: "1",

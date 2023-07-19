@@ -7,6 +7,7 @@ import StepCurrent from "../icons/step-current.svg";
 import StepDone from "../icons/step-done.svg";
 import { BREAKPOINTS, COLORS } from "../util";
 import { VideoSetup } from "./video-setup";
+import { AudioSetup } from "./audio-setup";
 
 
 
@@ -57,7 +58,7 @@ export const Main: React.FC = () => {
       <ProgressSidebar currentStep={currentStep} />
       {match<Step, ReactNode>(currentStep, {
         "video-select": () => <VideoSetup {...stepProps} />,
-        "audio-select": () => "second step",
+        "audio-select": () => <AudioSetup {...stepProps} />,
         "recording": () => null,
         "review": () => null,
         "finish": () => null,
