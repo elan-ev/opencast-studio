@@ -21,6 +21,9 @@ export const SHORTCUTS = {
     withAudio: "1",
     withoutAudio: "2",
   },
+  recording: {
+    startPauseResume: "K, Space",
+  },
 } as const;
 
 const SHORTCUT_TRANSLATIONS = {
@@ -38,6 +41,9 @@ const SHORTCUT_TRANSLATIONS = {
   audioSetup: {
     withAudio: "shortcuts.select-microphone",
     withoutAudio: "shortcuts.select-no-audio",
+  },
+  recording: {
+    startPauseResume: "shortcuts.start-pause-resume-recording",
   },
 } as const;
 
@@ -142,6 +148,7 @@ const GROUP_ID_TRANSLATIONS = {
   general: "shortcuts.general",
   videoSetup: "steps.video.label",
   audioSetup: "steps.audio.label",
+  recording: "steps.record.label",
 } as const satisfies Record<keyof typeof SHORTCUTS, string>;
 
 type ShortcutGroupOverviewProps = {
@@ -181,9 +188,18 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
               gap: 8,
             }}
           >
-            <div css={{ flex: "1" }}>{t(SHORTCUT_TRANSLATIONS[groupId][name])}</div>
-            <div>
-              <ShortcutKeys shortcut={keys} large />
+            <div css={{ flex: "1", overflowWrap: "anywhere" }}>
+              {t(SHORTCUT_TRANSLATIONS[groupId][name])}
+            </div>
+            <div css={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              alignItems: "end",
+            }}>
+              {keys.split(",").map((combination, i) => (
+                <ShortcutKeys key={i} shortcut={combination.trim()} large />
+              ))}
             </div>
           </div>
         ))}

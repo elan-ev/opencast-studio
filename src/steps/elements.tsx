@@ -97,6 +97,7 @@ export const StepContainer: React.FC<StepContainerProps> = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        position: "relative",
       }}>
         {children}
       </div>

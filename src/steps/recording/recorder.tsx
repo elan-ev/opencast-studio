@@ -1,5 +1,5 @@
-import { Settings } from "../../../settings";
-import { dimensionsOf } from "../../../util";
+import { Settings } from "../../settings";
+import { dimensionsOf } from "../../util";
 
 
 export type OnStopCallback = (args: {

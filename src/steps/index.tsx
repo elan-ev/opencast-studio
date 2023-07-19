@@ -8,6 +8,7 @@ import StepDone from "../icons/step-done.svg";
 import { BREAKPOINTS, COLORS } from "../util";
 import { VideoSetup } from "./video-setup";
 import { AudioSetup } from "./audio-setup";
+import { Recording } from "./recording";
 
 
 
@@ -59,9 +60,9 @@ export const Main: React.FC = () => {
       {match<Step, ReactNode>(currentStep, {
         "video-select": () => <VideoSetup {...stepProps} />,
         "audio-select": () => <AudioSetup {...stepProps} />,
-        "recording": () => null,
-        "review": () => null,
-        "finish": () => null,
+        "recording": () => <Recording {...stepProps} />,
+        "review": () => "Review",
+        "finish": () => "Finish",
       })}
     </main>
   );

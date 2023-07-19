@@ -166,7 +166,8 @@
       "label": "Select audio source"
     },
     "record": {
-      "label": "Record"
+      "label": "Record",
+      "is-paused": "Recording is paused"
     },
     "review": {
       "label": "Trim video"
@@ -190,6 +191,8 @@
 
     "select-microphone": "Select microphone",
     "select-no-audio": "Select no audio",
+
+    "start-pause-resume-recording": "Start/pause recording",
 
     "record-shortcuts": "Recording",
     "edit-shortcuts": "Editing",

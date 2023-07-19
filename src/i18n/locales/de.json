@@ -164,7 +164,8 @@
       "label": "Audioquelle auswählen"
     },
     "record": {
-      "label": "Aufnehmen"
+      "label": "Aufnehmen",
+      "is-paused": "Aufzeichnung ist pausiert"
     },
     "review": {
       "label": "Aufnahme kürzen"
@@ -188,6 +189,8 @@
 
     "select-microphone": "Mikrofon auswählen",
     "select-no-audio": "Ohne Audio",
+
+    "start-pause-resume-recording": "Aufzeichnung starten/pausieren",
 
     "record-shortcuts": "Aufnahme",
     "edit-shortcuts": "Editieren",
