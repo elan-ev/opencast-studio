@@ -13,7 +13,7 @@ const config: CallableOption = (_env, argv) => ({
   output: {
     filename: "[name].bundle.js",
     path: OUT_PATH,
-    publicPath: process.env.PUBLIC_PATH ?? "/",
+    publicPath: `${process.env.PUBLIC_PATH}/` ?? "/",
   },
   devtool: argv.mode === "development" ? "eval-cheap-module-source-map" : "source-map",
   resolve: {
