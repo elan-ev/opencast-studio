@@ -1,11 +1,12 @@
-import React from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { ProtoButton, WithTooltip } from "@opencast/appkit";
+import { ProtoButton, WithTooltip, notNullish } from "@opencast/appkit";
 import { FiPause, FiPlay } from "react-icons/fi";
 
 import { useStudioState, useDispatch, Dispatcher } from "../../studio-state";
 import { useSettings } from "../../settings";
 import CutHereIcon from "./cut-here-icon.svg";
+import CutMarkerIcon from "./cut-marker.svg";
 import { COLORS } from "../../util";
 import { ALMOST_ZERO } from ".";
 import { PreviewHandle } from "./preview";
@@ -74,7 +75,9 @@ const formatTime = (
 
 const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => {
   const duration = previewController.current?.duration || Infinity;
+  const dispatch = useDispatch();
   const { start, end } = useStudioState();
+  const ref = useRef<HTMLDivElement>(null);
 
   const setTime = mouseEvent => {
     const rect = mouseEvent.target.getBoundingClientRect();
@@ -91,16 +94,23 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
     }
   };
 
+  const height = 6;
+  const borderRadius = 3;
+
   const cutStyle = {
     position: "absolute",
-    backgroundColor: COLORS.neutral30,
+    backgroundColor: COLORS.danger1,
     height: "100%",
+    borderRadius,
     boxSizing: "content-box",
+    background: "repeating-linear-gradient(45deg,"
+      + `${COLORS.danger2}, ${COLORS.danger2} 4px,`
+      + `${COLORS.danger1} 4px, ${COLORS.danger1} 8px)`,
   } as const;
 
   return (
     <div css={{ padding: 4 }}>
-      <div css={{ padding: "2px 0", position: "relative" }}>
+      <div ref={ref} css={{ padding: "2px 0", position: "relative" }}>
         <div
           onClick={e => setTime(e)}
           onMouseMove={e => {
@@ -123,11 +133,10 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
         />
         <div css={{
           position: "relative",
-          backgroundColor: "#6bc295",
-          height: "12px",
+          backgroundColor: "#71B4F9", // TODO
+          height,
           width: "100%",
-          borderRadius: "6px",
-          overflow: "hidden",
+          borderRadius,
           "@media not (any-pointer: fine)": {
             height: "20px",
             borderRadius: "10px",
@@ -145,16 +154,127 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
             width: `${((duration - end) / duration) * 100}%`,
             ...cutStyle,
           }} /> }
+
+          <Draggable
+            scrubberRef={ref}
+            previewController={previewController}
+            initialTime={start ?? 0}
+            onDrag={time => dispatch({ type: "UPDATE_START", time })}
+          ><CutMarker side="left" /></Draggable>
+          <Draggable
+            scrubberRef={ref}
+            previewController={previewController}
+            initialTime={end ?? duration}
+            onDrag={time => dispatch({ type: "UPDATE_END", time })}
+          ><CutMarker side="right" /></Draggable>
+
           <div css={{
             position: "absolute",
             left: 0,
             width: `${(currentTime / duration) * 100}%`,
-            backgroundColor: "black",
+            backdropFilter: "brightness(0.75)",
             height: "100%",
-            opacity: 0.3,
+            borderRadius,
           }} />
         </div>
       </div>
+    </div>
+  );
+};
+
+type CutMarkerProps = {
+  side: "left" | "right";
+};
+
+const CutMarker: React.FC<CutMarkerProps> = ({ side }) => {
+
+  return (
+    <div css={{
+      width: 14,
+      height: 20,
+      backgroundColor: COLORS.neutral05,
+      color: COLORS.neutral70,
+      border: `1px solid ${COLORS.neutral40}`,
+      borderRadius: 4,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      boxShadow: "0 1px 2px var(--shadow-color)",
+    }}>
+      <CutMarkerIcon css={{
+        transform: `scale(1.2) ${side == "right" ? "scaleX(-1)" : ""}`,
+      }} />
+    </div>
+  );
+};
+
+type DraggableProps = React.PropsWithChildren<{
+  previewController: RefObject<PreviewHandle>;
+  scrubberRef: RefObject<HTMLDivElement>;
+  initialTime: number;
+  onDrag?: (time: number) => void;
+}>;
+
+const Draggable: React.FC<DraggableProps> = ({
+  previewController,
+  scrubberRef,
+  initialTime,
+  onDrag,
+  children,
+}) => {
+  const duration = previewController.current?.duration || Infinity;
+
+  const initialPos = initialTime / duration;
+  const pos = useRef<number>(initialPos);
+  const scrubberRect = useRef<DOMRect>();
+  const ref = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+
+  const leftValue = (v: number) => `${Math.min(1.0, Math.max(0.0, v)) * 100}%`;
+
+  useEffect(() => {
+    const onMouseUp = () => {
+      if (isDragging.current) {
+        isDragging.current = false;
+        onDrag?.(pos.current * duration);
+      }
+    };
+    const onMouseMove = (e: MouseEvent) => {
+      if (isDragging.current) {
+        const rect = notNullish(scrubberRect.current);
+        pos.current = (e.pageX - rect.left) / rect.width;
+        notNullish(ref.current).style.left = leftValue(pos.current);
+        onDrag?.(pos.current * duration);
+      }
+    };
+
+    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mousemove", onMouseMove);
+    };
+  });
+
+  return (
+    <div
+      ref={ref}
+      onMouseDown={() => {
+        isDragging.current = true;
+        scrubberRect.current = notNullish(scrubberRef.current).getBoundingClientRect();
+      }}
+      css={{
+        position: "absolute",
+        zIndex: 100,
+        left: leftValue(initialPos),
+        cursor: "grab",
+        userSelect: "none",
+        top: "50%",
+        transform: "translateY(-50%) translateX(-50%)",
+      }}
+    >
+      {children}
     </div>
   );
 };
