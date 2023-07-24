@@ -177,7 +177,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
   };
 
   useShortcut(SHORTCUTS.review.playPause, togglePlayPause, {
-    ignoreEventWhen: e => e.target instanceof HTMLButtonElement,
+    ignoreEventWhen: e => e.code === "Space" && e.target instanceof HTMLButtonElement,
   });
   const showShortcuts = useShowAvailableShortcuts();
 

@@ -128,7 +128,7 @@ export const RecordingControls: React.FC<Props> = ({
       "recording": () => handlePause(),
     });
   }, {
-    ignoreEventWhen: e => e.target instanceof HTMLButtonElement,
+    ignoreEventWhen: e => e.code === "Space" && e.target instanceof HTMLButtonElement,
   }, [recordingState]);
 
   return (
