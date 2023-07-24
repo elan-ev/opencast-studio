@@ -106,10 +106,12 @@ export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = fa
         "left": () => <FiArrowLeft />,
         "right": () => <FiArrowRight />,
       }, () => <>{s}</>);
-      return <>
-        {i !== 0 && "+"}
-        <SingleKey large={large} key={i}>{child}</SingleKey>
-      </>;
+      return (
+        <React.Fragment key={i}>
+          {i !== 0 && "+"}
+          <SingleKey large={large}>{child}</SingleKey>
+        </React.Fragment>
+      );
     })}
   </div>;
 };
