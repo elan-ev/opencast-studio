@@ -11,7 +11,7 @@ import KeyboardIcon from "../icons/keyboard.svg";
 import languages from "../i18n/languages";
 import { BREAKPOINTS, COLORS, focusStyle } from "../util";
 import { OverlayBoxState } from ".";
-import { SHORTCUTS, useShortcut } from "../shortcuts";
+import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../shortcuts";
 
 
 type Props = {
@@ -142,8 +142,20 @@ const InfoButton: React.FC<BoxOpenButtonProps> = ({ open }) => {
 const ShortCutsButton: React.FC<BoxOpenButtonProps> = ({ open }) => {
   const { t } = useTranslation();
   useShortcut(SHORTCUTS.general.showOverview, open, { ignoreModifiers: true });
+  const showShortcut = useShowAvailableShortcuts();
   return (
-    <HeaderButton onClick={open} icon={<KeyboardIcon />} label={t("shortcuts.label")} />
+    <HeaderButton onClick={open} icon={<KeyboardIcon />} label={t("shortcuts.label")}>
+      {showShortcut && (
+        <div css={{
+          position: "absolute",
+          bottom: -20,
+          left: 20,
+          padding: 2,
+          borderRadius: 4,
+          backgroundColor: COLORS.neutral05,
+        }}><ShortcutKeys shortcut={SHORTCUTS.general.showOverview} /></div>
+      )}
+    </HeaderButton>
   );
 };
 
@@ -155,11 +167,12 @@ type HeaderButtonProps = JSX.IntrinsicElements["button"] & {
 const BUTTON_LABEL_BREAKPOINT = 770;
 
 const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
-  ({ icon, label, ...rest }, ref) => {
+  ({ icon, label, children, ...rest }, ref) => {
     const isLight = useColorScheme().scheme === "light";
 
     return (
       <ProtoButton {...rest} ref={ref} css={{
+        position: "relative",
         display: "flex",
         gap: 8,
         alignItems: "center",
@@ -191,6 +204,7 @@ const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
             display: "none",
           },
         }}>{label}</span>
+        {children}
       </ProtoButton>
     );
   }
