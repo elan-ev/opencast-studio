@@ -127,7 +127,9 @@ export const RecordingControls: React.FC<Props> = ({
       "paused": () => handleResume(),
       "recording": () => handlePause(),
     });
-  });
+  }, {
+    ignoreEventWhen: e => e.target instanceof HTMLButtonElement,
+  }, [recordingState]);
 
   return (
     <div css={{
