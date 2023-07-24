@@ -11,8 +11,7 @@ import KeyboardIcon from "../icons/keyboard.svg";
 import languages from "../i18n/languages";
 import { BREAKPOINTS, COLORS, focusStyle } from "../util";
 import { OverlayBoxState } from ".";
-import { useHotkeys } from "react-hotkeys-hook";
-import { SHORTCUTS } from "../shortcuts";
+import { SHORTCUTS, useShortcut } from "../shortcuts";
 
 
 type Props = {
@@ -142,7 +141,7 @@ const InfoButton: React.FC<BoxOpenButtonProps> = ({ open }) => {
 
 const ShortCutsButton: React.FC<BoxOpenButtonProps> = ({ open }) => {
   const { t } = useTranslation();
-  useHotkeys(SHORTCUTS.general.showOverview, open, { ignoreModifiers: true });
+  useShortcut(SHORTCUTS.general.showOverview, open, { ignoreModifiers: true });
   return (
     <HeaderButton onClick={open} icon={<KeyboardIcon />} label={t("shortcuts.label")} />
   );

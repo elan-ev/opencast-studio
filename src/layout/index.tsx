@@ -1,13 +1,12 @@
 import React, { useRef, useState } from "react";
 import { match, screenWidthAtMost, useColorScheme, useOnOutsideClick } from "@opencast/appkit";
 import { FiX } from "react-icons/fi";
-import { useHotkeys } from "react-hotkeys-hook";
 
 import { Main } from "../steps";
 import { Header } from "./header";
 import { COLORS } from "../util";
 import { About } from "../about";
-import { SHORTCUTS, ShortcutOverview } from "../shortcuts";
+import { SHORTCUTS, ShortcutOverview, useShortcut } from "../shortcuts";
 
 
 export type OverlayBoxState = "none" | "info" | "shortcuts";
@@ -15,7 +14,7 @@ export type OverlayBoxState = "none" | "info" | "shortcuts";
 export const Root: React.FC = () => {
   const [overlayBoxState, setOverlayBoxState] = useState<OverlayBoxState>("none");
   const close = () => setOverlayBoxState("none");
-  useHotkeys(SHORTCUTS.general.closeOverlay, close);
+  useShortcut(SHORTCUTS.general.closeOverlay, close);
 
   return (
     <div css={{

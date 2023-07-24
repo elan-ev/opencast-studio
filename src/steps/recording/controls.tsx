@@ -2,13 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { WithTooltip, match } from "@opencast/appkit";
 import { FiPause, FiPlay } from "react-icons/fi";
-import { useHotkeys } from "react-hotkeys-hook";
 
 import Recorder, { OnStopCallback } from "./recorder";
 import { useSettings } from "../../settings";
 import { Dispatcher, Recording, useDispatch, useStudioState } from "../../studio-state";
 import { RecordingState } from ".";
-import { SHORTCUTS, ShortcutKeys, useShowAvailableShortcuts } from "../../shortcuts";
+import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 
 
 const addRecordOnStop = (
@@ -122,7 +121,7 @@ export const RecordingControls: React.FC<Props> = ({
   };
 
   const showAvailableShortcuts = useShowAvailableShortcuts();
-  useHotkeys(SHORTCUTS.recording.startPauseResume, () => {
+  useShortcut(SHORTCUTS.recording.startPauseResume, () => {
     match(recordingState, {
       "inactive": () => handleRecord(),
       "paused": () => handleResume(),

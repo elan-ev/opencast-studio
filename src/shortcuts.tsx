@@ -4,6 +4,8 @@ import { match, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 
 import { COLORS } from "./util";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { Options, useHotkeys } from "react-hotkeys-hook";
+import React from "react";
 
 
 export const SHORTCUTS = {
@@ -25,7 +27,18 @@ export const SHORTCUTS = {
     withoutAudio: "2",
   },
   recording: {
-    startPauseResume: "K, Space",
+    startPauseResume: "K; Space",
+  },
+  review: {
+    playPause: "K; Space",
+    forwards5secs: "L; right",
+    backwards5secs: "J; left",
+    forwardsFrame: ".",
+    backwardsFrame: ",",
+    cutLeft: "N",
+    cutRight: "M",
+    removeCutLeft: "Shift+N",
+    removeCutRight: "Shift+M",
   },
 } as const;
 
@@ -50,6 +63,17 @@ const SHORTCUT_TRANSLATIONS = {
   recording: {
     startPauseResume: "shortcuts.start-pause-resume-recording",
   },
+  review: {
+    playPause: "shortcuts.review.play-pause",
+    forwards5secs: "shortcuts.review.skip-five",
+    backwards5secs: "shortcuts.review.back-five",
+    forwardsFrame: "shortcuts.review.frame-forward",
+    backwardsFrame: "shortcuts.review.frame-back",
+    cutLeft: "shortcuts.review.cut-left",
+    cutRight: "shortcuts.review.cut-right",
+    removeCutLeft: "shortcuts.review.delete-left",
+    removeCutRight: "shortcuts.review.delete-right",
+  },
 } as const;
 
 const KEY_TRANSLATIONS = {
@@ -60,6 +84,17 @@ const KEY_TRANSLATIONS = {
   "ArrowLeft": "left",
   "Shift": "shift",
 } as const;
+
+
+/** Like `useHotkeys` but with pre-set options. */
+export const useShortcut = (
+  keys: string,
+  callback: () => void,
+  options: Omit<Options, "splitKey"> = {},
+  deps: unknown[] = [],
+) => {
+  return useHotkeys(keys, callback, { splitKey: ";", ...options }, deps);
+};
 
 /**
  * Helper to show an overlay of active shortcuts when Alt is pressed. Returns
@@ -161,6 +196,7 @@ const GROUP_ID_TRANSLATIONS = {
   videoSetup: "steps.video.label",
   audioSetup: "steps.audio.label",
   recording: "steps.record.label",
+  review: "steps.review.label",
 } as const satisfies Record<keyof typeof SHORTCUTS, string>;
 
 type ShortcutGroupOverviewProps = {
@@ -209,7 +245,7 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
               gap: 4,
               alignItems: "end",
             }}>
-              {keys.split(",").map((combination, i) => (
+              {keys.split(";").map((combination, i) => (
                 <ShortcutKeys key={i} shortcut={combination.trim()} large />
               ))}
             </div>

@@ -1,10 +1,11 @@
 import { ProtoButton, match } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
-import { COLORS, focusStyle } from "../util";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { CSSObject } from "@emotion/react";
-import { SHORTCUTS, ShortcutKeys, useShowAvailableShortcuts } from "../shortcuts";
-import { useHotkeys } from "react-hotkeys-hook";
+
+import { COLORS, focusStyle } from "../util";
+import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../shortcuts";
+
 
 type StepButtonProps = {
   kind: "next" | "prev";
@@ -24,7 +25,7 @@ const StepButton: React.FC<StepButtonProps> = ({
     prev: () => SHORTCUTS.general.prev,
     next: () => SHORTCUTS.general.next,
   });
-  useHotkeys(shortcut, () => onClick?.(), { enabled: !disabled });
+  useShortcut(shortcut, () => onClick?.(), { enabled: !disabled });
 
   return (
     <ProtoButton
@@ -82,13 +83,14 @@ const StepButton: React.FC<StepButtonProps> = ({
 
 type StepContainerProps = React.PropsWithChildren<{
   title: string;
-  // subtitle?: string;
+  note?: string;
   nextButton?: Omit<StepButtonProps, "kind">,
   prevButton?: Omit<StepButtonProps, "kind">,
 }>;
 
 export const StepContainer: React.FC<StepContainerProps> = ({
   title,
+  note,
   nextButton,
   prevButton,
   children,
@@ -102,15 +104,29 @@ export const StepContainer: React.FC<StepContainerProps> = ({
       padding: 24,
       gap: 16,
     }}>
-      <h1 css={{
-        textAlign: "center",
-        fontSize: 32,
-        fontWeight: 700,
-        color: COLORS.neutral70,
-        "@media screen and (max-width: 600px), screen and (max-height: 400px)": {
-          fontSize: 26,
-        },
-      }}>{title}</h1>
+      <div>
+        <h1 css={{
+          textAlign: "center",
+          fontSize: 32,
+          fontWeight: 700,
+          color: COLORS.neutral70,
+          "@media screen and (max-width: 600px), screen and (max-height: 400px)": {
+            fontSize: 26,
+          },
+        }}>{title}</h1>
+        {note && (
+          <div css={{
+            fontSize: 14,
+            color: COLORS.neutral60,
+            textAlign: "center",
+            lineHeight: 1.3,
+            maxWidth: "100ch",
+            margin: "0 auto",
+          }}>
+            {note}
+          </div>
+        )}
+      </div>
       <div css={{
         flex: "1",
         display: "flex",

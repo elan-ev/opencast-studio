@@ -105,7 +105,7 @@
   "review-set-end": "Set current time as end",
   "review-remove-cut-point": "Remove",
   "review-part-will-be-removed": "This part will be removed",
-  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
+  "review-player-progress": "{{currentTime}} / {{duration}}",
   "review-play": "Play",
   "review-pause": "Pause",
 
@@ -170,7 +170,9 @@
       "is-paused": "Recording is paused"
     },
     "review": {
-      "label": "Trim video"
+      "label": "Review & trim",
+      "only-on-upload-note": "Trimming the video only works when uploading to Opencast and not when saving the recording locally.",
+      "jump-to-cut-point": "Jump to cut point"
     },
     "finish": {
       "label": "Save video"
@@ -213,15 +215,17 @@
     "stop-recording": "Stop recording",
     "pause-recording": "Pause/Resume recording",
 
-    "play-pause": "Play/Pause video",
-    "skip-five": "5 seconds forward",
-    "back-five": "5 seconds back",
-    "frame-forward": "One frame forward",
-    "frame-back": "One frame back",
-    "cut-left": "Cut left",
-    "cut-right": "Cut right",
-    "delete-left": "Delete left crop marker",
-    "delete-right": "Delete right crop marker",
+    "review": {
+      "play-pause": "Play/Pause video",
+      "skip-five": "5 seconds forward",
+      "back-five": "5 seconds back",
+      "frame-forward": "One frame forward",
+      "frame-back": "One frame back",
+      "cut-left": "Cut left",
+      "cut-right": "Cut right",
+      "delete-left": "Delete left crop marker",
+      "delete-right": "Delete right crop marker"
+    },
 
     "next-button": "Next/Confirm buttons",
     "back-button": "Back/Discard buttons",

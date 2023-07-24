@@ -2,14 +2,13 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { screenWidthAtMost } from "@opencast/appkit";
 import { FiMonitor, FiUser } from "react-icons/fi";
-import { useHotkeys } from "react-hotkeys-hook";
 
 import { useDispatch, useStudioState, VideoSource } from "../../studio-state";
 import { useSettings } from "../../settings";
 import { queryMediaDevices, onMobileDevice, BREAKPOINTS } from "../../util";
 import { startDisplayCapture, startUserCapture } from "../../capturer";
 import { ErrorBox } from "../../ui/ErrorBox";
-import { SHORTCUTS, useShowAvailableShortcuts } from "../../shortcuts";
+import { SHORTCUTS, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 import { SourceOptionButton } from "../../ui/SourceOptionButton";
 
 
@@ -52,9 +51,9 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
     ]);
   };
 
-  useHotkeys(SHORTCUTS.videoSetup.selectScreen, clickDisplay);
-  useHotkeys(SHORTCUTS.videoSetup.selectBoth, clickBoth);
-  useHotkeys(SHORTCUTS.videoSetup.selectUser, clickUser);
+  useShortcut(SHORTCUTS.videoSetup.selectScreen, clickDisplay);
+  useShortcut(SHORTCUTS.videoSetup.selectBoth, clickBoth);
+  useShortcut(SHORTCUTS.videoSetup.selectUser, clickUser);
   const showShortcuts = useShowAvailableShortcuts();
 
   if (!displaySupported && !userSupported) {

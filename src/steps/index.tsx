@@ -9,6 +9,7 @@ import { BREAKPOINTS, COLORS } from "../util";
 import { VideoSetup } from "./video-setup";
 import { AudioSetup } from "./audio-setup";
 import { Recording } from "./recording";
+import { Review } from "./review";
 
 
 
@@ -61,7 +62,7 @@ export const Main: React.FC = () => {
         "video-select": () => <VideoSetup {...stepProps} />,
         "audio-select": () => <AudioSetup {...stepProps} />,
         "recording": () => <Recording {...stepProps} />,
-        "review": () => "Review",
+        "review": () => <Review {...stepProps} />,
         "finish": () => "Finish",
       })}
     </main>

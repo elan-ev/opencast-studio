@@ -1,18 +1,18 @@
 import { useTranslation } from "react-i18next";
-import { SourceOptionButton } from "../../ui/SourceOptionButton";
 import { FiMic, FiMicOff } from "react-icons/fi";
-import { SHORTCUTS, useShowAvailableShortcuts } from "../../shortcuts";
 import { screenWidthAtMost } from "@opencast/appkit";
+
+import { SourceOptionButton } from "../../ui/SourceOptionButton";
+import { SHORTCUTS, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 import { BREAKPOINTS } from "../../util";
-import { useHotkeys } from "react-hotkeys-hook";
 
 
 /** The two large option buttons for "no audio" and "Microphone". */
 export const SourceSelection = ({ selectNoAudio, selectMicrophone }) => {
   const { t } = useTranslation();
   const showShortcuts = useShowAvailableShortcuts();
-  useHotkeys(SHORTCUTS.audioSetup.withAudio, selectMicrophone);
-  useHotkeys(SHORTCUTS.audioSetup.withoutAudio, selectNoAudio);
+  useShortcut(SHORTCUTS.audioSetup.withAudio, selectMicrophone);
+  useShortcut(SHORTCUTS.audioSetup.withoutAudio, selectNoAudio);
 
   return (
     <div
