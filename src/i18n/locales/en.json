@@ -194,7 +194,7 @@
     "select-microphone": "Select microphone",
     "select-no-audio": "Select no audio",
 
-    "start-pause-resume-recording": "Start/pause recording",
+    "start-pause-resume-recording": "Start/​pause recording",
 
     "record-shortcuts": "Recording",
     "edit-shortcuts": "Editing",
@@ -213,22 +213,22 @@
 
     "start-recording": "Start recording",
     "stop-recording": "Stop recording",
-    "pause-recording": "Pause/Resume recording",
+    "pause-recording": "Pause/​Resume recording",
 
     "review": {
-      "play-pause": "Play/Pause video",
+      "play-pause": "Play/​Pause video",
       "skip-five": "5 seconds forward",
       "back-five": "5 seconds back",
       "frame-forward": "One frame forward",
       "frame-back": "One frame back",
       "cut-left": "Cut left",
       "cut-right": "Cut right",
-      "delete-left": "Delete left crop marker",
-      "delete-right": "Delete right crop marker"
+      "delete-left": "Delete left cut marker",
+      "delete-right": "Delete right cut marker"
     },
 
-    "next-button": "Next/Confirm buttons",
-    "back-button": "Back/Discard buttons",
+    "next-button": "Next/​Confirm",
+    "back-button": "Back/​Discard",
     "upload-video": "Upload video to Opencast",
     "download-video": "Download video",
     "new-recording": "Start new recording button"
