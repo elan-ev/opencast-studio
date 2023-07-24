@@ -110,73 +110,87 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
 
   return (
     <div css={{ padding: 4 }}>
-      <div ref={ref} css={{ padding: "2px 0", position: "relative" }}>
+      <div ref={ref} css={{
+        position: "relative",
+        backgroundColor: "#71B4F9", // TODO
+        height,
+        width: "100%",
+        borderRadius,
+        "@media not (any-pointer: fine)": {
+          height: "20px",
+          borderRadius: "10px",
+        },
+      }}>
+        {/* An overlay that extends further above and below the parent for easier clicking. */}
         <div
           onClick={e => setTime(e)}
-          onMouseMove={e => {
-            // Ignore unless only the primary button is pressed (`buttons` is a
-            // bitset).
-            if (e.buttons === 1) {
-              // TODO: maybe debounce this? Browsers seem to somewhat debounce
-              // that already.
-              setTime(e);
-            }
-          }}
           css={{
             position: "absolute",
             width: "100%",
-            height: "100%",
             cursor: "pointer",
-            top: 0,
-            zIndex: 10,
+            zIndex: 5,
+            top: -6,
+            bottom: -6,
           }}
-        />
-        <div css={{
-          position: "relative",
-          backgroundColor: "#71B4F9", // TODO
-          height,
-          width: "100%",
-          borderRadius,
-          "@media not (any-pointer: fine)": {
-            height: "20px",
-            borderRadius: "10px",
-          },
-        }}>
-          { (start != null && start > 0) && <div css={{
-            left: 0,
-            borderRight: "2px solid black",
-            width: `${(start / duration) * 100}%`,
-            ...cutStyle,
-          }} /> }
-          { (end != null && end < duration) && <div css={{
-            right: 0,
-            borderLeft: "2px solid black",
-            width: `${((duration - end) / duration) * 100}%`,
-            ...cutStyle,
-          }} /> }
-
+        >
+          {/* The playhead */}
           <Draggable
             scrubberRef={ref}
             previewController={previewController}
-            initialTime={start ?? 0}
-            onDrag={time => dispatch({ type: "UPDATE_START", time })}
-          ><CutMarker side="left" /></Draggable>
-          <Draggable
-            scrubberRef={ref}
-            previewController={previewController}
-            initialTime={end ?? duration}
-            onDrag={time => dispatch({ type: "UPDATE_END", time })}
-          ><CutMarker side="right" /></Draggable>
-
-          <div css={{
-            position: "absolute",
-            left: 0,
-            width: `${(currentTime / duration) * 100}%`,
-            backdropFilter: "brightness(0.75)",
-            height: "100%",
-            borderRadius,
-          }} />
+            initialTime={currentTime}
+            onDrag={time => notNullish(previewController.current).currentTime = time}
+          >
+            <div css={{
+              width: 16,
+              height: 16,
+              borderRadius: "50%",
+              backgroundColor: COLORS.neutral05,
+              border: `1px solid ${COLORS.neutral40}`,
+            }}/>
+          </Draggable>
         </div>
+
+        {/* The two "deleted" areas */}
+        {(start != null && start > 0) && <div css={{
+          left: 0,
+          borderRight: "2px solid black",
+          width: `${(start / duration) * 100}%`,
+          ...cutStyle,
+        }} />}
+        {(end != null && end < duration) && <div css={{
+          right: 0,
+          borderLeft: "2px solid black",
+          width: `${((duration - end) / duration) * 100}%`,
+          ...cutStyle,
+          backgroundPosition: "right",
+          backgroundSize: "100vw",
+        }} />}
+
+        {/* The two trim markers */}
+        <Draggable
+          scrubberRef={ref}
+          previewController={previewController}
+          initialTime={start ?? 0}
+          clamp={time => Math.min(time, end ?? duration)}
+          onDrag={time => dispatch({ type: "UPDATE_START", time })}
+        ><CutMarker side="left" /></Draggable>
+        <Draggable
+          scrubberRef={ref}
+          previewController={previewController}
+          initialTime={end ?? duration}
+          clamp={time => Math.max(time, start ?? 0)}
+          onDrag={time => dispatch({ type: "UPDATE_END", time })}
+        ><CutMarker side="right" /></Draggable>
+
+        {/* The play progress bar, overlaying darkening everything behind. */}
+        <div css={{
+          position: "absolute",
+          left: 0,
+          width: `${(currentTime / duration) * 100}%`,
+          backdropFilter: "brightness(0.75)",
+          height: "100%",
+          borderRadius,
+        }} />
       </div>
     </div>
   );
@@ -186,40 +200,51 @@ type CutMarkerProps = {
   side: "left" | "right";
 };
 
-const CutMarker: React.FC<CutMarkerProps> = ({ side }) => {
-
-  return (
-    <div css={{
-      width: 14,
-      height: 20,
-      backgroundColor: COLORS.neutral05,
-      color: COLORS.neutral70,
-      border: `1px solid ${COLORS.neutral40}`,
-      borderRadius: 4,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      boxShadow: "0 1px 2px var(--shadow-color)",
-    }}>
-      <CutMarkerIcon css={{
-        transform: `scale(1.2) ${side == "right" ? "scaleX(-1)" : ""}`,
-      }} />
-    </div>
-  );
-};
+const CutMarker: React.FC<CutMarkerProps> = ({ side }) => (
+  <div css={{
+    width: 14,
+    height: 20,
+    backgroundColor: COLORS.neutral05,
+    color: COLORS.neutral70,
+    border: `1px solid ${COLORS.neutral40}`,
+    borderRadius: 4,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxShadow: "0 1px 2px var(--shadow-color)",
+  }}>
+    <CutMarkerIcon css={{
+      transform: `scale(1.2) ${side == "right" ? "scaleX(-1)" : ""}`,
+    }} />
+  </div>
+);
 
 type DraggableProps = React.PropsWithChildren<{
   previewController: RefObject<PreviewHandle>;
   scrubberRef: RefObject<HTMLDivElement>;
   initialTime: number;
+
+  /** Called on every mouse move with the updated value */
   onDrag?: (time: number) => void;
+
+  /**
+   * Called on every mouse move. The calculate time is passed as argument and
+   * the function can modify it somehow, i.e. clamp it to a range. Called
+   * before `onDrag`.
+   */
+  clamp?: (time: number) => number;
 }>;
 
+/**
+ * Makes the given `children` draggable, letting the user adjust its x position
+ * inside the scrubber.
+ */
 const Draggable: React.FC<DraggableProps> = ({
   previewController,
   scrubberRef,
   initialTime,
   onDrag,
+  clamp = t => t,
   children,
 }) => {
   const duration = previewController.current?.duration || Infinity;
@@ -230,21 +255,28 @@ const Draggable: React.FC<DraggableProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
-  const leftValue = (v: number) => `${Math.min(1.0, Math.max(0.0, v)) * 100}%`;
-
   useEffect(() => {
     const onMouseUp = () => {
       if (isDragging.current) {
         isDragging.current = false;
         onDrag?.(pos.current * duration);
+
+        // Reset the element style so that the `left` value from the class CSS
+        // can take over again.
+        notNullish(ref.current).style.left = "";
       }
     };
     const onMouseMove = (e: MouseEvent) => {
       if (isDragging.current) {
         const rect = notNullish(scrubberRect.current);
-        pos.current = (e.pageX - rect.left) / rect.width;
-        notNullish(ref.current).style.left = leftValue(pos.current);
+        const percentage = Math.min(1.0, Math.max(0.0, (e.pageX - rect.left) / rect.width));
+        pos.current = clamp(duration * percentage) / duration;
         onDrag?.(pos.current * duration);
+
+        // We set the left value here directly instead of waiting for the React
+        // state change to trickle through. This actually leads to less input
+        // delay and a smoother dragging.
+        notNullish(ref.current).style.left = `${pos.current * 100}%`;
       }
     };
 
@@ -266,12 +298,13 @@ const Draggable: React.FC<DraggableProps> = ({
       }}
       css={{
         position: "absolute",
-        zIndex: 100,
-        left: leftValue(initialPos),
+        zIndex: 10,
+        left: `${initialPos * 100}%`,
         cursor: "grab",
         userSelect: "none",
         top: "50%",
         transform: "translateY(-50%) translateX(-50%)",
+        padding: "8px 4px", // To make grabbing it easier
       }}
     >
       {children}
