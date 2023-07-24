@@ -78,11 +78,9 @@ const SHORTCUT_TRANSLATIONS = {
 
 const KEY_TRANSLATIONS = {
   "Escape": "escape",
-  "Control": "control",
   "Space": "space",
-  "ArrowRight": "right",
-  "ArrowLeft": "left",
   "Shift": "shift",
+  "ctrl": "control",
 } as const;
 
 
