@@ -72,18 +72,16 @@ export const useShowAvailableShortcuts = () => {
       setActive(true);
     }
   };
-  const disable = (event: KeyboardEvent) => {
-    if (event.key === SHORTCUTS.general.showAvailableShortcuts) {
-      setActive(false);
-    }
-  };
+  const disable = () => setActive(false);
 
   useEffect(() => {
     document.addEventListener("keydown", enable);
     document.addEventListener("keyup", disable);
+    document.addEventListener("mousedown", disable);
     return () => {
       document.removeEventListener("keydown", enable);
       document.removeEventListener("keyup", disable);
+      document.removeEventListener("mousedown", disable);
     };
   });
 
