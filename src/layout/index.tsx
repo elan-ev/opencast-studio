@@ -26,8 +26,12 @@ export const Root: React.FC = () => {
       <Header {...{ setOverlayBoxState }} />
       {match(overlayBoxState, {
         "none": () => null,
-        "info": () => <OverlayBox close={close}><About /></OverlayBox>,
-        "shortcuts": () => <OverlayBox close={close}><ShortcutOverview /></OverlayBox>,
+        "info": () => <OverlayBox maxWidth={800} close={close}>
+          <About />
+        </OverlayBox>,
+        "shortcuts": () => <OverlayBox maxWidth={1000} close={close}>
+          <ShortcutOverview />
+        </OverlayBox>,
       })}
       <Main />
     </div>
@@ -37,9 +41,10 @@ export const Root: React.FC = () => {
 
 type OverlayBoxProps = React.PropsWithChildren<{
   close: () => void;
+  maxWidth: number;
 }>;
 
-const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children }) => {
+const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children, maxWidth }) => {
   const isLight = useColorScheme().scheme === "light";
   const ref = useRef<HTMLDivElement>(null);
   useOnOutsideClick(ref, close);
@@ -70,7 +75,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children }) => {
         width: "82%",
         flex: "0 1 auto",
         minHeight: 0,
-        maxWidth: 800,
+        maxWidth,
         boxShadow: "0 4px 16px var(--shadow-color))",
         [screenWidthAtMost(480)]: {
           width: "95%",
