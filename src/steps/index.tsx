@@ -79,6 +79,7 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
   return (
     <div css={{
       position: "relative",
+      flexShrink: "0",
       backgroundColor: COLORS.neutral05,
       [screenWidthAbove(BREAKPOINTS.large)]: {
         width: 160,
