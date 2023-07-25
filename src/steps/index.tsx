@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { bug, match, screenWidthAbove, screenWidthAtMost } from "@opencast/appkit";
+import { match, notNullish, screenWidthAbove, screenWidthAtMost } from "@opencast/appkit";
 import { FiCircle } from "react-icons/fi";
 
 import StepCurrent from "../icons/step-current.svg";
@@ -19,32 +19,16 @@ export type StepProps = {
   goToFirstStep: () => void;
 };
 
+const STEPS = ["video-select", "audio-select", "recording", "review", "finish"] as const;
+export type Step = typeof STEPS[number];
+const stepIndex = (step: Step): number => STEPS.indexOf(step);
 
-export type Step = "video-select" | "audio-select" | "recording" | "review" | "finish";
 
 export const Main: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<Step>("video-select");
   const stepProps = {
-    goToNextStep: () => {
-      const step: Step = match(currentStep, {
-        "video-select": () => "audio-select",
-        "audio-select": () => "recording",
-        "recording": () => "review",
-        "review": () => "finish",
-        "finish": () => bug("Finish is the last step"),
-      });
-      setCurrentStep(step);
-    },
-    goToPrevStep: () => {
-      const step: Step = match(currentStep, {
-        "video-select": () => bug("video-select is the first step"),
-        "audio-select": () => "video-select",
-        "recording": () => "audio-select",
-        "review": () => "recording",
-        "finish": () => "review",
-      });
-      setCurrentStep(step);
-    },
+    goToNextStep: () => setCurrentStep(notNullish(STEPS[stepIndex(currentStep) + 1])),
+    goToPrevStep: () => setCurrentStep(notNullish(STEPS[stepIndex(currentStep) - 1])),
     goToFirstStep: () => setCurrentStep("video-select"),
   };
 
@@ -69,15 +53,6 @@ export const Main: React.FC = () => {
   );
 };
 
-const stepIndex = (step: Step): number => {
-  return match(step, {
-    "video-select": () => 0,
-    "audio-select": () => 1,
-    "recording": () => 2,
-    "review": () => 3,
-    "finish": () => 4,
-  });
-};
 
 type ProgressSidebarProps = {
   currentStep: Step;
