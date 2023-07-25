@@ -94,14 +94,11 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
     }
   };
 
-  const height = 6;
-  const borderRadius = 3;
-
   const cutStyle = {
     position: "absolute",
     backgroundColor: COLORS.danger1,
-    height: "100%",
-    borderRadius,
+    height: "var(--scrubber-height)",
+    borderRadius: "var(--scrubber-border-radius)",
     boxSizing: "content-box",
     background: "repeating-linear-gradient(45deg,"
       + `${COLORS.danger2}, ${COLORS.danger2} 4px,`
@@ -111,15 +108,18 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
   return (
     <div css={{ padding: 4 }}>
       <div ref={ref} css={{
+        "--scrubber-border-radius": "3px",
+        "--scrubber-height": "6px",
+        "@media not (any-pointer: fine)": {
+          "--scrubber-border-radius": "6px",
+          "--scrubber-height": "12px",
+        },
+
         position: "relative",
         backgroundColor: "#71B4F9", // TODO
-        height,
         width: "100%",
-        borderRadius,
-        "@media not (any-pointer: fine)": {
-          height: "20px",
-          borderRadius: "10px",
-        },
+        height: "var(--scrubber-height)",
+        borderRadius: "var(--scrubber-border-radius)",
       }}>
         {/* An overlay that extends further above and below the parent for easier clicking. */}
         <div
@@ -143,6 +143,10 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
             <div css={{
               width: 16,
               height: 16,
+              "@media not (any-pointer: fine)": {
+                width: 24,
+                height: 24,
+              },
               borderRadius: "50%",
               backgroundColor: COLORS.neutral05,
               border: `1px solid ${COLORS.neutral40}`,
@@ -188,8 +192,8 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
           left: 0,
           width: `${(currentTime / duration) * 100}%`,
           backdropFilter: "brightness(0.75)",
-          height: "100%",
-          borderRadius,
+          height: "var(--scrubber-height)",
+          borderRadius: "var(--scrubber-border-radius)",
         }} />
       </div>
     </div>
@@ -204,6 +208,9 @@ const CutMarker: React.FC<CutMarkerProps> = ({ side }) => (
   <div css={{
     width: 14,
     height: 20,
+    "@media not (any-pointer: fine)": {
+      height: 24,
+    },
     backgroundColor: COLORS.neutral05,
     color: COLORS.neutral70,
     border: `1px solid ${COLORS.neutral40}`,
