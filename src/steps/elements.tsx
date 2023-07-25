@@ -36,6 +36,7 @@ const StepButton: React.FC<StepButtonProps> = ({
         display: "flex",
         gap: 8,
         alignItems: "center",
+        lineHeight: 1,
 
         ...focusStyle({ offset: -1 }),
         ...danger && { "--color-focus": COLORS.danger4 },
@@ -101,8 +102,12 @@ export const StepContainer: React.FC<StepContainerProps> = ({
       minWidth: "var(--min-page-width)",
       display: "flex",
       flexDirection: "column",
-      padding: 24,
-      gap: 16,
+      gap: 12,
+      padding: 12,
+      "@media (min-width: 500px) and (min-height: 500px)": {
+        gap: 16,
+        padding: 24,
+      },
     }}>
       <div>
         <h1 css={{
