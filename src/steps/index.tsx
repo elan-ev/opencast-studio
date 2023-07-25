@@ -10,6 +10,7 @@ import { VideoSetup } from "./video-setup";
 import { AudioSetup } from "./audio-setup";
 import { Recording } from "./recording";
 import { Review } from "./review";
+import { Finish } from "./finish";
 
 
 
@@ -47,7 +48,7 @@ export const Main: React.FC = () => {
         "audio-select": () => <AudioSetup {...stepProps} />,
         "recording": () => <Recording {...stepProps} />,
         "review": () => <Review {...stepProps} />,
-        "finish": () => "Finish",
+        "finish": () => <Finish {...stepProps} />,
       })}
     </main>
   );

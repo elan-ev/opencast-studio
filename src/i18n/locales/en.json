@@ -175,7 +175,9 @@
       "jump-to-cut-point": "Jump to cut point"
     },
     "finish": {
-      "label": "Save video"
+      "label": "Save video",
+      "save-locally": "Save locally",
+      "recording-saved": "Recording saved"
     }
   },
   "shortcuts": {

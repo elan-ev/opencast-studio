@@ -12,7 +12,7 @@
 
   "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
 
-  "save-creation-button-upload": "In Opencast hochladen",
+  "save-creation-button-upload": "Zu Opencast hochladen",
   "save-creation-form-invalid": "Bitte geben Sie einen Titel und die Vortragenden an",
   "save-creation-label-presenter": "Vortragende*r",
   "save-creation-label-title": "Titel",
@@ -173,7 +173,9 @@
       "jump-to-cut-point": "Zum Schnittpunkt springen"
     },
     "finish": {
-      "label": "Aufnahme speichern"
+      "label": "Aufnahme speichern",
+      "save-locally": "Lokal speichern",
+      "recording-saved": "Aufnahme gespeichert"
     }
   },
   "shortcuts": {
