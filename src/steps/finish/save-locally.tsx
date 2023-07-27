@@ -115,7 +115,6 @@ export const SaveLocally: React.FC = () => {
             textDecoration: "none",
             ":hover": {
               backgroundColor: "#215D99", // TODO
-
             },
           }}
         >

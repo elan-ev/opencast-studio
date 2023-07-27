@@ -7,6 +7,7 @@ import { StepProps } from "..";
 import { StepContainer } from "../elements";
 import { COLORS } from "../../util";
 import { SaveLocally } from "./save-locally";
+import { UploadBox } from "./upload";
 
 
 
@@ -55,7 +56,7 @@ export const Finish: React.FC<StepProps> = ({ goToPrevStep, goToFirstStep }) => 
         },
       }}>
         <Box title={t("save-creation-button-upload")}>
-          TODO
+          <UploadBox />
         </Box>
         <Box title={t("steps.finish.save-locally")}>
           <SaveLocally />
@@ -73,15 +74,16 @@ type BoxProps = React.PropsWithChildren<{
 }>;
 
 const Box: React.FC<BoxProps> = ({ title, children }) => {
-
   return (
     <div css={{
       maxWidth: 420,
       width: "100%",
       backgroundColor: COLORS.neutral05,
       boxShadow: "0 4px 16px var(--shadow-color)",
+      border: `1px solid ${COLORS.neutral15}`,
       padding: "24px 32px",
       borderRadius: 6,
+      minHeight: 330, // Make both boxes same height in common use cases
     }}>
       <h2 css={{
         textAlign: "center",

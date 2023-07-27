@@ -615,9 +615,14 @@ const arrayMerge: deepmerge.Options["arrayMerge"]
 // ==============================================================================================
 
 const Context = React.createContext<Settings | null>(null);
+const ManagerContext = React.createContext<SettingsManager | null>(null);
 
-// Returns the current provided Opencast instance.
+/** Returns the current settings. */
 export const useSettings = (): Settings => usePresentContext(Context, "useSettings");
+
+/** Returns the settings manager. */
+export const useSettingsManager = (): SettingsManager =>
+  usePresentContext(ManagerContext, "useSettingsManager");
 
 type ProviderProps = React.PropsWithChildren<{
   settingsManager: SettingsManager;
@@ -633,8 +638,10 @@ export const Provider: React.FC<ProviderProps> = ({ settingsManager, children })
   });
 
   return (
-    <Context.Provider value={settings}>
-      {children}
-    </Context.Provider>
+    <ManagerContext.Provider value={settingsManager}>
+      <Context.Provider value={settings}>
+        {children}
+      </Context.Provider>
+    </ManagerContext.Provider>
   );
 };

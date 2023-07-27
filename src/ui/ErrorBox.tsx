@@ -4,10 +4,11 @@ import { COLORS } from "../util";
 type ErrorBoxProps = {
   title?: string;
   body: string;
+  extraBody?: string;
   className?: string;
 };
 
-export const ErrorBox: React.FC<ErrorBoxProps> = ({ title, body, ...rest }) => (
+export const ErrorBox: React.FC<ErrorBoxProps> = ({ title, body, extraBody, ...rest }) => (
   <div
     aria-live="polite"
     css={{
@@ -21,5 +22,6 @@ export const ErrorBox: React.FC<ErrorBoxProps> = ({ title, body, ...rest }) => (
   >
     {title && <strong css={{ display: "block", fontSize: 17, marginBottom: 8 }}>{title}</strong>}
     <div css={{ fontSize: 15, maxWidth: "100ch" }}>{body}</div>
+    {extraBody && <div css={{ fontSize: 15, maxWidth: "100ch", marginTop: 8 }}>{extraBody}</div>}
   </div>
 );
