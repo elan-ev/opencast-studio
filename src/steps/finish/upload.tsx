@@ -10,6 +10,7 @@ import { FieldError, FieldValues, Path, SubmitHandler, Validate, useForm } from 
 import { FiUpload } from "react-icons/fi";
 import { ProtoButton, Spinner, match, notNullish, unreachable } from "@opencast/appkit";
 import { ErrorBox } from "../../ui/ErrorBox";
+import { sharedButtonStyle } from ".";
 
 
 const LAST_PRESENTER_KEY = "ocStudioLastPresenter";
@@ -307,25 +308,9 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
         <ProtoButton
           type="submit"
           css={{
-            display: "flex",
+            ...sharedButtonStyle,
             margin: "0 auto",
             marginTop: 24,
-            padding: "8px 12px",
-            alignItems: "center",
-            gap: 12,
-            borderRadius: 8,
-            "&[disabled]": {
-              backgroundColor: COLORS.neutral15,
-              color: COLORS.neutral70,
-            },
-            ":not([disabled])": {
-              color: COLORS.neutral05,
-              cursor: "pointer",
-              backgroundColor: "#3073B8", // TODO
-              ":hover": {
-                backgroundColor: "#215D99", // TODO
-              },
-            },
           }}
         >
           {match(state, {

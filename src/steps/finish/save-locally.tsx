@@ -4,8 +4,9 @@ import { FiDownload } from "react-icons/fi";
 import { LuCheckCircle2 } from "react-icons/lu";
 
 import { useDispatch, useStudioState } from "../../studio-state";
-import { COLORS, recordingFileName } from "../../util";
+import { recordingFileName } from "../../util";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
+import { sharedButtonStyle } from ".";
 
 
 
@@ -110,22 +111,11 @@ export const SaveLocally: React.FC = () => {
           role="button"
           onClick={() => dispatch({ type: "MARK_DOWNLOADED", index: i })}
           css={{
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
+            ...sharedButtonStyle,
             justifyContent: "center",
-            gap: 8,
             maxWidth: 260,
             margin: "auto",
             marginTop: 8,
-            color: COLORS.neutral05,
-            backgroundColor: "#3073B8", // TODO
-            borderRadius: 8,
-            padding: "8px 12px",
-            textDecoration: "none",
-            ":hover": {
-              backgroundColor: "#215D99", // TODO
-            },
           }}
         >
           <FiDownload css={{ fontSize: 20 }} />

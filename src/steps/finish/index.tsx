@@ -5,7 +5,7 @@ import { screenWidthAtMost } from "@opencast/appkit";
 import { useDispatch, useStudioState } from "../../studio-state";
 import { StepProps } from "..";
 import { StepContainer } from "../elements";
-import { COLORS } from "../../util";
+import { COLORS, focusStyle } from "../../util";
 import { SaveLocally } from "./save-locally";
 import { UploadBox } from "./upload";
 import { FiXCircle } from "react-icons/fi";
@@ -145,3 +145,26 @@ const getReturnTarget = (settings: Settings) => {
 
   return settings.return.target;
 };
+
+export const sharedButtonStyle = {
+  display: "flex",
+  alignItems: "center",
+  padding: "8px 12px",
+  gap: 12,
+  borderRadius: 8,
+  textDecoration: "none",
+  position: "relative",
+  ":not([disabled])": {
+    color: COLORS.neutral05,
+    cursor: "pointer",
+    backgroundColor: "#3073B8", // TODO
+    ":hover": {
+      backgroundColor: "#215D99", // TODO
+    },
+  },
+  "&[disabled]": {
+    backgroundColor: COLORS.neutral15,
+    color: COLORS.neutral70,
+  },
+  ...focusStyle({ offset: 1 }),
+} as const;
