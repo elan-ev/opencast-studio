@@ -5,7 +5,7 @@ import { useDispatch, useStudioState } from "../../studio-state";
 import { Opencast, useOpencast } from "../../opencast";
 import { useSettings, useSettingsManager } from "../../settings";
 import { LuCheckCircle2 } from "react-icons/lu";
-import { COLORS } from "../../util";
+import { COLORS, focusStyle } from "../../util";
 import { FieldError, FieldValues, Path, SubmitHandler, Validate, useForm } from "react-hook-form";
 import { FiUpload } from "react-icons/fi";
 import { ProtoButton, Spinner, match, notNullish, unreachable } from "@opencast/appkit";
@@ -407,6 +407,7 @@ export const Input = <I extends FieldValues, F>({
             color: COLORS.neutral70,
             // TODO: focus ring
             padding: "8px 16px",
+            ...focusStyle({ offset: -1 }),
           }}
         />
         {error && (
