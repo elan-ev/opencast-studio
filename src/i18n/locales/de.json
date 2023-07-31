@@ -175,7 +175,8 @@
       "label": "Aufnahme speichern",
       "upload-button": "Hochladen",
       "save-locally": "Lokal speichern",
-      "recording-saved": "Aufnahme gespeichert"
+      "recording-saved": "Aufnahme gespeichert",
+      "finish-button": "Abschließen"
     }
   },
   "shortcuts": {

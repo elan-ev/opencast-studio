@@ -1,10 +1,11 @@
-import { ProtoButton, match } from "@opencast/appkit";
+import { Floating, FloatingContainer, FloatingTrigger, ProtoButton, match, useColorScheme } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { CSSObject } from "@emotion/react";
 
 import { COLORS, focusStyle } from "../util";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../shortcuts";
+import { useState } from "react";
 
 
 type StepButtonProps = {
@@ -14,71 +15,160 @@ type StepButtonProps = {
   icon?: JSX.Element,
   disabled?: boolean;
   onClick?: () => void;
+  popoverEntries?: ({
+    icon: JSX.Element;
+    label: string;
+  } & ({ onClick: () => void } | { href: string }))[],
 };
 
 const StepButton: React.FC<StepButtonProps> = ({
-  kind, label, icon, disabled, danger, onClick,
+  kind, label, icon, disabled, danger, onClick, popoverEntries,
 }) => {
   const { t } = useTranslation();
   const showShortcut = useShowAvailableShortcuts();
+  const isDark = useColorScheme().scheme === "dark";
   const shortcut = match(kind, {
     prev: () => SHORTCUTS.general.prev,
     next: () => SHORTCUTS.general.next,
   });
-  useShortcut(shortcut, () => onClick?.(), { enabled: !disabled });
+  const [open, setOpen] = useState(false);
+  const click = popoverEntries ? () => setOpen(old => !old) : () => onClick?.();
+  useShortcut(shortcut, click, { enabled: !disabled });
 
   return (
-    <ProtoButton
-      disabled={disabled}
-      onClick={onClick}
-      css={{
-        position: "relative",
-        display: "flex",
-        gap: 8,
-        alignItems: "center",
-        lineHeight: 1,
-
-        ...focusStyle({ offset: -1 }),
-        ...danger && { "--color-focus": COLORS.danger4 },
-
-        borderRadius: 8,
-        border: `1px solid ${danger ? COLORS.danger4 : COLORS.neutral40}`,
-        color: danger ? COLORS.danger4 : COLORS.neutral70,
-        backgroundColor: danger ? COLORS.danger0 : COLORS.neutral05,
-        padding: "8px 24px",
-        ...match(kind, {
-          "next": () => ({ paddingRight: 16 }) as CSSObject,
-          "prev": () => ({ paddingLeft: 16 }) as CSSObject,
-        }),
-
-        "&[disabled]": {
-          color: COLORS.neutral60,
-          borderColor: COLORS.neutral15,
-          backgroundColor: COLORS.neutral15,
-        },
-
-        "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
-          borderColor: danger ? COLORS.danger5 : COLORS.neutral70,
-          color: danger ? COLORS.danger5 : COLORS.neutral90,
-          boxShadow: `0 0 8px ${COLORS.neutral25}`,
-          ...danger && { backgroundColor: COLORS.danger1 },
-        },
-      }}
+    <FloatingContainer
+      placement="top-end"
+      // {...popoverEntries ? { trigger: "click" } : { open: false }}
+      open={open}
+      onClose={() => setOpen(false)}
+      ariaRole="menu"
+      arrowSize={8}
+      viewPortMargin={12}
+      borderRadius={8}
+      distance={6}
     >
-      {kind === "prev" && (icon ?? <FiChevronLeft />)}
-      {label ?? t(`steps.${kind}-button-label`)}
-      {kind === "next" && (icon ?? <FiChevronRight />)}
-      {showShortcut && !disabled && (
-        <div css={{
-          position: "absolute",
-          top: -24,
-          left: -6,
-          padding: 2,
-          borderRadius: 4,
-          backgroundColor: COLORS.neutral05,
-        }}><ShortcutKeys shortcut={shortcut} /></div>
-      )}
-    </ProtoButton>
+      <FloatingTrigger>
+        <ProtoButton
+          disabled={disabled}
+          onClick={click}
+          css={{
+            position: "relative",
+            display: "flex",
+            gap: 8,
+            alignItems: "center",
+            lineHeight: 1,
+            ...focusStyle({ offset: -1 }),
+            ...danger && { "--color-focus": COLORS.danger4 },
+            borderRadius: 8,
+            border: `1px solid ${danger ? COLORS.danger4 : COLORS.neutral40}`,
+            color: danger ? COLORS.danger4 : COLORS.neutral70,
+            backgroundColor: danger ? COLORS.danger0 : COLORS.neutral05,
+            padding: "12px 24px",
+            ...match(kind, {
+              "next": () => ({ paddingRight: 16 }) as CSSObject,
+              "prev": () => ({ paddingLeft: 16 }) as CSSObject,
+            }),
+
+            '&[data-floating-state="open"] svg': {
+              transform: "rotate(-90deg)",
+            },
+            "svg": {
+              transition: "transform 0.15s",
+            },
+
+            "&[disabled]": {
+              color: COLORS.neutral60,
+              borderColor: COLORS.neutral15,
+              backgroundColor: COLORS.neutral15,
+            },
+
+            "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
+              borderColor: danger ? COLORS.danger5 : COLORS.neutral70,
+              color: danger ? COLORS.danger5 : COLORS.neutral90,
+              boxShadow: `0 0 8px ${COLORS.neutral25}`,
+              ...danger && { backgroundColor: COLORS.danger1 },
+            },
+          }}
+        >
+          {kind === "prev" && (icon ?? <FiChevronLeft />)}
+          {label ?? t(`steps.${kind}-button-label`)}
+          {kind === "next" && (icon ?? <FiChevronRight css={{
+          }}/>)}
+          {showShortcut && !disabled && (
+            <div css={{
+              position: "absolute",
+              top: -24,
+              left: -6,
+              padding: 2,
+              borderRadius: 4,
+              backgroundColor: COLORS.neutral05,
+            }}><ShortcutKeys shortcut={shortcut} /></div>
+          )}
+        </ProtoButton>
+      </FloatingTrigger>
+      <Floating
+        backgroundColor={isDark ? COLORS.neutral15 : COLORS.neutral05}
+        borderWidth={isDark ? 1 : 0}
+        padding={0}
+        shadowBlur={8}
+      >
+        <ul css={{
+          borderRadius: 8,
+          margin: 0,
+          paddingLeft: 0,
+          overflow: "hidden",
+          listStyle: "none",
+        }}>
+          {popoverEntries?.map((entry, i) => {
+            const style = {
+              display: "flex",
+              gap: 16,
+              alignItems: "center",
+              width: "100%",
+              minWidth: 160,
+              padding: 12,
+              color: COLORS.neutral80,
+              cursor: "pointer",
+              textDecoration: "none",
+              ...focusStyle({ inset: true }),
+              "& > svg": {
+                maxHeight: 23,
+                fontSize: 23,
+                color: COLORS.neutral60,
+                width: 24,
+                strokeWidth: 2,
+                "& > path": { strokeWidth: "inherit" },
+              },
+              ":hover, :focus": {
+                backgroundColor: COLORS.neutral10,
+                color: "inherit",
+              },
+            };
+
+            return (
+              <li key={i} css={{
+                ":first-of-type > *": { borderRadius: "8px 8px 0 0" },
+                ":last-of-type> *": { borderRadius: "0 0 8px 8px" },
+                ":not(:first-of-type)": {
+                  borderTop: `1px solid ${COLORS.neutral30}`,
+                },
+              }}>
+                {"href" in entry
+                  ? <a href={entry.href} css={style}>
+                    {entry.icon}
+                    {entry.label}
+                  </a>
+                  : <ProtoButton onClick={entry.onClick} css={style}>
+                    {entry.icon}
+                    {entry.label}
+                  </ProtoButton>
+                }
+              </li>
+            );
+          })}
+        </ul>
+      </Floating>
+    </FloatingContainer>
   );
 };
 

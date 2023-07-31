@@ -8,6 +8,9 @@ import { StepContainer } from "../elements";
 import { COLORS } from "../../util";
 import { SaveLocally } from "./save-locally";
 import { UploadBox } from "./upload";
+import { FiXCircle } from "react-icons/fi";
+import { Settings, useSettings } from "../../settings";
+
 
 
 
@@ -15,32 +18,50 @@ export const Finish: React.FC<StepProps> = ({ goToPrevStep, goToFirstStep }) => 
   const { t } = useTranslation();
   const { recordings, upload: uploadState } = useStudioState();
   const dispatch = useDispatch();
+  const settings = useSettings();
 
   const allDownloaded = recordings.every(rec => rec.downloaded);
   const possiblyDone = (uploadState.state === "uploaded" || allDownloaded)
     && uploadState.state !== "uploading";
   const hideBack = uploadState.state !== "not_uploaded" || allDownloaded;
 
+  const startAgain = {
+    label: t("save-creation-new-recording"),
+    icon: <LuRotateCw />,
+    onClick: () => {
+      const doIt = window.confirm(t("save-creation-new-recording-warning"));
+      if (doIt) {
+        dispatch({ type: "RESET" });
+        goToFirstStep();
+      }
+    },
+  };
+  const returnTarget = getReturnTarget(settings);
+  const nextButton = returnTarget
+    ? {
+      label: t("steps.finish.finish-button"),
+      disabled: !possiblyDone,
+      popoverEntries: [
+        startAgain,
+        {
+          label: settings.return?.label
+            ? t("save-creation-return-to", { label: settings.return.label })
+            : t("save-creation-return-to-no-label"),
+          href: returnTarget,
+          icon: <FiXCircle />,
+        },
+      ],
+    }
+    : {
+      disabled: !possiblyDone,
+      ...startAgain,
+    };
 
   return (
     <StepContainer
       title={t("steps.finish.label")}
-      prevButton={hideBack ? undefined : {
-        onClick: goToPrevStep,
-      }}
-      // TODO: return to prev page if return.target is set
-      nextButton={{
-        label: t("save-creation-new-recording"),
-        icon: <LuRotateCw />,
-        disabled: !possiblyDone,
-        onClick: () => {
-          const doIt = window.confirm(t("save-creation-new-recording-warning"));
-          if (doIt) {
-            dispatch({ type: "RESET" });
-            goToFirstStep();
-          }
-        },
-      }}
+      prevButton={hideBack ? undefined : { onClick: goToPrevStep }}
+      nextButton={nextButton}
     >
       {/* A spacer to push the boxes a bit further up */}
       <div css={{ height: "calc(35%)" }}/>
@@ -94,4 +115,28 @@ const Box: React.FC<BoxProps> = ({ title, children }) => {
       {children}
     </div>
   );
+};
+
+
+const getReturnTarget = (settings: Settings) => {
+  if (!settings.return?.target) {
+    return null;
+  }
+
+  let targetUrl: URL;
+  try {
+    targetUrl = new URL(settings.return.target, window.location.href);
+  } catch {
+    return null;
+  }
+
+  const allowedDomains = [window.location.hostname, ...(settings.return?.allowedDomains || [])];
+  const allowed = allowedDomains.some(domain => targetUrl.hostname === domain)
+    && (targetUrl.protocol === "https:" || targetUrl.protocol === "http:");
+
+  if (!allowed) {
+    return null;
+  }
+
+  return settings.return.target;
 };
