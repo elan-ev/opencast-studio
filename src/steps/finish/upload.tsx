@@ -244,6 +244,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
           onChange={handleInputChange}
           autoComplete="off"
           defaultValue={title}
+          autoFocus
           {...{ errors, register }}
         />}
         {presenterField !== "hidden" && <Input
@@ -363,6 +364,7 @@ type InputProps<I extends FieldValues, F> =
   errors: Partial<Record<keyof I, FieldError>>,
   /** Passed to the `<input>`. */
   type?: HTMLInputTypeAttribute,
+  autoFocus?: boolean;
 };
 
 /**
