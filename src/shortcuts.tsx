@@ -40,6 +40,10 @@ export const SHORTCUTS = {
     removeCutLeft: "Shift+N",
     removeCutRight: "Shift+M",
   },
+  finish: {
+    startNewRecording: "Shift+N",
+    download: "D",
+  },
 } as const;
 
 const SHORTCUT_TRANSLATIONS = {
@@ -73,6 +77,10 @@ const SHORTCUT_TRANSLATIONS = {
     cutRight: "shortcuts.review.cut-right",
     removeCutLeft: "shortcuts.review.delete-left",
     removeCutRight: "shortcuts.review.delete-right",
+  },
+  finish: {
+    startNewRecording: "shortcuts.finish.new-recording",
+    download: "steps.finish.save-locally",
   },
 } as const;
 
@@ -195,6 +203,7 @@ const GROUP_ID_TRANSLATIONS = {
   audioSetup: "steps.audio.label",
   recording: "steps.record.label",
   review: "steps.review.label",
+  finish: "steps.finish.label",
 } as const satisfies Record<keyof typeof SHORTCUTS, string>;
 
 type ShortcutGroupOverviewProps = {

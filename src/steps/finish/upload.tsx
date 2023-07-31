@@ -310,11 +310,10 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             display: "flex",
             margin: "0 auto",
             marginTop: 24,
-            padding: "12px 16px",
+            padding: "8px 12px",
             alignItems: "center",
             gap: 12,
             borderRadius: 8,
-            lineHeight: 1.3,
             "&[disabled]": {
               backgroundColor: COLORS.neutral15,
               color: COLORS.neutral70,

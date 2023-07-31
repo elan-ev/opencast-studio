@@ -10,6 +10,7 @@ import { SaveLocally } from "./save-locally";
 import { UploadBox } from "./upload";
 import { FiXCircle } from "react-icons/fi";
 import { Settings, useSettings } from "../../settings";
+import { SHORTCUTS, useShortcut } from "../../shortcuts";
 
 
 
@@ -56,6 +57,10 @@ export const Finish: React.FC<StepProps> = ({ goToPrevStep, goToFirstStep }) => 
       disabled: !possiblyDone,
       ...startAgain,
     };
+
+  useShortcut(SHORTCUTS.finish.startNewRecording, startAgain.onClick, {
+    enabled: possiblyDone,
+  });
 
   return (
     <StepContainer

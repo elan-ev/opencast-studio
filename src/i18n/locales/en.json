@@ -229,11 +229,13 @@
       "delete-left": "Delete left cut marker",
       "delete-right": "Delete right cut marker"
     },
+    "finish": {
+      "upload-video": "Upload video to Opencast",
+      "download-video": "Download video",
+      "new-recording": "Start new recording"
+    },
 
     "next-button": "Next/​Confirm",
-    "back-button": "Back/​Discard",
-    "upload-video": "Upload video to Opencast",
-    "download-video": "Download video",
-    "new-recording": "Start new recording button"
+    "back-button": "Back/​Discard"
   }
 }

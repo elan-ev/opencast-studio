@@ -227,11 +227,13 @@
       "delete-left": "Linke Schnittmarkierung entfernen",
       "delete-right": "Rechte Schnittmarkierung entfernen"
     },
+    "finish": {
+      "upload-video": "Video auf Opencast hochladen",
+      "download-video": "Video herunterladen",
+      "new-recording": "Neue Aufnahme starten"
+    },
 
     "next-button": "Weiter/​Bestätigen",
-    "back-button": "Zurück/​Verwerfen",
-    "upload-video": "Video auf Opencast hochladen",
-    "download-video": "Video herunterladen",
-    "new-recording": "Neue Aufnahme starten"
+    "back-button": "Zurück/​Verwerfen"
   }
 }

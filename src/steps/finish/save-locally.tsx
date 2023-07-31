@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { FiDownload } from "react-icons/fi";
+import { LuCheckCircle2 } from "react-icons/lu";
 
 import { useDispatch, useStudioState } from "../../studio-state";
 import { COLORS, recordingFileName } from "../../util";
-import { FiDownload } from "react-icons/fi";
-import { LuCheckCircle2 } from "react-icons/lu";
+import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 
 
 
@@ -12,7 +13,14 @@ export const SaveLocally: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { recordings, title, presenter } = useStudioState();
   const dispatch = useDispatch();
+  const showShortcuts = useShowAvailableShortcuts();
 
+  const buttons = recordings.map(() => useRef<HTMLAnchorElement>(null));
+  useShortcut(SHORTCUTS.finish.download, () => {
+    for (const button of buttons) {
+      button.current?.click();
+    }
+  });
 
   return recordings.map((recording, i) => {
     const { deviceType, mimeType, url, downloaded, media: blob } = recording;
@@ -94,6 +102,7 @@ export const SaveLocally: React.FC = () => {
           )}
         </div>
         <a
+          ref={buttons[i]}
           target="_blank"
           download={downloadName}
           href={url}
@@ -101,6 +110,7 @@ export const SaveLocally: React.FC = () => {
           role="button"
           onClick={() => dispatch({ type: "MARK_DOWNLOADED", index: i })}
           css={{
+            position: "relative",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -120,6 +130,11 @@ export const SaveLocally: React.FC = () => {
         >
           <FiDownload css={{ fontSize: 20 }} />
           {t("steps.finish.save-locally") + " (" + prettyFileSize + ")"}
+          {showShortcuts && (
+            <div css={{ position: "absolute", right: -4, bottom: -4 }}>
+              <ShortcutKeys shortcut={SHORTCUTS.finish.download} />
+            </div>
+          )}
         </a>
       </div>
     );
