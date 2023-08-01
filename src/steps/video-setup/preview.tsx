@@ -125,6 +125,7 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
         ref={videoRef}
         autoPlay
         muted
+        playsInline
         css={{
           minHeight: 0,
           display: "block",

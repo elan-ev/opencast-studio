@@ -145,6 +145,7 @@ const StreamPreview: React.FC<StreamPreviewProps> = ({ stream, paused }) => {
         ref={videoRef}
         autoPlay
         muted
+        playsInline
         tabIndex={-1}
         css={{
           outline: "none",
