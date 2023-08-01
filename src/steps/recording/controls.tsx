@@ -170,6 +170,7 @@ export const RecordingControls: React.FC<Props> = ({
             justifyContent: "center",
             alignItems: "center",
             fontSize: 28,
+            padding: 0,
 
             boxShadow: "0 4px 4px rgba(0, 0, 0, 0.12)",
             cursor: "pointer",
