@@ -223,8 +223,8 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
           css={{
             width: "100%",
             height: "100%",
-            backgroundColor: "#ccc",
             outline: "none",
+            boxShadow: "0 4px 16px var(--shadow-color)",
             borderRadius: 16,
           }}
         />
