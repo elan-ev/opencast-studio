@@ -195,8 +195,7 @@ const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
           outline: `2px solid ${COLORS.neutral50}`,
           backgroundColor: isLight ? COLORS.neutral70 : COLORS.neutral10,
         },
-        "--color-focus": isLight ? COLORS.neutral10 : COLORS.neutral90,
-        ...focusStyle(),
+        ...focusStyle({}, isLight ? COLORS.neutral10 : COLORS.accent8),
 
         "> svg": {
           fontSize: 22,

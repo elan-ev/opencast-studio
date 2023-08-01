@@ -7,7 +7,7 @@ import { useStudioState, useDispatch, Dispatcher } from "../../studio-state";
 import { useSettings } from "../../settings";
 import CutHereIcon from "./cut-here-icon.svg";
 import CutMarkerIcon from "./cut-marker.svg";
-import { COLORS } from "../../util";
+import { COLORS, focusStyle } from "../../util";
 import { ALMOST_ZERO } from ".";
 import { PreviewHandle } from "./preview";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
@@ -389,7 +389,8 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
             justifyContent: "center",
             alignItems: "center",
             fontSize: 24,
-            "&:hover": {
+            ...focusStyle({ offset: 1 }),
+            "&:hover, :focus-visible": {
               backgroundColor: COLORS.accent8,
             },
           }}
@@ -504,6 +505,7 @@ const CutControls: React.FC<CutControlsProps> = (
           padding: "4px 8px",
           paddingTop: 4,
           borderRadius: 4,
+          ...focusStyle(),
           "&:disabled": {
             opacity: 0.3,
           },

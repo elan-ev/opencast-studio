@@ -13,8 +13,16 @@ export const COLORS = APPKIT_CONFIG.colors;
 /** Breakpoint values */
 export const BREAKPOINTS = APPKIT_CONFIG.breakpoints;
 
-export const focusStyle = (options?: Parameters<typeof appkitFocusStyle>[1]) =>
-  appkitFocusStyle(APPKIT_CONFIG, options);
+export const focusStyle = (options?: Parameters<typeof appkitFocusStyle>[1], color?: string) => {
+  let config = APPKIT_CONFIG;
+  if (color) {
+    config = {
+      colors: { ...APPKIT_CONFIG.colors, focus: color },
+      breakpoints: APPKIT_CONFIG.breakpoints,
+    };
+  }
+  return appkitFocusStyle(config, options);
+};
 
 /**
  * Checks if we app is running on a mobile device.
