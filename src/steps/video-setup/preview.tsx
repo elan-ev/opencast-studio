@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Spinner, match, unreachable } from "@opencast/appkit";
+import { FiAlertTriangle } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 import { COLORS, dimensionsOf } from "../../util";
 import { StreamSettings } from "./prefs";
 import { Input } from ".";
 import { VideoBox, useVideoBoxResize } from "../../ui/VideoBox";
-import { FiAlertTriangle } from "react-icons/fi";
-import { useTranslation } from "react-i18next";
 import { ErrorBox } from "../../ui/ErrorBox";
 
 
