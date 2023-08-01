@@ -274,9 +274,12 @@ const Draggable: React.FC<DraggableProps> = ({
       }
     };
     const onMouseMove = (e: MouseEvent) => {
+      onMove(e.pageX);
+    };
+    const onMove = (pageX: number) => {
       if (isDragging.current) {
         const rect = notNullish(scrubberRect.current);
-        const percentage = Math.min(1.0, Math.max(0.0, (e.pageX - rect.left) / rect.width));
+        const percentage = Math.min(1.0, Math.max(0.0, (pageX - rect.left) / rect.width));
         pos.current = clamp(duration * percentage) / duration;
         onDrag?.(pos.current * duration);
 
@@ -286,13 +289,22 @@ const Draggable: React.FC<DraggableProps> = ({
         notNullish(ref.current).style.left = `${pos.current * 100}%`;
       }
     };
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        onMove(e.touches[0].pageX);
+      }
+    };
 
     document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("touchend", onMouseUp);
     document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("touchmove", onTouchMove);
 
     return () => {
       document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("touchend", onMouseUp);
       document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("touchmove", onTouchMove);
     };
   });
 
@@ -300,6 +312,11 @@ const Draggable: React.FC<DraggableProps> = ({
     <div
       ref={ref}
       onMouseDown={() => {
+        isDragging.current = true;
+        scrubberRect.current = notNullish(scrubberRef.current).getBoundingClientRect();
+      }}
+      onTouchStart={() => {
+        console.log("TOUCH START");
         isDragging.current = true;
         scrubberRect.current = notNullish(scrubberRef.current).getBoundingClientRect();
       }}
