@@ -74,6 +74,7 @@ const StepButton: React.FC<StepButtonProps> = ({
             },
             "svg": {
               transition: "transform 0.15s",
+              flexShrink: 0,
             },
 
             "&[disabled]": {
@@ -234,8 +235,9 @@ export const StepContainer: React.FC<StepContainerProps> = ({
       <div css={{
         display: "flex",
         justifyContent: "end",
+        alignItems: "end",
         gap: 8,
-        height: 42,
+        minHeight: 42,
       }}>
         {prevButton && <StepButton kind="prev" {...prevButton} />}
         {nextButton && <StepButton kind="next" {...nextButton} />}

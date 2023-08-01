@@ -266,6 +266,10 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
             gridTemplateColumns: "1fr",
             rowGap: 0,
           },
+          fontSize: 14,
+          "@media (min-width: 420px) and (min-height: 440px)": {
+            fontSize: 16,
+          },
         }}>
           {!isDesktop && <UserSettings {...{ updatePrefs, prefs, isExpanded }} />}
           <UniveralSettings {...{ isDesktop, updatePrefs, prefs, stream, settings, isExpanded }} />
@@ -274,10 +278,13 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
         <div css={{
           backgroundColor: COLORS.neutral15,
           marginTop: 8,
-          padding: 12,
-          fontSize: 14,
+          padding: "8px 12px",
+          fontSize: 12,
           lineHeight: 1.25,
           borderRadius: 6,
+          "@media (min-width: 420px) and (min-height: 440px)": {
+            fontSize: 14,
+          },
         }}>
           <Trans i18nKey="sources-video-preferences-note">
             <strong>Note:</strong> Explanation.
