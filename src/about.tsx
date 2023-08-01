@@ -1,6 +1,7 @@
 import React from "react";
 import { DEFINES } from "./defines";
 import { FiGlobe, FiMail, FiPhone } from "react-icons/fi";
+import { COLORS } from "./util";
 
 
 export const About: React.FC = () => (
@@ -14,9 +15,10 @@ export const About: React.FC = () => (
       fontSize: 21,
     },
     a: {
-      // TODO: color
+      color: COLORS.accent7,
       "&:hover": {
         textDecoration: "none",
+        color: COLORS.accent8,
       },
     },
   }}>
