@@ -119,10 +119,12 @@ export const useShowAvailableShortcuts = () => {
     document.addEventListener("keydown", enable);
     document.addEventListener("keyup", disable);
     document.addEventListener("mousedown", disable);
+    window.addEventListener("blur", disable);
     return () => {
       document.removeEventListener("keydown", enable);
       document.removeEventListener("keyup", disable);
       document.removeEventListener("mousedown", disable);
+      window.removeEventListener("blur", disable);
     };
   });
 
