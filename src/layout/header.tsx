@@ -16,13 +16,14 @@ import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from 
 
 type Props = {
   setOverlayBoxState: (state: OverlayBoxState) => void;
+  inert: boolean;
 };
 
-export const Header: React.FC<Props> = ({ setOverlayBoxState }) => {
+export const Header: React.FC<Props> = ({ setOverlayBoxState, inert }) => {
   const { scheme } = useColorScheme();
 
   return (
-    <div css={{
+    <header {...{ inert: inert ? "" : null }} css={{
       backgroundColor: scheme === "light" ? COLORS.neutral60 : COLORS.neutral20,
       height: "var(--header-height)",
       display: "flex",
@@ -30,7 +31,7 @@ export const Header: React.FC<Props> = ({ setOverlayBoxState }) => {
     }}>
       <Logo />
       <Buttons {...{ setOverlayBoxState }}/>
-    </div>
+    </header>
   );
 };
 
@@ -60,8 +61,7 @@ const Logo: React.FC = () => {
   );
 };
 
-const Buttons: React.FC<Props> = ({ setOverlayBoxState }) => {
-
+const Buttons: React.FC<Pick<Props, "setOverlayBoxState">> = ({ setOverlayBoxState }) => {
   return (
     <div css={{
       display: "flex",

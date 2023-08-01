@@ -25,7 +25,11 @@ export type Step = typeof STEPS[number];
 const stepIndex = (step: Step): number => STEPS.indexOf(step);
 
 
-export const Main: React.FC = () => {
+type Props = {
+  inert: boolean;
+};
+
+export const Main: React.FC<Props> = ({ inert }) => {
   const [currentStep, setCurrentStep] = useState<Step>("video-select");
   const stepProps = {
     goToNextStep: () => setCurrentStep(notNullish(STEPS[stepIndex(currentStep) + 1])),
@@ -34,7 +38,7 @@ export const Main: React.FC = () => {
   };
 
   return (
-    <main css={{
+    <main {...{ inert: inert ? "" : null }} css={{
       display: "flex",
       flex: 1,
       backgroundColor: COLORS.neutral10,

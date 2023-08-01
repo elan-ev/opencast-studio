@@ -15,6 +15,7 @@ export const Root: React.FC = () => {
   const [overlayBoxState, setOverlayBoxState] = useState<OverlayBoxState>("none");
   const close = () => setOverlayBoxState("none");
   useShortcut(SHORTCUTS.general.closeOverlay, close);
+  const inert = overlayBoxState !== "none";
 
   return (
     <div css={{
@@ -23,7 +24,7 @@ export const Root: React.FC = () => {
       flexDirection: "column",
       height: "100%",
     }}>
-      <Header {...{ setOverlayBoxState }} />
+      <Header inert={inert} {...{ setOverlayBoxState }} />
       {match(overlayBoxState, {
         "none": () => null,
         "info": () => <OverlayBox maxWidth={800} close={close}>
@@ -33,7 +34,7 @@ export const Root: React.FC = () => {
           <ShortcutOverview />
         </OverlayBox>,
       })}
-      <Main />
+      <Main inert={inert} />
     </div>
   );
 };
@@ -51,7 +52,7 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children, maxWidth }) =>
   const bg = isLight ? COLORS.neutral05 : COLORS.neutral15;
 
   return (
-    <div css={{
+    <div role="dialog" aria-modal="true" css={{
       position: "absolute",
       top: 0,
       left: 0,
