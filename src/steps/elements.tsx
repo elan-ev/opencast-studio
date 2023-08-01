@@ -2,10 +2,10 @@ import { Floating, FloatingContainer, FloatingTrigger, ProtoButton, match, useCo
 import { useTranslation } from "react-i18next";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { CSSObject } from "@emotion/react";
+import { useState } from "react";
 
 import { COLORS, focusStyle } from "../util";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../shortcuts";
-import { useState } from "react";
 
 
 type StepButtonProps = {
@@ -35,10 +35,77 @@ const StepButton: React.FC<StepButtonProps> = ({
   const click = popoverEntries ? () => setOpen(old => !old) : () => onClick?.();
   useShortcut(shortcut, click, { enabled: !disabled });
 
+  const button = (
+    <ProtoButton
+      disabled={disabled}
+      onClick={click}
+      css={{
+        position: "relative",
+        display: "flex",
+        gap: 8,
+        alignItems: "center",
+        lineHeight: 1,
+        ...focusStyle({ offset: -1 }),
+        ...danger && { "--color-focus": COLORS.danger4 },
+        borderRadius: 8,
+        border: `1px solid ${danger ? COLORS.danger4 : COLORS.neutral40}`,
+        color: danger ? COLORS.danger4 : COLORS.neutral70,
+        backgroundColor: danger ? COLORS.danger0 : COLORS.neutral05,
+        padding: "12px 24px",
+        ...match(kind, {
+          "next": () => ({ paddingRight: 16 }) as CSSObject,
+          "prev": () => ({ paddingLeft: 16 }) as CSSObject,
+        }),
+
+        '&[data-floating-state="open"] svg': {
+          transform: "rotate(-90deg)",
+        },
+        "svg": {
+          transition: "transform 0.15s",
+          flexShrink: 0,
+        },
+
+        "&[disabled]": {
+          color: COLORS.neutral60,
+          borderColor: COLORS.neutral15,
+          backgroundColor: COLORS.neutral15,
+        },
+
+        "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
+          borderColor: danger ? COLORS.danger5 : COLORS.neutral70,
+          color: danger ? COLORS.danger5 : COLORS.neutral90,
+          boxShadow: `0 0 8px ${COLORS.neutral25}`,
+          ...danger && { backgroundColor: COLORS.danger1 },
+        },
+      }}
+    >
+      {kind === "prev" && (icon ?? <FiChevronLeft />)}
+      {label ?? t(`steps.${kind}-button-label`)}
+      {kind === "next" && (icon ?? <FiChevronRight css={{
+      }}/>)}
+      {showShortcut && !disabled && (
+        <div css={{
+          position: "absolute",
+          top: -24,
+          left: -6,
+          padding: 2,
+          borderRadius: 4,
+          backgroundColor: COLORS.neutral05,
+        }}><ShortcutKeys shortcut={shortcut} /></div>
+      )}
+    </ProtoButton>
+  );
+
+  // One would think we can just always return a `FloatingContainer`, which just
+  // sometimes does nothing. But no: this confuses screenreaders as they would
+  // always announce that this button opens a menu.
+  if (!popoverEntries) {
+    return button;
+  }
+
   return (
     <FloatingContainer
       placement="top-end"
-      // {...popoverEntries ? { trigger: "click" } : { open: false }}
       open={open}
       onClose={() => setOpen(false)}
       ariaRole="menu"
@@ -47,66 +114,7 @@ const StepButton: React.FC<StepButtonProps> = ({
       borderRadius={8}
       distance={6}
     >
-      <FloatingTrigger>
-        <ProtoButton
-          disabled={disabled}
-          onClick={click}
-          css={{
-            position: "relative",
-            display: "flex",
-            gap: 8,
-            alignItems: "center",
-            lineHeight: 1,
-            ...focusStyle({ offset: -1 }),
-            ...danger && { "--color-focus": COLORS.danger4 },
-            borderRadius: 8,
-            border: `1px solid ${danger ? COLORS.danger4 : COLORS.neutral40}`,
-            color: danger ? COLORS.danger4 : COLORS.neutral70,
-            backgroundColor: danger ? COLORS.danger0 : COLORS.neutral05,
-            padding: "12px 24px",
-            ...match(kind, {
-              "next": () => ({ paddingRight: 16 }) as CSSObject,
-              "prev": () => ({ paddingLeft: 16 }) as CSSObject,
-            }),
-
-            '&[data-floating-state="open"] svg': {
-              transform: "rotate(-90deg)",
-            },
-            "svg": {
-              transition: "transform 0.15s",
-              flexShrink: 0,
-            },
-
-            "&[disabled]": {
-              color: COLORS.neutral60,
-              borderColor: COLORS.neutral15,
-              backgroundColor: COLORS.neutral15,
-            },
-
-            "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
-              borderColor: danger ? COLORS.danger5 : COLORS.neutral70,
-              color: danger ? COLORS.danger5 : COLORS.neutral90,
-              boxShadow: `0 0 8px ${COLORS.neutral25}`,
-              ...danger && { backgroundColor: COLORS.danger1 },
-            },
-          }}
-        >
-          {kind === "prev" && (icon ?? <FiChevronLeft />)}
-          {label ?? t(`steps.${kind}-button-label`)}
-          {kind === "next" && (icon ?? <FiChevronRight css={{
-          }}/>)}
-          {showShortcut && !disabled && (
-            <div css={{
-              position: "absolute",
-              top: -24,
-              left: -6,
-              padding: 2,
-              borderRadius: 4,
-              backgroundColor: COLORS.neutral05,
-            }}><ShortcutKeys shortcut={shortcut} /></div>
-          )}
-        </ProtoButton>
-      </FloatingTrigger>
+      <FloatingTrigger>{button}</FloatingTrigger>
       <Floating
         backgroundColor={isDark ? COLORS.neutral15 : COLORS.neutral05}
         borderWidth={isDark ? 1 : 0}
@@ -201,7 +209,7 @@ export const StepContainer: React.FC<StepContainerProps> = ({
       },
     }}>
       <div>
-        <h1 css={{
+        <h1 aria-live="polite" css={{
           textAlign: "center",
           fontSize: 32,
           fontWeight: 700,
