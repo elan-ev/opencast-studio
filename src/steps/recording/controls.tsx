@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { WithTooltip, match } from "@opencast/appkit";
+import { WithTooltip, match, useColorScheme } from "@opencast/appkit";
 import { FiPause, FiPlay } from "react-icons/fi";
 
 import Recorder, { OnStopCallback } from "./recorder";
@@ -8,6 +8,7 @@ import { useSettings } from "../../settings";
 import { Dispatcher, Recording, useDispatch, useStudioState } from "../../studio-state";
 import { RecordingState } from ".";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
+import { COLORS } from "../../util";
 
 
 const addRecordOnStop = (
@@ -44,6 +45,8 @@ export const RecordingControls: React.FC<Props> = ({
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const settings = useSettings();
+  const isLight = useColorScheme().scheme === "light";
+  const fgColor = isLight ? COLORS.neutral05 : COLORS.neutral90;
 
   const {
     audioStream,
@@ -140,11 +143,11 @@ export const RecordingControls: React.FC<Props> = ({
       gap: 32,
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: "#202020",
-      border: "1px solid #868686",
+      backgroundColor: isLight ? COLORS.neutral70 : COLORS.neutral05,
+      border: `1px solid ${isLight ? COLORS.neutral50 : COLORS.neutral25}`,
       boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
       borderRadius: 12,
-      color: "white",
+      color: fgColor,
     }}>
       <WithTooltip tooltip={
         match(recordingState, {
@@ -168,16 +171,17 @@ export const RecordingControls: React.FC<Props> = ({
             alignItems: "center",
             fontSize: 28,
 
+            boxShadow: "0 4px 4px rgba(0, 0, 0, 0.12)",
             cursor: "pointer",
+            color: isLight ? "white" : "#D6D6D6",
             borderRadius: "50%",
-            backgroundColor: "#E42D43",
-            color: "white",
-            border: "1px solid white",
+            backgroundColor: isLight ? "#E42D43" : "#b8012d",
+            border: `1px solid ${fgColor}`,
             ":hover, :focus-visible": {
-              backgroundColor: "#c40a31",
+              backgroundColor: isLight ? "#c40a31" : "#8f0121",
             },
             ":focus-visible": {
-              outline: "4px solid white",
+              outline: `4px solid ${fgColor}`,
             },
           }}
         >
