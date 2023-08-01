@@ -1,7 +1,7 @@
 import { HiOutlineTranslate } from "react-icons/hi";
 import { FiInfo, FiMoon } from "react-icons/fi";
 import {
-  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem, ProtoButton,
+  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem, ProtoButton, screenWidthAtMost,
 } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
@@ -50,6 +50,9 @@ const Logo: React.FC = () => {
       "> *": {
         height: "calc(100% - 12px)",
       },
+      [screenWidthAtMost(410)]: {
+        paddingLeft: 0,
+      },
     }}>
       <source media="(min-width: 920px)" srcSet={path("logo-wide.svg")} />
       <img src={path("logo-narrow.svg")} alt="Opencast Studio Logo" />
@@ -66,6 +69,10 @@ const Buttons: React.FC<Props> = ({ setOverlayBoxState }) => {
       height: "100%",
       alignItems: "center",
       paddingRight: 24,
+      [screenWidthAtMost(410)]: {
+        gap: 2,
+        paddingRight: 8,
+      },
     }}>
       <LanguageButton />
       <ThemeButton />
