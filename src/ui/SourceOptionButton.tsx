@@ -1,5 +1,5 @@
 import React from "react";
-import { ProtoButton, useColorScheme } from "@opencast/appkit";
+import { ProtoButton } from "@opencast/appkit";
 
 import { COLORS, focusStyle } from "../util";
 import { ShortcutKeys } from "../shortcuts";
@@ -17,13 +17,10 @@ export type SourceOptionButtonProps = {
 export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
   { icon, label, onClick, shortcut, disabledText }
 ) => {
-  const disabled = !!disabledText;
-  const isLight = useColorScheme().scheme === "light";
-
   return (
     <ProtoButton
       onClick={onClick}
-      disabled={disabled}
+      disabled={!!disabledText}
       css={{
         position: "relative",
         display: "inline-flex",
@@ -38,7 +35,7 @@ export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
         flex: "1",
 
         backgroundColor: COLORS.neutral05,
-        color: COLORS.neutral60,
+        color: COLORS.accent7,
         borderRadius: 8,
         border: `1px solid ${COLORS.neutral20}`,
 
@@ -49,9 +46,9 @@ export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
         },
 
         "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
-          color: COLORS.neutral90,
-          borderColor: COLORS.neutral25,
-          boxShadow: `0 0 16px ${isLight ? COLORS.neutral20 : COLORS.neutral05}`,
+          color: COLORS.accent8,
+          borderColor: COLORS.neutral30,
+          boxShadow: "0 0 16px var(--shadow-color)",
         },
         ...focusStyle({ offset: -1 }),
       }}
