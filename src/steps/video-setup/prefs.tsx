@@ -248,7 +248,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       </FloatingTrigger>
       <Floating
         css={{ maxWidth: "min(670px, 100vw - 16px)" }}
-        borderWidth={0}
+        borderWidth={isLight ? 0 : 1}
         shadowBlur={16}
         padding={18}
       >
