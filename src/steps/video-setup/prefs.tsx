@@ -453,6 +453,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           borderRadius: 6,
           fontWeight: 500,
           cursor: "pointer",
+          ":hover": {
+            backgroundColor: COLORS.neutral10,
+            borderColor: COLORS.neutral40,
+          },
         },
         "&:checked+label": {
           backgroundColor: COLORS.accent6,
