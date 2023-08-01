@@ -197,7 +197,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
     {/* The settings button and the popover dialog */}
     <FloatingContainer
       ref={floatRef}
-      placement="top-start"
+      placement="top-end"
       ariaRole="dialog"
       open={isExpanded}
       onClose={() => setIsExpanded(false)}
