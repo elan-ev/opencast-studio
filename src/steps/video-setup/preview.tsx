@@ -37,10 +37,7 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
     ],
   }, unreachable);
 
-  // Below this value, the video preference menu looks awful.
-  const minWidth = 300;
-
-  return <VideoBox minWidth={minWidth} gap={20}>{children}</VideoBox>;
+  return <VideoBox gap={20}>{children}</VideoBox>;
 };
 
 /** Shows a single stream as preview, deals with potential errors and shows preferences UI */
