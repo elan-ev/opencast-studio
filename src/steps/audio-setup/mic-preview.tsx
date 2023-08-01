@@ -8,6 +8,7 @@ import { startAudioCapture, stopAudioCapture } from "../../capturer";
 import { getUniqueDevices, COLORS } from "../../util";
 import { LAST_AUDIO_DEVICE_KEY } from ".";
 import { ErrorBox } from "../../ui/ErrorBox";
+import { Select } from "../../ui/Select";
 
 
 // Once the microphone is selected, this is shown. Renders an
@@ -58,23 +59,20 @@ export const MicrophonePreview: React.FC = () => {
           fontWeight: 700,
           color: COLORS.neutral70,
         }}>{t("sources-audio-device")}</label>
-        <select
+        <Select
           id={selectId}
           value={currentDeviceId}
           onChange={e => changeDevice(e.target.value)}
           css={{
             flex: "1 1",
             minWidth: 50,
-            borderRadius: 6,
-            padding: "6px 12px",
-            backgroundColor: "transparent",
-            border: `1px solid ${COLORS.neutral25}`,
+
           }}
         >
           {devices.map((d, i) => (
             <option key={i} value={d.deviceId}>{d.label ?? "unlabeled microphone"}</option>
           ))}
-        </select>
+        </Select>
       </div>
     </>;
   } else if (audioAllowed === false) {

@@ -17,6 +17,7 @@ import {
   WithTooltip, screenWidthAtMost, useColorScheme,
 } from "@opencast/appkit";
 import { FiSettings, FiX } from "react-icons/fi";
+import { Select } from "../../ui/Select";
 
 
 /**
@@ -385,20 +386,14 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
       <label htmlFor="sources-video-device">{t("sources-video-device")}</label>
     </PrefKey>
     <PrefValue>
-      <select
+      <Select
         id="sources-video-device"
         value={currentDeviceId}
         onChange={e => changeDevice(e.target.value)}
-        css={{
-          width: "100%",
-          borderRadius: 6,
-          padding: "6px 12px",
-          backgroundColor: "transparent",
-          border: `1px solid ${COLORS.neutral25}`,
-        }}
+        css={{ width: "100%" }}
       >
         {devices.map(d => <option key={d.deviceId} value={d.deviceId}>{d.label}</option>)}
-      </select>
+      </Select>
     </PrefValue>
 
     <PrefKey>{t("sources-video-aspect-ratio")}</PrefKey>
