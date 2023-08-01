@@ -223,7 +223,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
               backgroundColor: "rgba(0, 0, 0, 0.7)",
               color: "white",
               padding: 8,
-              fontSize: 32,
+              fontSize: 26,
               backdropFilter: "invert(1)",
               lineHeight: 0,
               borderRadius: "10px",
