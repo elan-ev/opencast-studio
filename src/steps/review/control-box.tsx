@@ -116,7 +116,7 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
         },
 
         position: "relative",
-        backgroundColor: "#71B4F9", // TODO
+        backgroundColor: COLORS.accent4,
         width: "100%",
         height: "var(--scrubber-height)",
         borderRadius: "var(--scrubber-border-radius)",
@@ -379,7 +379,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
       <WithTooltip tooltip={isPlaying ? t("review-pause") : t("review-play")}>
         <ProtoButton
           css={{
-            backgroundColor: "#3073B8", // TODO
+            backgroundColor: COLORS.accent7,
             color: "white",
             border: "none",
             borderRadius: "50%",
@@ -390,7 +390,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
             alignItems: "center",
             fontSize: 24,
             "&:hover": {
-              backgroundColor: "#215D99", // TODO
+              backgroundColor: COLORS.accent8,
             },
           }}
           onClick={togglePlayPause}
@@ -476,7 +476,7 @@ const CutControls: React.FC<CutControlsProps> = (
           <ProtoButton
             css={{
               padding: "4px 0",
-              color: "#3E8AD8", // TODO
+              color: COLORS.accent6,
             }}
             onClick={event => {
               event.preventDefault();

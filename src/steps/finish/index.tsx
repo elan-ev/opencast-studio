@@ -157,9 +157,9 @@ export const sharedButtonStyle = {
   ":not([disabled])": {
     color: COLORS.neutral05,
     cursor: "pointer",
-    backgroundColor: "#3073B8", // TODO
+    backgroundColor: COLORS.accent7,
     ":hover": {
-      backgroundColor: "#215D99", // TODO
+      backgroundColor: COLORS.accent8,
     },
   },
   "&[disabled]": {

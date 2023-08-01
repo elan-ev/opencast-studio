@@ -455,8 +455,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           cursor: "pointer",
         },
         "&:checked+label": {
-          backgroundColor: "#3E8AD8", // TODO
-          borderColor: "#3E8AD8", // TODO
+          backgroundColor: COLORS.accent6,
+          borderColor: COLORS.accent6,
           color: COLORS.neutral05,
           cursor: "default",
         },

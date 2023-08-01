@@ -481,7 +481,7 @@ const UploadProgress = ({ currentProgress, secondsLeft }) => {
         <div css={{
           width: `${currentProgress * 100}%`,
           height: "100%",
-          backgroundColor: "#4DA1F7", // TODO
+          backgroundColor: COLORS.accent5,
         }}/>
       </div>
 
@@ -510,7 +510,7 @@ const UploadSuccess = () => {
         fontSize: 50,
         margin: 24,
         lineHeight: 0,
-        color: "#4DA1F7", // TODO
+        color: COLORS.accent5,
       }}>
         <LuCheckCircle2 />
       </div>
