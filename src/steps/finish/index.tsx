@@ -11,6 +11,7 @@ import { UploadBox } from "./upload";
 import { FiXCircle } from "react-icons/fi";
 import { Settings, useSettings } from "../../settings";
 import { SHORTCUTS, useShortcut } from "../../shortcuts";
+import { i18n } from "i18next";
 
 
 
@@ -168,3 +169,29 @@ export const sharedButtonStyle = {
   },
   ...focusStyle({ offset: 1 }),
 } as const;
+
+/**
+ * Get file size in human readable format. We use base-1000 XB instead of
+ * base-1024 XiB, as the latter would probably confuse some users and many
+ * file managers use base-1000 anyway. Notably, the windows file manager
+ * calculates with base-1024 but shows "XB". So it is lying.
+*/
+export const prettyFileSize = (numBytes: number, i18n: i18n) => {
+  const round = (n: number) => {
+    const digits = n < 10 ? 1 : 0;
+    return n.toLocaleString(i18n.language, {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    });
+  };
+
+  if (numBytes < 1000) {
+    return `${numBytes} B`;
+  } else if (numBytes < 999_500) {
+    return `${round(numBytes / 1000)} KB`;
+  } else if (numBytes < 999_500_000) {
+    return `${round(numBytes / (1_000_000))} MB`;
+  } else {
+    return `${round(numBytes / (1_000_000_000))} GB`;
+  }
+};

@@ -10,7 +10,7 @@ import { FieldError, FieldValues, Path, SubmitHandler, Validate, useForm } from 
 import { FiUpload } from "react-icons/fi";
 import { ProtoButton, Spinner, match, notNullish, unreachable } from "@opencast/appkit";
 import { ErrorBox } from "../../ui/ErrorBox";
-import { sharedButtonStyle } from ".";
+import { prettyFileSize, sharedButtonStyle } from ".";
 
 
 const LAST_PRESENTER_KEY = "ocStudioLastPresenter";
@@ -153,11 +153,11 @@ type UploadFormProps = {
 const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
   const { titleField = "required", presenterField = "required" } = useSettings().upload || {};
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const opencast = useOpencast();
   const dispatch = useDispatch();
   const settingsManager = useSettingsManager();
-  const { title, presenter, upload: uploadState } = useStudioState();
+  const { title, presenter, upload: uploadState, recordings } = useStudioState();
   const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || "";
 
   type FormState = "idle" | "testing";
@@ -233,6 +233,9 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       await handleUpload(data);
     }
   };
+
+  const totalBytes = recordings.reduce((acc, rec) => acc + rec.media.size, 0);
+  const uploadSize = prettyFileSize(totalBytes, i18n);
 
 
   return (
@@ -317,7 +320,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             "idle": () => <FiUpload css={{ fontSize: 20 }} />,
             "testing": () => <Spinner size={20} />,
           })}
-          <span>{t("steps.finish.upload-button")}</span>
+          <span>{t("steps.finish.upload-button") + " (" + uploadSize + ")"}</span>
         </ProtoButton>
       </form>
 

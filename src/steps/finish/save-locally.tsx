@@ -6,7 +6,7 @@ import { LuCheckCircle2 } from "react-icons/lu";
 import { useDispatch, useStudioState } from "../../studio-state";
 import { recordingFileName } from "../../util";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
-import { sharedButtonStyle } from ".";
+import { prettyFileSize, sharedButtonStyle } from ".";
 
 
 
@@ -31,30 +31,6 @@ export const SaveLocally: React.FC = () => {
     if (!url) {
       return null;
     }
-
-    // Get file size in human readable format. We use base-1000 XB instead of
-    // base-1024 XiB, as the latter would probably confuse some users and many
-    // file managers use base-1000 anyway. Notably, the windows file manager
-    // calculates with base-1024 but shows "XB". So it is lying.
-    const numBytes = blob.size;
-    const round = (n: number) => {
-      const digits = n < 10 ? 1 : 0;
-      return n.toLocaleString(i18n.language, {
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits,
-      });
-    };
-    const prettyFileSize = (() => {
-      if (numBytes < 1000) {
-        return `${numBytes} B`;
-      } else if (numBytes < 999_500) {
-        return `${round(numBytes / 1000)} KB`;
-      } else if (numBytes < 999_500_000) {
-        return `${round(numBytes / (1_000_000))} MB`;
-      } else {
-        return `${round(numBytes / (1_000_000_000))} GB`;
-      }
-    })();
 
     return (
       <div key={i} css={{
@@ -119,7 +95,7 @@ export const SaveLocally: React.FC = () => {
           }}
         >
           <FiDownload css={{ fontSize: 20 }} />
-          {t("steps.finish.save-locally") + " (" + prettyFileSize + ")"}
+          {t("steps.finish.save-locally") + " (" + prettyFileSize(blob.size, i18n) + ")"}
           {showShortcuts && (
             <div css={{ position: "absolute", right: -4, bottom: -4 }}>
               <ShortcutKeys shortcut={SHORTCUTS.finish.download} />
