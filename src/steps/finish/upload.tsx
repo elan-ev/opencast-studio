@@ -408,7 +408,6 @@ export const Input = <I extends FieldValues, F>({
             border: `1px solid ${error ? COLORS.danger4 : COLORS.neutral30}`,
             backgroundColor: COLORS.neutral05,
             color: COLORS.neutral70,
-            // TODO: focus ring
             padding: "8px 16px",
             ...focusStyle({ offset: -1 }),
           }}
