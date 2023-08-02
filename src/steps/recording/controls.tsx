@@ -193,7 +193,7 @@ export const RecordingControls: React.FC<Props> = ({
           })}
           {showAvailableShortcuts && (
             <div css={{ position: "absolute", right: -4, bottom: -4 }}>
-              <ShortcutKeys shortcut={SHORTCUTS.recording.startPauseResume.split(",")[0]} />
+              <ShortcutKeys shortcut={SHORTCUTS.recording.startPauseResume.split(";")[0]} />
             </div>
           )}
         </button>
