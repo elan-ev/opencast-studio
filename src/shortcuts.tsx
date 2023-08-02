@@ -138,7 +138,7 @@ type ShortcutKeysProps = {
 
 export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = false }) => {
   const { t } = useTranslation();
-  return <div css={{ display: "flex", alignItems: "center", gap: 4 }}>
+  return <div css={{ display: "flex", alignItems: "center", gap: 4, color: COLORS.neutral70 }}>
     {shortcut.split("+").map((key, i) => {
       let s = key;
       if (key in KEY_TRANSLATIONS) {
