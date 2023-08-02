@@ -75,6 +75,7 @@ const formatTime = (
 
 const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => {
   const duration = previewController.current?.duration || Infinity;
+  const settings = useSettings();
   const dispatch = useDispatch();
   const { start, end } = useStudioState();
   const ref = useRef<HTMLDivElement>(null);
@@ -171,20 +172,22 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
         }} />}
 
         {/* The two trim markers */}
-        <Draggable
-          scrubberRef={ref}
-          previewController={previewController}
-          initialTime={start ?? 0}
-          clamp={time => Math.min(time, end ?? duration)}
-          onDrag={time => dispatch({ type: "UPDATE_START", time })}
-        ><CutMarker side="left" /></Draggable>
-        <Draggable
-          scrubberRef={ref}
-          previewController={previewController}
-          initialTime={end ?? duration}
-          clamp={time => Math.max(time, start ?? 0)}
-          onDrag={time => dispatch({ type: "UPDATE_END", time })}
-        ><CutMarker side="right" /></Draggable>
+        {settings.review?.disableCutting || <>
+          <Draggable
+            scrubberRef={ref}
+            previewController={previewController}
+            initialTime={start ?? 0}
+            clamp={time => Math.min(time, end ?? duration)}
+            onDrag={time => dispatch({ type: "UPDATE_START", time })}
+          ><CutMarker side="left" /></Draggable>
+          <Draggable
+            scrubberRef={ref}
+            previewController={previewController}
+            initialTime={end ?? duration}
+            clamp={time => Math.max(time, start ?? 0)}
+            onDrag={time => dispatch({ type: "UPDATE_END", time })}
+          ><CutMarker side="right" /></Draggable>
+        </>}
 
         {/* The play progress bar, overlaying darkening everything behind. */}
         <div css={{
