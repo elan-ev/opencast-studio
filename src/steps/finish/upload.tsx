@@ -115,7 +115,7 @@ export const UploadBox: React.FC = () => {
     });
     progressHistory = [];
 
-    const dispatchError = msg => dispatch({ type: "UPLOAD_ERROR", msg });
+    const dispatchError = (msg: string) => dispatch({ type: "UPLOAD_ERROR", msg });
     match(result, {
       "success": () => dispatch({ type: "UPLOAD_SUCCESS" }),
       "network_error": () => dispatchError(t("save-creation-upload-network-error")),
@@ -170,10 +170,12 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
   // This is a bit ugly, but works. We want to make sure that the `title` and
   // `presenter` values in the studio state always equal the current value in
   // the input.
-  function handleInputChange(event) {
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     dispatch({
-      type: { title: "UPDATE_TITLE", presenter: "UPDATE_PRESENTER" }[target.name],
+      type: notNullish(
+        ({ title: "UPDATE_TITLE", presenter: "UPDATE_PRESENTER" } as const)[target.name],
+      ),
       value: target.value,
     });
 
@@ -433,11 +435,16 @@ export const Input = <I extends FieldValues, F>({
 };
 
 
+type UploadProgressProps = {
+  currentProgress: number;
+  secondsLeft: number | null;
+};
+
 /**
  * Shown during upload. Shows a progressbar, the percentage of data already
  * uploaded and `secondsLeft` nicely formatted as human readable time.
  */
-const UploadProgress = ({ currentProgress, secondsLeft }) => {
+const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, secondsLeft }) => {
   const { t, i18n } = useTranslation();
 
   // Progress as percent with one fractional digit, e.g. 27.3%.

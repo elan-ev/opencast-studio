@@ -7,8 +7,13 @@ import { SHORTCUTS, useShortcut, useShowAvailableShortcuts } from "../../shortcu
 import { BREAKPOINTS } from "../../util";
 
 
+type Props = {
+  selectNoAudio: () => void;
+  selectMicrophone: () => void;
+};
+
 /** The two large option buttons for "no audio" and "Microphone". */
-export const SourceSelection = ({ selectNoAudio, selectMicrophone }) => {
+export const SourceSelection: React.FC<Props> = ({ selectNoAudio, selectMicrophone }) => {
   const { t } = useTranslation();
   const showShortcuts = useShowAvailableShortcuts();
   useShortcut(SHORTCUTS.audioSetup.withAudio, selectMicrophone);

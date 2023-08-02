@@ -146,7 +146,7 @@ export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = fa
     {shortcut.split("+").map((key, i) => {
       let s = key;
       if (key in KEY_TRANSLATIONS) {
-        const translationKey = KEY_TRANSLATIONS[key] as typeof KEY_TRANSLATIONS[keyof typeof KEY_TRANSLATIONS];
+        const translationKey = KEY_TRANSLATIONS[key as keyof typeof KEY_TRANSLATIONS];
         s = t(`shortcuts.keys.${translationKey}`);
       }
       const child = match<string, JSX.Element>(key, {
