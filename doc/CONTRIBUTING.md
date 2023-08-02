@@ -28,22 +28,6 @@ If a pull request relates to an existing issue, please also link that issue.
 If you want to make us happy, please also provide this reasoning as part of your git commit messages.
 
 
-Tests
------
-
-Opencast Studio comes with a set of tests.
-Passing these tests is a requirement for all contributions.
-These tests are also run automatically on our CI system.
-
-To run tests locally, use::
-
-    npm test
-
-If the CI tests on your pull request fail and you are sure it is not caused by your patch, please complain.
-Errors happen and we can easily trigger a new build.
-Your patch cannot be merged without these tests passing.
-
-
 Documentation
 -------------
 
