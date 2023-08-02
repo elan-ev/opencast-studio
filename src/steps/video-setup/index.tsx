@@ -9,6 +9,8 @@ import { loadCameraPrefs, loadDisplayPrefs, prefsToConstraints } from "./prefs";
 import { StepProps } from "..";
 import { StepContainer } from "../elements";
 import { SourceSelection } from "./source-select";
+import { ErrorBox } from "../../ui/ErrorBox";
+import { isRecordingSupported, onSafari } from "../../util";
 
 
 export type Input = {
@@ -63,6 +65,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
     "none": () => {
       return (
         <StepContainer title={t("sources-video-question")}>
+          <Warnings />
           <SourceSelection
             displayConstraints={prefsToConstraints(loadDisplayPrefs())}
             userConstraints={prefsToConstraints(loadCameraPrefs())}
@@ -109,4 +112,38 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
       );
     },
   });
+};
+
+
+
+/** Conditionally shows a number of warnings to help the user identify problems. */
+const Warnings = () => {
+  const { t } = useTranslation();
+
+  const warnings: JSX.Element[] = [];
+
+  // We allow HTTP connections to localhost, as most browsers also seem to allow
+  // video capture in those cases.
+  const usingUnsecureConnection = window.location.protocol !== "https:" &&
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1";
+  if (usingUnsecureConnection) {
+    warnings.push(
+      <ErrorBox body={t("warning-https")} />
+    );
+  }
+
+  // Warning about missing `MediaRecorder` support
+  if (!isRecordingSupported()) {
+    let msg = t("warning-recorder-not-supported");
+    if (onSafari()) {
+      msg += " " + t("warning-recorder-safari-hint");
+    }
+    warnings.push(<ErrorBox body={msg} />);
+  }
+
+
+  return warnings.length > 0
+    ? <div>{ warnings }</div>
+    : null;
 };

@@ -1,9 +1,9 @@
-import { Root } from "./layout";
-
 import { ColorSchemeProvider } from "@opencast/appkit";
+import { useBeforeunload } from "react-beforeunload";
+
+import { Root } from "./layout";
 import { GlobalStyle } from "./ui/global-style";
 import { useStudioState } from "./studio-state";
-import { useBeforeunload } from "react-beforeunload";
 
 
 
@@ -32,4 +32,3 @@ const PreventClose = () => {
 
   return null;
 };
-
