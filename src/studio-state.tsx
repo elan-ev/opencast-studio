@@ -1,24 +1,12 @@
 import { createContext, useReducer } from "react";
-import { isDisplayCaptureSupported, isUserCaptureSupported, usePresentContext } from "./util";
 import { assertNever } from "@opencast/appkit";
 
+import { isDisplayCaptureSupported, isUserCaptureSupported, usePresentContext } from "./util";
 
-export const AUDIO_SOURCE_MICROPHONE = "microphone";
-export const AUDIO_SOURCE_NONE = "none";
+
 export type AudioSource = "microphone" | "none";
-
-export const VIDEO_SOURCE_BOTH = "both";
-export const VIDEO_SOURCE_DISPLAY = "display";
-export const VIDEO_SOURCE_USER = "user";
-export const VIDEO_SOURCE_NONE = "none";
 export type VideoSource = "both" | "display" | "user" | "none";
-
-export const STATE_NOT_UPLOADED = "not_uploaded";
-export const STATE_UPLOADING = "uploading";
-export const STATE_UPLOADED = "uploaded";
-export const STATE_ERROR = "error";
 export type UploadState = "not_uploaded" | "uploading" | "uploaded" | "error";
-
 
 export type Recording = {
   deviceType: "desktop" | "video",
@@ -89,8 +77,8 @@ const initialState = (hasWebcam: boolean): StudioState => ({
   userUnexpectedEnd: false,
   userSupported: isUserCaptureSupported(),
 
-  videoChoice: VIDEO_SOURCE_NONE,
-  audioChoice: AUDIO_SOURCE_NONE,
+  videoChoice: "none",
+  audioChoice: "none",
 
   isRecording: false,
   prematureRecordingEnd: false,
@@ -104,7 +92,7 @@ const initialState = (hasWebcam: boolean): StudioState => ({
 
   upload: {
     error: null,
-    state: STATE_NOT_UPLOADED,
+    state: "not_uploaded",
     secondsLeft: null,
     currentProgress: 0,
   },
@@ -204,11 +192,11 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
       };
 
     case "UPLOAD_ERROR":
-      return { ...state, upload: { ...state.upload, error: action.msg, state: STATE_ERROR } };
+      return { ...state, upload: { ...state.upload, error: action.msg, state: "error" } };
     case "UPLOAD_REQUEST":
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADING } };
+      return { ...state, upload: { ...state.upload, error: null, state: "uploading" } };
     case "UPLOAD_SUCCESS":
-      return { ...state, upload: { ...state.upload, error: null, state: STATE_UPLOADED } };
+      return { ...state, upload: { ...state.upload, error: null, state: "uploaded" } };
     case "UPLOAD_PROGRESS_UPDATE":
       return { ...state, upload: {
         ...state.upload,
