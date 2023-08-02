@@ -14,9 +14,9 @@ import { SourceOptionButton } from "../../ui/SourceOptionButton";
 
 
 type SourceSelectionProps = {
-  setActiveSource: (s: VideoSource) => void,
-  userConstraints: MediaTrackConstraints,
-  displayConstraints: MediaTrackConstraints,
+  setActiveSource: (s: VideoSource) => void;
+  userConstraints: MediaTrackConstraints;
+  displayConstraints: MediaTrackConstraints;
 };
 
 export const SourceSelection: React.FC<SourceSelectionProps> = ({

@@ -223,7 +223,7 @@ const GROUP_ID_TRANSLATIONS = {
 
 type ShortcutGroupOverviewProps = {
   groupId: keyof typeof SHORTCUTS;
-  group: typeof SHORTCUTS[keyof typeof SHORTCUTS],
+  group: typeof SHORTCUTS[keyof typeof SHORTCUTS];
 };
 
 const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, group }) => {

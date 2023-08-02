@@ -15,7 +15,7 @@ import { prettyFileSize, sharedButtonStyle } from ".";
 
 const LAST_PRESENTER_KEY = "ocStudioLastPresenter";
 
-let progressHistory: { timestamp: number, progress: number }[] = [];
+let progressHistory: { timestamp: number; progress: number }[] = [];
 
 
 export const UploadBox: React.FC = () => {
@@ -344,15 +344,15 @@ type InputProps<I extends FieldValues, F> =
   Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue"> &
   Pick<ReturnType<typeof useForm<I>>, "register"> & {
   /** Human readable string describing the field. */
-  label: string,
-  name: Path<I>,
+  label: string;
+  name: Path<I>;
   /** Whether this field is required or may be empty. */
-  required: boolean,
+  required: boolean;
   /** Function validating the value and returning a string in the case of error. */
-  validate?: Validate<F, I>,
-  errors: Partial<Record<keyof I, FieldError>>,
+  validate?: Validate<F, I>;
+  errors: Partial<Record<keyof I, FieldError>>;
   /** Passed to the `<input>`. */
-  type?: HTMLInputTypeAttribute,
+  type?: HTMLInputTypeAttribute;
   autoFocus?: boolean;
 };
 

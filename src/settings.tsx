@@ -482,11 +482,11 @@ const types = {
     };
   },
 } satisfies {
-  string: Validator<string>,
-  int: Validator<number>,
-  boolean: Validator<boolean>,
-  positiveInteger: Validator<number>,
-  array: <T, >(validator: Validator<T>) => Validator<T[]>,
+  string: Validator<string>;
+  int: Validator<number>;
+  boolean: Validator<boolean>;
+  positiveInteger: Validator<number>;
+  array: <T, >(validator: Validator<T>) => Validator<T[]>;
 };
 
 /** Validator for `FormFieldState`. */

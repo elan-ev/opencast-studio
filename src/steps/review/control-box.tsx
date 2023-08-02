@@ -426,11 +426,11 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
 };
 
 type CutControlsProps = SharedProps & {
-  marker: "start" | "end",
-  value: number | null,
-  control: number | null,
+  marker: "start" | "end";
+  value: number | null;
+  control: number | null;
   invariant: (self: number, control: number) => boolean;
-  recordingDispatch: Dispatcher,
+  recordingDispatch: Dispatcher;
 };
 
 const CutControls: React.FC<CutControlsProps> = (

@@ -115,9 +115,9 @@ export async function startUserCapture(
 
 export function stopCapture(
   { audioStream, displayStream, userStream }: {
-    audioStream: MediaStream | null,
-    displayStream: MediaStream | null,
-    userStream: MediaStream | null,
+    audioStream: MediaStream | null;
+    displayStream: MediaStream | null;
+    userStream: MediaStream | null;
   },
   dispatch: Dispatcher,
 ) {

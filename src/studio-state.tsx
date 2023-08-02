@@ -9,53 +9,53 @@ export type VideoSource = "both" | "display" | "user" | "none";
 export type UploadState = "not_uploaded" | "uploading" | "uploaded" | "error";
 
 export type Recording = {
-  deviceType: "desktop" | "video",
-  media: Blob,
-  url: string,
-  mimeType: string,
-  dimensions: [number, number] | null,
-  downloaded?: boolean,
+  deviceType: "desktop" | "video";
+  media: Blob;
+  url: string;
+  mimeType: string;
+  dimensions: [number, number] | null;
+  downloaded?: boolean;
 };
 
 /** Our global state */
 export type StudioState = {
   hasWebcam: boolean;
-  mediaDevices: MediaDeviceInfo[],
+  mediaDevices: MediaDeviceInfo[];
 
-  audioAllowed: null | boolean,
-  audioStream: null | MediaStream,
-  audioUnexpectedEnd: boolean,
-  audioSupported: boolean,
+  audioAllowed: null | boolean;
+  audioStream: null | MediaStream;
+  audioUnexpectedEnd: boolean;
+  audioSupported: boolean;
 
-  displayAllowed: null | boolean,
-  displayStream: null | MediaStream,
-  displayUnexpectedEnd: boolean,
-  displaySupported: boolean,
+  displayAllowed: null | boolean;
+  displayStream: null | MediaStream;
+  displayUnexpectedEnd: boolean;
+  displaySupported: boolean;
 
-  userAllowed: null | boolean,
-  userStream: null | MediaStream,
-  userUnexpectedEnd: boolean,
-  userSupported: boolean,
+  userAllowed: null | boolean;
+  userStream: null | MediaStream;
+  userUnexpectedEnd: boolean;
+  userSupported: boolean;
 
-  videoChoice: VideoSource,
-  audioChoice: AudioSource,
+  videoChoice: VideoSource;
+  audioChoice: AudioSource;
 
-  isRecording: boolean,
-  prematureRecordingEnd: boolean,
-  recordings: Recording[],
+  isRecording: boolean;
+  prematureRecordingEnd: boolean;
+  recordings: Recording[];
 
-  title: string,
-  presenter: string,
+  title: string;
+  presenter: string;
 
-  start: null | number,
-  end: null | number,
+  start: null | number;
+  end: null | number;
 
   upload: {
-    error: null | string,
-    state: UploadState,
-    secondsLeft: null | number,
-    currentProgress: number,
-  },
+    error: null | string;
+    state: UploadState;
+    secondsLeft: null | number;
+    currentProgress: number;
+  };
 };
 
 const initialState = (hasWebcam: boolean): StudioState => ({
@@ -100,18 +100,18 @@ const initialState = (hasWebcam: boolean): StudioState => ({
 
 /** Every possible action that can be passed to the reducer. */
 type ReducerAction =
-  | { type: "UPDATE_MEDIA_DEVICES", devices: MediaDeviceInfo[] }
-  | { type: "CHOOSE_AUDIO", choice: AudioSource }
-  | { type: "CHOOSE_VIDEO", choice: VideoSource }
-  | { type: "SHARE_AUDIO", stream: MediaStream }
+  | { type: "UPDATE_MEDIA_DEVICES"; devices: MediaDeviceInfo[] }
+  | { type: "CHOOSE_AUDIO"; choice: AudioSource }
+  | { type: "CHOOSE_VIDEO"; choice: VideoSource }
+  | { type: "SHARE_AUDIO"; stream: MediaStream }
   | { type: "BLOCK_AUDIO" }
   | { type: "UNSHARE_AUDIO" }
   | { type: "AUDIO_UNEXPETED_END" }
-  | { type: "SHARE_DISPLAY", stream: MediaStream }
+  | { type: "SHARE_DISPLAY"; stream: MediaStream }
   | { type: "BLOCK_DISPLAY" }
   | { type: "UNSHARE_DISPLAY" }
   | { type: "DISPLAY_UNEXPETED_END" }
-  | { type: "SHARE_USER", stream: MediaStream }
+  | { type: "SHARE_USER"; stream: MediaStream }
   | { type: "BLOCK_USER" }
   | { type: "UNSHARE_USER" }
   | { type: "USER_UNEXPETED_END" }
@@ -119,16 +119,16 @@ type ReducerAction =
   | { type: "STOP_RECORDING" }
   | { type: "STOP_RECORDING_PREMATURELY" }
   | { type: "CLEAR_RECORDINGS" }
-  | { type: "ADD_RECORDING", recording: Recording }
-  | { type: "UPLOAD_ERROR", msg: string }
+  | { type: "ADD_RECORDING"; recording: Recording }
+  | { type: "UPLOAD_ERROR"; msg: string }
   | { type: "UPLOAD_REQUEST" }
   | { type: "UPLOAD_SUCCESS" }
-  | { type: "UPLOAD_PROGRESS_UPDATE", secondsLeft: number | null, currentProgress: number }
-  | { type: "MARK_DOWNLOADED", index: number }
-  | { type: "UPDATE_TITLE", value: string }
-  | { type: "UPDATE_PRESENTER", value: string }
-  | { type: "UPDATE_START", time: number | null }
-  | { type: "UPDATE_END", time: number | null }
+  | { type: "UPLOAD_PROGRESS_UPDATE"; secondsLeft: number | null; currentProgress: number }
+  | { type: "MARK_DOWNLOADED"; index: number }
+  | { type: "UPDATE_TITLE"; value: string }
+  | { type: "UPDATE_PRESENTER"; value: string }
+  | { type: "UPDATE_START"; time: number | null }
+  | { type: "UPDATE_END"; time: number | null }
   | { type: "RESET" };
 
 

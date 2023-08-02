@@ -3,10 +3,10 @@ import { dimensionsOf } from "../../util";
 
 
 export type OnStopCallback = (args: {
-  url: string,
-  media: Blob,
-  mimeType: string,
-  dimensions: [number, number] | null,
+  url: string;
+  media: Blob;
+  mimeType: string;
+  dimensions: [number, number] | null;
 }) => void;
 
 export default class Recorder {

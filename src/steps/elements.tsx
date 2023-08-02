@@ -12,13 +12,13 @@ type StepButtonProps = {
   kind: "next" | "prev";
   label?: string;
   danger?: boolean;
-  icon?: JSX.Element,
+  icon?: JSX.Element;
   disabled?: boolean;
   onClick?: () => void;
   popoverEntries?: ({
     icon: JSX.Element;
     label: string;
-  } & ({ onClick: () => void } | { href: string }))[],
+  } & ({ onClick: () => void } | { href: string }))[];
 };
 
 const StepButton: React.FC<StepButtonProps> = ({
@@ -184,8 +184,8 @@ const StepButton: React.FC<StepButtonProps> = ({
 type StepContainerProps = React.PropsWithChildren<{
   title: string;
   note?: string;
-  nextButton?: Omit<StepButtonProps, "kind">,
-  prevButton?: Omit<StepButtonProps, "kind">,
+  nextButton?: Omit<StepButtonProps, "kind">;
+  prevButton?: Omit<StepButtonProps, "kind">;
 }>;
 
 export const StepContainer: React.FC<StepContainerProps> = ({

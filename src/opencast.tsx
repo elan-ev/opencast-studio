@@ -65,7 +65,7 @@ export class Opencast {
    * - `true`: a login is already automatically provided from the OC context
    * - `{ username, password }`: username and password are given
    */
-  #login: null | true | { username: string, password: string } = null;
+  #login: null | true | { username: string; password: string } = null;
 
   /**
    * The response of `/info/me.json` or `null` if requesting that API did not
@@ -348,13 +348,13 @@ export class Opencast {
    * potentially changed the `state`.
    */
   async upload({ recordings, title, presenter, start, end, uploadSettings, onProgress }: {
-    recordings: Recording[],
-    title: string,
-    presenter: string,
-    start: number | null,
-    end: number | null,
-    uploadSettings: Settings["upload"],
-    onProgress: (p: number) => void,
+    recordings: Recording[];
+    title: string;
+    presenter: string;
+    start: number | null;
+    end: number | null;
+    uploadSettings: Settings["upload"];
+    onProgress: (p: number) => void;
   }): Promise<UploadState> {
     // Refresh connection and check if we are ready to upload.
     await this.refreshConnection();
@@ -435,10 +435,10 @@ export class Opencast {
    * via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
    */
   async addDcCatalog({ mediaPackage, title, presenter, uploadSettings }: {
-    mediaPackage: string,
-    title: string,
-    presenter: string,
-    uploadSettings: Settings["upload"],
+    mediaPackage: string;
+    title: string;
+    presenter: string;
+    uploadSettings: Settings["upload"];
   }) {
     const seriesId = uploadSettings?.seriesId;
     const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
@@ -458,8 +458,8 @@ export class Opencast {
    * not call this method outside of `upload`!
    */
   async attachAcl({ mediaPackage, uploadSettings }: {
-    mediaPackage: string,
-    uploadSettings: Settings["upload"],
+    mediaPackage: string;
+    uploadSettings: Settings["upload"];
   }) {
     const template = uploadSettings?.acl === true || (!uploadSettings?.acl)
       ? DEFAULT_ACL_TEMPLATE
@@ -477,9 +477,9 @@ export class Opencast {
 
   /** Adds a SMIL catalog for Opencast to cut the video during processing */
   async addCuttingInformation({ mediaPackage, start, end }: {
-    mediaPackage: string,
-    start: number,
-    end: number,
+    mediaPackage: string;
+    start: number;
+    end: number;
   }) {
     const body = new FormData();
     body.append("flavor", "smil/cutting");
@@ -494,11 +494,11 @@ export class Opencast {
    * `ingest/addTrack`. Do not call this method outside of `upload`!
    */
   async uploadTracks({ mediaPackage, recordings, onProgress, title, presenter }: {
-    mediaPackage: string,
-    recordings: Recording[],
-    onProgress: (p: number) => void,
-    title: string,
-    presenter: string,
+    mediaPackage: string;
+    recordings: Recording[];
+    onProgress: (p: number) => void;
+    title: string;
+    presenter: string;
   }) {
     const totalBytes = recordings.map(r => r.media.size).reduce((a, b) => a + b, 0);
     let finishedTracksBytes = 0;
@@ -570,8 +570,8 @@ export class Opencast {
    * method outside of `upload`!
    */
   async finishIngest({ mediaPackage, uploadSettings }: {
-    mediaPackage: string,
-    uploadSettings: Settings["upload"],
+    mediaPackage: string;
+    uploadSettings: Settings["upload"];
   }) {
     const workflowId = uploadSettings?.workflowId;
 
@@ -635,9 +635,9 @@ export class Opencast {
   }
 
   constructDcc(template: string, { title, presenter, seriesId }: {
-    title: string,
-    presenter: string,
-    seriesId?: string,
+    title: string;
+    presenter: string;
+    seriesId?: string;
   }) {
     // Prepare template "view": the values that can be used within the template.
     const view = {
@@ -814,7 +814,7 @@ const DEFAULT_ACL_TEMPLATE = `<?xml version="1.0" encoding="UTF-8" standalone="y
 </Policy>
 `;
 
-const smil = ({ start, end }: { start: number, end: number }) => `
+const smil = ({ start, end }: { start: number; end: number }) => `
   <smil xmlns="http://www.w3.org/ns/SMIL">
     <body>
       <par>

@@ -12,15 +12,15 @@ import { SHORTCUTS, useShortcut } from "../../shortcuts";
 
 
 type PreviewProps = {
-  onTimeUpdate: (event: SyntheticEvent<HTMLVideoElement, Event>) => void,
-  onReady: () => void,
+  onTimeUpdate: (event: SyntheticEvent<HTMLVideoElement, Event>) => void;
+  onReady: () => void;
 };
 
 export type PreviewHandle = {
-  currentTime: number,
-  readonly duration: number,
-  readonly isPlaying: boolean,
-  readonly isReadyToPlay: boolean,
+  currentTime: number;
+  readonly duration: number;
+  readonly isPlaying: boolean;
+  readonly isReadyToPlay: boolean;
   play(): void;
   pause(): void;
 };

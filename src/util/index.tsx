@@ -113,10 +113,10 @@ export const mimeToExt = (mime: string) => {
  * effort basis.
  */
 export const recordingFileName = ({ mime, flavor, title, presenter }: {
-  mime: string,
-  flavor: string,
-  title: string,
-  presenter: string,
+  mime: string;
+  flavor: string;
+  title: string;
+  presenter: string;
 }) => {
   const titlePart = (title ? ` - ${title}` : "").substring(0, 50);
   const presenterPart = (presenter ? ` - ${presenter}` : "").substring(0, 50);

@@ -11,7 +11,7 @@ export type SourceOptionButtonProps = {
   label: string;
   onClick: () => void;
   disabledText?: false | string;
-  shortcut?: string,
+  shortcut?: string;
 };
 
 export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
