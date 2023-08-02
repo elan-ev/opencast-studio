@@ -56,9 +56,6 @@ export type Settings = {
     label?: string;
     target?: string;
   };
-  theme?: {
-    customCSS: string;
-  };
 };
 
 /**
@@ -592,9 +589,6 @@ const SCHEMA = {
       }
       return v;
     },
-  },
-  theme: {
-    customCSS: types.string,
   },
 } satisfies Record<string, Record<string, Validator<unknown>>>;
 
