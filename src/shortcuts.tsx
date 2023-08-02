@@ -163,25 +163,31 @@ type SingleKeyProps = React.PropsWithChildren<{
   large: boolean;
 }>;
 
-const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => (
-  <div css={{
-    border: `1px solid ${COLORS.neutral50}`,
-    borderRadius: 4,
-    padding: "2px 6px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: large ? 36 : 30,
-    minWidth: large ? 36 : 30,
-    fontSize: 16,
-    boxShadow: "0 0 8px var(--shadow-color)",
-    backgroundColor: COLORS.neutral10,
-    color: COLORS.neutral80,
-    cursor: "default",
-  }}>
-    {children}
-  </div>
-);
+const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => {
+  const isLight = useColorScheme().scheme === "light";
+
+  return (
+    <div css={{
+      border: `1px solid ${COLORS.neutral50}`,
+      borderRadius: 4,
+      padding: "2px 6px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: large ? 36 : 30,
+      minWidth: large ? 36 : 30,
+      fontSize: 16,
+      boxShadow: "0 0 8px var(--shadow-color)",
+      backgroundColor: large
+        ? (isLight ? COLORS.neutral05 : COLORS.neutral15)
+        : COLORS.neutral10,
+      color: (isLight || !large) ? COLORS.neutral80 : COLORS.neutral90,
+      cursor: "default",
+    }}>
+      {children}
+    </div>
+  );
+};
 
 export const ShortcutOverview: React.FC = () => {
   const { t } = useTranslation();
@@ -215,15 +221,14 @@ type ShortcutGroupOverviewProps = {
 
 const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, group }) => {
   const { t } = useTranslation();
-  const isLight = useColorScheme().scheme === "light";
 
   return (
-    <section css={{ margin: "24px 0" }}>
-      <h2 css={{ fontSize: 18 }}>{t(GROUP_ID_TRANSLATIONS[groupId])}</h2>
+    <section css={{ margin: "32px 0" }}>
+      <h2 css={{ fontSize: 18, marginBottom: 8 }}>{t(GROUP_ID_TRANSLATIONS[groupId])}</h2>
       <div css={{
         display: "flex",
         flexWrap: "wrap",
-        gap: 6,
+        gap: 8,
       }}>
         {Object.entries(group).map(([name, keys], i) => (
           <div
@@ -237,7 +242,7 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
               [screenWidthAtMost(720)]: {
                 width: "100%",
               },
-              border: `1px dashed ${isLight ? COLORS.neutral15 : COLORS.neutral25}`,
+              backgroundColor: COLORS.neutral10,
               borderRadius: 4,
               padding: "6px 8px",
               display: "inline-flex",
