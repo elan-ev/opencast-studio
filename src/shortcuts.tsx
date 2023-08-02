@@ -3,9 +3,10 @@ import { useTranslation } from "react-i18next";
 import { match, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 
 import { COLORS } from "./util";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiCommand } from "react-icons/fi";
 import { Options, useHotkeys } from "react-hotkeys-hook";
 import React from "react";
+import { LuArrowBigUp, LuOption } from "react-icons/lu";
 
 
 export const SHORTCUTS = {
@@ -14,8 +15,8 @@ export const SHORTCUTS = {
     showOverview: "?",
     closeOverlay: "Escape",
     tab: "Tab",
-    prev: "ctrl+left",
-    next: "ctrl+right",
+    prev: "Mod+left",
+    next: "Mod+right",
   },
   videoSetup: {
     selectScreen: "1",
@@ -84,11 +85,14 @@ const SHORTCUT_TRANSLATIONS = {
   },
 } as const;
 
+const onMac = () => navigator.userAgent.includes("Mac");
+
 const KEY_TRANSLATIONS = {
   "Escape": "escape",
   "Space": "space",
   "Shift": "shift",
-  "ctrl": "control",
+  "Alt": onMac() ? "option" : "alt",
+  "Mod": onMac() ? "command" : "control",
 } as const;
 
 
@@ -145,9 +149,12 @@ export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = fa
         const translationKey = KEY_TRANSLATIONS[key] as typeof KEY_TRANSLATIONS[keyof typeof KEY_TRANSLATIONS];
         s = t(`shortcuts.keys.${translationKey}`);
       }
-      const child = match<string, JSX.Element>(s, {
-        "left": () => <FiArrowLeft />,
-        "right": () => <FiArrowRight />,
+      const child = match<string, JSX.Element>(key, {
+        "left": () => <FiArrowLeft title={s} />,
+        "right": () => <FiArrowRight title={s} />,
+        "Mod": () => onMac() ? <FiCommand title={s} /> : <>{s}</>,
+        "Alt": () => onMac() ? <LuOption title={s} /> : <>{s}</>,
+        "Shift": () => <LuArrowBigUp size={20} title={s} />,
       }, () => <>{s}</>);
       return (
         <React.Fragment key={i}>

@@ -208,6 +208,9 @@
     "keys": {
       "escape": "Esc",
       "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Option",
+      "command": "Cmd",
       "space": "Spacebar",
       "shift": "Shift",
       "left": "Left",
