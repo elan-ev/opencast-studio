@@ -74,7 +74,7 @@ const StepButton: React.FC<StepButtonProps> = ({
         "&:not([disabled]):hover, &:not([disabled]):focus-visible": {
           borderColor: danger ? COLORS.danger5 : COLORS.neutral70,
           color: danger ? COLORS.danger5 : COLORS.neutral90,
-          boxShadow: `0 0 8px ${COLORS.neutral25}`,
+          boxShadow: "0 0 8px var(--shadow-color)",
           ...danger && { backgroundColor: COLORS.danger1 },
         },
       }}
