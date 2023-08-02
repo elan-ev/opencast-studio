@@ -1,12 +1,15 @@
 Opencast Studio
 ===============
 
-[![CI status of master](https://img.shields.io/github/workflow/status/elan-ev/opencast-studio/Build%20&%20test/master)
-](https://github.com/elan-ev/opencast-studio/actions?query=branch%3Amaster)
+[![Build & test](https://github.com/elan-ev/opencast-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/elan-ev/opencast-studio/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/github/license/elan-ev/opencast-studio)
 ](https://github.com/elan-ev/opencast-studio/blob/master/LICENSE)
 
 A web-based recording studio for [Opencast](https://opencast.org).
+
+> **Important note for developers**: currently, we are redesigning Studio completely. 
+> This will change a lot of code. So please do not start writing a patch for Studio now.
+> At least talk to us first.
 
 Opencast Studio uses the recording capabilities built into modern browsers to
 record audio and video streams. The recording happens completely in the user's

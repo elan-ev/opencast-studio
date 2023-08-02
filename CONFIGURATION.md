@@ -3,21 +3,24 @@
 Opencast Studio can be configured in three different ways:
 
 - the user can manually configure certain things on the settings page,
-- the server can provide a `settings.toml` (only applicable if you deploy Studio yourself or as part of your Opencast), and
-- configuration values can be given via GET parameters in the URL.
+- the server can provide a configuration file (by default, Studio uses
+  `settings.toml`, but this can be changed via the query parameter
+  `settingsFile`), and
+- configuration values can be given via query parameters in the URL.
 
 Settings configured by the user have the lowest priority and are overwritten by
-both, `settings.toml` and GET parameters. GET parameters also override settings
-given in `settings.toml`. Additionally, on the settings page, values that are
-already preconfigured via `settings.toml` or a GET parameter are hidden from the
-user.
+both, the server config (e.g. `settings.toml`) and query parameters. Query
+parameters also override settings given in the server config (e.g. `settings.toml`).
+Additionally, on the settings page, values that are already preconfigured via
+`settings.toml` or a query parameter are hidden from the user.
 
 
 ## Possible configuration values
 
 The following settings are currently understood and respected by Studio. This
-code block shows the TOML configuration, but all values can be specified as GET
-parameter as well. See further below for information on that.
+code block shows the TOML configuration, but all values, except
+`return.allowedDomains`, can be specified as query parameter as well. See
+further below for information on that.
 
 ```toml
 # Configuration for Opencast Studio.
@@ -62,7 +65,7 @@ parameter as well. See further below for information on that.
 [upload]
 # The ID of the series which the recording is a part of. When uploading the
 # recording, it is automatically associated with that series. This value is
-# mostly passed as GET parameter; specifying it in the configuration file only
+# mostly passed as query parameter; specifying it in the configuration file only
 # makes sense if you want all the Studio uploads (that don't specify a series
 # otherwise) to be associated with one series.
 #seriesId = "979e0a0b-db25-47cd-869a-10daa1b3eb7a"
@@ -145,11 +148,11 @@ parameter as well. See further below for information on that.
 [return]
 # If this key is set, a "exit and back" button is shown in the last dialog
 # right above the "start a new recording" button. This button links to the
-# value of this key. Setting this value is usually done via GET parameters, as
+# value of this key. Setting this value is usually done via query parameters, as
 # a global configuration often does not make sense. You also probably want to
 # set `return.label`. Also see `return.allowedDomains`.
 #
-# Remember to URL-encode the URL if you set it as GET parameter, e.g.
+# Remember to URL-encode the URL if you set it as query parameter, e.g.
 # `https://foo.org/?a=1&b=2` would be `https%3A%2F%2Ffoo.org%2F%3Fa%3D1%26b%3D2`.
 # To be precise, Studio uses `URLSearchParams` to retrieve the values of GET
 # parameters.
@@ -174,9 +177,9 @@ parameter as well. See further below for information on that.
 Please also note that all settings related to video capture or recording should be treated carefully. Setting any of those means that you know more than the user's browser, which is unlikely: the browser has exact information about screen resolution, connected cameras, CPU usage and the like. As such, before setting any of those values for all of your users, make sure to test everything first!
 
 
-## Specifying settings via GET Parameters
+## Specifying settings via query parameters
 
-GET parameters can simply be attached to the studio URL. Values specified this way overwrite values set by the user or by `settings.toml`. Example URL:
+Query parameters can simply be attached to the Studio URL. Values specified this way overwrite values set by the user or by `settings.toml`. Example URL:
 
 ```
 https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upload.workflowId=studio-upload&upload.seriesId=3fe9ea49-a671-4d1e-9669-0c96ff0f8f79
@@ -184,7 +187,7 @@ https://studio.opencast.org/?opencast.serverUrl=https://develop.opencast.org&upl
 
 Note that each key is a "path" like `opencast.serverUrl`. The first part of that path is the "section" in the TOML file shown above (e.g. `[opencast]`).
 
-You can also put the settings in TOML file, then encode that as a hex string and pass it with the `config=` GET parameter. This might help to avoid problems if URLs (and thus the GET parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
+You can also put the settings in a TOML file, then encode that as a hex string and pass it with the `config=` query parameter. This might help to avoid problems if URLs (and thus the query parameters) are processed (e.g. by an LMS) in a way that modifies special characters. For example:
 
 - TOML string:
   ```
@@ -203,6 +206,15 @@ You can also put the settings in TOML file, then encode that as a hex string and
 You can encode your TOML as hex string with [this tool](https://onlineutf8tools.com/convert-utf8-to-hexadecimal), for example. Be sure to disable the options "Use Hex Radix Prefix" and "Use Extra Spacing".
 
 Note that if `config=` is specified, all other parameters are ignored!
+
+Finally, you can change the filename from which the server configuration is loaded by using `settingsFile`, e.g.:
+
+```
+https://your-opencast.com/studio?settingsFile=foo.toml
+```
+
+This file needs to live in the same directory as the `settings.toml` that would
+have been loaded otherwise.
 
 
 ## Debugging/Help

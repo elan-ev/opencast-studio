@@ -8,6 +8,7 @@ import { DEFINES } from "./defines";
 
 const LOCAL_STORAGE_KEY = "ocStudioSettings";
 const CONTEXT_SETTINGS_FILE = "settings.toml";
+const QUERY_PARAM_SETTINGS_PATH = "settingsFile";
 
 export const FORM_FIELD_HIDDEN = "hidden";
 export const FORM_FIELD_OPTIONAL = "optional";
@@ -139,8 +140,11 @@ export class SettingsManager {
       "from server settings file",
     );
 
-    // Get settings from URL query.
+    // Get settings from URL query. We remove the key `settingsFile` as that is
+    // just used for loading the context settings.
     const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete(QUERY_PARAM_SETTINGS_PATH);
+
     const encodedConfig = urlParams.get("config");
     if (encodedConfig) {
       // In this case, the GET parameter `config` is specified. We now expect a
@@ -228,7 +232,23 @@ export class SettingsManager {
     // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
     // given and starts with '/', it is interpreted as absolute path from the
     // server root.
-    const settingsPath = DEFINES.settingsPath || CONTEXT_SETTINGS_FILE;
+    let settingsPath = DEFINES.settingsPath || CONTEXT_SETTINGS_FILE;
+
+    // If a custom file is given via query parameter, change the settings path
+    // appropriately.
+    const urlParams = new URLSearchParams(window.location.search);
+    const customFile = urlParams.get(QUERY_PARAM_SETTINGS_PATH);
+    if (customFile) {
+      if (customFile.includes("/") || customFile.includes("\\")) {
+        console.warn(`You can only specify a filename via '${QUERY_PARAM_SETTINGS_PATH}', `
+          + "not a path");
+      } else {
+        const segments = settingsPath.split("/");
+        segments[segments.length - 1] = customFile;
+        settingsPath = segments.join("/");
+      }
+    }
+
     const base = settingsPath.startsWith("/") ? "" : basepath;
     const url = `${window.location.origin}${base}${settingsPath}`;
     let response: Response;

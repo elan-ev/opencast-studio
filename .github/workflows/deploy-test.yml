@@ -63,7 +63,6 @@ jobs:
         deploydir=$(cat deploydir.tmp)
         mkdir studio-test/${deploydir}
         mv .github/.deploy-settings.toml studio-test/${deploydir}/settings.toml
-        rm build/static/js/*.map
         mv build/* studio-test/${deploydir}/
         rmdir build
 
