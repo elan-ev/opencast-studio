@@ -379,7 +379,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
       <WithTooltip tooltip={isPlaying ? t("review-pause") : t("review-play")}>
         <ProtoButton
           css={{
-            backgroundColor: COLORS.accent7,
+            backgroundColor: COLORS.accent5,
             color: "white",
             border: "none",
             borderRadius: "50%",
@@ -391,7 +391,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
             fontSize: 24,
             ...focusStyle({ offset: 1 }),
             "&:hover, :focus-visible": {
-              backgroundColor: COLORS.accent8,
+              backgroundColor: COLORS.accent6,
             },
           }}
           onClick={togglePlayPause}
