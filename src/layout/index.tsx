@@ -23,6 +23,7 @@ export const Root: React.FC = () => {
       display: "flex",
       flexDirection: "column",
       height: "100%",
+      ...overlayBoxState !== "none" && { overflowY: "hidden" },
     }}>
       <Header inert={inert} {...{ setOverlayBoxState }} />
       {match(overlayBoxState, {
@@ -59,13 +60,15 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children, maxWidth }) =>
       right: 0,
       bottom: 0,
       padding: "32px 8px",
-      paddingTop: "calc(var(--header-height) + 32px)",
       zIndex: 800,
       backgroundColor: "rgba(0, 0, 0, 0.3)",
       backdropFilter: "blur(8px)",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      "@media (min-height: 400px)": {
+        paddingTop: "calc(var(--header-height) + 32px)",
+      },
     }}>
       <div ref={ref} css={{
         position: "relative",
