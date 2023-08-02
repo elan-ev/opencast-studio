@@ -39,16 +39,38 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
   // The index of the last video ref that received an event (0 or 1).
   const lastOrigin = useRef<0 | 1>();
 
+  // When updating the currenTime, i.e. the play position, we want to throttle
+  // this somehow. Just always setting `currentTime` is not ideal: consider
+  // `onMouseMove`, which would set a new value very frequently. Chrome and
+  // Firefox don't seem to handle that very well: every new time set will
+  // cancel the in-progress seeking, leading to quite large delays.
+  //
+  // What we do instead is: if we are not currently seeking, just set the time
+  // as normal. But if a seek operation is in progress, we just queue the time.
+  // Further below, the `onSeeked` event handler is the second part of the
+  // solution: when a seek operation has ended and a new time is queued, we
+  // seek to that time again. Put simply: we just wait for seek operations to
+  // finish before changing `currenTime` again.
+  const queuedSeek = useRef<number | null>(null);
+  const setTime = (newTime: number) => {
+    const isSeeking = allVideos.some(v => v.current?.seeking);
+    if (isSeeking) {
+      queuedSeek.current = newTime;
+    } else {
+      allVideos.forEach(r => {
+        if (r.current) {
+          r.current.currentTime = Math.max(0, Math.min(newTime, r.current.duration));
+        }
+      });
+    }
+  };
+
   useImperativeHandle(ref, () => ({
     get currentTime() {
       return notNullish(videoRefs[lastOrigin.current ?? 0].current?.currentTime);
     },
-    set currentTime(currentTime) {
-      allVideos.forEach(r => {
-        if (r.current && currentTime) {
-          r.current.currentTime = currentTime;
-        }
-      });
+    set currentTime(newTime) {
+      setTime(newTime);
     },
     get duration() {
       return notNullish(videoRefs[lastOrigin.current ?? 0].current?.duration);
@@ -140,16 +162,8 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
   });
 
 
-  const jumpInTime = (diff: number) => {
-    for (const video of videoRefs) {
-      if (video.current !== null) {
-        const newTime = video.current.currentTime + diff;
-        video.current.currentTime = diff < 0.0
-          ? Math.max(newTime, 0)
-          : Math.min(newTime, video.current.duration);
-      }
-    }
-  };
+  const jumpInTime = (diff: number) =>
+    setTime(notNullish(videoRefs[lastOrigin.current ?? 0].current?.currentTime) + diff);
 
   // TODO: This is obviously not always correct. Finding out the FPS of the
   // recording is surprisingly tricky. And actually, browsers seem to record
@@ -196,6 +210,20 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
             // some browsers show a black video element instead of the first frame.
             event.currentTarget.currentTime = Number.MAX_VALUE;
             durationCalculationProgress[index].current = "started";
+          }}
+          onSeeked={() => {
+            if (durationsCalculated) {
+              const isOtherSeeking = videoRefs[index == 0 ? 1 : 0].current?.seeking;
+              const queued = queuedSeek.current;
+              if (!isOtherSeeking && queued != null) {
+                allVideos.forEach(r => {
+                  if (r.current) {
+                    r.current.currentTime = queued;
+                  }
+                });
+                queuedSeek.current = null;
+              }
+            }
           }}
           onTimeUpdate={event => {
             if (durationsCalculated) {

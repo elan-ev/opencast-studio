@@ -79,8 +79,8 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
   const { start, end } = useStudioState();
   const ref = useRef<HTMLDivElement>(null);
 
-  const setTime = mouseEvent => {
-    const rect = mouseEvent.target.getBoundingClientRect();
+  const setTime = (mouseEvent: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = mouseEvent.currentTarget.getBoundingClientRect();
     const x = mouseEvent.clientX - rect.x;
     let progress = x / rect.width;
     if (progress < 0) {
