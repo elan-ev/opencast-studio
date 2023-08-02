@@ -304,7 +304,8 @@ export class SettingsManager {
       if (!(segment in obj)) {
         return true;
       }
-      obj = (obj as object)[segment];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      obj = (obj as any)[segment];
     }
 
     return false;

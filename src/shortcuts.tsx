@@ -258,7 +258,8 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
             }}
           >
             <div css={{ flex: "1", overflowWrap: "anywhere" }}>
-              {t(SHORTCUT_TRANSLATIONS[groupId][name])}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {t((SHORTCUT_TRANSLATIONS[groupId] as any)[name])}
             </div>
             <div css={{
               display: "flex",

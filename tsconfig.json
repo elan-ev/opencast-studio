@@ -4,12 +4,7 @@
     "module": "CommonJS",
     "noEmit": true,
     "incremental": true,
-
-    // We want to use strict mode eventually, but currently there are still too
-    // many errors caused by these specific rules. So we disabled them for
-    // now.
     "strict": true,
-    "noImplicitAny": false,
 
     "esModuleInterop": true,
     "jsx": "react-jsx",
