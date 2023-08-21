@@ -48,8 +48,8 @@ const StepButton: React.FC<StepButtonProps> = ({
         ...focusStyle({ offset: -1 }),
         ...danger && { "--color-focus": COLORS.danger4 },
         borderRadius: 8,
-        border: `1px solid ${danger ? COLORS.danger4 : COLORS.neutral40}`,
-        color: danger ? COLORS.danger4 : COLORS.neutral70,
+        border: `1px solid ${danger ? COLORS.danger4 : COLORS.neutral50}`,
+        color: danger ? COLORS.danger4 : COLORS.neutral80,
         backgroundColor: danger ? COLORS.danger0 : COLORS.neutral05,
         padding: "12px 24px",
         ...match(kind, {
