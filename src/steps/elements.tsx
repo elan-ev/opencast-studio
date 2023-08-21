@@ -33,7 +33,7 @@ const StepButton: React.FC<StepButtonProps> = ({
   });
   const [open, setOpen] = useState(false);
   const click = popoverEntries ? () => setOpen(old => !old) : () => onClick?.();
-  useShortcut(shortcut, click, { enabled: !disabled });
+  useShortcut(shortcut, click, { enabled: !disabled }, [click, shortcut, disabled]);
 
   const button = (
     <ProtoButton
