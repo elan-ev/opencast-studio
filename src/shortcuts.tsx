@@ -11,7 +11,7 @@ import { LuArrowBigUp, LuOption } from "react-icons/lu";
 
 export const SHORTCUTS = {
   general: {
-    showAvailableShortcuts: "Alt",
+    showAvailableShortcuts: "Alt; S",
     showOverview: "?",
     closeOverlay: "Escape",
     tab: "Tab",
@@ -113,7 +113,9 @@ export const useShortcut = (
 export const useShowAvailableShortcuts = () => {
   const [active, setActive] = useState(false);
   const enable = (event: KeyboardEvent) => {
-    if (event.key === SHORTCUTS.general.showAvailableShortcuts) {
+    const correctKeyPressed = SHORTCUTS.general.showAvailableShortcuts.split(";")
+      .some(s => s.trim().toLowerCase() == event.key.toLowerCase());
+    if (correctKeyPressed) {
       setActive(true);
     }
   };
