@@ -61,6 +61,9 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
     },
   };
 
+  const someProblem = state.userAllowed === false || state.userUnexpectedEnd
+    || state.displayAllowed === false || state.displayUnexpectedEnd;
+
   return match(activeSource, {
     "none": () => {
       return (
@@ -76,7 +79,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
     },
 
     "user": () => {
-      const showButtons = userStream || state.userAllowed === false;
+      const showButtons = userStream || someProblem;
       return (
         <StepContainer
           title={t("sources-video-user-selected")}
@@ -88,7 +91,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
     },
 
     "display": () => {
-      const showButtons = displayStream || state.displayAllowed === false;
+      const showButtons = displayStream || someProblem;
       return (
         <StepContainer
           title={t("sources-video-display-selected")}
@@ -100,8 +103,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
     },
 
     "both": () => {
-      const showButtons = (userStream || state.userAllowed === false)
-        && (displayStream || state.displayAllowed === false);
+      const showButtons = (userStream && displayStream) || someProblem;
       return (
         <StepContainer
           title={t("sources-video-display-and-user-selected")}
