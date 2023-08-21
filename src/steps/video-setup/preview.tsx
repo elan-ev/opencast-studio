@@ -50,7 +50,7 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => (
     position: "relative",
   }}>
     <PreviewVideo input={input} />
-    <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
+    {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
   </div>
 );
 
