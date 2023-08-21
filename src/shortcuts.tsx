@@ -9,14 +9,16 @@ import React from "react";
 import { LuArrowBigUp, LuOption } from "react-icons/lu";
 
 
+const onMac = () => navigator.userAgent.includes("Mac");
+
 export const SHORTCUTS = {
   general: {
     showAvailableShortcuts: "Alt; S",
     showOverview: "?",
     closeOverlay: "Escape",
     tab: "Tab",
-    prev: "Mod+left",
-    next: "Mod+right",
+    prev: onMac() ? "Shift+Cmd+left" : "Mod+left",
+    next: onMac() ? "Shift+Cmd+right" : "Mod+right",
   },
   videoSetup: {
     selectScreen: "1",
@@ -84,8 +86,6 @@ const SHORTCUT_TRANSLATIONS = {
     download: "steps.finish.save-locally",
   },
 } as const;
-
-const onMac = () => navigator.userAgent.includes("Mac");
 
 const KEY_TRANSLATIONS = {
   "Escape": "escape",
