@@ -79,10 +79,12 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
 
       <VideoBox gap={20}>{previews}</VideoBox>
       <div css={{ position: "absolute", bottom: 32, width: "100%" }}>
-        <RecordingControls
-          onRecordingStop={handleRecorded}
-          {...{ recordingState, setRecordingState }}
-        />
+        {!(displayUnexpectedEnd || userUnexpectedEnd || audioUnexpectedEnd) && (
+          <RecordingControls
+            onRecordingStop={handleRecorded}
+            {...{ recordingState, setRecordingState }}
+          />
+        )}
       </div>
     </StepContainer>
   );
