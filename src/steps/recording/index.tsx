@@ -1,7 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
+import { useBeforeunload } from "react-beforeunload";
+import { keyframes } from "@emotion/react";
+import { FiAlertTriangle, FiPauseCircle } from "react-icons/fi";
 
-import { useStudioState, useDispatch } from "../../studio-state";
+import {
+  useStudioState, useDispatch, Dispatcher, Recording as StudioRecording,
+} from "../../studio-state";
 import { useOpencast } from "../../opencast";
 
 import { stopCapture } from "../../capturer";
@@ -10,19 +15,40 @@ import { ErrorBox } from "../../ui/ErrorBox";
 import { StepContainer } from "../elements";
 import { VideoBox, VideoBoxProps, useVideoBoxResize } from "../../ui/VideoBox";
 import { COLORS, dimensionsOf } from "../../util";
-import { FiAlertTriangle, FiPauseCircle } from "react-icons/fi";
-import { keyframes } from "@emotion/react";
 import { RecordingControls } from "./controls";
-import { useBeforeunload } from "react-beforeunload";
+import Recorder, { OnStopCallback } from "./recorder";
+import { useSettings } from "../../settings";
 
 
 export type RecordingState = "inactive" | "paused" | "recording";
+
+
+const addRecordOnStop = (
+  dispatch: Dispatcher,
+  deviceType: StudioRecording["deviceType"],
+): OnStopCallback => {
+  return ({ media, url, mimeType, dimensions }) => {
+    dispatch({
+      type: "ADD_RECORDING",
+      recording: { deviceType, media, url, mimeType, dimensions },
+    });
+  };
+};
+
+const mixAudioIntoVideo = (audioStream: MediaStream | null, videoStream: MediaStream) => {
+  if (!(audioStream?.getAudioTracks().length)) {
+    return videoStream;
+  }
+  return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
+};
 
 
 export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) => {
   const { t } = useTranslation();
   const recordingDispatch = useDispatch();
   const opencast = useOpencast();
+  const dispatch = useDispatch();
+  const settings = useSettings();
   const state = useStudioState();
   const {
     displayStream, userStream, displayUnexpectedEnd, userUnexpectedEnd, audioUnexpectedEnd,
@@ -30,10 +56,54 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
 
   const [recordingState, setRecordingState] = useState<RecordingState>("inactive");
 
-  const handleRecorded = () => {
+  const desktopRecorder = useRef<Recorder>();
+  const videoRecorder = useRef<Recorder>();
+
+  const canRecord = (displayStream || userStream)
+    && !userUnexpectedEnd && !displayUnexpectedEnd && !audioUnexpectedEnd;
+
+  const startRecording = () => {
+    // In theory, we should never have recordings at this point. But just to be
+    // sure, in case of a bug elsewhere, we clear the recordings here.
+    dispatch({ type: "CLEAR_RECORDINGS" });
+
+    if (displayStream) {
+      const onStop = addRecordOnStop(dispatch, "desktop");
+      const stream = mixAudioIntoVideo(state.audioStream, displayStream);
+      desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
+      desktopRecorder.current.start();
+    }
+
+    if (userStream) {
+      const onStop = addRecordOnStop(dispatch, "video");
+      const stream = mixAudioIntoVideo(state.audioStream, userStream);
+      videoRecorder.current = new Recorder(stream, settings.recording, onStop);
+      videoRecorder.current.start();
+    }
+
+    setRecordingState("recording");
+    dispatch({ type: "START_RECORDING" });
+  };
+
+  const stopRecording = (premature: boolean) => {
+    desktopRecorder.current?.stop();
+    videoRecorder.current?.stop();
+    dispatch({ type: premature ? "STOP_RECORDING_PREMATURELY" : "STOP_RECORDING" });
     opencast.refreshConnection();
     stopCapture(state, recordingDispatch);
     goToNextStep();
+  };
+
+  const pauseRecording = () => {
+    setRecordingState("paused");
+    desktopRecorder.current?.pause();
+    videoRecorder.current?.pause();
+  };
+
+  const resumeRecording = () => {
+    setRecordingState("recording");
+    desktopRecorder.current?.resume();
+    videoRecorder.current?.resume();
   };
 
   const paused = recordingState === "paused";
@@ -65,7 +135,7 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
         disabled: recordingState !== "inactive",
       }}
       nextButton={{
-        onClick: handleRecorded,
+        onClick: () => stopRecording(false),
         disabled: recordingState !== "paused",
         label: t("stop-button-title"),
       }}
@@ -79,11 +149,14 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
 
       <VideoBox gap={20}>{previews}</VideoBox>
       <div css={{ position: "absolute", bottom: 32, width: "100%" }}>
-        {!(displayUnexpectedEnd || userUnexpectedEnd || audioUnexpectedEnd) && (
-          <RecordingControls
-            onRecordingStop={handleRecorded}
-            {...{ recordingState, setRecordingState }}
-          />
+        {canRecord && (
+          <RecordingControls {...{
+            startRecording,
+            stopRecording,
+            pauseRecording,
+            resumeRecording,
+            recordingState,
+          }} />
         )}
       </div>
     </StepContainer>

@@ -3,132 +3,52 @@ import { useTranslation } from "react-i18next";
 import { WithTooltip, match, useColorScheme } from "@opencast/appkit";
 import { FiPause, FiPlay } from "react-icons/fi";
 
-import Recorder, { OnStopCallback } from "./recorder";
-import { useSettings } from "../../settings";
-import { Dispatcher, Recording, useDispatch, useStudioState } from "../../studio-state";
+import { useStudioState } from "../../studio-state";
 import { RecordingState } from ".";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 import { COLORS } from "../../util";
 
 
-const addRecordOnStop = (
-  dispatch: Dispatcher,
-  deviceType: Recording["deviceType"],
-): OnStopCallback => {
-  return ({ media, url, mimeType, dimensions }) => {
-    dispatch({
-      type: "ADD_RECORDING",
-      recording: { deviceType, media, url, mimeType, dimensions },
-    });
-  };
-};
-
-function mixAudioIntoVideo(audioStream: MediaStream | null, videoStream: MediaStream) {
-  if (!(audioStream?.getAudioTracks().length)) {
-    return videoStream;
-  }
-  return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
-}
 
 
 type Props = {
-  onRecordingStop: () => void;
   recordingState: RecordingState;
-  setRecordingState: (state: RecordingState) => void;
+  startRecording: () => void;
+  stopRecording: (premature: boolean) => void;
+  pauseRecording: () => void;
+  resumeRecording: () => void;
 };
 
 export const RecordingControls: React.FC<Props> = ({
-  onRecordingStop,
   recordingState,
-  setRecordingState,
+  startRecording,
+  stopRecording,
+  pauseRecording,
+  resumeRecording,
 }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const settings = useSettings();
   const isLight = useColorScheme().scheme === "light";
   const fgColor = isLight ? COLORS.neutral05 : COLORS.neutral90;
 
-  const {
-    audioStream,
-    displayStream,
-    userStream,
-    userUnexpectedEnd,
-    displayUnexpectedEnd,
-    audioUnexpectedEnd,
-  } = useStudioState();
+  const { userUnexpectedEnd, displayUnexpectedEnd, audioUnexpectedEnd } = useStudioState();
 
 
-  const desktopRecorder = useRef<Recorder>();
-  const videoRecorder = useRef<Recorder>();
-
-  const canRecord = (displayStream || userStream)
-    && !userUnexpectedEnd && !displayUnexpectedEnd && !audioUnexpectedEnd;
-
-  const record = () => {
-    // In theory, we should never have recordings at this point. But just to be
-    // sure, in case of a bug elsewhere, we clear the recordings here.
-    dispatch({ type: "CLEAR_RECORDINGS" });
-
-    if (displayStream) {
-      const onStop = addRecordOnStop(dispatch, "desktop");
-      const stream = mixAudioIntoVideo(audioStream, displayStream);
-      desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
-      desktopRecorder.current.start();
-    }
-
-    if (userStream) {
-      const onStop = addRecordOnStop(dispatch, "video");
-      const stream = mixAudioIntoVideo(audioStream, userStream);
-      videoRecorder.current = new Recorder(stream, settings.recording, onStop);
-      videoRecorder.current.start();
-    }
-
-    dispatch({ type: "START_RECORDING" });
-  };
-
-  const stop = (premature = false) => {
-    desktopRecorder.current?.stop();
-    videoRecorder.current?.stop();
-    onRecordingStop();
-    dispatch({ type: premature ? "STOP_RECORDING_PREMATURELY" : "STOP_RECORDING" });
-  };
-
+  // Detect if a stream ended unexpectedly. In that case we want to stop the
+  // recording completely.
   useEffect(() => {
-    // Detect if a stream ended unexpectedly. In that case we want to stop the
-    // recording completely.
     const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
     if (unexpectedEnd && (recordingState === "recording" || recordingState === "paused")) {
-      stop(true);
+      stopRecording(true);
     }
   });
 
 
-  const handlePause = () => {
-    setRecordingState("paused");
-    desktopRecorder.current?.pause();
-    videoRecorder.current?.pause();
-  };
-
-  const handleResume = () => {
-    setRecordingState("recording");
-    desktopRecorder.current?.resume();
-    videoRecorder.current?.resume();
-  };
-
-  const handleRecord = () => {
-    if (!canRecord) {
-      return;
-    }
-    setRecordingState("recording");
-    record();
-  };
-
   const showAvailableShortcuts = useShowAvailableShortcuts();
   useShortcut(SHORTCUTS.recording.startPauseResume, () => {
     match(recordingState, {
-      "inactive": () => handleRecord(),
-      "paused": () => handleResume(),
-      "recording": () => handlePause(),
+      "inactive": () => startRecording(),
+      "paused": () => resumeRecording(),
+      "recording": () => pauseRecording(),
     });
   }, {
     ignoreEventWhen: e => e.code === "Space" && e.target instanceof HTMLButtonElement,
@@ -158,9 +78,9 @@ export const RecordingControls: React.FC<Props> = ({
       }>
         <button
           onClick={match(recordingState, {
-            "inactive": () => handleRecord,
-            "paused": () => handleResume,
-            "recording": () => handlePause,
+            "inactive": () => startRecording,
+            "paused": () => resumeRecording,
+            "recording": () => pauseRecording,
           })}
           css={{
             position: "relative",
