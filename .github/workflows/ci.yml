@@ -53,7 +53,7 @@ jobs:
         REACT_APP_INCLUDE_LEGAL_NOTICES: 1
       run: |
         rm -rf build
-        PUBLIC_PATH="/" npm run build:release
+        npm run build:release
 
     - name: Archive prod deployment files as artifact
       if: github.repository_owner == 'elan-ev' && github.ref == 'refs/heads/master'
