@@ -245,7 +245,7 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
             css={{
               minWidth: 250,
               width: "calc(33.33% - 12px)",
-              [screenWidthAtMost(1005)]: {
+              [screenWidthAtMost(1070)]: {
                 width: "calc(50% - 6px)",
               },
               [screenWidthAtMost(720)]: {
