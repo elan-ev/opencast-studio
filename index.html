@@ -1,1 +1,102 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="shortcut icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web-based recording studio for Opencast"/><link rel="apple-touch-icon" href="opencast-studio-icon-192.png"/><link rel="manifest" href="/manifest.json"/><title>Opencast Studio</title><style>@keyframes loading-rotation{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}body,html{margin:0;padding:0;height:100%;min-height:100%}.loading-indicator{width:100vw;height:100vh;justify-content:center;align-items:center;display:flex}.loading-indicator>svg{max-width:120px;max-height:120px;width:30vw;height:30vh;animation:2s linear infinite none loading-rotation}.loading-indicator>svg>circle{fill:none;stroke:black;stroke-width:10;stroke-dasharray:167;stroke-linecap:round}</style><script type="text/javascript">!function(i){if(i.search){var a={};i.search.slice(1).split("&").forEach((function(i){var l=i.split("=");a[l[0]]=l.slice(1).join("=").replace(/~and~/g,"&")})),void 0!==a.p&&window.history.replaceState(null,null,i.pathname.slice(0,-1)+(a.p||"")+(a.q?"?"+a.q:"")+i.hash)}}(window.location)</script><script defer="defer" src="/static/js/main.d45cd2f3.js"></script></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"><div class="loading-indicator"><svg viewbox="0 0 100 100"><circle cx="50" cy="50" r="40"/></svg></div></div></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content="Web-based recording studio for Opencast"/><title>Opencast Studio</title><script>// This is used to determine the color mode as soon as possible to avoid a
+      // flash of white (the loading indicator) for a user using dark mode.
+      const scheme = window.localStorage.getItem("colorScheme");
+      document.documentElement.dataset.colorScheme = (scheme === "dark" || scheme === "light")
+        ? scheme
+        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");</script><style>/* ----- Define colors and other color-scheme dependent things ----- */
+      /* Light mode */
+      html[data-color-scheme="light"], html:not([data-color-scheme]) {
+        --color-neutral05: #fefefe;
+        --color-neutral10: #f3f3f3;
+        --color-neutral15: #e8e8e8;
+        --color-neutral20: #dddddd;
+        --color-neutral25: #d1d1d1;
+        --color-neutral30: #c1c1c1;
+        --color-neutral40: #a3a3a3;
+        --color-neutral50: #777777;
+        --color-neutral60: #575757;
+        --color-neutral70: #404040;
+        --color-neutral80: #2a2a2a;
+        --color-neutral90: #181818;
+        --color-danger0: #feedeb;
+        --color-danger1: #ffd2cd;
+        --color-danger2: #feaba1;
+        --color-danger4: #c22a2c;
+        --color-danger5: #880e11;
+        --color-accent9: #044a81;
+        --color-accent8: #215D99;
+        --color-accent7: #3073B8;
+        --color-accent6: #3E8AD8;
+        --color-accent5: #4DA1F7;
+        --color-accent4: #71B4F9;
+
+        --shadow-color: rgba(0, 0, 0, 0.1);
+        color-scheme: light;
+      }
+
+      /* Dark mode */
+      html[data-color-scheme="dark"] {
+        --color-neutral05: #171717;
+        --color-neutral10: #1e1e1e;
+        --color-neutral15: #262626;
+        --color-neutral20: #2e2e2e;
+        --color-neutral25: #373737;
+        --color-neutral30: #3f3f3f;
+        --color-neutral40: #4d4d4d;
+        --color-neutral50: #676767;
+        --color-neutral60: #868686;
+        --color-neutral70: #969696;
+        --color-neutral80: #a6a6a6;
+        --color-neutral90: #c4c4c4;
+        --color-danger0: #361314;
+        --color-danger1: #462522;
+        --color-danger2: #712f2a;
+        --color-danger4: #dd554b;
+        --color-danger5: #f87965;
+        --color-accent9: #85ace3;
+        --color-accent8: #7da4db;
+        --color-accent7: #588ccd;
+        --color-accent6: #1f72ba;
+        --color-accent5: #1c619e;
+        --color-accent4: #195483;
+
+        --shadow-color: rgba(0, 0, 0, 0.3);
+        color-scheme: dark;
+      }
+
+
+      /* ----- Some global styles ----- */
+      html, body {
+          margin: 0;
+          padding: 0;
+          background-color: var(--color-neutral10);
+          color: var(--color-neutral90);
+      }
+
+
+      /* ----- Styles for the initial loading indicator ----- */
+      @keyframes loading-rotation {
+        0% { transform: rotate(0); }
+        100% { transform: rotate(360deg); }
+      }
+      .loading-indicator {
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      .loading-indicator > svg {
+        max-width: 90px;
+        max-height: 90px;
+        width: 30vw;
+        height: 30vh;
+        animation: 2s linear infinite none loading-rotation;
+      }
+      .loading-indicator > svg > circle {
+        fill: none;
+        stroke: var(--color-neutral5);
+        stroke-width: 10;
+        stroke-dasharray: 167; /* 2/3 of circumference */
+        stroke-linecap: round;
+      }</style><link rel="stylesheet" href="./font.css"><link rel="icon" href="//favicon.ico"><script defer="defer" src="//main.bundle.js"></script></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"><div class="loading-indicator"><svg viewbox="0 0 100 100"><circle cx="50" cy="50" r="40"/></svg></div></div></body></html>
