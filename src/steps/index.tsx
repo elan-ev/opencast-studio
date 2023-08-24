@@ -129,7 +129,7 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
               zIndex: 100,
               backgroundColor: COLORS.neutral05,
               svg: {
-                color: i === currentIndex ? COLORS.accent5 : COLORS.neutral40,
+                color: i === currentIndex ? COLORS.accent6 : COLORS.neutral40,
                 fontSize: 2 * CIRCLE_RADIUS,
                 flexShrink: 0,
                 // We want an effective stroke width of 2. If we scale the icon
@@ -149,7 +149,7 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
               <div css={{
                 fontSize: 14,
                 lineHeight: 1.2,
-                color: i == currentIndex ? COLORS.accent8 : COLORS.neutral60,
+                color: i == currentIndex ? COLORS.accent8 : COLORS.neutral70,
                 [screenWidthAtMost(BREAKPOINTS.large)]: {
                   display: "none",
                 },
