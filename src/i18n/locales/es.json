@@ -9,7 +9,6 @@
   "nav-open-menu-button": "Menu",
   "nav-recording": "Grabando",
   "nav-settings": "Ajustes",
-  "nav-about": "Acerca",
   "review-button-discard-and-record": "Descartar y volver a grabar",
   "save-creation-button-upload": "Subir a Opencast",
   "save-creation-form-invalid": "Por favor, establece el título y el ponente",
@@ -64,7 +63,7 @@
   "sources-video-aspect-ratio-auto": "automático",
   "sources-video-quality": "Calidad",
   "sources-video-quality-auto": "automático",
-  "sources-video-preferences-note": "<0>*Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'.",
+  "sources-video-preferences-note": "<0>Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'.",
 
   "sources-audio-question": "¿Grabar el audio?",
   "sources-audio-microphone": "Micrófono",

@@ -1,28 +1,25 @@
-//; -*- mode: rjsx;-*-
-/** @jsx jsx */
-import { jsx } from 'theme-ui';
-import React, { useEffect, useState } from 'react';
-import deepmerge from 'deepmerge';
-import parseToml from '@iarna/toml/parse-string';
+import React, { useEffect, useState } from "react";
+import deepmerge from "deepmerge";
+import parseToml from "@iarna/toml/parse-string";
+import { unreachable } from "@opencast/appkit";
 
-import { decodeHexString, usePresentContext } from './util';
-import { unreachable } from './util/err';
+import { decodeHexString, usePresentContext } from "./util";
+import { DEFINES } from "./defines";
 
+const LOCAL_STORAGE_KEY = "ocStudioSettings";
+const CONTEXT_SETTINGS_FILE = "settings.toml";
+const QUERY_PARAM_SETTINGS_PATH = "settingsFile";
 
-const LOCAL_STORAGE_KEY = 'ocStudioSettings';
-const CONTEXT_SETTINGS_FILE = 'settings.toml';
-const QUERY_PARAM_SETTINGS_PATH = 'settingsFile';
-
-export const FORM_FIELD_HIDDEN = 'hidden';
-export const FORM_FIELD_OPTIONAL = 'optional';
-export const FORM_FIELD_REQUIRED = 'required';
+export const FORM_FIELD_HIDDEN = "hidden";
+export const FORM_FIELD_OPTIONAL = "optional";
+export const FORM_FIELD_REQUIRED = "required";
 export type FormFieldState =
   | typeof FORM_FIELD_HIDDEN
   | typeof FORM_FIELD_OPTIONAL
   | typeof FORM_FIELD_REQUIRED;
 
 /** Sources that setting values can come from. */
-type SettingsSource = 'src-server'| 'src-url' | 'src-local-storage';
+type SettingsSource = "src-server"| "src-url" | "src-local-storage";
 
 /** Opencast Studio runtime settings. */
 export type Settings = {
@@ -60,9 +57,6 @@ export type Settings = {
     label?: string;
     target?: string;
   };
-  theme?: {
-    customCSS: string;
-  };
 };
 
 /**
@@ -71,9 +65,9 @@ export type Settings = {
  */
 const defaultSettings: Settings = {
   opencast: {
-    serverUrl: 'https://develop.opencast.org/',
-    loginName: 'admin',
-    loginPassword: 'opencast',
+    serverUrl: "https://develop.opencast.org/",
+    loginName: "admin",
+    loginPassword: "opencast",
   },
 };
 
@@ -110,14 +104,16 @@ export class SettingsManager {
    * This function is called whenever the user saved their settings. The new
    * settings object is passed as parameter.
    */
-  onChange: (newSettings: Settings) => void = () => {};
+  onChange: (newSettings: Settings) => void = () => {
+    // By default, this does nothing. It is overwritten below.
+  };
 
   /**
    * Creates a new `Settings` instance by loading user settings from local
    * storage and attempting to load context settings from the server..
    */
   static async init() {
-    let self = new SettingsManager();
+    const self = new SettingsManager();
 
     // Load the user settings from local storage
     const stored = window.localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -126,13 +122,13 @@ export class SettingsManager {
       try {
         rawUserSettings = JSON.parse(stored);
       } catch {
-        console.warn('Could not parse settings stored in local storage. Ignoring.');
+        console.warn("Could not parse settings stored in local storage. Ignoring.");
       }
       self.#userSettings = validate(
         rawUserSettings,
         false,
-        'src-local-storage',
-        'from local storage user settings',
+        "src-local-storage",
+        "from local storage user settings",
       );
     }
 
@@ -140,8 +136,8 @@ export class SettingsManager {
     self.contextSettings = validate(
       rawContextSettings,
       false,
-      'src-server',
-      'from server settings file',
+      "src-server",
+      "from server settings file",
     );
 
     // Get settings from URL query. We remove the key `settingsFile` as that is
@@ -149,7 +145,7 @@ export class SettingsManager {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.delete(QUERY_PARAM_SETTINGS_PATH);
 
-    const encodedConfig = urlParams.get('config');
+    const encodedConfig = urlParams.get("config");
     if (encodedConfig) {
       // In this case, the GET parameter `config` is specified. We now expect a
       // hex encoded TOML file describing the configuration. This is possible in
@@ -163,7 +159,7 @@ export class SettingsManager {
           decoded = decodeHexString(input);
         } catch (e) {
           console.warn(
-            'Could not decode hex-encoded string given to GET parameter \'config\'. Ignoring. Error:',
+            "Could not decode hex-encoded string given to GET parameter 'config'. Ignoring. Error:",
             e,
           );
           return null;
@@ -173,8 +169,8 @@ export class SettingsManager {
           return parseToml(decoded);
         } catch (e) {
           console.warn(
-            'Could not parse (as TOML) decoded hex-string given to GET parameter \'config\'. '
-              + 'Ignoring. Error:',
+            "Could not parse (as TOML) decoded hex-string given to GET parameter 'config'. "
+              + "Ignoring. Error:",
             e,
           );
         }
@@ -182,11 +178,11 @@ export class SettingsManager {
       };
 
       for (const key of urlParams.keys()) {
-        if (key !== 'config') {
+        if (key !== "config") {
           console.warn(
             `URL GET parameter '${key}' is ignored as 'config' is specified. Either specify `
-            + ' all configuration via the \'config\' GET parameter hex string or via direct GET '
-            + 'parameters. Mixing is not allowed.'
+            + " all configuration via the 'config' GET parameter hex string or via direct GET "
+            + "parameters. Mixing is not allowed."
           );
         }
       }
@@ -195,17 +191,17 @@ export class SettingsManager {
       self.urlSettings = validate(
         rawUrlSettings ?? {},
         false,
-        'src-url',
-        'given as URL `config` GET parameter',
+        "src-url",
+        "given as URL `config` GET parameter",
       );
     } else {
       // Interpret each get parameter as single configuration value.
-      let rawUrlSettings = Object.create(null);
-      for (let [key, value] of urlParams) {
+      const rawUrlSettings = Object.create(null);
+      for (const [key, value] of urlParams) {
         // Create empty objects for full path (if the key contains '.') and set
         // the value at the end.
         let obj = rawUrlSettings;
-        const segments = key.split('.');
+        const segments = key.split(".");
         segments.slice(0, -1).forEach(segment => {
           if (!(segment in obj)) {
             obj[segment] = Object.create(null);
@@ -215,7 +211,7 @@ export class SettingsManager {
         obj[segments[segments.length - 1]] = value;
       }
 
-      self.urlSettings = validate(rawUrlSettings, true, 'src-url', 'given as URL GET parameter');
+      self.urlSettings = validate(rawUrlSettings, true, "src-url", "given as URL GET parameter");
     }
 
     return self;
@@ -228,38 +224,38 @@ export class SettingsManager {
    */
   static async loadContextSettings() {
     // Try to retrieve the context settings.
-    let basepath = process.env.PUBLIC_URL || '/';
-    if (!basepath.endsWith('/')) {
-      basepath += '/';
+    let basepath = DEFINES.publicPath;
+    if (!basepath.endsWith("/")) {
+      basepath += "/";
     }
 
     // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
     // given and starts with '/', it is interpreted as absolute path from the
     // server root.
-    let settingsPath = process.env.REACT_APP_SETTINGS_PATH || CONTEXT_SETTINGS_FILE;
+    let settingsPath = DEFINES.settingsPath || CONTEXT_SETTINGS_FILE;
 
     // If a custom file is given via query parameter, change the settings path
     // appropriately.
     const urlParams = new URLSearchParams(window.location.search);
     const customFile = urlParams.get(QUERY_PARAM_SETTINGS_PATH);
     if (customFile) {
-      if (customFile.includes('/') || customFile.includes('\\')) {
+      if (customFile.includes("/") || customFile.includes("\\")) {
         console.warn(`You can only specify a filename via '${QUERY_PARAM_SETTINGS_PATH}', `
-          + 'not a path');
+          + "not a path");
       } else {
-        const segments = settingsPath.split('/');
+        const segments = settingsPath.split("/");
         segments[segments.length - 1] = customFile;
-        settingsPath = segments.join('/');
+        settingsPath = segments.join("/");
       }
     }
 
-    const base = settingsPath.startsWith('/') ? '' : basepath;
+    const base = settingsPath.startsWith("/") ? "" : basepath;
     const url = `${window.location.origin}${base}${settingsPath}`;
     let response: Response;
     try {
       response = await fetch(url);
     } catch (e) {
-      console.warn(`Could not access '${settingsPath}' due to network error!`, e || '');
+      console.warn(`Could not access '${settingsPath}' due to network error!`, e || "");
       return null;
     }
 
@@ -275,7 +271,7 @@ export class SettingsManager {
       return null;
     }
 
-    if (response.headers.get('Content-Type')?.startsWith('text/html')) {
+    if (response.headers.get("Content-Type")?.startsWith("text/html")) {
       console.warn(`'${settingsPath}' request has 'Content-Type: text/html' -> ignoring...`);
       return null;
     }
@@ -323,11 +319,12 @@ export class SettingsManager {
    */
   isConfigurable(path: string) {
     let obj = this.fixedSettings();
-    const segments = path.split('.');
+    const segments = path.split(".");
     for (const segment of segments) {
       if (!(segment in obj)) {
         return true;
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       obj = (obj as any)[segment];
     }
 
@@ -335,11 +332,11 @@ export class SettingsManager {
   }
 
   isUsernameConfigurable() {
-    return this.isConfigurable('opencast.loginName')
+    return this.isConfigurable("opencast.loginName")
       && this.fixedSettings().opencast?.loginProvided !== true;
   }
   isPasswordConfigurable() {
-    return this.isConfigurable('opencast.loginPassword')
+    return this.isConfigurable("opencast.loginPassword")
       && this.fixedSettings().opencast?.loginProvided !== true;
   }
 }
@@ -368,9 +365,9 @@ const validate = (
   // Validates `obj` with `schema`. `path` is the current path used for error
   // messages.
   const validate = (schema: SchemaOrValidator, obj: unknown, path: string) => {
-    if (typeof schema === 'function') {
+    if (typeof schema === "function") {
       return validateValue(schema, obj, path);
-    } else if (obj && typeof obj === 'object') {
+    } else if (obj && typeof obj === "object") {
       return validateObj(schema, obj, path);
     } else {
       return unreachable();
@@ -397,7 +394,7 @@ const validate = (
   const validateObj = (schema: Record<string, SchemaOrValidator>, obj: object, path: string) => {
     // We iterate through all keys of the given settings object, checking if
     // each key is valid and recursively validating the value of that key.
-    let out = Object.create(null);
+    const out = Object.create(null);
     for (const [key, value] of Object.entries(obj)) {
       const newPath = path ? `${path}.${key}` : key;
       if (key in schema && key in obj) {
@@ -418,7 +415,7 @@ const validate = (
     return out;
   };
 
-  return validate(SCHEMA, obj, '');
+  return validate(SCHEMA, obj, "");
 };
 
 /**
@@ -431,59 +428,59 @@ const validate = (
  * then used in the validated settings object. The returned value might be `v`
  * or something else.
  */
-type Validator<T> = (v: any, allowParse: boolean, src: SettingsSource) => T;
+type Validator<T> = (v: unknown, allowParse: boolean, src: SettingsSource) => T;
 
 /** Validation functions for basic types. */
 const types = {
-  'string': v => {
-    if (typeof v !== 'string') {
-      throw new Error('is not a string, but should be');
+  "string": v => {
+    if (typeof v !== "string") {
+      throw new Error("is not a string, but should be");
     }
     return v;
   },
-  'int': (v, allowParse): number => {
+  "int": (v, allowParse): number => {
     if (Number.isInteger(v)) {
-      return v;
+      return v as number;
     }
 
-    if (allowParse) {
+    if (allowParse && typeof v === "string") {
       if (/^[-+]?(\d+)$/.test(v)) {
         return Number(v);
       }
 
       throw new Error("can't be parsed as integer");
     } else {
-      throw new Error('is not an integer');
+      throw new Error("is not an integer");
     }
   },
-  'boolean': (v, allowParse): boolean => {
-    if (typeof v === 'boolean') {
+  "boolean": (v, allowParse): boolean => {
+    if (typeof v === "boolean") {
       return v;
     }
 
     if (allowParse) {
-      if (v === 'true') {
+      if (v === "true") {
         return true;
       }
-      if (v === 'false') {
+      if (v === "false") {
         return false;
       }
       throw new Error("can't be parsed as boolean");
     } else {
-      throw new Error('is not a boolean');
+      throw new Error("is not a boolean");
     }
   },
   positiveInteger: (v, allowParse): number => {
-    let i = types.int(v, allowParse);
+    const i = types.int(v, allowParse);
     if (i <= 0) {
       throw new Error("has to be positive, but isn't");
     }
 
     return i;
   },
-  'array': elementType => {
+  "array": elementType => {
     return (v, allowParse, src) => {
-      if (typeof v === 'string' && allowParse) {
+      if (typeof v === "string" && allowParse) {
         try {
           v = JSON.parse(v);
         } catch {
@@ -492,7 +489,7 @@ const types = {
       }
 
       if (!Array.isArray(v)) {
-        throw new Error('is not an array');
+        throw new Error("is not an array");
       }
 
       return v.map(element => {
@@ -505,15 +502,19 @@ const types = {
     };
   },
 } satisfies {
-  string: Validator<string>,
-  int: Validator<number>,
-  boolean: Validator<boolean>,
-  positiveInteger: Validator<number>,
-  array: <T, >(validator: Validator<T>) => Validator<T[]>,
+  string: Validator<string>;
+  int: Validator<number>;
+  boolean: Validator<boolean>;
+  positiveInteger: Validator<number>;
+  array: <T, >(validator: Validator<T>) => Validator<T[]>;
 };
 
 /** Validator for `FormFieldState`. */
 const metaDataField: Validator<FormFieldState> = v => {
+  if (typeof v !== "string") {
+    throw new Error("has to be a string");
+  }
+
   if (![FORM_FIELD_HIDDEN, FORM_FIELD_OPTIONAL, FORM_FIELD_REQUIRED].includes(v)) {
     throw new Error(
       `has to be either '${FORM_FIELD_HIDDEN}', '${FORM_FIELD_OPTIONAL}' or `
@@ -521,7 +522,7 @@ const metaDataField: Validator<FormFieldState> = v => {
     );
   }
 
-  return v;
+  return v as FormFieldState;
 };
 
 /**
@@ -530,9 +531,9 @@ const metaDataField: Validator<FormFieldState> = v => {
  */
 const onlyFromServer = <Out, >(inner: Validator<Out>): Validator<Out> => (
   (v, allowParse, src) => {
-    if (src !== 'src-server') {
-      throw new Error('this configuration cannot be specified via the URL or local storage, '
-        + 'but must be specified in \'settings.toml\'');
+    if (src !== "src-server") {
+      throw new Error("this configuration cannot be specified via the URL or local storage, "
+        + "but must be specified in 'settings.toml'");
     }
 
     return inner(v, allowParse, src);
@@ -543,14 +544,14 @@ const onlyFromServer = <Out, >(inner: Validator<Out>): Validator<Out> => (
 const SCHEMA = {
   opencast: {
     serverUrl: v => {
-      types.string(v);
+      const s = types.string(v);
 
-      if (v === '/' || v === '') {
+      if (s === "/" || s === "") {
         return;
       }
 
-      const url = new URL(v);
-      if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+      const url = new URL(s);
+      if (url.protocol !== "https:" && url.protocol !== "http:") {
         throw new Error('the URL does not start with "http:" or "https:"');
       }
 
@@ -565,14 +566,14 @@ const SCHEMA = {
     seriesId: types.string,
     workflowId: types.string,
     acl: (v, allowParse) => {
-      if ((allowParse && v === 'false') || v === false) {
+      if ((allowParse && v === "false") || v === false) {
         return false;
       }
-      if ((allowParse && v === 'true') || v === true) {
+      if ((allowParse && v === "true") || v === true) {
         return true;
       }
 
-      if (typeof v === 'string') {
+      if (typeof v === "string") {
         return v;
       }
 
@@ -601,17 +602,16 @@ const SCHEMA = {
     allowedDomains: onlyFromServer(types.array(types.string)),
     label: types.string,
     target: v => {
-      types.string(v);
-      if (!(v.startsWith('/') || v.startsWith('http'))) {
-        throw new Error('has to start with \'/\' or \'http\'');
+      if (typeof v !== "string") {
+        throw new Error("has to be a string");
+      }
+      if (!(v.startsWith("/") || v.startsWith("http"))) {
+        throw new Error("has to start with '/' or 'http'");
       }
       return v;
     },
   },
-  theme: {
-    customCSS: types.string,
-  },
-} satisfies Record<string, Record<string, Validator<any>>>;
+} satisfies Record<string, Record<string, Validator<unknown>>>;
 
 
 // ==============================================================================================
@@ -621,7 +621,7 @@ const SCHEMA = {
 // Customize array merge behavior
 const merge = (a: Settings, b: Settings): Settings => deepmerge(a, b, { arrayMerge });
 const mergeAll = (array: Settings[]) => deepmerge.all(array, { arrayMerge });
-const arrayMerge: deepmerge.Options['arrayMerge']
+const arrayMerge: deepmerge.Options["arrayMerge"]
   = (_destinationArray, sourceArray, _options) => sourceArray;
 
 
@@ -630,9 +630,14 @@ const arrayMerge: deepmerge.Options['arrayMerge']
 // ==============================================================================================
 
 const Context = React.createContext<Settings | null>(null);
+const ManagerContext = React.createContext<SettingsManager | null>(null);
 
-// Returns the current provided Opencast instance.
-export const useSettings = (): Settings => usePresentContext(Context, 'useSettings');
+/** Returns the current settings. */
+export const useSettings = (): Settings => usePresentContext(Context, "useSettings");
+
+/** Returns the settings manager. */
+export const useSettingsManager = (): SettingsManager =>
+  usePresentContext(ManagerContext, "useSettingsManager");
 
 type ProviderProps = React.PropsWithChildren<{
   settingsManager: SettingsManager;
@@ -644,12 +649,14 @@ export const Provider: React.FC<ProviderProps> = ({ settingsManager, children })
 
   // This debug output will be useful for future debugging sessions.
   useEffect(() => {
-    console.debug('Current settings: ', settings);
+    console.debug("Current settings: ", settings);
   });
 
   return (
-    <Context.Provider value={settings}>
-      {children}
-    </Context.Provider>
+    <ManagerContext.Provider value={settingsManager}>
+      <Context.Provider value={settings}>
+        {children}
+      </Context.Provider>
+    </ManagerContext.Provider>
   );
 };

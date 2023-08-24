@@ -9,13 +9,12 @@
   "nav-open-menu-button": "Menü",
   "nav-recording": "Aufnahme",
   "nav-settings": "Einstellungen",
-  "nav-about": "Info",
 
   "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
 
-  "save-creation-button-upload": "In Opencast hochladen",
+  "save-creation-button-upload": "Zu Opencast hochladen",
   "save-creation-form-invalid": "Bitte geben Sie einen Titel und die Vortragenden an",
-  "save-creation-label-presenter": "Vortragende*r",
+  "save-creation-label-presenter": "Vortragende:r",
   "save-creation-label-title": "Titel",
   "save-creation-title": "Fast geschafft!",
   "save-creation-title-done": "Geschafft!",
@@ -23,7 +22,6 @@
   "save-creation-download-button": "Runterladen",
   "save-creation-download-cut-warning": "Der Videoschnitt funktioniert zurzeit leider nur, wenn Sie Ihre Aufnahme hochladen. In dem Video, das Sie hier herunterladen können, sind die im vorherigen Schritt entfernten Teile immer noch enthalten.",
   "save-creation-subsection-title-upload": "Zu Opencast hochladen",
-  "save-creation-upload-to": "Zu <1>{{server}}</1> hochladen",
   "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
   "save-creation-upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
   "save-creation-upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
@@ -63,7 +61,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Qualität",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
+  "sources-video-preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
 
   "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
   "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
@@ -87,7 +85,6 @@
   "settings-header": "Einstellungen",
 
   "settings-general-header": "Allgemein",
-  "settings-language-label": "Sprache",
 
   "back-button-label": "Zurück",
   "next-button-label": "Weiter",
@@ -110,7 +107,7 @@
   "review-pause": "Pausieren",
 
   "stop-button-title": "Aufzeichnung beenden",
-  "upload-notification": "Wird gerade hochgeladen...",
+  "upload-notification": "Aufnahme wird hochgeladen...",
   "upload-settings-button-store": "Verbindungseinstellungen speichern",
   "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
@@ -141,50 +138,102 @@
   "settings-back-to-recording": "Zurück zur Aufnahme",
   "video-settings-open": "Videoeinstellungen öffnen",
   "video-settings-close": "Videoeinstellungen schließen",
-  
-  "settings-theme-appearance": "Aussehen",
-  "settings-theme-color": "Farbmodus",
-  "settings-theme-dark": "Dunkles Design",
-  "settings-theme-light": "Helles Design",
-  "settings-theme-system": "System Design",
 
-  "nav-shortcuts": "Tastenkürzel",
-  "record-shortcuts": "Aufnahme",
-  "edit-shortcuts": "Editieren",
-  "other-shortcuts": "Weitere Shortcuts",
-  "no-groups": "Keine Gruppen",
-  "sequence-seperator": "oder",
-  
-  "control-key": "Strg",
-  "space-key": "Leertaste",
-  "shift-key": "Shift",
-  "left-key": "Links",
-  "right-key": "Rechts",
+  "header": {
+    "info": {
+      "label": "Info"
+    },
+    "theme": {
+      "label": "Aussehen",
+      "dark": "Dunkel",
+      "light": "Hell",
+      "auto": "Auto"
+    },
+    "language": {
+      "label": "Sprache"
+    }
+  },
+  "steps": {
+    "prev-button-label": "Zurück",
+    "next-button-label": "Weiter",
+    "video": {
+      "label": "Videoquelle auswählen"
+    },
+    "audio": {
+      "label": "Audioquelle auswählen"
+    },
+    "record": {
+      "label": "Aufnehmen",
+      "is-paused": "Aufzeichnung ist pausiert"
+    },
+    "review": {
+      "label": "Prüfen & kürzen",
+      "only-on-upload-note": "Das Kürzen des Videos funktioniert nur beim Upload zu Opencast. Lokal speichern können Sie nur die ungekürzte Aufnahme.",
+      "jump-to-cut-point": "Zum Schnittpunkt springen"
+    },
+    "finish": {
+      "label": "Aufnahme speichern",
+      "upload-button": "Hochladen",
+      "save-locally": "Lokal speichern",
+      "recording-saved": "Aufnahme gespeichert",
+      "finish-button": "Abschließen"
+    }
+  },
+  "shortcuts": {
+    "label": "Tastenkürzel",
 
-  "record-display": "Nur Bildschirm aufnehmen",
-  "record-camera": "Nur Kamera aufnehmen",
-  "record-both": "Kamera und Display aufnehmen",
-  "record-audio": "Mit Audio aufnehmen",
-  "record-no-audio": "Ohne Audio aufnehmen",
-  "start-recording": "Aufnahme starten",
-  "stop-recording": "Aufnahme beenden",
-  "pause-recording": "Aufnahme pausieren/fortsetzen",
+    "general": "General",
+    "show-available-shortcuts": "Verfügbare Tastenkürzel anzeigen",
+    "show-overview": "Diese Übersicht anzeigen",
+    "close-overlay": "Dialog schließen",
+    "tab-elements": "Durch Seitenelemente navigieren",
 
-  "play-pause": "Video abspielen/anhalten",
-  "skip-five": "5 Sekunden weiter",
-  "back-five": "5 Sekunden zurück",
-  "frame-forward": "Ein Frame weiter",
-  "frame-back": "Ein Frame zurück",
-  "cut-left": "Links schneiden",
-  "cut-right": "Rechts schneiden",
-  "delete-left": "Linke Schnittmarkierung entfernen",
-  "delete-right": "Rechte Schnittmarkierung entfernen",
+    "select-display": "Bildschirm auswählen",
+    "select-camera": "Kamera auswählen",
+    "select-both": "Bildschirm & Kamera auswählen",
 
-  "tab-elements": "Durch Seitenelemente navigieren",
-  "next-button": "Weiter/Bestätigen",
-  "back-button": "Zurück/Verwerfen",
-  "upload-video": "Video auf Opencast hochladen",
-  "download-video": "Video herunterladen",
-  "new-recording": "Neue Aufnahme starten"
+    "select-microphone": "Mikrofon auswählen",
+    "select-no-audio": "Ohne Audio",
 
+    "start-pause-resume-recording": "Aufzeichnung starten/​pausieren",
+
+    "record-shortcuts": "Aufnahme",
+    "edit-shortcuts": "Editieren",
+    "other-shortcuts": "Weitere Shortcuts",
+    "no-groups": "Keine Gruppen",
+    "sequence-seperator": "oder",
+
+    "keys": {
+      "escape": "Esc",
+      "control": "Strg",
+      "space": "Leertaste",
+      "shift": "Shift",
+      "left": "Links",
+      "right": "Rechts"
+    },
+
+    "start-recording": "Aufnahme starten",
+    "stop-recording": "Aufnahme beenden",
+    "pause-recording": "Aufnahme pausieren/​fortsetzen",
+
+    "review": {
+      "play-pause": "Abspielen/​pausieren",
+      "skip-five": "5 Sekunden weiter",
+      "back-five": "5 Sekunden zurück",
+      "frame-forward": "Ein Frame weiter",
+      "frame-back": "Ein Frame zurück",
+      "cut-left": "Links schneiden",
+      "cut-right": "Rechts schneiden",
+      "delete-left": "Linke Schnittmarkierung entfernen",
+      "delete-right": "Rechte Schnittmarkierung entfernen"
+    },
+    "finish": {
+      "upload-video": "Video auf Opencast hochladen",
+      "download-video": "Video herunterladen",
+      "new-recording": "Neue Aufnahme starten"
+    },
+
+    "next-button": "Weiter/​Bestätigen",
+    "back-button": "Zurück/​Verwerfen"
+  }
 }

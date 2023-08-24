@@ -9,7 +9,6 @@
   "nav-open-menu-button": "Menu",
   "nav-recording": "Enregistrement",
   "nav-settings": "Paramètres",
-  "nav-about": "À propos",
   "review-button-discard-and-record": "Ignorer et réenregistrer",
   "save-creation-button-upload": "Téléverser vers Opencast",
   "save-creation-form-invalid": "Veuillez indiquer le titre et le présentateur",
@@ -48,7 +47,6 @@
   "settings-header": "Paramètres",
 
   "settings-general-header": "Général",
-  "settings-language-label": "Langue",
 
   "back-button-label": "Retour",
   "next-button-label": "Suivant",
@@ -69,7 +67,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Qualité",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
+  "sources-video-preferences-note": "<0>Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
 
   "sources-audio-question": "Enregistrer l’audio ?",
   "sources-audio-microphone": "Microphone",
@@ -142,5 +140,11 @@
   "settings-back-to-recording": "Retour à l’enregistrement",
 
   "video-settings-open": "Ouvrir les paramètres vidéo",
-  "video-settings-close": "Fermer les paramètres vidéo"
+  "video-settings-close": "Fermer les paramètres vidéo",
+
+  "header": {
+    "language": {
+      "label": "Langue"
+    }
+  }
 }

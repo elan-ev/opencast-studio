@@ -1,25 +1,19 @@
-//; -*- mode: rjsx;-*-
-/** @jsx jsx */
-import { jsx, ThemeProvider } from 'theme-ui';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { notNullish } from "@opencast/appkit";
 
-import { Global } from '@emotion/core';
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import GlobalStyle from './style/global-style';
-import theme from './style/theme';
-
-import './i18n';
-import { SettingsManager, Provider as SettingsProvider } from './settings';
-import { Opencast, Provider as OpencastProvider } from './opencast';
-import { userHasWebcam, sleep } from './util';
+import "./i18n";
+import { SettingsManager, Provider as SettingsProvider } from "./settings";
+import { Opencast, Provider as OpencastProvider } from "./opencast";
+import { userHasWebcam, sleep } from "./util";
+import { Provider as StudioStateProvier } from "./studio-state";
 
 
 // Load the rest of the application and try to fetch the settings file from the
 // server.
 const initialize = Promise.all([
   // Load rest of the application code
-  import('./App').then(mod => mod.default),
+  import("./App").then(mod => mod.App),
 
   // Check for camera devices
   userHasWebcam(),
@@ -43,27 +37,27 @@ const initialize = Promise.all([
 ]);
 
 const render = (body: JSX.Element) => {
-  ReactDOM.render(body, document.getElementById('root'));
+  const reactRoot = ReactDOM.createRoot(notNullish(document.getElementById("root")));
+  reactRoot.render(body);
 };
 
 // After the initialization is done, render to the root element.
 initialize.then(
-  ([App, userHasWebcam, [settingsManager, opencast]]) => {
+  ([App, hasWebcam, [settingsManager, opencast]]) => {
     render(
       <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <Global styles={GlobalStyle} />
-          <OpencastProvider initial={opencast}>
-            <SettingsProvider settingsManager={settingsManager}>
-              <App settingsManager={settingsManager} userHasWebcam={userHasWebcam} />
-            </SettingsProvider>
-          </OpencastProvider>
-        </ThemeProvider>
+        <OpencastProvider initial={opencast}>
+          <SettingsProvider settingsManager={settingsManager}>
+            <StudioStateProvier hasWebcam={hasWebcam}>
+              <App />
+            </StudioStateProvier>
+          </SettingsProvider>
+        </OpencastProvider>
       </React.StrictMode>
     );
   },
 
-  // This error case is vey unlikely to occur.
+  // This error case is very unlikely to occur.
   e => render(<p>
     {`Fatal error while loading app: ${e.message}`}
     <br />

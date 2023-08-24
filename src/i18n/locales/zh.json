@@ -9,7 +9,6 @@
   "nav-open-menu-button": "菜单",
   "nav-recording": "录制中",
   "nav-settings": "设置",
-  "nav-about": "关于",
   "review-button-discard-and-record": "丢弃并再次录制",
   "save-creation-button-upload": "上传到Opencast",
   "save-creation-form-invalid": "请设置标题和演示者",
@@ -67,7 +66,7 @@
   "sources-video-aspect-ratio-auto": "自动",
   "sources-video-quality": "质量",
   "sources-video-quality-auto": "自动",
-  "sources-video-preferences-note": "<0>*注意：</0> 这些只是首选项，不能保证您的设备实际支持所有选项。如有疑问，请选择'自动'。",
+  "sources-video-preferences-note": "<0>注意：</0> 这些只是首选项，不能保证您的设备实际支持所有选项。如有疑问，请选择'自动'。",
 
   "sources-audio-question": "录制音频？",
   "sources-audio-microphone": "麦克风",

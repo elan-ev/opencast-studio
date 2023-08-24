@@ -9,7 +9,6 @@
   "nav-open-menu-button": "Menu",
   "nav-recording": "Recording",
   "nav-settings": "Settings",
-  "nav-about": "About",
   "review-button-discard-and-record": "Discard and record again",
   "save-creation-button-upload": "Upload to Opencast",
   "save-creation-form-invalid": "Please set title and presenter",
@@ -21,7 +20,6 @@
   "save-creation-download-button": "Download",
   "save-creation-download-cut-warning": "Cutting the video currently only works when uploading to Opencast. The parts you have marked for removal in the previous step will still be contained in the downloaded video.",
   "save-creation-subsection-title-upload": "Upload to Opencast",
-  "save-creation-upload-to": "Upload to <1>{{server}}</1>",
   "save-creation-upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
   "save-creation-upload-invalid-response": "Upload failed: an unexpected response was returned.",
   "save-creation-upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
@@ -48,7 +46,6 @@
   "settings-header": "Settings",
 
   "settings-general-header": "General",
-  "settings-language-label": "Language",
 
   "back-button-label": "Back",
   "next-button-label": "Next",
@@ -69,7 +66,7 @@
   "sources-video-aspect-ratio-auto": "auto",
   "sources-video-quality": "Quality",
   "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>*Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
+  "sources-video-preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
 
   "sources-audio-question": "Record audio?",
   "sources-audio-microphone": "Microphone",
@@ -107,7 +104,7 @@
   "review-set-end": "Set current time as end",
   "review-remove-cut-point": "Remove",
   "review-part-will-be-removed": "This part will be removed",
-  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
+  "review-player-progress": "{{currentTime}} / {{duration}}",
   "review-play": "Play",
   "review-pause": "Pause",
 
@@ -143,49 +140,105 @@
   "video-settings-open": "Open video settings",
   "video-settings-close": "Close video settings",
 
-  "settings-theme-appearance": "Appearance",
-  "settings-theme-color": "Color mode",
-  "settings-theme-dark": "Dark mode",
-  "settings-theme-light": "Light mode",
-  "settings-theme-system": "System design",
 
-  "nav-shortcuts": "Shortcuts",
-  "record-shortcuts": "Recording",
-  "edit-shortcuts": "Editing",
-  "other-shortcuts": "Other shortcuts",
-  "no-groups": "No groups",
-  "sequence-seperator": "or",
-  
-  "control-key": "Ctrl",
-  "space-key": "Spacebar",
-  "shift-key": "Shift",
-  "left-key": "Left",
-  "right-key": "Right",
+  "header": {
+    "info": {
+      "label": "Info"
+    },
+    "theme": {
+      "label": "Appearance",
+      "dark": "Dark",
+      "light": "Light",
+      "auto": "Auto"
+    },
+    "language": {
+      "label": "Language"
+    }
+  },
+  "steps": {
+    "prev-button-label": "Back",
+    "next-button-label": "Next",
+    "video": {
+      "label": "Select video source"
+    },
+    "audio": {
+      "label": "Select audio source"
+    },
+    "record": {
+      "label": "Record",
+      "is-paused": "Recording is paused"
+    },
+    "review": {
+      "label": "Review & trim",
+      "only-on-upload-note": "Trimming the video only works when uploading to Opencast and not when saving the recording locally.",
+      "jump-to-cut-point": "Jump to cut point"
+    },
+    "finish": {
+      "label": "Save video",
+      "upload-button": "Upload",
+      "save-locally": "Save locally",
+      "recording-saved": "Recording saved",
+      "finish-button": "Finish"
+    }
+  },
+  "shortcuts": {
+    "label": "Shortcuts",
 
-  "record-display": "Record only display",
-  "record-camera": "Record only camera",
-  "record-both": "Record both: display and camera",
-  "record-audio": "Record with audio",
-  "record-no-audio": "Record without audio",
-  "start-recording": "Start recording",
-  "stop-recording": "Stop recording",
-  "pause-recording": "Pause/Resume recording",
+    "general": "General",
+    "show-available-shortcuts": "Show available shortcuts",
+    "show-overview": "Show this overview",
+    "close-overlay": "Close dialog",
+    "tab-elements": "Navigate through elements",
 
-  "play-pause": "Play/Pause video",
-  "skip-five": "5 seconds forward",
-  "back-five": "5 seconds back",
-  "frame-forward": "One frame forward",
-  "frame-back": "One frame back",
-  "cut-left": "Cut left",
-  "cut-right": "Cut right",
-  "delete-left": "Delete left crop marker",
-  "delete-right": "Delete right crop marker",
+    "select-display": "Select display",
+    "select-camera": "Select camera",
+    "select-both": "Select display & camera",
 
-  "tab-elements": "Navigate through elements",
-  "next-button": "Next/Confirm buttons",
-  "back-button": "Back/Discard buttons",
-  "upload-video": "Upload video to Opencast",
-  "download-video": "Download video",
-  "new-recording": "Start new recording button"
+    "select-microphone": "Select microphone",
+    "select-no-audio": "Select no audio",
 
+    "start-pause-resume-recording": "Start/​pause recording",
+
+    "record-shortcuts": "Recording",
+    "edit-shortcuts": "Editing",
+    "other-shortcuts": "Other shortcuts",
+    "no-groups": "No groups",
+    "sequence-seperator": "or",
+
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Option",
+      "command": "Cmd",
+      "space": "Spacebar",
+      "shift": "Shift",
+      "left": "Left",
+      "right": "Right"
+    },
+
+    "start-recording": "Start recording",
+    "stop-recording": "Stop recording",
+    "pause-recording": "Pause/​Resume recording",
+
+    "review": {
+      "play-pause": "Play/​Pause video",
+      "skip-five": "5 seconds forward",
+      "back-five": "5 seconds back",
+      "frame-forward": "One frame forward",
+      "frame-back": "One frame back",
+      "cut-left": "Cut left",
+      "cut-right": "Cut right",
+      "delete-left": "Delete left cut marker",
+      "delete-right": "Delete right cut marker"
+    },
+    "finish": {
+      "upload-video": "Upload video to Opencast",
+      "download-video": "Download video",
+      "new-recording": "Start new recording"
+    },
+
+    "next-button": "Next/​Confirm",
+    "back-button": "Back/​Discard"
+  }
 }

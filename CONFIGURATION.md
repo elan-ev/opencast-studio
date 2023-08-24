@@ -169,28 +169,6 @@ further below for information on that.
 # Note: this setting can ONLY be set via `settings.toml` and not via GET
 # parameter.
 #allowedDomains = ["mylms.myuniversity.de"]
-
-[theme]
-# You can add here your own CSS
-customCSS = """
-/* Sample pink theme */
-#root {
-  --theme-ui-colors-primary: #b03c7e;
-  --theme-ui-colors-btn-hover: #93326a;
-}
-
-/* Sample dark theme */
-/*
-:root {
-  --theme-ui-colors-background: #303238;
-  --theme-ui-colors-text: #FFF;
-}
-#root {
-  --theme-ui-colors-info: #737373;
-  --theme-ui-colors-gray-3: #797676;
-}
-*/
-"""
 ```
 
 

@@ -7,7 +7,7 @@ root = true
 indent_style = space
 indent_size = 2
 max_line_length = 100
-quote_type = single
+quote_type = double
 
 # We recommend you to keep these unchanged
 end_of_line = lf
