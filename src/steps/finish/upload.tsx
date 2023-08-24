@@ -22,7 +22,7 @@ export const UploadBox: React.FC = () => {
   const settings = useSettings();
   const { t } = useTranslation();
   const opencast = useOpencast();
-  const { recordings, upload: uploadState, title, presenter, start, end } = useStudioState();
+  const { recordings, upload: uploadState, title, presenter, ...state } = useStudioState();
   const dispatch = useDispatch();
 
   function onProgress(progress: number) {
@@ -108,10 +108,12 @@ export const UploadBox: React.FC = () => {
       recordings: recordings.filter(Boolean),
       title,
       presenter,
-      start,
-      end,
       uploadSettings: settings.upload,
       onProgress,
+      start: state.start,
+      end: state.end,
+      startTime: state.recordingStartTime ?? unreachable("no start time set"),
+      endTime: state.recordingEndTime ?? unreachable("no end time set"),
     });
     progressHistory = [];
 

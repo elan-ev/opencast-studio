@@ -50,6 +50,9 @@ export type StudioState = {
   start: null | number;
   end: null | number;
 
+  recordingStartTime: null | Date;
+  recordingEndTime: null | Date;
+
   upload: {
     error: null | string;
     state: UploadState;
@@ -89,6 +92,9 @@ const initialState = (hasWebcam: boolean): StudioState => ({
 
   start: null,
   end: null,
+
+  recordingStartTime: null,
+  recordingEndTime: null,
 
   upload: {
     error: null,
@@ -171,10 +177,15 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case "USER_UNEXPETED_END":
       return { ...state, userStream: null, userUnexpectedEnd: true };
 
-    case "START_RECORDING": return { ...state, isRecording: true };
-    case "STOP_RECORDING": return { ...state, isRecording: false };
+    case "START_RECORDING": return { ...state, isRecording: true, recordingStartTime: new Date() };
+    case "STOP_RECORDING": return { ...state, isRecording: false, recordingEndTime: new Date() };
     case "STOP_RECORDING_PREMATURELY":
-      return { ...state, isRecording: false, prematureRecordingEnd: true };
+      return {
+        ...state,
+        isRecording: false,
+        prematureRecordingEnd: true,
+        recordingEndTime: new Date(),
+      };
     case "CLEAR_RECORDINGS":
       return { ...state, recordings: [], prematureRecordingEnd: false };
     case "ADD_RECORDING":
