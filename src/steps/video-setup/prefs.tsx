@@ -6,7 +6,7 @@ import {
   Floating, FloatingContainer, FloatingHandle, FloatingTrigger, ProtoButton,
   WithTooltip, screenWidthAtMost, useColorScheme,
 } from "@opencast/appkit";
-import { FiSettings, FiX } from "react-icons/fi";
+import { FiSettings, FiX, FiInfo, FiVolumeX, FiVolume2 } from "react-icons/fi";
 
 import { Settings, useSettings } from "../../settings";
 import { COLORS, getUniqueDevices } from "../../util";
@@ -123,6 +123,56 @@ type StreamSettingsProps = {
   isDesktop: boolean;
   stream: MediaStream | null;
 }
+
+export const DesktopAudioInfo: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
+  const { t } = useTranslation();
+  const audioLength = stream?.getAudioTracks().length;
+
+  const hasDesktopAudio = () => {
+    if (audioLength !== undefined && audioLength > 0) {
+      return true;
+    }
+    return false;
+  };
+
+  return (
+    <div css={{
+      display: isDesktop ? "initial" : "none",
+      position: "absolute",
+      top: 12,
+      right: 12,
+      whiteSpace: "pre-line",
+    }}>
+      <WithTooltip
+        placement="bottom"
+        tooltip={hasDesktopAudio() ? t("desktop-audio-info") : t("no-desktop-audio-info")}
+      >
+        <ProtoButton
+          css={{
+            display: "inline-block",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            borderRadius: "5px",
+            padding: 4,
+            fontSize: 15,
+            backdropFilter: "invert(1)",
+            lineHeight: 0,
+            cursor: "pointer",
+            "&:hover, &:focus-visible": {
+              backgroundColor: "rgba(0, 0, 0, 0.9)",
+            },
+            "&:focus-visible": {
+              outline: "5px dashed white",
+              outlineOffset: -2.5,
+            },
+          }}
+        >
+          <FiInfo /> {hasDesktopAudio() ? <FiVolume2 /> : <FiVolumeX />}
+        </ProtoButton>
+      </WithTooltip>
+    </div>
+  );
+};
 
 export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
   const dispatch = useDispatch();

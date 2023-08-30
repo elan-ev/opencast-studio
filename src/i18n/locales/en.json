@@ -12,6 +12,9 @@
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on macOS, we recommend switching to Chrome or Firefox.",
 
+  "desktop-audio-info": "Desktop audio is recorded",
+  "no-desktop-audio-info": "Desktop audio is not recorded. \n If you want to record desktop audio, please use one of the following browsers: \n - Google Chrome, Edge and Opera: On Windows, the entire system audio can be captured, but on Linux and macOS only the audio of a tab can be captured. \n - Firefox, Safari and Internet Explorer do not support recording desktop audio.",
+
   "header": {
     "info": {
       "label": "Info"

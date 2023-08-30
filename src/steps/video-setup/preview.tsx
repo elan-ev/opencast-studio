@@ -3,7 +3,7 @@ import { Spinner, match, unreachable, useColorScheme } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
 
 import { COLORS, dimensionsOf } from "../../util";
-import { StreamSettings } from "./prefs";
+import { StreamSettings, DesktopAudioInfo } from "./prefs";
 import { Input } from ".";
 import { VideoBox, useVideoBoxResize } from "../../ui/VideoBox";
 import { ErrorBox } from "../../ui/ErrorBox";
@@ -63,6 +63,7 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
       },
     }}>
       <PreviewVideo input={input} />
+      <DesktopAudioInfo isDesktop={input.isDesktop} stream={input.stream} />
       {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
     </div>
   );
