@@ -47,7 +47,7 @@
     "react-icons": "^4.10.1",
     "react-page-visibility": "^7.0.0",
     "use-resize-observer": "^9.1.0",
-    "webpack": "^5.85.1",
+    "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
