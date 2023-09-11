@@ -27,7 +27,7 @@
     "@iarna/toml": "^2.2.5",
     "@opencast/appkit": "^0.2.0",
     "@svgr/webpack": "^8.1.0",
-    "babel-loader": "^9.1.2",
+    "babel-loader": "^9.1.3",
     "copy-webpack-plugin": "^10.2.4",
     "deepmerge": "^4.3.1",
     "fast-deep-equal": "^3.1.3",
