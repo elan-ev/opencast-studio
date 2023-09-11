@@ -347,12 +347,16 @@ export class Opencast {
    * At the start of this method, `refreshConnection` is called. That
    * potentially changed the `state`.
    */
-  async upload({ recordings, title, presenter, start, end, uploadSettings, onProgress }: {
+  async upload({
+    recordings, title, presenter, start, end, uploadSettings, startTime, endTime, onProgress,
+  }: {
     recordings: Recording[];
     title: string;
     presenter: string;
     start: number | null;
     end: number | null;
+    startTime: Date;
+    endTime: Date;
     uploadSettings: Settings["upload"];
     onProgress: (p: number) => void;
   }): Promise<UploadState> {
@@ -379,7 +383,9 @@ export class Opencast {
         .then(response => response.text());
 
       // Add metadata to media package
-      mediaPackage = await this.addDcCatalog({ mediaPackage, uploadSettings, title, presenter });
+      mediaPackage = await this.addDcCatalog(
+        { mediaPackage, uploadSettings, title, presenter, startTime, endTime }
+      );
 
       // Set appropriate ACL unless the configuration says no.
       if (uploadSettings?.acl !== false) {
@@ -434,15 +440,17 @@ export class Opencast {
    * Adds the DC Catalog with the given metadata to the current ingest process
    * via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
    */
-  async addDcCatalog({ mediaPackage, title, presenter, uploadSettings }: {
+  async addDcCatalog({ mediaPackage, uploadSettings, ...rest }: {
     mediaPackage: string;
     title: string;
     presenter: string;
     uploadSettings: Settings["upload"];
+    startTime: Date;
+    endTime: Date;
   }) {
     const seriesId = uploadSettings?.seriesId;
     const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
-    const dcc = this.constructDcc(template, { presenter, title, seriesId });
+    const dcc = this.constructDcc(template, { ...rest, seriesId });
 
     const body = new FormData();
     body.append("mediaPackage", mediaPackage);
@@ -634,9 +642,11 @@ export class Opencast {
     return renderTemplate(template, view);
   }
 
-  constructDcc(template: string, { title, presenter, seriesId }: {
+  constructDcc(template: string, { title, presenter, startTime, endTime, seriesId }: {
     title: string;
     presenter: string;
+    startTime: Date;
+    endTime: Date;
     seriesId?: string;
   }) {
     // Prepare template "view": the values that can be used within the template.
@@ -647,6 +657,8 @@ export class Opencast {
       presenter,
       seriesId,
       now: new Date().toISOString(),
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
     };
 
     return renderTemplate(template, view);
@@ -762,6 +774,9 @@ const DEFAULT_DCC_TEMPLATE = `<?xml version="1.0" encoding="UTF-8"?>
     <dcterms:title>{{ title }}</dcterms:title>
     {{ #presenter }}<dcterms:creator>{{ presenter }}</dcterms:creator>{{ /presenter }}
     {{ #seriesId }}<dcterms:isPartOf>{{ seriesId }}</dcterms:isPartOf>{{ /seriesId }}
+    <dcterms:temporal xsi:type="dcterms:Period">
+      start={{ startTime }}; end={{ endTime }}; scheme=W3CDTF;
+    </dcterms:temporal>
     <dcterms:spatial>Opencast Studio</dcterms:spatial>
 </dublincore>
 `;
