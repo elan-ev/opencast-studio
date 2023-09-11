@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/core": "^7.22.17",
     "@babel/preset-react": "^7.22.5",
-    "@babel/preset-typescript": "^7.21.5",
+    "@babel/preset-typescript": "^7.22.15",
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@fontsource-variable/roboto-flex": "^5.0.8",
