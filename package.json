@@ -26,7 +26,7 @@
     "@fontsource-variable/roboto-flex": "^5.0.3",
     "@iarna/toml": "^2.2.5",
     "@opencast/appkit": "^0.2.0",
-    "@svgr/webpack": "^8.0.1",
+    "@svgr/webpack": "^8.1.0",
     "babel-loader": "^9.1.2",
     "copy-webpack-plugin": "^10.2.4",
     "deepmerge": "^4.3.1",
