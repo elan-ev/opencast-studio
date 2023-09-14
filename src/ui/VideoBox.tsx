@@ -21,6 +21,12 @@ export type VideoBoxProps = {
 export type VideoBoxChild = {
   body: JSX.Element;
   dimensions: () => [number, number] | null;
+  /**
+   * If `true` (default), the calculated height is set as `height` of the div.
+   * If `false`, it is not set, which allows the div to grow in height. Used to
+   * display error messages.
+   */
+  calculatedHeight?: boolean;
 };
 
 // Manages one or two children with given aspect ratio.
@@ -104,7 +110,7 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
           <div ref={ref} css={{ flex: "1 0 0", minHeight, display: "flex" }}>
             <div css={{
-              height: childHeight,
+              height: (child.calculatedHeight ?? true) ? childHeight : undefined,
               width: childWidth,
               minWidth: `${minWidth}px`,
               margin: "auto",
@@ -213,7 +219,7 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
             }}
           >
             <div css={{
-              height: heights[0],
+              height: (children[0].calculatedHeight ?? true) ? heights[0] : undefined,
               width: widths[0],
               minWidth: `${minWidth}px`,
               margin: "auto",
@@ -221,7 +227,7 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
               { children[0].body }
             </div>
             <div css={{
-              height: heights[1],
+              height: (children[1].calculatedHeight ?? true) ? heights[1] : undefined,
               width: widths[1],
               minWidth: `${minWidth}px`,
               margin: "auto",

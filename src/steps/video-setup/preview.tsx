@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { Spinner, match, unreachable, useColorScheme } from "@opencast/appkit";
-import { FiAlertTriangle } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
 import { COLORS, dimensionsOf } from "../../util";
@@ -24,15 +23,18 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
     1: () => [{
       body: <StreamPreview input={inputs[0]} />,
       dimensions: () => dimensionsOf(inputs[0].stream),
+      calculatedHeight: (inputs[0].allowed !== false && inputs[0].unexpectedEnd === false),
     }],
     2: () => [
       {
         body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
+        calculatedHeight: (inputs[0].allowed !== false && inputs[0].unexpectedEnd === false),
       },
       {
         body: <StreamPreview input={inputs[1]} />,
         dimensions: () => dimensionsOf(inputs[1].stream),
+        calculatedHeight: (inputs[1].allowed !== false && inputs[1].unexpectedEnd === false),
       },
     ],
   }, unreachable);
@@ -86,7 +88,14 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
   if (!stream) {
     let inner: JSX.Element;
     if (allowed === false || unexpectedEnd) {
-      inner = <FiAlertTriangle css={{ fontSize: 48, color: COLORS.danger4 }} />;
+      inner = <div>
+        {allowed === false && <ErrorBox
+          title={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-title`)}
+          body={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-text`)}
+        />}
+        {/* TODO: differentiate between desktop and camera for better error */}
+        {unexpectedEnd && <ErrorBox body={t("error-lost-video-stream")} />}
+      </div>;
     } else {
       inner = <Spinner size={75} css={{ color: COLORS.neutral60 }} />;
     }
@@ -98,17 +107,6 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
         width: "100%",
         height: "100%",
       }}>
-        {allowed === false && <ErrorBox
-          title={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-title`)}
-          body={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-text`)}
-          css={{ marginBottom: 0 }}
-        />}
-        {/* TODO: differentiate between desktop and camera for better error */}
-        {unexpectedEnd && <ErrorBox
-          body={t("error-lost-video-stream")}
-          css={{ marginBottom: 0 }}
-        />}
-
         <div css={{
           flex: "1",
           display: "flex",
