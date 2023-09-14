@@ -1,7 +1,8 @@
 import { HiOutlineTranslate } from "react-icons/hi";
 import { FiInfo, FiMoon } from "react-icons/fi";
 import {
-  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem, ProtoButton, screenWidthAtMost,
+  HeaderMenuItemProps, useColorScheme, WithHeaderMenu, checkboxMenuItem, ProtoButton,
+  screenWidthAtMost, match,
 } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
 import React, { forwardRef } from "react";
@@ -20,14 +21,23 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ setOverlayBoxState, inert }) => {
-  const { scheme } = useColorScheme();
+  const { scheme, isHighContrast } = useColorScheme();
 
   return (
     <header {...{ inert: inert ? "" : null }} css={{
-      backgroundColor: scheme === "light" ? COLORS.neutral60 : COLORS.neutral20,
+      backgroundColor: match(scheme, {
+        "light": () => COLORS.neutral60,
+        "dark": () => COLORS.neutral20,
+        "dark-high-contrast": () => "black",
+        "light-high-contrast": () => "black",
+      }),
+      color: isHighContrast ? "white" : "inherit",
       height: "var(--header-height)",
       display: "flex",
       justifyContent: "space-between",
+      ...scheme === "dark-high-contrast"
+        ? { borderBottom: "1px solid white" }
+        : { paddingBottom: 1 },
     }}>
       <Logo />
       <Buttons {...{ setOverlayBoxState }}/>
@@ -39,13 +49,12 @@ const Logo: React.FC = () => {
   const path = (filename: string) => DEFINES.publicPath
     + (DEFINES.publicPath.endsWith("/") ? "" : "/")
     + filename;
-  const isLight = useColorScheme().scheme === "light";
 
   return (
     <picture css={{
       height: "100%",
       display: "flex",
-      opacity: isLight ? 1.0 : 0.8,
+      opacity: useColorScheme().scheme === "dark" ? 0.8 : 1.0,
       paddingLeft: 8,
       alignItems: "center",
       "> *": {
@@ -115,7 +124,7 @@ const ThemeButton: React.FC = () => {
   const { scheme, isAuto, update } = useColorScheme();
 
   const currentPref = isAuto ? "auto" : scheme;
-  const choices = ["auto", "light", "dark"] as const;
+  const choices = ["auto", "light", "dark", "light-high-contrast", "dark-high-contrast"] as const;
   const menuItems: HeaderMenuItemProps[] = choices.map(choice => checkboxMenuItem({
     checked: currentPref === choice,
     children: <>{t(`header.theme.${choice}`)}</>,
@@ -175,7 +184,7 @@ const BUTTON_LABEL_BREAKPOINT = 770;
 
 const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
   ({ icon, label, children, ...rest }, ref) => {
-    const isLight = useColorScheme().scheme === "light";
+    const { scheme, isHighContrast } = useColorScheme();
 
     return (
       <ProtoButton {...rest} ref={ref} css={{
@@ -187,15 +196,30 @@ const HeaderButton = forwardRef<HTMLButtonElement, HeaderButtonProps>(
         fontSize: 16,
         fontFamily: "inherit",
         fontWeight: 500,
-        color: isLight ? COLORS.neutral05 : COLORS.neutral90,
+        color: match(scheme, {
+          "light": () => COLORS.neutral05,
+          "dark": () => COLORS.neutral90,
+          "dark-high-contrast": () => "white",
+          "light-high-contrast": () => "white",
+        }),
         borderRadius: 6,
         padding: "6px 8px",
 
         ":hover, :active": {
-          outline: `2px solid ${COLORS.neutral50}`,
-          backgroundColor: isLight ? COLORS.neutral70 : COLORS.neutral10,
+          outline: `2px solid ${isHighContrast ? "#aaa" : COLORS.neutral50}`,
+          backgroundColor: match(scheme, {
+            "light": () => COLORS.neutral70,
+            "dark": () => COLORS.neutral10,
+            "dark-high-contrast": () => "none",
+            "light-high-contrast": () => "none",
+          }),
         },
-        ...focusStyle({}, isLight ? COLORS.neutral10 : COLORS.accent8),
+        ...focusStyle({}, match(scheme, {
+          "light": () => COLORS.neutral10,
+          "dark": () => COLORS.accent8,
+          "dark-high-contrast": () => "#aaa",
+          "light-high-contrast": () => "#aaa",
+        })),
 
         "> svg": {
           fontSize: 22,

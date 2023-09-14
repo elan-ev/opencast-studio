@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { match, notNullish, screenWidthAbove, screenWidthAtMost } from "@opencast/appkit";
+import { match, notNullish, screenWidthAbove, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 import { FiCircle } from "react-icons/fi";
 
 import StepCurrent from "../icons/step-current.svg";
@@ -69,6 +69,7 @@ type ProgressSidebarProps = {
  */
 const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
   const { t } = useTranslation();
+  const { isHighContrast } = useColorScheme();
 
   const currentIndex = stepIndex(currentStep);
   const labels = [
@@ -86,6 +87,9 @@ const ProgressSidebar: React.FC<ProgressSidebarProps> = ({ currentStep }) => {
       position: "relative",
       flexShrink: "0",
       backgroundColor: COLORS.neutral05,
+      ...isHighContrast && {
+        borderRight: `1px solid ${COLORS.neutral90}`,
+      },
       [screenWidthAbove(BREAKPOINTS.large)]: {
         width: 160,
         minWidth: 160,

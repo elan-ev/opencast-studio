@@ -11,7 +11,7 @@ export const App: React.FC = () => {
   return <>
     <GlobalStyle />
     <PreventClose />
-    <ColorSchemeProvider allowedSchemes={["light", "dark"]}>
+    <ColorSchemeProvider>
       <Root />
     </ColorSchemeProvider>
   </>;

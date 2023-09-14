@@ -6,12 +6,14 @@
     <meta name="description" content="Web-based recording studio for Opencast" />
     <title>Opencast Studio</title>
     <script>
-      // This is used to determine the color mode as soon as possible to avoid a
-      // flash of white (the loading indicator) for a user using dark mode.
-      const scheme = window.localStorage.getItem("colorScheme");
-      document.documentElement.dataset.colorScheme = (scheme === "dark" || scheme === "light")
-        ? scheme
-        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      let scheme = window.localStorage.getItem("colorScheme");
+      const isValid = ["light", "dark", "light-high-contrast", "dark-high-contrast"].includes(scheme);
+      if (!isValid) {
+        const lightness = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        const contrast = window.matchMedia("(prefers-contrast: more)").matches ? "-high-contrast" : "";
+        scheme = `${lightness}${contrast}`;
+      }
+      document.documentElement.dataset.colorScheme = scheme;
     </script>
     <style>
       /* ----- Define colors and other color-scheme dependent things ----- */
@@ -72,6 +74,66 @@
         --color-accent4: #195483;
 
         --shadow-color: rgba(0, 0, 0, 0.3);
+        color-scheme: dark;
+      }
+
+      html[data-color-scheme="light-high-contrast"] {
+        --color-neutral05: #fff;
+        --color-neutral10: #fff;
+        --color-neutral15: #fff;
+        --color-neutral20: #000;
+        --color-neutral25: #000;
+        --color-neutral30: #000;
+        --color-neutral40: #000;
+        --color-neutral50: #000;
+        --color-neutral60: #000;
+        --color-neutral70: #000;
+        --color-neutral80: #000;
+        --color-neutral90: #000;
+
+        --color-danger0: #fff;
+        --color-danger1: #fff;
+        --color-danger2: #a50613;
+        --color-danger4: #a50613;
+        --color-danger5: #a50613;
+
+        --color-accent8: #000099;
+        --color-accent7: #000099;
+        --color-accent6: #000099;
+        --color-accent5: #000099;
+        --color-accent4: #000099;
+
+        --color-focus: #000099;
+        color-scheme: light;
+      }
+
+      html[data-color-scheme="dark-high-contrast"] {
+        --color-neutral05: #000;
+        --color-neutral10: #000;
+        --color-neutral15: #000;
+        --color-neutral20: #fff;
+        --color-neutral25: #fff;
+        --color-neutral30: #fff;
+        --color-neutral40: #fff;
+        --color-neutral50: #fff;
+        --color-neutral60: #fff;
+        --color-neutral70: #fff;
+        --color-neutral80: #fff;
+        --color-neutral90: #fff;
+
+        --color-danger0: #000;
+        --color-danger1: #000;
+        --color-danger2: #eb1722;
+        --color-danger4: #eb1722;
+        --color-danger5: #eb1722;
+
+        --color-accent8: #a6ffea;
+        --color-accent7: #a6ffea;
+        --color-accent6: #a6ffea;
+        --color-accent5: #a6ffea;
+        --color-accent4: #a6ffea;
+
+        --color-focus: #a6ffea;
         color-scheme: dark;
       }
 
