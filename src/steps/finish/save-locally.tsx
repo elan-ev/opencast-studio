@@ -7,6 +7,7 @@ import { useDispatch, useStudioState } from "../../studio-state";
 import { recordingFileName } from "../../util";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 import { prettyFileSize, sharedButtonStyle } from ".";
+import { useColorScheme } from "@opencast/appkit";
 
 
 
@@ -27,6 +28,7 @@ export const SaveLocally: React.FC = () => {
     const { deviceType, mimeType, url, downloaded, media: blob } = recording;
     const flavor = deviceType === "desktop" ? t("sources-display") : t("sources-user");
     const downloadName = recordingFileName({ mime: mimeType, flavor, title, presenter });
+    const { isHighContrast } = useColorScheme();
 
     if (!url) {
       return null;
@@ -87,7 +89,7 @@ export const SaveLocally: React.FC = () => {
           role="button"
           onClick={() => dispatch({ type: "MARK_DOWNLOADED", index: i })}
           css={{
-            ...sharedButtonStyle,
+            ...sharedButtonStyle(isHighContrast),
             justifyContent: "center",
             maxWidth: 260,
             margin: "auto",

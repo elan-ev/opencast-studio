@@ -1,6 +1,6 @@
 import React, { RefObject, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { ProtoButton, WithTooltip, notNullish } from "@opencast/appkit";
+import { ProtoButton, WithTooltip, notNullish, useColorScheme } from "@opencast/appkit";
 import { FiPause, FiPlay } from "react-icons/fi";
 
 import { useStudioState, useDispatch, Dispatcher } from "../../studio-state";
@@ -21,13 +21,14 @@ type SharedProps = {
 export const ControlBox: React.FC<SharedProps> = ({ previewController, currentTime }) => {
   const { t, i18n } = useTranslation();
   const duration = previewController.current?.duration;
+  const { isHighContrast } = useColorScheme();
 
   return (
     <div css={{
       backgroundColor: COLORS.neutral05,
       borderRadius: 8,
       padding: 16,
-      boxShadow: "0 4px 4px var(--shadow-color)",
+      boxShadow: isHighContrast ? "none" : "0 4px 4px var(--shadow-color)",
       display: "flex",
       flexDirection: "column",
       gap: 12,
@@ -79,6 +80,7 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
   const dispatch = useDispatch();
   const { start, end } = useStudioState();
   const ref = useRef<HTMLDivElement>(null);
+  const { isHighContrast } = useColorScheme();
 
   const setTime = (mouseEvent: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const rect = mouseEvent.currentTarget.getBoundingClientRect();
@@ -179,14 +181,14 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
             initialTime={start ?? 0}
             clamp={time => Math.min(time, end ?? duration)}
             onDrag={time => dispatch({ type: "UPDATE_START", time })}
-          ><CutMarker side="left" /></Draggable>
+          ><CutMarker side="left" isHighContrast={isHighContrast} /></Draggable>
           <Draggable
             scrubberRef={ref}
             previewController={previewController}
             initialTime={end ?? duration}
             clamp={time => Math.max(time, start ?? 0)}
             onDrag={time => dispatch({ type: "UPDATE_END", time })}
-          ><CutMarker side="right" /></Draggable>
+          ><CutMarker side="right" isHighContrast={isHighContrast} /></Draggable>
         </>}
 
         {/* The play progress bar, overlaying darkening everything behind. */}
@@ -205,9 +207,10 @@ const Scrubber: React.FC<SharedProps> = ({ previewController, currentTime }) => 
 
 type CutMarkerProps = {
   side: "left" | "right";
+  isHighContrast: boolean;
 };
 
-const CutMarker: React.FC<CutMarkerProps> = ({ side }) => (
+const CutMarker: React.FC<CutMarkerProps> = ({ side, isHighContrast }) => (
   <div css={{
     width: 14,
     height: 20,
@@ -221,7 +224,7 @@ const CutMarker: React.FC<CutMarkerProps> = ({ side }) => (
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "0 1px 2px var(--shadow-color)",
+    boxShadow: isHighContrast ? "none" : "0 1px 2px var(--shadow-color)",
   }}>
     <CutMarkerIcon css={{
       transform: `scale(1.2) ${side == "right" ? "scaleX(-1)" : ""}`,
@@ -360,6 +363,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
     ignoreEventWhen: e => e.code === "Space" && e.target instanceof HTMLButtonElement,
   });
   const showShortcuts = useShowAvailableShortcuts();
+  const { isHighContrast } = useColorScheme();
 
   const isPlaying = previewController.current?.isPlaying;
   return (
@@ -383,7 +387,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
         <ProtoButton
           css={{
             backgroundColor: COLORS.accent5,
-            color: "white",
+            color: isHighContrast ? COLORS.neutral05 : "white",
             border: "none",
             borderRadius: "50%",
             width: 48,
@@ -395,6 +399,11 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
             ...focusStyle({ offset: 1 }),
             "&:hover, :focus-visible": {
               backgroundColor: COLORS.accent6,
+              ...isHighContrast && {
+                backgroundColor: COLORS.neutral05,
+                outline: `2px solid ${COLORS.accent4}`,
+                color: COLORS.accent4,
+              },
             },
           }}
           onClick={togglePlayPause}
@@ -437,7 +446,7 @@ const CutControls: React.FC<CutControlsProps> = (
   { marker, value, control, invariant, currentTime, previewController, recordingDispatch }
 ) => {
   const { t, i18n } = useTranslation();
-
+  const { isHighContrast } = useColorScheme();
 
   const disabled = currentTime <= ALMOST_ZERO
     || (previewController.current && currentTime >= previewController.current.duration)
@@ -514,6 +523,7 @@ const CutControls: React.FC<CutControlsProps> = (
           },
           "&:not(:disabled):hover": {
             backgroundColor: COLORS.neutral10,
+            color: isHighContrast ? COLORS.accent4 : "inherit",
           },
         }}
       >

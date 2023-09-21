@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { LuRotateCw } from "react-icons/lu";
-import { screenWidthAtMost } from "@opencast/appkit";
+import { screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 
 import { useDispatch, useStudioState } from "../../studio-state";
 import { StepProps } from "..";
@@ -101,12 +101,13 @@ type BoxProps = React.PropsWithChildren<{
 }>;
 
 const Box: React.FC<BoxProps> = ({ title, children }) => {
+  const { isHighContrast } = useColorScheme();
   return (
     <div css={{
       maxWidth: 420,
       width: "100%",
       backgroundColor: COLORS.neutral05,
-      boxShadow: "0 4px 16px var(--shadow-color)",
+      boxShadow: isHighContrast ? "none" : "0 4px 16px var(--shadow-color)",
       border: `1px solid ${COLORS.neutral15}`,
       padding: "24px 32px",
       borderRadius: 6,
@@ -147,7 +148,7 @@ const getReturnTarget = (settings: Settings) => {
   return settings.return.target;
 };
 
-export const sharedButtonStyle = {
+export const sharedButtonStyle = (isHighContrast: boolean) => ({
   display: "flex",
   alignItems: "center",
   padding: "8px 12px",
@@ -161,6 +162,11 @@ export const sharedButtonStyle = {
     backgroundColor: COLORS.accent7,
     ":hover": {
       backgroundColor: COLORS.accent8,
+      ...isHighContrast && {
+        backgroundColor: COLORS.neutral15,
+        outline: `2px solid ${COLORS.accent8}`,
+        color: COLORS.neutral20,
+      },
     },
   },
   "&[disabled]": {
@@ -168,7 +174,7 @@ export const sharedButtonStyle = {
     color: COLORS.neutral70,
   },
   ...focusStyle({ offset: 1 }),
-} as const;
+}) as const;
 
 /**
  * Get file size in human readable format. We use base-1000 XB instead of

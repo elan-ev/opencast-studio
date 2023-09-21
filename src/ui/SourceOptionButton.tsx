@@ -12,10 +12,11 @@ export type SourceOptionButtonProps = {
   onClick: () => void;
   disabledText?: false | string;
   shortcut?: string;
+  isHighContrast: boolean;
 };
 
 export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
-  { icon, label, onClick, shortcut, disabledText }
+  { icon, label, onClick, shortcut, disabledText, isHighContrast }
 ) => {
   return (
     <ProtoButton
@@ -49,6 +50,11 @@ export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
           color: COLORS.accent8,
           borderColor: COLORS.neutral30,
           boxShadow: "0 0 16px var(--shadow-color)",
+          ...isHighContrast && {
+            outline: `2px solid ${COLORS.accent4}`,
+            borderColor: "transparent",
+            boxShadow: "none",
+          },
         },
         ...focusStyle({ offset: -1 }),
       }}

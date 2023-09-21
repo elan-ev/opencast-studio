@@ -130,6 +130,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
   const floatRef = useRef<FloatingHandle>(null);
   const { t } = useTranslation();
   const isLight = useColorScheme().scheme === "light";
+  const { isHighContrast } = useColorScheme();
 
   // The current preferences and the callback to update them.
   const prefs = isDesktop ? loadDisplayPrefs() : loadCameraPrefs();
@@ -189,7 +190,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
         backgroundColor: COLORS.neutral05,
         borderRadius: "10px",
         padding: "4px 8px",
-        boxShadow: "0 0 12px rgba(0, 0, 0, 30%)",
+        boxShadow: isHighContrast ? "none" : "0 0 12px rgba(0, 0, 0, 30%)",
       }}>
         {streamInfo(stream)}
       </span>
@@ -339,6 +340,7 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
   { isDesktop, updatePrefs, prefs, settings }
 ) => {
   const { t } = useTranslation();
+  const { isHighContrast } = useColorScheme();
 
   const changeQuality = (quality: string) => updatePrefs({ quality });
   const maxHeight = isDesktop ? settings.display?.maxHeight : settings.camera?.maxHeight;
@@ -355,6 +357,7 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
         label={t("sources-video-quality-auto")}
         onChange={changeQuality}
         checked={qualities.every(q => prefs.quality !== q)}
+        isHighContrast={isHighContrast}
       />
       {
         qualities.map(q => (
@@ -365,6 +368,7 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
             name={`quality-${kind}`}
             onChange={changeQuality}
             checked={prefs.quality === q}
+            isHighContrast={isHighContrast}
           />
         ))
       }
@@ -381,6 +385,7 @@ type UserSettingsProps = {
 const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
   const { t } = useTranslation();
   const state = useStudioState();
+  const { isHighContrast } = useColorScheme();
 
   const currentDeviceId = deviceIdOf(state.userStream);
   const devices = getUniqueDevices(state.mediaDevices, "videoinput");
@@ -412,6 +417,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
         label={t("sources-video-aspect-ratio-auto")}
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
+        isHighContrast={isHighContrast}
       />
       {ASPECT_RATIOS.map(ar => (
         <RadioButton
@@ -421,6 +427,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
           name="aspectRatio"
           onChange={changeAspectRatio}
           checked={prefs.aspectRatio === ar}
+          isHighContrast={isHighContrast}
         />
       ))}
     </PrefValue>
@@ -434,11 +441,12 @@ type RadioButtonProps = {
   checked: boolean;
   label?: string;
   onChange: (v: string) => void;
+  isHighContrast: boolean;
 };
 
 // A styled radio input which looks like a button.
 const RadioButton: React.FC<RadioButtonProps> = ({
-  id, value, checked, name, onChange, label,
+  id, value, checked, name, onChange, label, isHighContrast,
 }) => {
   return <div>
     <input
@@ -458,6 +466,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           ":hover": {
             backgroundColor: COLORS.neutral10,
             borderColor: COLORS.neutral40,
+            ...isHighContrast && {
+              outline: `2px solid ${COLORS.accent4}`,
+              borderColor: "transparent",
+            },
           },
         },
         "&:checked+label": {

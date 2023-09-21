@@ -85,7 +85,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
           title={t("sources-video-user-selected")}
           {...showButtons && buttons}
         >
-          <SourcePreview inputs={[userInput]} />
+          <SourcePreview inputs={[userInput]} isHighContrast />
         </StepContainer>
       );
     },
@@ -97,7 +97,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
           title={t("sources-video-display-selected")}
           {...showButtons && buttons}
         >
-          <SourcePreview inputs={[displayInput]} />
+          <SourcePreview inputs={[displayInput]} isHighContrast />
         </StepContainer>
       );
     },
@@ -109,7 +109,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
           title={t("sources-video-display-and-user-selected")}
           {...showButtons && buttons}
         >
-          <SourcePreview inputs={[displayInput, userInput]} />
+          <SourcePreview inputs={[displayInput, userInput]} isHighContrast />
         </StepContainer>
       );
     },

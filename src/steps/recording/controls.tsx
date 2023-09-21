@@ -28,6 +28,7 @@ export const RecordingControls: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const isLight = useColorScheme().scheme === "light";
+  const { isHighContrast } = useColorScheme();
   const fgColor = isLight ? COLORS.neutral05 : COLORS.neutral90;
 
   const { userUnexpectedEnd, displayUnexpectedEnd, audioUnexpectedEnd } = useStudioState();
@@ -68,6 +69,11 @@ export const RecordingControls: React.FC<Props> = ({
       boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
       borderRadius: 12,
       color: fgColor,
+      ...isHighContrast && {
+        backgroundColor: COLORS.neutral05,
+        border: `2px solid ${COLORS.neutral25}`,
+        boxShadow: "none",
+      },
     }}>
       <WithTooltip tooltip={
         match(recordingState, {
@@ -92,12 +98,12 @@ export const RecordingControls: React.FC<Props> = ({
             fontSize: 28,
             padding: 0,
 
-            boxShadow: "0 4px 4px rgba(0, 0, 0, 0.12)",
+            boxShadow: isHighContrast ? "none" : "0 4px 4px rgba(0, 0, 0, 0.12)",
             cursor: "pointer",
-            color: isLight ? "white" : "#D6D6D6",
+            color: isHighContrast ? "white" : (isLight ? "white" : "#D6D6D6"),
             borderRadius: "50%",
             backgroundColor: isLight ? "#E42D43" : "#b8012d",
-            border: `1px solid ${fgColor}`,
+            border: `${isHighContrast ? "2px" : "1px"} solid ${fgColor}`,
             ":hover, :focus-visible": {
               backgroundColor: isLight ? "#c40a31" : "#8f0121",
             },

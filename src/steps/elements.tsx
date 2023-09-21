@@ -27,6 +27,7 @@ const StepButton: React.FC<StepButtonProps> = ({
   const { t } = useTranslation();
   const showShortcut = useShowAvailableShortcuts();
   const isDark = useColorScheme().scheme === "dark";
+  const { isHighContrast } = useColorScheme();
   const shortcut = match(kind, {
     prev: () => SHORTCUTS.general.prev,
     next: () => SHORTCUTS.general.next,
@@ -76,6 +77,11 @@ const StepButton: React.FC<StepButtonProps> = ({
           color: danger ? COLORS.danger5 : COLORS.neutral90,
           boxShadow: "0 0 8px var(--shadow-color)",
           ...danger && { backgroundColor: COLORS.danger1 },
+          ...isHighContrast && {
+            outline: `2px solid ${danger ? COLORS.danger5 : COLORS.accent4}`,
+            borderColor: "transparent",
+            boxShadow: "none",
+          },
         },
       }}
     >

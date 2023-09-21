@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { screenWidthAtMost } from "@opencast/appkit";
+import { screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 import { FiMonitor, FiUser } from "react-icons/fi";
 
 import { useDispatch, useStudioState, VideoSource } from "../../studio-state";
@@ -25,6 +25,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
   displayConstraints,
 }) => {
   const { t } = useTranslation();
+  const { isHighContrast } = useColorScheme();
 
   const settings = useSettings();
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         onClick={clickDisplay}
         disabledText={displaySupported ? false : t("sources-video-display-not-supported")}
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectScreen : undefined}
+        isHighContrast={isHighContrast}
       />}
       {(displaySupported || !onMobileDevice()) && userSupported && <SourceOptionButton
         label={t("sources-scenario-display-and-user")}
@@ -111,6 +113,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
             : t("sources-video-display-not-supported")
         }
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectBoth : undefined}
+        isHighContrast={isHighContrast}
       />}
       {userSupported && <SourceOptionButton
         label={t("sources-scenario-user")}
@@ -118,6 +121,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         onClick={clickUser}
         disabledText={state.hasWebcam ? false : t("sources-video-no-cam-detected")}
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectUser : undefined}
+        isHighContrast={isHighContrast}
       />}
     </div>
   );

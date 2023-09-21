@@ -174,6 +174,14 @@ type SingleKeyProps = React.PropsWithChildren<{
 
 const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => {
   const isLight = useColorScheme().scheme === "light";
+  const { scheme, isHighContrast } = useColorScheme();
+
+  const bg = match(scheme, {
+    "light": () => COLORS.neutral05,
+    "dark": () => COLORS.neutral15,
+    "light-high-contrast": () => COLORS.neutral05,
+    "dark-high-contrast": () => COLORS.neutral15,
+  });
 
   return (
     <div css={{
@@ -186,11 +194,11 @@ const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => {
       height: large ? 36 : 30,
       minWidth: large ? 36 : 30,
       fontSize: 16,
-      boxShadow: "0 0 8px var(--shadow-color)",
-      backgroundColor: large
-        ? (isLight ? COLORS.neutral05 : COLORS.neutral15)
-        : COLORS.neutral10,
-      color: (isLight || !large) ? COLORS.neutral80 : COLORS.neutral90,
+      boxShadow: isHighContrast ? "none" : "0 0 8px var(--shadow-color)",
+      backgroundColor: large ? bg : COLORS.neutral10,
+      color: isHighContrast
+        ? COLORS.neutral80
+        : ((isLight || !large) ? COLORS.neutral80 : COLORS.neutral90),
       cursor: "default",
     }}>
       {children}
