@@ -28,12 +28,8 @@ export const Root: React.FC = () => {
       <Header inert={inert} {...{ setOverlayBoxState }} />
       {match(overlayBoxState, {
         "none": () => null,
-        "info": () => <OverlayBox maxWidth={800} close={close}>
-          <About />
-        </OverlayBox>,
-        "shortcuts": () => <OverlayBox maxWidth={1000} close={close}>
-          <ShortcutOverview />
-        </OverlayBox>,
+        "info": () => <About close={close} />,
+        "shortcuts": () => <ShortcutOverview close={close} />,
       })}
       <Main inert={inert} />
     </div>
@@ -43,10 +39,11 @@ export const Root: React.FC = () => {
 
 type OverlayBoxProps = React.PropsWithChildren<{
   close: () => void;
+  title: string;
   maxWidth: number;
 }>;
 
-const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children, maxWidth }) => {
+export const OverlayBox: React.FC<OverlayBoxProps> = ({ close, title, children, maxWidth }) => {
   const isLight = useColorScheme().scheme === "light";
   const ref = useRef<HTMLDivElement>(null);
   useOnOutsideClick(ref, close);
@@ -75,11 +72,14 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children, maxWidth }) =>
         backgroundColor: bg,
         borderRadius: 8,
         padding: 32,
+        paddingTop: 24,
         paddingLeft: 48,
         width: "82%",
         flex: "0 1 auto",
         minHeight: 0,
         maxWidth,
+        display: "flex",
+        flexDirection: "column",
         boxShadow: "0 4px 16px var(--shadow-color))",
         [screenWidthAtMost(850)]: {
           padding: 24,
@@ -103,14 +103,11 @@ const OverlayBox: React.FC<OverlayBoxProps> = ({ close, children, maxWidth }) =>
             cursor: "pointer",
           }}
         />
-        <div css={{
-          height: "100%",
-          overflowY: "auto",
-          h1: {
-            marginBottom: 8,
-            fontSize: 26,
-          },
-        }}>
+        <h1 css={{
+          marginBottom: 8,
+          fontSize: 26,
+        }}>{title}</h1>
+        <div css={{ overflowY: "auto" }}>
           {children}
         </div>
       </div>

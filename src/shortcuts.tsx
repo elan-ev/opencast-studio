@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { match, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
-
-import { COLORS } from "./util";
+import { LuArrowBigUp, LuOption } from "react-icons/lu";
 import { FiArrowLeft, FiArrowRight, FiCommand } from "react-icons/fi";
 import { Options, useHotkeys } from "react-hotkeys-hook";
-import React from "react";
-import { LuArrowBigUp, LuOption } from "react-icons/lu";
+
+import { COLORS } from "./util";
+import { OverlayBox } from "./layout";
 
 
 const onMac = () => navigator.userAgent.includes("Mac");
@@ -198,11 +198,14 @@ const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => {
   );
 };
 
-export const ShortcutOverview: React.FC = () => {
+type ShortCutOverviewProps = {
+  close: () => void;
+};
+
+export const ShortcutOverview: React.FC<ShortCutOverviewProps> = ({ close }) => {
   const { t } = useTranslation();
 
-  return <>
-    <h1>{t("shortcuts.label")}</h1>
+  return <OverlayBox maxWidth={1000} close={close} title={t("shortcuts.label")}>
     {Object.entries(SHORTCUTS).map(([groupId, group]) => (
       <ShortcutGroupOverview
         key={groupId}
@@ -210,7 +213,7 @@ export const ShortcutOverview: React.FC = () => {
         group={group}
       />
     ))}
-  </>;
+  </OverlayBox>;
 };
 
 
@@ -232,7 +235,12 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
   const { t } = useTranslation();
 
   return (
-    <section css={{ margin: "32px 0" }}>
+    <section css={{
+      margin: "32px 0",
+      ":first-of-type": {
+        marginTop: 16,
+      },
+    }}>
       <h2 css={{ fontSize: 18, marginBottom: 8 }}>{t(GROUP_ID_TRANSLATIONS[groupId])}</h2>
       <div css={{
         display: "flex",
