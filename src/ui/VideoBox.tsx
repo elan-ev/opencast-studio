@@ -22,11 +22,11 @@ export type VideoBoxChild = {
   body: JSX.Element;
   dimensions: () => [number, number] | null;
   /**
-   * If `true` (default), the calculated height is set as `height` of the div.
-   * If `false`, it is not set, which allows the div to grow in height. Used to
-   * display error messages.
+   * If `false` (default), the calculated size is used for the divs. Otherwise,
+   * `width` and `height` are unset, which means the div takes the size of its
+   * child. Used for error messages.
    */
-  calculatedHeight?: boolean;
+  autoSize?: boolean;
 };
 
 // Manages one or two children with given aspect ratio.
@@ -110,8 +110,10 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
           <div ref={ref} css={{ flex: "1 0 0", minHeight, display: "flex" }}>
             <div css={{
-              height: (child.calculatedHeight ?? true) ? childHeight : undefined,
-              width: childWidth,
+              ...!child.autoSize && {
+                height: childHeight,
+                width: childWidth,
+              },
               minWidth: `${minWidth}px`,
               margin: "auto",
             }}>
@@ -213,22 +215,27 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
             css={{
               flex: "1 0 0",
               display: "flex",
+              gap: gap,
               flexDirection,
               justifyContent: "space-between",
               minHeight,
             }}
           >
             <div css={{
-              height: (children[0].calculatedHeight ?? true) ? heights[0] : undefined,
-              width: widths[0],
+              ...!children[0].autoSize && {
+                height: heights[0],
+                width: widths[0],
+              },
               minWidth: `${minWidth}px`,
               margin: "auto",
             }}>
               { children[0].body }
             </div>
             <div css={{
-              height: (children[1].calculatedHeight ?? true) ? heights[1] : undefined,
-              width: widths[1],
+              ...!children[1].autoSize && {
+                height: heights[1],
+                width: widths[1],
+              },
               minWidth: `${minWidth}px`,
               margin: "auto",
             }}>

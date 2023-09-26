@@ -23,18 +23,18 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
     1: () => [{
       body: <StreamPreview input={inputs[0]} />,
       dimensions: () => dimensionsOf(inputs[0].stream),
-      calculatedHeight: (inputs[0].allowed !== false && inputs[0].unexpectedEnd === false),
+      autoSize: inputs[0].allowed === false || inputs[0].unexpectedEnd === true,
     }],
     2: () => [
       {
         body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
-        calculatedHeight: (inputs[0].allowed !== false && inputs[0].unexpectedEnd === false),
+        autoSize: inputs[0].allowed === false || inputs[0].unexpectedEnd === true,
       },
       {
         body: <StreamPreview input={inputs[1]} />,
         dimensions: () => dimensionsOf(inputs[1].stream),
-        calculatedHeight: (inputs[1].allowed !== false && inputs[1].unexpectedEnd === false),
+        autoSize: inputs[1].allowed === false || inputs[1].unexpectedEnd === true,
       },
     ],
   }, unreachable);
