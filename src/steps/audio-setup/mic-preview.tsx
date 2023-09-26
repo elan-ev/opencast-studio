@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Oscilloscope from "oscilloscope";
-import { Spinner } from "@opencast/appkit";
+import { Spinner, useColorScheme } from "@opencast/appkit";
 
 import { useDispatch, useStudioState } from "../../studio-state";
 import { startAudioCapture, stopAudioCapture } from "../../capturer";
@@ -111,6 +111,7 @@ type AudioVisualziationProps = {
 };
 
 const AudioVisualziation: React.FC<AudioVisualziationProps> = ({ stream }) => {
+  const isDark = useColorScheme().scheme === "dark";
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -142,7 +143,7 @@ const AudioVisualziation: React.FC<AudioVisualziationProps> = ({ stream }) => {
         width: "100%",
         height: "min(200px, 20vh)",
         flex: "1 0 70px",
-        backgroundColor: "rgba(0,0,0,0.8)",
+        backgroundColor: isDark ? "transparent" : "rgba(0,0,0,0.8)",
         borderRadius: "7px",
       }}
     />
