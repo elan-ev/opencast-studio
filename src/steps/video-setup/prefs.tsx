@@ -2,6 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
+import {
+  Floating, FloatingContainer, FloatingHandle, FloatingTrigger, ProtoButton,
+  WithTooltip, screenWidthAtMost, useColorScheme,
+} from "@opencast/appkit";
+import { FiSettings, FiX } from "react-icons/fi";
 
 import { Settings, useSettings } from "../../settings";
 import { COLORS, getUniqueDevices } from "../../util";
@@ -12,11 +17,6 @@ import {
   stopDisplayCapture,
   stopUserCapture,
 } from "../../capturer";
-import {
-  Floating, FloatingContainer, FloatingHandle, FloatingTrigger, ProtoButton,
-  WithTooltip, screenWidthAtMost, useColorScheme,
-} from "@opencast/appkit";
-import { FiSettings, FiX } from "react-icons/fi";
 import { Select } from "../../ui/Select";
 
 
@@ -220,16 +220,16 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
             css={{
               border: "none",
               display: "inline-block",
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
+              backgroundColor: "rgba(0, 0, 0, 0.3)",
               color: "white",
               padding: 8,
               fontSize: 26,
-              backdropFilter: "invert(1)",
+              backdropFilter: "invert(0.3) blur(4px)",
               lineHeight: 0,
               borderRadius: "10px",
               cursor: "pointer",
               "&:hover, &:focus-visible": {
-                backgroundColor: "rgba(0, 0, 0, 0.9)",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
               },
               "> svg": {
                 transition: "transform 0.2s",
