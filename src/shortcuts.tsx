@@ -17,8 +17,8 @@ export const SHORTCUTS = {
     showOverview: "?",
     closeOverlay: "Escape",
     tab: "Tab",
-    prev: onMac() ? "Shift+Cmd+left" : "Mod+left",
-    next: onMac() ? "Shift+Cmd+right" : "Mod+right",
+    prev: onMac() ? "Shift+Mod+left" : "Mod+left",
+    next: onMac() ? "Shift+Mod+right" : "Mod+right",
   },
   videoSetup: {
     selectScreen: "1",
