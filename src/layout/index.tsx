@@ -72,9 +72,7 @@ export const OverlayBox: React.FC<OverlayBoxProps> = ({ close, title, children, 
         position: "relative",
         backgroundColor: bg,
         borderRadius: 8,
-        padding: 32,
-        paddingTop: 24,
-        paddingLeft: 48,
+        padding: "24px 24px 32px 48px",
         width: "82%",
         flex: "0 1 auto",
         minHeight: 0,
@@ -109,7 +107,7 @@ export const OverlayBox: React.FC<OverlayBoxProps> = ({ close, title, children, 
           marginBottom: 8,
           fontSize: 26,
         }}>{title}</h1>
-        <div css={{ overflowY: "auto" }}>
+        <div css={{ paddingRight: 16, overflowY: "auto" }}>
           {children}
         </div>
       </div>
