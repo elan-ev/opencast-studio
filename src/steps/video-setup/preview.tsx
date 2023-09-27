@@ -23,24 +23,27 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
     1: () => [{
       body: <StreamPreview input={inputs[0]} />,
       dimensions: () => dimensionsOf(inputs[0].stream),
-      autoSize: inputs[0].allowed === false || inputs[0].unexpectedEnd === true,
+      autoSize: inputHasError(inputs[0]),
     }],
     2: () => [
       {
         body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
-        autoSize: inputs[0].allowed === false || inputs[0].unexpectedEnd === true,
+        autoSize: inputHasError(inputs[0]),
       },
       {
         body: <StreamPreview input={inputs[1]} />,
         dimensions: () => dimensionsOf(inputs[1].stream),
-        autoSize: inputs[1].allowed === false || inputs[1].unexpectedEnd === true,
+        autoSize: inputHasError(inputs[1]),
       },
     ],
   }, unreachable);
 
   return <VideoBox gap={20}>{children}</VideoBox>;
 };
+
+const inputHasError = (input: Input): boolean =>
+  input.allowed === false || !!input.unexpectedEnd;
 
 /** Shows a single stream as preview, deals with potential errors and shows preferences UI */
 const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
@@ -51,8 +54,10 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
       height: "100%",
       backgroundColor: COLORS.neutral05,
       borderRadius: 12,
-      boxShadow: isHighContrast ? "none" : "0 6px 16px rgba(0, 0, 0, 0.2)",
       position: "relative",
+      ...!inputHasError(input) && {
+        boxShadow: isHighContrast ? "none" : "0 6px 16px rgba(0, 0, 0, 0.2)",
+      },
       ...isHighContrast && {
         outline: `1px solid ${COLORS.neutral90}`,
       },
@@ -90,11 +95,12 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
     if (allowed === false || unexpectedEnd) {
       inner = <div>
         {allowed === false && <ErrorBox
+          css={{ margin: 0 }}
           title={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-title`)}
           body={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-text`)}
         />}
         {/* TODO: differentiate between desktop and camera for better error */}
-        {unexpectedEnd && <ErrorBox body={t("error-lost-video-stream")} />}
+        {unexpectedEnd && <ErrorBox css={{ margin: 0 }} body={t("error-lost-video-stream")} />}
       </div>;
     } else {
       inner = <Spinner size={75} css={{ color: COLORS.neutral60 }} />;
