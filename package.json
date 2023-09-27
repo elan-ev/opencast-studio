@@ -41,7 +41,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
     "react-hotkeys-hook": "^4.4.1",
-    "react-i18next": "^12.3.1",
+    "react-i18next": "^13.2.2",
     "react-icons": "^4.10.1",
     "use-resize-observer": "^9.1.0",
     "webpack": "^5.88.2",
