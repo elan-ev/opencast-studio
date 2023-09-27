@@ -5,7 +5,7 @@ import { FiMonitor, FiUser } from "react-icons/fi";
 
 import { useDispatch, useStudioState, VideoSource } from "../../studio-state";
 import { useSettings } from "../../settings";
-import { queryMediaDevices, onMobileDevice, BREAKPOINTS } from "../../util";
+import { queryMediaDevices, onMobileDevice, BREAKPOINTS, onSafari } from "../../util";
 import { startDisplayCapture, startUserCapture } from "../../capturer";
 import { ErrorBox } from "../../ui/ErrorBox";
 import { SHORTCUTS, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
@@ -44,11 +44,20 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
 
   const clickBoth = async () => {
     setActiveSource("both");
-    await startUserCapture(dispatch, settings, userConstraints);
-    await Promise.all([
-      queryMediaDevices(dispatch),
-      startDisplayCapture(dispatch, settings, displayConstraints),
-    ]);
+    // Safari needs the display capture to be called first as otherwise
+    // it thinks `getDisplayMedia` is called without user gesture and
+    // throws an error.
+    if (onSafari()) {
+      await startDisplayCapture(dispatch, settings, displayConstraints);
+      await startUserCapture(dispatch, settings, userConstraints);
+      await queryMediaDevices(dispatch);
+    } else {
+      await startUserCapture(dispatch, settings, userConstraints);
+      await Promise.all([
+        queryMediaDevices(dispatch),
+        startDisplayCapture(dispatch, settings, displayConstraints),
+      ]);
+    }
   };
 
   useShortcut(SHORTCUTS.videoSetup.selectScreen, clickDisplay);
