@@ -25,7 +25,7 @@ export async function startAudioCapture(dispatch: Dispatcher, deviceId?: Constra
     });
     stream.getTracks().forEach(track => {
       track.onended = () => {
-        dispatch({ type: "AUDIO_UNEXPETED_END" });
+        dispatch({ type: "AUDIO_UNEXPECTED_END" });
       };
     });
 
@@ -62,7 +62,7 @@ export async function startDisplayCapture(
     const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
     stream.getTracks().forEach(track => {
       track.onended = () => {
-        dispatch({ type: "DISPLAY_UNEXPETED_END" });
+        dispatch({ type: "DISPLAY_UNEXPECTED_END" });
       };
     });
 
@@ -99,7 +99,7 @@ export async function startUserCapture(
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     stream.getTracks().forEach(track => {
       track.onended = () => {
-        dispatch({ type: "USER_UNEXPETED_END" });
+        dispatch({ type: "USER_UNEXPECTED_END" });
       };
     });
     dispatch({ type: "SHARE_USER", stream });
