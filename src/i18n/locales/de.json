@@ -37,7 +37,7 @@
   "save-creation-warn-login-failed": "Die Anmeldung beim Opencast-Server schlug fehl. Bitte prüfen Sie Ihre Anmeldedaten in <1>den Einstellungen</1>.",
 
   "save-creation-return-to": "Beenden und zurück ({{label}})",
-  "save-creation-return-to-no-label": "Beenden und zurück zur vorherigen Seite",
+  "save-creation-return-to-no-label": "Opencast Studio beenden und zurück",
   "save-creation-new-recording": "Neue Aufzeichnung starten",
   "save-creation-new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
 
