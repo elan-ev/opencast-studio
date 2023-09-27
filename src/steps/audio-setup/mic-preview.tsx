@@ -122,7 +122,10 @@ const AudioVisualziation: React.FC<AudioVisualziationProps> = ({ stream }) => {
         throw new Error("Could not get 2D context for canvas");
       }
       ctx.lineWidth = 2;
-      ctx.strokeStyle = "#f1c40f";
+
+      // We use `--color-accent9` in light mode, but have to hard code it here.
+      // In dark mode, we use the tranditional yellow as it just looks better.
+      ctx.strokeStyle = isDark ? "#f1c40f" : "#044a81";
 
       const audioContext = new window.AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
@@ -132,7 +135,7 @@ const AudioVisualziation: React.FC<AudioVisualziationProps> = ({ stream }) => {
       return () => scope.stop();
     }
     return () => {};
-  }, [stream]);
+  }, [stream, isDark]);
 
   return (
     <canvas
@@ -143,8 +146,6 @@ const AudioVisualziation: React.FC<AudioVisualziationProps> = ({ stream }) => {
         width: "100%",
         height: "min(200px, 20vh)",
         flex: "1 0 70px",
-        backgroundColor: isDark ? "transparent" : "rgba(0,0,0,0.8)",
-        borderRadius: "7px",
       }}
     />
   );
