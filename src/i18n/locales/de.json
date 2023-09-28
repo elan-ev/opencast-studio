@@ -147,6 +147,8 @@
       "label": "Aussehen",
       "dark": "Dunkel",
       "light": "Hell",
+      "dark-high-contrast": "Dunkel (hoher Kontrast)",
+      "light-high-contrast": "Hell (hoher Kontrast)",
       "auto": "Auto"
     },
     "language": {

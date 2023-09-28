@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Spinner, match, unreachable } from "@opencast/appkit";
+import { Spinner, match, unreachable, useColorScheme } from "@opencast/appkit";
 import { FiAlertTriangle } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
@@ -41,18 +41,25 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
 };
 
 /** Shows a single stream as preview, deals with potential errors and shows preferences UI */
-const StreamPreview: React.FC<{ input: Input }> = ({ input }) => (
-  <div css={{
-    height: "100%",
-    backgroundColor: COLORS.neutral05,
-    borderRadius: 12,
-    boxShadow: "0 6px 16px rgba(0, 0, 0, 0.2)",
-    position: "relative",
-  }}>
-    <PreviewVideo input={input} />
-    {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
-  </div>
-);
+const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
+  const { isHighContrast } = useColorScheme();
+
+  return (
+    <div css={{
+      height: "100%",
+      backgroundColor: COLORS.neutral05,
+      borderRadius: 12,
+      boxShadow: isHighContrast ? "none" : "0 6px 16px rgba(0, 0, 0, 0.2)",
+      position: "relative",
+      ...isHighContrast && {
+        outline: `1px solid ${COLORS.neutral90}`,
+      },
+    }}>
+      <PreviewVideo input={input} />
+      {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
+    </div>
+  );
+};
 
 const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
   const { t } = useTranslation();

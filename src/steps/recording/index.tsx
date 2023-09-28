@@ -18,6 +18,7 @@ import { COLORS, dimensionsOf } from "../../util";
 import { RecordingControls } from "./controls";
 import Recorder, { OnStopCallback } from "./recorder";
 import { useSettings } from "../../settings";
+import { useColorScheme } from "@opencast/appkit";
 
 
 export type RecordingState = "inactive" | "paused" | "recording";
@@ -172,6 +173,7 @@ type StreamPreviewProps = {
 const StreamPreview: React.FC<StreamPreviewProps> = ({ stream, paused }) => {
   const resizeVideoBox = useVideoBoxResize();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { isHighContrast } = useColorScheme();
 
   useEffect(() => {
     const v = videoRef.current;
@@ -210,7 +212,7 @@ const StreamPreview: React.FC<StreamPreviewProps> = ({ stream, paused }) => {
     <div
       css={{
         position: "relative",
-        boxShadow: "0 2px 12px rgba(0, 0, 0, 0.35)",
+        boxShadow: isHighContrast ? "none" : "0 2px 12px rgba(0, 0, 0, 0.35)",
         overflow: "hidden",
         height: "100%",
       }}

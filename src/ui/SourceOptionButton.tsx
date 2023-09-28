@@ -1,5 +1,5 @@
 import React from "react";
-import { ProtoButton } from "@opencast/appkit";
+import { ProtoButton, useColorScheme } from "@opencast/appkit";
 
 import { COLORS, focusStyle } from "../util";
 import { ShortcutKeys } from "../shortcuts";
@@ -17,6 +17,8 @@ export type SourceOptionButtonProps = {
 export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
   { icon, label, onClick, shortcut, disabledText }
 ) => {
+  const { isHighContrast } = useColorScheme();
+
   return (
     <ProtoButton
       onClick={onClick}
@@ -49,6 +51,11 @@ export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
           color: COLORS.accent8,
           borderColor: COLORS.neutral30,
           boxShadow: "0 0 16px var(--shadow-color)",
+          ...isHighContrast && {
+            outline: `2px solid ${COLORS.accent4}`,
+            borderColor: "transparent",
+            boxShadow: "none",
+          },
         },
         ...focusStyle({ offset: -1 }),
       }}

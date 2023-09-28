@@ -45,9 +45,10 @@ type OverlayBoxProps = React.PropsWithChildren<{
 
 export const OverlayBox: React.FC<OverlayBoxProps> = ({ close, title, children, maxWidth }) => {
   const isLight = useColorScheme().scheme === "light";
+  const { isHighContrast } = useColorScheme();
   const ref = useRef<HTMLDivElement>(null);
   useOnOutsideClick(ref, close);
-  const bg = isLight ? COLORS.neutral05 : COLORS.neutral15;
+  const bg = (isLight || isHighContrast) ? COLORS.neutral05 : COLORS.neutral15;
 
   return (
     <div role="dialog" aria-modal="true" css={{
@@ -80,7 +81,8 @@ export const OverlayBox: React.FC<OverlayBoxProps> = ({ close, title, children, 
         maxWidth,
         display: "flex",
         flexDirection: "column",
-        boxShadow: "0 4px 16px var(--shadow-color))",
+        boxShadow: isHighContrast ? "none" : "0 4px 16px var(--shadow-color))",
+        outline: isHighContrast ? "2px solid var(--color-neutral90)" : "none",
         [screenWidthAtMost(850)]: {
           padding: 24,
           paddingLeft: 32,

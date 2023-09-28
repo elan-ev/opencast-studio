@@ -130,6 +130,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
   const floatRef = useRef<FloatingHandle>(null);
   const { t } = useTranslation();
   const isLight = useColorScheme().scheme === "light";
+  const { isHighContrast } = useColorScheme();
 
   // The current preferences and the callback to update them.
   const prefs = isDesktop ? loadDisplayPrefs() : loadCameraPrefs();
@@ -189,7 +190,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
         backgroundColor: COLORS.neutral05,
         borderRadius: "10px",
         padding: "4px 8px",
-        boxShadow: "0 0 12px rgba(0, 0, 0, 30%)",
+        boxShadow: isHighContrast ? "none" : "0 0 12px rgba(0, 0, 0, 30%)",
       }}>
         {streamInfo(stream)}
       </span>
@@ -440,6 +441,8 @@ type RadioButtonProps = {
 const RadioButton: React.FC<RadioButtonProps> = ({
   id, value, checked, name, onChange, label,
 }) => {
+  const { isHighContrast } = useColorScheme();
+
   return <div>
     <input
       type="radio"
@@ -458,6 +461,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({
           ":hover": {
             backgroundColor: COLORS.neutral10,
             borderColor: COLORS.neutral40,
+            ...isHighContrast && {
+              outline: `2px solid ${COLORS.accent4}`,
+              borderColor: "transparent",
+            },
           },
         },
         "&:checked+label": {

@@ -15,6 +15,7 @@ import { Select } from "../../ui/Select";
 // audio-visualization and a device-selector.
 export const MicrophonePreview: React.FC = () => {
   const { t } = useTranslation();
+  const { isHighContrast } = useColorScheme();
   const dispatch = useDispatch();
   const state = useStudioState();
   const { audioStream, audioAllowed, audioUnexpectedEnd } = state;
@@ -91,7 +92,7 @@ export const MicrophonePreview: React.FC = () => {
       maxWidth: 850,
       backgroundColor: COLORS.neutral05,
       borderRadius: 16,
-      boxShadow: "0 4px 16px var(--shadow-color)",
+      boxShadow: isHighContrast ? "none" : "0 4px 16px var(--shadow-color)",
       width: "100%",
       margin: "0 auto",
       padding: 24,

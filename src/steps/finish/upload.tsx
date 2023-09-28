@@ -8,7 +8,7 @@ import { LuCheckCircle2 } from "react-icons/lu";
 import { COLORS, focusStyle } from "../../util";
 import { FieldError, FieldValues, Path, SubmitHandler, Validate, useForm } from "react-hook-form";
 import { FiUpload } from "react-icons/fi";
-import { ProtoButton, Spinner, match, notNullish, unreachable } from "@opencast/appkit";
+import { ProtoButton, Spinner, match, notNullish, unreachable, useColorScheme } from "@opencast/appkit";
 import { ErrorBox } from "../../ui/ErrorBox";
 import { prettyFileSize, sharedButtonStyle } from ".";
 
@@ -240,6 +240,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 
   const totalBytes = recordings.reduce((acc, rec) => acc + rec.media.size, 0);
   const uploadSize = prettyFileSize(totalBytes, i18n);
+  const { isHighContrast } = useColorScheme();
 
 
   return (
@@ -315,7 +316,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
         <ProtoButton
           type="submit"
           css={{
-            ...sharedButtonStyle,
+            ...sharedButtonStyle(isHighContrast),
             margin: "0 auto",
             marginTop: 24,
           }}

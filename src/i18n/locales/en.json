@@ -149,6 +149,8 @@
       "label": "Appearance",
       "dark": "Dark",
       "light": "Light",
+      "dark-high-contrast": "Dark (high contrast)",
+      "light-high-contrast": "Light (high contrast)",
       "auto": "Auto"
     },
     "language": {

@@ -2,7 +2,7 @@ import {
   forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { match, notNullish } from "@opencast/appkit";
+import { match, notNullish, useColorScheme } from "@opencast/appkit";
 
 import { useStudioState } from "../../studio-state";
 import CutOutIcon from "./cut-out-icon.svg";
@@ -28,6 +28,7 @@ export type PreviewHandle = {
 export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, onReady }, ref) => {
   const { recordings, start, end } = useStudioState();
   const { t } = useTranslation();
+  const { isHighContrast } = useColorScheme();
 
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
   const allVideos = videoRefs.slice(0, recordings.length);
@@ -252,7 +253,7 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
             width: "100%",
             height: "100%",
             outline: "none",
-            boxShadow: "0 4px 16px var(--shadow-color)",
+            boxShadow: isHighContrast ? "none" : "0 4px 16px var(--shadow-color)",
             borderRadius: 16,
           }}
         />
