@@ -112,15 +112,15 @@ type ReducerAction =
   | { type: "SHARE_AUDIO"; stream: MediaStream }
   | { type: "BLOCK_AUDIO" }
   | { type: "UNSHARE_AUDIO" }
-  | { type: "AUDIO_UNEXPETED_END" }
+  | { type: "AUDIO_UNEXPECTED_END" }
   | { type: "SHARE_DISPLAY"; stream: MediaStream }
   | { type: "BLOCK_DISPLAY" }
   | { type: "UNSHARE_DISPLAY" }
-  | { type: "DISPLAY_UNEXPETED_END" }
+  | { type: "DISPLAY_UNEXPECTED_END" }
   | { type: "SHARE_USER"; stream: MediaStream }
   | { type: "BLOCK_USER" }
   | { type: "UNSHARE_USER" }
-  | { type: "USER_UNEXPETED_END" }
+  | { type: "USER_UNEXPECTED_END" }
   | { type: "START_RECORDING" }
   | { type: "STOP_RECORDING" }
   | { type: "STOP_RECORDING_PREMATURELY" }
@@ -153,7 +153,7 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case "BLOCK_AUDIO":
       return { ...state, audioStream: null, audioAllowed: false, audioUnexpectedEnd: false };
     case "UNSHARE_AUDIO": return { ...state, audioStream: null, audioUnexpectedEnd: false };
-    case "AUDIO_UNEXPETED_END": return { ...state, audioStream: null, audioUnexpectedEnd: true };
+    case "AUDIO_UNEXPECTED_END": return { ...state, audioStream: null, audioUnexpectedEnd: true };
 
     case "SHARE_DISPLAY": return {
       ...state,
@@ -165,7 +165,7 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
       return { ...state, displayStream: null, displayAllowed: false, displayUnexpectedEnd: false };
     case "UNSHARE_DISPLAY":
       return { ...state, displayStream: null, displayUnexpectedEnd: false };
-    case "DISPLAY_UNEXPETED_END":
+    case "DISPLAY_UNEXPECTED_END":
       return { ...state, displayStream: null, displayUnexpectedEnd: true };
 
     case "SHARE_USER":
@@ -174,7 +174,7 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
       return { ...state, userStream: null, userAllowed: false, userUnexpectedEnd: false };
     case "UNSHARE_USER":
       return { ...state, userStream: null, userUnexpectedEnd: false };
-    case "USER_UNEXPETED_END":
+    case "USER_UNEXPECTED_END":
       return { ...state, userStream: null, userUnexpectedEnd: true };
 
     case "START_RECORDING": return { ...state, isRecording: true, recordingStartTime: new Date() };
