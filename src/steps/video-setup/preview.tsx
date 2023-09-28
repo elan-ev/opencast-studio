@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Spinner, match, unreachable } from "@opencast/appkit";
+import { Spinner, match, unreachable, useColorScheme } from "@opencast/appkit";
 import { FiAlertTriangle } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
@@ -13,26 +13,25 @@ import { ErrorBox } from "../../ui/ErrorBox";
 
 export type SourcePreviewProps = {
   inputs: Input[];
-  isHighContrast: boolean;
 }
 
 /**
  * Shows the preview for one or two input streams. The previews also show
  * preferences allowing the user to change the webcam and the like.
  */
-export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs, isHighContrast }) => {
+export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
   const children = match(inputs.length, {
     1: () => [{
-      body: <StreamPreview input={inputs[0]} isHighContrast={isHighContrast} />,
+      body: <StreamPreview input={inputs[0]} />,
       dimensions: () => dimensionsOf(inputs[0].stream),
     }],
     2: () => [
       {
-        body: <StreamPreview input={inputs[0]} isHighContrast={isHighContrast} />,
+        body: <StreamPreview input={inputs[0]} />,
         dimensions: () => dimensionsOf(inputs[0].stream),
       },
       {
-        body: <StreamPreview input={inputs[1]} isHighContrast={isHighContrast} />,
+        body: <StreamPreview input={inputs[1]} />,
         dimensions: () => dimensionsOf(inputs[1].stream),
       },
     ],
@@ -42,22 +41,25 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs, isHighCont
 };
 
 /** Shows a single stream as preview, deals with potential errors and shows preferences UI */
-const StreamPreview: React.FC<{ input: Input; isHighContrast: boolean }> = ({ input, isHighContrast }) => (
-  <div css={{
-    height: "100%",
-    backgroundColor: COLORS.neutral05,
-    borderRadius: 12,
-    boxShadow: "0 6px 16px rgba(0, 0, 0, 0.2)",
-    position: "relative",
-    ...isHighContrast && {
-      boxShadow: "none",
-      outline: `1px solid ${COLORS.neutral90}`,
-    },
-  }}>
-    <PreviewVideo input={input} />
-    {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
-  </div>
-);
+const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
+  const { isHighContrast } = useColorScheme();
+
+  return (
+    <div css={{
+      height: "100%",
+      backgroundColor: COLORS.neutral05,
+      borderRadius: 12,
+      boxShadow: isHighContrast ? "none" : "0 6px 16px rgba(0, 0, 0, 0.2)",
+      position: "relative",
+      ...isHighContrast && {
+        outline: `1px solid ${COLORS.neutral90}`,
+      },
+    }}>
+      <PreviewVideo input={input} />
+      {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
+    </div>
+  );
+};
 
 const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
   const { t } = useTranslation();

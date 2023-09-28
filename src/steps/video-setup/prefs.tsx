@@ -340,7 +340,6 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
   { isDesktop, updatePrefs, prefs, settings }
 ) => {
   const { t } = useTranslation();
-  const { isHighContrast } = useColorScheme();
 
   const changeQuality = (quality: string) => updatePrefs({ quality });
   const maxHeight = isDesktop ? settings.display?.maxHeight : settings.camera?.maxHeight;
@@ -357,7 +356,6 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
         label={t("sources-video-quality-auto")}
         onChange={changeQuality}
         checked={qualities.every(q => prefs.quality !== q)}
-        isHighContrast={isHighContrast}
       />
       {
         qualities.map(q => (
@@ -368,7 +366,6 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
             name={`quality-${kind}`}
             onChange={changeQuality}
             checked={prefs.quality === q}
-            isHighContrast={isHighContrast}
           />
         ))
       }
@@ -385,7 +382,6 @@ type UserSettingsProps = {
 const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
   const { t } = useTranslation();
   const state = useStudioState();
-  const { isHighContrast } = useColorScheme();
 
   const currentDeviceId = deviceIdOf(state.userStream);
   const devices = getUniqueDevices(state.mediaDevices, "videoinput");
@@ -417,7 +413,6 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
         label={t("sources-video-aspect-ratio-auto")}
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
-        isHighContrast={isHighContrast}
       />
       {ASPECT_RATIOS.map(ar => (
         <RadioButton
@@ -427,7 +422,6 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
           name="aspectRatio"
           onChange={changeAspectRatio}
           checked={prefs.aspectRatio === ar}
-          isHighContrast={isHighContrast}
         />
       ))}
     </PrefValue>
@@ -441,13 +435,14 @@ type RadioButtonProps = {
   checked: boolean;
   label?: string;
   onChange: (v: string) => void;
-  isHighContrast: boolean;
 };
 
 // A styled radio input which looks like a button.
 const RadioButton: React.FC<RadioButtonProps> = ({
-  id, value, checked, name, onChange, label, isHighContrast,
+  id, value, checked, name, onChange, label,
 }) => {
+  const { isHighContrast } = useColorScheme();
+
   return <div>
     <input
       type="radio"

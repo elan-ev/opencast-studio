@@ -114,7 +114,6 @@ type AudioVisualziationProps = {
 const AudioVisualziation: React.FC<AudioVisualziationProps> = ({ stream }) => {
   const isDark = useColorScheme().scheme === "dark";
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { isHighContrast } = useColorScheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;

@@ -66,13 +66,12 @@ export const RecordingControls: React.FC<Props> = ({
       justifyContent: "center",
       backgroundColor: isLight ? COLORS.neutral70 : COLORS.neutral05,
       border: `1px solid ${isLight ? COLORS.neutral50 : COLORS.neutral25}`,
-      boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+      boxShadow: isHighContrast ? "none" : "0 4px 16px rgba(0, 0, 0, 0.2)",
       borderRadius: 12,
       color: fgColor,
       ...isHighContrast && {
         backgroundColor: COLORS.neutral05,
         border: `2px solid ${COLORS.neutral25}`,
-        boxShadow: "none",
       },
     }}>
       <WithTooltip tooltip={
@@ -100,7 +99,7 @@ export const RecordingControls: React.FC<Props> = ({
 
             boxShadow: isHighContrast ? "none" : "0 4px 4px rgba(0, 0, 0, 0.12)",
             cursor: "pointer",
-            color: isHighContrast ? "white" : (isLight ? "white" : "#D6D6D6"),
+            color: (isHighContrast || isLight) ? "white" : "#D6D6D6",
             borderRadius: "50%",
             backgroundColor: isLight ? "#E42D43" : "#b8012d",
             border: `${isHighContrast ? "2px" : "1px"} solid ${fgColor}`,
