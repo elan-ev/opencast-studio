@@ -82,6 +82,7 @@ export const OverlayBox: React.FC<OverlayBoxProps> = ({ close, title, children, 
         display: "flex",
         flexDirection: "column",
         boxShadow: isHighContrast ? "none" : "0 4px 16px var(--shadow-color))",
+        outline: isHighContrast ? "2px solid var(--color-neutral90)" : "none",
         [screenWidthAtMost(850)]: {
           padding: 24,
           paddingLeft: 32,
