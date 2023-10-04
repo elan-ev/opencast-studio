@@ -82,6 +82,7 @@ export const SaveLocally: React.FC = () => {
         </div>
         <a
           ref={buttons[i]}
+          aria-label={t(`steps.finish.save-${deviceType}-locally`)}
           target="_blank"
           download={downloadName}
           href={url}

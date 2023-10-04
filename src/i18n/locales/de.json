@@ -178,6 +178,8 @@
       "label": "Aufnahme speichern",
       "upload-button": "Hochladen",
       "save-locally": "Lokal speichern",
+      "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
+      "save-video-locally": "Kameraaufnahme lokal speichern",
       "recording-saved": "Aufnahme gespeichert",
       "finish-button": "Abschließen"
     }

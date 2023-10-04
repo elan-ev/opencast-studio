@@ -180,6 +180,8 @@
       "label": "Save video",
       "upload-button": "Upload",
       "save-locally": "Save locally",
+      "save-desktop-locally": "Save display recording locally",
+      "save-video-locally": "Save camera recording locally",
       "recording-saved": "Recording saved",
       "finish-button": "Finish"
     }
