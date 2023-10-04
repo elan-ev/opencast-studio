@@ -92,7 +92,6 @@ export const SaveLocally: React.FC = () => {
             if (e.key === " ") {
               e.preventDefault();
               buttons[i].current?.click();
-              dispatch({ type: "MARK_DOWNLOADED", index: i });
             }
           }}
           css={{
