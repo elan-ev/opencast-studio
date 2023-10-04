@@ -168,7 +168,17 @@ const StepButton: React.FC<StepButtonProps> = ({
                 },
               }}>
                 {"href" in entry
-                  ? <a href={entry.href} css={style}>
+                  ? <a
+                    role="button"
+                    href={entry.href}
+                    css={style}
+                    onKeyDown={e => {
+                      if (e.key === " ") {
+                        e.preventDefault();
+                        window.location.href = entry.href;
+                      }
+                    }}
+                  >
                     {entry.icon}
                     {entry.label}
                   </a>
