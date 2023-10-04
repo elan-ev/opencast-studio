@@ -88,6 +88,13 @@ export const SaveLocally: React.FC = () => {
           rel="noopener noreferrer"
           role="button"
           onClick={() => dispatch({ type: "MARK_DOWNLOADED", index: i })}
+          onKeyDown={e => {
+            if (e.key === " ") {
+              e.preventDefault();
+              buttons[i].current?.click();
+              dispatch({ type: "MARK_DOWNLOADED", index: i });
+            }
+          }}
           css={{
             ...sharedButtonStyle(isHighContrast),
             justifyContent: "center",
