@@ -12,10 +12,11 @@ export type SourceOptionButtonProps = {
   onClick: () => void;
   disabledText?: false | string;
   shortcut?: string;
+  ariaLabel?: string;
 };
 
 export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
-  { icon, label, onClick, shortcut, disabledText }
+  { icon, label, onClick, shortcut, disabledText, ariaLabel }
 ) => {
   const { isHighContrast } = useColorScheme();
 
@@ -23,6 +24,7 @@ export const SourceOptionButton: React.FC<SourceOptionButtonProps> = (
     <ProtoButton
       onClick={onClick}
       disabled={!!disabledText}
+      aria-label={ariaLabel}
       css={{
         position: "relative",
         display: "inline-flex",
