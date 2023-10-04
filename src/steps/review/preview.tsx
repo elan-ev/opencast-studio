@@ -101,7 +101,7 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
     useRef<DurationCalcState>(),
     useRef<DurationCalcState>(),
   ];
-  const [durationsCalculated, setDurationsCalculated] = useState<boolean>();
+  const [durationsCalculated, setDurationsCalculated] = useState<boolean>(false);
 
   // Some logic to decide whether we currently are in a part of the video that
   // will be removed. The state will be updated in `onTimeUpdate` below and is
@@ -247,6 +247,14 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>(({ onTimeUpdate, 
               });
             }
           }}
+          // For iOS: without the autoplay attribute, the `loadeddata` event is
+          // never fired for some reason. Adding this does not seem to actually
+          // cause Safari to autoplay.
+          autoPlay={/iPad|iPhone|iPod/.test(navigator.userAgent)}
+
+          // Also for iOS: without this, the video maximizes automatically.
+          playsInline
+
           preload="auto"
           tabIndex={-1}
           css={{
