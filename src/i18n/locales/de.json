@@ -176,7 +176,7 @@
     },
     "finish": {
       "label": "Aufnahme speichern",
-      "upload-button": "Hochladen",
+      "upload": "Hochladen",
       "save-locally": "Lokal speichern",
       "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
       "save-video-locally": "Kameraaufnahme lokal speichern",

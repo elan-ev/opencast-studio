@@ -325,7 +325,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             "idle": () => <FiUpload css={{ fontSize: 20 }} />,
             "testing": () => <Spinner size={20} />,
           })}
-          <span>{t("steps.finish.upload-button") + " (" + uploadSize + ")"}</span>
+          <span>{t("steps.finish.upload") + " (" + uploadSize + ")"}</span>
         </ProtoButton>
       </form>
 

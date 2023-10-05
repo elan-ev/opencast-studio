@@ -178,7 +178,7 @@
     },
     "finish": {
       "label": "Save video",
-      "upload-button": "Upload",
+      "upload": "Upload",
       "save-locally": "Save locally",
       "save-desktop-locally": "Save display recording locally",
       "save-video-locally": "Save camera recording locally",
