@@ -23,20 +23,10 @@
 
   "confirm-discard-recordings": "Are you sure you want to discard your recording(s)? This cannot be undone!",
 
-  "sources-audio-question": "Record audio?",
-  "sources-audio-microphone": "Microphone",
-  "sources-audio-microphone-selected": "Microphone selected",
-  "sources-audio-without-audio": "Without audio",
-  "sources-audio-reselect-audio": "Reselect audio",
-  "sources-audio-device": "Device",
 
   "sources-scenario-display-and-user": "Display & camera",
   "sources-scenario-display": "Display",
   "sources-scenario-user": "Camera",
-
-
-  "source-audio-not-allowed-title": "Cannot access your microphone.",
-  "source-audio-not-allowed-text": "Try selecting 'Reselect audio' and then selecting 'Microphone' again. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
   "sources-display": "Display",
   "sources-user": "Camera",
@@ -124,7 +114,15 @@
       "preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'."
     },
     "audio": {
-      "label": "Select audio source"
+      "label": "Select audio source",
+      "question": "Record audio?",
+      "microphone": "Microphone",
+      "microphone-selected": "Microphone selected",
+      "without-audio": "Without audio",
+      "reselect-audio": "Reselect audio",
+      "not-allowed-title": "Cannot access your microphone.",
+      "not-allowed-text": "Try selecting 'Reselect audio' and then selecting 'Microphone' again. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
+      "device": "Device"
     },
     "record": {
       "label": "Record",

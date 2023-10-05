@@ -14,17 +14,11 @@
 
   "confirm-discard-recordings": "Ali ste prepričani, da želite zavreči posnetke? Tega ni mogoče razveljaviti!",
 
-  "sources-audio-question": "Posnemi zvok?",
-  "sources-audio-microphone": "Mikrofon",
-  "sources-audio-without-audio": "Brez zvoka",
 
   "sources-scenario-display-and-user": "Zaslon & video kamera",
   "sources-scenario-display": "Zaslon",
   "sources-scenario-user": "Video kamera",
 
-
-  "source-audio-not-allowed-title": "Do vašega mikrofona ni mogoče dostopati",
-  "source-audio-not-allowed-text": "Poskusite izbrati 'Ni zvoka' nato ponovno izberite 'Mikrofon'. Če to ne deluje, bodisi znova naložite to stran ali ročno dovolite dostop do vašega mikrofona (ponavadi preko gumba poleg naslovne vrstice brskalnika).",
 
   "sources-display": "Zaslon",
   "sources-user": "Video kamera",
@@ -76,6 +70,13 @@
       "none-available": "Vaš brskalnik / naprava ne podpira zajema zaslona ali video kamere :-(",
       "reselect-source": "Ponovno izberi vir(e)",
       "no-cam-detected": "Video kamera ni bila zaznana"
+    },
+    "audio": {
+      "question": "Posnemi zvok?",
+      "microphone": "Mikrofon",
+      "without-audio": "Brez zvoka",
+      "not-allowed-title": "Do vašega mikrofona ni mogoče dostopati",
+      "not-allowed-text": "Poskusite izbrati 'Ni zvoka' nato ponovno izberite 'Mikrofon'. Če to ne deluje, bodisi znova naložite to stran ali ročno dovolite dostop do vašega mikrofona (ponavadi preko gumba poleg naslovne vrstice brskalnika)."
     }
   }
 }

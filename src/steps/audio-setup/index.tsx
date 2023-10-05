@@ -32,7 +32,7 @@ export const AudioSetup: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) 
 
       return (
         <StepContainer
-          title={t("sources-audio-question")}
+          title={t("steps.audio.question")}
           prevButton={{ onClick: goToPrevStep }}
           nextButton={{ disabled: true }}
         >
@@ -54,9 +54,9 @@ export const AudioSetup: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) 
 
       return (
         <StepContainer
-          title={t("sources-audio-microphone-selected")}
+          title={t("steps.audio.microphone-selected")}
           prevButton={{
-            label: t("sources-audio-reselect-audio"),
+            label: t("steps.audio.reselect-audio"),
             onClick: reselectSource,
           }}
           nextButton={{ disabled: !audioStream, onClick: goToNextStep }}

@@ -24,20 +24,12 @@
 
   "confirm-discard-recordings": "Êtes-vous certain de vouloir vous débarrasser de vos enregistrements ? C’est irréversible !",
 
-  "sources-audio-question": "Enregistrer l’audio ?",
-  "sources-audio-microphone": "Microphone",
-  "sources-audio-microphone-selected": "Microphone sélectionné",
-  "sources-audio-without-audio": "Sans audio",
-  "sources-audio-reselect-audio": "Resélectionnez la source audio",
-  "sources-audio-device": "Appareil",
 
   "sources-scenario-display-and-user": "Écran et caméra",
   "sources-scenario-display": "Écran",
   "sources-scenario-user": "Caméra",
 
 
-  "source-audio-not-allowed-title": "Impossible d’accéder à votre micro.",
-  "source-audio-not-allowed-text": "Essayez de sélectionner 'Resélectionnez la source audio' et de sélectionner à nouveau 'Microphone'. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre microphone (généralement via un bouton situé à côté de la barre d’adresse de votre navigateur)",
 
   "sources-display": "Écran",
   "sources-user": "Caméra",
@@ -111,6 +103,16 @@
       "quality": "Qualité",
       "quality-auto": "auto",
       "preferences-note": "<0>Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto »."
+    },
+    "audio": {
+      "question": "Enregistrer l’audio ?",
+      "microphone": "Microphone",
+      "microphone-selected": "Microphone sélectionné",
+      "without-audio": "Sans audio",
+      "reselect-audio": "Resélectionnez la source audio",
+      "not-allowed-title": "Impossible d’accéder à votre micro.",
+      "not-allowed-text": "Essayez de sélectionner 'Resélectionnez la source audio' et de sélectionner à nouveau 'Microphone'. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre microphone (généralement via un bouton situé à côté de la barre d’adresse de votre navigateur)",
+      "device": "Appareil"
     }
   }
 }

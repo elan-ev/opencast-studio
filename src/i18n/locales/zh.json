@@ -23,20 +23,9 @@
 
   "confirm-discard-recordings": "是否确实要丢弃录制文件？这是无法撤消的！",
 
-  "sources-audio-question": "录制音频？",
-  "sources-audio-microphone": "麦克风",
-  "sources-audio-microphone-selected": "麦克风已选择",
-  "sources-audio-without-audio": "无音频",
-  "sources-audio-reselect-audio": "重新选择音频",
-  "sources-audio-device": "设备",
-
   "sources-scenario-display-and-user": "显示器和摄像头",
   "sources-scenario-display": "显示器",
   "sources-scenario-user": "摄像头",
-
-
-  "source-audio-not-allowed-title": "无法访问麦克风。",
-  "source-audio-not-allowed-text": "尝试选择\"重新选择音频\"，然后再次选择\"麦克风\"。如果这不起作用，请重新加载此页面或手动允许我们访问您的麦克风（通常通过浏览器地址栏旁边的按钮）。",
 
   "sources-display": "显示器",
   "sources-user": "摄像头",
@@ -101,6 +90,16 @@
       "quality": "质量",
       "quality-auto": "自动",
       "preferences-note": "<0>注意：</0> 这些只是首选项，不能保证您的设备实际支持所有选项。如有疑问，请选择'自动'。"
+    },
+    "audio": {
+      "question": "录制音频？",
+      "microphone": "麦克风",
+      "microphone-selected": "麦克风已选择",
+      "without-audio": "无音频",
+      "reselect-audio": "重新选择音频",
+      "not-allowed-title": "无法访问麦克风。",
+      "not-allowed-text": "尝试选择\"重新选择音频\"，然后再次选择\"麦克风\"。如果这不起作用，请重新加载此页面或手动允许我们访问您的麦克风（通常通过浏览器地址栏旁边的按钮）。",
+      "device": "设备"
     }
   }
 }

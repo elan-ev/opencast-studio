@@ -21,20 +21,9 @@
 
   "confirm-discard-recordings": "¿Está seguro que quiere descartar tu grabación? ¡Esto no se puede deshacer!",
 
-  "sources-audio-question": "¿Grabar el audio?",
-  "sources-audio-microphone": "Micrófono",
-  "sources-audio-microphone-selected": "Micrófono seleccionado",
-  "sources-audio-without-audio": "Sin audio",
-  "sources-audio-reselect-audio": "Volver a seleccionar el audio",
-  "sources-audio-device": "Dispositivo",
-
   "sources-scenario-display-and-user": "Pantalla y cámara",
   "sources-scenario-display": "Pantalla",
   "sources-scenario-user": "Cámara",
-
-
-  "source-audio-not-allowed-title": "No se puede acceder a su micrófono",
-  "source-audio-not-allowed-text": "Intente seleccionar 'Volver a seleccionar el audio' y luego vuelva a seleccionar 'Micrófono'. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su micrófono (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
 
   "sources-display": "Pantalla",
   "sources-user": "Cámara",
@@ -98,6 +87,16 @@
       "quality": "Calidad",
       "quality-auto": "automático",
       "preferences-note": "<0>Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'."
+    },
+    "audio": {
+      "question": "¿Grabar el audio?",
+      "microphone": "Micrófono",
+      "microphone-selected": "Micrófono seleccionado",
+      "without-audio": "Sin audio",
+      "reselect-audio": "Volver a seleccionar el audio",
+      "not-allowed-title": "No se puede acceder a su micrófono",
+      "not-allowed-text": "Intente seleccionar 'Volver a seleccionar el audio' y luego vuelva a seleccionar 'Micrófono'. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su micrófono (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
+      "device": "Dispositivo"
     }
   }
 }

@@ -30,17 +30,6 @@
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
 
-  "source-audio-not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
-  "source-audio-not-allowed-text": "Versuchen Sie 'Audio neu auswählen' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
-
-  "sources-audio-question": "Audio aufnehmen?",
-  "sources-audio-microphone": "Mikrofon",
-  "sources-audio-microphone-selected": "Mikrofon ausgewählt",
-  "sources-audio-without-audio": "Ohne Audio",
-  "sources-audio-reselect-audio": "Audio neu auswählen",
-  "sources-audio-device": "Gerät",
-
-
   "error-lost-video-stream": "Video-Stream endete unerwartet! Wurde eine Kamera getrennt oder haben Sie versehentlich die Videofreigabe beendet?",
   "error-lost-audio-stream": "Audio-Stream endete unerwartet! Wurde ein Mikrofon getrennt oder haben Sie versehentlich die Audiofreigabe beendet?",
   "error-lost-stream-end-recording": "Ein Video- oder Audio-Stream endete unerwartet! Infolgedessen wurde die aktive Aufnahme vorzeitig beendet. Wurde ein Mikrofon oder eine Kamera getrennt? Oder haben Sie versehentlich die Medienfreigabe beendet oder Studio die notwendigen Berechtigungen entzogen?",
@@ -123,7 +112,15 @@
       "preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen."
     },
     "audio": {
-      "label": "Audioquelle auswählen"
+      "label": "Audioquelle auswählen",
+      "question": "Audio aufnehmen?",
+      "microphone": "Mikrofon",
+      "microphone-selected": "Mikrofon ausgewählt",
+      "without-audio": "Ohne Audio",
+      "reselect-audio": "Audio neu auswählen",
+      "not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
+      "not-allowed-text": "Versuchen Sie 'Audio neu auswählen' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+      "device": "Gerät"
     },
     "record": {
       "label": "Aufnehmen",
