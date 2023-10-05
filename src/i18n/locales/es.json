@@ -2,7 +2,6 @@
   "forms-validation-error-required": "Este campo es obligatorio.",
   "message-upload-complete": "¡Subida completa!",
   "message-upload-complete-explanation": "Su grabación será procesada por Opencast ahora.",
-  "review-button-discard-and-record": "Descartar y volver a grabar",
   "save-creation-label-presenter": "Ponente",
   "save-creation-label-title": "Título",
   "save-creation-upload-network-error": "Fallo en la subida: error de red. Por favor, compruebe su conexión a Internet. Otras posibles causas: el servidor de Opencast no está accesible o está mal configurado.",
@@ -28,14 +27,6 @@
   "error-lost-video-stream": "¡La transmisión de video terminó inesperadamente! ¿Se desconectó una cámara o accidentalmente dejó de compartir una fuente de video?",
   "error-lost-audio-stream": "¡La transmisión de audio terminó inesperadamente! ¿Se desconectó el micrófono o accidentalmente dejó de compartir la fuente de audio?",
   "error-lost-stream-end-recording": "Una transmisión de video o audio finalizó inesperadamente y, por lo tanto, la grabación se detuvo prematuramente. ¿Se desconectó un micrófono o una cámara? ¿O accidentalmente dejó de compartir la fuente de medios o revocó los permisos necesarios?",
-
-  "review-error-empty-recording": "Error: tu grabación está completamente vacía. ¿Detuviste la grabación casi inmediatamente después de comenzar? Además, asegúrese de que su sistema sea lo suficientemente potente como para grabar una transmisión de video (este podría no ser el caso si otra aplicación utiliza mucho su sistema o si su dispositivo es muy antiguo). Si su sistema es lo suficientemente potente como para grabar, grabó durante más de unos segundos y aún ve este error: informe de esto como un error en GitHub.",
-  "review-set-start": "Establecer el instante actual como inicio",
-  "review-set-end": "Establecer el instante actual como fin",
-  "review-play": "Reproducir",
-  "review-pause": "Pausar",
-  "review-part-will-be-removed": "Esta parte será eliminada",
-  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 
   "upload-notification": "En este momento se está subiendo...",
   "upload-settings-modal-header": "Configurar subida a Opencast",
@@ -99,6 +90,16 @@
       "record-button-title": "Iniciar grabación",
       "resume-button-title": "Reanudar grabación",
       "stop-button-title": "Detener grabación"
+    },
+    "review": {
+      "button-discard-and-record": "Descartar y volver a grabar",
+      "error-empty-recording": "Error: tu grabación está completamente vacía. ¿Detuviste la grabación casi inmediatamente después de comenzar? Además, asegúrese de que su sistema sea lo suficientemente potente como para grabar una transmisión de video (este podría no ser el caso si otra aplicación utiliza mucho su sistema o si su dispositivo es muy antiguo). Si su sistema es lo suficientemente potente como para grabar, grabó durante más de unos segundos y aún ve este error: informe de esto como un error en GitHub.",
+      "set-start": "Establecer el instante actual como inicio",
+      "set-end": "Establecer el instante actual como fin",
+      "part-will-be-removed": "Esta parte será eliminada",
+      "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
+      "play": "Reproducir",
+      "pause": "Pausar"
     }
   }
 }

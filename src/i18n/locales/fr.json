@@ -2,7 +2,6 @@
   "forms-validation-error-required": "Ce champ est obligatoire.",
   "message-upload-complete": "Téléchargement terminé !",
   "message-upload-complete-explanation": "Votre enregistrement va maintenant être traité par Opencast.",
-  "review-button-discard-and-record": "Ignorer et réenregistrer",
   "save-creation-label-presenter": "Présentateur",
   "save-creation-label-title": "Titre",
   "save-creation-upload-network-error": "Échec du téléchargement : erreur réseau. Veuillez vérifier votre connexion internet ! Autres causes potentielles : le serveur Opencast n’est pas accessible ou mal configuré.",
@@ -34,14 +33,6 @@
   "error-lost-video-stream": "Le flux vidéo s’est terminé de manière inattendue ! Une caméra s’est-elle déconnectée ou avez-vous accidentellement annulé le partage d’une source vidéo ?",
   "error-lost-audio-stream": "Le flux audio s’est terminé de manière inattendue ! Le microphone s’est-il déconnecté ou avez-vous accidentellement annulé le partage de la source audio ?",
   "error-lost-stream-end-recording": "Un flux vidéo ou audio s’est terminé de manière inattendue et l’enregistrement actif a été arrêté prématurément ! Un microphone ou une caméra s'est-il déconnecté ? Ou avez-vous accidentellement annulé le partage de la source multimédia ou révoqué les autorisations nécessaires ?",
-
-  "review-error-empty-recording": "Erreur : votre enregistrement est complètement vide. Avez-vous arrêté l’enregistrement presque immédiatement après l’avoir démarré ? En outre, veuillez vous assurer que votre système est suffisamment puissant pour enregistrer un flux vidéo (cela pourrait ne pas être le cas si une autre application utilise fortement votre système ou si votre ordinateur est très ancien). Si votre système est assez puissant pour enregistrer, que vous avez enregistré pendant plusieurs secondes et que vous voyez toujours cette erreur : veuillez signaler ce problème comme un bogue sur GitHub.",
-  "review-set-start": "Définir l’heure actuelle comme début",
-  "review-set-end": "Définir l’heure actuelle comme fin",
-  "review-part-will-be-removed": "Cette section sera retirée",
-  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
-  "review-play": "Jouer",
-  "review-pause": "Pause",
 
   "upload-notification": "En cours de téléchargement...",
   "upload-settings-modal-header": "Connexion à Opencast",
@@ -115,6 +106,16 @@
       "record-button-title": "Démarrer l’enregistrement",
       "resume-button-title": "Reprendre l’enregistrement",
       "stop-button-title": "Arrêt de l’enregistrement"
+    },
+    "review": {
+      "button-discard-and-record": "Ignorer et réenregistrer",
+      "error-empty-recording": "Erreur : votre enregistrement est complètement vide. Avez-vous arrêté l’enregistrement presque immédiatement après l’avoir démarré ? En outre, veuillez vous assurer que votre système est suffisamment puissant pour enregistrer un flux vidéo (cela pourrait ne pas être le cas si une autre application utilise fortement votre système ou si votre ordinateur est très ancien). Si votre système est assez puissant pour enregistrer, que vous avez enregistré pendant plusieurs secondes et que vous voyez toujours cette erreur : veuillez signaler ce problème comme un bogue sur GitHub.",
+      "set-start": "Définir l’heure actuelle comme début",
+      "set-end": "Définir l’heure actuelle comme fin",
+      "part-will-be-removed": "Cette section sera retirée",
+      "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
+      "play": "Jouer",
+      "pause": "Pause"
     }
   }
 }

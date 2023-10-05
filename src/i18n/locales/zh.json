@@ -2,7 +2,6 @@
   "forms-validation-error-required": "此字段为必填字段。",
   "message-upload-complete": "上传完成！",
   "message-upload-complete-explanation": "您的录制内容现在将由 Opencast 处理。",
-  "review-button-discard-and-record": "丢弃并再次录制",
   "save-creation-label-presenter": "演示者",
   "save-creation-label-title": "标题",
   "save-creation-upload-network-error": "上传失败：网络错误。请检查您的互联网连接！其他潜在原因：无法访问或配置错误。",
@@ -30,14 +29,6 @@
   "error-lost-video-stream": "视频流意外结束！是摄像头断开连接还是您不小心取消了共享视频源？",
   "error-lost-audio-stream": "音频流意外结束！麦克风是否断开连接或意外断开了音频源的共享？",
   "error-lost-stream-end-recording": "视频或音频流意外结束，活动录制过早停止！麦克风或摄像头是否断开连接？还是您不小心取消了媒体源的共享或撤销了必要的权限？",
-
-  "review-error-empty-recording": "错误：您的录音完全为空。您在开始录制后几乎立即停止了录制吗？此外，请确保您的系统功能强大到足以录制视频流（如果其他应用程序大量使用您的系统或您的设备非常旧，则情况可能并非如此）。如果您的系统功能强大到足以记录，则您录制了几秒钟以上，并且您仍然看到此错误：请在GitHub上将此错误报告为错误。",
-  "review-set-start": "将当前时间设置为开始时间",
-  "review-set-end": "将当前时间设置为结束",
-  "review-part-will-be-removed": "此部分将被删除",
-  "review-player-progress": "{{当前时间, 持续时间-秒}} / {{期间, 持续时间-秒}}",
-  "review-play": "播放",
-  "review-pause": "暂停",
 
   "upload-notification": "当前正在上传...",
   "upload-settings-modal-header": "Opencast连接",
@@ -102,6 +93,16 @@
       "record-button-title": "开始录制",
       "resume-button-title": "恢复录制",
       "stop-button-title": "停止录制"
+    },
+    "review": {
+      "button-discard-and-record": "丢弃并再次录制",
+      "error-empty-recording": "错误：您的录音完全为空。您在开始录制后几乎立即停止了录制吗？此外，请确保您的系统功能强大到足以录制视频流（如果其他应用程序大量使用您的系统或您的设备非常旧，则情况可能并非如此）。如果您的系统功能强大到足以记录，则您录制了几秒钟以上，并且您仍然看到此错误：请在GitHub上将此错误报告为错误。",
+      "set-start": "将当前时间设置为开始时间",
+      "set-end": "将当前时间设置为结束",
+      "part-will-be-removed": "此部分将被删除",
+      "player-progress": "{{当前时间, 持续时间-秒}} / {{期间, 持续时间-秒}}",
+      "play": "播放",
+      "pause": "暂停"
     }
   }
 }

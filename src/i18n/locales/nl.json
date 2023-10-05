@@ -2,7 +2,6 @@
   "forms-validation-error-required": "Dit veld is verplicht.",
   "message-upload-complete": "Upload voltooid!",
   "message-upload-complete-explanation": "Uw opname wordt nu verwerkt door Opencast.",
-  "review-button-discard-and-record": "Verwijderen en opnieuw opnemen",
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Titel",
   "save-creation-new-recording": "Start nieuwe opname",
@@ -14,7 +13,6 @@
   "sources-display": "Beeldscherm",
   "sources-user": "Camera",
 
-  "review-error-empty-recording": "Fout: Uw opname is leeg. Ben je direct na de start gestopt met opnemen? Zorg er ook voor dat uw systeem krachtig genoeg is om video's op te nemen (dit kan niet het geval zijn als andere toepassingen uw systeem zwaar gebruiken of als uw apparaat erg oud is). Als uw systeem krachtig genoeg is, uw opname is langer dan een paar seconden, en u ziet deze fout nog steeds, meld het dan als een bug op GitHub.",
   "upload-notification": "Momenteel aan het uploaden",
   "upload-settings-modal-header": "Upload naar Opencast configureren",
   "upload-settings-label-server-url": "Server-URL",
@@ -42,12 +40,6 @@
   "error-lost-video-stream": "Videostroom onverwacht beëindigd! Heeft een camera de verbinding verbroken of heeft u per ongeluk een videobron uitgeschakeld?",
   "error-lost-audio-stream": "De audiostream is onverwacht beëindigd! Heeft de microfoon de verbinding verbroken of heeft u per ongeluk de audiobron uitgeschakeld?",
   "error-lost-stream-end-recording": "Een video- of audiostream werd onverwacht beëindigd en dus werd de actieve opname voortijdig gestopt! Heeft een microfoon of een camera de verbinding verbroken? Of heeft u per ongeluk de mediabron uitgeschakeld of de benodigde rechten opgezegd?",
-  "review-set-start": "Stel de actuele tijd in als starttijd",
-  "review-set-end": "Stel de actuele tijd in als eindtijd",
-  "review-play": "Afspelen",
-  "review-pause": "Pauze",
-  "review-part-will-be-removed": "Dit deel wordt verwijderd.",
-  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 
   "steps": {
     "back-button-label": "Terug",
@@ -89,6 +81,16 @@
       "record-button-title": "Opname starten",
       "resume-button-title": "Opname hervatten",
       "stop-button-title": "Opname stoppen"
+    },
+    "review": {
+      "button-discard-and-record": "Verwijderen en opnieuw opnemen",
+      "error-empty-recording": "Fout: Uw opname is leeg. Ben je direct na de start gestopt met opnemen? Zorg er ook voor dat uw systeem krachtig genoeg is om video's op te nemen (dit kan niet het geval zijn als andere toepassingen uw systeem zwaar gebruiken of als uw apparaat erg oud is). Als uw systeem krachtig genoeg is, uw opname is langer dan een paar seconden, en u ziet deze fout nog steeds, meld het dan als een bug op GitHub.",
+      "set-start": "Stel de actuele tijd in als starttijd",
+      "set-end": "Stel de actuele tijd in als eindtijd",
+      "part-will-be-removed": "Dit deel wordt verwijderd.",
+      "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
+      "play": "Afspelen",
+      "pause": "Pauze"
     }
   }
 }

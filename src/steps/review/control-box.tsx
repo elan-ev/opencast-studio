@@ -35,7 +35,7 @@ export const ControlBox: React.FC<SharedProps> = ({ previewController, currentTi
     }}>
       <Controls {...{ previewController, currentTime }} />
       <div css={{ textAlign: "center", color: COLORS.neutral70 }}>
-        {t("review-player-progress", {
+        {t("steps.review.player-progress", {
           currentTime: formatTime(currentTime, duration, i18n.language),
           duration: formatTime(duration, duration, i18n.language),
         })}
@@ -366,6 +366,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
   const { isHighContrast } = useColorScheme();
 
   const isPlaying = previewController.current?.isPlaying;
+  const label = t(`steps.review.${isPlaying ? "pause" : "play"}`);
   return (
     <div css={{
       display: "flex",
@@ -383,9 +384,9 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
       />}
 
       {/* Play/pause button */}
-      <WithTooltip tooltip={isPlaying ? t("review-pause") : t("review-play")}>
+      <WithTooltip tooltip={label}>
         <ProtoButton
-          aria-label={isPlaying ? t("review-pause") : t("review-play")}
+          aria-label={label}
           css={{
             backgroundColor: COLORS.accent5,
             color: isHighContrast ? COLORS.neutral05 : "white",
@@ -508,10 +509,10 @@ const CutControls: React.FC<CutControlsProps> = (
   );
 
   const cutButton = (
-    <WithTooltip tooltip={t(`review-set-${marker}`)}>
+    <WithTooltip tooltip={t(`steps.review.set-${marker}`)}>
       <ProtoButton
         {...{ disabled }}
-        aria-label={t(`review-set-${marker}`)}
+        aria-label={t(`steps.review.set-${marker}`)}
         onClick={cut}
         onMouseDown={e => e.preventDefault()}
         css={{

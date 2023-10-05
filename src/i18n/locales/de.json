@@ -3,8 +3,6 @@
   "message-upload-complete": "Erfolgreich hochgeladen!",
   "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
 
-  "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
-
   "save-creation-label-presenter": "Vortragende:r",
   "save-creation-label-title": "Titel",
   "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
@@ -30,13 +28,6 @@
   "error-lost-video-stream": "Video-Stream endete unerwartet! Wurde eine Kamera getrennt oder haben Sie versehentlich die Videofreigabe beendet?",
   "error-lost-audio-stream": "Audio-Stream endete unerwartet! Wurde ein Mikrofon getrennt oder haben Sie versehentlich die Audiofreigabe beendet?",
   "error-lost-stream-end-recording": "Ein Video- oder Audio-Stream endete unerwartet! Infolgedessen wurde die aktive Aufnahme vorzeitig beendet. Wurde ein Mikrofon oder eine Kamera getrennt? Oder haben Sie versehentlich die Medienfreigabe beendet oder Studio die notwendigen Berechtigungen entzogen?",
-
-  "review-error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
-  "review-set-start": "Aktuelle Zeit als Anfang festlegen",
-  "review-set-end": "Aktuelle Zeit als Ende festlegen",
-  "review-part-will-be-removed": "Dieser Teil wird entfernt",
-  "review-play": "Abspielen",
-  "review-pause": "Pausieren",
 
   "upload-notification": "Aufnahme wird hochgeladen...",
   "upload-settings-modal-header": "Verbindung zu Opencast",
@@ -129,6 +120,13 @@
     "review": {
       "label": "Prüfen & kürzen",
       "only-on-upload-note": "Das Kürzen des Videos funktioniert nur beim Upload zu Opencast. Lokal speichern können Sie nur die ungekürzte Aufnahme.",
+      "button-discard-and-record": "Verwerfen und neu aufzeichnen",
+      "error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
+      "set-start": "Aktuelle Zeit als Anfang festlegen",
+      "set-end": "Aktuelle Zeit als Ende festlegen",
+      "part-will-be-removed": "Dieser Teil wird entfernt",
+      "play": "Abspielen",
+      "pause": "Pausieren",
       "jump-to-cut-point": "Zum Schnittpunkt springen"
     },
     "finish": {

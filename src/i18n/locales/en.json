@@ -2,7 +2,6 @@
   "forms-validation-error-required": "This field is required.",
   "message-upload-complete": "Upload complete!",
   "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
-  "review-button-discard-and-record": "Discard and record again",
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Title",
   "save-creation-upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
@@ -31,14 +30,6 @@
   "error-lost-video-stream": "Video stream unexpectedly ended! Did a camera disconnect or did you accidentally unshare a video source?",
   "error-lost-audio-stream": "Audio stream unexpectedly ended! Did the microphone disconnect or did you accidentally unshare the audio source?",
   "error-lost-stream-end-recording": "A video or audio stream unexpectedly ended and the active recording was prematurely stopped! Did a microphone or a camera disconnect? Or did you accidentally unshare the media source or revoke the necessary permissions?",
-
-  "review-error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
-  "review-set-start": "Set current time as start",
-  "review-set-end": "Set current time as end",
-  "review-part-will-be-removed": "This part will be removed",
-  "review-player-progress": "{{currentTime}} / {{duration}}",
-  "review-play": "Play",
-  "review-pause": "Pause",
 
   "upload-notification": "Currently uploading...",
   "upload-settings-modal-header": "Opencast Connection",
@@ -131,6 +122,14 @@
     "review": {
       "label": "Review & trim",
       "only-on-upload-note": "Trimming the video only works when uploading to Opencast and not when saving the recording locally.",
+      "button-discard-and-record": "Discard and record again",
+      "error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
+      "set-start": "Set current time as start",
+      "set-end": "Set current time as end",
+      "part-will-be-removed": "This part will be removed",
+      "player-progress": "{{currentTime}} / {{duration}}",
+      "play": "Play",
+      "pause": "Pause",
       "jump-to-cut-point": "Jump to cut point"
     },
     "finish": {
