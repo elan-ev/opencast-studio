@@ -2,9 +2,6 @@
   "forms-validation-error-required": "Dit veld is verplicht.",
   "message-upload-complete": "Upload voltooid!",
   "message-upload-complete-explanation": "Uw opname wordt nu verwerkt door Opencast.",
-  "pause-button-title": "Opname pauzeren",
-  "record-button-title": "Opname starten",
-  "resume-button-title": "Opname hervatten",
   "review-button-discard-and-record": "Verwijderen en opnieuw opnemen",
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Titel",
@@ -18,7 +15,6 @@
   "sources-user": "Camera",
 
   "review-error-empty-recording": "Fout: Uw opname is leeg. Ben je direct na de start gestopt met opnemen? Zorg er ook voor dat uw systeem krachtig genoeg is om video's op te nemen (dit kan niet het geval zijn als andere toepassingen uw systeem zwaar gebruiken of als uw apparaat erg oud is). Als uw systeem krachtig genoeg is, uw opname is langer dan een paar seconden, en u ziet deze fout nog steeds, meld het dan als een bug op GitHub.",
-  "stop-button-title": "Opname stoppen",
   "upload-notification": "Momenteel aan het uploaden",
   "upload-settings-modal-header": "Upload naar Opencast configureren",
   "upload-settings-label-server-url": "Server-URL",
@@ -87,6 +83,12 @@
       "not-allowed-title": "Toegang tot de microfoon niet mogelijk.",
       "not-allowed-text": "Probeer 'Audio opnieuw selecteren' te selecteren en dan weer 'Microfoon'. Als dat niet werkt, laadt u deze pagina opnieuw of staat u deze pagina handmatig toe om toegang te krijgen tot uw microfoon (meestal met behulp van een knop naast de adresbalk van uw browser).",
       "device": "Toestel"
+    },
+    "record": {
+      "pause-button-title": "Opname pauzeren",
+      "record-button-title": "Opname starten",
+      "resume-button-title": "Opname hervatten",
+      "stop-button-title": "Opname stoppen"
     }
   }
 }

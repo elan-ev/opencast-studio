@@ -1,12 +1,8 @@
 {
   "forms-validation-error-required": "این زمینه مورد نیاز است.",
   "message-upload-complete": "آپلود کامل شد!",
-  "pause-button-title": "مکث در ضبط کردن",
-  "record-button-title": "شروع ضبط کردن",
-  "resume-button-title": "ادامه ضبط کردن",
   "save-creation-label-presenter": "ارائه دهنده",
   "save-creation-label-title": "عنوان",
-  "stop-button-title": "توقف در ضبط کردن",
   "upload-notification": "در حال بارگذاری",
   "upload-settings-modal-header": "آپلود تنظیمات در Opencast",
   "upload-settings-label-server-url": "آدرس سرور",
@@ -17,6 +13,12 @@
     "video": {
       "share-display": "اشتراک دسکتاپ (بدون صدا)",
       "share-user": "به اشتراک گذاشتن دوربین"
+    },
+    "record": {
+      "pause-button-title": "مکث در ضبط کردن",
+      "record-button-title": "شروع ضبط کردن",
+      "resume-button-title": "ادامه ضبط کردن",
+      "stop-button-title": "توقف در ضبط کردن"
     }
   }
 }

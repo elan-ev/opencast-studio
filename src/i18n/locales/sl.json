@@ -2,9 +2,6 @@
   "forms-validation-error-required": "To polje je obvezno.",
   "message-upload-complete": "Nalaganje zaključeno!",
   "message-upload-complete-explanation": "Vaš posnetek bo sedaj sprocesiran v Opencast sistemu.",
-  "pause-button-title": "Začasno ustavi snemanje",
-  "record-button-title": "Začni snemanje",
-  "resume-button-title": "Obnovi snemanje",
   "review-button-discard-and-record": "Prekinite in ponovno posnemite",
   "save-creation-label-presenter": "Avtor",
   "save-creation-label-title": "Naslov",
@@ -29,7 +26,6 @@
 
   "review-error-empty-recording": "Napaka: vaš posnetek je popolnoma prazen. Ste mogoče snemanje ustavili skoraj takoj po tem, ko ste ga začeli? Poleg tega se prepričajte, da je vaš sistem dovolj zmogljiv za snemanje videa. (to morda ne velja, če druga aplikacija močno obrremenjuje vaš sistem ali pa če je vaša računalnik zelo star). V primeru da je vaš sistem dovolj zmogljiiv za viideo snemanje, ter snemali več kot nekaj sekund in še vedno vidite to napako: Prosimo prijavite to kot napako na GitHub.",
 
-  "stop-button-title": "Prekini snemanje",
   "upload-notification": "Trenutno nalaga ...",
   "upload-settings-modal-header": "Opencast povezava",
   "upload-settings-label-server-url": "URL strežnika ",
@@ -77,6 +73,12 @@
       "without-audio": "Brez zvoka",
       "not-allowed-title": "Do vašega mikrofona ni mogoče dostopati",
       "not-allowed-text": "Poskusite izbrati 'Ni zvoka' nato ponovno izberite 'Mikrofon'. Če to ne deluje, bodisi znova naložite to stran ali ročno dovolite dostop do vašega mikrofona (ponavadi preko gumba poleg naslovne vrstice brskalnika)."
+    },
+    "record": {
+      "pause-button-title": "Začasno ustavi snemanje",
+      "record-button-title": "Začni snemanje",
+      "resume-button-title": "Obnovi snemanje",
+      "stop-button-title": "Prekini snemanje"
     }
   }
 }

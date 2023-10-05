@@ -2,9 +2,6 @@
   "forms-validation-error-required": "Dieses Feld ist erforderlich.",
   "message-upload-complete": "Erfolgreich hochgeladen!",
   "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
-  "pause-button-title": "Aufzeichnung pausieren",
-  "record-button-title": "Aufzeichnung beginnen",
-  "resume-button-title": "Aufzeichnung fortsetzen",
 
   "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
 
@@ -41,7 +38,6 @@
   "review-play": "Abspielen",
   "review-pause": "Pausieren",
 
-  "stop-button-title": "Aufzeichnung beenden",
   "upload-notification": "Aufnahme wird hochgeladen...",
   "upload-settings-modal-header": "Verbindung zu Opencast",
   "upload-settings-label-server-url": "Server-URL",
@@ -124,6 +120,10 @@
     },
     "record": {
       "label": "Aufnehmen",
+      "pause-button-title": "Aufzeichnung pausieren",
+      "record-button-title": "Aufzeichnung beginnen",
+      "resume-button-title": "Aufzeichnung fortsetzen",
+      "stop-button-title": "Aufzeichnung beenden",
       "is-paused": "Aufzeichnung ist pausiert"
     },
     "review": {

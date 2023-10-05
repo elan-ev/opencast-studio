@@ -2,9 +2,6 @@
   "forms-validation-error-required": "Ce champ est obligatoire.",
   "message-upload-complete": "Téléchargement terminé !",
   "message-upload-complete-explanation": "Votre enregistrement va maintenant être traité par Opencast.",
-  "pause-button-title": "Mettre l’enregistrement en pause",
-  "record-button-title": "Démarrer l’enregistrement",
-  "resume-button-title": "Reprendre l’enregistrement",
   "review-button-discard-and-record": "Ignorer et réenregistrer",
   "save-creation-label-presenter": "Présentateur",
   "save-creation-label-title": "Titre",
@@ -46,7 +43,6 @@
   "review-play": "Jouer",
   "review-pause": "Pause",
 
-  "stop-button-title": "Arrêt de l’enregistrement",
   "upload-notification": "En cours de téléchargement...",
   "upload-settings-modal-header": "Connexion à Opencast",
   "upload-settings-label-server-url": "URL du serveur",
@@ -113,6 +109,12 @@
       "not-allowed-title": "Impossible d’accéder à votre micro.",
       "not-allowed-text": "Essayez de sélectionner 'Resélectionnez la source audio' et de sélectionner à nouveau 'Microphone'. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre microphone (généralement via un bouton situé à côté de la barre d’adresse de votre navigateur)",
       "device": "Appareil"
+    },
+    "record": {
+      "pause-button-title": "Mettre l’enregistrement en pause",
+      "record-button-title": "Démarrer l’enregistrement",
+      "resume-button-title": "Reprendre l’enregistrement",
+      "stop-button-title": "Arrêt de l’enregistrement"
     }
   }
 }

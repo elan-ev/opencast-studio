@@ -2,9 +2,6 @@
   "forms-validation-error-required": "此字段为必填字段。",
   "message-upload-complete": "上传完成！",
   "message-upload-complete-explanation": "您的录制内容现在将由 Opencast 处理。",
-  "pause-button-title": "暂停录制",
-  "record-button-title": "开始录制",
-  "resume-button-title": "恢复录制",
   "review-button-discard-and-record": "丢弃并再次录制",
   "save-creation-label-presenter": "演示者",
   "save-creation-label-title": "标题",
@@ -42,7 +39,6 @@
   "review-play": "播放",
   "review-pause": "暂停",
 
-  "stop-button-title": "停止录制",
   "upload-notification": "当前正在上传...",
   "upload-settings-modal-header": "Opencast连接",
   "upload-settings-label-server-url": "服务器网址",
@@ -100,6 +96,12 @@
       "not-allowed-title": "无法访问麦克风。",
       "not-allowed-text": "尝试选择\"重新选择音频\"，然后再次选择\"麦克风\"。如果这不起作用，请重新加载此页面或手动允许我们访问您的麦克风（通常通过浏览器地址栏旁边的按钮）。",
       "device": "设备"
+    },
+    "record": {
+      "pause-button-title": "暂停录制",
+      "record-button-title": "开始录制",
+      "resume-button-title": "恢复录制",
+      "stop-button-title": "停止录制"
     }
   }
 }

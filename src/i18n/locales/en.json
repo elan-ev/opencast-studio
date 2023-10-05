@@ -2,9 +2,6 @@
   "forms-validation-error-required": "This field is required.",
   "message-upload-complete": "Upload complete!",
   "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
-  "pause-button-title": "Pause recording",
-  "record-button-title": "Start recording",
-  "resume-button-title": "Resume recording",
   "review-button-discard-and-record": "Discard and record again",
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Title",
@@ -43,7 +40,6 @@
   "review-play": "Play",
   "review-pause": "Pause",
 
-  "stop-button-title": "Stop recording",
   "upload-notification": "Currently uploading...",
   "upload-settings-modal-header": "Opencast Connection",
   "upload-settings-label-server-url": "Server URL",
@@ -126,6 +122,10 @@
     },
     "record": {
       "label": "Record",
+      "pause-button-title": "Pause recording",
+      "record-button-title": "Start recording",
+      "resume-button-title": "Resume recording",
+      "stop-button-title": "Stop recording",
       "is-paused": "Recording is paused"
     },
     "review": {
@@ -173,7 +173,6 @@
       "left": "Left",
       "right": "Right"
     },
-
 
     "review": {
       "play-pause": "Play/​Pause video",

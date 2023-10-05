@@ -2,9 +2,6 @@
   "forms-validation-error-required": "Este campo es obligatorio.",
   "message-upload-complete": "¡Subida completa!",
   "message-upload-complete-explanation": "Su grabación será procesada por Opencast ahora.",
-  "pause-button-title": "Pausar grabación",
-  "record-button-title": "Iniciar grabación",
-  "resume-button-title": "Reanudar grabación",
   "review-button-discard-and-record": "Descartar y volver a grabar",
   "save-creation-label-presenter": "Ponente",
   "save-creation-label-title": "Título",
@@ -40,7 +37,6 @@
   "review-part-will-be-removed": "Esta parte será eliminada",
   "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 
-  "stop-button-title": "Detener grabación",
   "upload-notification": "En este momento se está subiendo...",
   "upload-settings-modal-header": "Configurar subida a Opencast",
   "upload-settings-label-server-url": "URL del servidor",
@@ -97,6 +93,12 @@
       "not-allowed-title": "No se puede acceder a su micrófono",
       "not-allowed-text": "Intente seleccionar 'Volver a seleccionar el audio' y luego vuelva a seleccionar 'Micrófono'. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su micrófono (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
       "device": "Dispositivo"
+    },
+    "record": {
+      "pause-button-title": "Pausar grabación",
+      "record-button-title": "Iniciar grabación",
+      "resume-button-title": "Reanudar grabación",
+      "stop-button-title": "Detener grabación"
     }
   }
 }
