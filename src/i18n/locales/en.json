@@ -118,7 +118,7 @@
     }
   },
   "steps": {
-    "prev-button-label": "Back",
+    "back-button-label": "Back",
     "next-button-label": "Next",
     "video": {
       "label": "Select video source"
