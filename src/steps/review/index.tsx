@@ -24,6 +24,7 @@ export const Review: React.FC<StepProps> = ({ goToFirstStep, goToNextStep }) => 
   const previewController = useRef<PreviewHandle>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [previewReady, setPreviewReady] = useState(false);
+  const [_isPaused, setIsPaused] = useState(true);
 
   const expectedRecordings = match(videoChoice, {
     "both": () => 2,
@@ -81,6 +82,7 @@ export const Review: React.FC<StepProps> = ({ goToFirstStep, goToNextStep }) => 
             onTimeUpdate={event => {
               setCurrentTime(event.currentTarget.currentTime);
             }}
+            onPausePlay={paused => setIsPaused(paused)}
             onReady={() => setPreviewReady(true)}
           />
 
