@@ -37,8 +37,8 @@
 
   "save-creation-new-recording": "Empezar una nueva grabación",
   "save-creation-new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Estás seguro?",
-  "share-desktop": "Compartir escritorio",
-  "share-camera": "Compartir cámara",
+  "share-display": "Compartir escritorio",
+  "share-user": "Compartir cámara",
   "state-paused": "Pausado",
   "state-recording": "Grabando",
   "state-waiting": "Esperando",

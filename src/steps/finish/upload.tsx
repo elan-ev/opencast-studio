@@ -397,7 +397,7 @@ export const Input = <I extends FieldValues, F>({
         <input
           id={id}
           aria-invalid={error ? "true" : "false"}
-          aria-describedby={`${name}Error`}
+          aria-describedby={error ? `${name}Error` : id}
           autoComplete="off"
           type={type}
           {...rest}

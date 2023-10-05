@@ -82,6 +82,7 @@ export const SaveLocally: React.FC = () => {
         </div>
         <a
           ref={buttons[i]}
+          aria-label={t(`steps.finish.save-${deviceType}-locally`)}
           target="_blank"
           download={downloadName}
           href={url}
@@ -92,7 +93,6 @@ export const SaveLocally: React.FC = () => {
             if (e.key === " ") {
               e.preventDefault();
               buttons[i].current?.click();
-              dispatch({ type: "MARK_DOWNLOADED", index: i });
             }
           }}
           css={{

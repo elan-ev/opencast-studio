@@ -385,6 +385,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
       {/* Play/pause button */}
       <WithTooltip tooltip={isPlaying ? t("review-pause") : t("review-play")}>
         <ProtoButton
+          aria-label={isPlaying ? t("review-pause") : t("review-play")}
           css={{
             backgroundColor: COLORS.accent5,
             color: isHighContrast ? COLORS.neutral05 : "white",
@@ -510,6 +511,7 @@ const CutControls: React.FC<CutControlsProps> = (
     <WithTooltip tooltip={t(`review-set-${marker}`)}>
       <ProtoButton
         {...{ disabled }}
+        aria-label={t(`review-set-${marker}`)}
         onClick={cut}
         onMouseDown={e => e.preventDefault()}
         css={{

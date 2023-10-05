@@ -85,6 +85,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
     >
       {(displaySupported || !onMobileDevice()) && <SourceOptionButton
         label={t("sources-scenario-display")}
+        ariaLabel={t("share-display")}
         icon={<FiMonitor />}
         onClick={clickDisplay}
         disabledText={displaySupported ? false : t("sources-video-display-not-supported")}
@@ -92,6 +93,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
       />}
       {(displaySupported || !onMobileDevice()) && userSupported && <SourceOptionButton
         label={t("sources-scenario-display-and-user")}
+        ariaLabel={t("share-display-and-user")}
         icon={(
           <div css={{
             lineHeight: 0,
@@ -114,6 +116,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
       />}
       {userSupported && <SourceOptionButton
         label={t("sources-scenario-user")}
+        ariaLabel={t("share-user")}
         icon={<FiUser />}
         onClick={clickUser}
         disabledText={state.hasWebcam ? false : t("sources-video-no-cam-detected")}

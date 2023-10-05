@@ -77,8 +77,9 @@
   "sources-audio-reselect-audio": "Audio neu auswählen",
   "sources-audio-device": "Gerät",
 
-  "share-desktop": "Bildschirm teilen",
-  "share-camera": "Kamera teilen",
+  "share-display": "Bildschirm teilen",
+  "share-user": "Kamera teilen",
+  "share-display-and-user": "Bildschirm und Kamera teilen",
   "state-paused": "Pause",
   "state-recording": "Aufnahme",
   "state-waiting": "Warten",
@@ -177,6 +178,8 @@
       "label": "Aufnahme speichern",
       "upload-button": "Hochladen",
       "save-locally": "Lokal speichern",
+      "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
+      "save-video-locally": "Kameraaufnahme lokal speichern",
       "recording-saved": "Aufnahme gespeichert",
       "finish-button": "Abschließen"
     }

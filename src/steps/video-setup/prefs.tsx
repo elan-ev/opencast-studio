@@ -218,6 +218,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
         >
           <ProtoButton
             onClick={() => setIsExpanded(old => !old)}
+            aria-label={isExpanded ? t("video-settings-close") : t("video-settings-open")}
             css={{
               border: "none",
               display: "inline-block",

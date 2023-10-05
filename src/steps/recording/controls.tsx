@@ -87,6 +87,12 @@ export const RecordingControls: React.FC<Props> = ({
             "paused": () => resumeRecording,
             "recording": () => pauseRecording,
           })}
+          aria-label={match(recordingState, {
+            "inactive": () => t("record-button-title"),
+            "paused": () => t("resume-button-title"),
+            "recording": () => t("pause-button-title"),
+          })}
+          aria-live="polite"
           css={{
             position: "relative",
             width: 50,

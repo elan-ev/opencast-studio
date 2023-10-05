@@ -38,8 +38,9 @@
   "save-creation-return-to-no-label": "Exit Opencast Studio and go back",
   "save-creation-new-recording": "Start a new recording",
   "save-creation-new-recording-warning": "By starting a new recording, the current recording(s) will be discarded in this application (any uploaded or downloaded recording(s) will not be affected). Are you sure?",
-  "share-desktop": "Share desktop",
-  "share-camera": "Share camera",
+  "share-display": "Share display",
+  "share-user": "Share camera",
+  "share-display-and-user": "Share display & camera",
   "state-paused": "Paused",
   "state-recording": "Recording",
   "state-waiting": "Waiting",
@@ -179,6 +180,8 @@
       "label": "Save video",
       "upload-button": "Upload",
       "save-locally": "Save locally",
+      "save-desktop-locally": "Save display recording locally",
+      "save-video-locally": "Save camera recording locally",
       "recording-saved": "Recording saved",
       "finish-button": "Finish"
     }
