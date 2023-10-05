@@ -137,35 +137,28 @@
   },
   "shortcuts": {
     "label": "Shortcuts",
-
-    "general": "General",
-    "show-available-shortcuts": "Show available shortcuts",
-    "show-overview": "Show this overview",
-    "close-overlay": "Close dialog",
-    "tab-elements": "Navigate through elements",
-
-    "select-display": "Select display",
-    "select-camera": "Select camera",
-    "select-both": "Select display & camera",
-
-    "select-microphone": "Select microphone",
-    "select-no-audio": "Select no audio",
-
-    "start-pause-resume-recording": "Start/​pause recording",
     "sequence-seperator": "or",
-
-    "keys": {
-      "escape": "Esc",
-      "control": "Ctrl",
-      "alt": "Alt",
-      "option": "Option",
-      "command": "Cmd",
-      "space": "Spacebar",
-      "shift": "Shift",
-      "left": "Left",
-      "right": "Right"
+    "general": {
+      "title": "General",
+      "show-available-shortcuts": "Show available shortcuts",
+      "show-overview": "Show this overview",
+      "close-overlay": "Close dialog",
+      "tab-elements": "Navigate through elements",
+      "next-button": "Next/​Confirm",
+      "back-button": "Back/​Discard"
     },
-
+    "select-video": {
+      "select-display": "Select display",
+      "select-camera": "Select camera",
+      "select-both": "Select display & camera"
+    },
+    "select-audio": {
+      "select-microphone": "Select microphone",
+      "select-no-audio": "Select no audio"
+    },
+    "record": {
+      "start-pause-resume-recording": "Start/​pause recording"
+    },
     "review": {
       "play-pause": "Play/​Pause video",
       "skip-five": "5 seconds forward",
@@ -180,8 +173,16 @@
     "finish": {
       "new-recording": "Start new recording"
     },
-
-    "next-button": "Next/​Confirm",
-    "back-button": "Back/​Discard"
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Option",
+      "command": "Cmd",
+      "space": "Spacebar",
+      "shift": "Shift",
+      "left": "Left",
+      "right": "Right"
+    }
   }
 }

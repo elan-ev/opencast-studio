@@ -136,32 +136,28 @@
   },
   "shortcuts": {
     "label": "Tastenkürzel",
-
-    "general": "General",
-    "show-available-shortcuts": "Verfügbare Tastenkürzel anzeigen",
-    "show-overview": "Diese Übersicht anzeigen",
-    "close-overlay": "Dialog schließen",
-    "tab-elements": "Durch Seitenelemente navigieren",
-
-    "select-display": "Bildschirm auswählen",
-    "select-camera": "Kamera auswählen",
-    "select-both": "Bildschirm & Kamera auswählen",
-
-    "select-microphone": "Mikrofon auswählen",
-    "select-no-audio": "Ohne Audio",
-
-    "start-pause-resume-recording": "Aufzeichnung starten/​pausieren",
     "sequence-seperator": "oder",
-
-    "keys": {
-      "escape": "Esc",
-      "control": "Strg",
-      "space": "Leertaste",
-      "shift": "Shift",
-      "left": "Links",
-      "right": "Rechts"
+    "general": {
+      "title": "Allgemein",
+      "show-available-shortcuts": "Verfügbare Tastenkürzel anzeigen",
+      "show-overview": "Diese Übersicht anzeigen",
+      "close-overlay": "Dialog schließen",
+      "tab-elements": "Durch Seitenelemente navigieren",
+      "next-button": "Weiter/​Bestätigen",
+      "back-button": "Zurück/​Verwerfen"
     },
-
+    "select-video": {
+      "select-display": "Bildschirm auswählen",
+      "select-camera": "Kamera auswählen",
+      "select-both": "Bildschirm & Kamera auswählen"
+    },
+    "select-audio": {
+      "select-microphone": "Mikrofon auswählen",
+      "select-no-audio": "Ohne Audio"
+    },
+    "record": {
+      "start-pause-resume-recording": "Aufzeichnung starten/​pausieren"
+    },
     "review": {
       "play-pause": "Abspielen/​pausieren",
       "skip-five": "5 Sekunden weiter",
@@ -176,8 +172,13 @@
     "finish": {
       "new-recording": "Neue Aufnahme starten"
     },
-
-    "next-button": "Weiter/​Bestätigen",
-    "back-button": "Zurück/​Verwerfen"
+    "keys": {
+      "escape": "Esc",
+      "control": "Strg",
+      "space": "Leertaste",
+      "shift": "Shift",
+      "left": "Links",
+      "right": "Rechts"
+    }
   }
 }
