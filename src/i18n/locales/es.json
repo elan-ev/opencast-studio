@@ -1,16 +1,4 @@
 {
-  "forms-validation-error-required": "Este campo es obligatorio.",
-  "message-upload-complete": "¡Subida completa!",
-  "message-upload-complete-explanation": "Su grabación será procesada por Opencast ahora.",
-  "save-creation-label-presenter": "Ponente",
-  "save-creation-label-title": "Título",
-  "save-creation-upload-network-error": "Fallo en la subida: error de red. Por favor, compruebe su conexión a Internet. Otras posibles causas: el servidor de Opencast no está accesible o está mal configurado.",
-  "save-creation-upload-invalid-response": "Fallo en la subida: hubo una respuesta inesperada.",
-  "save-creation-upload-not-authorized": "Fallo en la subida: parece que no estás autorizado a subir.",
-  "save-creation-upload-unknown-error": "Fallo en la subida: se produjo un error desconocido.",
-
-  "save-creation-warn-download-hint": "Si este problema persiste, asegúrese de descargar su grabación para evitar perderla.",
-
   "save-creation-new-recording": "Empezar una nueva grabación",
   "save-creation-new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Estás seguro?",
 
@@ -100,6 +88,20 @@
       "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
       "play": "Reproducir",
       "pause": "Pausar"
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "Este campo es obligatorio.",
+        "complete": "¡Subida completa!",
+        "complete-explanation": "Su grabación será procesada por Opencast ahora.",
+        "label-presenter": "Ponente",
+        "label-title": "Título",
+        "upload-network-error": "Fallo en la subida: error de red. Por favor, compruebe su conexión a Internet. Otras posibles causas: el servidor de Opencast no está accesible o está mal configurado.",
+        "upload-invalid-response": "Fallo en la subida: hubo una respuesta inesperada.",
+        "upload-not-authorized": "Fallo en la subida: parece que no estás autorizado a subir.",
+        "upload-unknown-error": "Fallo en la subida: se produjo un error desconocido.",
+        "warn-download-hint": "Si este problema persiste, asegúrese de descargar su grabación para evitar perderla."
+      }
     }
   }
 }

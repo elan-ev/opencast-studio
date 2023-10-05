@@ -82,10 +82,10 @@ export const Finish: React.FC<StepProps> = ({ goToPrevStep, goToFirstStep }) => 
           alignItems: "center",
         },
       }}>
-        <Box title={t("steps.finish.upload")}>
+        <Box title={t("steps.finish.upload.label")}>
           <UploadBox />
         </Box>
-        <Box title={t("steps.finish.save-locally")}>
+        <Box title={t("steps.finish.save-locally.label")}>
           <SaveLocally />
         </Box>
       </div>

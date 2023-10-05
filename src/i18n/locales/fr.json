@@ -1,16 +1,4 @@
 {
-  "forms-validation-error-required": "Ce champ est obligatoire.",
-  "message-upload-complete": "Téléchargement terminé !",
-  "message-upload-complete-explanation": "Votre enregistrement va maintenant être traité par Opencast.",
-  "save-creation-label-presenter": "Présentateur",
-  "save-creation-label-title": "Titre",
-  "save-creation-upload-network-error": "Échec du téléchargement : erreur réseau. Veuillez vérifier votre connexion internet ! Autres causes potentielles : le serveur Opencast n’est pas accessible ou mal configuré.",
-  "save-creation-upload-invalid-response": "Échec du téléchargement : une réponse inattendue a été reçue.",
-  "save-creation-upload-not-authorized": "Échec du téléchargement : vous n’êtes pas autorisé à télécharger.",
-  "save-creation-upload-unknown-error": "Échec du téléchargement : une erreur inconnue s’est produite.",
-
-  "save-creation-warn-download-hint": "Si le problème persiste, assurez-vous de télécharger votre enregistrement pour éviter de le perdre.",
-
   "save-creation-return-to": "Quitter et retourner vers {{label}}",
   "save-creation-return-to-no-label": "Quitter et revenir à la page précédente",
   "save-creation-new-recording": "Commencer un nouvel enregistrement",
@@ -116,6 +104,20 @@
       "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
       "play": "Jouer",
       "pause": "Pause"
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "Ce champ est obligatoire.",
+        "complete": "Téléchargement terminé !",
+        "complete-explanation": "Votre enregistrement va maintenant être traité par Opencast.",
+        "label-presenter": "Présentateur",
+        "label-title": "Titre",
+        "upload-network-error": "Échec du téléchargement : erreur réseau. Veuillez vérifier votre connexion internet ! Autres causes potentielles : le serveur Opencast n’est pas accessible ou mal configuré.",
+        "upload-invalid-response": "Échec du téléchargement : une réponse inattendue a été reçue.",
+        "upload-not-authorized": "Échec du téléchargement : vous n’êtes pas autorisé à télécharger.",
+        "upload-unknown-error": "Échec du téléchargement : une erreur inconnue s’est produite.",
+        "warn-download-hint": "Si le problème persiste, assurez-vous de télécharger votre enregistrement pour éviter de le perdre."
+      }
     }
   }
 }

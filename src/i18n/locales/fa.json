@@ -1,8 +1,4 @@
 {
-  "forms-validation-error-required": "این زمینه مورد نیاز است.",
-  "message-upload-complete": "آپلود کامل شد!",
-  "save-creation-label-presenter": "ارائه دهنده",
-  "save-creation-label-title": "عنوان",
   "upload-notification": "در حال بارگذاری",
   "upload-settings-modal-header": "آپلود تنظیمات در Opencast",
   "upload-settings-label-server-url": "آدرس سرور",
@@ -19,6 +15,14 @@
       "record-button-title": "شروع ضبط کردن",
       "resume-button-title": "ادامه ضبط کردن",
       "stop-button-title": "توقف در ضبط کردن"
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "این زمینه مورد نیاز است.",
+        "complete": "آپلود کامل شد!",
+        "label-presenter": "ارائه دهنده",
+        "label-title": "عنوان"
+      }
     }
   }
 }

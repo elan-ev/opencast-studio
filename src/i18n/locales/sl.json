@@ -1,9 +1,4 @@
 {
-  "forms-validation-error-required": "To polje je obvezno.",
-  "message-upload-complete": "Nalaganje zaključeno!",
-  "message-upload-complete-explanation": "Vaš posnetek bo sedaj sprocesiran v Opencast sistemu.",
-  "save-creation-label-presenter": "Avtor",
-  "save-creation-label-title": "Naslov",
   "save-creation-new-recording": "Začni novo snemanje",
   "save-creation-new-recording-warning": "Z pričetkom novega snemanja bodo trenutni posnetki izgubljeni (to ne vpliva na že naložene ali prenesene posnetke). Ali ste prepričan?",
 
@@ -81,6 +76,15 @@
     "review": {
       "button-discard-and-record": "Prekinite in ponovno posnemite",
       "error-empty-recording": "Napaka: vaš posnetek je popolnoma prazen. Ste mogoče snemanje ustavili skoraj takoj po tem, ko ste ga začeli? Poleg tega se prepričajte, da je vaš sistem dovolj zmogljiv za snemanje videa. (to morda ne velja, če druga aplikacija močno obrremenjuje vaš sistem ali pa če je vaša računalnik zelo star). V primeru da je vaš sistem dovolj zmogljiiv za viideo snemanje, ter snemali več kot nekaj sekund in še vedno vidite to napako: Prosimo prijavite to kot napako na GitHub."
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "To polje je obvezno.",
+        "complete": "Nalaganje zaključeno!",
+        "complete-explanation": "Vaš posnetek bo sedaj sprocesiran v Opencast sistemu.",
+        "label-presenter": "Avtor",
+        "label-title": "Naslov"
+      }
     }
   }
 }

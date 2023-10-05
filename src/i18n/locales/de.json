@@ -1,17 +1,4 @@
 {
-  "forms-validation-error-required": "Dieses Feld ist erforderlich.",
-  "message-upload-complete": "Erfolgreich hochgeladen!",
-  "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
-
-  "save-creation-label-presenter": "Vortragende:r",
-  "save-creation-label-title": "Titel",
-  "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
-  "save-creation-upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
-  "save-creation-upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
-  "save-creation-upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
-
-  "save-creation-warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren.",
-
   "save-creation-return-to": "Beenden und zurück ({{label}})",
   "save-creation-return-to-no-label": "Opencast Studio beenden und zurück",
   "save-creation-new-recording": "Neue Aufzeichnung starten",
@@ -131,12 +118,26 @@
     },
     "finish": {
       "label": "Aufnahme speichern",
-      "upload": "Hochladen",
-      "save-locally": "Lokal speichern",
-      "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
-      "save-video-locally": "Kameraaufnahme lokal speichern",
-      "recording-saved": "Aufnahme gespeichert",
-      "finish-button": "Abschließen"
+      "finish-button": "Abschließen",
+      "upload": {
+        "label": "Hochladen",
+        "validation-error-required": "Dieses Feld ist erforderlich.",
+        "complete": "Erfolgreich hochgeladen!",
+        "complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
+        "label-presenter": "Vortragende:r",
+        "label-title": "Titel",
+        "upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
+        "upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
+        "upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
+        "upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
+        "warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren."
+      },
+      "save-locally": {
+        "label": "Lokal speichern",
+        "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
+        "save-video-locally": "Kameraaufnahme lokal speichern",
+        "recording-saved": "Aufnahme gespeichert"
+      }
     }
   },
   "shortcuts": {

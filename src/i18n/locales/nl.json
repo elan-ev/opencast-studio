@@ -1,9 +1,5 @@
 {
-  "forms-validation-error-required": "Dit veld is verplicht.",
-  "message-upload-complete": "Upload voltooid!",
-  "message-upload-complete-explanation": "Uw opname wordt nu verwerkt door Opencast.",
-  "save-creation-label-presenter": "Presenter",
-  "save-creation-label-title": "Titel",
+
   "save-creation-new-recording": "Start nieuwe opname",
   "save-creation-new-recording-warning": "Wanneer u een nieuwe opname start, wordt de actuele opname in deze programma verwijderd (maar de gedownloade of geüploade opnames blijven behouden). Weet je het zeker?",
   "confirm-discard-recordings": "Weet u zeker dat u deze opname wilt weggooien? Dit kan niet ongedaan worden gemaakt!",
@@ -32,11 +28,6 @@
   "warning-https": "De meeste browsers staan geen video-opname toe over een niet-versleutelde verbinding (HTTP). Schakel over naar HTTPS.",
   "warning-recorder-not-supported": "Uw browser ondersteunt het opnemen van media streams niet.",
   "warning-recorder-safari-hint": "Voor Safari op iOS kunt u de experimentele functie 'MediaRecorder' inschakelen in instellingen.",
-  "save-creation-upload-network-error": "Upload mislukt: netwerkfout. Controleer uw internetverbinding! Andere mogelijke oorzaken zijn: de Opencast-server is niet bereikbaar of verkeerd geconfigureerd.",
-  "save-creation-upload-invalid-response": "Upload mislukt: een onverwachte respons werd teruggestuurd.",
-  "save-creation-upload-not-authorized": "Upload mislukt: het lijkt erop dat u niet gemachtigd bent om te uploaden.",
-  "save-creation-upload-unknown-error": "Upload mislukt: er is een onbekende fout opgetreden.",
-  "save-creation-warn-download-hint": "Als dit probleem voortduurt, zorg er dan voor dat u uw opname downloadt om te voorkomen dat u deze verliest.",
   "error-lost-video-stream": "Videostroom onverwacht beëindigd! Heeft een camera de verbinding verbroken of heeft u per ongeluk een videobron uitgeschakeld?",
   "error-lost-audio-stream": "De audiostream is onverwacht beëindigd! Heeft de microfoon de verbinding verbroken of heeft u per ongeluk de audiobron uitgeschakeld?",
   "error-lost-stream-end-recording": "Een video- of audiostream werd onverwacht beëindigd en dus werd de actieve opname voortijdig gestopt! Heeft een microfoon of een camera de verbinding verbroken? Of heeft u per ongeluk de mediabron uitgeschakeld of de benodigde rechten opgezegd?",
@@ -91,6 +82,20 @@
       "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
       "play": "Afspelen",
       "pause": "Pauze"
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "Dit veld is verplicht.",
+        "complete": "Upload voltooid!",
+        "complete-explanation": "Uw opname wordt nu verwerkt door Opencast.",
+        "label-presenter": "Presenter",
+        "label-title": "Titel",
+        "upload-network-error": "Upload mislukt: netwerkfout. Controleer uw internetverbinding! Andere mogelijke oorzaken zijn: de Opencast-server is niet bereikbaar of verkeerd geconfigureerd.",
+        "upload-invalid-response": "Upload mislukt: een onverwachte respons werd teruggestuurd.",
+        "upload-not-authorized": "Upload mislukt: het lijkt erop dat u niet gemachtigd bent om te uploaden.",
+        "upload-unknown-error": "Upload mislukt: er is een onbekende fout opgetreden.",
+        "warn-download-hint": "Als dit probleem voortduurt, zorg er dan voor dat u uw opname downloadt om te voorkomen dat u deze verliest."
+      }
     }
   }
 }

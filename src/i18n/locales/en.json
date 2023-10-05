@@ -1,16 +1,4 @@
 {
-  "forms-validation-error-required": "This field is required.",
-  "message-upload-complete": "Upload complete!",
-  "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
-  "save-creation-label-presenter": "Presenter",
-  "save-creation-label-title": "Title",
-  "save-creation-upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
-  "save-creation-upload-invalid-response": "Upload failed: an unexpected response was returned.",
-  "save-creation-upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
-  "save-creation-upload-unknown-error": "Upload failed: an unknown error occurred.",
-
-  "save-creation-warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it.",
-
   "save-creation-return-to": "Exit and go back to {{label}}",
   "save-creation-return-to-no-label": "Exit Opencast Studio and go back",
   "save-creation-new-recording": "Start a new recording",
@@ -134,12 +122,26 @@
     },
     "finish": {
       "label": "Save video",
-      "upload": "Upload",
-      "save-locally": "Save locally",
-      "save-desktop-locally": "Save display recording locally",
-      "save-video-locally": "Save camera recording locally",
-      "recording-saved": "Recording saved",
-      "finish-button": "Finish"
+      "finish-button": "Finish",
+      "upload": {
+        "label": "Upload",
+        "validation-error-required": "This field is required.",
+        "complete": "Upload complete!",
+        "complete-explanation": "Your recording will now be processed by Opencast.",
+        "label-presenter": "Presenter",
+        "label-title": "Title",
+        "upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
+        "upload-invalid-response": "Upload failed: an unexpected response was returned.",
+        "upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
+        "upload-unknown-error": "Upload failed: an unknown error occurred.",
+        "warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it."
+      },
+      "save-locally": {
+        "label": "Save locally",
+        "save-desktop-locally": "Save display recording locally",
+        "save-video-locally": "Save camera recording locally",
+        "recording-saved": "Recording saved"
+      }
     }
   },
   "shortcuts": {

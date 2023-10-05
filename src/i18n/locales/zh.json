@@ -1,16 +1,4 @@
 {
-  "forms-validation-error-required": "此字段为必填字段。",
-  "message-upload-complete": "上传完成！",
-  "message-upload-complete-explanation": "您的录制内容现在将由 Opencast 处理。",
-  "save-creation-label-presenter": "演示者",
-  "save-creation-label-title": "标题",
-  "save-creation-upload-network-error": "上传失败：网络错误。请检查您的互联网连接！其他潜在原因：无法访问或配置错误。",
-  "save-creation-upload-invalid-response": "上载失败：返回了意外的响应。",
-  "save-creation-upload-not-authorized": "上传失败：您似乎无权上传。",
-  "save-creation-upload-unknown-error": "上传失败：发生未知错误。",
-
-  "save-creation-warn-download-hint": "如果此问题仍然存在，请确保下载录制文件以避免丢失。",
-
   "save-creation-return-to": "退出并返回 {{label}}",
   "save-creation-return-to-no-label": "退出并返回上一页",
   "save-creation-new-recording": "开始新录制",
@@ -103,6 +91,20 @@
       "player-progress": "{{当前时间, 持续时间-秒}} / {{期间, 持续时间-秒}}",
       "play": "播放",
       "pause": "暂停"
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "此字段为必填字段。",
+        "complete": "上传完成！",
+        "complete-explanation": "您的录制内容现在将由 Opencast 处理。",
+        "label-presenter": "演示者",
+        "label-title": "标题",
+        "upload-network-error": "上传失败：网络错误。请检查您的互联网连接！其他潜在原因：无法访问或配置错误。",
+        "upload-invalid-response": "上载失败：返回了意外的响应。",
+        "upload-not-authorized": "上传失败：您似乎无权上传。",
+        "upload-unknown-error": "上传失败：发生未知错误。",
+        "warn-download-hint": "如果此问题仍然存在，请确保下载录制文件以避免丢失。"
+      }
     }
   }
 }

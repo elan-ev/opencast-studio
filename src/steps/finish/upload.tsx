@@ -120,10 +120,10 @@ export const UploadBox: React.FC = () => {
     const dispatchError = (msg: string) => dispatch({ type: "UPLOAD_ERROR", msg });
     match(result, {
       "success": () => dispatch({ type: "UPLOAD_SUCCESS" }),
-      "network_error": () => dispatchError(t("save-creation-upload-network-error")),
-      "not_authorized": () => dispatchError(t("save-creation-upload-not-authorized")),
-      "unexpected_response": () => dispatchError(t("save-creation-upload-invalid-response")),
-    }, () => dispatchError(t("save-creation-upload-unknown-error")));
+      "network_error": () => dispatchError(t("steps.finish.upload.upload-network-error")),
+      "not_authorized": () => dispatchError(t("steps.finish.upload.upload-not-authorized")),
+      "unexpected_response": () => dispatchError(t("steps.finish.upload.upload-invalid-response")),
+    }, () => dispatchError(t("steps.finish.upload.upload-unknown-error")));
   };
 
   switch (uploadState.state) {
@@ -224,9 +224,9 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       "incorrect_login": () => opencast.isLoginProvided()
         ? t("upload-settings-invalid-provided-login")
         : t("upload-settings-invalid-login-data"),
-      "network_error": () => t("save-creation-upload-network-error"),
-      "invalid_response": () => t("save-creation-upload-invalid-response"),
-      "response_not_ok": () => t("save-creation-upload-invalid-response"),
+      "network_error": () => t("steps.finish.upload.upload-network-error"),
+      "invalid_response": () => t("steps.finish.upload.upload-invalid-response"),
+      "response_not_ok": () => t("steps.finish.upload.upload-invalid-response"),
     }, () => unreachable());
 
     if (error) {
@@ -248,7 +248,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {titleField !== "hidden" && <Input
           name="title"
-          label={t("save-creation-label-title")}
+          label={t("steps.finish.upload.label-title")}
           required={titleField === "required"}
           onChange={handleInputChange}
           autoComplete="off"
@@ -258,7 +258,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
         />}
         {presenterField !== "hidden" && <Input
           name="presenter"
-          label={t("save-creation-label-presenter")}
+          label={t("steps.finish.upload.label-presenter")}
           required={presenterField === "required"}
           onChange={handleInputChange}
           autoComplete="off"
@@ -325,7 +325,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             "idle": () => <FiUpload css={{ fontSize: 20 }} />,
             "testing": () => <Spinner size={20} />,
           })}
-          <span>{t("steps.finish.upload") + " (" + uploadSize + ")"}</span>
+          <span>{t("steps.finish.upload.label") + " (" + uploadSize + ")"}</span>
         </ProtoButton>
       </form>
 
@@ -335,7 +335,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
           <ErrorBox
             css={{ margin: 0 }}
             body={notNullish(uploadState.error)}
-            extraBody={t("save-creation-warn-download-hint")}
+            extraBody={t("steps.finish.upload.warn-download-hint")}
           />
         )}
       </div>
@@ -404,7 +404,7 @@ export const Input = <I extends FieldValues, F>({
           {...register(name, {
             validate,
             onChange: rest.onChange,
-            ...required && { required: t("forms-validation-error-required") },
+            ...required && { required: t("steps.finish.upload.validation-error-required") },
           })}
           css={{
             display: "block",
@@ -517,7 +517,7 @@ const UploadSuccess = () => {
 
   return (
     <GreyInnerBox>
-      <div css={{ fontWeight: 700 }}>{t("message-upload-complete")}</div>
+      <div css={{ fontWeight: 700 }}>{t("steps.finish.upload.complete")}</div>
       <div css={{
         fontSize: 50,
         margin: 24,
@@ -526,7 +526,7 @@ const UploadSuccess = () => {
       }}>
         <LuCheckCircle2 />
       </div>
-      <div>{t("message-upload-complete-explanation")}</div>
+      <div>{t("steps.finish.upload.complete-explanation")}</div>
     </GreyInnerBox>
   );
 };
