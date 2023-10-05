@@ -19,26 +19,9 @@
   "save-creation-return-to-no-label": "Exit Opencast Studio and go back",
   "save-creation-new-recording": "Start a new recording",
   "save-creation-new-recording-warning": "By starting a new recording, the current recording(s) will be discarded in this application (any uploaded or downloaded recording(s) will not be affected). Are you sure?",
-  "share-display": "Share display",
-  "share-user": "Share camera",
-  "share-display-and-user": "Share display & camera",
+
 
   "confirm-discard-recordings": "Are you sure you want to discard your recording(s)? This cannot be undone!",
-
-  "sources-video-display-selected": "Display selected",
-  "sources-video-display-and-user-selected": "Display & camera selected",
-  "sources-video-user-selected": "Camera selected",
-  "sources-video-question": "What video source(s) to record?",
-  "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
-  "sources-video-reselect-source": "Reselect source(s)",
-  "sources-video-no-cam-detected": "No camera detected",
-  "sources-video-display-not-supported": "Display capture not supported",
-  "sources-video-device": "Device",
-  "sources-video-aspect-ratio": "Aspect ratio",
-  "sources-video-aspect-ratio-auto": "auto",
-  "sources-video-quality": "Quality",
-  "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
 
   "sources-audio-question": "Record audio?",
   "sources-audio-microphone": "Microphone",
@@ -52,10 +35,6 @@
   "sources-scenario-user": "Camera",
 
 
-  "source-display-not-allowed-title": "Cannot access your display",
-  "source-display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
-  "source-user-not-allowed-title": "Cannot access your camera",
-  "source-user-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
   "source-audio-not-allowed-title": "Cannot access your microphone.",
   "source-audio-not-allowed-text": "Try selecting 'Reselect audio' and then selecting 'Microphone' again. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
 
@@ -97,8 +76,6 @@
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on macOS, we recommend switching to Chrome or Firefox.",
 
-  "video-settings-open": "Open video settings",
-  "video-settings-close": "Close video settings",
 
 
   "header": {
@@ -121,7 +98,30 @@
     "back-button-label": "Back",
     "next-button-label": "Next",
     "video": {
-      "label": "Select video source"
+      "label": "Select video source",
+      "share-display": "Share display",
+      "share-user": "Share camera",
+      "share-display-and-user": "Share display & camera",
+      "display-not-allowed-title": "Cannot access your display",
+      "display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
+      "user-not-allowed-title": "Cannot access your camera",
+      "user-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
+      "display-selected": "Display selected",
+      "display-and-user-selected": "Display & camera selected",
+      "user-selected": "Camera selected",
+      "question": "What video source(s) to record?",
+      "none-available": "Your browser/device does not support capturing display or camera video :-(",
+      "reselect-source": "Reselect source(s)",
+      "no-cam-detected": "No camera detected",
+      "display-not-supported": "Display capture not supported",
+      "video-settings-open": "Open video settings",
+      "video-settings-close": "Close video settings",
+      "device": "Device",
+      "aspect-ratio": "Aspect ratio",
+      "aspect-ratio-auto": "auto",
+      "quality": "Quality",
+      "quality-auto": "auto",
+      "preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'."
     },
     "audio": {
       "label": "Select audio source"

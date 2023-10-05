@@ -66,7 +66,7 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
   const showShortcuts = useShowAvailableShortcuts();
 
   if (!displaySupported && !userSupported) {
-    return <ErrorBox body={t("sources-video-none-available")} />;
+    return <ErrorBox body={t("steps.video.none-available")} />;
   }
 
   return (
@@ -85,15 +85,15 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
     >
       {(displaySupported || !onMobileDevice()) && <SourceOptionButton
         label={t("sources-scenario-display")}
-        ariaLabel={t("share-display")}
+        ariaLabel={t("steps.video.share-display")}
         icon={<FiMonitor />}
         onClick={clickDisplay}
-        disabledText={displaySupported ? false : t("sources-video-display-not-supported")}
+        disabledText={displaySupported ? false : t("steps.video.display-not-supported")}
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectScreen : undefined}
       />}
       {(displaySupported || !onMobileDevice()) && userSupported && <SourceOptionButton
         label={t("sources-scenario-display-and-user")}
-        ariaLabel={t("share-display-and-user")}
+        ariaLabel={t("steps.video.share-display-and-user")}
         icon={(
           <div css={{
             lineHeight: 0,
@@ -109,17 +109,17 @@ export const SourceSelection: React.FC<SourceSelectionProps> = ({
         onClick={clickBoth}
         disabledText={
           displaySupported
-            ? (state.hasWebcam ? false : t("sources-video-no-cam-detected"))
-            : t("sources-video-display-not-supported")
+            ? (state.hasWebcam ? false : t("steps.video.no-cam-detected"))
+            : t("steps.video.display-not-supported")
         }
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectBoth : undefined}
       />}
       {userSupported && <SourceOptionButton
         label={t("sources-scenario-user")}
-        ariaLabel={t("share-user")}
+        ariaLabel={t("steps.video.share-user")}
         icon={<FiUser />}
         onClick={clickUser}
-        disabledText={state.hasWebcam ? false : t("sources-video-no-cam-detected")}
+        disabledText={state.hasWebcam ? false : t("steps.video.no-cam-detected")}
         shortcut={showShortcuts ? SHORTCUTS.videoSetup.selectUser : undefined}
       />}
     </div>

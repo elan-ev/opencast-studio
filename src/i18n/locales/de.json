@@ -24,30 +24,12 @@
 
   "confirm-discard-recordings": "Sind Sie sicher, dass Sie die Aufnahmen verwerfen wollen? Dies kann nicht rückgängig gemacht werden!",
 
-  "sources-video-display-selected": "Bildschirm ausgewählt",
-  "sources-video-display-and-user-selected": "Bildschirm & Kamera ausgewählt",
-  "sources-video-user-selected": "Kamera ausgewählt",
-  "sources-video-question": "Welche Videoquelle(n) aufnehmen?",
-  "sources-video-none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
-  "sources-video-reselect-source": "Quelle(n) neu auswählen",
-  "sources-video-no-cam-detected": "Keine Kamera erkannt",
-  "sources-video-display-not-supported": "Bildschirmaufnahme nicht unterstützt",
   "sources-scenario-display-and-user": "Bildschirm & Kamera",
   "sources-scenario-display": "Bildschirm",
   "sources-scenario-user": "Kamera",
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
-  "sources-video-device": "Kamera",
-  "sources-video-aspect-ratio": "Seitenverhältnis",
-  "sources-video-aspect-ratio-auto": "auto",
-  "sources-video-quality": "Qualität",
-  "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
 
-  "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
-  "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
-  "source-user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
-  "source-user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
   "source-audio-not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
   "source-audio-not-allowed-text": "Versuchen Sie 'Audio neu auswählen' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
 
@@ -57,10 +39,6 @@
   "sources-audio-without-audio": "Ohne Audio",
   "sources-audio-reselect-audio": "Audio neu auswählen",
   "sources-audio-device": "Gerät",
-
-  "share-display": "Bildschirm teilen",
-  "share-user": "Kamera teilen",
-  "share-display-and-user": "Bildschirm und Kamera teilen",
 
 
   "back-button-label": "Zurück",
@@ -101,8 +79,6 @@
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
   "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf macOS Firefox oder Chrome zu nutzen.",
 
-  "video-settings-open": "Videoeinstellungen öffnen",
-  "video-settings-close": "Videoeinstellungen schließen",
 
   "header": {
     "info": {
@@ -124,7 +100,30 @@
     "back-button-label": "Zurück",
     "next-button-label": "Weiter",
     "video": {
-      "label": "Videoquelle auswählen"
+      "label": "Videoquelle auswählen",
+      "share-display": "Bildschirm teilen",
+      "share-user": "Kamera teilen",
+      "share-display-and-user": "Bildschirm und Kamera teilen",
+      "display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
+      "display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+      "user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
+      "user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
+      "display-selected": "Bildschirm ausgewählt",
+      "display-and-user-selected": "Bildschirm & Kamera ausgewählt",
+      "user-selected": "Kamera ausgewählt",
+      "question": "Welche Videoquelle(n) aufnehmen?",
+      "none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
+      "reselect-source": "Quelle(n) neu auswählen",
+      "no-cam-detected": "Keine Kamera erkannt",
+      "display-not-supported": "Bildschirmaufnahme nicht unterstützt",
+      "video-settings-open": "Videoeinstellungen öffnen",
+      "video-settings-close": "Videoeinstellungen schließen",
+      "device": "Kamera",
+      "aspect-ratio": "Seitenverhältnis",
+      "aspect-ratio-auto": "auto",
+      "quality": "Qualität",
+      "quality-auto": "auto",
+      "preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen."
     },
     "audio": {
       "label": "Audioquelle auswählen"

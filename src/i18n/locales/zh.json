@@ -20,26 +20,9 @@
   "save-creation-return-to-no-label": "退出并返回上一页",
   "save-creation-new-recording": "开始新录制",
   "save-creation-new-recording-warning": "通过开始新的录制，当前录制内容将在此应用程序中被丢弃（任何上传或下载的录制文件都不会受到影响）。是否确定？",
-  "share-display": "共享桌面",
-  "share-user": "共享摄像头",
 
 
   "confirm-discard-recordings": "是否确实要丢弃录制文件？这是无法撤消的！",
-
-  "sources-video-display-selected": "显示所选内容",
-  "sources-video-display-and-user-selected": "显示器和摄像头已选",
-  "sources-video-user-selected": "已选择摄像头",
-  "sources-video-question": "要录制哪些视频源？",
-  "sources-video-none-available": "您的浏览器/设备不支持捕获显示或摄像头视频：-（",
-  "sources-video-reselect-source": "重新选择源",
-  "sources-video-no-cam-detected": "未检测到摄像头",
-  "sources-video-display-not-supported": "不支持显示捕获",
-  "sources-video-device": "设备",
-  "sources-video-aspect-ratio": "纵横比",
-  "sources-video-aspect-ratio-auto": "自动",
-  "sources-video-quality": "质量",
-  "sources-video-quality-auto": "自动",
-  "sources-video-preferences-note": "<0>注意：</0> 这些只是首选项，不能保证您的设备实际支持所有选项。如有疑问，请选择'自动'。",
 
   "sources-audio-question": "录制音频？",
   "sources-audio-microphone": "麦克风",
@@ -53,10 +36,6 @@
   "sources-scenario-user": "摄像头",
 
 
-  "source-display-not-allowed-title": "无法访问您的显示器",
-  "source-display-not-allowed-text": "尝试重新选择源。如果这不起作用，请重新加载此页面或手动允许我们访问您的显示器（通常通过浏览器地址栏旁边的按钮）。",
-  "source-user-not-allowed-title": "无法访问摄像头",
-  "source-user-not-allowed-text": "尝试重新选择源。如果这不起作用，请重新加载此页面或手动允许我们访问您的摄像头（通常通过浏览器地址栏旁边的按钮）。如果这不起作用，请尝试关闭可能使用该摄像头的其他应用程序：对于某些操作系统，只有一个应用程序可以访问摄像头。",
   "source-audio-not-allowed-title": "无法访问麦克风。",
   "source-audio-not-allowed-text": "尝试选择\"重新选择音频\"，然后再次选择\"麦克风\"。如果这不起作用，请重新加载此页面或手动允许我们访问您的麦克风（通常通过浏览器地址栏旁边的按钮）。",
 
@@ -100,6 +79,29 @@
 
   "steps": {
     "back-button-label": "返回",
-    "next-button-label": "下一个"
+    "next-button-label": "下一个",
+
+    "video": {
+      "share-display": "共享桌面",
+      "share-user": "共享摄像头",
+      "display-not-allowed-title": "无法访问您的显示器",
+      "display-not-allowed-text": "尝试重新选择源。如果这不起作用，请重新加载此页面或手动允许我们访问您的显示器（通常通过浏览器地址栏旁边的按钮）。",
+      "user-not-allowed-title": "无法访问摄像头",
+      "user-not-allowed-text": "尝试重新选择源。如果这不起作用，请重新加载此页面或手动允许我们访问您的摄像头（通常通过浏览器地址栏旁边的按钮）。如果这不起作用，请尝试关闭可能使用该摄像头的其他应用程序：对于某些操作系统，只有一个应用程序可以访问摄像头。",
+      "display-selected": "显示所选内容",
+      "display-and-user-selected": "显示器和摄像头已选",
+      "user-selected": "已选择摄像头",
+      "question": "要录制哪些视频源？",
+      "none-available": "您的浏览器/设备不支持捕获显示或摄像头视频：-（",
+      "reselect-source": "重新选择源",
+      "no-cam-detected": "未检测到摄像头",
+      "display-not-supported": "不支持显示捕获",
+      "device": "设备",
+      "aspect-ratio": "纵横比",
+      "aspect-ratio-auto": "自动",
+      "quality": "质量",
+      "quality-auto": "自动",
+      "preferences-note": "<0>注意：</0> 这些只是首选项，不能保证您的设备实际支持所有选项。如有疑问，请选择'自动'。"
+    }
   }
 }

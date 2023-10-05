@@ -96,8 +96,8 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
       inner = <div>
         {allowed === false && <ErrorBox
           css={{ margin: 0 }}
-          title={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-title`)}
-          body={t(`source-${input.isDesktop ? "display" : "user"}-not-allowed-text`)}
+          title={t(`steps.video.${input.isDesktop ? "display" : "user"}-not-allowed-title`)}
+          body={t(`steps.video.${input.isDesktop ? "display" : "user"}-not-allowed-text`)}
         />}
         {/* TODO: differentiate between desktop and camera for better error */}
         {unexpectedEnd && <ErrorBox css={{ margin: 0 }} body={t("error-lost-video-stream")} />}

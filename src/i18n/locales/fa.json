@@ -7,8 +7,6 @@
   "save-creation-button-discard": "دور انداختن",
   "save-creation-label-presenter": "ارائه دهنده",
   "save-creation-label-title": "عنوان",
-  "share-display": "اشتراک دسکتاپ (بدون صدا)",
-  "share-user": "به اشتراک گذاشتن دوربین",
   "stop-button-title": "توقف در ضبط کردن",
   "toolbar-button-about": "درباره Opencast Studio",
   "toolbar-button-issues": "گزارش مشکل",
@@ -18,5 +16,12 @@
   "upload-settings-modal-header": "آپلود تنظیمات در Opencast",
   "upload-settings-label-server-url": "آدرس سرور",
   "upload-settings-label-username": "نام کاربری",
-  "upload-settings-label-password": "رمز عبور"
+  "upload-settings-label-password": "رمز عبور",
+
+  "steps": {
+    "video": {
+      "share-display": "اشتراک دسکتاپ (بدون صدا)",
+      "share-user": "به اشتراک گذاشتن دوربین"
+    }
+  }
 }

@@ -53,7 +53,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
     prevButton: {
       onClick: reselectSource,
       disabled: false,
-      label: t("sources-video-reselect-source"),
+      label: t("steps.video.reselect-source"),
     },
     nextButton: {
       onClick: () => goToNextStep(),
@@ -67,7 +67,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
   return match(activeSource, {
     "none": () => {
       return (
-        <StepContainer title={t("sources-video-question")}>
+        <StepContainer title={t("steps.video.question")}>
           <Warnings />
           <SourceSelection
             displayConstraints={prefsToConstraints(loadDisplayPrefs())}
@@ -82,7 +82,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
       const showButtons = userStream || someProblem;
       return (
         <StepContainer
-          title={t("sources-video-user-selected")}
+          title={t("steps.video.user-selected")}
           {...showButtons && buttons}
         >
           <SourcePreview inputs={[userInput]} />
@@ -94,7 +94,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
       const showButtons = displayStream || someProblem;
       return (
         <StepContainer
-          title={t("sources-video-display-selected")}
+          title={t("steps.video.display-selected")}
           {...showButtons && buttons}
         >
           <SourcePreview inputs={[displayInput]} />
@@ -106,7 +106,7 @@ export const VideoSetup: React.FC<StepProps> = ({ goToNextStep }) => {
       const showButtons = (userStream && displayStream) || someProblem;
       return (
         <StepContainer
-          title={t("sources-video-display-and-user-selected")}
+          title={t("steps.video.display-and-user-selected")}
           {...showButtons && buttons}
         >
           <SourcePreview inputs={[displayInput, userInput]} />
