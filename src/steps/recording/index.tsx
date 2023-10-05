@@ -107,6 +107,15 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
     videoRecorder.current?.resume();
   };
 
+  // Detect if a stream ended unexpectedly. In that case we want to stop the
+  // recording completely.
+  useEffect(() => {
+    const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
+    if (unexpectedEnd && (recordingState === "recording" || recordingState === "paused")) {
+      stopRecording(true);
+    }
+  });
+
   const paused = recordingState === "paused";
   const previews: VideoBoxProps["children"] = [];
   if (displayStream || displayUnexpectedEnd) {
@@ -153,7 +162,6 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
         {canRecord && (
           <RecordingControls {...{
             startRecording,
-            stopRecording,
             pauseRecording,
             resumeRecording,
             recordingState,
