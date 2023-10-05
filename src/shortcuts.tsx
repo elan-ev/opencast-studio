@@ -196,7 +196,7 @@ const SingleKey: React.FC<SingleKeyProps> = ({ large, monofont, children }) => {
       height: large ? 36 : 30,
       minWidth: large ? 36 : 30,
       fontSize: 16,
-      boxShadow: isHighContrast ? "none" : "0 0 8px var(--shadow-color)",
+      boxShadow: isHighContrast ? "none" : "0 0 6px var(--shadow-color)",
       backgroundColor: large ? bg : COLORS.neutral10,
       color: isHighContrast
         ? COLORS.neutral80
@@ -256,41 +256,41 @@ const ShortcutGroupOverview: React.FC<ShortcutGroupOverviewProps> = ({ groupId, 
       <div css={{
         display: "flex",
         flexWrap: "wrap",
-        gap: 8,
+        gap: 12,
       }}>
         {Object.entries(group).map(([name, keys], i) => (
           <div
             key={i}
             css={{
-              minWidth: 250,
-              width: "calc(33.33% - 12px)",
-              [screenWidthAtMost(1070)]: {
-                width: "calc(50% - 6px)",
+              width: "calc(33.33% - 24px / 3)",
+              [screenWidthAtMost(1080)]: {
+                width: "calc(50% - 12px / 2)",
               },
               [screenWidthAtMost(720)]: {
                 width: "100%",
               },
               backgroundColor: COLORS.neutral10,
               borderRadius: 4,
-              padding: "6px 8px",
+              padding: "10px 16px",
               display: "inline-flex",
-              alignItems: "center",
+              flexDirection: "column",
+              alignItems: "start",
               gap: 8,
             }}
           >
-            <div css={{ flex: "1", overflowWrap: "anywhere" }}>
+            <div css={{ overflowWrap: "anywhere" }}>
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {t((SHORTCUT_TRANSLATIONS[groupId] as any)[name])}
             </div>
             <div css={{
               display: "flex",
-              flexDirection: "column",
-              gap: 4,
-              alignItems: "end",
+              gap: 8,
+              alignItems: "center",
             }}>
-              {keys.split(";").map((combination, i) => (
-                <ShortcutKeys key={i} shortcut={combination.trim()} large />
-              ))}
+              {keys.split(";").map((combination, i) => <React.Fragment key={i}>
+                {i > 0 && t("shortcuts.sequence-seperator")}
+                <ShortcutKeys shortcut={combination.trim()} large />
+              </React.Fragment>)}
             </div>
           </div>
         ))}
