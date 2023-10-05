@@ -13,7 +13,7 @@ const onMac = () => navigator.userAgent.includes("Mac");
 
 export const SHORTCUTS = {
   general: {
-    showAvailableShortcuts: "Alt; S",
+    showAvailableShortcuts: "Alt; s",
     showOverview: "?",
     closeOverlay: "Escape",
     tab: "Tab",
@@ -30,22 +30,22 @@ export const SHORTCUTS = {
     withoutAudio: "2",
   },
   recording: {
-    startPauseResume: "K; Space",
+    startPauseResume: "k; Space",
   },
   review: {
-    playPause: "K; Space",
-    forwards5secs: "L; right",
-    backwards5secs: "J; left",
+    playPause: "k; Space",
+    forwards5secs: "l; right",
+    backwards5secs: "j; left",
     forwardsFrame: ".",
     backwardsFrame: ",",
-    cutLeft: "N",
-    cutRight: "M",
-    removeCutLeft: "Shift+N",
-    removeCutRight: "Shift+M",
+    cutLeft: "n",
+    cutRight: "m",
+    removeCutLeft: "Shift+n",
+    removeCutRight: "Shift+m",
   },
   finish: {
-    startNewRecording: "Shift+N",
-    download: "D",
+    startNewRecording: "Shift+n",
+    download: "d",
   },
 } as const;
 
@@ -161,7 +161,7 @@ export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = fa
       return (
         <React.Fragment key={i}>
           {i !== 0 && "+"}
-          <SingleKey large={large}>{child}</SingleKey>
+          <SingleKey large={large} monofont={key === "l"}>{child}</SingleKey>
         </React.Fragment>
       );
     })}
@@ -170,9 +170,11 @@ export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = fa
 
 type SingleKeyProps = React.PropsWithChildren<{
   large: boolean;
+  /** Whether to use `monospace` font for this one. Basically only useful for lowercase l. */
+  monofont: boolean;
 }>;
 
-const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => {
+const SingleKey: React.FC<SingleKeyProps> = ({ large, monofont, children }) => {
   const isLight = useColorScheme().scheme === "light";
   const { scheme, isHighContrast } = useColorScheme();
 
@@ -200,6 +202,7 @@ const SingleKey: React.FC<SingleKeyProps> = ({ large, children }) => {
         ? COLORS.neutral80
         : ((isLight || !large) ? COLORS.neutral80 : COLORS.neutral90),
       cursor: "default",
+      ...monofont && { fontFamily: "monospace" },
     }}>
       {children}
     </div>
