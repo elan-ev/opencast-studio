@@ -1,7 +1,5 @@
 {
   "forms-validation-error-required": "To polje je obvezno.",
-  "message-login-failed": "Prijava ni bila uspešna. Prosimo preverite vaše geslo.",
-  "message-server-unreachable": "Strežnik ni dostopen: Preverite internetno povezavo in URL strežnika. Preverite tudi, ali vaš Opencast sistem dovoljuje dostop prek Studio-ja..",
   "message-upload-complete": "Nalaganje zaključeno!",
   "message-upload-complete-explanation": "Vaš posnetek bo sedaj sprocesiran v Opencast sistemu.",
   "pause-button-title": "Začasno ustavi snemanje",
@@ -10,10 +8,8 @@
   "review-button-discard-and-record": "Prekinite in ponovno posnemite",
   "save-creation-label-presenter": "Avtor",
   "save-creation-label-title": "Naslov",
-  "save-creation-upload-to": "Naloži na <1>{{server}}</1>",
   "save-creation-new-recording": "Začni novo snemanje",
   "save-creation-new-recording-warning": "Z pričetkom novega snemanja bodo trenutni posnetki izgubljeni (to ne vpliva na že naložene ali prenesene posnetke). Ali ste prepričan?",
-  "settings-language": "Jezik",
 
 
   "confirm-discard-recordings": "Ali ste prepričani, da želite zavreči posnetke? Tega ni mogoče razveljaviti!",

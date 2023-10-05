@@ -41,9 +41,6 @@
   "sources-audio-device": "Gerät",
 
 
-  "back-button-label": "Zurück",
-  "next-button-label": "Weiter",
-
   "error-lost-video-stream": "Video-Stream endete unerwartet! Wurde eine Kamera getrennt oder haben Sie versehentlich die Videofreigabe beendet?",
   "error-lost-audio-stream": "Audio-Stream endete unerwartet! Wurde ein Mikrofon getrennt oder haben Sie versehentlich die Audiofreigabe beendet?",
   "error-lost-stream-end-recording": "Ein Video- oder Audio-Stream endete unerwartet! Infolgedessen wurde die aktive Aufnahme vorzeitig beendet. Wurde ein Mikrofon oder eine Kamera getrennt? Oder haben Sie versehentlich die Medienfreigabe beendet oder Studio die notwendigen Berechtigungen entzogen?",

@@ -8,7 +8,6 @@
   "review-button-discard-and-record": "Verwijderen en opnieuw opnemen",
   "save-creation-label-presenter": "Presenter",
   "save-creation-label-title": "Titel",
-  "save-creation-upload-to": "Upload naar <1>{{server}}</1>",
   "save-creation-new-recording": "Start nieuwe opname",
   "save-creation-new-recording-warning": "Wanneer u een nieuwe opname start, wordt de actuele opname in deze programma verwijderd (maar de gedownloade of geüploade opnames blijven behouden). Weet je het zeker?",
   "confirm-discard-recordings": "Weet u zeker dat u deze opname wilt weggooien? Dit kan niet ongedaan worden gemaakt!",
@@ -58,7 +57,6 @@
   "review-set-end": "Stel de actuele tijd in als eindtijd",
   "review-play": "Afspelen",
   "review-pause": "Pauze",
-  "review-remove-start-end": "Verwijder",
   "review-part-will-be-removed": "Dit deel wordt verwijderd.",
   "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 

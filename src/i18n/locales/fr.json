@@ -8,7 +8,6 @@
   "review-button-discard-and-record": "Ignorer et réenregistrer",
   "save-creation-label-presenter": "Présentateur",
   "save-creation-label-title": "Titre",
-  "save-creation-upload-to": "Téléverser vers <1>{{server}}</1>",
   "save-creation-upload-network-error": "Échec du téléchargement : erreur réseau. Veuillez vérifier votre connexion internet ! Autres causes potentielles : le serveur Opencast n’est pas accessible ou mal configuré.",
   "save-creation-upload-invalid-response": "Échec du téléchargement : une réponse inattendue a été reçue.",
   "save-creation-upload-not-authorized": "Échec du téléchargement : vous n’êtes pas autorisé à télécharger.",

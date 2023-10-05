@@ -8,7 +8,6 @@
   "review-button-discard-and-record": "丢弃并再次录制",
   "save-creation-label-presenter": "演示者",
   "save-creation-label-title": "标题",
-  "save-creation-upload-to": "上传到 <1>{{服务器}} </1>",
   "save-creation-upload-network-error": "上传失败：网络错误。请检查您的互联网连接！其他潜在原因：无法访问或配置错误。",
   "save-creation-upload-invalid-response": "上载失败：返回了意外的响应。",
   "save-creation-upload-not-authorized": "上传失败：您似乎无权上传。",

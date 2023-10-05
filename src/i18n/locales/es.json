@@ -8,7 +8,6 @@
   "review-button-discard-and-record": "Descartar y volver a grabar",
   "save-creation-label-presenter": "Ponente",
   "save-creation-label-title": "Título",
-  "save-creation-upload-to": "Subir a <1>{{server}}</1>",
   "save-creation-upload-network-error": "Fallo en la subida: error de red. Por favor, compruebe su conexión a Internet. Otras posibles causas: el servidor de Opencast no está accesible o está mal configurado.",
   "save-creation-upload-invalid-response": "Fallo en la subida: hubo una respuesta inesperada.",
   "save-creation-upload-not-authorized": "Fallo en la subida: parece que no estás autorizado a subir.",
@@ -49,7 +48,6 @@
   "review-set-end": "Establecer el instante actual como fin",
   "review-play": "Reproducir",
   "review-pause": "Pausar",
-  "review-remove-start-end": "Eliminar",
   "review-part-will-be-removed": "Esta parte será eliminada",
   "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
 
