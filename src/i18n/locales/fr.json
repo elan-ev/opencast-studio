@@ -48,9 +48,6 @@
 
   "settings-general-header": "Général",
 
-  "back-button-label": "Retour",
-  "next-button-label": "Suivant",
-
   "confirm-discard-recordings": "Êtes-vous certain de vouloir vous débarrasser de vos enregistrements ? C’est irréversible !",
   "confirm-cancel-recording": "Vous êtes en train d’enregistrer ! Êtes-vous certain de vouloir annuler et de supprimer l’enregistrement ?",
 
@@ -146,5 +143,9 @@
     "language": {
       "label": "Langue"
     }
+  },
+  "steps": {
+    "back-button-label": "Retour",
+    "next-button-label": "Suivant"
   }
 }

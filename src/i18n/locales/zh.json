@@ -46,9 +46,6 @@
   "state-waiting": "等待",
   "settings-header": "设置",
 
-  "back-button-label": "返回",
-  "next-button-label": "下一个",
-
 
   "confirm-discard-recordings": "是否确实要丢弃录制文件？这是无法撤消的！",
   "confirm-cancel-recording": "您目前正在录制！是否确实要取消并放弃录制文件？",
@@ -135,5 +132,10 @@
   "warning-recorder-not-supported": "您的浏览器不支持录制媒体流。",
   "warning-recorder-safari-hint": "如果您使用的是Safari，则可以在设置中启用实验性功能\"MediaRecorder\"。但是，在 macOS 上，我们建议切换到 Chrome 或 Firefox。",
   "warning-missing-connection-settings": "与 Opencast 的连接未完全建立：上载已禁用。请在<1>设置</1>中配置连接（您不会丢失录制文件）。",
-  "settings-back-to-recording": "返回录制"
+  "settings-back-to-recording": "返回录制",
+
+  "steps": {
+    "back-button-label": "返回",
+    "next-button-label": "下一个"
+  }
 }

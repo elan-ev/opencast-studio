@@ -44,9 +44,6 @@
   "state-waiting": "Esperando",
   "settings-header": "Ajustes",
 
-  "back-button-label": "Atrás",
-  "next-button-label": "Siguiente",
-
 
   "confirm-discard-recordings": "¿Está seguro que quiere descartar tu grabación? ¡Esto no se puede deshacer!",
   "confirm-cancel-recording": "En este momento estás grabando! ¿Estás seguro que deseas cancelar y descartar la grabación?",
@@ -132,5 +129,10 @@
   "warning-recorder-not-supported": "Su navegador no soporta la grabación de transmisiones multimedia.",
   "warning-recorder-safari-hint": "Si está utilizando Safari, puede habilitar la función experimental 'MediaRecorder' en la configuración. Sin embargo, en macOS, recomendamos cambiar a Chrome o Firefox.",
   "warning-missing-connection-settings": "La conexión a Opencast no está completamente establecida: la subida está deshabilitada. Configure la conexión en <1>ajustes</1> (no perderá su grabación).",
-  "settings-back-to-recording": "Volver a la grabación"
+  "settings-back-to-recording": "Volver a la grabación",
+
+  "steps": {
+    "back-button-label": "Atrás",
+    "next-button-label": "Siguiente"
+  }
 }

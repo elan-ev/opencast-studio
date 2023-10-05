@@ -32,9 +32,6 @@
   "settings-header": "Nastavitve",
   "settings-language": "Jezik",
 
-  "back-button-label": "Nazaj",
-  "next-button-label": "Naprej",
-
 
   "confirm-discard-recordings": "Ali ste prepričani, da želite zavreči posnetke? Tega ni mogoče razveljaviti!",
   "confirm-cancel-recording": "Trenutno snemate! Ali ste prepričani, da želite preklicati in s tem zavreči snemanje?",
@@ -100,5 +97,10 @@
   "warning-recorder-not-supported": "Vaš brskalnik ne podpira snemanja video posnetkov.",
   "warning-recorder-safari-hint": "Če uporabljate Safari, lahko v nastavitvah omogočite eksperimentalno funkcijo »MediaRecorder«. V Apple MacOS-u priporočamo prehod na Chrome ali Firefox.",
   "warning-missing-connection-settings": "Povezava z Opencastom ni v celoti vzpostavljena: nalaganje je onemogočeno. Konfigurirajte povezavo v <1>nastavitvah</1> (posnetka ne boste izgubili).",
-  "settings-back-to-recording": "Nazaj na snemanje"
+  "settings-back-to-recording": "Nazaj na snemanje",
+
+  "steps": {
+    "back-button-label": "Nazaj",
+    "next-button-label": "Naprej"
+  }
 }

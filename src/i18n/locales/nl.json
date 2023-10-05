@@ -50,8 +50,6 @@
   "state-recording": "Opnemen",
   "state-waiting": "Wachten",
   "settings-header": "Instellingen",
-  "back-button-label": "Terug",
-  "next-button-label": "Verder",
   "review-heading": "Tevreden met de opname?",
   "review-error-empty-recording": "Fout: Uw opname is leeg. Ben je direct na de start gestopt met opnemen? Zorg er ook voor dat uw systeem krachtig genoeg is om video's op te nemen (dit kan niet het geval zijn als andere toepassingen uw systeem zwaar gebruiken of als uw apparaat erg oud is). Als uw systeem krachtig genoeg is, uw opname is langer dan een paar seconden, en u ziet deze fout nog steeds, meld het dan als een bug op GitHub.",
   "stop-button-title": "Opname stoppen",
@@ -115,5 +113,10 @@
   "review-pause": "Pauze",
   "review-remove-start-end": "Verwijder",
   "review-part-will-be-removed": "Dit deel wordt verwijderd.",
-  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}"
+  "review-player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
+
+  "steps": {
+    "back-button-label": "Terug",
+    "next-button-label": "Verder"
+  }
 }
