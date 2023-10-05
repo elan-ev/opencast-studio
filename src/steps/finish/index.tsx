@@ -28,10 +28,10 @@ export const Finish: React.FC<StepProps> = ({ goToPrevStep, goToFirstStep }) => 
   const hideBack = uploadState.state !== "not_uploaded" || allDownloaded;
 
   const startAgain = {
-    label: t("save-creation-new-recording"),
+    label: t("steps.finish.new-recording"),
     icon: <LuRotateCw />,
     onClick: () => {
-      const doIt = window.confirm(t("save-creation-new-recording-warning"));
+      const doIt = window.confirm(t("steps.finish.new-recording-warning"));
       if (doIt) {
         dispatch({ type: "RESET" });
         goToFirstStep();
@@ -47,8 +47,8 @@ export const Finish: React.FC<StepProps> = ({ goToPrevStep, goToFirstStep }) => 
         startAgain,
         {
           label: settings.return?.label
-            ? t("save-creation-return-to", { label: settings.return.label })
-            : t("save-creation-return-to-no-label"),
+            ? t("steps.finish.return-to", { label: settings.return.label })
+            : t("steps.finish.return-to-no-label"),
           href: returnTarget,
           icon: <FiXCircle />,
         },

@@ -1,23 +1,13 @@
 {
-  "save-creation-return-to": "退出并返回 {{label}}",
-  "save-creation-return-to-no-label": "退出并返回上一页",
-  "save-creation-new-recording": "开始新录制",
-  "save-creation-new-recording-warning": "通过开始新的录制，当前录制内容将在此应用程序中被丢弃（任何上传或下载的录制文件都不会受到影响）。是否确定？",
-
-
   "confirm-discard-recordings": "是否确实要丢弃录制文件？这是无法撤消的！",
-
   "sources-scenario-display-and-user": "显示器和摄像头",
   "sources-scenario-display": "显示器",
   "sources-scenario-user": "摄像头",
-
   "sources-display": "显示器",
   "sources-user": "摄像头",
-
   "error-lost-video-stream": "视频流意外结束！是摄像头断开连接还是您不小心取消了共享视频源？",
   "error-lost-audio-stream": "音频流意外结束！麦克风是否断开连接或意外断开了音频源的共享？",
   "error-lost-stream-end-recording": "视频或音频流意外结束，活动录制过早停止！麦克风或摄像头是否断开连接？还是您不小心取消了媒体源的共享或撤销了必要的权限？",
-
   "warning-https": "大多数浏览器不允许通过未加密连接 （HTTP） 捕获视频。请切换到 HTTPS。",
   "warning-recorder-not-supported": "您的浏览器不支持录制媒体流。",
   "warning-recorder-safari-hint": "如果您使用的是Safari，则可以在设置中启用实验性功能\"MediaRecorder\"。但是，在 macOS 上，我们建议切换到 Chrome 或 Firefox。",
@@ -75,6 +65,10 @@
       "pause": "暂停"
     },
     "finish": {
+      "return-to": "退出并返回 {{label}}",
+      "return-to-no-label": "退出并返回上一页",
+      "new-recording": "开始新录制",
+      "new-recording-warning": "通过开始新的录制，当前录制内容将在此应用程序中被丢弃（任何上传或下载的录制文件都不会受到影响）。是否确定？",
       "upload": {
         "validation-error-required": "此字段为必填字段。",
         "complete": "上传完成！",

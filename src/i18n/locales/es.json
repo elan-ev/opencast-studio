@@ -1,21 +1,13 @@
 {
-  "save-creation-new-recording": "Empezar una nueva grabación",
-  "save-creation-new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Estás seguro?",
-
-
   "confirm-discard-recordings": "¿Está seguro que quiere descartar tu grabación? ¡Esto no se puede deshacer!",
-
   "sources-scenario-display-and-user": "Pantalla y cámara",
   "sources-scenario-display": "Pantalla",
   "sources-scenario-user": "Cámara",
-
   "sources-display": "Pantalla",
   "sources-user": "Cámara",
-
   "error-lost-video-stream": "¡La transmisión de video terminó inesperadamente! ¿Se desconectó una cámara o accidentalmente dejó de compartir una fuente de video?",
   "error-lost-audio-stream": "¡La transmisión de audio terminó inesperadamente! ¿Se desconectó el micrófono o accidentalmente dejó de compartir la fuente de audio?",
   "error-lost-stream-end-recording": "Una transmisión de video o audio finalizó inesperadamente y, por lo tanto, la grabación se detuvo prematuramente. ¿Se desconectó un micrófono o una cámara? ¿O accidentalmente dejó de compartir la fuente de medios o revocó los permisos necesarios?",
-
   "warning-https": "La mayoría de los navegadores no permiten la captura de video a través de una conexión no segura (HTTP). Por favor cambie a HTTPS.",
   "warning-recorder-not-supported": "Su navegador no soporta la grabación de transmisiones multimedia.",
   "warning-recorder-safari-hint": "Si está utilizando Safari, puede habilitar la función experimental 'MediaRecorder' en la configuración. Sin embargo, en macOS, recomendamos cambiar a Chrome o Firefox.",
@@ -72,6 +64,8 @@
       "pause": "Pausar"
     },
     "finish": {
+      "new-recording": "Empezar una nueva grabación",
+      "new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Estás seguro?",
       "upload": {
         "validation-error-required": "Este campo es obligatorio.",
         "complete": "¡Subida completa!",

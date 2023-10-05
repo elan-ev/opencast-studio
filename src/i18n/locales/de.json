@@ -1,25 +1,16 @@
 {
-  "save-creation-return-to": "Beenden und zurück ({{label}})",
-  "save-creation-return-to-no-label": "Opencast Studio beenden und zurück",
-  "save-creation-new-recording": "Neue Aufzeichnung starten",
-  "save-creation-new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
-
   "confirm-discard-recordings": "Sind Sie sicher, dass Sie die Aufnahmen verwerfen wollen? Dies kann nicht rückgängig gemacht werden!",
-
   "sources-scenario-display-and-user": "Bildschirm & Kamera",
   "sources-scenario-display": "Bildschirm",
   "sources-scenario-user": "Kamera",
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
-
   "error-lost-video-stream": "Video-Stream endete unerwartet! Wurde eine Kamera getrennt oder haben Sie versehentlich die Videofreigabe beendet?",
   "error-lost-audio-stream": "Audio-Stream endete unerwartet! Wurde ein Mikrofon getrennt oder haben Sie versehentlich die Audiofreigabe beendet?",
   "error-lost-stream-end-recording": "Ein Video- oder Audio-Stream endete unerwartet! Infolgedessen wurde die aktive Aufnahme vorzeitig beendet. Wurde ein Mikrofon oder eine Kamera getrennt? Oder haben Sie versehentlich die Medienfreigabe beendet oder Studio die notwendigen Berechtigungen entzogen?",
-
   "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
   "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf macOS Firefox oder Chrome zu nutzen.",
-
 
   "header": {
     "info": {
@@ -100,6 +91,10 @@
     "finish": {
       "label": "Aufnahme speichern",
       "finish-button": "Abschließen",
+      "return-to": "Beenden und zurück ({{label}})",
+      "return-to-no-label": "Opencast Studio beenden und zurück",
+      "new-recording": "Neue Aufzeichnung starten",
+      "new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
       "upload": {
         "label": "Hochladen",
         "validation-error-required": "Dieses Feld ist erforderlich.",

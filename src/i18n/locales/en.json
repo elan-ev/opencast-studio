@@ -1,29 +1,16 @@
 {
-  "save-creation-return-to": "Exit and go back to {{label}}",
-  "save-creation-return-to-no-label": "Exit Opencast Studio and go back",
-  "save-creation-new-recording": "Start a new recording",
-  "save-creation-new-recording-warning": "By starting a new recording, the current recording(s) will be discarded in this application (any uploaded or downloaded recording(s) will not be affected). Are you sure?",
-
-
   "confirm-discard-recordings": "Are you sure you want to discard your recording(s)? This cannot be undone!",
-
-
   "sources-scenario-display-and-user": "Display & camera",
   "sources-scenario-display": "Display",
   "sources-scenario-user": "Camera",
-
   "sources-display": "Display",
   "sources-user": "Camera",
-
   "error-lost-video-stream": "Video stream unexpectedly ended! Did a camera disconnect or did you accidentally unshare a video source?",
   "error-lost-audio-stream": "Audio stream unexpectedly ended! Did the microphone disconnect or did you accidentally unshare the audio source?",
   "error-lost-stream-end-recording": "A video or audio stream unexpectedly ended and the active recording was prematurely stopped! Did a microphone or a camera disconnect? Or did you accidentally unshare the media source or revoke the necessary permissions?",
-
   "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on macOS, we recommend switching to Chrome or Firefox.",
-
-
 
   "header": {
     "info": {
@@ -105,6 +92,10 @@
     "finish": {
       "label": "Save video",
       "finish-button": "Finish",
+      "return-to": "Exit and go back to {{label}}",
+      "return-to-no-label": "Exit Opencast Studio and go back",
+      "new-recording": "Start a new recording",
+      "new-recording-warning": "By starting a new recording, the current recording(s) will be discarded in this application (any uploaded or downloaded recording(s) will not be affected). Are you sure?",
       "upload": {
         "label": "Upload",
         "validation-error-required": "This field is required.",

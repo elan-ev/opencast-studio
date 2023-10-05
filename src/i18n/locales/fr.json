@@ -1,32 +1,16 @@
 {
-  "save-creation-return-to": "Quitter et retourner vers {{label}}",
-  "save-creation-return-to-no-label": "Quitter et revenir à la page précédente",
-  "save-creation-new-recording": "Commencer un nouvel enregistrement",
-  "save-creation-new-recording-warning": "En démarrant un nouvel enregistrement, les enregistrements actuels seront supprimés (les enregistrements téléchargés ou en cours de téléchargement ne sont pas concernés). Êtes-vous sûr ?",
-
-
-
   "confirm-discard-recordings": "Êtes-vous certain de vouloir vous débarrasser de vos enregistrements ? C’est irréversible !",
-
-
   "sources-scenario-display-and-user": "Écran et caméra",
   "sources-scenario-display": "Écran",
   "sources-scenario-user": "Caméra",
-
-
-
   "sources-display": "Écran",
   "sources-user": "Caméra",
-
   "error-lost-video-stream": "Le flux vidéo s’est terminé de manière inattendue ! Une caméra s’est-elle déconnectée ou avez-vous accidentellement annulé le partage d’une source vidéo ?",
   "error-lost-audio-stream": "Le flux audio s’est terminé de manière inattendue ! Le microphone s’est-il déconnecté ou avez-vous accidentellement annulé le partage de la source audio ?",
   "error-lost-stream-end-recording": "Un flux vidéo ou audio s’est terminé de manière inattendue et l’enregistrement actif a été arrêté prématurément ! Un microphone ou une caméra s'est-il déconnecté ? Ou avez-vous accidentellement annulé le partage de la source multimédia ou révoqué les autorisations nécessaires ?",
-
   "warning-https": "La plupart des navigateurs ne permettent pas la capture vidéo via une connexion non cryptée (HTTP). Veuillez passer en HTTPS.",
   "warning-recorder-not-supported": "Votre navigateur ne prend pas en charge les flux de médias d’enregistrement.",
   "warning-recorder-safari-hint": "Si vous utilisez Safari, vous pouvez activer la fonction expérimentale 'MediaRecorder' dans les paramètres. Toutefois, sous MacOS, nous vous recommandons de passer à Chrome ou Firefox.",
-
-
 
   "header": {
     "language": {
@@ -88,6 +72,10 @@
       "pause": "Pause"
     },
     "finish": {
+      "return-to": "Quitter et retourner vers {{label}}",
+      "return-to-no-label": "Quitter et revenir à la page précédente",
+      "new-recording": "Commencer un nouvel enregistrement",
+      "new-recording-warning": "En démarrant un nouvel enregistrement, les enregistrements actuels seront supprimés (les enregistrements téléchargés ou en cours de téléchargement ne sont pas concernés). Êtes-vous sûr ?",
       "upload": {
         "validation-error-required": "Ce champ est obligatoire.",
         "complete": "Téléchargement terminé !",

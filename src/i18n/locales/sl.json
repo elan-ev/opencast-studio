@@ -1,23 +1,13 @@
 {
-  "save-creation-new-recording": "Začni novo snemanje",
-  "save-creation-new-recording-warning": "Z pričetkom novega snemanja bodo trenutni posnetki izgubljeni (to ne vpliva na že naložene ali prenesene posnetke). Ali ste prepričan?",
-
-
   "confirm-discard-recordings": "Ali ste prepričani, da želite zavreči posnetke? Tega ni mogoče razveljaviti!",
-
-
   "sources-scenario-display-and-user": "Zaslon & video kamera",
   "sources-scenario-display": "Zaslon",
   "sources-scenario-user": "Video kamera",
-
-
   "sources-display": "Zaslon",
   "sources-user": "Video kamera",
-
   "error-lost-video-stream": "Video snemanje se je nepričakovano končalo! Ali se je prekinila povezava s kamera ali ste po nesreči zamenjali video vir?",
   "error-lost-audio-stream": "Snemanje zvoka se je nepričakovano končalo! Ali se je prekinila povezava s mikrofonom ali ste po nesreči zamenjali avdio vir??",
   "error-lost-stream-end-recording": "Video ali avdio snemanje se je nepričakovano končalo in zaradi tega je bilo aktivno snemanje predčasno zaustavljeno! Ali se je prekinila povezava s video kamero ali mikrofonom? Ali ste po naključju zamenjali kamero ali avdio povezavo oziroma preklicali potrebna dovoljenja?",
-
   "warning-https": "Večina brskalnikov ne dovoljuje zajema video posnetkov prek nešifrirane povezave (HTTP). Preklopite na HTTPS.",
   "warning-recorder-not-supported": "Vaš brskalnik ne podpira snemanja video posnetkov.",
   "warning-recorder-safari-hint": "Če uporabljate Safari, lahko v nastavitvah omogočite eksperimentalno funkcijo »MediaRecorder«. V Apple MacOS-u priporočamo prehod na Chrome ali Firefox.",
@@ -59,6 +49,8 @@
       "error-empty-recording": "Napaka: vaš posnetek je popolnoma prazen. Ste mogoče snemanje ustavili skoraj takoj po tem, ko ste ga začeli? Poleg tega se prepričajte, da je vaš sistem dovolj zmogljiv za snemanje videa. (to morda ne velja, če druga aplikacija močno obrremenjuje vaš sistem ali pa če je vaša računalnik zelo star). V primeru da je vaš sistem dovolj zmogljiiv za viideo snemanje, ter snemali več kot nekaj sekund in še vedno vidite to napako: Prosimo prijavite to kot napako na GitHub."
     },
     "finish": {
+      "new-recording": "Začni novo snemanje",
+      "new-recording-warning": "Z pričetkom novega snemanja bodo trenutni posnetki izgubljeni (to ne vpliva na že naložene ali prenesene posnetke). Ali ste prepričan?",
       "upload": {
         "validation-error-required": "To polje je obvezno.",
         "complete": "Nalaganje zaključeno!",

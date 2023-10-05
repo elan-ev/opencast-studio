@@ -1,14 +1,10 @@
 {
-
-  "save-creation-new-recording": "Start nieuwe opname",
-  "save-creation-new-recording-warning": "Wanneer u een nieuwe opname start, wordt de actuele opname in deze programma verwijderd (maar de gedownloade of geüploade opnames blijven behouden). Weet je het zeker?",
   "confirm-discard-recordings": "Weet u zeker dat u deze opname wilt weggooien? Dit kan niet ongedaan worden gemaakt!",
   "sources-scenario-display-and-user": "Beeldscherm en camera",
   "sources-scenario-display": "Beeldscherm",
   "sources-scenario-user": "Camera",
   "sources-display": "Beeldscherm",
   "sources-user": "Camera",
-
   "warning-https": "De meeste browsers staan geen video-opname toe over een niet-versleutelde verbinding (HTTP). Schakel over naar HTTPS.",
   "warning-recorder-not-supported": "Uw browser ondersteunt het opnemen van media streams niet.",
   "warning-recorder-safari-hint": "Voor Safari op iOS kunt u de experimentele functie 'MediaRecorder' inschakelen in instellingen.",
@@ -68,6 +64,8 @@
       "pause": "Pauze"
     },
     "finish": {
+      "new-recording": "Start nieuwe opname",
+      "new-recording-warning": "Wanneer u een nieuwe opname start, wordt de actuele opname in deze programma verwijderd (maar de gedownloade of geüploade opnames blijven behouden). Weet je het zeker?",
       "upload": {
         "validation-error-required": "Dit veld is verplicht.",
         "complete": "Upload voltooid!",
