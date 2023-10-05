@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
 import { useBeforeunload } from "react-beforeunload";
 import { keyframes } from "@emotion/react";
-import { FiAlertTriangle, FiPauseCircle } from "react-icons/fi";
+import { FiPauseCircle } from "react-icons/fi";
 
 import {
   useStudioState, useDispatch, Dispatcher, Recording as StudioRecording,
@@ -14,7 +14,7 @@ import { StepProps } from "..";
 import { ErrorBox } from "../../ui/ErrorBox";
 import { StepContainer } from "../elements";
 import { VideoBox, VideoBoxProps, useVideoBoxResize } from "../../ui/VideoBox";
-import { COLORS, dimensionsOf } from "../../util";
+import { dimensionsOf } from "../../util";
 import { RecordingControls } from "./controls";
 import Recorder, { OnStopCallback } from "./recorder";
 import { useSettings } from "../../settings";
@@ -107,18 +107,29 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
     videoRecorder.current?.resume();
   };
 
+  // Detect if a stream ended unexpectedly. In that case we want to stop the
+  // recording completely.
+  useEffect(() => {
+    const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
+    if (unexpectedEnd && (recordingState === "recording" || recordingState === "paused")) {
+      stopRecording(true);
+    }
+  });
+
   const paused = recordingState === "paused";
   const previews: VideoBoxProps["children"] = [];
   if (displayStream || displayUnexpectedEnd) {
     previews.push({
       body: <StreamPreview stream={displayStream} paused={paused} />,
       dimensions: () => dimensionsOf(displayStream),
+      autoSize: !displayStream,
     });
   }
   if (userStream || userUnexpectedEnd) {
     previews.push({
       body: <StreamPreview stream={userStream} paused={paused} />,
       dimensions: () => dimensionsOf(userStream),
+      autoSize: !userStream,
     });
   }
 
@@ -141,9 +152,6 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
         label: t("stop-button-title"),
       }}
     >
-      {(displayUnexpectedEnd || userUnexpectedEnd) && (
-        <ErrorBox body={t("error-lost-video-stream")} />
-      )}
       {audioUnexpectedEnd && (
         <ErrorBox body={t("error-lost-audio-stream")} />
       )}
@@ -153,7 +161,6 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
         {canRecord && (
           <RecordingControls {...{
             startRecording,
-            stopRecording,
             pauseRecording,
             resumeRecording,
             recordingState,
@@ -171,6 +178,7 @@ type StreamPreviewProps = {
 };
 
 const StreamPreview: React.FC<StreamPreviewProps> = ({ stream, paused }) => {
+  const { t } = useTranslation();
   const resizeVideoBox = useVideoBoxResize();
   const videoRef = useRef<HTMLVideoElement>(null);
   const { isHighContrast } = useColorScheme();
@@ -194,18 +202,7 @@ const StreamPreview: React.FC<StreamPreviewProps> = ({ stream, paused }) => {
   });
 
   if (!stream) {
-    return (
-      <div css={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: COLORS.danger4,
-      }}>
-        <FiAlertTriangle size={48} />
-      </div>
-    );
+    return <ErrorBox css={{ margin: 0 }} body={t("error-lost-video-stream")} />;
   }
 
   return (

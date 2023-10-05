@@ -21,6 +21,12 @@ export type VideoBoxProps = {
 export type VideoBoxChild = {
   body: JSX.Element;
   dimensions: () => [number, number] | null;
+  /**
+   * If `false` (default), the calculated size is used for the divs. Otherwise,
+   * `width` and `height` are unset, which means the div takes the size of its
+   * child. Used for error messages.
+   */
+  autoSize?: boolean;
 };
 
 // Manages one or two children with given aspect ratio.
@@ -104,8 +110,10 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
         <VideoBoxResizeContext.Provider value={resizeVideoBox}>
           <div ref={ref} css={{ flex: "1 0 0", minHeight, display: "flex" }}>
             <div css={{
-              height: childHeight,
-              width: childWidth,
+              ...!child.autoSize && {
+                height: childHeight,
+                width: childWidth,
+              },
               minWidth: `${minWidth}px`,
               margin: "auto",
             }}>
@@ -207,22 +215,27 @@ export const VideoBox: React.FC<VideoBoxProps> = ({
             css={{
               flex: "1 0 0",
               display: "flex",
+              gap: gap,
               flexDirection,
               justifyContent: "space-between",
               minHeight,
             }}
           >
             <div css={{
-              height: heights[0],
-              width: widths[0],
+              ...!children[0].autoSize && {
+                height: heights[0],
+                width: widths[0],
+              },
               minWidth: `${minWidth}px`,
               margin: "auto",
             }}>
               { children[0].body }
             </div>
             <div css={{
-              height: heights[1],
-              width: widths[1],
+              ...!children[1].autoSize && {
+                height: heights[1],
+                width: widths[1],
+              },
               minWidth: `${minWidth}px`,
               margin: "auto",
             }}>

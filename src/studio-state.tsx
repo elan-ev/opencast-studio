@@ -164,7 +164,7 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case "BLOCK_DISPLAY":
       return { ...state, displayStream: null, displayAllowed: false, displayUnexpectedEnd: false };
     case "UNSHARE_DISPLAY":
-      return { ...state, displayStream: null, displayUnexpectedEnd: false };
+      return { ...state, displayStream: null, displayAllowed: null, displayUnexpectedEnd: false };
     case "DISPLAY_UNEXPECTED_END":
       return { ...state, displayStream: null, displayUnexpectedEnd: true };
 
@@ -173,7 +173,7 @@ const reducer = (state: StudioState, action: ReducerAction): StudioState => {
     case "BLOCK_USER":
       return { ...state, userStream: null, userAllowed: false, userUnexpectedEnd: false };
     case "UNSHARE_USER":
-      return { ...state, userStream: null, userUnexpectedEnd: false };
+      return { ...state, userStream: null, userAllowed: null, userUnexpectedEnd: false };
     case "USER_UNEXPECTED_END":
       return { ...state, userStream: null, userUnexpectedEnd: true };
 

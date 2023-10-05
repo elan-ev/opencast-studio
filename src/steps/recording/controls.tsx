@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { WithTooltip, match, useColorScheme } from "@opencast/appkit";
 import { FiPause, FiPlay } from "react-icons/fi";
 
-import { useStudioState } from "../../studio-state";
 import { RecordingState } from ".";
 import { SHORTCUTS, ShortcutKeys, useShortcut, useShowAvailableShortcuts } from "../../shortcuts";
 import { COLORS } from "../../util";
@@ -14,7 +13,6 @@ import { COLORS } from "../../util";
 type Props = {
   recordingState: RecordingState;
   startRecording: () => void;
-  stopRecording: (premature: boolean) => void;
   pauseRecording: () => void;
   resumeRecording: () => void;
 };
@@ -22,7 +20,6 @@ type Props = {
 export const RecordingControls: React.FC<Props> = ({
   recordingState,
   startRecording,
-  stopRecording,
   pauseRecording,
   resumeRecording,
 }) => {
@@ -30,19 +27,6 @@ export const RecordingControls: React.FC<Props> = ({
   const isLight = useColorScheme().scheme === "light";
   const { isHighContrast } = useColorScheme();
   const fgColor = isLight ? COLORS.neutral05 : COLORS.neutral90;
-
-  const { userUnexpectedEnd, displayUnexpectedEnd, audioUnexpectedEnd } = useStudioState();
-
-
-  // Detect if a stream ended unexpectedly. In that case we want to stop the
-  // recording completely.
-  useEffect(() => {
-    const unexpectedEnd = userUnexpectedEnd || displayUnexpectedEnd || audioUnexpectedEnd;
-    if (unexpectedEnd && (recordingState === "recording" || recordingState === "paused")) {
-      stopRecording(true);
-    }
-  });
-
 
   const showAvailableShortcuts = useShowAvailableShortcuts();
   useShortcut(SHORTCUTS.recording.startPauseResume, () => {
