@@ -18,25 +18,6 @@
   "error-lost-audio-stream": "Snemanje zvoka se je nepričakovano končalo! Ali se je prekinila povezava s mikrofonom ali ste po nesreči zamenjali avdio vir??",
   "error-lost-stream-end-recording": "Video ali avdio snemanje se je nepričakovano končalo in zaradi tega je bilo aktivno snemanje predčasno zaustavljeno! Ali se je prekinila povezava s video kamero ali mikrofonom? Ali ste po naključju zamenjali kamero ali avdio povezavo oziroma preklicali potrebna dovoljenja?",
 
-
-  "upload-notification": "Trenutno nalaga ...",
-  "upload-settings-modal-header": "Opencast povezava",
-  "upload-settings-label-server-url": "URL strežnika ",
-  "upload-settings-label-username": "Uporabniško ime",
-  "upload-settings-label-password": "Geslo",
-  "upload-settings-invalid-url": "To ni veljaven URL",
-  "upload-settings-invalid-url-http-start": "URL povezava se mora začeti z 'https://' ali 'http://'",
-  "upload-settings-invalid-login-data": "Prijava v strežnik Opencast je neuspešna: uporabniško ime ali geslo, ki ste ga navedli, je neveljavno.",
-  "upload-settings-invalid-provided-login": "Strežnik sporoča, da omogoča samodejno prijavo, vendar je bila zahteva vrnjena kot neavtenticirana. To je ali notranja napaka programa Opencast Studio ali pa je vaš sistemski skrbnik napačno konfiguriral strežnik. Žal glede tega ne moremo pomagati :(",
-
-  "upload-time-a-few-seconds": "nekaj sekund",
-  "upload-time-a-minute": "minuta",
-  "upload-time-an-hour": "ura",
-  "upload-time-seconds": "sekunde",
-  "upload-time-minutes": "minute",
-  "upload-time-hours": "ure",
-  "upload-time-left": "{{time}} ostane",
-
   "warning-https": "Večina brskalnikov ne dovoljuje zajema video posnetkov prek nešifrirane povezave (HTTP). Preklopite na HTTPS.",
   "warning-recorder-not-supported": "Vaš brskalnik ne podpira snemanja video posnetkov.",
   "warning-recorder-safari-hint": "Če uporabljate Safari, lahko v nastavitvah omogočite eksperimentalno funkcijo »MediaRecorder«. V Apple MacOS-u priporočamo prehod na Chrome ali Firefox.",
@@ -83,7 +64,25 @@
         "complete": "Nalaganje zaključeno!",
         "complete-explanation": "Vaš posnetek bo sedaj sprocesiran v Opencast sistemu.",
         "label-presenter": "Avtor",
-        "label-title": "Naslov"
+        "label-title": "Naslov",
+        "currently-uploading": "Trenutno nalaga ...",
+        "settings-header": "Opencast povezava",
+        "settings-label-server-url": "URL strežnika ",
+        "settings-label-username": "Uporabniško ime",
+        "settings-label-password": "Geslo",
+        "settings-invalid-url": "To ni veljaven URL",
+        "settings-invalid-url-http-start": "URL povezava se mora začeti z 'https://' ali 'http://'",
+        "settings-invalid-login-data": "Prijava v strežnik Opencast je neuspešna: uporabniško ime ali geslo, ki ste ga navedli, je neveljavno.",
+        "settings-invalid-provided-login": "Strežnik sporoča, da omogoča samodejno prijavo, vendar je bila zahteva vrnjena kot neavtenticirana. To je ali notranja napaka programa Opencast Studio ali pa je vaš sistemski skrbnik napačno konfiguriral strežnik. Žal glede tega ne moremo pomagati :(",
+        "time": {
+          "a-few-seconds": "nekaj sekund",
+          "a-minute": "minuta",
+          "an-hour": "ura",
+          "seconds": "sekunde",
+          "minutes": "minute",
+          "hours": "ure",
+          "left": "{{time}} ostane"
+        }
       }
     }
   }

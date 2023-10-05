@@ -222,8 +222,8 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
         return null;
       },
       "incorrect_login": () => opencast.isLoginProvided()
-        ? t("upload-settings-invalid-provided-login")
-        : t("upload-settings-invalid-login-data"),
+        ? t("steps.finish.upload.settings-invalid-provided-login")
+        : t("steps.finish.upload.settings-invalid-login-data"),
       "network_error": () => t("steps.finish.upload.upload-network-error"),
       "invalid_response": () => t("steps.finish.upload.upload-invalid-response"),
       "response_not_ok": () => t("steps.finish.upload.upload-invalid-response"),
@@ -271,11 +271,11 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             fontSize: 16,
             fontWeight: 700,
             marginTop: 20,
-          }}>{t("upload-settings-modal-header")}</h3>
+          }}>{t("steps.finish.upload.settings-header")}</h3>
 
           {configurableServerUrl && <Input
             errors={errors}
-            label={t("upload-settings-label-server-url")}
+            label={t("steps.finish.upload.settings-label-server-url")}
             name="serverUrl"
             register={register}
             required
@@ -283,11 +283,11 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
               try {
                 const url = new URL(value);
                 return (url.protocol === "https:" || url.protocol === "http:")
-                  || t("upload-settings-invalid-url-http-start");
+                  || t("steps.finish.upload.settings-invalid-url-http-start");
               } catch {
-                let err = t("upload-settings-invalid-url");
+                let err = t("steps.finish.upload.settings-invalid-url");
                 if (!value.startsWith("https://") && !value.startsWith("http://")) {
-                  err += " " + t("upload-settings-invalid-url-http-start");
+                  err += " " + t("steps.finish.upload.settings-invalid-url-http-start");
                 }
                 return err;
               }
@@ -296,7 +296,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 
           {configurableUsername && <Input
             errors={errors}
-            label={t("upload-settings-label-username")}
+            label={t("steps.finish.upload.settings-label-username")}
             name="loginName"
             register={register}
             required
@@ -304,7 +304,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 
           {configurablePassword && <Input
             errors={errors}
-            label={t("upload-settings-label-password")}
+            label={t("steps.finish.upload.settings-label-password")}
             name="loginPassword"
             register={register}
             required
@@ -461,17 +461,17 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, second
   if (secondsLeft === null) {
     prettyTime = null;
   } else if (secondsLeft < 4) {
-    prettyTime = t("upload-time-a-few-seconds");
+    prettyTime = t("steps.finish.upload.time.a-few-seconds");
   } else if (secondsLeft < 45) {
-    prettyTime = `${secondsLeft} ${t("upload-time-seconds")}`;
+    prettyTime = `${secondsLeft} ${t("steps.finish.upload.time.seconds")}`;
   } else if (secondsLeft < 90) {
-    prettyTime = t("upload-time-a-minute");
+    prettyTime = t("steps.finish.upload.time.a-minute");
   } else if (secondsLeft < 45 * 60) {
-    prettyTime = `${Math.round(secondsLeft / 60)} ${t("upload-time-minutes")}`;
+    prettyTime = `${Math.round(secondsLeft / 60)} ${t("steps.finish.upload.time.minutes")}`;
   } else if (secondsLeft < 90 * 60) {
-    prettyTime = t("upload-time-an-hour");
+    prettyTime = t("steps.finish.upload.time.an-hour");
   } else if (secondsLeft < 24 * 60 * 60) {
-    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t("upload-time-hours")}`;
+    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t("steps.finish.upload.time.hours")}`;
   } else {
     prettyTime = null;
   }
@@ -479,7 +479,7 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, second
   return (
     <GreyInnerBox>
       {/* Heading */}
-      <div css={{ fontWeight: 700 }}>{t("upload-notification")}</div>
+      <div css={{ fontWeight: 700 }}>{t("steps.finish.upload.currently-uploading")}</div>
 
       {/* Progress bar */}
       <div css={{
@@ -502,7 +502,7 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, second
         <div>{roundedPercent}%</div>
         <div css={{ flex: 1 }} />
         <div>
-          {prettyTime && <Trans i18nKey="upload-time-left">
+          {prettyTime && <Trans i18nKey="steps.finish.upload.time.left">
             {{ time: prettyTime }} left
           </Trans>}
         </div>

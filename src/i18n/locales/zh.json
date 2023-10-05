@@ -18,24 +18,6 @@
   "error-lost-audio-stream": "音频流意外结束！麦克风是否断开连接或意外断开了音频源的共享？",
   "error-lost-stream-end-recording": "视频或音频流意外结束，活动录制过早停止！麦克风或摄像头是否断开连接？还是您不小心取消了媒体源的共享或撤销了必要的权限？",
 
-  "upload-notification": "当前正在上传...",
-  "upload-settings-modal-header": "Opencast连接",
-  "upload-settings-label-server-url": "服务器网址",
-  "upload-settings-label-username": "用户名",
-  "upload-settings-label-password": "密码",
-  "upload-settings-invalid-url": "这不是一个有效的网址",
-  "upload-settings-invalid-url-http-start": "网址应以 'https://' 或 'http://'",
-  "upload-settings-invalid-login-data": "无法登录到 Opencast 服务器：您提供的用户名/密码无效。",
-  "upload-settings-invalid-provided-login": "服务器指定它提供自动登录，但返回的请求未经身份验证。这是 Opencast Studio 的内部错误，或者您的系统管理员错误地配置了服务器。你无能为力:(",
-
-  "upload-time-a-few-seconds": "几秒钟",
-  "upload-time-a-minute": "一分钟",
-  "upload-time-an-hour": "一小时",
-  "upload-time-seconds": "秒",
-  "upload-time-minutes": "分",
-  "upload-time-hours": "小时",
-  "upload-time-left": "剩余{{时间}}",
-
   "warning-https": "大多数浏览器不允许通过未加密连接 （HTTP） 捕获视频。请切换到 HTTPS。",
   "warning-recorder-not-supported": "您的浏览器不支持录制媒体流。",
   "warning-recorder-safari-hint": "如果您使用的是Safari，则可以在设置中启用实验性功能\"MediaRecorder\"。但是，在 macOS 上，我们建议切换到 Chrome 或 Firefox。",
@@ -103,7 +85,25 @@
         "upload-invalid-response": "上载失败：返回了意外的响应。",
         "upload-not-authorized": "上传失败：您似乎无权上传。",
         "upload-unknown-error": "上传失败：发生未知错误。",
-        "warn-download-hint": "如果此问题仍然存在，请确保下载录制文件以避免丢失。"
+        "warn-download-hint": "如果此问题仍然存在，请确保下载录制文件以避免丢失。",
+        "currently-uploading": "当前正在上传...",
+        "settings-header": "Opencast连接",
+        "settings-label-server-url": "服务器网址",
+        "settings-label-username": "用户名",
+        "settings-label-password": "密码",
+        "settings-invalid-url": "这不是一个有效的网址",
+        "settings-invalid-url-http-start": "网址应以 'https://' 或 'http://'",
+        "settings-invalid-login-data": "无法登录到 Opencast 服务器：您提供的用户名/密码无效。",
+        "settings-invalid-provided-login": "服务器指定它提供自动登录，但返回的请求未经身份验证。这是 Opencast Studio 的内部错误，或者您的系统管理员错误地配置了服务器。你无能为力:(",
+        "time": {
+          "a-few-seconds": "几秒钟",
+          "a-minute": "一分钟",
+          "an-hour": "一小时",
+          "seconds": "秒",
+          "minutes": "分",
+          "hours": "小时",
+          "left": "剩余{{时间}}"
+        }
       }
     }
   }

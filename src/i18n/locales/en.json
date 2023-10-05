@@ -19,24 +19,6 @@
   "error-lost-audio-stream": "Audio stream unexpectedly ended! Did the microphone disconnect or did you accidentally unshare the audio source?",
   "error-lost-stream-end-recording": "A video or audio stream unexpectedly ended and the active recording was prematurely stopped! Did a microphone or a camera disconnect? Or did you accidentally unshare the media source or revoke the necessary permissions?",
 
-  "upload-notification": "Currently uploading...",
-  "upload-settings-modal-header": "Opencast Connection",
-  "upload-settings-label-server-url": "Server URL",
-  "upload-settings-label-username": "Username",
-  "upload-settings-label-password": "Password",
-  "upload-settings-invalid-url": "This is not a valid URL",
-  "upload-settings-invalid-url-http-start": "The URL should start with 'https://' or 'http://'",
-  "upload-settings-invalid-login-data": "Could not log into Opencast server: the username/password you provided are invalid.",
-  "upload-settings-invalid-provided-login": "The server specifies that it provides an automatic login, but the request returned non-authenticated. This is either an internal bug of Opencast Studio or your system administrator misconfigured the server. There is nothing you can do :(",
-
-  "upload-time-a-few-seconds": "a few seconds",
-  "upload-time-a-minute": "a minute",
-  "upload-time-an-hour": "an hour",
-  "upload-time-seconds": "seconds",
-  "upload-time-minutes": "minutes",
-  "upload-time-hours": "hours",
-  "upload-time-left": "{{time}} left",
-
   "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on macOS, we recommend switching to Chrome or Firefox.",
@@ -134,7 +116,25 @@
         "upload-invalid-response": "Upload failed: an unexpected response was returned.",
         "upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
         "upload-unknown-error": "Upload failed: an unknown error occurred.",
-        "warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it."
+        "warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it.",
+        "currently-uploading": "Currently uploading...",
+        "settings-header": "Opencast Connection",
+        "settings-label-server-url": "Server URL",
+        "settings-label-username": "Username",
+        "settings-label-password": "Password",
+        "settings-invalid-url": "This is not a valid URL",
+        "settings-invalid-url-http-start": "The URL should start with 'https://' or 'http://'",
+        "settings-invalid-login-data": "Could not log into Opencast server: the username/password you provided are invalid.",
+        "settings-invalid-provided-login": "The server specifies that it provides an automatic login, but the request returned non-authenticated. This is either an internal bug of Opencast Studio or your system administrator misconfigured the server. There is nothing you can do :(",
+        "time": {
+          "a-few-seconds": "a few seconds",
+          "a-minute": "a minute",
+          "an-hour": "an hour",
+          "seconds": "seconds",
+          "minutes": "minutes",
+          "hours": "hours",
+          "left": "{{time}} left"
+        }
       },
       "save-locally": {
         "label": "Save locally",

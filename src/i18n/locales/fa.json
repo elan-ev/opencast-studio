@@ -1,10 +1,4 @@
 {
-  "upload-notification": "در حال بارگذاری",
-  "upload-settings-modal-header": "آپلود تنظیمات در Opencast",
-  "upload-settings-label-server-url": "آدرس سرور",
-  "upload-settings-label-username": "نام کاربری",
-  "upload-settings-label-password": "رمز عبور",
-
   "steps": {
     "video": {
       "share-display": "اشتراک دسکتاپ (بدون صدا)",
@@ -21,7 +15,12 @@
         "validation-error-required": "این زمینه مورد نیاز است.",
         "complete": "آپلود کامل شد!",
         "label-presenter": "ارائه دهنده",
-        "label-title": "عنوان"
+        "label-title": "عنوان",
+        "currently-uploading": "در حال بارگذاری",
+        "settings-header": "آپلود تنظیمات در Opencast",
+        "settings-label-server-url": "آدرس سرور",
+        "settings-label-username": "نام کاربری",
+        "settings-label-password": "رمز عبور"
       }
     }
   }

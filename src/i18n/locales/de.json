@@ -16,25 +16,6 @@
   "error-lost-audio-stream": "Audio-Stream endete unerwartet! Wurde ein Mikrofon getrennt oder haben Sie versehentlich die Audiofreigabe beendet?",
   "error-lost-stream-end-recording": "Ein Video- oder Audio-Stream endete unerwartet! Infolgedessen wurde die aktive Aufnahme vorzeitig beendet. Wurde ein Mikrofon oder eine Kamera getrennt? Oder haben Sie versehentlich die Medienfreigabe beendet oder Studio die notwendigen Berechtigungen entzogen?",
 
-  "upload-notification": "Aufnahme wird hochgeladen...",
-  "upload-settings-modal-header": "Verbindung zu Opencast",
-  "upload-settings-label-server-url": "Server-URL",
-  "upload-settings-label-username": "Benutzername",
-  "upload-settings-label-password": "Passwort",
-
-  "upload-settings-invalid-url": "Dies ist keine gültige URL.",
-  "upload-settings-invalid-url-http-start": "Die URL muss mit 'https://' oder 'http://' beginnen.",
-  "upload-settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
-  "upload-settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
-
-  "upload-time-a-few-seconds": "wenige Sekunden",
-  "upload-time-a-minute": "eine Minute",
-  "upload-time-an-hour": "eine Stunde",
-  "upload-time-seconds": "Sekunden",
-  "upload-time-minutes": "Minuten",
-  "upload-time-hours": "Stunden",
-  "upload-time-left": "{{time}} verbleibend",
-
   "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
   "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf macOS Firefox oder Chrome zu nutzen.",
@@ -130,7 +111,25 @@
         "upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
         "upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
         "upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
-        "warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren."
+        "warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren.",
+        "currently-uploading": "Aufnahme wird hochgeladen...",
+        "settings-header": "Verbindung zu Opencast",
+        "settings-label-server-url": "Server-URL",
+        "settings-label-username": "Benutzername",
+        "settings-label-password": "Passwort",
+        "settings-invalid-url": "Dies ist keine gültige URL.",
+        "settings-invalid-url-http-start": "Die URL muss mit 'https://' oder 'http://' beginnen.",
+        "settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
+        "settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
+        "time": {
+          "a-few-seconds": "wenige Sekunden",
+          "a-minute": "eine Minute",
+          "an-hour": "eine Stunde",
+          "seconds": "Sekunden",
+          "minutes": "Minuten",
+          "hours": "Stunden",
+          "left": "{{time}} verbleibend"
+        }
       },
       "save-locally": {
         "label": "Lokal speichern",

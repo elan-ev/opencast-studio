@@ -16,24 +16,6 @@
   "error-lost-audio-stream": "¡La transmisión de audio terminó inesperadamente! ¿Se desconectó el micrófono o accidentalmente dejó de compartir la fuente de audio?",
   "error-lost-stream-end-recording": "Una transmisión de video o audio finalizó inesperadamente y, por lo tanto, la grabación se detuvo prematuramente. ¿Se desconectó un micrófono o una cámara? ¿O accidentalmente dejó de compartir la fuente de medios o revocó los permisos necesarios?",
 
-  "upload-notification": "En este momento se está subiendo...",
-  "upload-settings-modal-header": "Configurar subida a Opencast",
-  "upload-settings-label-server-url": "URL del servidor",
-  "upload-settings-label-username": "Usuario",
-  "upload-settings-label-password": "Contraseña",
-  "upload-settings-invalid-url": "Esta no es una URL válida",
-  "upload-settings-invalid-url-http-start": "La URL debe empezar por  'https://' o 'http://'",
-  "upload-settings-invalid-login-data": "No se pudo iniciar sesión en el servidor Opencast: el nombre de usuario/contraseña que proporcionó no es válido.",
-  "upload-settings-invalid-provided-login": "El servidor esta configurado para autenticarse automáticamente, pero la solicitud devolvió que no está autenticado. Es un error interno de Opencast Studio o el administrador de su sistema configuró mal el servidor. No hay nada que puedas hacer :(",
-
-  "upload-time-a-few-seconds": "unos pocos segundos",
-  "upload-time-a-minute": "un minuto",
-  "upload-time-an-hour": "una hora",
-  "upload-time-seconds": "segundos",
-  "upload-time-minutes": "minutos",
-  "upload-time-hours": "horas",
-  "upload-time-left": "queda {{time}}",
-
   "warning-https": "La mayoría de los navegadores no permiten la captura de video a través de una conexión no segura (HTTP). Por favor cambie a HTTPS.",
   "warning-recorder-not-supported": "Su navegador no soporta la grabación de transmisiones multimedia.",
   "warning-recorder-safari-hint": "Si está utilizando Safari, puede habilitar la función experimental 'MediaRecorder' en la configuración. Sin embargo, en macOS, recomendamos cambiar a Chrome o Firefox.",
@@ -100,7 +82,25 @@
         "upload-invalid-response": "Fallo en la subida: hubo una respuesta inesperada.",
         "upload-not-authorized": "Fallo en la subida: parece que no estás autorizado a subir.",
         "upload-unknown-error": "Fallo en la subida: se produjo un error desconocido.",
-        "warn-download-hint": "Si este problema persiste, asegúrese de descargar su grabación para evitar perderla."
+        "warn-download-hint": "Si este problema persiste, asegúrese de descargar su grabación para evitar perderla.",
+        "currently-uploading": "En este momento se está subiendo...",
+        "settings-header": "Configurar subida a Opencast",
+        "settings-label-server-url": "URL del servidor",
+        "settings-label-username": "Usuario",
+        "settings-label-password": "Contraseña",
+        "settings-invalid-url": "Esta no es una URL válida",
+        "settings-invalid-url-http-start": "La URL debe empezar por  'https://' o 'http://'",
+        "settings-invalid-login-data": "No se pudo iniciar sesión en el servidor Opencast: el nombre de usuario/contraseña que proporcionó no es válido.",
+        "settings-invalid-provided-login": "El servidor esta configurado para autenticarse automáticamente, pero la solicitud devolvió que no está autenticado. Es un error interno de Opencast Studio o el administrador de su sistema configuró mal el servidor. No hay nada que puedas hacer :(",
+        "time": {
+          "a-few-seconds": "unos pocos segundos",
+          "a-minute": "un minuto",
+          "an-hour": "una hora",
+          "seconds": "segundos",
+          "minutes": "minutos",
+          "hours": "horas",
+          "left": "queda {{time}}"
+        }
       }
     }
   }

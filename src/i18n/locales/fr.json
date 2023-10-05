@@ -22,24 +22,6 @@
   "error-lost-audio-stream": "Le flux audio s’est terminé de manière inattendue ! Le microphone s’est-il déconnecté ou avez-vous accidentellement annulé le partage de la source audio ?",
   "error-lost-stream-end-recording": "Un flux vidéo ou audio s’est terminé de manière inattendue et l’enregistrement actif a été arrêté prématurément ! Un microphone ou une caméra s'est-il déconnecté ? Ou avez-vous accidentellement annulé le partage de la source multimédia ou révoqué les autorisations nécessaires ?",
 
-  "upload-notification": "En cours de téléchargement...",
-  "upload-settings-modal-header": "Connexion à Opencast",
-  "upload-settings-label-server-url": "URL du serveur",
-  "upload-settings-label-username": "Identifiant",
-  "upload-settings-label-password": "Mot de passe",
-  "upload-settings-invalid-url": "Cette adresse URL est invalide",
-  "upload-settings-invalid-url-http-start": "L’adresse URL devrait commencer avec 'https://' ou 'http://'",
-  "upload-settings-invalid-login-data": "Impossible de se connecter au serveur Opencast : l’identifiant/mot de passe que vous avez fourni n’est pas valide.",
-  "upload-settings-invalid-provided-login": "Le serveur précise qu’il fournit une connexion automatique, mais la demande renvoyée n’est pas authentifiée. Il s’agit soit d’un bogue interne d’Opencast Studio, soit d’une mauvaise configuration du serveur par votre administrateur système. Il n’y a rien que vous puissiez faire :(",
-
-  "upload-time-a-few-seconds": "quelques secondes",
-  "upload-time-a-minute": "une minute",
-  "upload-time-an-hour": "une heure",
-  "upload-time-seconds": "secondes",
-  "upload-time-minutes": "minutes",
-  "upload-time-hours": "heures",
-  "upload-time-left": "{{time}} restant",
-
   "warning-https": "La plupart des navigateurs ne permettent pas la capture vidéo via une connexion non cryptée (HTTP). Veuillez passer en HTTPS.",
   "warning-recorder-not-supported": "Votre navigateur ne prend pas en charge les flux de médias d’enregistrement.",
   "warning-recorder-safari-hint": "Si vous utilisez Safari, vous pouvez activer la fonction expérimentale 'MediaRecorder' dans les paramètres. Toutefois, sous MacOS, nous vous recommandons de passer à Chrome ou Firefox.",
@@ -116,7 +98,25 @@
         "upload-invalid-response": "Échec du téléchargement : une réponse inattendue a été reçue.",
         "upload-not-authorized": "Échec du téléchargement : vous n’êtes pas autorisé à télécharger.",
         "upload-unknown-error": "Échec du téléchargement : une erreur inconnue s’est produite.",
-        "warn-download-hint": "Si le problème persiste, assurez-vous de télécharger votre enregistrement pour éviter de le perdre."
+        "warn-download-hint": "Si le problème persiste, assurez-vous de télécharger votre enregistrement pour éviter de le perdre.",
+        "currently-uploading": "En cours de téléchargement...",
+        "settings-header": "Connexion à Opencast",
+        "settings-label-server-url": "URL du serveur",
+        "settings-label-username": "Identifiant",
+        "settings-label-password": "Mot de passe",
+        "settings-invalid-url": "Cette adresse URL est invalide",
+        "settings-invalid-url-http-start": "L’adresse URL devrait commencer avec 'https://' ou 'http://'",
+        "settings-invalid-login-data": "Impossible de se connecter au serveur Opencast : l’identifiant/mot de passe que vous avez fourni n’est pas valide.",
+        "settings-invalid-provided-login": "Le serveur précise qu’il fournit une connexion automatique, mais la demande renvoyée n’est pas authentifiée. Il s’agit soit d’un bogue interne d’Opencast Studio, soit d’une mauvaise configuration du serveur par votre administrateur système. Il n’y a rien que vous puissiez faire :(",
+        "time": {
+          "a-few-seconds": "quelques secondes",
+          "a-minute": "une minute",
+          "an-hour": "une heure",
+          "seconds": "secondes",
+          "minutes": "minutes",
+          "hours": "heures",
+          "left": "{{time}} restant"
+        }
       }
     }
   }

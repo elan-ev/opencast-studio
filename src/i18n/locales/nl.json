@@ -9,22 +9,6 @@
   "sources-display": "Beeldscherm",
   "sources-user": "Camera",
 
-  "upload-notification": "Momenteel aan het uploaden",
-  "upload-settings-modal-header": "Upload naar Opencast configureren",
-  "upload-settings-label-server-url": "Server-URL",
-  "upload-settings-label-username": "Gebruikersnaam",
-  "upload-settings-label-password": "Wachtwoord",
-  "upload-settings-invalid-url": "Dit is geen geldige URL.",
-  "upload-settings-invalid-url-http-start": "De URL moet beginnen met 'https://' of 'http://'.",
-  "upload-settings-invalid-login-data": "Inloggen op de opgegeven server is mislukt: Onjuiste gebruikersnaam of wachtwoord.",
-  "upload-settings-invalid-provided-login": "Deze Opencast Studio installatie heeft aangegeven dat er een automatische login beschikbaar is, maar de Opencast server reageert dat er geen login beschikbaar is. Dit is of een interne fout of uw systeembeheerder heeft Studio of Opencast is verkeerd geconfigureerd. Helaas is er niets wat u er aan kunt doen :(",
-  "upload-time-a-few-seconds": "enkele seconden",
-  "upload-time-a-minute": "een minuut",
-  "upload-time-an-hour": "een uur",
-  "upload-time-seconds": "seconden",
-  "upload-time-minutes": "minuten",
-  "upload-time-hours": "uren",
-  "upload-time-left": "{{time}} over",
   "warning-https": "De meeste browsers staan geen video-opname toe over een niet-versleutelde verbinding (HTTP). Schakel over naar HTTPS.",
   "warning-recorder-not-supported": "Uw browser ondersteunt het opnemen van media streams niet.",
   "warning-recorder-safari-hint": "Voor Safari op iOS kunt u de experimentele functie 'MediaRecorder' inschakelen in instellingen.",
@@ -94,7 +78,25 @@
         "upload-invalid-response": "Upload mislukt: een onverwachte respons werd teruggestuurd.",
         "upload-not-authorized": "Upload mislukt: het lijkt erop dat u niet gemachtigd bent om te uploaden.",
         "upload-unknown-error": "Upload mislukt: er is een onbekende fout opgetreden.",
-        "warn-download-hint": "Als dit probleem voortduurt, zorg er dan voor dat u uw opname downloadt om te voorkomen dat u deze verliest."
+        "warn-download-hint": "Als dit probleem voortduurt, zorg er dan voor dat u uw opname downloadt om te voorkomen dat u deze verliest.",
+        "currently-uploading": "Momenteel aan het uploaden",
+        "settings-header": "Upload naar Opencast configureren",
+        "settings-label-server-url": "Server-URL",
+        "settings-label-username": "Gebruikersnaam",
+        "settings-label-password": "Wachtwoord",
+        "settings-invalid-url": "Dit is geen geldige URL.",
+        "settings-invalid-url-http-start": "De URL moet beginnen met 'https://' of 'http://'.",
+        "settings-invalid-login-data": "Inloggen op de opgegeven server is mislukt: Onjuiste gebruikersnaam of wachtwoord.",
+        "settings-invalid-provided-login": "Deze Opencast Studio installatie heeft aangegeven dat er een automatische login beschikbaar is, maar de Opencast server reageert dat er geen login beschikbaar is. Dit is of een interne fout of uw systeembeheerder heeft Studio of Opencast is verkeerd geconfigureerd. Helaas is er niets wat u er aan kunt doen :(",
+        "time": {
+          "a-few-seconds": "enkele seconden",
+          "a-minute": "een minuut",
+          "an-hour": "een uur",
+          "seconds": "seconden",
+          "minutes": "minuten",
+          "hours": "uren",
+          "left": "{{time}} over"
+        }
       }
     }
   }
