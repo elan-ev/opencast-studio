@@ -4,25 +4,21 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import enTranslations from "./locales/en.json";
 import deTranslations from "./locales/de.json";
-import elTranslations from "./locales/el.json";
 import esTranslations from "./locales/es.json";
 import faTranslations from "./locales/fa.json";
 import frTranslations from "./locales/fr.json";
 import nlTranslations from "./locales/nl.json";
 import slTranslations from "./locales/sl.json";
-import trTranslations from "./locales/tr.json";
 import zhTranslations from "./locales/zh.json";
 
 const resources = {
   en: { translation: enTranslations },
   de: { translation: deTranslations },
-  el: { translation: elTranslations },
   es: { translation: esTranslations },
   fa: { translation: faTranslations },
   fr: { translation: frTranslations },
   nl: { translation: nlTranslations },
   sl: { translation: slTranslations },
-  tr: { translation: trTranslations },
   zh: { translation: zhTranslations },
 };
 
