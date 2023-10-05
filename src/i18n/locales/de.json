@@ -164,11 +164,6 @@
     "select-no-audio": "Ohne Audio",
 
     "start-pause-resume-recording": "Aufzeichnung starten/​pausieren",
-
-    "record-shortcuts": "Aufnahme",
-    "edit-shortcuts": "Editieren",
-    "other-shortcuts": "Weitere Shortcuts",
-    "no-groups": "Keine Gruppen",
     "sequence-seperator": "oder",
 
     "keys": {
@@ -179,10 +174,6 @@
       "left": "Links",
       "right": "Rechts"
     },
-
-    "start-recording": "Aufnahme starten",
-    "stop-recording": "Aufnahme beenden",
-    "pause-recording": "Aufnahme pausieren/​fortsetzen",
 
     "review": {
       "play-pause": "Abspielen/​pausieren",
@@ -196,8 +187,6 @@
       "delete-right": "Rechte Schnittmarkierung entfernen"
     },
     "finish": {
-      "upload-video": "Video auf Opencast hochladen",
-      "download-video": "Video herunterladen",
       "new-recording": "Neue Aufnahme starten"
     },
 
