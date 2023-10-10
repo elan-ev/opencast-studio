@@ -118,7 +118,7 @@ To build Studio yourself, execute these commands:
 % git clone git@github.com:elan-ev/opencast-studio.git
 % cd opencast-studio
 % npm install
-% npm run build
+% npm run build:release   # or npm run build:dev for development
 ```
 
 This will generate static content you can serve via any web server in `build/`.
@@ -128,7 +128,7 @@ If you prefer to run a local development server directly, you can use this
 instead:
 
 ```sh
-% npm run start
+% npm start
 ```
 
 ### Additional Build Options
@@ -139,11 +139,11 @@ can apply these options by exporting them as environment variable before startin
 
 ```sh
 export OPTION=VALUE
-npm run build
+npm run build:release
 ```
 
-| Option                            | Example            | Description
-| --------------------------------- | ------------------ | -----------
-| `PUBLIC_URL`                      | `/studio`          | Path from which Studio will be served
-| `REACT_APP_SETTINGS_PATH`         | `/mysettings.toml` | Path from which to load the configuration (see `CONFIGURATION.md` for more information)
-| `REACT_APP_INCLUDE_LEGAL_NOTICES` | `1`                | Set to `1` to include legal notices and information about ELAN e.V., any other value or having this variable not set will not include them. Unless you are working for ELAN e.V. there is probably no reason for you to use this variable.
+| Option                  | Example            | Description
+| ----------------------- | ------------------ | -----------
+| `PUBLIC_URL`            | `/studio`          | Path from which Studio will be served
+| `SETTINGS_PATH`         | `/mysettings.toml` | Path from which to load the configuration (see `CONFIGURATION.md` for more information)
+| `INCLUDE_LEGAL_NOTICES` | `1`                | Set to `1` to include legal notices and information about ELAN e.V., any other value or having this variable not set will not include them. Unless you are working for ELAN e.V. there is probably no reason for you to use this variable.
