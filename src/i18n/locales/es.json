@@ -59,7 +59,6 @@
       "set-start": "Establecer el instante actual como inicio",
       "set-end": "Establecer el instante actual como fin",
       "part-will-be-removed": "Esta parte será eliminada",
-      "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
       "play": "Reproducir",
       "pause": "Pausar"
     },

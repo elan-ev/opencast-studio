@@ -59,7 +59,6 @@
       "set-start": "Stel de actuele tijd in als starttijd",
       "set-end": "Stel de actuele tijd in als eindtijd",
       "part-will-be-removed": "Dit deel wordt verwijderd.",
-      "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
       "play": "Afspelen",
       "pause": "Pauze"
     },

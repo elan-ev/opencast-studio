@@ -67,7 +67,6 @@
       "set-start": "Définir l’heure actuelle comme début",
       "set-end": "Définir l’heure actuelle comme fin",
       "part-will-be-removed": "Cette section sera retirée",
-      "player-progress": "{{currentTime, duration-seconds}} / {{duration, duration-seconds}}",
       "play": "Jouer",
       "pause": "Pause"
     },
