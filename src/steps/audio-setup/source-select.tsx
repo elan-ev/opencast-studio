@@ -35,13 +35,13 @@ export const SourceSelection: React.FC<Props> = ({ selectNoAudio, selectMicropho
     >
       <SourceOptionButton
         icon={<FiMic />}
-        label={t("sources-audio-microphone")}
+        label={t("steps.audio.microphone")}
         onClick={selectMicrophone}
         shortcut={showShortcuts ? SHORTCUTS.audioSetup.withAudio : undefined}
       />
       <SourceOptionButton
         icon={<FiMicOff />}
-        label={t("sources-audio-without-audio")}
+        label={t("steps.audio.without-audio")}
         onClick={selectNoAudio}
         shortcut={showShortcuts ? SHORTCUTS.audioSetup.withoutAudio : undefined}
       />

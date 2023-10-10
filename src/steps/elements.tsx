@@ -85,7 +85,7 @@ const StepButton: React.FC<StepButtonProps> = ({
       }}
     >
       {kind === "prev" && (icon ?? <FiChevronLeft />)}
-      {label ?? t(`steps.${kind}-button-label`)}
+      {label ?? t(`steps.${kind === "next" ? "next" : "back"}-button-label`)}
       {kind === "next" && (icon ?? <FiChevronRight css={{
       }}/>)}
       {showShortcut && !disabled && (

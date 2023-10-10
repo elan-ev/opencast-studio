@@ -149,7 +149,7 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
       nextButton={{
         onClick: () => stopRecording(false),
         disabled: recordingState !== "paused",
-        label: t("stop-button-title"),
+        label: t("steps.record.stop-button-title"),
       }}
     >
       {audioUnexpectedEnd && (

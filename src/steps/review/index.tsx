@@ -40,7 +40,7 @@ export const Review: React.FC<StepProps> = ({ goToFirstStep, goToNextStep }) => 
       prevButton={{
         danger: true,
         icon: <FiTrash />,
-        label: t("review-button-discard-and-record"),
+        label: t("steps.review.button-discard-and-record"),
         onClick: () => {
           const doIt = window.confirm(t("confirm-discard-recordings"));
           if (doIt) {
@@ -56,7 +56,7 @@ export const Review: React.FC<StepProps> = ({ goToFirstStep, goToNextStep }) => 
       )}
 
       {emptyRecording && (
-        <ErrorBox body={t("review-error-empty-recording")} />
+        <ErrorBox body={t("steps.review.error-empty-recording")} />
       )}
 
       {(!previewReady || recordings.length !== expectedRecordings) && (

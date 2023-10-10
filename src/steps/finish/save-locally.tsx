@@ -76,13 +76,13 @@ export const SaveLocally: React.FC = () => {
               borderRadius: "0 0 4px 4px",
             }}>
               <LuCheckCircle2 css={{ fontSize: 22 }} />
-              {t("steps.finish.recording-saved")}
+              {t("steps.finish.save-locally.recording-saved")}
             </div>
           )}
         </div>
         <a
           ref={buttons[i]}
-          aria-label={t(`steps.finish.save-${deviceType}-locally`)}
+          aria-label={t(`steps.finish.save-locally.save-${deviceType}-locally`)}
           target="_blank"
           download={downloadName}
           href={url}
@@ -104,7 +104,7 @@ export const SaveLocally: React.FC = () => {
           }}
         >
           <FiDownload css={{ fontSize: 20 }} />
-          {t("steps.finish.save-locally") + " (" + prettyFileSize(blob.size, i18n) + ")"}
+          {t("steps.finish.save-locally.label") + " (" + prettyFileSize(blob.size, i18n) + ")"}
           {showShortcuts && (
             <div css={{ position: "absolute", right: -4, bottom: -4 }}>
               <ShortcutKeys shortcut={SHORTCUTS.finish.download} />

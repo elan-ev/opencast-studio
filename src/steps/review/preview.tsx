@@ -203,7 +203,7 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
             pointerEvents: "none",
           }}>
             <CutOutIcon css={{ fontSize: "3em" }}/>
-            <p css={{ margin: "8px 0" }}>{t("review-part-will-be-removed")}</p>
+            <p css={{ margin: "8px 0" }}>{t("steps.review.part-will-be-removed")}</p>
           </div>
         )}
         <video

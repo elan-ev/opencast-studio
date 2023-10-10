@@ -1,31 +1,27 @@
 {
-  "nav-recording": "ضبط کردن",
-  "save-creation-subsection-title-upload": "آپلود در Opencast",
-  "forms-validation-error-required": "این زمینه مورد نیاز است.",
-  "message-upload-complete": "آپلود کامل شد!",
-  "cancel-button-title": "لغو کردن",
-  "pause-button-title": "مکث در ضبط کردن",
-  "record-button-title": "شروع ضبط کردن",
-  "resume-button-title": "ادامه ضبط کردن",
-  "save-creation-button-discard": "دور انداختن",
-  "save-creation-button-upload": "آپلود در Opencast",
-  "save-creation-form-invalid": "لطفا عنوان و مجری را تعیین کنید",
-  "save-creation-label-presenter": "ارائه دهنده",
-  "save-creation-label-title": "عنوان",
-  "share-display": "اشتراک دسکتاپ (بدون صدا)",
-  "share-user": "به اشتراک گذاشتن دوربین",
-  "state-paused": "توقف شده",
-  "state-recording": "ضبط کردن",
-  "state-waiting": "در حال انتظار",
-  "stop-button-title": "توقف در ضبط کردن",
-  "toolbar-button-about": "درباره Opencast Studio",
-  "toolbar-button-issues": "گزارش مشکل",
-  "toolbar-button-opencast": "برو به Opencast",
-  "toolbar-button-upload-settings": "باز کردن تنظیمات آپلود",
-  "upload-notification": "در حال بارگذاری",
-  "upload-settings-button-store": "ذخیره تنظیمات",
-  "upload-settings-modal-header": "آپلود تنظیمات در Opencast",
-  "upload-settings-label-server-url": "آدرس سرور",
-  "upload-settings-label-username": "نام کاربری",
-  "upload-settings-label-password": "رمز عبور"
+  "steps": {
+    "video": {
+      "share-display": "اشتراک دسکتاپ (بدون صدا)",
+      "share-user": "به اشتراک گذاشتن دوربین"
+    },
+    "record": {
+      "pause-button-title": "مکث در ضبط کردن",
+      "record-button-title": "شروع ضبط کردن",
+      "resume-button-title": "ادامه ضبط کردن",
+      "stop-button-title": "توقف در ضبط کردن"
+    },
+    "finish": {
+      "upload": {
+        "validation-error-required": "این زمینه مورد نیاز است.",
+        "complete": "آپلود کامل شد!",
+        "label-presenter": "ارائه دهنده",
+        "label-title": "عنوان",
+        "currently-uploading": "در حال بارگذاری",
+        "settings-header": "آپلود تنظیمات در Opencast",
+        "settings-label-server-url": "آدرس سرور",
+        "settings-label-username": "نام کاربری",
+        "settings-label-password": "رمز عبور"
+      }
+    }
+  }
 }

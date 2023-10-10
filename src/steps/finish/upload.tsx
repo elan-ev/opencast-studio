@@ -120,10 +120,10 @@ export const UploadBox: React.FC = () => {
     const dispatchError = (msg: string) => dispatch({ type: "UPLOAD_ERROR", msg });
     match(result, {
       "success": () => dispatch({ type: "UPLOAD_SUCCESS" }),
-      "network_error": () => dispatchError(t("save-creation-upload-network-error")),
-      "not_authorized": () => dispatchError(t("save-creation-upload-not-authorized")),
-      "unexpected_response": () => dispatchError(t("save-creation-upload-invalid-response")),
-    }, () => dispatchError(t("save-creation-upload-unknown-error")));
+      "network_error": () => dispatchError(t("steps.finish.upload.upload-network-error")),
+      "not_authorized": () => dispatchError(t("steps.finish.upload.upload-not-authorized")),
+      "unexpected_response": () => dispatchError(t("steps.finish.upload.upload-invalid-response")),
+    }, () => dispatchError(t("steps.finish.upload.upload-unknown-error")));
   };
 
   switch (uploadState.state) {
@@ -222,11 +222,11 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
         return null;
       },
       "incorrect_login": () => opencast.isLoginProvided()
-        ? t("upload-settings-invalid-provided-login")
-        : t("upload-settings-invalid-login-data"),
-      "network_error": () => t("save-creation-upload-network-error"),
-      "invalid_response": () => t("save-creation-upload-invalid-response"),
-      "response_not_ok": () => t("save-creation-upload-invalid-response"),
+        ? t("steps.finish.upload.settings-invalid-provided-login")
+        : t("steps.finish.upload.settings-invalid-login-data"),
+      "network_error": () => t("steps.finish.upload.upload-network-error"),
+      "invalid_response": () => t("steps.finish.upload.upload-invalid-response"),
+      "response_not_ok": () => t("steps.finish.upload.upload-invalid-response"),
     }, () => unreachable());
 
     if (error) {
@@ -248,7 +248,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {titleField !== "hidden" && <Input
           name="title"
-          label={t("save-creation-label-title")}
+          label={t("steps.finish.upload.label-title")}
           required={titleField === "required"}
           onChange={handleInputChange}
           autoComplete="off"
@@ -258,7 +258,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
         />}
         {presenterField !== "hidden" && <Input
           name="presenter"
-          label={t("save-creation-label-presenter")}
+          label={t("steps.finish.upload.label-presenter")}
           required={presenterField === "required"}
           onChange={handleInputChange}
           autoComplete="off"
@@ -271,11 +271,11 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             fontSize: 16,
             fontWeight: 700,
             marginTop: 20,
-          }}>{t("upload-settings-modal-header")}</h3>
+          }}>{t("steps.finish.upload.settings-header")}</h3>
 
           {configurableServerUrl && <Input
             errors={errors}
-            label={t("upload-settings-label-server-url")}
+            label={t("steps.finish.upload.settings-label-server-url")}
             name="serverUrl"
             register={register}
             required
@@ -283,11 +283,11 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
               try {
                 const url = new URL(value);
                 return (url.protocol === "https:" || url.protocol === "http:")
-                  || t("upload-settings-invalid-url-http-start");
+                  || t("steps.finish.upload.settings-invalid-url-http-start");
               } catch {
-                let err = t("upload-settings-invalid-url");
+                let err = t("steps.finish.upload.settings-invalid-url");
                 if (!value.startsWith("https://") && !value.startsWith("http://")) {
-                  err += " " + t("upload-settings-invalid-url-http-start");
+                  err += " " + t("steps.finish.upload.settings-invalid-url-http-start");
                 }
                 return err;
               }
@@ -296,7 +296,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 
           {configurableUsername && <Input
             errors={errors}
-            label={t("upload-settings-label-username")}
+            label={t("steps.finish.upload.settings-label-username")}
             name="loginName"
             register={register}
             required
@@ -304,7 +304,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 
           {configurablePassword && <Input
             errors={errors}
-            label={t("upload-settings-label-password")}
+            label={t("steps.finish.upload.settings-label-password")}
             name="loginPassword"
             register={register}
             required
@@ -325,7 +325,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             "idle": () => <FiUpload css={{ fontSize: 20 }} />,
             "testing": () => <Spinner size={20} />,
           })}
-          <span>{t("steps.finish.upload-button") + " (" + uploadSize + ")"}</span>
+          <span>{t("steps.finish.upload.label") + " (" + uploadSize + ")"}</span>
         </ProtoButton>
       </form>
 
@@ -335,7 +335,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
           <ErrorBox
             css={{ margin: 0 }}
             body={notNullish(uploadState.error)}
-            extraBody={t("save-creation-warn-download-hint")}
+            extraBody={t("steps.finish.upload.warn-download-hint")}
           />
         )}
       </div>
@@ -404,7 +404,7 @@ export const Input = <I extends FieldValues, F>({
           {...register(name, {
             validate,
             onChange: rest.onChange,
-            ...required && { required: t("forms-validation-error-required") },
+            ...required && { required: t("steps.finish.upload.validation-error-required") },
           })}
           css={{
             display: "block",
@@ -461,17 +461,17 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, second
   if (secondsLeft === null) {
     prettyTime = null;
   } else if (secondsLeft < 4) {
-    prettyTime = t("upload-time-a-few-seconds");
+    prettyTime = t("steps.finish.upload.time.a-few-seconds");
   } else if (secondsLeft < 45) {
-    prettyTime = `${secondsLeft} ${t("upload-time-seconds")}`;
+    prettyTime = `${secondsLeft} ${t("steps.finish.upload.time.seconds")}`;
   } else if (secondsLeft < 90) {
-    prettyTime = t("upload-time-a-minute");
+    prettyTime = t("steps.finish.upload.time.a-minute");
   } else if (secondsLeft < 45 * 60) {
-    prettyTime = `${Math.round(secondsLeft / 60)} ${t("upload-time-minutes")}`;
+    prettyTime = `${Math.round(secondsLeft / 60)} ${t("steps.finish.upload.time.minutes")}`;
   } else if (secondsLeft < 90 * 60) {
-    prettyTime = t("upload-time-an-hour");
+    prettyTime = t("steps.finish.upload.time.an-hour");
   } else if (secondsLeft < 24 * 60 * 60) {
-    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t("upload-time-hours")}`;
+    prettyTime = `${Math.round(secondsLeft / (60 * 60))} ${t("steps.finish.upload.time.hours")}`;
   } else {
     prettyTime = null;
   }
@@ -479,7 +479,7 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, second
   return (
     <GreyInnerBox>
       {/* Heading */}
-      <div css={{ fontWeight: 700 }}>{t("upload-notification")}</div>
+      <div css={{ fontWeight: 700 }}>{t("steps.finish.upload.currently-uploading")}</div>
 
       {/* Progress bar */}
       <div css={{
@@ -502,7 +502,7 @@ const UploadProgress: React.FC<UploadProgressProps> = ({ currentProgress, second
         <div>{roundedPercent}%</div>
         <div css={{ flex: 1 }} />
         <div>
-          {prettyTime && <Trans i18nKey="upload-time-left">
+          {prettyTime && <Trans i18nKey="steps.finish.upload.time.left">
             {{ time: prettyTime }} left
           </Trans>}
         </div>
@@ -517,7 +517,7 @@ const UploadSuccess = () => {
 
   return (
     <GreyInnerBox>
-      <div css={{ fontWeight: 700 }}>{t("message-upload-complete")}</div>
+      <div css={{ fontWeight: 700 }}>{t("steps.finish.upload.complete")}</div>
       <div css={{
         fontSize: 50,
         margin: 24,
@@ -526,7 +526,7 @@ const UploadSuccess = () => {
       }}>
         <LuCheckCircle2 />
       </div>
-      <div>{t("message-upload-complete-explanation")}</div>
+      <div>{t("steps.finish.upload.complete-explanation")}</div>
     </GreyInnerBox>
   );
 };

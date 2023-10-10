@@ -1,146 +1,16 @@
 {
-  "forms-validation-error-required": "This field is required.",
-  "message-upload-complete": "Upload complete!",
-  "message-upload-complete-explanation": "Your recording will now be processed by Opencast.",
-  "cancel-button-title": "Cancel",
-  "pause-button-title": "Pause recording",
-  "record-button-title": "Start recording",
-  "resume-button-title": "Resume recording",
-  "nav-open-menu-button": "Menu",
-  "nav-recording": "Recording",
-  "nav-settings": "Settings",
-  "review-button-discard-and-record": "Discard and record again",
-  "save-creation-button-upload": "Upload to Opencast",
-  "save-creation-form-invalid": "Please set title and presenter",
-  "save-creation-label-presenter": "Presenter",
-  "save-creation-label-title": "Title",
-  "save-creation-title": "Almost done!",
-  "save-creation-title-done": "Done!",
-  "save-creation-subsection-title-download": "Download recording",
-  "save-creation-download-button": "Download",
-  "save-creation-download-cut-warning": "Cutting the video currently only works when uploading to Opencast. The parts you have marked for removal in the previous step will still be contained in the downloaded video.",
-  "save-creation-subsection-title-upload": "Upload to Opencast",
-  "save-creation-upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
-  "save-creation-upload-invalid-response": "Upload failed: an unexpected response was returned.",
-  "save-creation-upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
-  "save-creation-upload-unknown-error": "Upload failed: an unknown error occurred.",
-
-  "save-creation-warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it.",
-  "save-creation-warn-once-reestablished": "Once the connection is reestablished, this warning will disappear.",
-  "save-creation-warn-once-refreshed": "Once the session is refreshed, this warning will disappear.",
-  "save-creation-warn-once-logged-in": "Once you are correctly logged in, this warning will disappear.",
-  "save-creation-warn-unreachable": "The Opencast server is currently unreachable. Please check your internet connection! If you are connected to the internet, this is likely a temporary problem with the Opencast server.",
-  "save-creation-warn-server-problem": "An unknown problem occurred while connecting to the Opencast server.",
-  "save-creation-warn-session-expired": "It seems like your Opencast session has expired. To refresh the session, try opening <1>the website from which you started Opencast Studio</1> in another browser tab and return here.",
-  "save-creation-warn-login-failed": "Logging into the Opencast server failed. Please check your login credentials in <1>the settings</1>.",
-
-  "save-creation-return-to": "Exit and go back to {{label}}",
-  "save-creation-return-to-no-label": "Exit Opencast Studio and go back",
-  "save-creation-new-recording": "Start a new recording",
-  "save-creation-new-recording-warning": "By starting a new recording, the current recording(s) will be discarded in this application (any uploaded or downloaded recording(s) will not be affected). Are you sure?",
-  "share-display": "Share display",
-  "share-user": "Share camera",
-  "share-display-and-user": "Share display & camera",
-  "state-paused": "Paused",
-  "state-recording": "Recording",
-  "state-waiting": "Waiting",
-  "settings-header": "Settings",
-
-  "settings-general-header": "General",
-
-  "back-button-label": "Back",
-  "next-button-label": "Next",
-
   "confirm-discard-recordings": "Are you sure you want to discard your recording(s)? This cannot be undone!",
-  "confirm-cancel-recording": "You are currently recording! Are you sure you want to cancel and discard the recording?",
-
-  "sources-video-display-selected": "Display selected",
-  "sources-video-display-and-user-selected": "Display & camera selected",
-  "sources-video-user-selected": "Camera selected",
-  "sources-video-question": "What video source(s) to record?",
-  "sources-video-none-available": "Your browser/device does not support capturing display or camera video :-(",
-  "sources-video-reselect-source": "Reselect source(s)",
-  "sources-video-no-cam-detected": "No camera detected",
-  "sources-video-display-not-supported": "Display capture not supported",
-  "sources-video-device": "Device",
-  "sources-video-aspect-ratio": "Aspect ratio",
-  "sources-video-aspect-ratio-auto": "auto",
-  "sources-video-quality": "Quality",
-  "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
-
-  "sources-audio-question": "Record audio?",
-  "sources-audio-microphone": "Microphone",
-  "sources-audio-microphone-selected": "Microphone selected",
-  "sources-audio-without-audio": "Without audio",
-  "sources-audio-reselect-audio": "Reselect audio",
-  "sources-audio-device": "Device",
-
   "sources-scenario-display-and-user": "Display & camera",
   "sources-scenario-display": "Display",
   "sources-scenario-user": "Camera",
-
-
-  "source-display-not-allowed-title": "Cannot access your display",
-  "source-display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
-  "source-user-not-allowed-title": "Cannot access your camera",
-  "source-user-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
-  "source-audio-not-allowed-title": "Cannot access your microphone.",
-  "source-audio-not-allowed-text": "Try selecting 'Reselect audio' and then selecting 'Microphone' again. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
-
   "sources-display": "Display",
   "sources-user": "Camera",
-
   "error-lost-video-stream": "Video stream unexpectedly ended! Did a camera disconnect or did you accidentally unshare a video source?",
   "error-lost-audio-stream": "Audio stream unexpectedly ended! Did the microphone disconnect or did you accidentally unshare the audio source?",
   "error-lost-stream-end-recording": "A video or audio stream unexpectedly ended and the active recording was prematurely stopped! Did a microphone or a camera disconnect? Or did you accidentally unshare the media source or revoke the necessary permissions?",
-
-  "review-heading": "Happy with your recording?",
-  "review-error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
-  "review-start": "Start: <2>{{start, duration-seconds}}</2>",
-  "review-end": "End: <2>{{end, duration-seconds}}</2>",
-  "review-no-start": "No start set",
-  "review-no-end": "No end set",
-  "review-set-start": "Set current time as start",
-  "review-set-end": "Set current time as end",
-  "review-remove-cut-point": "Remove",
-  "review-part-will-be-removed": "This part will be removed",
-  "review-player-progress": "{{currentTime}} / {{duration}}",
-  "review-play": "Play",
-  "review-pause": "Pause",
-
-  "stop-button-title": "Stop recording",
-  "upload-notification": "Currently uploading...",
-  "upload-settings-button-store": "Save connection settings",
-  "upload-settings-modal-header": "Opencast Connection",
-  "upload-settings-label-server-url": "Server URL",
-  "upload-settings-label-username": "Username",
-  "upload-settings-label-password": "Password",
-  "upload-settings-invalid-url": "This is not a valid URL",
-  "upload-settings-invalid-url-http-start": "The URL should start with 'https://' or 'http://'",
-  "upload-settings-error-server-unreachable": "The server you specified is not reachable. Possible causes: the server URL you specified is incorrect; your device is offline; the Opencast server is offline; the Opencast server is not correctly configured to allow CORS requests from Opencast Studio.",
-  "upload-settings-error-response-not-ok": "The server returned a non-OK answer to our request. This likely means that the server you specified is not a valid Opencast server.",
-  "upload-settings-error-invalid-response": "The server returned an invalid response to our request. This likely means that the server you specified is not a valid Opencast server.",
-  "upload-settings-invalid-login-data": "Could not log into Opencast server: the username/password you provided are invalid.",
-  "upload-settings-invalid-provided-login": "The server specifies that it provides an automatic login, but the request returned non-authenticated. This is either an internal bug of Opencast Studio or your system administrator misconfigured the server. There is nothing you can do :(",
-
-  "upload-time-a-few-seconds": "a few seconds",
-  "upload-time-a-minute": "a minute",
-  "upload-time-an-hour": "an hour",
-  "upload-time-seconds": "seconds",
-  "upload-time-minutes": "minutes",
-  "upload-time-hours": "hours",
-  "upload-time-left": "{{time}} left",
-
   "warning-https": "Most browsers do not allow video capture over an unencrypted connection (HTTP). Please switch to HTTPS.",
   "warning-recorder-not-supported": "Your browser does not support recording media streams.",
   "warning-recorder-safari-hint": "If you are using Safari, you can enable the experimental feature 'MediaRecorder' in settings. However, on macOS, we recommend switching to Chrome or Firefox.",
-  "warning-missing-connection-settings": "Connection to Opencast is not fully established: uploading is disabled. Please configure the connection in <1>the settings</1> (you won't lose your recording).",
-
-  "settings-back-to-recording": "Back to recording",
-  "video-settings-open": "Open video settings",
-  "video-settings-close": "Close video settings",
-
 
   "header": {
     "info": {
@@ -159,73 +29,136 @@
     }
   },
   "steps": {
-    "prev-button-label": "Back",
+    "back-button-label": "Back",
     "next-button-label": "Next",
     "video": {
-      "label": "Select video source"
+      "label": "Select video source",
+      "share-display": "Share display",
+      "share-user": "Share camera",
+      "share-display-and-user": "Share display & camera",
+      "display-not-allowed-title": "Cannot access your display",
+      "display-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your display (usually via a button next to your browser's address bar).",
+      "user-not-allowed-title": "Cannot access your camera",
+      "user-not-allowed-text": "Try reselecting the source. If that does not work, either reload this page or manually allow us to access your camera (usually via a button next to your browser's address bar). If that does not help, try closing other applications that might use that camera: with some operating systems, only a single application can have access to the camera.",
+      "display-selected": "Display selected",
+      "display-and-user-selected": "Display & camera selected",
+      "user-selected": "Camera selected",
+      "question": "What video source(s) to record?",
+      "none-available": "Your browser/device does not support capturing display or camera video :-(",
+      "reselect-source": "Reselect source(s)",
+      "no-cam-detected": "No camera detected",
+      "display-not-supported": "Display capture not supported",
+      "video-settings-open": "Open video settings",
+      "video-settings-close": "Close video settings",
+      "device": "Device",
+      "aspect-ratio": "Aspect ratio",
+      "aspect-ratio-auto": "auto",
+      "quality": "Quality",
+      "quality-auto": "auto",
+      "preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'."
     },
     "audio": {
-      "label": "Select audio source"
+      "label": "Select audio source",
+      "question": "Record audio?",
+      "microphone": "Microphone",
+      "microphone-selected": "Microphone selected",
+      "without-audio": "Without audio",
+      "reselect-audio": "Reselect audio",
+      "not-allowed-title": "Cannot access your microphone.",
+      "not-allowed-text": "Try selecting 'Reselect audio' and then selecting 'Microphone' again. If that does not work, either reload this page or manually allow us to access your microphone (usually via a button next to your browser's address bar).",
+      "device": "Device"
     },
     "record": {
       "label": "Record",
+      "pause-button-title": "Pause recording",
+      "record-button-title": "Start recording",
+      "resume-button-title": "Resume recording",
+      "stop-button-title": "Stop recording",
       "is-paused": "Recording is paused"
     },
     "review": {
       "label": "Review & trim",
       "only-on-upload-note": "Trimming the video only works when uploading to Opencast and not when saving the recording locally.",
+      "button-discard-and-record": "Discard and record again",
+      "error-empty-recording": "Error: your recording is completely empty. Did you stop the recording almost immediately after starting it? Additionally, please make sure that your system is powerful enough to record a video stream (this might not be the case if another application heavily utilizes your system or if your device is very old). If your system is powerful enough to record, you recorded for more than a few seconds, and you are still seeing this error: please report this as a bug on GitHub.",
+      "set-start": "Set current time as start",
+      "set-end": "Set current time as end",
+      "part-will-be-removed": "This part will be removed",
+      "player-progress": "{{currentTime}} / {{duration}}",
+      "play": "Play",
+      "pause": "Pause",
       "jump-to-cut-point": "Jump to cut point"
     },
     "finish": {
       "label": "Save video",
-      "upload-button": "Upload",
-      "save-locally": "Save locally",
-      "save-desktop-locally": "Save display recording locally",
-      "save-video-locally": "Save camera recording locally",
-      "recording-saved": "Recording saved",
-      "finish-button": "Finish"
+      "finish-button": "Finish",
+      "return-to": "Exit and go back to {{label}}",
+      "return-to-no-label": "Exit Opencast Studio and go back",
+      "new-recording": "Start a new recording",
+      "new-recording-warning": "By starting a new recording, the current recording(s) will be discarded in this application (any uploaded or downloaded recording(s) will not be affected). Are you sure?",
+      "upload": {
+        "label": "Upload",
+        "validation-error-required": "This field is required.",
+        "complete": "Upload complete!",
+        "complete-explanation": "Your recording will now be processed by Opencast.",
+        "label-presenter": "Presenter",
+        "label-title": "Title",
+        "upload-network-error": "Upload failed: network error. Please check your internet connection! Other potential causes: the Opencast server is not reachable or misconfigured.",
+        "upload-invalid-response": "Upload failed: an unexpected response was returned.",
+        "upload-not-authorized": "Upload failed: it seems like you are not authorized to upload.",
+        "upload-unknown-error": "Upload failed: an unknown error occurred.",
+        "warn-download-hint": "If this problem persists, make sure to download your recording to avoid losing it.",
+        "currently-uploading": "Currently uploading...",
+        "settings-header": "Opencast Connection",
+        "settings-label-server-url": "Server URL",
+        "settings-label-username": "Username",
+        "settings-label-password": "Password",
+        "settings-invalid-url": "This is not a valid URL",
+        "settings-invalid-url-http-start": "The URL should start with 'https://' or 'http://'",
+        "settings-invalid-login-data": "Could not log into Opencast server: the username/password you provided are invalid.",
+        "settings-invalid-provided-login": "The server specifies that it provides an automatic login, but the request returned non-authenticated. This is either an internal bug of Opencast Studio or your system administrator misconfigured the server. There is nothing you can do :(",
+        "time": {
+          "a-few-seconds": "a few seconds",
+          "a-minute": "a minute",
+          "an-hour": "an hour",
+          "seconds": "seconds",
+          "minutes": "minutes",
+          "hours": "hours",
+          "left": "{{time}} left"
+        }
+      },
+      "save-locally": {
+        "label": "Save locally",
+        "save-desktop-locally": "Save display recording locally",
+        "save-video-locally": "Save camera recording locally",
+        "recording-saved": "Recording saved"
+      }
     }
   },
   "shortcuts": {
     "label": "Shortcuts",
-
-    "general": "General",
-    "show-available-shortcuts": "Show available shortcuts",
-    "show-overview": "Show this overview",
-    "close-overlay": "Close dialog",
-    "tab-elements": "Navigate through elements",
-
-    "select-display": "Select display",
-    "select-camera": "Select camera",
-    "select-both": "Select display & camera",
-
-    "select-microphone": "Select microphone",
-    "select-no-audio": "Select no audio",
-
-    "start-pause-resume-recording": "Start/​pause recording",
-
-    "record-shortcuts": "Recording",
-    "edit-shortcuts": "Editing",
-    "other-shortcuts": "Other shortcuts",
-    "no-groups": "No groups",
     "sequence-seperator": "or",
-
-    "keys": {
-      "escape": "Esc",
-      "control": "Ctrl",
-      "alt": "Alt",
-      "option": "Option",
-      "command": "Cmd",
-      "space": "Spacebar",
-      "shift": "Shift",
-      "left": "Left",
-      "right": "Right"
+    "general": {
+      "title": "General",
+      "show-available-shortcuts": "Show available shortcuts",
+      "show-overview": "Show this overview",
+      "close-overlay": "Close dialog",
+      "tab-elements": "Navigate through elements",
+      "next-button": "Next/​Confirm",
+      "back-button": "Back/​Discard"
     },
-
-    "start-recording": "Start recording",
-    "stop-recording": "Stop recording",
-    "pause-recording": "Pause/​Resume recording",
-
+    "select-video": {
+      "select-display": "Select display",
+      "select-camera": "Select camera",
+      "select-both": "Select display & camera"
+    },
+    "select-audio": {
+      "select-microphone": "Select microphone",
+      "select-no-audio": "Select no audio"
+    },
+    "record": {
+      "start-pause-resume-recording": "Start/​pause recording"
+    },
     "review": {
       "play-pause": "Play/​Pause video",
       "skip-five": "5 seconds forward",
@@ -238,12 +171,18 @@
       "delete-right": "Delete right cut marker"
     },
     "finish": {
-      "upload-video": "Upload video to Opencast",
-      "download-video": "Download video",
       "new-recording": "Start new recording"
     },
-
-    "next-button": "Next/​Confirm",
-    "back-button": "Back/​Discard"
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Option",
+      "command": "Cmd",
+      "space": "Spacebar",
+      "shift": "Shift",
+      "left": "Left",
+      "right": "Right"
+    }
   }
 }

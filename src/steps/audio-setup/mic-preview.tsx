@@ -59,7 +59,7 @@ export const MicrophonePreview: React.FC = () => {
           alignItems: "center",
           fontWeight: 700,
           color: COLORS.neutral70,
-        }}>{t("sources-audio-device")}</label>
+        }}>{t("steps.audio.device")}</label>
         <Select
           id={selectId}
           value={currentDeviceId}
@@ -78,8 +78,8 @@ export const MicrophonePreview: React.FC = () => {
     </>;
   } else if (audioAllowed === false) {
     body = <ErrorBox
-      title={t("source-audio-not-allowed-title")}
-      body={t("source-audio-not-allowed-text")}
+      title={t("steps.audio.not-allowed-title")}
+      body={t("steps.audio.not-allowed-text")}
     />;
   } else if (audioUnexpectedEnd === true) {
     body = <ErrorBox body={t("error-lost-audio-stream")} />;

@@ -51,24 +51,24 @@ export const SHORTCUTS = {
 
 const SHORTCUT_TRANSLATIONS = {
   general: {
-    showAvailableShortcuts: "shortcuts.show-available-shortcuts",
-    showOverview: "shortcuts.show-overview",
-    closeOverlay: "shortcuts.close-overlay",
-    tab: "shortcuts.tab-elements",
-    prev: "shortcuts.back-button",
-    next: "shortcuts.next-button",
+    showAvailableShortcuts: "shortcuts.general.show-available-shortcuts",
+    showOverview: "shortcuts.general.show-overview",
+    closeOverlay: "shortcuts.general.close-overlay",
+    tab: "shortcuts.general.tab-elements",
+    prev: "shortcuts.general.back-button",
+    next: "shortcuts.general.next-button",
   },
   videoSetup: {
-    selectScreen: "shortcuts.select-display",
-    selectBoth: "shortcuts.select-both",
-    selectUser: "shortcuts.select-camera",
+    selectScreen: "shortcuts.select-video.select-display",
+    selectBoth: "shortcuts.select-video.select-both",
+    selectUser: "shortcuts.select-video.select-camera",
   },
   audioSetup: {
-    withAudio: "shortcuts.select-microphone",
-    withoutAudio: "shortcuts.select-no-audio",
+    withAudio: "shortcuts.select-audio.select-microphone",
+    withoutAudio: "shortcuts.select-audio.select-no-audio",
   },
   recording: {
-    startPauseResume: "shortcuts.start-pause-resume-recording",
+    startPauseResume: "shortcuts.record.start-pause-resume-recording",
   },
   review: {
     playPause: "shortcuts.review.play-pause",
@@ -83,7 +83,7 @@ const SHORTCUT_TRANSLATIONS = {
   },
   finish: {
     startNewRecording: "shortcuts.finish.new-recording",
-    download: "steps.finish.save-locally",
+    download: "steps.finish.save-locally.label",
   },
 } as const;
 
@@ -229,7 +229,7 @@ export const ShortcutOverview: React.FC<ShortCutOverviewProps> = ({ close }) => 
 
 
 const GROUP_ID_TRANSLATIONS = {
-  general: "shortcuts.general",
+  general: "shortcuts.general.title",
   videoSetup: "steps.video.label",
   audioSetup: "steps.audio.label",
   recording: "steps.record.label",

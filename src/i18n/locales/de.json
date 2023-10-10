@@ -1,144 +1,16 @@
 {
-  "forms-validation-error-required": "Dieses Feld ist erforderlich.",
-  "message-upload-complete": "Erfolgreich hochgeladen!",
-  "message-upload-complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
-  "cancel-button-title": "Abbrechen",
-  "pause-button-title": "Aufzeichnung pausieren",
-  "record-button-title": "Aufzeichnung beginnen",
-  "resume-button-title": "Aufzeichnung fortsetzen",
-  "nav-open-menu-button": "Menü",
-  "nav-recording": "Aufnahme",
-  "nav-settings": "Einstellungen",
-
-  "review-button-discard-and-record": "Verwerfen und neu aufzeichnen",
-
-  "save-creation-button-upload": "Zu Opencast hochladen",
-  "save-creation-form-invalid": "Bitte geben Sie einen Titel und die Vortragenden an",
-  "save-creation-label-presenter": "Vortragende:r",
-  "save-creation-label-title": "Titel",
-  "save-creation-title": "Fast geschafft!",
-  "save-creation-title-done": "Geschafft!",
-  "save-creation-subsection-title-download": "Aufnahme runterladen",
-  "save-creation-download-button": "Runterladen",
-  "save-creation-download-cut-warning": "Der Videoschnitt funktioniert zurzeit leider nur, wenn Sie Ihre Aufnahme hochladen. In dem Video, das Sie hier herunterladen können, sind die im vorherigen Schritt entfernten Teile immer noch enthalten.",
-  "save-creation-subsection-title-upload": "Zu Opencast hochladen",
-  "save-creation-upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
-  "save-creation-upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
-  "save-creation-upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
-  "save-creation-upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
-
-  "save-creation-warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren.",
-  "save-creation-warn-once-reestablished": "Sobald die Verbindung wiederhergestellt ist, wird diese Warnung verschwinden.",
-  "save-creation-warn-once-refreshed": "Sobald die Sitzung erneuert ist, wird diese Warnung verschwinden.",
-  "save-creation-warn-once-logged-in": "Sobald die Anmeldung gelingt, wird diese Warnung verschwinden.",
-  "save-creation-warn-unreachable": "Der Opencast-Server ist derzeitig nicht erreichbar. Bitte prüfen Sie Ihre Internetverbindung! Falls Sie mit dem Internet verbunden sind, handelt es sich vermutlich um ein vorübergehendes Problem mit dem Opencast-Server.",
-  "save-creation-warn-server-problem": "Ein unbekanntes Problem trat beim Verbinden zum Opencast-Server auf.",
-  "save-creation-warn-session-expired": "Es scheint, als wäre Ihre Opencast-Sitzung abgelaufen. Um diese zu erneuern, versuchen Sie <1>die Webseite, von der Sie Opencast Studio gestartet haben,</1> in einem anderen Browser-Tab zu öffnen und hierher zurückzukehren.",
-  "save-creation-warn-login-failed": "Die Anmeldung beim Opencast-Server schlug fehl. Bitte prüfen Sie Ihre Anmeldedaten in <1>den Einstellungen</1>.",
-
-  "save-creation-return-to": "Beenden und zurück ({{label}})",
-  "save-creation-return-to-no-label": "Opencast Studio beenden und zurück",
-  "save-creation-new-recording": "Neue Aufzeichnung starten",
-  "save-creation-new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
-
   "confirm-discard-recordings": "Sind Sie sicher, dass Sie die Aufnahmen verwerfen wollen? Dies kann nicht rückgängig gemacht werden!",
-
-  "sources-video-display-selected": "Bildschirm ausgewählt",
-  "sources-video-display-and-user-selected": "Bildschirm & Kamera ausgewählt",
-  "sources-video-user-selected": "Kamera ausgewählt",
-  "sources-video-question": "Welche Videoquelle(n) aufnehmen?",
-  "sources-video-none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
-  "sources-video-reselect-source": "Quelle(n) neu auswählen",
-  "sources-video-no-cam-detected": "Keine Kamera erkannt",
-  "sources-video-display-not-supported": "Bildschirmaufnahme nicht unterstützt",
   "sources-scenario-display-and-user": "Bildschirm & Kamera",
   "sources-scenario-display": "Bildschirm",
   "sources-scenario-user": "Kamera",
   "sources-display": "Bildschirm",
   "sources-user": "Kamera",
-  "sources-video-device": "Kamera",
-  "sources-video-aspect-ratio": "Seitenverhältnis",
-  "sources-video-aspect-ratio-auto": "auto",
-  "sources-video-quality": "Qualität",
-  "sources-video-quality-auto": "auto",
-  "sources-video-preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
-
-  "source-display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
-  "source-display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
-  "source-user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
-  "source-user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
-  "source-audio-not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
-  "source-audio-not-allowed-text": "Versuchen Sie 'Audio neu auswählen' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
-
-  "sources-audio-question": "Audio aufnehmen?",
-  "sources-audio-microphone": "Mikrofon",
-  "sources-audio-microphone-selected": "Mikrofon ausgewählt",
-  "sources-audio-without-audio": "Ohne Audio",
-  "sources-audio-reselect-audio": "Audio neu auswählen",
-  "sources-audio-device": "Gerät",
-
-  "share-display": "Bildschirm teilen",
-  "share-user": "Kamera teilen",
-  "share-display-and-user": "Bildschirm und Kamera teilen",
-  "state-paused": "Pause",
-  "state-recording": "Aufnahme",
-  "state-waiting": "Warten",
-  "settings-header": "Einstellungen",
-
-  "settings-general-header": "Allgemein",
-
-  "back-button-label": "Zurück",
-  "next-button-label": "Weiter",
-
   "error-lost-video-stream": "Video-Stream endete unerwartet! Wurde eine Kamera getrennt oder haben Sie versehentlich die Videofreigabe beendet?",
   "error-lost-audio-stream": "Audio-Stream endete unerwartet! Wurde ein Mikrofon getrennt oder haben Sie versehentlich die Audiofreigabe beendet?",
   "error-lost-stream-end-recording": "Ein Video- oder Audio-Stream endete unerwartet! Infolgedessen wurde die aktive Aufnahme vorzeitig beendet. Wurde ein Mikrofon oder eine Kamera getrennt? Oder haben Sie versehentlich die Medienfreigabe beendet oder Studio die notwendigen Berechtigungen entzogen?",
-
-  "review-heading": "Zufrieden mit der Aufnahme?",
-  "review-error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
-  "review-start": "Anfang: <2>{{start, duration-seconds}}</2>",
-  "review-end": "Ende: <2>{{end, duration-seconds}}</2>",
-  "review-no-start": "Kein Anfang festgelegt",
-  "review-no-end": "Kein Ende festgelegt",
-  "review-set-start": "Aktuelle Zeit als Anfang festlegen",
-  "review-set-end": "Aktuelle Zeit als Ende festlegen",
-  "review-remove-cut-point": "Entfernen",
-  "review-part-will-be-removed": "Dieser Teil wird entfernt",
-  "review-play": "Abspielen",
-  "review-pause": "Pausieren",
-
-  "stop-button-title": "Aufzeichnung beenden",
-  "upload-notification": "Aufnahme wird hochgeladen...",
-  "upload-settings-button-store": "Verbindungseinstellungen speichern",
-  "upload-settings-modal-header": "Verbindung zu Opencast",
-  "upload-settings-label-server-url": "Server-URL",
-  "upload-settings-label-username": "Benutzername",
-  "upload-settings-label-password": "Passwort",
-
-  "upload-settings-invalid-url": "Dies ist keine gültige URL.",
-  "upload-settings-invalid-url-http-start": "Die URL muss mit 'https://' oder 'http://' beginnen.",
-  "upload-settings-error-server-unreachable": "Der angegebene Server ist nicht erreichbar. Mögliche Ursachen: die angegebene Server-URL ist inkorrekt; Ihr Gerät ist nicht mit dem Internet verbunden; der angegebene Server ist offline; der angegebene Server ist nicht korrekt konfiguriert und erlaubt keine CORS-Anfragen von Opencast Studio.",
-  "upload-settings-error-response-not-ok": "Der Server hat mit einem nicht-200er Status geantwortet. Vermutlich heißt das, dass der angegebene Server kein gültiger Opencast-Server ist.",
-  "upload-settings-error-invalid-response": "Die Antwort des Servers ist ungültig. Vermutlich heißt das, dass der angegebene Server kein gültiger Opencast-Server ist.",
-  "upload-settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
-  "upload-settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
-
-  "upload-time-a-few-seconds": "wenige Sekunden",
-  "upload-time-a-minute": "eine Minute",
-  "upload-time-an-hour": "eine Stunde",
-  "upload-time-seconds": "Sekunden",
-  "upload-time-minutes": "Minuten",
-  "upload-time-hours": "Stunden",
-  "upload-time-left": "{{time}} verbleibend",
-
   "warning-https": "Die meisten Browser verbieten die Aufnahme von Videos über eine ungesicherte Verbindung (HTTP). Bitte nutzen Sie HTTPS.",
   "warning-recorder-not-supported": "Ihr Browser unterstützt die Aufnahme von Videos nicht.",
   "warning-recorder-safari-hint": "Falls Sie Safari nutzen, können Sie die experimentelle Funktion 'MediaRecorder' in den Einstellungen aktivieren. Wir empfehlen allerdings, auf macOS Firefox oder Chrome zu nutzen.",
-  "warning-missing-connection-settings": "Die Verbindung zum Opencast Server wurde noch nicht vollständig hergestellt. Bitte konfigurieren Sie die Verbindung in <1>den Einstellungen</1> (die Aufnahme geht nicht verloren).",
-
-  "settings-back-to-recording": "Zurück zur Aufnahme",
-  "video-settings-open": "Videoeinstellungen öffnen",
-  "video-settings-close": "Videoeinstellungen schließen",
 
   "header": {
     "info": {
@@ -157,70 +29,135 @@
     }
   },
   "steps": {
-    "prev-button-label": "Zurück",
+    "back-button-label": "Zurück",
     "next-button-label": "Weiter",
     "video": {
-      "label": "Videoquelle auswählen"
+      "label": "Videoquelle auswählen",
+      "share-display": "Bildschirm teilen",
+      "share-user": "Kamera teilen",
+      "share-display-and-user": "Bildschirm und Kamera teilen",
+      "display-not-allowed-title": "Zugriff auf Bildschirm nicht möglich",
+      "display-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihren Bildschirm (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+      "user-not-allowed-title": "Zugriff auf Kamera nicht möglich",
+      "user-not-allowed-text": "Versuchen Sie, die Quelle neu auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihre Kamera (typischerweise über einen Button neben der Adressleiste Ihres Browsers). Versuchen Sie auch, andere Anwendungen, die diese Kamera nutzen, zu schließen: auf einigen Systemen können Kameras nicht von mehreren Anwendungen gleichzeitig benutzt werden.",
+      "display-selected": "Bildschirm ausgewählt",
+      "display-and-user-selected": "Bildschirm & Kamera ausgewählt",
+      "user-selected": "Kamera ausgewählt",
+      "question": "Welche Videoquelle(n) aufnehmen?",
+      "none-available": "Ihr Browser/Gerät unterstützt den Zugriff auf das Kamerabild und den Bildschirm nicht. Bitte nutzen Sie einen unterstützten Browser.",
+      "reselect-source": "Quelle(n) neu auswählen",
+      "no-cam-detected": "Keine Kamera erkannt",
+      "display-not-supported": "Bildschirmaufnahme nicht unterstützt",
+      "video-settings-open": "Videoeinstellungen öffnen",
+      "video-settings-close": "Videoeinstellungen schließen",
+      "device": "Kamera",
+      "aspect-ratio": "Seitenverhältnis",
+      "aspect-ratio-auto": "auto",
+      "quality": "Qualität",
+      "quality-auto": "auto",
+      "preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen."
     },
     "audio": {
-      "label": "Audioquelle auswählen"
+      "label": "Audioquelle auswählen",
+      "question": "Audio aufnehmen?",
+      "microphone": "Mikrofon",
+      "microphone-selected": "Mikrofon ausgewählt",
+      "without-audio": "Ohne Audio",
+      "reselect-audio": "Audio neu auswählen",
+      "not-allowed-title": "Zugriff auf Mikrofon nicht möglich.",
+      "not-allowed-text": "Versuchen Sie 'Audio neu auswählen' und danach wieder 'Mikrofon' auszuwählen. Falls das nicht funktioniert, laden Sie entweder diese Seite neu oder erlauben Sie dieser Seite manuell Zugriff auf Ihr Mikrofon (typischerweise über einen Button neben der Adressleiste Ihres Browsers)",
+      "device": "Gerät"
     },
     "record": {
       "label": "Aufnehmen",
+      "pause-button-title": "Aufzeichnung pausieren",
+      "record-button-title": "Aufzeichnung beginnen",
+      "resume-button-title": "Aufzeichnung fortsetzen",
+      "stop-button-title": "Aufzeichnung beenden",
       "is-paused": "Aufzeichnung ist pausiert"
     },
     "review": {
       "label": "Prüfen & kürzen",
       "only-on-upload-note": "Das Kürzen des Videos funktioniert nur beim Upload zu Opencast. Lokal speichern können Sie nur die ungekürzte Aufnahme.",
+      "button-discard-and-record": "Verwerfen und neu aufzeichnen",
+      "error-empty-recording": "Fehler: Ihre Aufzeichnung ist leer. Haben Sie die Aufzeichnung unmittelbar nach dem Starten beendet? Stellen Sie auch bitte sicher, dass Ihr System leistungsstark genug ist, um Videos aufzuzeichnen (das ist möglicherweise nicht der Fall, falls andere Anwendungen Ihr System stark auslasten oder Ihr Gerät sehr alt ist). Falls Ihr System genug Leistung besitzt, Ihre Aufnahme länger als wenige Sekunden ist, und Sie trotzdem diesen Fehler sehen, melden Sie dies bitte als Bug auf GitHub.",
+      "set-start": "Aktuelle Zeit als Anfang festlegen",
+      "set-end": "Aktuelle Zeit als Ende festlegen",
+      "part-will-be-removed": "Dieser Teil wird entfernt",
+      "play": "Abspielen",
+      "pause": "Pausieren",
       "jump-to-cut-point": "Zum Schnittpunkt springen"
     },
     "finish": {
       "label": "Aufnahme speichern",
-      "upload-button": "Hochladen",
-      "save-locally": "Lokal speichern",
-      "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
-      "save-video-locally": "Kameraaufnahme lokal speichern",
-      "recording-saved": "Aufnahme gespeichert",
-      "finish-button": "Abschließen"
+      "finish-button": "Abschließen",
+      "return-to": "Beenden und zurück ({{label}})",
+      "return-to-no-label": "Opencast Studio beenden und zurück",
+      "new-recording": "Neue Aufzeichnung starten",
+      "new-recording-warning": "Wenn Sie eine neue Aufzeichnung starten, werden die derzeitigen Aufzeichnungen in dieser Applikation verworfen (herunter- oder hochgeladene Aufzeichnung bleiben aber erhalten). Sind Sie sicher?",
+      "upload": {
+        "label": "Hochladen",
+        "validation-error-required": "Dieses Feld ist erforderlich.",
+        "complete": "Erfolgreich hochgeladen!",
+        "complete-explanation": "Ihre Aufzeichnung wird nun von Opencast verarbeitet.",
+        "label-presenter": "Vortragende:r",
+        "label-title": "Titel",
+        "upload-network-error": "Upload aufgrund eines Netzwerkfehler fehlgeschlagen. Bitte prüfen Sie Ihre Internetverbindung. Weitere mögliche Ursachen: Der Opencast-Server ist nicht erreichbar oder falsch konfiguriert.",
+        "upload-invalid-response": "Upload fehlgeschlagen: Unerwartete Antwort vom Opencast-Server.",
+        "upload-not-authorized": "Upload fehlgeschlagen: Sie sind nicht berechtigt, hochzuladen.",
+        "upload-unknown-error": "Upload fehlgeschlagen: Ein unbekannter Fehler ist aufgetreten.",
+        "warn-download-hint": "Falls das Problem bestehen bleibt, sollten Sie Ihre Aufzeichnung herunterladen, um diese nicht zu verlieren.",
+        "currently-uploading": "Aufnahme wird hochgeladen...",
+        "settings-header": "Verbindung zu Opencast",
+        "settings-label-server-url": "Server-URL",
+        "settings-label-username": "Benutzername",
+        "settings-label-password": "Passwort",
+        "settings-invalid-url": "Dies ist keine gültige URL.",
+        "settings-invalid-url-http-start": "Die URL muss mit 'https://' oder 'http://' beginnen.",
+        "settings-invalid-login-data": "Anmeldung auf dem angegebenen Server schlug fehl: Nutzername oder Passwort inkorrekt.",
+        "settings-invalid-provided-login": "Diese Opencast Studio Installation hat angegeben, dass ein automatischer Login verfügbar ist, aber der Opencast-Server antwortet, dass kein Login vorhanden ist. Dies ist entweder ein interner Fehler oder Ihr Systemadministrator hat Studio oder Opencast falsch konfiguriert. Leider können Sie nichts daran ändern :(",
+        "time": {
+          "a-few-seconds": "wenige Sekunden",
+          "a-minute": "eine Minute",
+          "an-hour": "eine Stunde",
+          "seconds": "Sekunden",
+          "minutes": "Minuten",
+          "hours": "Stunden",
+          "left": "{{time}} verbleibend"
+        }
+      },
+      "save-locally": {
+        "label": "Lokal speichern",
+        "save-desktop-locally": "Bildschirmaufnahme lokal speichern",
+        "save-video-locally": "Kameraaufnahme lokal speichern",
+        "recording-saved": "Aufnahme gespeichert"
+      }
     }
   },
   "shortcuts": {
     "label": "Tastenkürzel",
-
-    "general": "General",
-    "show-available-shortcuts": "Verfügbare Tastenkürzel anzeigen",
-    "show-overview": "Diese Übersicht anzeigen",
-    "close-overlay": "Dialog schließen",
-    "tab-elements": "Durch Seitenelemente navigieren",
-
-    "select-display": "Bildschirm auswählen",
-    "select-camera": "Kamera auswählen",
-    "select-both": "Bildschirm & Kamera auswählen",
-
-    "select-microphone": "Mikrofon auswählen",
-    "select-no-audio": "Ohne Audio",
-
-    "start-pause-resume-recording": "Aufzeichnung starten/​pausieren",
-
-    "record-shortcuts": "Aufnahme",
-    "edit-shortcuts": "Editieren",
-    "other-shortcuts": "Weitere Shortcuts",
-    "no-groups": "Keine Gruppen",
     "sequence-seperator": "oder",
-
-    "keys": {
-      "escape": "Esc",
-      "control": "Strg",
-      "space": "Leertaste",
-      "shift": "Shift",
-      "left": "Links",
-      "right": "Rechts"
+    "general": {
+      "title": "Allgemein",
+      "show-available-shortcuts": "Verfügbare Tastenkürzel anzeigen",
+      "show-overview": "Diese Übersicht anzeigen",
+      "close-overlay": "Dialog schließen",
+      "tab-elements": "Durch Seitenelemente navigieren",
+      "next-button": "Weiter/​Bestätigen",
+      "back-button": "Zurück/​Verwerfen"
     },
-
-    "start-recording": "Aufnahme starten",
-    "stop-recording": "Aufnahme beenden",
-    "pause-recording": "Aufnahme pausieren/​fortsetzen",
-
+    "select-video": {
+      "select-display": "Bildschirm auswählen",
+      "select-camera": "Kamera auswählen",
+      "select-both": "Bildschirm & Kamera auswählen"
+    },
+    "select-audio": {
+      "select-microphone": "Mikrofon auswählen",
+      "select-no-audio": "Ohne Audio"
+    },
+    "record": {
+      "start-pause-resume-recording": "Aufzeichnung starten/​pausieren"
+    },
     "review": {
       "play-pause": "Abspielen/​pausieren",
       "skip-five": "5 Sekunden weiter",
@@ -233,12 +170,15 @@
       "delete-right": "Rechte Schnittmarkierung entfernen"
     },
     "finish": {
-      "upload-video": "Video auf Opencast hochladen",
-      "download-video": "Video herunterladen",
       "new-recording": "Neue Aufnahme starten"
     },
-
-    "next-button": "Weiter/​Bestätigen",
-    "back-button": "Zurück/​Verwerfen"
+    "keys": {
+      "escape": "Esc",
+      "control": "Strg",
+      "space": "Leertaste",
+      "shift": "Shift",
+      "left": "Links",
+      "right": "Rechts"
+    }
   }
 }

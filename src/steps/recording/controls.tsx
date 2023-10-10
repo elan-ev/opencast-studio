@@ -38,6 +38,11 @@ export const RecordingControls: React.FC<Props> = ({
   }, {
     ignoreEventWhen: e => e.code === "Space" && e.target instanceof HTMLButtonElement,
   }, [recordingState]);
+  const label = match(recordingState, {
+    "inactive": () => t("steps.record.record-button-title"),
+    "paused": () => t("steps.record.resume-button-title"),
+    "recording": () => t("steps.record.pause-button-title"),
+  });
 
   return (
     <div css={{
@@ -58,24 +63,14 @@ export const RecordingControls: React.FC<Props> = ({
         border: `2px solid ${COLORS.neutral25}`,
       },
     }}>
-      <WithTooltip tooltip={
-        match(recordingState, {
-          "inactive": () => t("record-button-title"),
-          "paused": () => t("resume-button-title"),
-          "recording": () => t("pause-button-title"),
-        })
-      }>
+      <WithTooltip tooltip={label}>
         <button
           onClick={match(recordingState, {
             "inactive": () => startRecording,
             "paused": () => resumeRecording,
             "recording": () => pauseRecording,
           })}
-          aria-label={match(recordingState, {
-            "inactive": () => t("record-button-title"),
-            "paused": () => t("resume-button-title"),
-            "recording": () => t("pause-button-title"),
-          })}
+          aria-label={label}
           aria-live="polite"
           css={{
             position: "relative",

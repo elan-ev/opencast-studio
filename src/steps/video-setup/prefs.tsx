@@ -174,6 +174,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
 
   // State about expanding and hiding the settings.
   const [isExpanded, setIsExpanded] = useState(false);
+  const label = t(`steps.video.video-settings-${isExpanded ? "close" : "open"}`);
 
   return <>
     {/* Stream info at the top */}
@@ -212,13 +213,10 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
       }}
     >
       <FloatingTrigger>
-        <WithTooltip
-          placement="bottom"
-          tooltip={isExpanded ? t("video-settings-close") : t("video-settings-open")}
-        >
+        <WithTooltip placement="bottom" tooltip={label}>
           <ProtoButton
             onClick={() => setIsExpanded(old => !old)}
-            aria-label={isExpanded ? t("video-settings-close") : t("video-settings-open")}
+            aria-label={label}
             css={{
               border: "none",
               display: "inline-block",
@@ -288,7 +286,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
             fontSize: 14,
           },
         }}>
-          <Trans i18nKey="sources-video-preferences-note">
+          <Trans i18nKey="steps.video.preferences-note">
             <strong>Note:</strong> Explanation.
           </Trans>
         </div>
@@ -348,13 +346,13 @@ const UniveralSettings: React.FC<UniveralSettingsProps> = (
   const kind = isDesktop ? "desktop" : "user";
 
   return <>
-    <PrefKey>{t("sources-video-quality")}</PrefKey>
+    <PrefKey>{t("steps.video.quality")}</PrefKey>
     <PrefValue>
       <RadioButton
         id={`quality-auto-${kind}`}
         value="auto"
         name={`quality-${kind}`}
-        label={t("sources-video-quality-auto")}
+        label={t("steps.video.quality-auto")}
         onChange={changeQuality}
         checked={qualities.every(q => prefs.quality !== q)}
       />
@@ -392,7 +390,7 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
 
   return <>
     <PrefKey>
-      <label htmlFor="sources-video-device">{t("sources-video-device")}</label>
+      <label htmlFor="sources-video-device">{t("steps.video.device")}</label>
     </PrefKey>
     <PrefValue>
       <Select
@@ -405,13 +403,13 @@ const UserSettings: React.FC<UserSettingsProps> = ({ updatePrefs, prefs }) => {
       </Select>
     </PrefValue>
 
-    <PrefKey>{t("sources-video-aspect-ratio")}</PrefKey>
+    <PrefKey>{t("steps.video.aspect-ratio")}</PrefKey>
     <PrefValue>
       <RadioButton
         id="ar-auto"
         value="auto"
         name="aspectRatio"
-        label={t("sources-video-aspect-ratio-auto")}
+        label={t("steps.video.aspect-ratio-auto")}
         onChange={changeAspectRatio}
         checked={ASPECT_RATIOS.every(x => prefs.aspectRatio !== x)}
       />
