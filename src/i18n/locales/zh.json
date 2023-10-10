@@ -95,7 +95,7 @@
           "seconds": "秒",
           "minutes": "分",
           "hours": "小时",
-          "left": "剩余{{时间}}"
+          "left": "剩余{{time}}"
         }
       }
     }
