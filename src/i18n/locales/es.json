@@ -12,24 +12,44 @@
   "warning-recorder-not-supported": "Su navegador no soporta la grabación de transmisiones multimedia.",
   "warning-recorder-safari-hint": "Si está utilizando Safari, puede habilitar la función experimental 'MediaRecorder' en la configuración. Sin embargo, en macOS, recomendamos cambiar a Chrome o Firefox.",
 
+  "header": {
+    "info": {
+      "label": "Información"
+    },
+    "theme": {
+      "label": "Apariencia",
+      "dark": "Oscuro",
+      "light": "Claro",
+      "dark-high-contrast": "Oscuro (alto contraste)",
+      "light-high-contrast": "Claro (alto contraste)",
+      "auto": "Automático"
+    },
+    "language": {
+      "label": "Idioma"
+    }
+  },
   "steps": {
     "back-button-label": "Atrás",
     "next-button-label": "Siguiente",
-
     "video": {
+      "label": "Seleccionar la fuente de video",
       "share-display": "Compartir escritorio",
       "share-user": "Compartir cámara",
-      "display-selected": "Pantalla seleccionada",
-      "display-and-user-selected": "Pantalla y cámara seleccionada",
+      "share-display-and-user": "Compartir la pantalla y la cámara",
       "display-not-allowed-title": "No se puede acceder a su pantalla",
       "display-not-allowed-text": "Intenta volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su pantalla (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
       "user-not-allowed-title": "No se puede acceder a su cámara",
       "user-not-allowed-text": "Intenta volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su cámara (generalmente a través de un botón al lado de la barra de direcciones de su navegador). Si eso no ayuda, intente cerrar otras aplicaciones que puedan usar esa cámara: con algunos sistemas operativos, solo una aplicación puede tener acceso a la cámara.",
+      "display-selected": "Pantalla seleccionada",
+      "display-and-user-selected": "Pantalla y cámara seleccionada",
       "user-selected": "Cámara seleccionada",
       "question": "¿Qué fuente(s) de video grabar?",
       "none-available": "Su navegador/dispositivo no permite la captura de pantalla o video de la cámara :-(",
       "reselect-source": "Reseleccionar la(s) fuente(s)",
       "no-cam-detected": "Cámara no seleccionada",
+      "display-not-supported": "No se soporta la captura de pantalla",
+      "video-settings-open": "Abrir las propiedades del video",
+      "video-settings-close": "Cerrar las propiedades del video",
       "device": "Dispositivo",
       "aspect-ratio": "Relación de aspecto",
       "aspect-ratio-auto": "automático",
@@ -38,6 +58,7 @@
       "preferences-note": "<0>Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'."
     },
     "audio": {
+      "label": "Seleccionar la fuente de audio",
       "question": "¿Grabar el audio?",
       "microphone": "Micrófono",
       "microphone-selected": "Micrófono seleccionado",
@@ -48,24 +69,34 @@
       "device": "Dispositivo"
     },
     "record": {
+      "label": "Grabar",
       "pause-button-title": "Pausar grabación",
       "record-button-title": "Iniciar grabación",
       "resume-button-title": "Reanudar grabación",
-      "stop-button-title": "Detener grabación"
+      "stop-button-title": "Detener grabación",
+      "is-paused": "La grabación esta pausada"
     },
     "review": {
+      "label": "Revisar y recortar",
+      "only-on-upload-note": "Recortar el video solo funciona cuando se sube a Opencast y no cuando se guarda la grabación localmente.",
       "button-discard-and-record": "Descartar y volver a grabar",
       "error-empty-recording": "Error: tu grabación está completamente vacía. ¿Detuviste la grabación casi inmediatamente después de comenzar? Además, asegúrese de que su sistema sea lo suficientemente potente como para grabar una transmisión de video (este podría no ser el caso si otra aplicación utiliza mucho su sistema o si su dispositivo es muy antiguo). Si su sistema es lo suficientemente potente como para grabar, grabó durante más de unos segundos y aún ve este error: informe de esto como un error en GitHub.",
       "set-start": "Establecer el instante actual como inicio",
       "set-end": "Establecer el instante actual como fin",
       "part-will-be-removed": "Esta parte será eliminada",
       "play": "Reproducir",
-      "pause": "Pausar"
+      "pause": "Pausar",
+      "jump-to-cut-point": "Ir al punto de corte"
     },
     "finish": {
+      "label": "Guardar el video",
+      "finish-button": "Finalizar",
+      "return-to": "Salir y volver a {{label}}",
+      "return-to-no-label": "Salir de Opencast Studio y volver atrás",
       "new-recording": "Empezar una nueva grabación",
       "new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Estás seguro?",
       "upload": {
+        "label": "Subir",
         "validation-error-required": "Este campo es obligatorio.",
         "complete": "¡Subida completa!",
         "complete-explanation": "Su grabación será procesada por Opencast ahora.",
@@ -94,7 +125,63 @@
           "hours": "horas",
           "left": "queda {{time}}"
         }
+      },
+      "save-locally": {
+        "label": "Guardar localmente",
+        "save-desktop-locally": "Guardar grabación de la pantalla localmente",
+        "save-video-locally": "Guardar grabación de la cámara localmente",
+        "recording-saved": "Grabación guardada"
       }
+    }
+  },
+  "shortcuts": {
+    "label": "Atajos de teclado",
+    "sequence-seperator": "o",
+    "general": {
+      "title": "General",
+      "show-available-shortcuts": "Mostrar los atajos de teclado disponibles",
+      "show-overview": "Mostrar este resumen",
+      "close-overlay": "Cerrar cuadro dialogo",
+      "tab-elements": "Navegar por los elementos",
+      "next-button": "Siguiente/​Confirmar",
+      "back-button": "Atrás/​Descartar"
+    },
+    "select-video": {
+      "select-display": "Seleccionar la pantalla",
+      "select-camera": "Seleccionar la cámara",
+      "select-both": "Seleccionar la pantalla y la camara"
+    },
+    "select-audio": {
+      "select-microphone": "Seleccionar el microfono",
+      "select-no-audio": "No seleccionar audio"
+    },
+    "record": {
+      "start-pause-resume-recording": "Iniciar/pausar grabación"
+    },
+    "review": {
+      "play-pause": "Reproducir/Pausar vídeo",
+      "skip-five": "5 segundos adelante",
+      "back-five": "5 segundos atrás",
+      "frame-forward": "Un cuadro adelante",
+      "frame-back": "Un cuadro atrás",
+      "cut-left": "Cortar a la izquierda",
+      "cut-right": "Cortar a la derecha",
+      "delete-left": "Eliminar marcador de corte izquierdo",
+      "delete-right": "Eliminar marcador de corte derecho"
+    },
+    "finish": {
+      "new-recording": "Iniciar nueva grabación"
+    },
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Opción",
+      "command": "Cmd",
+      "space": "Barra espaciadora",
+      "shift": "Shift",
+      "left": "Flecha izquierda",
+      "right": "Flecha derecha"
     }
   }
 }
