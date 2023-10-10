@@ -1,27 +1,187 @@
 {
-  "steps": {
-    "video": {
-      "share-display": "اشتراک دسکتاپ (بدون صدا)",
-      "share-user": "به اشتراک گذاشتن دوربین"
+    "confirm-discard-recordings": "آیا از حذف موارد ضبط شده خود اطمینان دارید؟ موارد حذف شده غیر قابل بازگشت هستند!",
+    "sources-scenario-display-and-user": "صفحه نمایش و دوربین",
+    "sources-scenario-display": "صفحه نمایش",
+    "sources-scenario-user": "دوربین",
+    "sources-display": "صفحه نمایش",
+    "sources-user": "دوربین",
+    "error-lost-video-stream": "پخش ویدیو به طور غیر منتظره تمام شد! آیا دوربین قطع شده یا به اشتراک گذاری ویدیو به طور اتفاقی متوقف شده؟",
+    "error-lost-audio-stream": "پخش صدا به طور غیر منتظره تمام شد! آیا میکروفن قطع شده یا به اشتراک گذاری صدا به طور اتفاقی متوقف شده؟",
+    "error-lost-stream-end-recording": "پخش ویدیو یا صدا به طور غیر منتظره تمام شد و پروسه ضبط فعال پیش از موعد به اتمام رسید! آیا میکروفن یا دوربین قطع شده؟ یا اینکه به طور اتفاقی تداخلی در به اشتراک گذاری و اجازه دسترسی آنها بوجود آمده؟",
+    "warning-https": "بیشتر مرورگرها اجازه ضبط ویدیو را در صورت اتصال با (HTTP) را نمیدهند. لطفا به حالت اتصال (HTTPS) تغییر دهید ",
+    "warning-recorder-not-supported": "مرورگر شما از ضبط صدا یا ویدیو پشتیبانی نمیکند",
+    "warning-recorder-safari-hint": "اگر شما از مرورگر سافاری استفاده میکنید، میتوانید ویژگی امتحانی 'MediaRecorder' را در تنظیمات فعال کنید. اگرچه پیشنهاد میشود در سیستمهای مک از مرورگر کروم یا فایرفکس استفاده کنید",
+    "header": {
+        "info": {
+            "label": "اطلاعات"
+        },
+        "theme": {
+            "label": "ظاهر",
+            "dark": "تیره",
+            "light": "روشن",
+            "dark-high-contrast": "تیره (کنتراست بالا)",
+            "light-high-contrast": "روشن (کنتراست بالا)",
+            "auto": "خودکار"
+        },
+        "language": {
+            "label": "زبان"
+        }
     },
-    "record": {
-      "pause-button-title": "مکث در ضبط کردن",
-      "record-button-title": "شروع ضبط کردن",
-      "resume-button-title": "ادامه ضبط کردن",
-      "stop-button-title": "توقف در ضبط کردن"
+    "steps": {
+        "back-button-label": "قبلی",
+        "next-button-label": "بعدی",
+        "video": {
+            "label": "منبع ویدیو را انتخاب کنید",
+            "share-display": "اشتراک صفحه نمایش (بدون صدا)",
+            "share-user": "اشتراک دوربین",
+            "share-display-and-user": "اشتراک صفحه نمایش و دوربین",
+            "display-not-allowed-title": "دسترسی به صفحه نمایش شما امکان پذیر نیست",
+            "display-not-allowed-text": "منبع را دوباره انتخاب کنید. اگر کار نکرد، این صفحه را مجدداً بارگیری کنید یا به صورت دستی به ما اجازه دهید به صفحه نمایش شما دسترسی داشته باشیم (معمولاً از طریق دکمه ای در کنار نوار آدرس مرورگر شما).",
+            "user-not-allowed-title": "دسترسی به دوربین شما امکان پذیر نیست",
+            "user-not-allowed-text": "منبع را دوباره انتخاب کنید. اگر کار نکرد، این صفحه را دوباره بارگیری کنید یا به صورت دستی به ما اجازه دهید به دوربین شما دسترسی داشته باشیم (معمولاً از طریق دکمه ای در کنار نوار آدرس مرورگر شما). اگر کمکی نکرد، برنامه‌های دیگری را که ممکن است از آن دوربین استفاده کنند ببندید: در برخی سیستم‌عامل‌ها، تنها یک برنامه می‌تواند به دوربین دسترسی داشته باشد.",
+            "display-selected": "صفحه نمایش انتخاب شده است",
+            "display-and-user-selected": "صفحه نمایش و دوربین انتخاب شده اند",
+            "user-selected": "دوربین انتخاب شده است",
+            "question": "کدام منبع ویدیویی ضبط شود؟",
+            "none-available": "مرورگر/دستگاه شما از ضبط صفحه نمایش یا دوربین پشتیبانی نمی کند :-(",
+            "reselect-source": "انتخاب دوباره منبع(ها)",
+            "no-cam-detected": "دوربینی شناسایی نشد",
+            "display-not-supported": "ضبط صفحه نمایش پشتیبانی نمی شود",
+            "video-settings-open": "تنظیمات ویدیو را باز کنید",
+            "video-settings-close": "تنظیمات ویدیو را ببندید",
+            "device": "دستگاه",
+            "aspect-ratio": "نسبت تصویر",
+            "aspect-ratio-auto": "خودکار",
+            "quality": "کیفیت",
+            "quality-auto": "خودکار",
+            "preferences-note": "<0>توجه:</0> اینها صرفاً تنظیمات برگزیده هستند و نمی توان تضمین کرد که همه گزینه ها واقعاً در دستگاه شما پشتیبانی می شوند. اگر شک دارید، «خودکار» را انتخاب کنید."
+        },
+        "audio": {
+            "label": "منبع صوتی را انتخاب کنید",
+            "question": "ضبط صدا؟",
+            "microphone": "میکروفن",
+            "microphone-selected": "میکروفن انتخاب شد",
+            "without-audio": "بدون صدا",
+            "reselect-audio": "صدا را دوباره انتخاب کنید",
+            "not-allowed-title": "دسترسی به میکروفن شما امکان پذیر نیست.",
+            "not-allowed-text": "سعی کنید انتخاب دوباره صدا را انتخاب کنید و سپس دوباره میکروفن را انتخاب کنید. اگر کار نکرد٬ یا این صفحه را دوباره بارگیری کنید یا اینکه به ما به صورت دستی اجازه دسترسی به میکروفن را بدهید. (معمولا از طریق دکمه ای کنار نوار آدرس مرورگر)",
+            "device": "دستگاه"
+        },
+        "record": {
+            "label": "ضبط",
+            "pause-button-title": "مکث در ضبط کردن",
+            "record-button-title": "شروع ضبط کردن",
+            "resume-button-title": "ادامه ضبط کردن",
+            "stop-button-title": "توقف ضبط کردن",
+            "is-paused": "در حال مکث"
+        },
+        "review": {
+            "label": "بازبینی و تدوین",
+            "only-on-upload-note": "تدوین ویدیو فقط در صورت آپلود در Opencast کار می کند و نه هنگام ذخیره ضبط به صورت محلی.",
+            "button-discard-and-record": "لغو و ضبط دوباره",
+            "error-empty-recording": "خطا: مورد ضبط شده شما کاملا خالی است. آیا ضبط را تقریباً بلافاصله پس از شروع آن متوقف کردید؟ علاوه بر این، لطفاً مطمئن شوید که سیستم شما به اندازه کافی برای ضبط ویدیو قدرتمند است (اگر برنامه دیگری به شدت از سیستم شما استفاده می کند یا دستگاه شما بسیار قدیمی است، ممکن است این مورد صادق نباشد). اگر سیستم شما به اندازه کافی قدرتمند برای ضبط است و برای بیش از چند ثانیه ضبط کرده اید، و همچنان این خطا را مشاهده می کنید: لطفاً این را به صورت یک باگ یا خطا در GitHub گزارش دهید.",
+            "set-start": "تنظیم زمان فعلی به عنوان زمان شروع",
+            "set-end": "تنظیم زمان فعلی به عنوان زمان پایان",
+            "part-will-be-removed": "این بخش حذف می شود",
+            "player-progress": "{{currentTime}} / {{duration}}",
+            "play": "پخش",
+            "pause": "مکث",
+            "jump-to-cut-point": "پرش به نقطه برش"
+        },
+        "finish": {
+            "label": "ذخیره ویدیو",
+            "finish-button": "پایان",
+            "return-to": "خروج و برگشت به {{label}}",
+            "return-to-no-label": "خروج و برگشت به Opencast Studio",
+            "new-recording": "شروع یک ضبط جدید",
+            "new-recording-warning": "با شروع یک ضبط جدید، موردهای ضبط شده فعلی در این برنامه لغو می شوند (هر یک از موارد ضبط شده آپلود شده یا دانلود شده تحت تأثیر قرار نمی گیرد. آیا از انجام این پروسه مطمئن هستید؟",
+            "upload": {
+                "label": "آپلود",
+                "validation-error-required": "این زمینه مورد نیاز است.",
+                "complete": "آپلود کامل شد!",
+                "complete-explanation": "مورد ضبط شده شما اکنون توسط Opencast پردازش خواهد شد",
+                "label-presenter": "ارائه دهنده",
+                "label-title": "عنوان",
+                "upload-network-error": "خطا در آپلود: خطای شبکه. لطفا اتصال اینترنت خود را بررسی کنید! سایر دلایل ممکن: سرور Opencast قابل دسترسی نیست یا به درستی تنظیم نشده است.",
+                "upload-invalid-response": "خطا در آپلود: دریافت پاسخ غیر منتظره",
+                "upload-not-authorized": "خطا در آپلود: به نظر میرسد که شما مجاز به آپلود کردن نیستید ",
+                "upload-unknown-error": "خطا در آپلود: یک خطای ناشناخته رخ داده است ",
+                "warn-download-hint": "در صورت ادامه مشکل٬ حتما مورد ضبط شده خود را دانلود کنید تا از ازدست رفتن آن جلوگیری شود",
+                "currently-uploading": "در حال بارگذاری",
+                "settings-header": "آپلود تنظیمات در Opencast",
+                "settings-label-server-url": "آدرس سرور",
+                "settings-label-username": "نام کاربری",
+                "settings-label-password": "رمز عبور",
+                "settings-invalid-url": "این یک URL نامعتبر است",
+                "settings-invalid-url-http-start": "URL باید با 'https://'  یا 'http://' شروع شود",
+                "settings-invalid-login-data": "ورود به سرور Opencast امکان پذیر نیست: نام کاربری یا رمز عبور نامعتبر است",
+                "settings-invalid-provided-login": "سرور مشخص می کند که یک ورود خودکار را ارائه می دهد، اما درخواست بدون احراز هویت بازگردانده می شود. این یا یک اشکال داخلی Opencast Studio است یا سرپرست سیستم شما سرور را به اشتباه پیکربندی کرده است. فعلا کاری از کسی ساخته نیست :(",
+                "time": {
+                    "a-few-seconds": "چند ثانیه",
+                    "a-minute": "یک دقیقه",
+                    "an-hour": "یک ساعت",
+                    "seconds": "ثانیه ها",
+                    "minutes": "دقیقه ها",
+                    "hours": "ساعت ها",
+                    "left": "{{time}} باقی مانده"
+                }
+            },
+            "save-locally": {
+                "label": "ذخیره محلی",
+                "save-desktop-locally": "ذخیره ضبط صفحه نمایش به صورت محلی",
+                "save-video-locally": "ذخیره ضبط دوربین به صورت محلی",
+                "recording-saved": "مورد ضبط شده ذخیره شد"
+            }
+        }
     },
-    "finish": {
-      "upload": {
-        "validation-error-required": "این زمینه مورد نیاز است.",
-        "complete": "آپلود کامل شد!",
-        "label-presenter": "ارائه دهنده",
-        "label-title": "عنوان",
-        "currently-uploading": "در حال بارگذاری",
-        "settings-header": "آپلود تنظیمات در Opencast",
-        "settings-label-server-url": "آدرس سرور",
-        "settings-label-username": "نام کاربری",
-        "settings-label-password": "رمز عبور"
-      }
+    "shortcuts": {
+        "label": "میانبرها",
+        "sequence-seperator": "یا",
+        "general": {
+            "title": "کلی",
+            "show-available-shortcuts": "نمایش میانبرهای موجود",
+            "show-overview": "نمایش این نمای کلی",
+            "close-overlay": "بستن",
+            "tab-elements": "حرکت در میان عناصر",
+            "next-button": "بعدی/تأیید",
+            "back-button": "قبلی/لغو"
+        },
+        "select-video": {
+            "select-display": "انتخاب صفحه نمایش",
+            "select-camera": "انتخاب دوربین",
+            "select-both": "انتخاب صفحه نمایش و دوربین"
+        },
+        "select-audio": {
+            "select-microphone": "انتخاب میکروفن",
+            "select-no-audio": "انتخاب بدون صدا"
+        },
+        "record": {
+            "start-pause-resume-recording": "شروع/مکث ضبط"
+        },
+        "review": {
+            "play-pause": "شروع/مکث ویدیو",
+            "skip-five": "۵ ثانیه جلوتر",
+            "back-five": "۵ ثانیه عقبتر",
+            "frame-forward": "یک فریم به جلو",
+            "frame-back": "یک فریم به عقب",
+            "cut-left": "برش چپ",
+            "cut-right": "برش راست",
+            "delete-left": "حذف برش سمت چپ",
+            "delete-right": "حذف برش راست"
+        },
+        "finish": {
+            "new-recording": "شروع یک ضبط جدید"
+        },
+        "keys": {
+            "escape": "Esc",
+            "control": "Ctrl",
+            "alt": "Alt",
+            "option": "Option",
+            "command": "Cmd",
+            "space": "Spacebar",
+            "shift": "Shift",
+            "left": "Left",
+            "right": "Right"
+        }
     }
-  }
 }
