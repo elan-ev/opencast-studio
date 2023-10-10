@@ -32,6 +32,7 @@ void i18n
     fallbackLng: "en",
 
     interpolation: {
+      // React already escapes. Disabled here to avoid double escapes.
       escapeValue: false,
     },
 
