@@ -19,7 +19,7 @@ type SharedProps = {
 };
 
 export const ControlBox: React.FC<SharedProps> = ({ previewController, currentTime }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const duration = previewController.current?.duration;
   const { isHighContrast } = useColorScheme();
 
@@ -35,10 +35,9 @@ export const ControlBox: React.FC<SharedProps> = ({ previewController, currentTi
     }}>
       <Controls {...{ previewController, currentTime }} />
       <div css={{ textAlign: "center", color: COLORS.neutral70 }}>
-        {t("steps.review.player-progress", {
-          currentTime: formatTime(currentTime, duration, i18n.language),
-          duration: formatTime(duration, duration, i18n.language),
-        })}
+        {formatTime(currentTime, duration, i18n.language)}
+        /
+        {formatTime(duration, duration, i18n.language)}
       </div>
       <Scrubber {...{ previewController, currentTime }} />
     </div>

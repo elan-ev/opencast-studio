@@ -60,7 +60,6 @@
       "set-start": "将当前时间设置为开始时间",
       "set-end": "将当前时间设置为结束",
       "part-will-be-removed": "此部分将被删除",
-      "player-progress": "{{当前时间, 持续时间-秒}} / {{期间, 持续时间-秒}}",
       "play": "播放",
       "pause": "暂停"
     },
@@ -96,7 +95,7 @@
           "seconds": "秒",
           "minutes": "分",
           "hours": "小时",
-          "left": "剩余{{时间}}"
+          "left": "剩余{{time}}"
         }
       }
     }
