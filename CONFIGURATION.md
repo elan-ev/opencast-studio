@@ -27,7 +27,7 @@ further below for information on that.
 #
 # Is loaded by Studio in the beginning. Default path is "settings.toml"
 # (relative to current URL), but can be overwritten via the environment variable
-# `REACT_APP_SETTINGS_PATH` at build time.
+# `SETTINGS_PATH` at build time.
 
 
 [opencast]

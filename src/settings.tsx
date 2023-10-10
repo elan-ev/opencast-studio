@@ -218,9 +218,9 @@ export class SettingsManager {
   }
 
   /**
-   * Attempts to load `settings.toml` (or REACT_APP_SETTINGS_PATH is that's
-   * specified) from the server. If it fails for some reason, returns `null` and
-   * prints an appropriate message on console.
+   * Attempts to load `settings.toml` (or SETTINGS_PATH if that's specified)
+   * from the server. If it fails for some reason, returns `null` and prints an
+   * appropriate message on console.
    */
   static async loadContextSettings() {
     // Try to retrieve the context settings.
@@ -229,9 +229,9 @@ export class SettingsManager {
       basepath += "/";
     }
 
-    // Construct path to settings file. If the `REACT_APP_SETTINGS_PATH` is
-    // given and starts with '/', it is interpreted as absolute path from the
-    // server root.
+    // Construct path to settings file. If the `SETTINGS_PATH` is given and
+    // starts with '/', it is interpreted as absolute path from the server
+    // root.
     let settingsPath = DEFINES.settingsPath || CONTEXT_SETTINGS_FILE;
 
     // If a custom file is given via query parameter, change the settings path

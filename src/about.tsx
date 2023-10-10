@@ -101,7 +101,6 @@ export const About: React.FC<Props> = ({ close }) => (
         </li>
       </ul>
 
-      {/* process.env.REACT_APP_INCLUDE_LEGAL_NOTICES === '1' && <LegalNotices /> */}
       {DEFINES.showLegalNotices && <>
         <h2>ELAN e.V.</h2>
 

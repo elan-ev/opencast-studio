@@ -16,8 +16,8 @@ fi
 npm ci
 
 # Build version for root path installation
-export PUBLIC_URL=/
-npm run build
+export PUBLIC_PATH=/
+npm run build:release
 
 FILENAME="oc-studio-$(date --utc +%F)-root.tar.gz"
 cd build
@@ -27,9 +27,9 @@ cd ..
 
 # Build integrated version
 rm -rf build/
-export PUBLIC_URL=/studio
-export REACT_APP_SETTINGS_PATH="/ui/config/studio/settings.toml"
-npm run build
+export PUBLIC_PATH=/studio
+export SETTINGS_PATH="/ui/config/studio/settings.toml"
+npm run build:release
 
 FILENAME="oc-studio-$(date --utc +%F)-integrated.tar.gz"
 cd build
