@@ -42,3 +42,15 @@ void i18n
   });
 
 export default i18n;
+
+const updateAttributes = (lng: string) => {
+  document.documentElement.setAttribute("lang", lng);
+  // TODO: add this at some point. Needs lots of fixing.
+  // const dir = languages.find(l => l.short === lng)?.rtl ? "rtl" : "ltr";
+  // document.documentElement.setAttribute("dir", dir);
+};
+
+i18n.on("languageChanged", updateAttributes);
+if (i18n.resolvedLanguage) {
+  updateAttributes(i18n.resolvedLanguage);
+}
