@@ -28,18 +28,15 @@ The following table depicts the current state of browser support (as of May 2022
 | Windows 11 | ✔              | ✔              | ✔              | -
 | Windows 10 | ✔              | ✔              | ✔              | -
 | Linux      | ✔              | ✔              | ✔              | -
-| macOS      | ✔              | ✔              | ✔              | 🔶<sup>1</sup>
-| iOS        | - <sup>2</sup> | - <sup>2</sup> | - <sup>2</sup> | 🔶<sup>3,4</sup>
-| Android    | 🔶<sup>3</sup> | 🔶<sup>3</sup> | 🔶<sup>3</sup> | -
+| macOS      | ✔              | ✔              | ✔              | ✔
+| iOS        | - <sup>1</sup> | - <sup>1</sup> | - <sup>1</sup> | 🔶<sup>2</sup>
+| Android    | 🔶<sup>2</sup> | 🔶<sup>2</sup> | 🔶<sup>2</sup> | -
 
 
-<sup>1</sup> Recording webcam and screen at the same time fails (Studio bug: [#934](https://github.com/elan-ev/opencast-studio/issues/934)). Also: Safari only lets you capture the whole screen, not individual windows.
+<sup>1</sup> Non-Safari browser on iOS use the Safari browser engine, so behave essentially the same as Safari.
 
-<sup>2</sup> Non-Safari browser on iOS use the Safari browser engine, so behave essentially the same as Safari.
+<sup>2</sup> Screen share on mobile devices not supported; only webcam recording.
 
-<sup>3</sup> Screen share on mobile devices not supported; only webcam recording.
-
-<sup>4</sup> Several bugs, see [#423](https://github.com/elan-ev/opencast-studio/issues/423).
 
 
 ## Usage
