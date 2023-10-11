@@ -20,10 +20,8 @@ Opencast instance.
 
 ## Supported Browsers
 
-Opencast Studio uses somewhat new web technologies that are not yet (fully) supported by all browsers.
-The following table depicts the current state of browser support (as of May 2022).
 
-|            | Firefox ≥ 68   | Chrome ≥ 77    | Edge ≥ 79      | Safari ≥ 14.1 |
+|            | Firefox        | Chrome         | Edge           | Safari        |
 | ---------- | -------------- | -------------- | -------------- | ------------- |
 | Windows 11 | ✔              | ✔              | ✔              | -
 | Windows 10 | ✔              | ✔              | ✔              | -
