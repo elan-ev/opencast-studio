@@ -43,6 +43,7 @@
     "react-hotkeys-hook": "^4.4.1",
     "react-i18next": "^13.2.2",
     "react-icons": "^4.11.0",
+    "react-select": "^5.7.7",
     "use-resize-observer": "^9.1.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"

@@ -1,14 +1,18 @@
-import { HTMLInputTypeAttribute, useEffect, useId, useState } from "react";
+import { HTMLInputTypeAttribute, useEffect, useId, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
+import Select, { CSSObjectWithLabel, SelectInstance } from "react-select";
+import {
+  ControllerRenderProps, FieldError, FieldValues, Path, SubmitHandler, Validate,
+  useController, useForm,
+} from "react-hook-form";
+import { FiUpload } from "react-icons/fi";
+import { LuCheckCircle2 } from "react-icons/lu";
+import { ProtoButton, Spinner, match, notNullish, unreachable, useColorScheme } from "@opencast/appkit";
 
 import { useDispatch, useStudioState } from "../../studio-state";
 import { Opencast, useOpencast } from "../../opencast";
 import { useSettings, useSettingsManager } from "../../settings";
-import { LuCheckCircle2 } from "react-icons/lu";
 import { COLORS, focusStyle } from "../../util";
-import { FieldError, FieldValues, Path, SubmitHandler, Validate, useForm } from "react-hook-form";
-import { FiUpload } from "react-icons/fi";
-import { ProtoButton, Spinner, match, notNullish, unreachable, useColorScheme } from "@opencast/appkit";
 import { ErrorBox } from "../../ui/ErrorBox";
 import { prettyFileSize, sharedButtonStyle } from ".";
 
@@ -98,7 +102,7 @@ export const UploadBox: React.FC = () => {
     return () => clearInterval(interval);
   });
 
-  const handleUpload: SubmitHandler<Inputs> = async () => {
+  const handleUpload: SubmitHandler<Inputs> = async data => {
     dispatch({ type: "UPLOAD_REQUEST" });
     progressHistory.push({
       timestamp: Date.now(),
@@ -106,8 +110,9 @@ export const UploadBox: React.FC = () => {
     });
     const result = await opencast.upload({
       recordings: recordings.filter(Boolean),
-      title,
-      presenter,
+      title: data.title,
+      presenter: data.presenter,
+      series: data.series,
       uploadSettings: settings.upload,
       onProgress,
       start: state.start,
@@ -143,6 +148,7 @@ export const UploadBox: React.FC = () => {
 type Inputs = {
   title: string;
   presenter: string;
+  series: string;
   serverUrl: string;
   loginName: string;
   loginPassword: string;
@@ -153,7 +159,11 @@ type UploadFormProps = {
 };
 
 const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
-  const { titleField = "required", presenterField = "required" } = useSettings().upload || {};
+  const {
+    titleField = "required",
+    presenterField = "required",
+    seriesField = "optional",
+  } = useSettings().upload ?? {};
 
   const { t, i18n } = useTranslation();
   const opencast = useOpencast();
@@ -165,8 +175,17 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
   type FormState = "idle" | "testing";
   const [state, setState] = useState<FormState>("idle");
 
-  const { formState: { errors }, handleSubmit, register } = useForm<Inputs>({
+  const { formState: { errors }, handleSubmit, register, control, getValues } = useForm<Inputs>({
     defaultValues: settingsManager.formValues().opencast,
+  });
+  const { field: seriesSelect } = useController({
+    name: "series",
+    control,
+    rules: {
+      required: seriesField === "required"
+        ? t("steps.finish.upload.validation-error-required")
+        : false,
+    },
   });
 
   // This is a bit ugly, but works. We want to make sure that the `title` and
@@ -205,6 +224,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       return;
     }
 
+    console.log(data);
     setState("testing");
 
     // Update Opencast connection data. This is a bit roundabout right now as
@@ -242,6 +262,30 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
   const uploadSize = prettyFileSize(totalBytes, i18n);
   const { isHighContrast } = useColorScheme();
 
+  // Testing the new connection settings to establish a connection ASAP to make
+  // the series selector work.
+  const onConnectionSettingChange = async () => {
+    const data = getValues();
+
+    // If nothing changed, do nothing.
+    const ocSettings = settingsManager.settings().opencast;
+    const anyChange = (data.serverUrl && data.serverUrl !== ocSettings?.serverUrl)
+      || (data.loginName && data.loginName !== ocSettings?.loginName)
+      || (data.loginPassword && data.loginPassword !== ocSettings?.loginPassword);
+    if (!anyChange) {
+      return;
+    }
+
+    const oc = await Opencast.init({
+      ...settingsManager.settings().opencast,
+      ...data,
+    });
+
+    if (oc.getState() === "logged_in") {
+      opencast.setGlobalInstance(oc);
+      settingsManager.saveSettings({ opencast: data });
+    }
+  };
 
   return (
     <>
@@ -265,6 +309,11 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
           defaultValue={presenterValue}
           {...{ errors, register }}
         />}
+        {seriesField !== "hidden" && <SeriesSelect
+          formProps={seriesSelect}
+          showOpencastSection={showOpencastSection}
+          errors={errors}
+        />}
 
         {showOpencastSection && <>
           <h3 css={{
@@ -278,6 +327,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             label={t("steps.finish.upload.settings-label-server-url")}
             name="serverUrl"
             register={register}
+            onBlur={onConnectionSettingChange}
             required
             validate={(value: string) => {
               try {
@@ -299,6 +349,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             label={t("steps.finish.upload.settings-label-username")}
             name="loginName"
             register={register}
+            onBlur={onConnectionSettingChange}
             required
           />}
 
@@ -307,6 +358,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
             label={t("steps.finish.upload.settings-label-password")}
             name="loginPassword"
             register={register}
+            onBlur={onConnectionSettingChange}
             required
             type="password"
           />}
@@ -344,7 +396,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 };
 
 type InputProps<I extends FieldValues, F> =
-  Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue"> &
+  Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue" | "onBlur"> &
   Pick<ReturnType<typeof useForm<I>>, "register"> & {
   /** Human readable string describing the field. */
   label: string;
@@ -404,6 +456,7 @@ export const Input = <I extends FieldValues, F>({
           {...register(name, {
             validate,
             onChange: rest.onChange,
+            onBlur: rest.onBlur,
             ...required && { required: t("steps.finish.upload.validation-error-required") },
           })}
           css={{
@@ -417,25 +470,201 @@ export const Input = <I extends FieldValues, F>({
             ...focusStyle({ offset: -1 }),
           }}
         />
-        {error && (
-          <div
-            id={`${name}Error`}
-            css={{
-              backgroundColor: COLORS.danger1,
-              color: COLORS.danger5,
-              marginTop: 4,
-              borderRadius: 4,
-              padding: "6px 12px",
-              lineHeight: 1.2,
-            }}
-          >
-            {error.message}
-          </div>
-        )}
+        {error && <ErrorContainer id={`${name}Error`}>
+          {error.message}
+        </ErrorContainer>}
       </div>
     </div>
   );
 };
+
+type ErrorContainerProps = React.PropsWithChildren<{
+  id: string;
+}>;
+
+const ErrorContainer: React.FC<ErrorContainerProps> = ({ id, children }) => (
+  <div
+    id={id}
+    css={{
+      backgroundColor: COLORS.danger1,
+      color: COLORS.danger5,
+      marginTop: 4,
+      borderRadius: 4,
+      padding: "6px 12px",
+      lineHeight: 1.2,
+    }}
+  >
+    {children}
+  </div>
+);
+
+
+type SeriesSelectProps = {
+  formProps: ControllerRenderProps<Inputs, "series">;
+  showOpencastSection: boolean;
+  errors: Partial<Record<keyof Inputs, FieldError>>;
+};
+
+const SeriesSelect: React.FC<SeriesSelectProps> = ({ formProps, showOpencastSection, errors }) => {
+  const { t, i18n } = useTranslation();
+  const opencast = useOpencast();
+  const { scheme } = useColorScheme();
+  const seriesId = useSettings().upload?.seriesId;
+
+  type Option = { value: string; label: string };
+  const [options, setOptions] = useState<Option[] | "error" | null>(null);
+  const ref = useRef<SelectInstance<Option>>(null);
+  useEffect(() => {
+    setOptions(null);
+    opencast.getSeries().then(
+      result => {
+        const options = [...result.entries()].map(([value, label]) => ({ value, label }));
+        options.sort(
+          (a, b) => a.label.localeCompare(b.label, i18n.language, { sensitivity: "base" })
+        );
+
+        // If a seriesID is given, make the select use that as default value.
+        if (seriesId) {
+          const title = result.get(seriesId);
+          const defaultOption = {
+            label: title ?? t("steps.finish.upload.series-unknown"),
+            value: seriesId,
+          };
+          if (title == null) {
+            options.push(defaultOption);
+          }
+          ref.current?.setValue(defaultOption, "select-option");
+        }
+
+        setOptions(options);
+      },
+      e => {
+        console.log("Error fetching series: ", e);
+        setOptions("error");
+      },
+    );
+  }, [opencast]);
+
+  const inputId = useId();
+  const errorId = useId();
+  const error = options === "error";
+  return (
+    <div css={{ marginBottom: 12 }}>
+      <label htmlFor={inputId} css={{
+        display: "block",
+        fontWeight: 700,
+        color: COLORS.neutral70,
+        margin: "4px 0",
+        fontSize: 14,
+      }}>
+        {t("steps.finish.upload.label-series")}
+      </label>
+
+      <Select
+        id={inputId}
+        ref={ref}
+        options={options && options !== "error" ? options : []}
+        isLoading={options === null}
+        isDisabled={options === "error"}
+        isClearable
+        isSearchable
+        onChange={data => formProps.onChange(data?.value)}
+        onBlur={formProps.onBlur}
+        aria-invalid={error ? "true" : "false"}
+        aria-describedby={error ? errorId : inputId}
+
+        // Styling
+        placeholder={t("steps.finish.upload.series-placeholder")}
+        loadingMessage={() => t("steps.finish.upload.series-loading")}
+        noOptionsMessage={() => t("steps.finish.upload.series-none")}
+        styles={selectStyles(scheme.startsWith("dark"), scheme.endsWith("high-contrast"))}
+        theme={theme => ({
+          ...theme,
+          colors: {
+            ...theme.colors,
+            danger: COLORS.danger0,
+            primary: COLORS.focus,
+            neutral0: COLORS.neutral00,
+            neutral5: COLORS.neutral15,
+            neutral10: COLORS.neutral20,
+            neutral20: COLORS.neutral30,
+            neutral30: COLORS.neutral40,
+            neutral40: COLORS.neutral50,
+            neutral50: COLORS.neutral50,
+            neutral60: COLORS.neutral60,
+            neutral70: COLORS.neutral70,
+            neutral80: COLORS.neutral80,
+            neutral90: COLORS.neutral90,
+          },
+        })}
+      />
+      {error && (
+        <ErrorContainer id={errorId}>
+          {t("steps.finish.upload.series-fetch-error")}
+          {showOpencastSection && (
+            " " + t("steps.finish.upload.series-connection-settings-hint")
+          )}
+        </ErrorContainer>
+      )}
+      {errors["series"] && (
+        <ErrorContainer id={errorId}>{errors["series"].message}</ErrorContainer>
+      )}
+    </div>
+  );
+};
+
+export const selectStyles = (isDark: boolean, isHighContrast: boolean) => ({
+  control: (baseStyles: CSSObjectWithLabel, state: { isFocused: boolean }) => ({
+    ...baseStyles,
+    backgroundColor: COLORS.neutral00,
+    paddingLeft: 8,
+    ...!state.isFocused && { borderColor: COLORS.neutral30 },
+    ...state.isFocused && {
+      // react-select uses box-shadow as outline. But it's not quite large
+      // enough, so we override it here.
+      boxShadow: `0 0 0 1.5px ${COLORS.focus}`,
+    },
+  }),
+  input: (baseStyles: CSSObjectWithLabel) => ({
+    ...baseStyles,
+    color: COLORS.neutral80,
+    padding: "4px 0",
+  }),
+  placeholder: (baseStyles: CSSObjectWithLabel) => ({
+    ...baseStyles,
+    color: COLORS.neutral60,
+  }),
+  singleValue: (baseStyles: CSSObjectWithLabel) => ({
+    ...baseStyles,
+    color: COLORS.neutral90,
+  }),
+  menuList: (baseStyles: CSSObjectWithLabel) => ({
+    ...baseStyles,
+    padding: 0,
+  }),
+  menu: (baseStyles: CSSObjectWithLabel) => ({
+    ...baseStyles,
+    ...isDark && { outline: `1px solid ${COLORS.neutral20}` },
+    ...isHighContrast && { outline: `1px solid ${COLORS.neutral90}` },
+    backgroundColor: isDark ? COLORS.neutral10 : COLORS.neutral05,
+    overflow: "hidden",
+  }),
+  option: (_baseStyles: CSSObjectWithLabel, state: {
+    isSelected: boolean;
+    isFocused: boolean;
+  }) => ({
+    cursor: "default",
+    padding: "6px 10px",
+    borderLeft: `4px solid ${state.isSelected ? COLORS.focus : "transparent"}`,
+    ...isHighContrast && state.isFocused && {
+      outline: `2px solid ${COLORS.neutral90}`,
+      outlineOffset: -3,
+    },
+    ...(state.isFocused || state.isSelected) && !isHighContrast && {
+      backgroundColor: isDark ? COLORS.neutral25 : COLORS.neutral10,
+    },
+  }),
+});
 
 
 type UploadProgressProps = {
