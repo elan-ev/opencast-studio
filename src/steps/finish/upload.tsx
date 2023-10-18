@@ -218,6 +218,12 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
   const configurablePassword = settingsManager.isPasswordConfigurable();
   const showOpencastSection = configurableServerUrl || configurableUsername || configurablePassword;
 
+  const ocDataFromInputs = (data: Inputs) => ({
+    serverUrl: data.serverUrl,
+    loginName: data.loginName,
+    loginPassword: data.loginPassword,
+  });
+
   const onSubmit: SubmitHandler<Inputs> = async data => {
     if (!showOpencastSection) {
       await handleUpload(data);
@@ -230,15 +236,16 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
     // Update Opencast connection data. This is a bit roundabout right now as
     // the Opencast logic is still from pre-redesign, where the connection data
     // was given on a separate settings page.
+    const ocData = ocDataFromInputs(data);
     const oc = await Opencast.init({
       ...settingsManager.settings().opencast,
-      ...data,
+      ...ocData,
     });
 
     const error = match(oc.getState(), {
       "logged_in": () => {
         opencast.setGlobalInstance(oc);
-        settingsManager.saveSettings({ opencast: data });
+        settingsManager.saveSettings({ opencast: ocData });
         return null;
       },
       "incorrect_login": () => opencast.isLoginProvided()
@@ -276,14 +283,15 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       return;
     }
 
+    const ocData = ocDataFromInputs(data);
     const oc = await Opencast.init({
       ...settingsManager.settings().opencast,
-      ...data,
+      ...ocData,
     });
 
     if (oc.getState() === "logged_in") {
       opencast.setGlobalInstance(oc);
-      settingsManager.saveSettings({ opencast: data });
+      settingsManager.saveSettings({ opencast: ocData });
     }
   };
 
