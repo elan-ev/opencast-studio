@@ -119,6 +119,32 @@ export class Opencast {
     return self;
   }
 
+  /**
+   * Requests series from Opencast that the current user has write access to.
+   * Returns a map from series ID to title, or "error" if anything goes wrong.
+   */
+  async getSeries(): Promise<Map<string, string>> {
+    if (this.#serverUrl === null) {
+      throw new Error("Connection not configured");
+    }
+
+    const series = await this.jsonRequest("studio-api/series.json");
+
+    const isProperForm = (obj: object | null): obj is { id: string; title: string }[] => (
+      Array.isArray(obj) && obj.every(s => typeof s === "object"
+        && "id" in s
+        && "title" in s
+        && typeof s.id === "string"
+        && typeof s.title === "string"
+      )
+    );
+    if (!isProperForm(series)) {
+      throw new InvalidJson("unexpected result from series API", null);
+    }
+
+    return new Map(series.map(s => [s.id, s.title]));
+  }
+
   /** Updates the global OC instance from `this` to `newInstance`. */
   setGlobalInstance(newInstance: Opencast) {
     if (!this.updateGlobalOc) {
@@ -348,7 +374,7 @@ export class Opencast {
    * potentially changed the `state`.
    */
   async upload({
-    recordings, title, presenter, start, end, uploadSettings, startTime, endTime, onProgress,
+    recordings, title, presenter, series, start, end, uploadSettings, startTime, endTime, onProgress,
   }: {
     recordings: Recording[];
     title: string;
@@ -357,6 +383,7 @@ export class Opencast {
     end: number | null;
     startTime: Date;
     endTime: Date;
+    series: string | null;
     uploadSettings: Settings["upload"];
     onProgress: (p: number) => void;
   }): Promise<UploadState> {
@@ -384,7 +411,7 @@ export class Opencast {
 
       // Add metadata to media package
       mediaPackage = await this.addDcCatalog(
-        { mediaPackage, uploadSettings, title, presenter, startTime, endTime }
+        { mediaPackage, uploadSettings, title, presenter, series, startTime, endTime }
       );
 
       // Set appropriate ACL unless the configuration says no.
@@ -440,15 +467,16 @@ export class Opencast {
    * Adds the DC Catalog with the given metadata to the current ingest process
    * via `ingest/addDCCatalog`. Do not call this method outside of `upload`!
    */
-  async addDcCatalog({ mediaPackage, uploadSettings, ...rest }: {
+  async addDcCatalog({ mediaPackage, uploadSettings, series, ...rest }: {
     mediaPackage: string;
     title: string;
     presenter: string;
+    series: string | null;
     uploadSettings: Settings["upload"];
     startTime: Date;
     endTime: Date;
   }) {
-    const seriesId = uploadSettings?.seriesId;
+    const seriesId = series ? series : uploadSettings?.seriesId;
     const template = uploadSettings?.dcc || DEFAULT_DCC_TEMPLATE;
     const dcc = this.constructDcc(template, { ...rest, seriesId });
 
