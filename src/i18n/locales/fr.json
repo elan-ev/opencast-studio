@@ -7,12 +7,23 @@
   "sources-user": "Caméra",
   "error-lost-video-stream": "Le flux vidéo s’est terminé de manière inattendue ! Une caméra s’est-elle déconnectée ou avez-vous accidentellement annulé le partage d’une source vidéo ?",
   "error-lost-audio-stream": "Le flux audio s’est terminé de manière inattendue ! Le microphone s’est-il déconnecté ou avez-vous accidentellement annulé le partage de la source audio ?",
-  "error-lost-stream-end-recording": "Un flux vidéo ou audio s’est terminé de manière inattendue et l’enregistrement actif a été arrêté prématurément ! Un microphone ou une caméra s'est-il déconnecté ? Ou avez-vous accidentellement annulé le partage de la source multimédia ou révoqué les autorisations nécessaires ?",
+  "error-lost-stream-end-recording": "Un flux vidéo ou audio s’est terminé de manière inattendue et l’enregistrement actif a été arrêté prématurément ! Un microphone ou une caméra s’est-il déconnecté ? Ou avez-vous accidentellement annulé le partage de la source multimédia ou révoqué les autorisations nécessaires ?",
   "warning-https": "La plupart des navigateurs ne permettent pas la capture vidéo via une connexion non cryptée (HTTP). Veuillez passer en HTTPS.",
   "warning-recorder-not-supported": "Votre navigateur ne prend pas en charge les flux de médias d’enregistrement.",
-  "warning-recorder-safari-hint": "Si vous utilisez Safari, vous pouvez activer la fonction expérimentale 'MediaRecorder' dans les paramètres. Toutefois, sous MacOS, nous vous recommandons de passer à Chrome ou Firefox.",
+  "warning-recorder-safari-hint": "Si vous utilisez Safari, vous pouvez activer la fonction expérimentale « MediaRecorder » dans les paramètres. Toutefois, sous MacOS, nous vous recommandons de passer à Chrome ou Firefox.",
 
   "header": {
+    "info": {
+      "label": "Info"
+    },
+    "theme": {
+      "label": "Apparence",
+      "dark": "Sombre",
+      "light": "Clair",
+      "dark-high-contrast": "Sombre (contraste élevé)",
+      "light-high-contrast": "Clair (contraste élevé)",
+      "auto": "Auto"
+    },
     "language": {
       "label": "Langue"
     }
@@ -20,16 +31,17 @@
   "steps": {
     "back-button-label": "Retour",
     "next-button-label": "Suivant",
-
     "video": {
+      "label": "Sélectionner la source vidéo",
       "share-display": "Partager le bureau",
       "share-user": "Partager la caméra",
-      "display-selected": "Écran sélectionné",
-      "display-and-user-selected": "Écran et caméra sélectionnés",
+      "share-display-and-user": "Partager l’écran et la caméra",
       "display-not-allowed-title": "Impossible d’accéder à votre écran",
       "display-not-allowed-text": "Essayez de resélectionner la source. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre écran (généralement via un bouton à côté de la barre d’adresse de votre navigateur).",
       "user-not-allowed-title": "Impossible d’accéder à votre caméra",
       "user-not-allowed-text": "Essayez de resélectionner la source. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre caméra (généralement via un bouton situé à côté de la barre d’adresse de votre navigateur). Si cela n’aide pas, essayez de fermer les autres applications qui pourraient utiliser cette caméra : avec certains systèmes d’exploitation, une seule application peut avoir accès à la caméra.",
+      "display-selected": "Écran sélectionné",
+      "display-and-user-selected": "Écran et caméra sélectionnés",
       "user-selected": "Caméra sélectionnée",
       "question": "Quelle(s) source(s) vidéo(s) enregistrer ?",
       "none-available": "Votre navigateur/appareil ne prend pas en charge la capture d’écran ou de vidéo de la caméra :-(",
@@ -46,41 +58,57 @@
       "preferences-note": "<0>Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto »."
     },
     "audio": {
+      "label": "Sélectionner la source audio",
       "question": "Enregistrer l’audio ?",
       "microphone": "Microphone",
       "microphone-selected": "Microphone sélectionné",
       "without-audio": "Sans audio",
       "reselect-audio": "Resélectionnez la source audio",
       "not-allowed-title": "Impossible d’accéder à votre micro.",
-      "not-allowed-text": "Essayez de sélectionner 'Resélectionnez la source audio' et de sélectionner à nouveau 'Microphone'. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre microphone (généralement via un bouton situé à côté de la barre d’adresse de votre navigateur)",
+      "not-allowed-text": "Essayez de sélectionner « Resélectionnez la source audio » et de sélectionner à nouveau « Microphone ». Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre microphone (généralement via un bouton situé à côté de la barre d’adresse de votre navigateur)",
       "device": "Appareil"
     },
     "record": {
+      "label": "Enregistrer",
       "pause-button-title": "Mettre l’enregistrement en pause",
       "record-button-title": "Démarrer l’enregistrement",
       "resume-button-title": "Reprendre l’enregistrement",
-      "stop-button-title": "Arrêt de l’enregistrement"
+      "stop-button-title": "Arrêt de l’enregistrement",
+      "is-paused": "Enregistrement en pause"
     },
     "review": {
+      "label": "Examiner et couper",
+      "only-on-upload-note": "Le découpage de la vidéo ne fonctionne que lors du téléchargement sur Opencast et non lors de la sauvegarde locale.",
       "button-discard-and-record": "Ignorer et réenregistrer",
       "error-empty-recording": "Erreur : votre enregistrement est complètement vide. Avez-vous arrêté l’enregistrement presque immédiatement après l’avoir démarré ? En outre, veuillez vous assurer que votre système est suffisamment puissant pour enregistrer un flux vidéo (cela pourrait ne pas être le cas si une autre application utilise fortement votre système ou si votre ordinateur est très ancien). Si votre système est assez puissant pour enregistrer, que vous avez enregistré pendant plusieurs secondes et que vous voyez toujours cette erreur : veuillez signaler ce problème comme un bogue sur GitHub.",
       "set-start": "Définir l’heure actuelle comme début",
       "set-end": "Définir l’heure actuelle comme fin",
       "part-will-be-removed": "Cette section sera retirée",
       "play": "Jouer",
-      "pause": "Pause"
+      "pause": "Pause",
+      "jump-to-cut-point": "Aller au point de coupure"
     },
     "finish": {
+      "label": "Enregistrer la vidéo",
+      "finish-button": "Terminer",
       "return-to": "Quitter et retourner vers {{label}}",
       "return-to-no-label": "Quitter et revenir à la page précédente",
       "new-recording": "Commencer un nouvel enregistrement",
       "new-recording-warning": "En démarrant un nouvel enregistrement, les enregistrements actuels seront supprimés (les enregistrements téléchargés ou en cours de téléchargement ne sont pas concernés). Êtes-vous sûr ?",
       "upload": {
+        "label": "Téléverser la vidéo",
         "validation-error-required": "Ce champ est obligatoire.",
         "complete": "Téléchargement terminé !",
         "complete-explanation": "Votre enregistrement va maintenant être traité par Opencast.",
         "label-presenter": "Présentateur",
         "label-title": "Titre",
+        "label-series": "Séries",
+        "series-placeholder": "Sélectionnez une série",
+        "series-none": "Aucune série",
+        "series-unknown": "Série inconnue",
+        "series-fetch-error": "Impossible de charger les séries disponibles.",
+        "series-connection-settings-hint": "Vérifiez les paramètres de connexion ci-dessous.",
+        "series-loading": "Chargement…",
         "upload-network-error": "Échec du téléchargement : erreur réseau. Veuillez vérifier votre connexion internet ! Autres causes potentielles : le serveur Opencast n’est pas accessible ou mal configuré.",
         "upload-invalid-response": "Échec du téléchargement : une réponse inattendue a été reçue.",
         "upload-not-authorized": "Échec du téléchargement : vous n’êtes pas autorisé à télécharger.",
@@ -92,7 +120,7 @@
         "settings-label-username": "Identifiant",
         "settings-label-password": "Mot de passe",
         "settings-invalid-url": "Cette adresse URL est invalide",
-        "settings-invalid-url-http-start": "L’adresse URL devrait commencer avec 'https://' ou 'http://'",
+        "settings-invalid-url-http-start": "L’adresse URL devrait commencer avec « https:// » ou « http:// »",
         "settings-invalid-login-data": "Impossible de se connecter au serveur Opencast : l’identifiant/mot de passe que vous avez fourni n’est pas valide.",
         "settings-invalid-provided-login": "Le serveur précise qu’il fournit une connexion automatique, mais la demande renvoyée n’est pas authentifiée. Il s’agit soit d’un bogue interne d’Opencast Studio, soit d’une mauvaise configuration du serveur par votre administrateur système. Il n’y a rien que vous puissiez faire :(",
         "time": {
@@ -104,7 +132,63 @@
           "hours": "heures",
           "left": "{{time}} restant"
         }
+      },
+      "save-locally": {
+        "label": "Enregistrer localement",
+        "save-desktop-locally": "Télécharger l’enregistrement d’écran",
+        "save-video-locally": "Télécharger l’enregistrement de la caméra",
+        "recording-saved": "Enregistrement sauvegardé"
       }
+    }
+  },
+  "shortcuts": {
+    "label": "Raccourcis",
+    "sequence-seperator": "ou",
+    "general": {
+      "title": "Général",
+      "show-available-shortcuts": "Afficher les raccourcis disponibles",
+      "show-overview": "Afficher cet aperçu",
+      "close-overlay": "Fermer la boîte de dialogue",
+      "tab-elements": "Naviguer à travers les éléments",
+      "next-button": "Suivant / Confirmer",
+      "back-button": "Retour / Annuler"
+    },
+    "select-video": {
+      "select-display": "Sélectionner l’écran",
+      "select-camera": "Sélectionner la caméra",
+      "select-both": "Sélectionner écran et la caméra"
+    },
+    "select-audio": {
+      "select-microphone": "Sélectionner le micro",
+      "select-no-audio": "Ne sélectionner aucun son"
+    },
+    "record": {
+      "start-pause-resume-recording": "Démarrer / mettre en pause l’enregistrement"
+    },
+    "review": {
+      "play-pause": "Lecture / Pause de la vidéo",
+      "skip-five": "5 secondes en avant",
+      "back-five": "5 secondes en arrière",
+      "frame-forward": "Une image en avant",
+      "frame-back": "Une image en arrière",
+      "cut-left": "Couper à gauche",
+      "cut-right": "Couper à droite",
+      "delete-left": "Supprimer le marqueur de coupe gauche",
+      "delete-right": "Supprimer le marqueur de coupe droit"
+    },
+    "finish": {
+      "new-recording": "Démarrez un nouvel enregistrement"
+    },
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Option",
+      "command": "Cmd",
+      "space": "Barre d’espace",
+      "shift": "Majuscule",
+      "left": "Gauche",
+      "right": "Droite"
     }
   }
 }
