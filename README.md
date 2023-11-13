@@ -7,7 +7,7 @@ Opencast Studio
 
 A web-based recording studio for [Opencast](https://opencast.org).
 
-> **Important note for developers**: currently, we are redesigning Studio completely. 
+> **Important note for developers**: currently, we are redesigning Studio completely.
 > This will change a lot of code. So please do not start writing a patch for Studio now.
 > At least talk to us first.
 
@@ -139,6 +139,6 @@ npm run build:release
 
 | Option                  | Example            | Description
 | ----------------------- | ------------------ | -----------
-| `PUBLIC_URL`            | `/studio`          | Path from which Studio will be served
+| `PUBLIC_PATH`           | `/studio`          | Path from which Studio will be served
 | `SETTINGS_PATH`         | `/mysettings.toml` | Path from which to load the configuration (see `CONFIGURATION.md` for more information)
 | `INCLUDE_LEGAL_NOTICES` | `1`                | Set to `1` to include legal notices and information about ELAN e.V., any other value or having this variable not set will not include them. Unless you are working for ELAN e.V. there is probably no reason for you to use this variable.
