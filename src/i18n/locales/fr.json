@@ -35,7 +35,7 @@
       "label": "Sélectionner la source vidéo",
       "share-display": "Partager le bureau",
       "share-user": "Partager la caméra",
-      "share-display-and-user": "Share display & camera",
+      "share-display-and-user": "Partager l’écran et la caméra",
       "display-not-allowed-title": "Impossible d’accéder à votre écran",
       "display-not-allowed-text": "Essayez de resélectionner la source. Si cela ne fonctionne pas, rechargez cette page ou autorisez-nous à accéder manuellement à votre écran (généralement via un bouton à côté de la barre d’adresse de votre navigateur).",
       "user-not-allowed-title": "Impossible d’accéder à votre caméra",
