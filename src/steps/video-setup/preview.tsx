@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
-import { Spinner, match, unreachable, useColorScheme } from "@opencast/appkit";
+import { ProtoButton, Spinner, WithTooltip, match, unreachable, useColorScheme } from "@opencast/appkit";
 import { useTranslation } from "react-i18next";
+import { FiInfo, FiVolume2, FiVolumeX } from "react-icons/fi";
 
 import { COLORS, dimensionsOf } from "../../util";
-import { StreamSettings, DesktopAudioInfo } from "./prefs";
-import { Input } from ".";
 import { VideoBox, useVideoBoxResize } from "../../ui/VideoBox";
 import { ErrorBox } from "../../ui/ErrorBox";
+import { StreamSettings } from "./prefs";
+import { Input } from ".";
 
 
 
@@ -145,6 +146,48 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
           borderRadius: 12,
         }}
       />
+    </div>
+  );
+};
+
+export const DesktopAudioInfo: React.FC<{ stream: MediaStream }> = ({ stream }) => {
+  const { t } = useTranslation();
+  const hasAudio = stream.getAudioTracks().length;
+
+  return (
+    <div css={{
+      position: "absolute",
+      top: 12,
+      right: 12,
+      whiteSpace: "pre-line",
+    }}>
+      <WithTooltip
+        placement="bottom"
+        tooltip={t(hasAudio ? "desktop-audio-info" : "no-desktop-audio-info")}
+      >
+        <ProtoButton
+          css={{
+            display: "inline-block",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            borderRadius: 5,
+            padding: 4,
+            fontSize: 15,
+            backdropFilter: "invert(1)",
+            lineHeight: 0,
+            cursor: "pointer",
+            "&:hover, &:focus-visible": {
+              backgroundColor: "rgba(0, 0, 0, 0.9)",
+            },
+            "&:focus-visible": {
+              outline: "5px dashed white",
+              outlineOffset: -2.5,
+            },
+          }}
+        >
+          <FiInfo /> {hasAudio ? <FiVolume2 /> : <FiVolumeX />}
+        </ProtoButton>
+      </WithTooltip>
     </div>
   );
 };

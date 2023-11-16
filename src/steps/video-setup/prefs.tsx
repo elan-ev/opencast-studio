@@ -6,7 +6,7 @@ import {
   Floating, FloatingContainer, FloatingHandle, FloatingTrigger, ProtoButton,
   WithTooltip, screenWidthAtMost, useColorScheme,
 } from "@opencast/appkit";
-import { FiSettings, FiX, FiInfo, FiVolumeX, FiVolume2 } from "react-icons/fi";
+import { FiSettings, FiX } from "react-icons/fi";
 
 import { Settings, useSettings } from "../../settings";
 import { COLORS, getUniqueDevices } from "../../util";
@@ -123,48 +123,6 @@ type StreamSettingsProps = {
   isDesktop: boolean;
   stream: MediaStream | null;
 }
-
-export const DesktopAudioInfo: React.FC<{ stream: MediaStream }> = ({ stream }) => {
-  const { t } = useTranslation();
-  const hasAudio = stream.getAudioTracks().length;
-
-  return (
-    <div css={{
-      position: "absolute",
-      top: 12,
-      right: 12,
-      whiteSpace: "pre-line",
-    }}>
-      <WithTooltip
-        placement="bottom"
-        tooltip={t(hasAudio ? "desktop-audio-info" : "no-desktop-audio-info")}
-      >
-        <ProtoButton
-          css={{
-            display: "inline-block",
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            borderRadius: 5,
-            padding: 4,
-            fontSize: 15,
-            backdropFilter: "invert(1)",
-            lineHeight: 0,
-            cursor: "pointer",
-            "&:hover, &:focus-visible": {
-              backgroundColor: "rgba(0, 0, 0, 0.9)",
-            },
-            "&:focus-visible": {
-              outline: "5px dashed white",
-              outlineOffset: -2.5,
-            },
-          }}
-        >
-          <FiInfo /> {hasAudio ? <FiVolume2 /> : <FiVolumeX />}
-        </ProtoButton>
-      </WithTooltip>
-    </div>
-  );
-};
 
 export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
   const dispatch = useDispatch();
