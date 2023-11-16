@@ -124,20 +124,12 @@ type StreamSettingsProps = {
   stream: MediaStream | null;
 }
 
-export const DesktopAudioInfo: React.FC<StreamSettingsProps> = ({ isDesktop, stream }) => {
+export const DesktopAudioInfo: React.FC<{ stream: MediaStream }> = ({ stream }) => {
   const { t } = useTranslation();
-  const audioLength = stream?.getAudioTracks().length;
-
-  const hasDesktopAudio = () => {
-    if (audioLength !== undefined && audioLength > 0) {
-      return true;
-    }
-    return false;
-  };
+  const hasAudio = stream.getAudioTracks().length;
 
   return (
     <div css={{
-      display: isDesktop ? "initial" : "none",
       position: "absolute",
       top: 12,
       right: 12,
@@ -145,14 +137,14 @@ export const DesktopAudioInfo: React.FC<StreamSettingsProps> = ({ isDesktop, str
     }}>
       <WithTooltip
         placement="bottom"
-        tooltip={hasDesktopAudio() ? t("desktop-audio-info") : t("no-desktop-audio-info")}
+        tooltip={t(hasAudio ? "desktop-audio-info" : "no-desktop-audio-info")}
       >
         <ProtoButton
           css={{
             display: "inline-block",
             backgroundColor: "rgba(0, 0, 0, 0.7)",
             color: "white",
-            borderRadius: "5px",
+            borderRadius: 5,
             padding: 4,
             fontSize: 15,
             backdropFilter: "invert(1)",
@@ -167,7 +159,7 @@ export const DesktopAudioInfo: React.FC<StreamSettingsProps> = ({ isDesktop, str
             },
           }}
         >
-          <FiInfo /> {hasDesktopAudio() ? <FiVolume2 /> : <FiVolumeX />}
+          <FiInfo /> {hasAudio ? <FiVolume2 /> : <FiVolumeX />}
         </ProtoButton>
       </WithTooltip>
     </div>

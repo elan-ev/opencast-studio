@@ -63,8 +63,10 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
       },
     }}>
       <PreviewVideo input={input} />
-      <DesktopAudioInfo isDesktop={input.isDesktop} stream={input.stream} />
-      {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
+      {input.stream && <>
+        {input.isDesktop && <DesktopAudioInfo stream={input.stream} />}
+        <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
+      </>}
     </div>
   );
 };
