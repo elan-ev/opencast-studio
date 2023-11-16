@@ -49,6 +49,13 @@ const config: CallableOption = (_env, argv) => ({
           },
         }],
       },
+      {
+        resourceQuery: /asset/,
+        type: "asset/resource",
+        generator: {
+          filename: "[path][name][ext]",
+        },
+      },
     ],
   },
   plugins: [

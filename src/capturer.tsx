@@ -1,3 +1,4 @@
+import { VirtualBackgroundProcessor } from "@shiguredo/virtual-background";
 import { Settings } from "./settings";
 import { Dispatcher } from "./studio-state";
 
@@ -96,12 +97,24 @@ export async function startUserCapture(
   };
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    stream.getTracks().forEach(track => {
+    let stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+    const assetLoader = require.context("@shiguredo/virtual-background/dist?asset", true, /.*/);
+    const assetsPath = assetLoader(assetLoader.keys()[0])
+      .split("/").slice(0, -1).join("/");
+
+    const tracks = await Promise.all(stream.getTracks().map(
+      async track => track.kind === "video"
+        ? await new VirtualBackgroundProcessor(assetsPath)
+          .startProcessing(track as MediaStreamVideoTrack, { blurRadius: 15 })
+        : track,
+    ));
+    tracks.forEach(track => {
       track.onended = () => {
         dispatch({ type: "USER_UNEXPECTED_END" });
       };
     });
+    stream = new MediaStream(tracks);
     dispatch({ type: "SHARE_USER", stream });
   } catch (err) {
     // TODO: there 7 types of exceptions; certainly we should differentiate here one day
