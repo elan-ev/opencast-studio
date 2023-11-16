@@ -159,13 +159,12 @@ type UploadFormProps = {
 };
 
 const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
-  const uploadSettings = useSettings().upload ?? {};
   const {
     titleField = "required",
     presenterField = "required",
     seriesField = "optional",
     autofillPresenter = [],
-  } = uploadSettings;
+  } = useSettings().upload ?? {};
 
   const { t, i18n } = useTranslation();
   const opencast = useOpencast();
@@ -178,7 +177,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       .map(source => match(source, {
         "opencast": () => opencast.getUsername(),
       }))
-      .filter(Boolean)[0]
+      .find(Boolean)
     || "";
 
   type FormState = "idle" | "testing";
@@ -213,6 +212,15 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       window.localStorage.setItem(LAST_PRESENTER_KEY, target.value);
     }
   }
+
+  // If the user has not yet changed the value of the field, but it has been prefilled
+  // from local storage or one of the `autofillPresenter` sources, update the state
+  // using that value.
+  useEffect(() => {
+    if (presenterValue !== presenter) {
+      dispatch({ type: "UPDATE_PRESENTER", value: presenterValue });
+    }
+  }, []);
 
   const configurableServerUrl = settingsManager.isConfigurable("opencast.serverUrl");
   const configurableUsername = settingsManager.isUsernameConfigurable();

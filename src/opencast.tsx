@@ -290,25 +290,15 @@ export class Opencast {
 
   /** Returns the value from user.name from the `/info/me.json` endpoint. */
   getUsername(): string | null {
-    if (!(this.#currentUser)) {
-      return null;
-    }
-    if (!(typeof this.#currentUser === "object")) {
-      return null;
-    }
-    if (!("user" in this.#currentUser)) {
-      return null;
-    }
-    if (!this.#currentUser.user) {
-      return null;
-    }
-    if (!(typeof this.#currentUser.user === "object")) {
-      return null;
-    }
-    if (!("name" in this.#currentUser.user)) {
-      return null;
-    }
-    if (!(typeof this.#currentUser.user.name === "string")) {
+    if (!(
+      this.#currentUser
+      && typeof this.#currentUser === "object"
+      && "user" in this.#currentUser
+      && this.#currentUser.user
+      && typeof this.#currentUser.user === "object"
+      && "name" in this.#currentUser.user
+      && typeof this.#currentUser.user.name === "string"
+    )) {
       return null;
     }
     return this.#currentUser.user.name;
