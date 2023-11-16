@@ -163,6 +163,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
     titleField = "required",
     presenterField = "required",
     seriesField = "optional",
+    autofillPresenter = [],
   } = useSettings().upload ?? {};
 
   const { t, i18n } = useTranslation();
@@ -170,7 +171,14 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
   const dispatch = useDispatch();
   const settingsManager = useSettingsManager();
   const { title, presenter, upload: uploadState, recordings } = useStudioState();
-  const presenterValue = presenter || window.localStorage.getItem(LAST_PRESENTER_KEY) || "";
+  const presenterValue = presenter
+    || window.localStorage.getItem(LAST_PRESENTER_KEY)
+    || autofillPresenter
+      .map(source => match(source, {
+        "opencast": () => opencast.getUsername(),
+      }))
+      .find(Boolean)
+    || "";
 
   type FormState = "idle" | "testing";
   const [state, setState] = useState<FormState>("idle");
@@ -205,13 +213,14 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
     }
   }
 
-  // If the user has not yet changed the value of the field and the last used
-  // presenter name is used in local storage, use that.
+  // If the user has not yet changed the value of the field, but it has been prefilled
+  // from local storage or one of the `autofillPresenter` sources, update the state
+  // using that value.
   useEffect(() => {
     if (presenterValue !== presenter) {
       dispatch({ type: "UPDATE_PRESENTER", value: presenterValue });
     }
-  });
+  }, []);
 
   const configurableServerUrl = settingsManager.isConfigurable("opencast.serverUrl");
   const configurableUsername = settingsManager.isUsernameConfigurable();
@@ -404,20 +413,23 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
 };
 
 type InputProps<I extends FieldValues, F> =
-  Pick<JSX.IntrinsicElements["input"], "onChange" | "autoComplete" | "defaultValue" | "onBlur"> &
+  Pick<
+    JSX.IntrinsicElements["input"],
+    "onChange" | "autoComplete" | "defaultValue" | "onBlur"
+  > &
   Pick<ReturnType<typeof useForm<I>>, "register"> & {
-  /** Human readable string describing the field. */
-  label: string;
-  name: Path<I>;
-  /** Whether this field is required or may be empty. */
-  required: boolean;
-  /** Function validating the value and returning a string in the case of error. */
-  validate?: Validate<F, I>;
-  errors: Partial<Record<keyof I, FieldError>>;
-  /** Passed to the `<input>`. */
-  type?: HTMLInputTypeAttribute;
-  autoFocus?: boolean;
-};
+    /** Human readable string describing the field. */
+    label: string;
+    name: Path<I>;
+    /** Whether this field is required or may be empty. */
+    required: boolean;
+    /** Function validating the value and returning a string in the case of error. */
+    validate?: Validate<F, I>;
+    errors: Partial<Record<keyof I, FieldError>>;
+    /** Passed to the `<input>`. */
+    type?: HTMLInputTypeAttribute;
+    autoFocus?: boolean;
+  };
 
 /**
  * A styled `<input>` element with a label. Displays errors and integrated with

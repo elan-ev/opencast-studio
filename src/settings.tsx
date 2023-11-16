@@ -21,6 +21,9 @@ export type FormFieldState =
 /** Sources that setting values can come from. */
 type SettingsSource = "src-server"| "src-url" | "src-local-storage";
 
+const PRESENTER_SOURCES = ["opencast"] as const;
+type PresenterSource = typeof PRESENTER_SOURCES[number];
+
 /** Opencast Studio runtime settings. */
 export type Settings = {
   opencast?: {
@@ -37,6 +40,7 @@ export type Settings = {
     titleField?: FormFieldState;
     presenterField?: FormFieldState;
     seriesField?: FormFieldState;
+    autofillPresenter?: PresenterSource[];
   };
   recording?: {
     videoBitrate?: number;
@@ -584,6 +588,19 @@ const SCHEMA = {
     titleField: metaDataField,
     presenterField: metaDataField,
     seriesField: metaDataField,
+    autofillPresenter: (v, allowParse, src) => {
+      const a = types.array(v => {
+        const s = types.string(v);
+        if (!(PRESENTER_SOURCES as readonly string[]).includes(s)) {
+          throw new Error("invalid presenter name source");
+        }
+        return s;
+      })(v, allowParse, src);
+      if (new Set(a).size < a.length) {
+        throw new Error("duplicate presenter name source");
+      }
+      return a;
+    },
   },
   recording: {
     videoBitrate: types.positiveInteger,

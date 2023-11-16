@@ -288,6 +288,22 @@ export class Opencast {
     return await this.jsonRequest("info/me.json");
   }
 
+  /** Returns the value from user.name from the `/info/me.json` endpoint. */
+  getUsername(): string | null {
+    if (!(
+      this.#currentUser
+      && typeof this.#currentUser === "object"
+      && "user" in this.#currentUser
+      && this.#currentUser.user
+      && typeof this.#currentUser.user === "object"
+      && "name" in this.#currentUser.user
+      && typeof this.#currentUser.user.name === "string"
+    )) {
+      return null;
+    }
+    return this.#currentUser.user.name;
+  }
+
   /** Returns the response from the `/lti` endpoint. */
   async getLti(): Promise<object | null> {
     return await this.jsonRequest("lti");
