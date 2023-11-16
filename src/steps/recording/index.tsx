@@ -92,7 +92,7 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
     // sure, in case of a bug elsewhere, we clear the recordings here.
     dispatch({ type: "CLEAR_RECORDINGS" });
 
-    if (displayStream && userStream){
+    if (displayStream && userStream) {
       const onStopDesktop = addRecordOnStop(dispatch, "desktop");
       const onStopCamera = addRecordOnStop(dispatch, "video");
       const desktopStream = mixAudioIntoBothVideos(state.audioStream, displayStream);
@@ -102,16 +102,12 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
       desktopRecorder.current.start();
       videoRecorder.current = new Recorder(cameraStream, settings.recording, onStopCamera);
       videoRecorder.current.start();
-    }
-
-    else if (displayStream) {
+    } else if (displayStream) {
       const onStop = addRecordOnStop(dispatch, "desktop");
       const stream = mixAudioIntoVideo(state.audioStream, displayStream);
       desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
       desktopRecorder.current.start();
-    }
-
-    else if (userStream) {
+    } else if (userStream) {
       const onStop = addRecordOnStop(dispatch, "video");
       const stream = mixAudioIntoVideo(state.audioStream, userStream);
       videoRecorder.current = new Recorder(stream, settings.recording, onStop);
