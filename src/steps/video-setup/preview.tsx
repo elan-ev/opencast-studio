@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { ProtoButton, Spinner, WithTooltip, match, unreachable, useColorScheme } from "@opencast/appkit";
-import { useTranslation } from "react-i18next";
-import { FiInfo, FiVolume2, FiVolumeX } from "react-icons/fi";
+import { Spinner, WithTooltip, match, unreachable, useColorScheme } from "@opencast/appkit";
+import { Trans, useTranslation } from "react-i18next";
+import { LuInfo, LuVolume2, LuVolumeX } from "react-icons/lu";
 
 import { COLORS, dimensionsOf } from "../../util";
 import { VideoBox, useVideoBoxResize } from "../../ui/VideoBox";
@@ -65,7 +65,7 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
     }}>
       <PreviewVideo input={input} />
       {input.stream && <>
-        {input.isDesktop && <DesktopAudioInfo stream={input.stream} />}
+        {input.isDesktop && <DisplayAudioInfo stream={input.stream} />}
         <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
       </>}
     </div>
@@ -150,44 +150,48 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
   );
 };
 
-export const DesktopAudioInfo: React.FC<{ stream: MediaStream }> = ({ stream }) => {
-  const { t } = useTranslation();
+export const DisplayAudioInfo: React.FC<{ stream: MediaStream }> = ({ stream }) => {
   const hasAudio = stream.getAudioTracks().length;
 
   return (
     <div css={{
       position: "absolute",
-      top: 12,
-      right: 12,
-      whiteSpace: "pre-line",
+      top: 8,
+      right: 8,
     }}>
       <WithTooltip
-        placement="bottom"
-        tooltip={t(hasAudio ? "desktop-audio-info" : "no-desktop-audio-info")}
+        placement="top"
+        tooltip={
+          <Trans i18nKey={
+            `steps.video.${hasAudio ? "display-audio-shared" : "display-audio-not-shared"}`
+          }>
+            <strong>Note:</strong> Explanation.
+          </Trans>
+        }
       >
-        <ProtoButton
-          css={{
-            display: "inline-block",
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            borderRadius: 5,
-            padding: 4,
-            fontSize: 15,
-            backdropFilter: "invert(1)",
-            lineHeight: 0,
-            cursor: "pointer",
-            "&:hover, &:focus-visible": {
-              backgroundColor: "rgba(0, 0, 0, 0.9)",
-            },
-            "&:focus-visible": {
-              outline: "5px dashed white",
-              outlineOffset: -2.5,
-            },
-          }}
-        >
-          <FiInfo /> {hasAudio ? <FiVolume2 /> : <FiVolumeX />}
-        </ProtoButton>
+        <div css={{ ...OVERLAY_STYLE, fontSize: 15 }}>
+          <LuInfo /> {hasAudio ? <LuVolume2 /> : <LuVolumeX />}
+        </div>
       </WithTooltip>
     </div>
   );
+};
+
+export const OVERLAY_STYLE = {
+  border: "none",
+  display: "inline-block",
+  backgroundColor: "rgba(0, 0, 0, 0.3)",
+  color: "white",
+  padding: 8,
+  backdropFilter: "invert(0.3) blur(4px)",
+  lineHeight: 0,
+  borderRadius: 10,
+  cursor: "pointer",
+  "&:hover, &:focus-visible": {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  "&:focus-visible": {
+    outline: "5px dashed white",
+    outlineOffset: -2.5,
+  },
 };

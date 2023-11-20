@@ -55,7 +55,9 @@
       "aspect-ratio-auto": "auto",
       "quality": "Qualität",
       "quality-auto": "auto",
-      "preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen."
+      "preferences-note": "<0>Hinweis:</0> Dies sind lediglich Präferenzen. Es ist nicht garantiert, dass alle Einstellungen von Ihrem Gerät unterstützt werden. Im Zweifelsfall 'auto' wählen.",
+      "display-audio-shared": "Bildschirmton wird aufgezeichnet.",
+      "display-audio-not-shared": "Bildschirmton wird nicht aufgezeichnet. <0>Hinweis</0>: Nicht alle Browser und Betriebssysteme unterstützen die Aufnahme des Bildschirmtons."
     },
     "audio": {
       "label": "Audioquelle auswählen",
