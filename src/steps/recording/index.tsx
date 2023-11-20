@@ -36,12 +36,29 @@ const addRecordOnStop = (
   };
 };
 
-const mixAudioIntoVideo = (audioStream: MediaStream | null, videoStream: MediaStream) => {
-  if (!(audioStream?.getAudioTracks().length)) {
-    return videoStream;
-  }
-  return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
-};
+const mixAudioIntoVideo = (audioStreams: (MediaStream | null)[], videoStream: MediaStream) => (
+  audioStreams.reduce<MediaStream>(
+    (stream, audioStream) => audioStream?.getAudioTracks().length
+      ? new MediaStream([
+        ...stream.getVideoTracks(),
+        ...(
+          stream.getAudioTracks().length
+            ? (() => {
+              const audioContext = new AudioContext();
+              const accumulatedAudio = audioContext.createMediaStreamSource(stream);
+              const currentAudio = audioContext.createMediaStreamSource(audioStream);
+              const resultAudio = audioContext.createMediaStreamDestination();
+              accumulatedAudio.connect(resultAudio);
+              currentAudio.connect(resultAudio);
+              return resultAudio.stream;
+            })()
+            : audioStream
+        ).getAudioTracks(),
+      ])
+      : stream,
+    videoStream,
+  )
+);
 
 
 export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) => {
@@ -70,14 +87,13 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
 
     if (displayStream) {
       const onStop = addRecordOnStop(dispatch, "desktop");
-      const stream = mixAudioIntoVideo(state.audioStream, displayStream);
+      const stream = mixAudioIntoVideo([state.audioStream], displayStream);
       desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
       desktopRecorder.current.start();
     }
-
     if (userStream) {
       const onStop = addRecordOnStop(dispatch, "video");
-      const stream = mixAudioIntoVideo(state.audioStream, userStream);
+      const stream = mixAudioIntoVideo([state.audioStream, displayStream], userStream);
       videoRecorder.current = new Recorder(stream, settings.recording, onStop);
       videoRecorder.current.start();
     }

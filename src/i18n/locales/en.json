@@ -55,7 +55,9 @@
       "aspect-ratio-auto": "auto",
       "quality": "Quality",
       "quality-auto": "auto",
-      "preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'."
+      "preferences-note": "<0>Note:</0> these are merely preferences and it cannot be guaranteed that all options are actually supported on your device. If in doubt, choose 'auto'.",
+      "display-audio-shared": "Display audio will be recorded.",
+      "display-audio-not-shared": "Display audio will not be recorded. <0>Note</0>: Not all browsers and operating systems support display audio capture."
     },
     "audio": {
       "label": "Select audio source",

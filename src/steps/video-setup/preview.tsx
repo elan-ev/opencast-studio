@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
-import { Spinner, match, unreachable, useColorScheme } from "@opencast/appkit";
-import { useTranslation } from "react-i18next";
+import { Spinner, WithTooltip, match, unreachable, useColorScheme } from "@opencast/appkit";
+import { Trans, useTranslation } from "react-i18next";
+import { LuInfo, LuVolume2, LuVolumeX } from "react-icons/lu";
 
 import { COLORS, dimensionsOf } from "../../util";
-import { StreamSettings } from "./prefs";
-import { Input } from ".";
 import { VideoBox, useVideoBoxResize } from "../../ui/VideoBox";
 import { ErrorBox } from "../../ui/ErrorBox";
+import { StreamSettings } from "./prefs";
+import { Input } from ".";
 
 
 
@@ -63,7 +64,10 @@ const StreamPreview: React.FC<{ input: Input }> = ({ input }) => {
       },
     }}>
       <PreviewVideo input={input} />
-      {input.stream && <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />}
+      {input.stream && <>
+        {input.isDesktop && <DisplayAudioInfo stream={input.stream} />}
+        <StreamSettings isDesktop={input.isDesktop} stream={input.stream} />
+      </>}
     </div>
   );
 };
@@ -144,4 +148,50 @@ const PreviewVideo: React.FC<{ input: Input }> = ({ input }) => {
       />
     </div>
   );
+};
+
+export const DisplayAudioInfo: React.FC<{ stream: MediaStream }> = ({ stream }) => {
+  const hasAudio = stream.getAudioTracks().length;
+
+  return (
+    <div css={{
+      position: "absolute",
+      top: 8,
+      right: 8,
+    }}>
+      <WithTooltip
+        placement="top"
+        tooltip={
+          <Trans i18nKey={
+            `steps.video.${hasAudio ? "display-audio-shared" : "display-audio-not-shared"}`
+          }>
+            <strong>Note:</strong> Explanation.
+          </Trans>
+        }
+      >
+        <div css={{ ...OVERLAY_STYLE, fontSize: 15 }}>
+          <LuInfo /> {hasAudio ? <LuVolume2 /> : <LuVolumeX />}
+        </div>
+      </WithTooltip>
+    </div>
+  );
+};
+
+export const OVERLAY_STYLE = {
+  border: "none",
+  display: "inline-block",
+  backgroundColor: "rgba(0, 0, 0, 0.3)",
+  color: "white",
+  padding: 8,
+  backdropFilter: "invert(0.3) blur(4px)",
+  lineHeight: 0,
+  borderRadius: 10,
+  cursor: "pointer",
+  "&:hover, &:focus-visible": {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  "&:focus-visible": {
+    outline: "5px dashed white",
+    outlineOffset: -2.5,
+  },
 };

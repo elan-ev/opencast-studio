@@ -18,6 +18,7 @@ import {
   stopUserCapture,
 } from "../../capturer";
 import { Select } from "../../ui/Select";
+import { OVERLAY_STYLE } from "./preview";
 
 
 /**
@@ -218,28 +219,13 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
             onClick={() => setIsExpanded(old => !old)}
             aria-label={label}
             css={{
-              border: "none",
-              display: "inline-block",
-              backgroundColor: "rgba(0, 0, 0, 0.3)",
-              color: "white",
-              padding: 8,
+              ...OVERLAY_STYLE,
               fontSize: 26,
-              backdropFilter: "invert(0.3) blur(4px)",
-              lineHeight: 0,
-              borderRadius: "10px",
-              cursor: "pointer",
-              "&:hover, &:focus-visible": {
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-              },
               "> svg": {
                 transition: "transform 0.2s",
               },
               "&:hover > svg, &:focus > svg": {
                 transform: isExpanded ? "none" : "rotate(45deg)",
-              },
-              "&:focus-visible": {
-                outline: "5px dashed white",
-                outlineOffset: -2.5,
               },
             }}
           >
