@@ -36,36 +36,29 @@ const addRecordOnStop = (
   };
 };
 
-const mixAudioIntoBothVideos = (audioStream: MediaStream | null, videoStream: MediaStream) => {
-  if (videoStream.getAudioTracks().length) {
-    return videoStream;
-  }
-
-  if (!(audioStream?.getAudioTracks().length)) {
-    return videoStream;
-  }
-
-  return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
-};
-
-const mixAudioIntoVideo = (audioStream: MediaStream | null, videoStream: MediaStream) => {
-  if (!(audioStream?.getAudioTracks().length)) {
-    return videoStream;
-  }
-
-  if (videoStream?.getAudioTracks().length) {
-    const audioContext = new AudioContext();
-    const desktopAudio = audioContext.createMediaStreamSource(videoStream);
-    const micAudio = audioContext.createMediaStreamSource(audioStream);
-    const dest = audioContext.createMediaStreamDestination();
-    desktopAudio.connect(dest);
-    micAudio.connect(dest);
-
-    return new MediaStream([...videoStream.getVideoTracks(), ...dest.stream.getAudioTracks()]);
-  }
-
-  return new MediaStream([...videoStream.getVideoTracks(), ...audioStream.getAudioTracks()]);
-};
+const mixAudioIntoVideo = (audioStreams: (MediaStream | null)[], videoStream: MediaStream) => (
+  audioStreams.reduce<MediaStream>(
+    (stream, audioStream) => audioStream?.getAudioTracks().length
+      ? new MediaStream([
+        ...stream.getVideoTracks(),
+        ...(
+          stream.getAudioTracks().length
+            ? (() => {
+              const audioContext = new AudioContext();
+              const accumulatedAudio = audioContext.createMediaStreamSource(stream);
+              const currentAudio = audioContext.createMediaStreamSource(audioStream);
+              const resultAudio = audioContext.createMediaStreamDestination();
+              accumulatedAudio.connect(resultAudio);
+              currentAudio.connect(resultAudio);
+              return resultAudio.stream;
+            })()
+            : audioStream
+        ).getAudioTracks(),
+      ])
+      : stream,
+    videoStream,
+  )
+);
 
 
 export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) => {
@@ -92,24 +85,15 @@ export const Recording: React.FC<StepProps> = ({ goToNextStep, goToPrevStep }) =
     // sure, in case of a bug elsewhere, we clear the recordings here.
     dispatch({ type: "CLEAR_RECORDINGS" });
 
-    if (displayStream && userStream) {
-      const onStopDesktop = addRecordOnStop(dispatch, "desktop");
-      const onStopCamera = addRecordOnStop(dispatch, "video");
-      const desktopStream = mixAudioIntoBothVideos(state.audioStream, displayStream);
-      const cameraStream = mixAudioIntoBothVideos(state.audioStream, userStream);
-
-      desktopRecorder.current = new Recorder(desktopStream, settings.recording, onStopDesktop);
-      desktopRecorder.current.start();
-      videoRecorder.current = new Recorder(cameraStream, settings.recording, onStopCamera);
-      videoRecorder.current.start();
-    } else if (displayStream) {
+    if (displayStream) {
       const onStop = addRecordOnStop(dispatch, "desktop");
-      const stream = mixAudioIntoVideo(state.audioStream, displayStream);
+      const stream = mixAudioIntoVideo([state.audioStream], displayStream);
       desktopRecorder.current = new Recorder(stream, settings.recording, onStop);
       desktopRecorder.current.start();
-    } else if (userStream) {
+    }
+    if (userStream) {
       const onStop = addRecordOnStop(dispatch, "video");
-      const stream = mixAudioIntoVideo(state.audioStream, userStream);
+      const stream = mixAudioIntoVideo([state.audioStream, displayStream], userStream);
       videoRecorder.current = new Recorder(stream, settings.recording, onStop);
       videoRecorder.current.start();
     }
