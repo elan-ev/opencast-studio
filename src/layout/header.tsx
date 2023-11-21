@@ -46,9 +46,7 @@ export const Header: React.FC<Props> = ({ setOverlayBoxState, inert }) => {
 };
 
 const Logo: React.FC = () => {
-  const path = (filename: string) => DEFINES.publicPath
-    + (DEFINES.publicPath.endsWith("/") ? "" : "/")
-    + filename;
+  const path = (filename: string) => DEFINES.publicPath + filename;
 
   return (
     <picture css={{
