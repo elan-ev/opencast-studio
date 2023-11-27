@@ -20,13 +20,12 @@ Opencast instance.
 
 ## Supported Browsers
 
-
 |            | Firefox        | Chrome         | Edge           | Safari        |
 | ---------- | -------------- | -------------- | -------------- | ------------- |
-| Windows 11 | ✔              | ✔              | ✔              | -
-| Windows 10 | ✔              | ✔              | ✔              | -
-| Linux      | ✔              | ✔              | ✔              | -
-| macOS      | ✔              | ✔              | ✔              | ✔
+| Windows 11 | ✔<sup>3</sup>  | ✔              | ✔              | -
+| Windows 10 | ✔<sup>3</sup>  | ✔              | ✔              | -
+| Linux      | ✔<sup>3</sup>  | ✔<sup>4</sup>  | ✔<sup>4</sup>  | -
+| macOS      | ✔<sup>3</sup>  | ✔<sup>4</sup>  | ✔<sup>4</sup>  | 🔶<sup>5</sup>
 | iOS        | - <sup>1</sup> | - <sup>1</sup> | - <sup>1</sup> | 🔶<sup>2</sup>
 | Android    | 🔶<sup>2</sup> | 🔶<sup>2</sup> | 🔶<sup>2</sup> | -
 
@@ -34,6 +33,12 @@ Opencast instance.
 <sup>1</sup> Non-Safari browser on iOS use the Safari browser engine, so behave essentially the same as Safari.
 
 <sup>2</sup> Screen share on mobile devices not supported; only webcam recording.
+
+<sup>3</sup> Display audio capture only possible through the use of "monitor sources" as microphone.
+
+<sup>4</sup> Display audio capture only possible if sharing a tab, not the entire screen or individual application windows.
+
+<sup>5</sup> Display audio capture not supported.
 
 
 
