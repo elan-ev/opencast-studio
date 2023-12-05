@@ -8,12 +8,17 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
 const OUT_PATH = path.join(__dirname, "build");
 
+let publicPath = process.env.PUBLIC_PATH ?? "/";
+if (!publicPath.endsWith("/")) {
+  publicPath += "/";
+}
+
 const config: CallableOption = (_env, argv) => ({
   entry: "./src/index.tsx",
   output: {
     filename: "[name].bundle.js",
     path: OUT_PATH,
-    publicPath: `${process.env.PUBLIC_PATH ?? ""}/`,
+    publicPath,
   },
   devtool: argv.mode === "development" ? "eval-cheap-module-source-map" : "source-map",
   resolve: {
@@ -55,7 +60,7 @@ const config: CallableOption = (_env, argv) => ({
     // Passing compile time values into the code
     new DefinePlugin({
       DEFINE_SETTINGS_PATH: JSON.stringify(process.env.SETTINGS_PATH),
-      DEFINE_PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH),
+      DEFINE_PUBLIC_PATH: JSON.stringify(publicPath),
       DEFINE_SHOW_LEGAL_NOTICES: JSON.stringify(process.env.INCLUDE_LEGAL_NOTICES),
       DEFINE_BUILD_DATE: JSON.stringify(process.env.BUILD_DATE),
       DEFINE_COMMIT_SHA: JSON.stringify(process.env.COMMIT_SHA),

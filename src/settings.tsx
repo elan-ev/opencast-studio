@@ -228,12 +228,6 @@ export class SettingsManager {
    * appropriate message on console.
    */
   static async loadContextSettings() {
-    // Try to retrieve the context settings.
-    let basepath = DEFINES.publicPath;
-    if (!basepath.endsWith("/")) {
-      basepath += "/";
-    }
-
     // Construct path to settings file. If the `SETTINGS_PATH` is given and
     // starts with '/', it is interpreted as absolute path from the server
     // root.
@@ -254,7 +248,7 @@ export class SettingsManager {
       }
     }
 
-    const base = settingsPath.startsWith("/") ? "" : basepath;
+    const base = settingsPath.startsWith("/") ? "" : DEFINES.publicPath;
     const url = `${window.location.origin}${base}${settingsPath}`;
     let response: Response;
     try {
