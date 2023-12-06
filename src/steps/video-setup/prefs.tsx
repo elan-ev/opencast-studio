@@ -175,7 +175,7 @@ export const StreamSettings: React.FC<StreamSettingsProps> = ({ isDesktop, strea
 
   // State about expanding and hiding the settings.
   const [isExpanded, setIsExpanded] = useState(false);
-  const label = t(`steps.video.video-settings-${isExpanded ? "close" : "open"}`);
+  const label = t(`steps.video.video-settings-${isExpanded ? "close" : "open"}` as const);
 
   return <>
     {/* Stream info at the top */}
