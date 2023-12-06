@@ -365,7 +365,7 @@ const Controls: React.FC<SharedProps> = ({ currentTime, previewController }) => 
   const { isHighContrast } = useColorScheme();
 
   const isPlaying = previewController.current?.isPlaying;
-  const label = t(`steps.review.${isPlaying ? "pause" : "play"}`);
+  const label = t(`steps.review.${isPlaying ? "pause" : "play"}` as const);
   return (
     <div css={{
       display: "flex",
