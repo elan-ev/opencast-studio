@@ -65,7 +65,7 @@
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^5.0.2"
   },
   "eslintConfig": {
     "extends": "react-app"
