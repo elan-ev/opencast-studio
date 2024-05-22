@@ -102,6 +102,17 @@ const config: CallableOption = (_env, argv) => ({
             to: path.join(OUT_PATH, "fonts", font),
           }))
         ),
+        {
+          from: path.join(__dirname, "node_modules/@fontsource-variable/vazirmatn/index.css"),
+          to: path.join(OUT_PATH, "font.css"),
+          transform: (input: Buffer) => {
+            return input.toString().replace(/url\(.\/files\//g, "url(./fonts/");
+          },
+        },
+        {
+          from: path.join(__dirname, "node_modules/@fontsource-variable/vazirmatn/files/vazirmatn-arabic-wght-normal.woff2"),
+          to: path.join(OUT_PATH, "fonts", "vazirmatn-arabic-wght-normal.woff2"),
+        },
       ],
     }),
   ],

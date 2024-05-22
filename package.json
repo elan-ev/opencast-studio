@@ -24,6 +24,7 @@
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@fontsource-variable/roboto-flex": "^5.0.8",
+    "@fontsource-variable/vazirmatn": "^5.0.20",
     "@iarna/toml": "^2.2.5",
     "@opencast/appkit": "^0.2.4",
     "@svgr/webpack": "^8.1.0",
@@ -45,6 +46,7 @@
     "react-icons": "^4.12.0",
     "react-select": "^5.8.0",
     "use-resize-observer": "^9.1.0",
+    "vazirmatn": "^33.0.3",
     "webpack": "^5.90.0",
     "webpack-cli": "^5.1.4"
   },

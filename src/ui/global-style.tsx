@@ -19,7 +19,7 @@ const GLOBAL_STYLE = css({
     // // as well as `<progress>` elements.
     // accentColor: COLORS.primary0,
 
-    fontFamily: "'Roboto Flex Variable', sans-serif",
+    fontFamily: "'Roboto Flex Variable', 'Vazirmatn', sans-serif",
     fontWeight: 400,
 
     // A reset to a sensible value.
