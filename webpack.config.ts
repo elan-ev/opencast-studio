@@ -83,11 +83,9 @@ const config: CallableOption = (_env, argv) => ({
 
         // Copy the font related files to output directory
         {
-          from: path.join(__dirname, "node_modules/@fontsource-variable/roboto-flex/index.css"),
-          to: path.join(OUT_PATH, "font.css"),
-          transform: (input: Buffer) => {
-            return input.toString().replace(/url\(.\/files\//g, "url(./fonts/");
-          },
+          from: path.join(__dirname, "node_modules/@fontsource-variable/@(roboto-flex|vazirmatn)/index.css"),
+          to: "font.css",
+          transformAll: assets => assets.map(assets => assets.data).join("\n").replace(/url\(.\/files\//g, "url(./fonts/"),
         },
         ...(
           [
@@ -102,6 +100,10 @@ const config: CallableOption = (_env, argv) => ({
             to: path.join(OUT_PATH, "fonts", font),
           }))
         ),
+        {
+          from: path.join(__dirname, "node_modules/@fontsource-variable/vazirmatn/files/vazirmatn-arabic-wght-normal.woff2"),
+          to: path.join(OUT_PATH, "fonts", "vazirmatn-arabic-wght-normal.woff2"),
+        },
       ],
     }),
   ],
