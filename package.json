@@ -50,7 +50,7 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
-    "@opencast/eslint-config-ts-react": "^0.1.0",
+    "@opencast/eslint-config-ts-react": "^0.2.0",
     "@types/iarna__toml": "^2.0.5",
     "@types/mustache": "^4.2.5",
     "@types/node": "^20.14.2",
@@ -58,7 +58,7 @@
     "@types/react-beforeunload": "^2.1.5",
     "@types/react-dom": "^18.3.0",
     "@types/react-page-visibility": "^6.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.2",
     "eslint-plugin-react-hooks": "^4.6.2",
