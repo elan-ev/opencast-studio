@@ -53,7 +53,7 @@
     "@opencast/eslint-config-ts-react": "^0.2.0",
     "@types/iarna__toml": "^2.0.5",
     "@types/mustache": "^4.2.5",
-    "@types/node": "^20.14.9",
+    "@types/node": "^22.0.2",
     "@types/react": "^18.3.3",
     "@types/react-beforeunload": "^2.1.5",
     "@types/react-dom": "^18.3.0",
