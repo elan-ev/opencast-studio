@@ -1,7 +1,8 @@
 {
   "extends": ["@opencast/eslint-config-ts-react"],
+  "plugins": ["@stylistic/eslint-plugin-ts"],
   "rules": {
-    "@typescript-eslint/member-delimiter-style": "warn"
+    "@stylistic/ts/member-delimiter-style": "warn"
   },
   "overrides": [
       {
