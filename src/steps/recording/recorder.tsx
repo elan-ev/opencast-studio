@@ -1,3 +1,4 @@
+import fixWebmDuration from "webm-duration-fix";
 import { Settings } from "../../settings";
 import { dimensionsOf } from "../../util";
 
@@ -61,9 +62,9 @@ export default class Recorder {
     }
   };
 
-  #onStop = (_event: Event) => {
+  #onStop = async (_event: Event) => {
     const mimeType = this.#data[0]?.type || this.#recorder.mimeType;
-    const media = new Blob(this.#data, { type: mimeType });
+    const media = await fixWebmDuration(new Blob(this.#data, { type: mimeType }));
     const url = URL.createObjectURL(media);
 
     this.#reset();
