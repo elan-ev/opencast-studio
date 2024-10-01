@@ -572,11 +572,11 @@ const SCHEMA = {
         return true;
       }
 
-      if (typeof v === "string") {
+      if (typeof v === "string" && v.trim().startsWith("<")) {
         return v;
       }
 
-      throw new Error("needs to be 'true', 'false' or a string");
+      throw new Error("needs to be 'true', 'false' or an XML string");
     },
     dcc: types.string,
     titleField: metaDataField,
