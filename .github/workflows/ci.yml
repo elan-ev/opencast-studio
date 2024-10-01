@@ -41,6 +41,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-deployment-files
+        include-hidden-files: true
         path: |
           build
           .github/.deploy-settings.toml
@@ -60,6 +61,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: prod-deployment-files
+        include-hidden-files: true
         path: |
           build
           .github/.deploy-settings.toml
