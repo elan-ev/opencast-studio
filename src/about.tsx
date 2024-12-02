@@ -42,7 +42,7 @@ export const About: React.FC<Props> = ({ close }) => (
         <a href="https://github.com/elan-ev/opencast-studio/blob/master/LICENSE">
           MIT License
         </a>{" "}
-        developed by the <a href="https://elan-ev.de">ELAN e.V.</a> in cooperation
+        developed by the <a href="https://elan-ev.de">elan e.V.</a> in cooperation
         with the <a href="https://ethz.ch">ETH Zürich</a>.
       </p>
 
@@ -68,8 +68,8 @@ export const About: React.FC<Props> = ({ close }) => (
           <p>
             If you are interested in additional development
             or want to support the development of Opencast Studio, please contact{" "}
-            <a href="mailto:opencast-support@elan-ev.de">
-              opencast-support@elan-ev.de
+            <a href="mailto:office@elan-ev.de">
+              office@elan-ev.de
             </a>.
           </p>
         </React.Fragment>
@@ -93,7 +93,7 @@ export const About: React.FC<Props> = ({ close }) => (
           testing
         </li>
         <li>
-          <a href="https://github.com/elan-ev">ELAN e.V.</a> for the re-implementation
+          <a href="https://github.com/elan-ev">elan e.V.</a> for the re-implementation
           and the ongoing development
         </li>
         <li>
@@ -102,10 +102,10 @@ export const About: React.FC<Props> = ({ close }) => (
       </ul>
 
       {DEFINES.showLegalNotices && <>
-        <h2>ELAN e.V.</h2>
+        <h2>elan e.V.</h2>
 
         <p>
-          The e-learning academic network (ELAN e.V.) is a German non-profit organization supporting
+          The e-learning academic network (elan e.V.) is a German non-profit organization supporting
           higher-education organizations in all matters related to e-learning. Our services include
           practical tips about how to use digital technologies in education, legal advice and
           development of free, open-source software to support education.
@@ -126,7 +126,7 @@ export const About: React.FC<Props> = ({ close }) => (
           <a href="https://elan-ev.de">elan-ev.de</a>
           <br />
           <FiMail />
-          <a href="mailto:kontakt@elan-ev.de">kontakt@elan-ev.de</a>
+          <a href="mailto:office@elan-ev.de">kontakt@elan-ev.de</a>
           <br />
           <FiPhone />
           <a href="tel:+4944199866610">+49&thinsp;441 998&thinsp;666&thinsp;10</a>
