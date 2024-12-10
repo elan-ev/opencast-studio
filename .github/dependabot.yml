@@ -1,13 +1,20 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: monthly
-    time: "04:00"
-  groups:
-    minor-and-patch:
-      update-types:
-      - "minor"
-      - "patch"
 
+  # GHA
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+
+  # Javascript
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+      time: "04:00"
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
