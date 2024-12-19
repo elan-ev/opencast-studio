@@ -64,7 +64,17 @@ export default class Recorder {
 
   #onStop = async (_event: Event) => {
     const mimeType = this.#data[0]?.type || this.#recorder.mimeType;
-    const media = await fixWebmDuration(new Blob(this.#data, { type: mimeType }));
+    const mainMimeType = mimeType.split(";")[0].trim();
+    let media;
+
+    const fixMimeTypes = ["video/webm", "video/x-matroska"];
+
+    if (fixMimeTypes.includes(mainMimeType)) {
+      media = await fixWebmDuration(new Blob(this.#data, { type: mimeType }));
+    } else {
+      media = new Blob(this.#data, { type: mimeType });
+    }
+
     const url = URL.createObjectURL(media);
 
     this.#reset();
