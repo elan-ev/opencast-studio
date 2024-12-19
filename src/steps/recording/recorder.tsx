@@ -67,7 +67,9 @@ export default class Recorder {
     const mainMimeType = mimeType.split(";")[0].trim();
     let media;
 
-    if (mainMimeType === "video/webm") {
+    const fixMimeTypes = ["video/webm", "video/x-matroska"];
+
+    if (fixMimeTypes.includes(mainMimeType)) {
       media = await fixWebmDuration(new Blob(this.#data, { type: mimeType }));
     } else {
       media = new Blob(this.#data, { type: mimeType });
