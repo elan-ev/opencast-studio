@@ -31,38 +31,11 @@ jobs:
           git ls-files | while read -r f; do rm -f "$f"; git rm --cached "$f"; done
         fi
 
-    # Unfortunately we cannot use `actions/download-artifact` here since that
-    # only allows to download artifacts from the same run.
     - name: Download artifacts from build workflow
-      uses: actions/github-script@v7
+      uses: actions/download-artifact@4
       with:
-        script: |
-          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: ${{ github.event.workflow_run.id }},
-          });
-          const deployFiles = artifacts.data.artifacts
-              .filter(a => a.name == "prod-deployment-files")[0];
-          const download = await github.rest.actions.downloadArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: deployFiles.id,
-              archive_format: 'zip',
-          });
-
-          const fs = require('fs');
-          fs.writeFileSync('${{github.workspace}}/artifacts.zip', Buffer.from(download.data));
-
-          // The artifact is not needed anymore
-          github.rest.actions.deleteArtifact({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              artifact_id: deployFiles.id,
-          })
-
-    - name: extract artifacts
-      run: unzip artifacts.zip
+        name: prod-deployment-files
+        run-id: ${{ github.event.workflow_run.id }}
 
     - name: Prepare deployment files
       run: |
