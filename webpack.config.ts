@@ -70,6 +70,7 @@ const config: CallableOption = (_env, argv) => ({
     new ForkTsCheckerWebpackPlugin(),
     new ESLintPlugin({
       extensions: ["ts", "tsx", "js"],
+      configType: "flat",
     }),
 
     new HtmlWebpackPlugin({
