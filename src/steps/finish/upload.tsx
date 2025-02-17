@@ -540,7 +540,7 @@ const SeriesSelect: React.FC<SeriesSelectProps> = ({ formProps, showOpencastSect
       result => {
         const options = [...result.entries()].map(([value, label]) => ({ value, label }));
         options.sort(
-          (a, b) => a.label.localeCompare(b.label, i18n.language, { sensitivity: "base" })
+          (a, b) => a.label.localeCompare(b.label, i18n.language, { sensitivity: "base" }),
         );
 
         // If a seriesID is given, make the select use that as default value.
