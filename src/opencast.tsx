@@ -673,7 +673,7 @@ export class Opencast {
 
     if (!hasRoles(this.#currentUser)) {
       // Internal error: this should not happen.
-      throw new Error(`'currentUser' is '${this.#currentUser}' in 'constructAcl'`);
+      throw new Error(`'currentUser' is '${JSON.stringify(this.#currentUser)}' in 'constructAcl'`);
     }
 
     // Prepare template "view": the values that can be used within the template.

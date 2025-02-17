@@ -379,10 +379,10 @@ const validate = (
     try {
       const newValue = validation(value, allowParse, src);
       return newValue === undefined ? value : newValue;
-    } catch (e) {
+    } catch (error) {
       console.warn(
-        `Validation of setting '${path}' (${sourceDescription}) with value '${value}' failed: `
-          + `${e}. Ignoring.`,
+        `Validation of setting '${path}' (${sourceDescription}) failed -> ignoring...`,
+        { value, error },
       );
       return null;
     }
