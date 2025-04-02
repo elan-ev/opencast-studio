@@ -1,5 +1,5 @@
 import * as path from "path";
-import { CallableOption } from "webpack-cli";
+import { CallableWebpackConfiguration } from "webpack-cli";
 import { DefinePlugin } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
@@ -13,7 +13,7 @@ if (!publicPath.endsWith("/")) {
   publicPath += "/";
 }
 
-const config: CallableOption = (_env, argv) => ({
+const config: CallableWebpackConfiguration = (_env, argv) => ({
   entry: "./src/index.tsx",
   output: {
     filename: "[name].bundle.js",
