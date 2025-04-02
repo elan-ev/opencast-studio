@@ -151,13 +151,13 @@ export const ShortcutKeys: React.FC<ShortcutKeysProps> = ({ shortcut, large = fa
         const translationKey = KEY_TRANSLATIONS[key as keyof typeof KEY_TRANSLATIONS];
         s = t(`shortcuts.keys.${translationKey}`);
       }
-      const child = match<string, JSX.Element>(key, {
+      const child = match(key, {
         "left": () => <FiArrowLeft title={s} />,
         "right": () => <FiArrowRight title={s} />,
         "Mod": () => onMac() ? <FiCommand title={s} /> : <>{s}</>,
         "Alt": () => onMac() ? <LuOption title={s} /> : <>{s}</>,
         "Shift": () => <LuArrowBigUp size={20} title={s} />,
-      }, () => <>{s}</>);
+      }) ?? <>{s}</>;
       return (
         <React.Fragment key={i}>
           {i !== 0 && "+"}
