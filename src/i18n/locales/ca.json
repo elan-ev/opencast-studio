@@ -1,0 +1,187 @@
+{
+  "confirm-discard-recordings": "Esteu segur que voleu descartar la gravació? Això no es pot desfer!",
+  "sources-scenario-display-and-user": "Pantalla i càmera",
+  "sources-scenario-display": "Pantalla",
+  "sources-scenario-user": "Càmera",
+  "sources-display": "Pantalla",
+  "sources-user": "Càmera",
+  "error-lost-video-stream": "La transmissió de vídeo ha finalitzat inesperadament. Heu desconnectat una càmera o accidentalment heu deixat de compartir una font de vídeo?",
+  "error-lost-audio-stream": "La transmissió d'àudio ha finalitzat inesperadament. Heu desconnectat el micròfon o accidentalment heu deixat de compartir la font d'àudio?",
+  "error-lost-stream-end-recording": "Una transmissió de vídeo o àudio ha finalitzat inesperadament i, per tant, la gravació s'ha detingut abans d'hora. S'ha desconnectat un micròfon o una càmera? O accidentalment heu deixat de compartir la font de mitjans o heu revocat els permisos necessaris?",
+  "warning-https": "La majoria dels navegadors no permeten la captura de vídeo mitjançant una connexió no segura (HTTP). Per favor, canvieu a HTTPS.",
+  "warning-recorder-not-supported": "El vostre navegador no admet la gravació de transmissions multimèdia.",
+  "warning-recorder-safari-hint": "Si useu Safari, podeu habilitar la funció experimental 'MediaRecorder' en la configuració. No obstant això, en macOS recomanem canviar a Chrome o Firefox.",
+
+  "header": {
+    "info": {
+      "label": "Informació"
+    },
+    "theme": {
+      "label": "Aparença",
+      "dark": "Fosc",
+      "light": "Clar",
+      "dark-high-contrast": "Fosc (contrast alt)",
+      "light-high-contrast": "Clar (contrast alt)",
+      "auto": "Automàtic"
+    },
+    "language": {
+      "label": "Idioma"
+    }
+  },
+  "steps": {
+    "back-button-label": "Arrere",
+    "next-button-label": "Següent",
+    "video": {
+      "label": "Selecciona la font de vídeo",
+      "share-display": "Comparteix l'escriptori",
+      "share-user": "Comparteix la càmera",
+      "share-display-and-user": "Comparteix la pantalla i la càmera",
+      "display-not-allowed-title": "No es pot accedir a la vostra pantalla",
+      "display-not-allowed-text": "Intenteu tornar a seleccionar la font. Si no funciona, actualitzeu aquesta pàgina o permeteu accedir a la vostra pantalla (generalment mitjançant un botó al costat de la barra d'adreces del navegador).",
+      "user-not-allowed-title": "No es pot accedir a la vostra càmera",
+      "user-not-allowed-text": "Intenteu tornar a seleccionar la font. Si això no funciona, actualitzeu aquesta pàgina o permeteu accedir a la vostra càmera (generalment mitjançant un botó al costat de la barra d'adreces del navegador). Si això no funciona, tanqueu altres aplicacions que poden usar aquesta càmera. Amb alguns sistemes operatius, només una aplicació pot tenir accés a la càmera.",
+      "display-selected": "Pantalla seleccionada",
+      "display-and-user-selected": "Pantalla i càmera seleccionada",
+      "user-selected": "Càmera seleccionada",
+      "question": "Quina font o fonts de vídeo gravar?",
+      "none-available": "El vostre navegador/dispositiu no permet la captura de pantalla o vídeo de la cámera",
+      "reselect-source": "Reselecciona la font o fonts",
+      "no-cam-detected": "Càmera no seleccionada",
+      "display-not-supported": "La captura de pantalla no és compatible",
+      "video-settings-open": "Obri les propietats del vídeo",
+      "video-settings-close": "Tanca les propietats del vídeo",
+      "device": "Dispositiu",
+      "aspect-ratio": "Relació d'aspecte",
+      "aspect-ratio-auto": "automàtic",
+      "quality": "Qualitat",
+      "quality-auto": "automàtic",
+      "preferences-note": "<0>Nota:</0> aquestes són únicament preferències i no es pot garantir que totes les opcions siguen realment compatibles amb el vostre dispositiu. En cas de dubtes, seleccioneu 'automàtic'."
+    },
+    "audio": {
+      "label": "Selecciona la font d'àudio",
+      "question": "Grava l'àudio?",
+      "microphone": "Micròfon",
+      "microphone-selected": "Micròfon seleccionat",
+      "without-audio": "Sense àudio",
+      "reselect-audio": "Torna a seleccionar l'àudio",
+      "not-allowed-title": "No es pot accedir al micròfon",
+      "not-allowed-text": "Seleccioneu 'Torna a seleccionar l'àudio' i després torneu a seleccionar 'Micròfon'. Si això no funciona, actualitzeu aquesta pàgina o permeteu accedir al vostre micròfon (generalment mitjançant un botó al costat de la barra d'adreces del navegador).",
+      "device": "Dispositiu"
+    },
+    "record": {
+      "label": "Grava",
+      "pause-button-title": "Pausa la gravació",
+      "record-button-title": "Inicia la gravació",
+      "resume-button-title": "Reanuda la gravació",
+      "stop-button-title": "Atura la grabació",
+      "is-paused": "La gravació està pausada"
+    },
+    "review": {
+      "label": "Revisa i retalla",
+      "only-on-upload-note": "Retallar el vídeo només funciona quan es puja a Opencast i no quan es guarda la gravació localment.",
+      "button-discard-and-record": "Descarta i torna a gravar",
+      "error-empty-recording": "Hi ha hagu un error. La vostra gravació és buida. Heu aturat la grabació quasi immediatament després de començar? Assegureu-vos també que el vostre sistema és prou potent per a gravar una transmissió de vídeo (potser no és el cas si una altra aplicació usa molt els vostre sistema o si el vostre dispositiu és molt antic). Si el vostre sistema és prou potent per a gravar, heu gravat durant més d'uns quants segons i encara eieu aquest error, informeu-ne com a error en GitHub.",
+      "set-start": "Estableix l'instante actual com a inici",
+      "set-end": "Estableeix l'instant actual com a fi",
+      "part-will-be-removed": "Aquesta part serà eliminada",
+      "play": "Reprodueix",
+      "pause": "Pausa",
+      "jump-to-cut-point": "Ves al punt de tall"
+    },
+    "finish": {
+      "label": "Guarda el vídeo",
+      "finish-button": "Finalitza",
+      "return-to": "Ix i torna a {{label}}",
+      "return-to-no-label": "Ix d'Opencast Studio i torna arrere",
+      "new-recording": "Comença una nova gravació",
+      "new-recording-warning": "Si comenceu una nova gravació, la gravació actual es descartarà (les gravacions pujades o baixades no es veuran afectades). N'esteu segur?",
+      "upload": {
+        "label": "Puja",
+        "validation-error-required": "Aquest camp és obligatori.",
+        "complete": "La pujada s'ha completat",
+        "complete-explanation": "La vostra gravació serà processada ara per Opencast.",
+        "label-presenter": "Ponent",
+        "label-title": "Títol",
+        "upload-network-error": "S'ha produït un error en la pujada (error de xarxa). Comproveu la connexió a Internet. Altres possibles causes: el servidor d'Opencast no és accessible o està mal configurat.",
+        "upload-invalid-response": "S'ha produït un error en la pujada: resposta inesperada.",
+        "upload-not-authorized": "S'ha produït un error en la pujada: pareix ser que no esteu autorizat a pujar fitxers.",
+        "upload-unknown-error": "S'ha produït un error en la pujada: s'ha produït un error desconegut.",
+        "warn-download-hint": "Si el problema persistex, assegureu-vos de baixar la gravació per a evitar perdre-la.",
+        "currently-uploading": "Ara mateix s'està pujant...",
+        "settings-header": "Configura la pujada a Opencast",
+        "settings-label-server-url": "URL del servidor",
+        "settings-label-username": "Usuari",
+        "settings-label-password": "Contraseny",
+        "settings-invalid-url": "Aquest URL no és vàlid",
+        "settings-invalid-url-http-start": "L'URL ha de començar per  'https://' o 'http://'",
+        "settings-invalid-login-data": "No s'ha pogut iniciar la sessió en el servidor Opencast: el nom d'usuari/contrasenya que heu proporcionat no és vàlid.",
+        "settings-invalid-provided-login": "El servidor està configurat per a autenticar-se automàticament, però la sol·licitud ha retornat que no hi esteu autenticat. És un error intern d'Opencast Studio o l'administrador del vostre sistema ha configurat malament el servidor. No podeu fer-hi res",
+        "time": {
+          "a-few-seconds": "uns pocs segons",
+          "a-minute": "un minut",
+          "an-hour": "una hora",
+          "seconds": "segons",
+          "minutes": "minuts",
+          "hours": "hores",
+          "left": "queda {{time}}"
+        }
+      },
+      "save-locally": {
+        "label": "Guarda localment",
+        "save-desktop-locally": "Guarda la gravació de la pantalla localment",
+        "save-video-locally": "Guarda la gravació de la càmera localment",
+        "recording-saved": "S'ha guardat la gravació"
+      }
+    }
+  },
+  "shortcuts": {
+    "label": "Dreceres de teclat",
+    "sequence-seperator": "o",
+    "general": {
+      "title": "General",
+      "show-available-shortcuts": "Mostra les dreceres de teclat disponibles",
+      "show-overview": "Mostra aquest resum",
+      "close-overlay": "Tanca el quadre de diàleg",
+      "tab-elements": "Navega pels elements",
+      "next-button": "Següent/​Confirma",
+      "back-button": "Arrere/​Descarta"
+    },
+    "select-video": {
+      "select-display": "Selecciona la pantalla",
+      "select-camera": "Selecciona la càmera",
+      "select-both": "Selecciona la pantalla i la càmara"
+    },
+    "select-audio": {
+      "select-microphone": "Selecciona el micròfon",
+      "select-no-audio": "No selecciones l'àudio"
+    },
+    "record": {
+      "start-pause-resume-recording": "Inicia/pausa la gravació"
+    },
+    "review": {
+      "play-pause": "Reprodueix/Pausa el vídeo",
+      "skip-five": "5 segons avant",
+      "back-five": "5 segons arrere",
+      "frame-forward": "Un quadre avant",
+      "frame-back": "Un quadre arrere",
+      "cut-left": "Talla a l'esquerra",
+      "cut-right": "Talla a la derecha",
+      "delete-left": "Elimina el marcador de tall esquerre",
+      "delete-right": "Elimina el marcador de tall dret"
+    },
+    "finish": {
+      "new-recording": "Inicia una nova gravació"
+    },
+    "keys": {
+      "escape": "Esc",
+      "control": "Ctrl",
+      "alt": "Alt",
+      "option": "Opció",
+      "command": "Cmd",
+      "space": "Barra espaiadora",
+      "shift": "Maj",
+      "left": "Fletxa esquerra",
+      "right": "Fletxa dreta"
+    }
+  }
+}

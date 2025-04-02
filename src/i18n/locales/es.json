@@ -5,10 +5,10 @@
   "sources-scenario-user": "Cámara",
   "sources-display": "Pantalla",
   "sources-user": "Cámara",
-  "error-lost-video-stream": "¡La transmisión de video terminó inesperadamente! ¿Se desconectó una cámara o accidentalmente dejó de compartir una fuente de video?",
+  "error-lost-video-stream": "¡La transmisión de vídeo terminó inesperadamente! ¿Se desconectó una cámara o accidentalmente dejó de compartir una fuente de vídeo?",
   "error-lost-audio-stream": "¡La transmisión de audio terminó inesperadamente! ¿Se desconectó el micrófono o accidentalmente dejó de compartir la fuente de audio?",
-  "error-lost-stream-end-recording": "Una transmisión de video o audio finalizó inesperadamente y, por lo tanto, la grabación se detuvo prematuramente. ¿Se desconectó un micrófono o una cámara? ¿O accidentalmente dejó de compartir la fuente de medios o revocó los permisos necesarios?",
-  "warning-https": "La mayoría de los navegadores no permiten la captura de video a través de una conexión no segura (HTTP). Por favor cambie a HTTPS.",
+  "error-lost-stream-end-recording": "Una transmisión de vídeo o audio finalizó inesperadamente y, por lo tanto, la grabación se detuvo prematuramente. ¿Se desconectó un micrófono o una cámara? ¿O accidentalmente dejó de compartir la fuente de medios o revocó los permisos necesarios?",
+  "warning-https": "La mayoría de los navegadores no permiten la captura de vídeo a través de una conexión no segura (HTTP). Por favor cambie a HTTPS.",
   "warning-recorder-not-supported": "Su navegador no soporta la grabación de transmisiones multimedia.",
   "warning-recorder-safari-hint": "Si está utilizando Safari, puede habilitar la función experimental 'MediaRecorder' en la configuración. Sin embargo, en macOS, recomendamos cambiar a Chrome o Firefox.",
 
@@ -32,30 +32,30 @@
     "back-button-label": "Atrás",
     "next-button-label": "Siguiente",
     "video": {
-      "label": "Seleccionar la fuente de video",
+      "label": "Seleccionar la fuente de vídeo",
       "share-display": "Compartir escritorio",
       "share-user": "Compartir cámara",
       "share-display-and-user": "Compartir la pantalla y la cámara",
       "display-not-allowed-title": "No se puede acceder a su pantalla",
-      "display-not-allowed-text": "Intenta volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su pantalla (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
+      "display-not-allowed-text": "Intente volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su pantalla (generalmente a través de un botón al lado de la barra de direcciones de su navegador).",
       "user-not-allowed-title": "No se puede acceder a su cámara",
-      "user-not-allowed-text": "Intenta volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su cámara (generalmente a través de un botón al lado de la barra de direcciones de su navegador). Si eso no ayuda, intente cerrar otras aplicaciones que puedan usar esa cámara: con algunos sistemas operativos, solo una aplicación puede tener acceso a la cámara.",
+      "user-not-allowed-text": "Intente volver a seleccionar la fuente. Si eso no funciona, vuelva a cargar esta página o permítanos acceder a su cámara (generalmente a través de un botón al lado de la barra de direcciones de su navegador). Si eso no ayuda, intente cerrar otras aplicaciones que puedan usar esa cámara: con algunos sistemas operativos, solo una aplicación puede tener acceso a la cámara.",
       "display-selected": "Pantalla seleccionada",
       "display-and-user-selected": "Pantalla y cámara seleccionada",
       "user-selected": "Cámara seleccionada",
-      "question": "¿Qué fuente(s) de video grabar?",
-      "none-available": "Su navegador/dispositivo no permite la captura de pantalla o video de la cámara :-(",
+      "question": "¿Qué fuente(s) de vídeo grabar?",
+      "none-available": "Su navegador/dispositivo no permite la captura de pantalla o vídeo de la cámara :-(",
       "reselect-source": "Reseleccionar la(s) fuente(s)",
       "no-cam-detected": "Cámara no seleccionada",
       "display-not-supported": "No se soporta la captura de pantalla",
-      "video-settings-open": "Abrir las propiedades del video",
-      "video-settings-close": "Cerrar las propiedades del video",
+      "video-settings-open": "Abrir las propiedades del vídeo",
+      "video-settings-close": "Cerrar las propiedades del vídeo",
       "device": "Dispositivo",
       "aspect-ratio": "Relación de aspecto",
       "aspect-ratio-auto": "automático",
       "quality": "Calidad",
       "quality-auto": "automático",
-      "preferences-note": "<0>Nota:</0> estao son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'."
+      "preferences-note": "<0>Nota:</0> estas son sólo preferencias y no se puede garantizar que todas las opciones estén realmente soportadas en su dispositivo. En caso de duda, elija 'automático'."
     },
     "audio": {
       "label": "Seleccionar la fuente de audio",
@@ -78,9 +78,9 @@
     },
     "review": {
       "label": "Revisar y recortar",
-      "only-on-upload-note": "Recortar el video solo funciona cuando se sube a Opencast y no cuando se guarda la grabación localmente.",
+      "only-on-upload-note": "Recortar el vídeo solo funciona cuando se sube a Opencast y no cuando se guarda la grabación localmente.",
       "button-discard-and-record": "Descartar y volver a grabar",
-      "error-empty-recording": "Error: tu grabación está completamente vacía. ¿Detuviste la grabación casi inmediatamente después de comenzar? Además, asegúrese de que su sistema sea lo suficientemente potente como para grabar una transmisión de video (este podría no ser el caso si otra aplicación utiliza mucho su sistema o si su dispositivo es muy antiguo). Si su sistema es lo suficientemente potente como para grabar, grabó durante más de unos segundos y aún ve este error: informe de esto como un error en GitHub.",
+      "error-empty-recording": "Error: su grabación está completamente vacía. ¿Ha detenido la grabación casi inmediatamente después de comenzar? Además, asegúrese de que su sistema sea lo suficientemente potente como para grabar una transmisión de vídeo (este podría no ser el caso si otra aplicación utiliza mucho su sistema o si su dispositivo es muy antiguo). Si su sistema es lo suficientemente potente como para grabar, grabó durante más de unos segundos y aún ve este error: informe de esto como un error en GitHub.",
       "set-start": "Establecer el instante actual como inicio",
       "set-end": "Establecer el instante actual como fin",
       "part-will-be-removed": "Esta parte será eliminada",
@@ -89,12 +89,12 @@
       "jump-to-cut-point": "Ir al punto de corte"
     },
     "finish": {
-      "label": "Guardar el video",
+      "label": "Guardar el vídeo",
       "finish-button": "Finalizar",
       "return-to": "Salir y volver a {{label}}",
       "return-to-no-label": "Salir de Opencast Studio y volver atrás",
       "new-recording": "Empezar una nueva grabación",
-      "new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Estás seguro?",
+      "new-recording-warning": "Al comenzar una nueva grabación, la grabación actual se descartará (las grabaciones subidas o descargadas no se verán afectadas). ¿Está seguro?",
       "upload": {
         "label": "Subir",
         "validation-error-required": "Este campo es obligatorio.",
@@ -104,7 +104,7 @@
         "label-title": "Título",
         "upload-network-error": "Fallo en la subida: error de red. Por favor, compruebe su conexión a Internet. Otras posibles causas: el servidor de Opencast no está accesible o está mal configurado.",
         "upload-invalid-response": "Fallo en la subida: hubo una respuesta inesperada.",
-        "upload-not-authorized": "Fallo en la subida: parece que no estás autorizado a subir.",
+        "upload-not-authorized": "Fallo en la subida: parece que no está autorizado a subir.",
         "upload-unknown-error": "Fallo en la subida: se produjo un error desconocido.",
         "warn-download-hint": "Si este problema persiste, asegúrese de descargar su grabación para evitar perderla.",
         "currently-uploading": "En este momento se está subiendo...",
@@ -115,7 +115,7 @@
         "settings-invalid-url": "Esta no es una URL válida",
         "settings-invalid-url-http-start": "La URL debe empezar por  'https://' o 'http://'",
         "settings-invalid-login-data": "No se pudo iniciar sesión en el servidor Opencast: el nombre de usuario/contraseña que proporcionó no es válido.",
-        "settings-invalid-provided-login": "El servidor esta configurado para autenticarse automáticamente, pero la solicitud devolvió que no está autenticado. Es un error interno de Opencast Studio o el administrador de su sistema configuró mal el servidor. No hay nada que puedas hacer :(",
+        "settings-invalid-provided-login": "El servidor está configurado para autenticarse automáticamente, pero la solicitud devolvió que no está autenticado. Es un error interno de Opencast Studio o el administrador de su sistema configuró mal el servidor. No hay nada que pueda hacer :(",
         "time": {
           "a-few-seconds": "unos pocos segundos",
           "a-minute": "un minuto",
@@ -149,10 +149,10 @@
     "select-video": {
       "select-display": "Seleccionar la pantalla",
       "select-camera": "Seleccionar la cámara",
-      "select-both": "Seleccionar la pantalla y la camara"
+      "select-both": "Seleccionar la pantalla y la cámara"
     },
     "select-audio": {
-      "select-microphone": "Seleccionar el microfono",
+      "select-microphone": "Seleccionar el micrófono",
       "select-no-audio": "No seleccionar audio"
     },
     "record": {

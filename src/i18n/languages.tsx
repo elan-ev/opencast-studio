@@ -7,6 +7,7 @@ const languages = [
   { short: "fr", long: "Français", rtl: false },
   { short: "sl", long: "Slovenščina", rtl: false },
   { short: "zh", long: "简体中文", rtl: false },
+  { short: "ca", long: "Català", rtl: false },
 ];
 
 export default languages;
