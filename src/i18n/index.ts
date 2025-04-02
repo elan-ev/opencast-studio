@@ -10,6 +10,7 @@ import frTranslations from "./locales/fr.json";
 import nlTranslations from "./locales/nl.json";
 import slTranslations from "./locales/sl.json";
 import zhTranslations from "./locales/zh.json";
+import caTranslations from "./locales/ca.json";
 
 const resources = {
   en: { translation: enTranslations },
@@ -20,6 +21,7 @@ const resources = {
   nl: { translation: nlTranslations },
   sl: { translation: slTranslations },
   zh: { translation: zhTranslations },
+  ca: { translation: caTranslations },
 };
 
 export type TranslationKey = keyof CustomTypeOptions["resources"]["translation"];
