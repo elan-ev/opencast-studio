@@ -6,7 +6,7 @@ import {
   useController, useForm,
 } from "react-hook-form";
 import { FiUpload } from "react-icons/fi";
-import { LuCheckCircle2 } from "react-icons/lu";
+import { LuCircleCheckBig } from "react-icons/lu";
 import { ProtoButton, Spinner, match, notNullish, unreachable, useColorScheme } from "@opencast/appkit";
 
 import { useDispatch, useStudioState } from "../../studio-state";
@@ -123,12 +123,12 @@ export const UploadBox: React.FC = () => {
     progressHistory = [];
 
     const dispatchError = (msg: string) => dispatch({ type: "UPLOAD_ERROR", msg });
-    match(result, {
+    const _ = match(result, {
       "success": () => dispatch({ type: "UPLOAD_SUCCESS" }),
       "network_error": () => dispatchError(t("steps.finish.upload.upload-network-error")),
       "not_authorized": () => dispatchError(t("steps.finish.upload.upload-not-authorized")),
       "unexpected_response": () => dispatchError(t("steps.finish.upload.upload-invalid-response")),
-    }, () => dispatchError(t("steps.finish.upload.upload-unknown-error")));
+    }) ?? dispatchError(t("steps.finish.upload.upload-unknown-error"));
   };
 
   switch (uploadState.state) {
@@ -264,7 +264,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       "network_error": () => t("steps.finish.upload.upload-network-error"),
       "invalid_response": () => t("steps.finish.upload.upload-invalid-response"),
       "response_not_ok": () => t("steps.finish.upload.upload-invalid-response"),
-    }, () => unreachable());
+    }) ?? unreachable();
 
     if (error) {
       dispatch({ type: "UPLOAD_ERROR", msg: error });
@@ -774,7 +774,7 @@ const UploadSuccess = () => {
         lineHeight: 0,
         color: COLORS.accent5,
       }}>
-        <LuCheckCircle2 />
+        <LuCircleCheckBig />
       </div>
       <div>{t("steps.finish.upload.complete-explanation")}</div>
     </GreyInnerBox>

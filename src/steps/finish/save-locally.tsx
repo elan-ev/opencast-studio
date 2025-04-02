@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { FiDownload } from "react-icons/fi";
-import { LuCheckCircle2 } from "react-icons/lu";
+import { LuCircleCheckBig } from "react-icons/lu";
 
 import { useDispatch, useStudioState, Recording } from "../../studio-state";
 import { recordingFileName } from "../../util";
@@ -82,7 +82,7 @@ const SaveLocallySingle: React.FC<SaveLocallySingleProps> = ({ recording, idx })
             padding: 12,
             borderRadius: "0 0 4px 4px",
           }}>
-            <LuCheckCircle2 css={{ fontSize: 22 }} />
+            <LuCircleCheckBig css={{ fontSize: 22 }} />
             {t("steps.finish.save-locally.recording-saved")}
           </div>
         )}

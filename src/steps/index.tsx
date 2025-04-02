@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { match, notNullish, screenWidthAbove, screenWidthAtMost, useColorScheme } from "@opencast/appkit";
 import { FiCircle } from "react-icons/fi";
@@ -47,7 +47,7 @@ export const Main: React.FC<Props> = ({ inert }) => {
       },
     }}>
       <ProgressSidebar currentStep={currentStep} />
-      {match<Step, ReactNode>(currentStep, {
+      {match(currentStep, {
         "video-select": () => <VideoSetup {...stepProps} />,
         "audio-select": () => <AudioSetup {...stepProps} />,
         "recording": () => <Recording {...stepProps} />,

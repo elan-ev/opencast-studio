@@ -38,7 +38,7 @@ export const SourcePreview: React.FC<SourcePreviewProps> = ({ inputs }) => {
         autoSize: inputHasError(inputs[1]),
       },
     ],
-  }, unreachable);
+  }) ?? unreachable();
 
   return <VideoBox gap={20}>{children}</VideoBox>;
 };
