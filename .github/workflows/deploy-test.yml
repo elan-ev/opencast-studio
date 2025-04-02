@@ -19,10 +19,10 @@ jobs:
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
     - name: Download artifacts from build workflow
-      uses: actions/download-artifact@v4
+      uses: dawidd6/action-download-artifact@v9
       with:
         name: test-deployment-files
-        run-id: ${{ github.event.workflow_run.id }}
+        run_id: ${{ github.event.workflow_run.id }}
 
     - name: Checkout test deployment repo
       run: |
