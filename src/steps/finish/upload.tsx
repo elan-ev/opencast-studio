@@ -123,12 +123,14 @@ export const UploadBox: React.FC = () => {
     progressHistory = [];
 
     const dispatchError = (msg: string) => dispatch({ type: "UPLOAD_ERROR", msg });
+    console.log({ result });
     const _ = match(result, {
       "success": () => dispatch({ type: "UPLOAD_SUCCESS" }),
       "network_error": () => dispatchError(t("steps.finish.upload.upload-network-error")),
       "not_authorized": () => dispatchError(t("steps.finish.upload.upload-not-authorized")),
       "unexpected_response": () => dispatchError(t("steps.finish.upload.upload-invalid-response")),
-    }) ?? dispatchError(t("steps.finish.upload.upload-unknown-error"));
+      "unknown_error": () => dispatchError(t("steps.finish.upload.upload-unknown-error")),
+    });
   };
 
   switch (uploadState.state) {
@@ -252,26 +254,24 @@ const UploadForm: React.FC<UploadFormProps> = ({ handleUpload }) => {
       ...ocData,
     });
 
-    const error = match(oc.getState(), {
-      "logged_in": () => {
-        opencast.setGlobalInstance(oc);
-        settingsManager.saveSettings({ opencast: ocData });
-        return null;
-      },
-      "incorrect_login": () => opencast.isLoginProvided()
-        ? t("steps.finish.upload.settings-invalid-provided-login")
-        : t("steps.finish.upload.settings-invalid-login-data"),
-      "network_error": () => t("steps.finish.upload.upload-network-error"),
-      "invalid_response": () => t("steps.finish.upload.upload-invalid-response"),
-      "response_not_ok": () => t("steps.finish.upload.upload-invalid-response"),
-    }) ?? unreachable();
-
-    if (error) {
-      dispatch({ type: "UPLOAD_ERROR", msg: error });
-      setState("idle");
-    } else {
+    const ocState = oc.getState();
+    if (ocState === "logged_in") {
+      opencast.setGlobalInstance(oc);
+      settingsManager.saveSettings({ opencast: ocData });
       // The connection to Opencast works -> now actually start the upload.
       await handleUpload(data);
+    } else {
+      const error = match(ocState, {
+        "incorrect_login": () => opencast.isLoginProvided()
+          ? t("steps.finish.upload.settings-invalid-provided-login")
+          : t("steps.finish.upload.settings-invalid-login-data"),
+        "network_error": () => t("steps.finish.upload.upload-network-error"),
+        "invalid_response": () => t("steps.finish.upload.upload-invalid-response"),
+        "response_not_ok": () => t("steps.finish.upload.upload-invalid-response"),
+      }) ?? unreachable();
+
+      dispatch({ type: "UPLOAD_ERROR", msg: error });
+      setState("idle");
     }
   };
 
