@@ -100,10 +100,10 @@ const KEY_TRANSLATIONS = {
 export const useShortcut = (
   keys: string,
   callback: () => void,
-  options: Omit<Options, "splitKey"> = {},
+  options: Omit<Options, "delimiter"> = {},
   deps: unknown[] = [],
 ) => {
-  return useHotkeys(keys, callback, { splitKey: ";", ...options }, deps);
+  return useHotkeys(keys, callback, { delimiter: ";", ...options }, deps);
 };
 
 /**
