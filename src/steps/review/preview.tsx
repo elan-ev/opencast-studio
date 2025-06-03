@@ -178,8 +178,8 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
   const fps = 30;
   useShortcut(SHORTCUTS.review.forwards5secs, () => jumpInTime(5));
   useShortcut(SHORTCUTS.review.backwards5secs, () => jumpInTime(-5));
-  useShortcut(SHORTCUTS.review.forwardsFrame, () => jumpInTime(1 / fps));
-  useShortcut(SHORTCUTS.review.backwardsFrame, () => jumpInTime(-1 / fps));
+  useShortcut(SHORTCUTS.review.forwardsFrame, () => jumpInTime(1 / fps), { useKey: true });
+  useShortcut(SHORTCUTS.review.backwardsFrame, () => jumpInTime(-1 / fps), { useKey: true });
 
 
   const children = recordings.map((recording, index) => ({
