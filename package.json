@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@opencast/eslint-config-ts-react": "^0.3.0",
-    "@stylistic/eslint-plugin-ts": "3.1",
+    "@stylistic/eslint-plugin-ts": "4.4",
     "@types/iarna__toml": "^2.0.5",
     "@types/mustache": "^4.2.6",
     "@types/node": "^22.15.29",
