@@ -1,0 +1,196 @@
+{
+  "confirm-discard-recordings": "",
+  "sources-scenario-display-and-user": "",
+  "sources-scenario-display": "",
+  "sources-scenario-user": "",
+  "sources-display": "",
+  "sources-user": "",
+  "error-lost-video-stream": "",
+  "error-lost-audio-stream": "",
+  "error-lost-stream-end-recording": "",
+  "warning-https": "",
+  "warning-recorder-not-supported": "",
+  "warning-recorder-safari-hint": "",
+
+  "header": {
+    "info": {
+      "label": ""
+    },
+    "theme": {
+      "label": "",
+      "dark": "",
+      "light": "",
+      "dark-high-contrast": "",
+      "light-high-contrast": "",
+      "auto": ""
+    },
+    "language": {
+      "label": ""
+    }
+  },
+  "steps": {
+    "back-button-label": "",
+    "next-button-label": "",
+    "video": {
+      "label": "",
+      "share-display": "",
+      "share-user": "",
+      "share-display-and-user": "",
+      "display-not-allowed-title": "",
+      "display-not-allowed-text": "",
+      "user-not-allowed-title": "",
+      "user-not-allowed-text": "",
+      "display-selected": "",
+      "display-and-user-selected": "",
+      "user-selected": "",
+      "question": "",
+      "none-available": "",
+      "reselect-source": "",
+      "no-cam-detected": "",
+      "display-not-supported": "",
+      "video-settings-open": "",
+      "video-settings-close": "",
+      "device": "",
+      "aspect-ratio": "",
+      "aspect-ratio-auto": "",
+      "quality": "",
+      "quality-auto": "",
+      "preferences-note": "",
+      "display-audio-shared": "",
+      "display-audio-not-shared": ""
+    },
+    "audio": {
+      "label": "",
+      "question": "",
+      "microphone": "",
+      "microphone-selected": "",
+      "without-audio": "",
+      "reselect-audio": "",
+      "not-allowed-title": "",
+      "not-allowed-text": "",
+      "device": ""
+    },
+    "record": {
+      "label": "",
+      "pause-button-title": "" ,
+      "record-button-title": "",
+      "resume-button-title": "",
+      "stop-button-title": "",
+      "is-paused": ""
+    },
+    "review": {
+      "label": "",
+      "only-on-upload-note": "",
+      "button-discard-and-record": "",
+      "error-empty-recording": "",
+      "set-start": "",
+      "set-end": "",
+      "part-will-be-removed": "",
+      "play": "",
+      "pause": "",
+      "jump-to-cut-point": ""
+    },
+    "finish": {
+      "label": "",
+      "finish-button": "",
+      "return-to": "",
+      "return-to-no-label": "",
+      "new-recording": "",
+      "new-recording-warning": "",
+      "upload": {
+        "label": "",
+        "validation-error-required": "",
+        "complete": "",
+        "complete-explanation": "",
+        "label-presenter": "",
+        "label-title": "",
+        "label-series": "",
+        "series-placeholder": "",
+        "series-none": "",
+        "series-unknown": "",
+        "series-fetch-error": "",
+        "series-connection-settings-hint": "",
+        "series-loading": "",
+        "upload-network-error": "",
+        "upload-invalid-response": "",
+        "upload-not-authorized": "",
+        "upload-unknown-error": "",
+        "warn-download-hint": "",
+        "currently-uploading": "",
+        "settings-header": "",
+        "settings-label-server-url": "",
+        "settings-label-username": "",
+        "settings-label-password": "",
+        "settings-invalid-url": "",
+        "settings-invalid-url-http-start": "",
+        "settings-invalid-login-data": "",
+        "settings-invalid-provided-login": "",
+        "time": {
+          "a-few-seconds": "",
+          "a-minute": "",
+          "an-hour": "",
+          "seconds": "",
+          "minutes": "",
+          "hours": "",
+          "left": ""
+        }
+      },
+      "save-locally": {
+        "label": "",
+        "save-desktop-locally": "",
+        "save-video-locally": "",
+        "recording-saved": ""
+      }
+    }
+  },
+  "shortcuts": {
+    "label": "",
+    "sequence-seperator": "",
+    "general": {
+      "title": "",
+      "show-available-shortcuts": "",
+      "show-overview": "",
+      "close-overlay": "",
+      "tab-elements": "",
+      "next-button": "",
+      "back-button": ""
+    },
+    "select-video": {
+      "select-display": "",
+      "select-camera": "",
+      "select-both": ""
+    },
+    "select-audio": {
+      "select-microphone": "",
+      "select-no-audio": ""
+    },
+    "record": {
+      "start-pause-resume-recording": ""
+    },
+    "review": {
+      "play-pause": "",
+      "skip-five": "",
+      "back-five": "",
+      "frame-forward": "",
+      "frame-back": "",
+      "cut-left": "",
+      "cut-right": "",
+      "delete-left": "",
+      "delete-right": ""
+    },
+    "finish": {
+      "new-recording": ""
+    },
+    "keys": {
+      "escape": "",
+      "control": "",
+      "alt": "",
+      "option": "",
+      "command": "",
+      "space": "",
+      "shift": "",
+      "left": "",
+      "right": ""
+    }
+  }
+}
