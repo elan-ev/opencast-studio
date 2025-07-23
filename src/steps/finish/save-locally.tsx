@@ -64,6 +64,7 @@ const SaveLocallySingle: React.FC<SaveLocallySingleProps> = ({ recording, idx })
             borderRadius: 4,
             display: "block",
             maxHeight: 190,
+            maxWidth: "100%",
             margin: "0 auto",
           }}
         />
