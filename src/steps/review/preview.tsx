@@ -2,12 +2,11 @@ import {
   forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { match, notNullish, useColorScheme } from "@opencast/appkit";
+import { notNullish, useColorScheme } from "@opencast/appkit";
 
 import { useStudioState } from "../../studio-state";
 import CutOutIcon from "./cut-out-icon.svg";
 import { VideoBox } from "../../ui/VideoBox";
-import { ALMOST_ZERO } from ".";
 import { SHORTCUTS, useShortcut } from "../../shortcuts";
 
 
@@ -98,17 +97,6 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
     },
   }));
 
-  // Some browsers don't calculate the duration for the recorded videos
-  // preventing us from seeking in the video. We force it below
-  // in the event handlers of the video elements, but we want to hold off
-  // on some effects until that calculation is done.
-  type DurationCalcState = "done" | "started";
-  const durationCalculationProgress = [
-    useRef<DurationCalcState>(),
-    useRef<DurationCalcState>(),
-  ];
-  const [durationsCalculated, setDurationsCalculated] = useState<boolean>(false);
-
   // Some logic to decide whether we currently are in a part of the video that
   // will be removed. The state will be updated in `onTimeUpdate` below and is
   // only here to trigger a rerender: the condition for rendering the overlay is
@@ -119,18 +107,8 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
   const overlayVisible = isInCutRegion(currentTime);
   const [, setOverlayVisible] = useState(overlayVisible);
 
-  useEffect(() => {
-    if (durationsCalculated) {
-      onReady();
-    }
-  }, [onReady, durationsCalculated]);
-
   // Setup backup synchronization between both video elements
   useEffect(() => {
-    if (!durationsCalculated) {
-      return;
-    }
-
     if (desktopIndex != null) {
       // If we have two recordings, both will have audio. But the user doesn't
       // want to hear audio twice, so we mute one video element. Particularly,
@@ -210,49 +188,22 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
           ref={videoRefs[index]}
           key={index}
           src={recording.url}
-          onLoadedData={event => {
-            // Force the browser to calculate the duration of the stream
-            // by seeking way past its end. *fingers crossed*
-            // We reset this later in an effect. (See above.)
-            // Also without setting the current time once initially,
-            // some browsers show a black video element instead of the first frame.
-            event.currentTarget.currentTime = Number.MAX_VALUE;
-            durationCalculationProgress[index].current = "started";
-          }}
+          onLoadedData={() => onReady()}
           onSeeked={() => {
-            if (durationsCalculated) {
-              const isOtherSeeking = videoRefs[index == 0 ? 1 : 0].current?.seeking;
-              const queued = queuedSeek.current;
-              if (!isOtherSeeking && queued != null) {
-                allVideos.forEach(r => {
-                  if (r.current) {
-                    r.current.currentTime = queued;
-                  }
-                });
-                queuedSeek.current = null;
-              }
+            const isOtherSeeking = videoRefs[index == 0 ? 1 : 0].current?.seeking;
+            const queued = queuedSeek.current;
+            if (!isOtherSeeking && queued != null) {
+              allVideos.forEach(r => {
+                if (r.current) {
+                  r.current.currentTime = queued;
+                }
+              });
+              queuedSeek.current = null;
             }
           }}
           onTimeUpdate={event => {
-            if (durationsCalculated) {
-              setOverlayVisible(isInCutRegion(event.currentTarget.currentTime));
-              onTimeUpdate(event);
-            } else {
-              match(notNullish(durationCalculationProgress[index].current), {
-                "started": () => {
-                  event.currentTarget.currentTime = ALMOST_ZERO;
-                  durationCalculationProgress[index].current = "done";
-                },
-                "done": () => {
-                  const finishedCalculations = durationCalculationProgress
-                    .filter(p => p.current === "done")
-                    .length;
-                  if (finishedCalculations === recordings.length) {
-                    setDurationsCalculated(true);
-                  }
-                },
-              });
-            }
+            setOverlayVisible(isInCutRegion(event.currentTarget.currentTime));
+            onTimeUpdate(event);
           }}
 
           // For iOS: without the autoplay attribute, the `loadeddata` event is
