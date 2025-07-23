@@ -55,7 +55,9 @@
       "aspect-ratio-auto": "auto",
       "quality": "Qualité",
       "quality-auto": "auto",
-      "preferences-note": "<0>Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto »."
+      "preferences-note": "<0>Notez :</0> ces paramètres ne sont que des préférences et il ne peut être garanti que toutes les options sélectionnées seront réellement prises en charge sur votre appareil. En cas de doute, sélectionnez « auto ».",
+      "display-audio-shared": "L'audio de l'écran sera enregistré.",
+      "display-audio-not-shared": "L'audio de l'écran ne sera pas enregistré. <0>Note</0>: tous les navigateurs et systèmes opérationnels ne prennent pas en charge la capture de l'audio de l'écran."
     },
     "audio": {
       "label": "Sélectionner la source audio",
