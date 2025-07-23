@@ -1,5 +1,5 @@
 import {
-  forwardRef, useState, useRef, useEffect, useImperativeHandle, SyntheticEvent,
+  forwardRef, useState, useRef, useImperativeHandle, SyntheticEvent,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { notNullish, useColorScheme } from "@opencast/appkit";
@@ -36,12 +36,6 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
   const allVideos = videoRefs.slice(0, recordings.length);
 
-  const desktopIndex = recordings.length === 2
-    ? (recordings[0].deviceType === "desktop" ? 0 : 1)
-    : null;
-
-  // The index of the last video ref that received an event (0 or 1).
-  const lastOrigin = useRef<0 | 1>();
 
   // When updating the currenTime, i.e. the play position, we want to throttle
   // this somehow. Just always setting `currentTime` is not ideal: consider
@@ -71,16 +65,16 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
 
   useImperativeHandle(ref, () => ({
     get currentTime() {
-      return notNullish(videoRefs[lastOrigin.current ?? 0].current?.currentTime);
+      return notNullish(videoRefs[0].current?.currentTime);
     },
     set currentTime(newTime) {
       setTime(newTime);
     },
     get duration() {
-      return notNullish(videoRefs[lastOrigin.current ?? 0].current?.duration);
+      return notNullish(videoRefs[0].current?.duration);
     },
     get isPlaying() {
-      const v = videoRefs[lastOrigin.current ?? 0].current;
+      const v = videoRefs[0].current;
       return v != null && v.currentTime > 0 && !v.paused && !v.ended;
     },
     get isReadyToPlay() {
@@ -103,52 +97,13 @@ export const Preview = forwardRef<PreviewHandle, PreviewProps>((
   // below.
   const isInCutRegion = (time: number) =>
     (start !== null && time < start) || (end !== null && time > end);
-  const currentTime = videoRefs[lastOrigin.current ?? 0].current?.currentTime || 0;
+  const currentTime = videoRefs[0].current?.currentTime || 0;
   const overlayVisible = isInCutRegion(currentTime);
   const [, setOverlayVisible] = useState(overlayVisible);
 
-  // Setup backup synchronization between both video elements
-  useEffect(() => {
-    if (desktopIndex != null) {
-      // If we have two recordings, both will have audio. But the user doesn't
-      // want to hear audio twice, so we mute one video element. Particularly,
-      // we mute the desktop video, as there the audio/video synchronization is
-      // not as critical.
-      notNullish(videoRefs[desktopIndex].current).volume = 0;
-
-      const va = notNullish(videoRefs[0].current);
-      const vb = notNullish(videoRefs[1].current);
-
-      // We regularly check if both video elements diverge too much from one
-      // another.
-      let frameCounter = 0;
-      let fixRequest: number;
-      const fixTime = () => {
-        // Only run every 60 frames.
-        if (frameCounter % 60 === 0) {
-          // We want the difference to be below 150ms. Usually, even without
-          // this backup solution, it should be below 50ms at all time. That's
-          // what testing showed.
-          const diff = Math.abs(va.currentTime - vb.currentTime);
-          if (diff > 0.15 && lastOrigin.current != null) {
-            const origin = videoRefs[lastOrigin.current].current;
-            const target = videoRefs[lastOrigin.current === 0 ? 1 : 0].current;
-            notNullish(target).currentTime = notNullish(origin).currentTime;
-          }
-        }
-
-        frameCounter++;
-        fixRequest = window.requestAnimationFrame(fixTime);
-      };
-      fixRequest = window.requestAnimationFrame(fixTime);
-
-      return () => window.cancelAnimationFrame(fixRequest);
-    }
-  });
-
 
   const jumpInTime = (diff: number) =>
-    setTime(notNullish(videoRefs[lastOrigin.current ?? 0].current?.currentTime) + diff);
+    setTime(notNullish(videoRefs[0].current?.currentTime) + diff);
 
   // TODO: This is obviously not always correct. Finding out the FPS of the
   // recording is surprisingly tricky. And actually, browsers seem to record
